@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BullProsperity Tools</title>
+  <style>
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+    }
+
+    body{
+      font-family:Arial, Helvetica, sans-serif;
+      background:#0a0a0a;
+      color:#ffffff;
+      line-height:1.6;
+    }
+
+    header{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      padding:22px 7%;
+      background:#000000;
+      border-bottom:1px solid #1f1f1f;
+      position:sticky;
+      top:0;
+      z-index:1000;
+    }
+
+    .logo{
+      font-size:28px;
+      font-weight:700;
+      color:#d4af37;
+      letter-spacing:1px;
+    }
+
+    nav a{
+      color:white;
+      text-decoration:none;
+      margin-left:22px;
+      font-size:15px;
+    }
+
+    nav a:hover{
+      color:#d4af37;
+    }
+
+    .hero{
+      padding:70px 7% 35px;
+      text-align:center;
+      background:
+        linear-gradient(rgba(0,0,0,0.82), rgba(0,0,0,0.92)),
+        radial-gradient(circle at center, rgba(212,175,55,0.10), transparent 45%);
+      border-bottom:1px solid #1f1f1f;
+    }
+
+    .hero h1{
+      font-size:48px;
+      color:#d4af37;
+      margin-bottom:12px;
+    }
+
+    .hero p{
+      max-width:850px;
+      margin:0 auto;
+      color:#d0d0d0;
+      font-size:18px;
+    }
+
+    .container{
+      width:min(1200px, 92%);
+      margin:40px auto;
+    }
+
+    .section{
+      margin-bottom:28px;
+      background:#111111;
+      border:1px solid #1f1f1f;
+      border-radius:18px;
+      padding:28px;
+    }
+
+    .section h2{
+      color:#d4af37;
+      margin-bottom:18px;
+      font-size:28px;
+    }
+
+    .section p{
+      color:#d2d2d2;
+      margin-bottom:16px;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit, minmax(260px, 1fr));
+      gap:18px;
+    }
+
+    .tool-card{
+      background:#0d0d0d;
+      border:1px solid #1f1f1f;
+      border-radius:14px;
+      padding:20px;
+    }
+
+    .tool-card h3{
+      color:#d4af37;
+      margin-bottom:10px;
+      font-size:20px;
+    }
+
+    .input-group{
+      margin-bottom:14px;
+    }
+
+    .input-group label{
+      display:block;
+      margin-bottom:6px;
+      color:#d7d7d7;
+      font-size:14px;
+    }
+
+    .input-group input,
+    .input-group select,
+    .input-group textarea{
+      width:100%;
+      padding:12px;
+      border-radius:10px;
+      border:1px solid #2a2a2a;
+      background:#090909;
+      color:#ffffff;
+      font-size:15px;
+    }
+
+    .input-group textarea{
+      min-height:110px;
+      resize:vertical;
+    }
+
+    .btn{
+      display:inline-block;
+      padding:12px 20px;
+      border:none;
+      border-radius:8px;
+      cursor:pointer;
+      font-weight:700;
+      font-size:15px;
+      margin-top:6px;
+    }
+
+    .btn-gold{
+      background:#d4af37;
+      color:#000000;
+    }
+
+    .result-box{
+      margin-top:18px;
+      padding:16px;
+      background:#0a0a0a;
+      border:1px solid #2a2a2a;
+      border-radius:12px;
+      color:#d8d8d8;
+    }
+
+    .checklist{
+      display:grid;
+      gap:12px;
+      margin-top:14px;
+    }
+
+    .check-item{
+      background:#0d0d0d;
+      border:1px solid #1f1f1f;
+      border-radius:12px;
+      padding:14px;
+      display:flex;
+      align-items:center;
+      gap:12px;
+    }
+
+    .check-item input{
+      width:18px;
+      height:18px;
+      accent-color:#d4af37;
+    }
+
+    .journal-preview{
+      margin-top:18px;
+      background:#0a0a0a;
+      border:1px solid #2a2a2a;
+      border-radius:12px;
+      padding:18px;
+      color:#d8d8d8;
+      white-space:pre-line;
+    }
+
+    .tv-wrap{
+      border-radius:16px;
+      overflow:hidden;
+      border:1px solid #1f1f1f;
+      background:#0d0d0d;
+      min-height:520px;
+    }
+
+    footer{
+      margin-top:40px;
+      background:#000000;
+      border-top:1px solid #1f1f1f;
+      text-align:center;
+      padding:28px 7%;
+      color:#aaaaaa;
+    }
+
+    @media (max-width: 768px){
+      header{
+        flex-direction:column;
+        gap:14px;
+      }
+
+      nav{
+        display:flex;
+        flex-wrap:wrap;
+        justify-content:center;
+      }
+
+      nav a{
+        margin:8px 10px;
+      }
+
+      .hero h1{
+        font-size:36px;
+      }
+
+      .hero p{
+        font-size:16px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="logo">BullProsperity</div>
+    <nav>
+      <a href="/index.html">Home</a>
+      <a href="/hub.html">Hub</a>
+      <a href="/dashboard.html">Dashboard</a>
+      <a href="/course.html">Course</a>
+      <a href="/tools.html">Tools</a>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <h1>Trading Tools</h1>
+    <p>
+      Dein zentraler Bereich für Risikomanagement, Journal-Einträge, Pre-Trade-Checklisten
+      und Live-Chartanalyse mit TradingView.
+    </p>
+  </section>
+
+  <div class="container">
+
+    <section class="section">
+      <h2>Lot Size Rechner</h2>
+      <p>Berechne deine Positionsgröße auf Basis von Kontogröße, Risiko und Stop Loss.</p>
+
+      <div class="grid">
+        <div class="tool-card">
+          <div class="input-group">
+            <label for="balance">Kontogröße (€ / $)</label>
+            <input type="number" id="balance" placeholder="z. B. 1000" />
+          </div>
+
+          <div class="input-group">
+            <label for="risk">Risiko pro Trade (%)</label>
+            <input type="number" id="risk" placeholder="z. B. 1" step="0.1" />
+          </div>
+
+          <div class="input-group">
+            <label for="stoploss">Stop Loss (Pips)</label>
+            <input type="number" id="stoploss" placeholder="z. B. 20" />
+          </div>
+
+          <div class="input-group">
+            <label for="pipvalue">Pip-Wert pro 1.00 Lot</label>
+            <input type="number" id="pipvalue" placeholder="z. B. 10" value="10" step="0.1" />
+          </div>
+
+          <button class="btn btn-gold" onclick="calculateLotSize()">Berechnen</button>
+
+          <div class="result-box" id="lotResult">
+            Ergebnis erscheint hier.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Trading Journal</h2>
+      <p>Halte deine Trades fest, um Muster, Fehler und Fortschritte zu erkennen.</p>
+
+      <div class="grid">
+        <div class="tool-card">
+          <div class="input-group">
+            <label for="journalDate">Datum</label>
+            <input type="date" id="journalDate" />
+          </div>
+
+          <div class="input-group">
+            <label for="journalPair">Markt / Pair</label>
+            <input type="text" id="journalPair" placeholder="z. B. XAUUSD / EURUSD / NAS100" />
+          </div>
+
+          <div class="input-group">
+            <label for="journalDirection">Richtung</label>
+            <select id="journalDirection">
+              <option>Buy</option>
+              <option>Sell</option>
+            </select>
+          </div>
+
+          <div class="input-group">
+            <label for="journalReason">Setup / Begründung</label>
+            <textarea id="journalReason" placeholder="Warum hast du den Trade genommen?"></textarea>
+          </div>
+
+          <div class="input-group">
+            <label for="journalEmotion">Emotion / Zustand</label>
+            <input type="text" id="journalEmotion" placeholder="z. B. ruhig, unsicher, fokussiert" />
+          </div>
+
+          <div class="input-group">
+            <label for="journalResult">Ergebnis</label>
+            <input type="text" id="journalResult" placeholder="z. B. +2R oder -1R" />
+          </div>
+
+          <button class="btn btn-gold" onclick="saveJournalEntry()">Journal Vorschau erstellen</button>
+
+          <div class="journal-preview" id="journalPreview">
+            Dein Journal-Eintrag erscheint hier.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Pre-Trade Checkliste</h2>
+      <p>Diese Checkliste hilft dir, impulsive Trades zu vermeiden und diszipliniert zu bleiben.</p>
+
+      <div class="checklist">
+        <label class="check-item"><input type="checkbox"> Ist die Marktstruktur klar?</label>
+        <label class="check-item"><input type="checkbox"> Liegt mein Setup wirklich vor?</label>
+        <label class="check-item"><input type="checkbox"> Ist Liquidität klar erkennbar?</label>
+        <label class="check-item"><input type="checkbox"> Ist mein Entry bestätigt?</label>
+        <label class="check-item"><input type="checkbox"> Kenne ich Stop Loss und Take Profit?</label>
+        <label class="check-item"><input type="checkbox"> Passt das Risiko zu meinem Plan?</label>
+        <label class="check-item"><input type="checkbox"> Bin ich emotional ruhig und fokussiert?</label>
+        <label class="check-item"><input type="checkbox"> Handle ich aus Disziplin und nicht aus FOMO?</label>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>TradingView Chart</h2>
+      <p>Hier kannst du direkt einen Live-Chart im Hub einbauen.</p>
+
+      <div class="tv-wrap">
+        <div class="tradingview-widget-container" style="height:520px;width:100%">
+          <div id="tradingview_bullprosperity" style="height:520px;width:100%"></div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <footer>
+    <p>© 2026 BullProsperity. Alle Rechte vorbehalten.</p>
+  </footer>
+
+  <script>
+    function calculateLotSize() {
+      const balance = parseFloat(document.getElementById("balance").value);
+      const risk = parseFloat(document.getElementById("risk").value);
+      const stoploss = parseFloat(document.getElementById("stoploss").value);
+      const pipvalue = parseFloat(document.getElementById("pipvalue").value);
+      const resultBox = document.getElementById("lotResult");
+
+      if (!balance || !risk || !stoploss || !pipvalue || stoploss <= 0 || pipvalue <= 0) {
+        resultBox.innerHTML = "Bitte alle Felder korrekt ausfüllen.";
+        return;
+      }
+
+      const riskAmount = balance * (risk / 100);
+      const lotSize = riskAmount / (stoploss * pipvalue);
+
+      resultBox.innerHTML =
+        "Risikobetrag: <strong>" + riskAmount.toFixed(2) + "</strong><br>" +
+        "Empfohlene Lot Size: <strong>" + lotSize.toFixed(2) + " Lot</strong>";
+    }
+
+    function saveJournalEntry() {
+      const date = document.getElementById("journalDate").value;
+      const pair = document.getElementById("journalPair").value;
+      const direction = document.getElementById("journalDirection").value;
+      const reason = document.getElementById("journalReason").value;
+      const emotion = document.getElementById("journalEmotion").value;
+      const result = document.getElementById("journalResult").value;
+      const preview = document.getElementById("journalPreview");
+
+      preview.innerHTML =
+        "<strong>Datum:</strong> " + (date || "-") + "<br><br>" +
+        "<strong>Markt / Pair:</strong> " + (pair || "-") + "<br><br>" +
+        "<strong>Richtung:</strong> " + (direction || "-") + "<br><br>" +
+        "<strong>Setup / Begründung:</strong><br>" + (reason || "-") + "<br><br>" +
+        "<strong>Emotion / Zustand:</strong> " + (emotion || "-") + "<br><br>" +
+        "<strong>Ergebnis:</strong> " + (result || "-");
+    }
+  </script>
+
+  <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+  <script type="text/javascript">
+    new TradingView.widget({
+      "width": "100%",
+      "height": 520,
+      "symbol": "OANDA:XAUUSD",
+      "interval": "15",
+      "timezone": "Europe/Berlin",
+      "theme": "dark",
+      "style": "1",
+      "locale": "de_DE",
+      "toolbar_bg": "#0a0a0a",
+      "enable_publishing": false,
+      "hide_top_toolbar": false,
+      "hide_legend": false,
+      "save_image": false,
+      "container_id": "tradingview_bullprosperity"
+    });
+  </script>
+
+</body>
+</html>
