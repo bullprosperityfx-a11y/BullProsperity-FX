@@ -96,7 +96,7 @@
 
     .grid{
       display:grid;
-      grid-template-columns:repeat(auto-fit, minmax(260px, 1fr));
+      grid-template-columns:repeat(auto-fit, minmax(280px, 1fr));
       gap:18px;
     }
 
@@ -150,6 +150,7 @@
       font-weight:700;
       font-size:15px;
       margin-top:6px;
+      margin-right:10px;
     }
 
     .btn-gold{
@@ -157,7 +158,14 @@
       color:#000000;
     }
 
-    .result-box{
+    .btn-dark{
+      background:#141414;
+      color:#ffffff;
+      border:1px solid #2d2d2d;
+    }
+
+    .result-box,
+    .journal-preview{
       margin-top:18px;
       padding:16px;
       background:#0a0a0a;
@@ -166,20 +174,33 @@
       color:#d8d8d8;
     }
 
-    .checklist{
+    .checklists-grid{
       display:grid;
-      gap:12px;
-      margin-top:14px;
+      grid-template-columns:repeat(auto-fit, minmax(280px, 1fr));
+      gap:18px;
+    }
+
+    .checklist-box{
+      background:#0d0d0d;
+      border:1px solid #1f1f1f;
+      border-radius:14px;
+      padding:20px;
+    }
+
+    .checklist-box h3{
+      color:#d4af37;
+      margin-bottom:14px;
     }
 
     .check-item{
-      background:#0d0d0d;
+      background:#111111;
       border:1px solid #1f1f1f;
       border-radius:12px;
       padding:14px;
       display:flex;
       align-items:center;
       gap:12px;
+      margin-bottom:12px;
     }
 
     .check-item input{
@@ -188,14 +209,46 @@
       accent-color:#d4af37;
     }
 
-    .journal-preview{
-      margin-top:18px;
+    .saved-entries{
+      margin-top:22px;
+    }
+
+    .entry-card{
       background:#0a0a0a;
-      border:1px solid #2a2a2a;
+      border:1px solid #242424;
       border-radius:12px;
-      padding:18px;
+      padding:16px;
+      margin-bottom:14px;
+    }
+
+    .entry-card h4{
+      color:#d4af37;
+      margin-bottom:10px;
+      font-size:18px;
+    }
+
+    .entry-card p{
+      margin-bottom:8px;
       color:#d8d8d8;
-      white-space:pre-line;
+    }
+
+    .entry-actions{
+      margin-top:12px;
+    }
+
+    .small-btn{
+      padding:10px 14px;
+      border:none;
+      border-radius:8px;
+      cursor:pointer;
+      font-weight:700;
+      margin-right:8px;
+    }
+
+    .delete-btn{
+      background:#3a1111;
+      color:#ffffff;
+      border:1px solid #5a1f1f;
     }
 
     .tv-wrap{
@@ -257,7 +310,7 @@
   <section class="hero">
     <h1>Trading Tools</h1>
     <p>
-      Dein zentraler Bereich für Risikomanagement, Journal-Einträge, Pre-Trade-Checklisten
+      Dein zentraler Bereich für Risikomanagement, Journalführung, Checklisten
       und Live-Chartanalyse mit TradingView.
     </p>
   </section>
@@ -301,7 +354,7 @@
 
     <section class="section">
       <h2>Trading Journal</h2>
-      <p>Halte deine Trades fest, um Muster, Fehler und Fortschritte zu erkennen.</p>
+      <p>Speichere deine Trades direkt im Browser und erkenne Muster, Fehler und Fortschritte.</p>
 
       <div class="grid">
         <div class="tool-card">
@@ -338,34 +391,58 @@
             <input type="text" id="journalResult" placeholder="z. B. +2R oder -1R" />
           </div>
 
-          <button class="btn btn-gold" onclick="saveJournalEntry()">Journal Vorschau erstellen</button>
+          <button class="btn btn-gold" onclick="saveJournalEntry()">Eintrag speichern</button>
+          <button class="btn btn-dark" onclick="previewJournalEntry()">Vorschau</button>
 
           <div class="journal-preview" id="journalPreview">
             Dein Journal-Eintrag erscheint hier.
           </div>
         </div>
       </div>
+
+      <div class="saved-entries">
+        <h2 style="font-size:24px;">Gespeicherte Einträge</h2>
+        <div id="entriesContainer"></div>
+      </div>
     </section>
 
     <section class="section">
-      <h2>Pre-Trade Checkliste</h2>
-      <p>Diese Checkliste hilft dir, impulsive Trades zu vermeiden und diszipliniert zu bleiben.</p>
+      <h2>Trading Checklisten</h2>
+      <p>Nutze strukturierte Checklisten vor, während und nach dem Trade.</p>
 
-      <div class="checklist">
-        <label class="check-item"><input type="checkbox"> Ist die Marktstruktur klar?</label>
-        <label class="check-item"><input type="checkbox"> Liegt mein Setup wirklich vor?</label>
-        <label class="check-item"><input type="checkbox"> Ist Liquidität klar erkennbar?</label>
-        <label class="check-item"><input type="checkbox"> Ist mein Entry bestätigt?</label>
-        <label class="check-item"><input type="checkbox"> Kenne ich Stop Loss und Take Profit?</label>
-        <label class="check-item"><input type="checkbox"> Passt das Risiko zu meinem Plan?</label>
-        <label class="check-item"><input type="checkbox"> Bin ich emotional ruhig und fokussiert?</label>
-        <label class="check-item"><input type="checkbox"> Handle ich aus Disziplin und nicht aus FOMO?</label>
+      <div class="checklists-grid">
+        <div class="checklist-box">
+          <h3>Pre-Trade Checkliste</h3>
+          <label class="check-item"><input type="checkbox"> Ist die Marktstruktur klar?</label>
+          <label class="check-item"><input type="checkbox"> Liegt mein Setup wirklich vor?</label>
+          <label class="check-item"><input type="checkbox"> Ist Liquidität klar erkennbar?</label>
+          <label class="check-item"><input type="checkbox"> Ist mein Entry bestätigt?</label>
+          <label class="check-item"><input type="checkbox"> Passt das Risiko zu meinem Plan?</label>
+        </div>
+
+        <div class="checklist-box">
+          <h3>During-Trade Checkliste</h3>
+          <label class="check-item"><input type="checkbox"> Bleibe ich diszipliniert im Plan?</label>
+          <label class="check-item"><input type="checkbox"> Verändere ich den Stop Loss nicht impulsiv?</label>
+          <label class="check-item"><input type="checkbox"> Reagiere ich nicht aus Angst oder Gier?</label>
+          <label class="check-item"><input type="checkbox"> Halte ich mich an mein Management?</label>
+          <label class="check-item"><input type="checkbox"> Vermeide ich unnötiges Eingreifen?</label>
+        </div>
+
+        <div class="checklist-box">
+          <h3>Post-Trade Checkliste</h3>
+          <label class="check-item"><input type="checkbox"> Habe ich den Trade dokumentiert?</label>
+          <label class="check-item"><input type="checkbox"> Habe ich meine Emotionen reflektiert?</label>
+          <label class="check-item"><input type="checkbox"> Habe ich Fehler erkannt?</label>
+          <label class="check-item"><input type="checkbox"> Habe ich meinen Prozess bewertet?</label>
+          <label class="check-item"><input type="checkbox"> Ziehe ich eine klare Lektion daraus?</label>
+        </div>
       </div>
     </section>
 
     <section class="section">
       <h2>TradingView Chart</h2>
-      <p>Hier kannst du direkt einen Live-Chart im Hub einbauen.</p>
+      <p>Nutze einen Live-Chart direkt innerhalb deines Hubs.</p>
 
       <div class="tv-wrap">
         <div class="tradingview-widget-container" style="height:520px;width:100%">
@@ -401,23 +478,93 @@
         "Empfohlene Lot Size: <strong>" + lotSize.toFixed(2) + " Lot</strong>";
     }
 
-    function saveJournalEntry() {
-      const date = document.getElementById("journalDate").value;
-      const pair = document.getElementById("journalPair").value;
-      const direction = document.getElementById("journalDirection").value;
-      const reason = document.getElementById("journalReason").value;
-      const emotion = document.getElementById("journalEmotion").value;
-      const result = document.getElementById("journalResult").value;
+    function getJournalData() {
+      return {
+        date: document.getElementById("journalDate").value,
+        pair: document.getElementById("journalPair").value,
+        direction: document.getElementById("journalDirection").value,
+        reason: document.getElementById("journalReason").value,
+        emotion: document.getElementById("journalEmotion").value,
+        result: document.getElementById("journalResult").value
+      };
+    }
+
+    function previewJournalEntry() {
+      const data = getJournalData();
       const preview = document.getElementById("journalPreview");
 
       preview.innerHTML =
-        "<strong>Datum:</strong> " + (date || "-") + "<br><br>" +
-        "<strong>Markt / Pair:</strong> " + (pair || "-") + "<br><br>" +
-        "<strong>Richtung:</strong> " + (direction || "-") + "<br><br>" +
-        "<strong>Setup / Begründung:</strong><br>" + (reason || "-") + "<br><br>" +
-        "<strong>Emotion / Zustand:</strong> " + (emotion || "-") + "<br><br>" +
-        "<strong>Ergebnis:</strong> " + (result || "-");
+        "<strong>Datum:</strong> " + (data.date || "-") + "<br><br>" +
+        "<strong>Markt / Pair:</strong> " + (data.pair || "-") + "<br><br>" +
+        "<strong>Richtung:</strong> " + (data.direction || "-") + "<br><br>" +
+        "<strong>Setup / Begründung:</strong><br>" + (data.reason || "-") + "<br><br>" +
+        "<strong>Emotion / Zustand:</strong> " + (data.emotion || "-") + "<br><br>" +
+        "<strong>Ergebnis:</strong> " + (data.result || "-");
     }
+
+    function saveJournalEntry() {
+      const data = getJournalData();
+
+      if (!data.date || !data.pair || !data.reason) {
+        alert("Bitte mindestens Datum, Markt und Begründung ausfüllen.");
+        return;
+      }
+
+      const entries = JSON.parse(localStorage.getItem("bpJournalEntries")) || [];
+      entries.unshift(data);
+      localStorage.setItem("bpJournalEntries", JSON.stringify(entries));
+
+      previewJournalEntry();
+      renderEntries();
+      clearForm();
+    }
+
+    function clearForm() {
+      document.getElementById("journalDate").value = "";
+      document.getElementById("journalPair").value = "";
+      document.getElementById("journalDirection").value = "Buy";
+      document.getElementById("journalReason").value = "";
+      document.getElementById("journalEmotion").value = "";
+      document.getElementById("journalResult").value = "";
+    }
+
+    function deleteEntry(index) {
+      const entries = JSON.parse(localStorage.getItem("bpJournalEntries")) || [];
+      entries.splice(index, 1);
+      localStorage.setItem("bpJournalEntries", JSON.stringify(entries));
+      renderEntries();
+    }
+
+    function renderEntries() {
+      const container = document.getElementById("entriesContainer");
+      const entries = JSON.parse(localStorage.getItem("bpJournalEntries")) || [];
+
+      if (entries.length === 0) {
+        container.innerHTML = '<div class="entry-card"><p>Noch keine Einträge gespeichert.</p></div>';
+        return;
+      }
+
+      container.innerHTML = "";
+
+      entries.forEach((entry, index) => {
+        container.innerHTML += `
+          <div class="entry-card">
+            <h4>${entry.pair} • ${entry.direction}</h4>
+            <p><strong>Datum:</strong> ${entry.date || "-"}</p>
+            <p><strong>Setup / Begründung:</strong> ${entry.reason || "-"}</p>
+            <p><strong>Emotion:</strong> ${entry.emotion || "-"}</p>
+            <p><strong>Ergebnis:</strong> ${entry.result || "-"}</p>
+            <div class="entry-actions">
+              <button class="small-btn delete-btn" onclick="deleteEntry(${index})">Löschen</button>
+            </div>
+          </div>
+        `;
+      });
+    }
+
+    window.onload = function () {
+      renderEntries();
+    };
   </script>
 
   <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
