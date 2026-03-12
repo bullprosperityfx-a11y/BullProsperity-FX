@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BullProsperity Lesson</title>
+  <style>
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+    }
+
+    body{
+      font-family:Arial, Helvetica, sans-serif;
+      background:#0a0a0a;
+      color:#ffffff;
+      line-height:1.6;
+    }
+
+    header{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      padding:22px 7%;
+      background:#000000;
+      border-bottom:1px solid #1f1f1f;
+      position:sticky;
+      top:0;
+      z-index:1000;
+    }
+
+    .logo{
+      font-size:28px;
+      font-weight:700;
+      color:#d4af37;
+      letter-spacing:1px;
+    }
+
+    nav a{
+      color:white;
+      text-decoration:none;
+      margin-left:22px;
+      font-size:15px;
+    }
+
+    nav a:hover{
+      color:#d4af37;
+    }
+
+    .container{
+      width:min(1200px, 92%);
+      margin:40px auto;
+      display:grid;
+      grid-template-columns:2fr 1fr;
+      gap:24px;
+    }
+
+    .main-content{
+      background:#111111;
+      border:1px solid #1f1f1f;
+      border-radius:18px;
+      overflow:hidden;
+    }
+
+    .video-box{
+      width:100%;
+      aspect-ratio:16/9;
+      background:linear-gradient(135deg, #111111, #050505);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      border-bottom:1px solid #1f1f1f;
+      position:relative;
+    }
+
+    .play-button{
+      width:88px;
+      height:88px;
+      border-radius:50%;
+      background:#d4af37;
+      color:#000000;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:34px;
+      font-weight:bold;
+      box-shadow:0 0 30px rgba(212,175,55,0.25);
+    }
+
+    .lesson-content{
+      padding:28px;
+    }
+
+    .tag{
+      display:inline-block;
+      padding:7px 14px;
+      border-radius:999px;
+      background:rgba(212,175,55,0.08);
+      border:1px solid rgba(212,175,55,0.28);
+      color:#d4af37;
+      font-size:13px;
+      font-weight:700;
+      margin-bottom:16px;
+    }
+
+    .lesson-content h1{
+      font-size:34px;
+      color:#d4af37;
+      margin-bottom:12px;
+    }
+
+    .lesson-meta{
+      color:#bdbdbd;
+      margin-bottom:22px;
+      font-size:14px;
+    }
+
+    .lesson-content p{
+      color:#d5d5d5;
+      margin-bottom:16px;
+    }
+
+    .notes-box{
+      margin-top:28px;
+      background:#0d0d0d;
+      border:1px solid #1f1f1f;
+      border-radius:14px;
+      padding:20px;
+    }
+
+    .notes-box h3{
+      color:#d4af37;
+      margin-bottom:12px;
+    }
+
+    .notes-box ul{
+      padding-left:18px;
+      color:#d5d5d5;
+    }
+
+    .notes-box li{
+      margin-bottom:10px;
+    }
+
+    .sidebar{
+      display:flex;
+      flex-direction:column;
+      gap:18px;
+    }
+
+    .sidebar-card{
+      background:#111111;
+      border:1px solid #1f1f1f;
+      border-radius:18px;
+      padding:22px;
+    }
+
+    .sidebar-card h3{
+      color:#d4af37;
+      margin-bottom:14px;
+      font-size:22px;
+    }
+
+    .lesson-link{
+      display:block;
+      text-decoration:none;
+      color:#ffffff;
+      background:#0d0d0d;
+      border:1px solid #1f1f1f;
+      border-radius:12px;
+      padding:14px;
+      margin-bottom:12px;
+      transition:0.3s;
+    }
+
+    .lesson-link:hover{
+      border-color:#d4af37;
+      transform:translateY(-2px);
+    }
+
+    .lesson-link strong{
+      display:block;
+      color:#d4af37;
+      margin-bottom:6px;
+    }
+
+    .button-row{
+      display:flex;
+      gap:14px;
+      flex-wrap:wrap;
+      margin-top:24px;
+    }
+
+    .btn{
+      display:inline-block;
+      padding:13px 22px;
+      border-radius:8px;
+      text-decoration:none;
+      font-weight:700;
+    }
+
+    .btn-gold{
+      background:#d4af37;
+      color:#000000;
+    }
+
+    .btn-dark{
+      background:#0d0d0d;
+      border:1px solid #333333;
+      color:#ffffff;
+    }
+
+    footer{
+      margin-top:40px;
+      background:#000000;
+      border-top:1px solid #1f1f1f;
+      text-align:center;
+      padding:28px 7%;
+      color:#aaaaaa;
+    }
+
+    @media (max-width: 950px){
+      .container{
+        grid-template-columns:1fr;
+      }
+    }
+
+    @media (max-width: 768px){
+      header{
+        flex-direction:column;
+        gap:14px;
+      }
+
+      nav{
+        display:flex;
+        flex-wrap:wrap;
+        justify-content:center;
+      }
+
+      nav a{
+        margin:8px 10px;
+      }
+
+      .lesson-content h1{
+        font-size:28px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="logo">BullProsperity</div>
+    <nav>
+      <a href="/index.html">Home</a>
+      <a href="/hub.html">Hub</a>
+      <a href="/dashboard.html">Dashboard</a>
+      <a href="/course.html">Course</a>
+    </nav>
+  </header>
+
+  <div class="container">
+    <div class="main-content">
+      <div class="video-box">
+        <div class="play-button">▶</div>
+      </div>
+
+      <div class="lesson-content">
+        <div class="tag">Modul 1 • Lesson 1</div>
+        <h1>Wie du diesen Kurs optimal durcharbeitest</h1>
+        <div class="lesson-meta">BullProsperity Academy • Video-Lektion • Dauer: 08:32</div>
+
+        <p>
+          In dieser Lektion lernst du, wie du den Kurs strukturiert, fokussiert und mit dem richtigen System durcharbeitest.
+          Der Schlüssel liegt nicht darin, Inhalte nur einmal anzuschauen, sondern sie bewusst zu verstehen, zu wiederholen
+          und direkt am Chart umzusetzen.
+        </p>
+
+        <p>
+          Arbeite die Module Schritt für Schritt in der vorgesehenen Reihenfolge durch. Überspringe keine Grundlagen,
+          denn genau dort wird das Fundament für Strategie, Marktverständnis und saubere Entscheidungen gelegt.
+        </p>
+
+        <p>
+          Nutze jede Lektion nicht nur zum Konsumieren, sondern aktiv: Schreibe Notizen, markiere wichtige Erkenntnisse
+          und setze das Gelernte direkt praktisch um. So entwickelst du nicht nur Wissen, sondern echtes Verständnis.
+        </p>
+
+        <div class="notes-box">
+          <h3>Wichtige Punkte aus dieser Lektion</h3>
+          <ul>
+            <li>Arbeite die Module in der richtigen Reihenfolge durch</li>
+            <li>Wiederhole wichtige Inhalte regelmäßig</li>
+            <li>Kombiniere Theorie immer mit Chartpraxis</li>
+            <li>Führe Notizen zu jeder Lektion</li>
+            <li>Baue Verständnis auf statt nur Informationen zu sammeln</li>
+          </ul>
+        </div>
+
+        <div class="button-row">
+          <a href="/course.html" class="btn btn-dark">Zur Kursübersicht</a>
+          <a href="#" class="btn btn-gold">Nächste Lektion</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="sidebar">
+      <div class="sidebar-card">
+        <h3>Dieses Modul</h3>
+
+        <a href="/lesson1.html" class="lesson-link">
+          <strong>Lesson 1</strong>
+          Wie du diesen Kurs optimal durcharbeitest
+        </a>
+
+        <a href="#" class="lesson-link">
+          <strong>Lesson 2</strong>
+          Wichtiger Hinweis & Risikoaufklärung
+        </a>
+      </div>
+
+      <div class="sidebar-card">
+        <h3>Nächste Schritte</h3>
+        <p style="color:#d3d3d3;">
+          Als Nächstes kannst du weitere Video-Lektionsseiten erstellen und jede Lektion einzeln mit Video,
+          Beschreibung und Notizen aufbauen.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <p>© 2026 BullProsperity. Alle Rechte vorbehalten.</p>
+  </footer>
+
+</body>
+</html>
