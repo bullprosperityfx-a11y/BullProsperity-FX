@@ -112,7 +112,33 @@
       padding:28px;
       transition:0.3s;
     }
+    .locked-card{
+position:relative;
+background:linear-gradient(180deg, #111111, #0b0b0b);
+border:1px solid #3a3120;
+}
 
+.locked-card::after{
+content:"";
+position:absolute;
+inset:0;
+background:linear-gradient(rgba(0,0,0,0.08), rgba(0,0,0,0.18));
+border-radius:16px;
+pointer-events:none;
+}
+
+.lock-badge{
+display:inline-block;
+margin-bottom:14px;
+padding:7px 12px;
+border-radius:999px;
+background:rgba(212,175,55,0.08);
+border:1px solid rgba(212,175,55,0.28);
+color:#d4af37;
+font-size:12px;
+font-weight:700;
+letter-spacing:0.3px;
+}
     .card:hover{
       transform:translateY(-4px);
       border-color:#d4af37;
@@ -261,7 +287,7 @@
         grid-template-columns:1fr;
       }
     }
-  </style>
+  </style> 
 </head>
 <body>
 
@@ -292,11 +318,46 @@
     </div>
 
     <div class="grid">
-      <div class="card">
-        <h3>Trading Kurs</h3>
-        <p>Alle Module, Lektionen und später eingebettete Videos an einem Ort.</p>
-        <a href="/dashboard.html" class="btn btn-gold">Öffnen</a>
-      </div>
+  <div class="card">
+    <h3>Trading Kurs</h3>
+    <p>Alle Module, Lektionen und später eingebettete Videos an einem Ort.</p>
+    <a href="/course.html" class="btn btn-gold">Öffnen</a>
+  </div>
+
+  <div class="card locked-card">
+    <div class="lock-badge">🔒 Members Only</div>
+    <h3>Strategie Bibliothek</h3>
+    <p>Deine Setups, Entry-Modelle, Markstruktur und Smart-Money Inhalte.</p>
+    <a href="#" class="btn btn-dark">Nur für Mitglieder</a>
+  </div>
+
+  <div class="card" id="tools">
+    <h3>Trading Tools</h3>
+    <p>Lot Size Rechner, Journal, Checklisten und TradingView Charts an einem Ort.</p>
+    <a href="/tools.html" class="btn btn-gold">Öffnen</a>
+  </div>
+
+  <div class="card locked-card">
+    <div class="lock-badge">🔒 Premium Access</div>
+    <h3>Community</h3>
+    <p>Ein Bereich für Austausch, Updates, Calls und exklusive Mitgliederinfos.</p>
+    <a href="#" class="btn btn-dark">Nur für Mitglieder</a>
+  </div>
+
+  <div class="card locked-card">
+    <div class="lock-badge">🔒 Locked</div>
+    <h3>Live Sessions</h3>
+    <p>Exklusive Marktanalysen, Live Calls und direkte Einblicke in Umsetzungen.</p>
+    <a href="#" class="btn btn-dark">Freischaltung über Whop</a>
+  </div>
+
+  <div class="card locked-card">
+    <div class="lock-badge">🔒 Locked</div>
+    <h3>Signal & Setup Room</h3>
+    <p>Strukturierte Marktideen, Watchlists und ausgewählte Setups für Mitglieder.</p>
+    <a href="#" class="btn btn-dark">Freischaltung über Whop</a>
+  </div>
+</div>
 
       <div class="card">
         <h3>Strategie Bibliothek</h3>
