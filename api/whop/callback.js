@@ -12,20 +12,22 @@ module.exports = async function handler(req, res) {
     const codeVerifier = verifierMatch ? verifierMatch[1] : null;
 
     // TOKEN holen
-    const tokenRes = await fetch("https://api.whop.com/oauth/token", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        client_id: clientId,
-        client_secret: clientSecret,
-        code,
-        grant_type: "authorization_code",
-        redirect_uri: redirectUri,
-        code_verifier: codeVerifier
-      })
-    });
+   const params = new URLSearchParams();
+
+params.append("client_id", clientId);
+params.append("client_secret", clientSecret);
+params.append("code", code);
+params.append("grant_type", "authorization_code");
+params.append("redirect_uri", redirectUri);
+params.append("code_verifier", codeVerifier);
+
+const tokenRes = await fetch("https://api.whop.com/oauth/token", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/x-www-form-urlencoded"
+  },
+  body: params.toString()
+});
 
     const tokenData = await tokenRes.json();
 
