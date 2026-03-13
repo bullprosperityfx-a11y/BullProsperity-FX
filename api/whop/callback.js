@@ -1,28 +1,9 @@
-module.exports = async function handler(req, res) {
+export default async function handler(req, res) {
   try {
-    const { code, state } = req.query;
+    const { code } = req.query;
 
     if (!code) {
-      return res.status(400).send("Missing OAuth code");
-    }
-
-    const clientId = process.env.WHOP_CLIENT_ID;
-    const clientSecret = process.env.WHOP_CLIENT_SECRET;
-    const redirectUri = process.env.WHOP_REDIRECT_URI;
-
-    const cookie = req.headers.cookie || "";
-    const verifierMatch = cookie.match(/whop_verifier=([^;]+)/);
-    const stateMatch = cookie.match(/whop_state=([^;]+)/);
-
-    const codeVerifier = verifierMatch ? verifierMatch[1] : null;
-    const storedState = stateMatch ? stateMatch[1] : null;
-
-    if (!codeVerifier) {
-      return res.status(400).send("Missing code verifier");
-    }
-
-    if (!state || !storedState || state !== storedState) {
-      return res.status(400).send("Invalid OAuth state");
+      return res.status(400).json({ error: "Missing code" });
     }
 
     const tokenRes = await fetch("https://api.whop.com/oauth/token", {
@@ -32,85 +13,55 @@ module.exports = async function handler(req, res) {
       },
       body: JSON.stringify({
         grant_type: "authorization_code",
-        code,
-        redirect_uri: redirectUri,
-        client_id: clientId,
-        client_secret: clientSecret,
-        code_verifier: codeVerifier
+        code: code,
+        client_id: process.env.WHOP_CLIENT_ID,
+        client_secret: process.env.WHOP_CLIENT_SECRET,
+        redirect_uri: process.env.WHOP_REDIRECT_URI
       })
     });
 
-    const tokenData = await tokenRes.json();
+    const tokenText = await tokenRes.text();
 
-    if (!tokenRes.ok || !tokenData.access_token) {
+    if (!tokenText) {
       return res.status(500).json({
-        error: "Token exchange failed",
-        tokenData
+        error: "Whop returned empty response"
       });
     }
+
+    const tokenData = JSON.parse(tokenText);
 
     const accessToken = tokenData.access_token;
 
-    // OAuth Userinfo
-    const userInfoRes = await fetch("https://api.whop.com/oauth/userinfo", {
+    const userRes = await fetch("https://api.whop.com/v5/me", {
       headers: {
         Authorization: `Bearer ${accessToken}`
       }
     });
 
-    const userInfo = await userInfoRes.json();
+    const userText = await userRes.text();
+    const userData = JSON.parse(userText);
 
-    if (!userInfoRes.ok) {
-      return res.status(500).json({
-        error: "Failed to fetch userinfo",
-        userInfo
-      });
-    }
-
-    const email = (userInfo.email || "").toLowerCase();
-
-    // Memberships laden
-    const membershipRes = await fetch("https://api.whop.com/api/v5/memberships", {
-      headers: {
-        Authorization: `Bearer ${accessToken}`
-      }
-    });
-
-    const membershipData = await membershipRes.json();
-
-    const memberships = Array.isArray(membershipData?.data)
-      ? membershipData.data
-      : Array.isArray(membershipData)
-      ? membershipData
-      : [];
-
-    const activeMemberships = memberships.filter((membership) => {
-      const status = (membership.status || "").toLowerCase();
-      return status === "active" || status === "trialing";
-    });
-
-    const adminEmails = [
-      "bullprosperityfx@gmail.com"
-    ].map((e) => e.toLowerCase());
+    const email = userData.email || "";
 
     let role = "guest";
 
-    if (adminEmails.includes(email)) {
+    if (email === "DEINE_ADMIN_EMAIL") {
       role = "admin";
-    } else if (activeMemberships.length > 0) {
+    } else {
       role = "premium";
     }
 
-    res.setHeader("Set-Cookie", [
-      `bp_role=${encodeURIComponent(role)}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=86400`,
-      `bp_email=${encodeURIComponent(email)}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=86400`
-    ]);
+    res.setHeader(
+      "Set-Cookie",
+      `bp_role=${role}; Path=/; HttpOnly; Secure; SameSite=Lax`
+    );
 
-    return res.redirect("/hub.html");
-  } catch (error) {
+    res.redirect("/hub.html");
+
+  } catch (err) {
     return res.status(500).json({
       error: "OAuth callback failed",
-      message: error.message
+      message: err.message
     });
   }
-};
+}
