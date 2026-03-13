@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Long Term Investment | BullProsperity</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    body {
+      background: #0b0b0f;
+      color: #f5f5f5;
+      line-height: 1.6;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .navbar {
+      width: 100%;
+      padding: 18px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(10, 10, 14, 0.95);
+      border-bottom: 1px solid rgba(255, 215, 0, 0.12);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      backdrop-filter: blur(10px);
+    }
+
+    .logo {
+      font-size: 24px;
+      font-weight: 700;
+      color: #d4af37;
+      letter-spacing: 0.5px;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 24px;
+      font-size: 15px;
+      color: #d8d8d8;
+    }
+
+    .nav-links a:hover {
+      color: #d4af37;
+      transition: 0.3s ease;
+    }
+
+    .hero {
+      min-height: 90vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 80px 20px;
+      background:
+        linear-gradient(rgba(5,5,10,0.72), rgba(5,5,10,0.88)),
+        url('https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?auto=format&fit=crop&w=1400&q=80') center/cover no-repeat;
+      text-align: center;
+    }
+
+    .hero-content {
+      max-width: 900px;
+    }
+
+    .hero h1 {
+      font-size: 56px;
+      line-height: 1.1;
+      margin-bottom: 20px;
+      color: #ffffff;
+    }
+
+    .hero h1 span {
+      color: #d4af37;
+    }
+
+    .hero p {
+      font-size: 19px;
+      color: #d3d3d3;
+      max-width: 760px;
+      margin: 0 auto 32px;
+    }
+
+    .hero-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 18px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      padding: 14px 28px;
+      border-radius: 10px;
+      font-weight: bold;
+      transition: 0.3s ease;
+      display: inline-block;
+    }
+
+    .btn-primary {
+      background: #d4af37;
+      color: #111;
+    }
+
+    .btn-primary:hover {
+      background: #f0c94d;
+      transform: translateY(-2px);
+    }
+
+    .btn-secondary {
+      border: 1px solid #d4af37;
+      color: #d4af37;
+      background: transparent;
+    }
+
+    .btn-secondary:hover {
+      background: rgba(212, 175, 55, 0.1);
+      transform: translateY(-2px);
+    }
+
+    .section {
+      padding: 90px 20px;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: auto;
+    }
+
+    .section-title {
+      text-align: center;
+      margin-bottom: 18px;
+      font-size: 38px;
+      color: #fff;
+    }
+
+    .section-subtitle {
+      text-align: center;
+      max-width: 760px;
+      margin: 0 auto 50px;
+      color: #bbbbbb;
+      font-size: 17px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 24px;
+    }
+
+    .card {
+      background: #12121a;
+      border: 1px solid rgba(212, 175, 55, 0.12);
+      border-radius: 18px;
+      padding: 28px;
+      transition: 0.3s ease;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    }
+
+    .card:hover {
+      transform: translateY(-6px);
+      border-color: rgba(212, 175, 55, 0.35);
+      box-shadow: 0 18px 40px rgba(0,0,0,0.22);
+    }
+
+    .card h3 {
+      color: #d4af37;
+      margin-bottom: 14px;
+      font-size: 24px;
+    }
+
+    .card p {
+      color: #d2d2d2;
+      font-size: 15px;
+      margin-bottom: 14px;
+    }
+
+    .card ul {
+      padding-left: 18px;
+      color: #c7c7c7;
+      font-size: 14px;
+    }
+
+    .card ul li {
+      margin-bottom: 8px;
+    }
+
+    .strategy-section {
+      background: #0f0f15;
+    }
+
+    .strategy-boxes {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+      margin-top: 20px;
+    }
+
+    .strategy-box {
+      background: #151520;
+      border-radius: 18px;
+      padding: 28px;
+      border: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .strategy-box h4 {
+      color: #d4af37;
+      margin-bottom: 14px;
+      font-size: 22px;
+    }
+
+    .strategy-box p {
+      color: #d0d0d0;
+      font-size: 15px;
+    }
+
+    .timeline {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+      margin-top: 40px;
+    }
+
+    .timeline-step {
+      background: #12121a;
+      border-radius: 16px;
+      padding: 24px;
+      border: 1px solid rgba(212, 175, 55, 0.12);
+    }
+
+    .timeline-step span {
+      display: inline-block;
+      width: 38px;
+      height: 38px;
+      line-height: 38px;
+      text-align: center;
+      border-radius: 50%;
+      background: #d4af37;
+      color: #111;
+      font-weight: bold;
+      margin-bottom: 14px;
+    }
+
+    .timeline-step h5 {
+      font-size: 20px;
+      margin-bottom: 10px;
+      color: #fff;
+    }
+
+    .timeline-step p {
+      color: #c9c9c9;
+      font-size: 14px;
+    }
+
+    .cta {
+      text-align: center;
+      background: linear-gradient(180deg, #111117, #0b0b0f);
+      padding: 80px 20px;
+    }
+
+    .cta h2 {
+      font-size: 40px;
+      margin-bottom: 16px;
+      color: #fff;
+    }
+
+    .cta p {
+      max-width: 760px;
+      margin: 0 auto 28px;
+      color: #cfcfcf;
+      font-size: 17px;
+    }
+
+    .footer {
+      padding: 28px 20px 40px;
+      text-align: center;
+      color: #9d9d9d;
+      font-size: 13px;
+      border-top: 1px solid rgba(255,255,255,0.06);
+      background: #09090c;
+    }
+
+    .footer .disclaimer {
+      max-width: 950px;
+      margin: 0 auto;
+      line-height: 1.7;
+    }
+
+    @media (max-width: 768px) {
+      .navbar {
+        flex-direction: column;
+        gap: 14px;
+        padding: 18px 20px;
+      }
+
+      .nav-links {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 14px;
+      }
+
+      .hero h1 {
+        font-size: 38px;
+      }
+
+      .hero p {
+        font-size: 16px;
+      }
+
+      .section-title {
+        font-size: 30px;
+      }
+
+      .cta h2 {
+        font-size: 30px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="navbar">
+    <div class="logo">BullProsperity | Long Term</div>
+    <div class="nav-links">
+      <a href="#assetklassen">Anlageklassen</a>
+      <a href="#strategie">Strategie</a>
+      <a href="#plan">Investment Plan</a>
+      <a href="#start">Starten</a>
+    </div>
+  </nav>
+
+  <section class="hero">
+    <div class="hero-content">
+      <h1>Langfristig Vermögen aufbauen mit <span>Strategie & Geduld</span></h1>
+      <p>
+        Diese Unterseite zeigt dir die Grundlagen des Long-Term Investing in ETFs, Fonds, Krypto,
+        Aktien und Rohstoffen. Fokus: nachhaltiger Vermögensaufbau, Risikoverständnis und strukturierte Entscheidungen.
+      </p>
+      <div class="hero-buttons">
+        <a href="#assetklassen" class="btn btn-primary">Jetzt entdecken</a>
+        <a href="#plan" class="btn btn-secondary">Investment Plan ansehen</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="assetklassen">
+    <div class="container">
+      <h2 class="section-title">Die wichtigsten Anlageklassen</h2>
+      <p class="section-subtitle">
+        Jede Anlageklasse hat eigene Chancen, Risiken und Rollen im Portfolio.
+        Ziel ist nicht Hype, sondern ein solides, durchdachtes Long-Term Setup.
+      </p>
+
+      <div class="grid">
+        <div class="card">
+          <h3>ETF</h3>
+          <p>
+            ETFs sind für viele Anleger die Basis eines langfristigen Portfolios.
+            Sie ermöglichen breite Diversifikation bei meist niedrigen Kosten.
+          </p>
+          <ul>
+            <li>Breite Streuung über viele Unternehmen</li>
+            <li>Ideal für passiven Vermögensaufbau</li>
+            <li>Geeignet für regelmäßige Sparpläne</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h3>Fonds</h3>
+          <p>
+            Fonds können aktiv gemanagt sein und bestimmte Märkte, Regionen oder Strategien gezielt abdecken.
+          </p>
+          <ul>
+            <li>Aktiv gemanagte Strategien möglich</li>
+            <li>Breite Themen- oder Regionenabdeckung</li>
+            <li>Oft höhere Gebühren als ETFs</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h3>Krypto</h3>
+          <p>
+            Krypto kann als spekulative Beimischung gesehen werden, sollte aber wegen der hohen Volatilität
+            klar risikobegrenzt eingesetzt werden.
+          </p>
+          <ul>
+            <li>Hohe Chancen, aber hohe Schwankungen</li>
+            <li>Nur als kleiner Portfolio-Anteil sinnvoll</li>
+            <li>Langfristig nur mit Risikomanagement</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h3>Aktien</h3>
+          <p>
+            Einzelaktien bieten Wachstumspotenzial, erfordern aber mehr Analyse, Geduld und Disziplin.
+          </p>
+          <ul>
+            <li>Direkte Beteiligung an Unternehmen</li>
+            <li>Langfristig starke Renditechancen</li>
+            <li>Mehr Risiko als breit gestreute ETFs</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h3>Rohstoffe</h3>
+          <p>
+            Rohstoffe wie Gold, Silber oder Öl können als Diversifikation dienen und in bestimmten Marktphasen absichern.
+          </p>
+          <ul>
+            <li>Kann Inflationsschutz unterstützen</li>
+            <li>Interessant zur Portfolio-Ergänzung</li>
+            <li>Stark abhängig von globalen Entwicklungen</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h3>Portfolio Fokus</h3>
+          <p>
+            Ein gutes Long-Term Portfolio kombiniert Stabilität, Wachstum und Risikokontrolle statt kurzfristiger Emotionen.
+          </p>
+          <ul>
+            <li>Kapital schützen</li>
+            <li>Regelmäßig investieren</li>
+            <li>Langfristig denken statt impulsiv handeln</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section strategy-section" id="strategie">
+    <div class="container">
+      <h2 class="section-title">Long-Term Investment Strategie</h2>
+      <p class="section-subtitle">
+        Langfristiges Investieren bedeutet nicht wahllos kaufen und hoffen,
+        sondern systematisch Vermögen aufzubauen.
+      </p>
+
+      <div class="strategy-boxes">
+        <div class="strategy-box">
+          <h4>1. Diversifikation</h4>
+          <p>
+            Nicht alles auf eine Karte setzen. Verschiedene Anlageklassen können helfen,
+            Risiken zu verteilen und das Portfolio stabiler zu machen.
+          </p>
+        </div>
+
+        <div class="strategy-box">
+          <h4>2. Regelmäßigkeit</h4>
+          <p>
+            Monatliche Investments können langfristig stärker wirken als der Versuch,
+            den perfekten Einstiegszeitpunkt zu treffen.
+          </p>
+        </div>
+
+        <div class="strategy-box">
+          <h4>3. Geduld</h4>
+          <p>
+            Reales Vermögen entsteht selten über Nacht. Zeit im Markt ist im Long-Term Bereich
+            oft wichtiger als ständiges Kaufen und Verkaufen.
+          </p>
+        </div>
+
+        <div class="strategy-box">
+          <h4>4. Risikomanagement</h4>
+          <p>
+            Vor jedem Investment sollte klar sein, wie hoch das Risiko ist,
+            welcher Anlagehorizont verfolgt wird und wie die Gewichtung aussieht.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="plan">
+    <div class="container">
+      <h2 class="section-title">Dein Investment Plan</h2>
+      <p class="section-subtitle">
+        So könnte ein strukturierter Einstieg in langfristiges Investieren aussehen.
+      </p>
+
+      <div class="timeline">
+        <div class="timeline-step">
+          <span>1</span>
+          <h5>Ziele definieren</h5>
+          <p>Willst du Kapital aufbauen, Inflation ausgleichen oder langfristig Vermögen sichern?</p>
+        </div>
+
+        <div class="timeline-step">
+          <span>2</span>
+          <h5>Risiko verstehen</h5>
+          <p>Wie viel Schwankung kannst du emotional und finanziell wirklich tragen?</p>
+        </div>
+
+        <div class="timeline-step">
+          <span>3</span>
+          <h5>Portfolio aufbauen</h5>
+          <p>Wähle Anlageklassen und verteile dein Kapital bewusst statt impulsiv.</p>
+        </div>
+
+        <div class="timeline-step">
+          <span>4</span>
+          <h5>Regelmäßig investieren</h5>
+          <p>Mit Struktur und Disziplin kann ein langfristiger Plan deutlich stabiler wachsen.</p>
+        </div>
+
+        <div class="timeline-step">
+          <span>5</span>
+          <h5>Kontrollieren & anpassen</h5>
+          <p>Überprüfe dein Portfolio in Abständen und optimiere es, ohne emotional zu reagieren.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta" id="start">
+    <h2>Long-Term Investing ist ein Prozess</h2>
+    <p>
+      Der Fokus liegt nicht auf schnellen Gewinnen, sondern auf nachhaltigem Vermögensaufbau,
+      klaren Entscheidungen und einem Plan, den man auch langfristig durchziehen kann.
+    </p>
+    <a href="#" class="btn btn-primary">Mehr zum Investment Bereich</a>
+  </section>
+
+  <footer class="footer">
+    <div class="disclaimer">
+      Diese Inhalte dienen ausschließlich zu Informations- und Bildungszwecken und stellen keine Finanzberatung,
+      Anlageberatung oder Kauf-/Verkaufsempfehlung dar. Investments in ETFs, Fonds, Kryptowährungen, Aktien und Rohstoffe
+      sind mit Risiken verbunden. Vergangene Entwicklungen sind kein verlässlicher Indikator für zukünftige Ergebnisse.
+      Jeder Nutzer handelt eigenverantwortlich.
+    </div>
+  </footer>
+
+</body>
+</html>
