@@ -4,6 +4,18 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Long Term Investing | BullProsperity</title>
+  <script>
+(async function () {
+
+  const res = await fetch("/api/access");
+  const data = await res.json();
+
+  if (data.role !== "admin" && data.role !== "premium") {
+    window.location.href = "locked.html";
+  }
+
+})();
+</script>
 
   <style>
     * {
