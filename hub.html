@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>BullProsperity Hub</title>
+
   <style>
     * {
       margin: 0;
@@ -11,612 +12,562 @@
       box-sizing: border-box;
     }
 
+    html {
+      scroll-behavior: smooth;
+    }
+
     body {
       font-family: Arial, Helvetica, sans-serif;
       background:
         radial-gradient(circle at top, rgba(255, 215, 0, 0.08), transparent 35%),
-        linear-gradient(135deg, #050505, #0c0c0c 58%, #111111);
+        linear-gradient(135deg, #050505, #0c0c0c 55%, #111111);
       color: #ffffff;
       min-height: 100vh;
       overflow-x: hidden;
     }
 
-    .chart-bg {
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      opacity: 0.24;
-      z-index: 0;
+    a {
+      text-decoration: none;
+      color: inherit;
     }
 
-    .chart-bg svg {
-      width: 100%;
-      height: 100%;
-    }
-
-    .line-main {
-      fill: none;
-      stroke: rgba(255, 215, 0, 0.58);
-      stroke-width: 3;
-    }
-
-    .line-alt {
-      fill: none;
-      stroke: rgba(255, 255, 255, 0.16);
-      stroke-width: 2;
-    }
-
-    .candle {
-      stroke: rgba(255, 215, 0, 0.42);
-      stroke-width: 2;
-    }
-
-    .candle.alt {
-      stroke: rgba(255, 255, 255, 0.16);
-    }
-
-    header {
+    .navbar {
       position: sticky;
       top: 0;
-      z-index: 30;
+      z-index: 1000;
+      width: 100%;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 24px 42px;
-      background: rgba(10, 10, 10, 0.8);
-      backdrop-filter: blur(10px);
+      padding: 18px 40px;
+      background: rgba(8, 8, 8, 0.92);
+      backdrop-filter: blur(12px);
       border-bottom: 1px solid rgba(255, 215, 0, 0.12);
     }
 
     .logo {
-      font-size: 2rem;
-      font-weight: 800;
-      color: #ffd700;
-      text-shadow: 0 0 16px rgba(255, 215, 0, 0.22);
-    }
-
-    nav {
-      display: flex;
-      gap: 26px;
-      flex-wrap: wrap;
-    }
-
-    nav a {
-      color: #ffffff;
-      text-decoration: none;
+      font-size: 24px;
       font-weight: 700;
-      transition: 0.25s ease;
-    }
-
-    nav a:hover {
-      color: #ffd700;
-    }
-
-    .layout {
-      position: relative;
-      z-index: 1;
-      width: min(1360px, calc(100% - 28px));
-      margin: 26px auto 40px;
-      display: grid;
-      grid-template-columns: 300px 1fr;
-      gap: 24px;
-    }
-
-    .sidebar,
-    .main-card,
-    .card,
-    .chart-card {
-      background: rgba(18, 18, 18, 0.94);
-      border: 1px solid rgba(255, 215, 0, 0.15);
-      border-radius: 24px;
-      box-shadow: 0 0 26px rgba(255, 215, 0, 0.05);
-    }
-
-    .sidebar {
-      padding: 22px;
-      height: fit-content;
-      position: sticky;
-      top: 105px;
-    }
-
-    .sidebar-title {
-      color: #ffd700;
-      font-size: 0.95rem;
-      font-weight: 800;
-      margin-bottom: 14px;
-      text-transform: uppercase;
-      letter-spacing: 0.4px;
-    }
-
-    .side-group {
-      margin-bottom: 24px;
-    }
-
-    .side-link {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 10px;
-      text-decoration: none;
-      color: #ffffff;
-      padding: 14px 16px;
-      border-radius: 16px;
-      border: 1px solid rgba(255, 215, 0, 0.12);
-      background: rgba(255,255,255,0.03);
-      margin-bottom: 10px;
-      transition: 0.2s ease;
-      font-weight: 700;
-    }
-
-    .side-link:hover {
-      border-color: rgba(255, 215, 0, 0.28);
-      transform: translateY(-1px);
-    }
-
-    .side-link.active {
-      border-color: rgba(255, 215, 0, 0.45);
-      box-shadow: 0 0 18px rgba(255, 215, 0, 0.08);
-    }
-
-    .mini-badge {
-      padding: 6px 10px;
-      border-radius: 999px;
-      border: 1px solid rgba(255, 215, 0, 0.22);
-      color: #ffd84d;
-      font-size: 11px;
-      background: rgba(255, 215, 0, 0.07);
+      color: #d4af37;
+      letter-spacing: 0.6px;
       white-space: nowrap;
     }
 
-    .content {
-      display: grid;
-      gap: 24px;
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
     }
 
-    .main-card {
-      padding: 30px;
+    .nav-links a {
+      color: #f2f2f2;
+      font-size: 15px;
+      padding: 10px 14px;
+      border-radius: 8px;
+      transition: all 0.25s ease;
     }
 
-    .badge {
-      display: inline-block;
-      padding: 8px 14px;
-      border-radius: 999px;
-      border: 1px solid rgba(255, 215, 0, 0.34);
-      color: #ffd84d;
-      font-size: 13px;
+    .nav-links a:hover {
+      color: #d4af37;
+      background: rgba(255, 255, 255, 0.04);
+    }
+
+    .longterm-banner {
+      background: #d4af37;
+      color: #000000 !important;
       font-weight: 700;
-      background: rgba(255, 215, 0, 0.08);
-      margin-bottom: 15px;
+      border-radius: 8px;
+      display: inline-block;
     }
 
-    .main-card h1 {
-      font-size: clamp(2rem, 4vw, 3.6rem);
-      line-height: 1.05;
-      margin-bottom: 14px;
+    .longterm-banner:hover {
+      background: #ebc85a !important;
+      color: #000000 !important;
+      transform: translateY(-1px);
     }
 
-    .main-card h1 .white {
-      color: #ffffff;
+    .hero {
+      padding: 90px 20px 60px;
     }
 
-    .main-card h1 .gold {
-      color: #ffd700;
-      text-shadow: 0 0 20px rgba(255, 215, 0, 0.18);
-    }
-
-    .main-card p {
-      color: #dddddd;
-      line-height: 1.8;
-      max-width: 940px;
-    }
-
-    .education-note {
-      margin-top: 20px;
-      padding: 16px 18px;
-      border-left: 3px solid #ffd700;
-      background: rgba(255, 215, 0, 0.06);
-      color: #e9e9e9;
-      border-radius: 14px;
-      line-height: 1.75;
-    }
-
-    .progress-grid,
-    .card-grid {
+    .hero-inner {
+      max-width: 1200px;
+      margin: 0 auto;
       display: grid;
-      gap: 20px;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 36px;
+      align-items: center;
     }
 
-    .progress-grid {
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      margin-top: 24px;
+    .hero-text h1 {
+      font-size: 58px;
+      line-height: 1.08;
+      margin-bottom: 18px;
     }
 
-    .progress-card,
-    .card {
-      padding: 22px;
+    .hero-text h1 span {
+      color: #d4af37;
     }
 
-    .progress-card {
-      background: rgba(255,255,255,0.03);
-      border: 1px solid rgba(255, 215, 0, 0.13);
-      border-radius: 20px;
-    }
-
-    .progress-card h3,
-    .card h3,
-    .chart-card h2 {
-      color: #ffd700;
-      margin-bottom: 10px;
-    }
-
-    .progress-card p,
-    .card p,
-    .chart-card p {
-      color: #dddddd;
+    .hero-text p {
+      color: #d0d0d0;
+      font-size: 18px;
+      max-width: 700px;
+      margin-bottom: 28px;
       line-height: 1.7;
     }
 
-    .progress-bar {
-      margin-top: 14px;
-      width: 100%;
-      height: 10px;
-      border-radius: 999px;
-      background: rgba(255,255,255,0.08);
-      overflow: hidden;
-    }
-
-    .progress-fill {
-      height: 100%;
-      border-radius: 999px;
-      background: linear-gradient(135deg, #ffe15b, #f0b90b);
-    }
-
-    .card-grid {
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-    }
-
-    .card {
-      min-height: 220px;
-    }
-
-    .card .top-tag {
-      display: inline-block;
-      margin-bottom: 12px;
-      padding: 7px 12px;
-      border-radius: 999px;
-      font-size: 12px;
-      border: 1px solid rgba(255, 215, 0, 0.2);
-      color: #ffd84d;
-      background: rgba(255, 215, 0, 0.07);
-    }
-
-    .btn-row {
+    .hero-buttons {
       display: flex;
-      gap: 12px;
+      gap: 16px;
       flex-wrap: wrap;
-      margin-top: 16px;
     }
 
     .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      text-decoration: none;
-      border-radius: 14px;
-      padding: 13px 18px;
-      font-weight: 800;
-      transition: 0.2s ease;
-      cursor: pointer;
+      padding: 14px 22px;
+      border-radius: 10px;
+      font-size: 15px;
+      font-weight: 700;
+      transition: 0.25s ease;
+      display: inline-block;
     }
 
     .btn-primary {
-      background: linear-gradient(135deg, #ffe15b, #f0b90b);
-      color: #111111;
-      border: none;
+      background: #d4af37;
+      color: #000000;
     }
 
     .btn-primary:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 8px 18px rgba(255, 215, 0, 0.18);
+      background: #ebc85a;
+      transform: translateY(-2px);
     }
 
     .btn-secondary {
-      color: #ffffff;
-      border: 1px solid rgba(255, 215, 0, 0.22);
-      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(212, 175, 55, 0.55);
+      color: #d4af37;
+      background: transparent;
     }
 
     .btn-secondary:hover {
-      background: rgba(255,255,255,0.06);
+      background: rgba(212, 175, 55, 0.08);
+      transform: translateY(-2px);
     }
 
-    .chart-card {
-      padding: 24px;
-      overflow: hidden;
+    .hero-card {
+      background: linear-gradient(180deg, rgba(20,20,20,0.96), rgba(12,12,12,0.95));
+      border: 1px solid rgba(212, 175, 55, 0.18);
+      border-radius: 22px;
+      padding: 28px;
+      box-shadow: 0 18px 50px rgba(0,0,0,0.25);
     }
 
-    .tv-wrapper {
-      overflow: hidden;
-      border-radius: 18px;
-      border: 1px solid rgba(255, 215, 0, 0.16);
-      margin-top: 18px;
+    .hero-card h3 {
+      color: #d4af37;
+      font-size: 24px;
+      margin-bottom: 16px;
     }
 
-    .hub-footer {
+    .hero-card p {
+      color: #cfcfcf;
+      line-height: 1.7;
+      margin-bottom: 18px;
+    }
+
+    .mini-stats {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+      margin-top: 10px;
+    }
+
+    .stat-box {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 14px;
+      padding: 16px;
+    }
+
+    .stat-box strong {
+      display: block;
+      color: #d4af37;
+      font-size: 18px;
+      margin-bottom: 6px;
+    }
+
+    .stat-box span {
+      color: #d0d0d0;
+      font-size: 14px;
+    }
+
+    .section {
+      padding: 70px 20px;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .section-title {
       text-align: center;
-      color: #a8a8a8;
-      font-size: 0.92rem;
-      padding: 10px 0 22px;
+      font-size: 40px;
+      margin-bottom: 14px;
     }
 
-    @media (max-width: 1180px) {
-      .layout {
+    .section-subtitle {
+      text-align: center;
+      max-width: 760px;
+      margin: 0 auto 42px;
+      color: #bdbdbd;
+      font-size: 17px;
+      line-height: 1.7;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 22px;
+    }
+
+    .card {
+      background: #111111;
+      border: 1px solid rgba(212, 175, 55, 0.12);
+      border-radius: 18px;
+      padding: 26px;
+      transition: 0.25s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      border-color: rgba(212, 175, 55, 0.3);
+      box-shadow: 0 18px 34px rgba(0,0,0,0.22);
+    }
+
+    .card h3 {
+      color: #d4af37;
+      font-size: 24px;
+      margin-bottom: 12px;
+    }
+
+    .card p {
+      color: #d0d0d0;
+      font-size: 15px;
+      line-height: 1.7;
+      margin-bottom: 14px;
+    }
+
+    .card ul {
+      padding-left: 18px;
+      color: #d6d6d6;
+      line-height: 1.8;
+      font-size: 14px;
+    }
+
+    .hub-section {
+      background: rgba(255,255,255,0.015);
+      border-top: 1px solid rgba(255,255,255,0.04);
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+    }
+
+    .hub-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 22px;
+    }
+
+    .hub-box {
+      background: #121212;
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,0.05);
+      padding: 24px;
+    }
+
+    .hub-box h4 {
+      color: #d4af37;
+      margin-bottom: 12px;
+      font-size: 22px;
+    }
+
+    .hub-box p {
+      color: #d0d0d0;
+      line-height: 1.7;
+      font-size: 15px;
+    }
+
+    .cta {
+      padding: 80px 20px 90px;
+      text-align: center;
+    }
+
+    .cta-box {
+      max-width: 960px;
+      margin: 0 auto;
+      background: linear-gradient(180deg, rgba(18,18,18,0.95), rgba(10,10,10,0.95));
+      border: 1px solid rgba(212, 175, 55, 0.18);
+      border-radius: 24px;
+      padding: 40px 24px;
+    }
+
+    .cta-box h2 {
+      font-size: 40px;
+      margin-bottom: 14px;
+    }
+
+    .cta-box p {
+      color: #cdcdcd;
+      font-size: 17px;
+      max-width: 760px;
+      margin: 0 auto 26px;
+      line-height: 1.7;
+    }
+
+    .footer {
+      padding: 28px 20px 40px;
+      text-align: center;
+      color: #9f9f9f;
+      font-size: 13px;
+      border-top: 1px solid rgba(255,255,255,0.05);
+      background: #080808;
+    }
+
+    .footer .disclaimer {
+      max-width: 980px;
+      margin: 0 auto;
+      line-height: 1.8;
+    }
+
+    @media (max-width: 980px) {
+      .hero-inner {
         grid-template-columns: 1fr;
       }
 
-      .sidebar {
-        position: relative;
-        top: 0;
-      }
-
-      .progress-grid,
-      .card-grid {
-        grid-template-columns: 1fr;
+      .hero-text h1 {
+        font-size: 46px;
       }
     }
 
-    @media (max-width: 780px) {
-      header {
-        padding: 20px 18px;
+    @media (max-width: 768px) {
+      .navbar {
+        padding: 18px 18px;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 14px;
       }
 
-      nav {
-        gap: 15px;
+      .nav-links {
+        gap: 10px;
       }
 
-      .layout {
-        width: min(100% - 18px, 1360px);
+      .nav-links a {
+        font-size: 14px;
+        padding: 9px 12px;
       }
 
-      .main-card,
-      .sidebar,
-      .chart-card,
-      .card {
-        padding: 20px;
+      .hero {
+        padding: 70px 18px 50px;
+      }
+
+      .hero-text h1 {
+        font-size: 36px;
+      }
+
+      .hero-text p {
+        font-size: 16px;
+      }
+
+      .section-title {
+        font-size: 30px;
+      }
+
+      .cta-box h2 {
+        font-size: 30px;
+      }
+
+      .mini-stats {
+        grid-template-columns: 1fr;
       }
     }
   </style>
 </head>
 <body>
-  <div class="chart-bg">
-    <svg viewBox="0 0 1600 900" preserveAspectRatio="none">
-      <path class="line-alt" d="M0,650 C110,620 170,565 290,550 C380,540 470,570 560,495 C665,410 720,450 820,350 C905,265 980,290 1085,220 C1205,140 1285,185 1415,120 C1500,82 1548,108 1600,86" />
-      <path class="line-main" d="M0,730 C85,695 160,685 255,610 C375,505 445,560 555,475 C655,396 725,420 835,315 C925,228 1010,258 1125,180 C1238,105 1325,145 1450,94 C1512,66 1560,70 1600,58" />
 
-      <line class="candle" x1="85" y1="768" x2="85" y2="705"></line>
-      <line class="candle alt" x1="165" y1="702" x2="165" y2="625"></line>
-      <line class="candle" x1="255" y1="645" x2="255" y2="565"></line>
-      <line class="candle alt" x1="360" y1="582" x2="360" y2="500"></line>
-      <line class="candle" x1="470" y1="545" x2="470" y2="460"></line>
-      <line class="candle alt" x1="580" y1="490" x2="580" y2="405"></line>
-      <line class="candle" x1="700" y1="435" x2="700" y2="348"></line>
-      <line class="candle alt" x1="820" y1="360" x2="820" y2="275"></line>
-      <line class="candle" x1="935" y1="286" x2="935" y2="210"></line>
-      <line class="candle alt" x1="1060" y1="220" x2="1060" y2="150"></line>
-      <line class="candle" x1="1190" y1="160" x2="1190" y2="102"></line>
-      <line class="candle alt" x1="1330" y1="116" x2="1330" y2="76"></line>
-      <line class="candle" x1="1480" y1="92" x2="1480" y2="55"></line>
-    </svg>
-  </div>
-
-  <header>
+  <nav class="navbar">
     <div class="logo">BullProsperity</div>
-    <nav>
-      <a href="/index.html">Home</a>
-      <a href="/api/whop/protect-hub">Hub</a>
-      <a href="/api/whop/protect-course">Course</a>
-      <a href="/api/whop/protect-tools">Tools</a>
-      <a href="longterm.html">Long Term Investing</a>
-      <a href="/api/whop/login">Login</a>
-    </nav>
-  </header>
 
-  <main class="layout">
-    <aside class="sidebar">
-      <div class="side-group">
-        <div class="sidebar-title">Navigation</div>
-        <a href="/api/whop/protect-hub" class="side-link active">
-          <span>Hub Start</span>
-        </a>
-        <a href="/api/whop/protect-course" class="side-link">
-          <span>Trading Course</span>
-        </a>
-        <a href="/api/whop/protect-tools" class="side-link">
-          <span>Trading Tools</span>
-        </a>
-      </div>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="hub.html">Hub</a>
+      <a href="setup.html">Setup Room</a>
+      <a href="longterm.html" class="longterm-banner">Long Term Investing</a>
+      <a href="tools.html">Tools</a>
+      <a href="login.html">Login</a>
+    </div>
+  </nav>
 
-      <div class="side-group">
-        <div class="sidebar-title">Members Area</div>
-        <a href="/locked.html" class="side-link">
-          <span>Strategie Bibliothek</span>
-          <span class="mini-badge">Locked</span>
-        </a>
-        <a href="/locked.html" class="side-link">
-          <span>Community</span>
-          <span class="mini-badge">Members</span>
-        </a>
-        <a href="/locked.html" class="side-link">
-          <span>Live Sessions</span>
-          <span class="mini-badge">Premium</span>
-        </a>
-        <a href="/locked.html" class="side-link">
-          <span>Setup Room</span>
-          <span class="mini-badge">Whop</span>
-        </a>
-      </div>
-    </aside>
-
-    <section class="content">
-      <section class="main-card">
-        <div class="badge">Mitglieder Dashboard</div>
-        <h1>
-          <span class="white">Willkommen im</span><br>
-          <span class="gold">BullProsperity Hub</span>
-        </h1>
+  <section class="hero">
+    <div class="hero-inner">
+      <div class="hero-text">
+        <h1>Welcome to the <span>BullProsperity Hub</span></h1>
         <p>
-          Hier findest du deinen Trading Kurs, wichtige Lern-Tools, Marktbeobachtung,
-          Strukturtraining und exklusive Premium-Bereiche. Die Plattform ist darauf aufgebaut,
-          dass du sauber analysierst, strukturiert lernst und klare Prozesse entwickelst.
+          Dein zentraler Bereich für Education, Trading-Struktur, Marktverständnis und langfristigen Vermögensaufbau.
+          Hier findest du Zugriff auf den Setup Room, Tools und jetzt auch den neuen Bereich für Long Term Investing.
         </p>
 
-        <div class="education-note">
-          Alle Inhalte auf BullProsperity dienen ausschließlich zu Ausbildungs-, Lern- und Analysezwecken.
-          Es handelt sich nicht um Finanzberatung, Anlageberatung oder konkrete Handelsempfehlungen.
-          Der eingebundene Marktchart dient nur zur Veranschaulichung von Marktstruktur, Setups und Education-Inhalten.
+        <div class="hero-buttons">
+          <a href="setup.html" class="btn btn-primary">Zum Setup Room</a>
+          <a href="longterm.html" class="btn btn-secondary">Long Term Bereich öffnen</a>
         </div>
+      </div>
 
-        <div class="progress-grid">
-          <div class="progress-card">
-            <h3>Trading Grundlagen</h3>
-            <p>Fortschritt in Basismodulen und ersten Kernlektionen.</p>
-            <div class="progress-bar">
-              <div class="progress-fill" style="width: 40%;"></div>
-            </div>
-          </div>
-
-          <div class="progress-card">
-            <h3>Smart Money Strategie</h3>
-            <p>Verfolge deinen Fortschritt in Setups und Marktlogik.</p>
-            <div class="progress-bar">
-              <div class="progress-fill" style="width: 22%;"></div>
-            </div>
-          </div>
-
-          <div class="progress-card">
-            <h3>Trading Psychologie</h3>
-            <p>Mentale Struktur, Disziplin und Regelkontrolle.</p>
-            <div class="progress-bar">
-              <div class="progress-fill" style="width: 18%;"></div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section class="chart-card">
-        <div class="badge">Education Chart</div>
-        <h2>Live Marktübersicht im Hub</h2>
+      <div class="hero-card">
+        <h3>Neu im Hub</h3>
         <p>
-          Nutze den Live Chart zur Marktbeobachtung, zur Veranschaulichung von Struktur,
-          Liquidity, Entries und für deine persönliche Ausbildung. Dieser Bereich dient
-          ausschließlich der Analyse und Education.
+          Der neue Bereich <strong>Long Term Investing</strong> ist jetzt direkt oben im Menü eingebunden.
+          Dort kannst du Inhalte zu ETFs, Fonds, Aktien, Krypto und Rohstoffen strukturierter darstellen.
         </p>
 
-        <div class="tv-wrapper">
-          <div class="tradingview-widget-container">
-            <div id="tradingview_chart"></div>
+        <div class="mini-stats">
+          <div class="stat-box">
+            <strong>ETF</strong>
+            <span>Langfristig & breit gestreut</span>
+          </div>
+
+          <div class="stat-box">
+            <strong>Aktien</strong>
+            <span>Wachstum & Unternehmensbeteiligung</span>
+          </div>
+
+          <div class="stat-box">
+            <strong>Krypto</strong>
+            <span>Spekulative Beimischung</span>
+          </div>
+
+          <div class="stat-box">
+            <strong>Rohstoffe</strong>
+            <span>Diversifikation & Absicherung</span>
           </div>
         </div>
-      </section>
+      </div>
+    </div>
+  </section>
 
-      <section class="card-grid">
-        <div class="card">
-          <div class="top-tag">Kursbereich</div>
-          <h3>Trading Kurs</h3>
-          <p>
-            Alle Module, Lektionen und Video-Inhalte an einem Ort.
-            Starte mit den Grundlagen und arbeite dich systematisch durch die Inhalte.
-          </p>
-          <div class="btn-row">
-            <a class="btn btn-primary" href="/api/whop/protect-course">Öffnen</a>
-          </div>
-        </div>
+  <section class="section">
+    <div class="container">
+      <h2 class="section-title">Hub Bereiche</h2>
+      <p class="section-subtitle">
+        Deine wichtigsten Bereiche an einem Ort. Klar strukturiert, modern aufgebaut und direkt zugänglich.
+      </p>
 
+      <div class="cards">
         <div class="card">
-          <div class="top-tag">Tools</div>
-          <h3>Trading Tools</h3>
-          <p>
-            Lot Size Rechner, Journal, Checklisten und TradingView Charts
-            für einen professionelleren und strukturierteren Ablauf.
-          </p>
-          <div class="btn-row">
-            <a class="btn btn-primary" href="/api/whop/protect-tools">Öffnen</a>
-          </div>
-        </div>
-
-        <div class="card">
-          <div class="top-tag">Members Only</div>
-          <h3>Strategie Bibliothek</h3>
-          <p>
-            Exklusive Setups, Entry-Modelle, Smart-Money Inhalte und klare Marktlogik
-            für Mitglieder mit aktivem Zugang.
-          </p>
-          <div class="btn-row">
-            <a class="btn btn-secondary" href="/locked.html">Nur für Mitglieder</a>
-          </div>
-        </div>
-
-        <div class="card">
-          <div class="top-tag">Premium Access</div>
-          <h3>Community</h3>
-          <p>
-            Exklusive Updates, Austausch, Calls und interne Informationen
-            innerhalb der BullProsperity Mitgliederstruktur.
-          </p>
-          <div class="btn-row">
-            <a class="btn btn-secondary" href="/locked.html">Mitgliedschaft erforderlich</a>
-          </div>
-        </div>
-
-        <div class="card">
-          <div class="top-tag">Locked</div>
-          <h3>Live Sessions</h3>
-          <p>
-            Live-Marktanalysen, Calls und direkte Umsetzungs-Einblicke,
-            um Marktsituationen professioneller zu verstehen.
-          </p>
-          <div class="btn-row">
-            <a class="btn btn-secondary" href="/locked.html">Freischaltung über Whop</a>
-          </div>
-        </div>
-
-        <div class="card">
-          <div class="top-tag">Locked</div>
           <h3>Setup Room</h3>
           <p>
-            Strukturierte Marktanalysen, Watchlists und ausgewählte Trading-Setups
-            nur für Mitglieder mit aktivem Zugang.
+            Dein Bereich für Marktstrukturen, Setups, Orientierung und Trading-Fokus.
           </p>
-          <div class="btn-row">
-            <a class="btn btn-secondary" href="/locked.html">Freischaltung über Whop</a>
-          </div>
+          <ul>
+            <li>Marktverständnis</li>
+            <li>Setup-Struktur</li>
+            <li>Trading-Auswertung</li>
+          </ul>
         </div>
-      </section>
 
-      <div class="hub-footer">
-        © 2026 BullProsperity FX. Alle Inhalte dienen ausschließlich zu Lern-, Analyse- und Ausbildungszwecken.
+        <div class="card">
+          <h3>Tools</h3>
+          <p>
+            Praktische Tools für deinen Workflow und deine Entscheidungsstruktur.
+          </p>
+          <ul>
+            <li>Lot Size Rechner</li>
+            <li>Journal</li>
+            <li>Checklisten</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h3>Long Term</h3>
+          <p>
+            Der neue Investment-Bereich für nachhaltigen Vermögensaufbau.
+          </p>
+          <ul>
+            <li>ETF & Fonds</li>
+            <li>Aktien & Krypto</li>
+            <li>Rohstoffe & Portfolio-Ideen</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h3>Education</h3>
+          <p>
+            Lerne die Grundlagen, Denkweise und Disziplin hinter strukturierten Entscheidungen.
+          </p>
+          <ul>
+            <li>Kursstruktur</li>
+            <li>Risikoaufklärung</li>
+            <li>Langfristige Entwicklung</li>
+          </ul>
+        </div>
       </div>
-    </section>
-  </main>
+    </div>
+  </section>
 
-  <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
-  <script type="text/javascript">
-    new TradingView.widget({
-      width: "100%",
-      height: 560,
-      symbol: "OANDA:XAUUSD",
-      interval: "15",
-      timezone: "Europe/Berlin",
-      theme: "dark",
-      style: "1",
-      locale: "de",
-      toolbar_bg: "#0f0f0f",
-      enable_publishing: false,
-      hide_top_toolbar: false,
-      hide_legend: false,
-      save_image: false,
-      container_id: "tradingview_chart"
-    });
-  </script>
+  <section class="section hub-section">
+    <div class="container">
+      <h2 class="section-title">Warum der Long Term Bereich wichtig ist</h2>
+      <p class="section-subtitle">
+        BullProsperity soll nicht nur kurzfristige Marktideen zeigen, sondern auch den Blick auf nachhaltigen Kapitalaufbau erweitern.
+      </p>
+
+      <div class="hub-grid">
+        <div class="hub-box">
+          <h4>ETF & Fonds</h4>
+          <p>
+            Für viele Nutzer bilden ETFs und Fonds die Basis eines ruhigen, langfristigen Portfolios mit breiter Diversifikation.
+          </p>
+        </div>
+
+        <div class="hub-box">
+          <h4>Aktien</h4>
+          <p>
+            Einzelaktien können langfristig stark performen, brauchen aber Analyse, Disziplin und Geduld.
+          </p>
+        </div>
+
+        <div class="hub-box">
+          <h4>Krypto</h4>
+          <p>
+            Kryptowährungen können als spekulative Ergänzung dienen, sollten aber immer mit klarer Gewichtung betrachtet werden.
+          </p>
+        </div>
+
+        <div class="hub-box">
+          <h4>Rohstoffe</h4>
+          <p>
+            Gold, Silber und andere Rohstoffe können als Ergänzung für Diversifikation und Absicherung genutzt werden.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta">
+    <div class="cta-box">
+      <h2>Jetzt den neuen Bereich ergänzen</h2>
+      <p>
+        Der Menüpunkt <strong>Long Term Investing</strong> ist bereits oben eingebaut.
+        Jetzt musst du nur noch zusätzlich eine Datei namens <strong>longterm.html</strong> erstellen und dort deine Investment-Unterseite einfügen.
+      </p>
+      <a href="longterm.html" class="btn btn-primary">Long Term Seite öffnen</a>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="disclaimer">
+      Alle Inhalte auf BullProsperity dienen ausschließlich zu Informations- und Bildungszwecken und stellen keine Finanzberatung,
+      Anlageberatung oder Aufforderung zum Kauf oder Verkauf von Finanzinstrumenten dar. Investments in ETFs, Fonds, Aktien,
+      Kryptowährungen und Rohstoffe sind mit Risiken verbunden. Vergangene Entwicklungen sind kein verlässlicher Indikator für zukünftige Ergebnisse.
+    </div>
+  </footer>
+
 </body>
 </html>
