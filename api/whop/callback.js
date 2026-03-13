@@ -45,7 +45,7 @@ export default async function handler(req, res) {
 
     let role = "guest";
 
-    if (email === "DEINE_ADMIN_EMAIL") {
+    if (email === "bullprosperityfx@gmail.com") {
       role = "admin";
     } else {
       role = "premium";
