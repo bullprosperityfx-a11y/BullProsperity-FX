@@ -1,33 +1,54 @@
-module.exports = async function handler(req, res) {
-  try {
-    const cookie = req.headers.cookie || "";
+export default async function handler(req, res) {
 
-    const bpRoleMatch = cookie.match(/bp_role=([^;]+)/);
-    const whopRoleMatch = cookie.match(/whop_role=([^;]+)/);
-    const emailMatch = cookie.match(/bp_email=([^;]+)/);
-    const membershipMatch = cookie.match(/bp_membership=([^;]+)/);
+const cookie = req.headers.cookie || ""
 
-    const role = bpRoleMatch
-      ? decodeURIComponent(bpRoleMatch[1])
-      : whopRoleMatch
-      ? decodeURIComponent(whopRoleMatch[1])
-      : "guest";
+const tokenMatch = cookie.match(/whop_access_token=([^;]+)/)
 
-    const email = emailMatch ? decodeURIComponent(emailMatch[1]) : "";
-    const membership = membershipMatch ? decodeURIComponent(membershipMatch[1]) : "false";
+if (!tokenMatch) {
+return res.json({
+ok:true,
+role:"guest",
+email:"",
+hasMembership:false
+})
+}
 
-    return res.status(200).json({
-      ok: true,
-      role,
-      email,
-      hasMembership: membership === "true",
-      rawCookie: cookie || "NO_COOKIE"
-    });
-  } catch (error) {
-    return res.status(500).json({
-      ok: false,
-      role: "guest",
-      error: error.message
-    });
-  }
-};
+const token = tokenMatch[1]
+
+try {
+
+const userRes = await fetch("https://api.whop.com/api/v5/me",{
+headers:{
+Authorization:`Bearer ${token}`
+}
+})
+
+const user = await userRes.json()
+
+const email = user.email || ""
+
+let role = "guest"
+
+if(email === "bullprosperityfx@gmail.com"){
+role = "admin"
+}
+
+res.json({
+ok:true,
+role,
+email,
+hasMembership:true
+})
+
+}catch(e){
+
+res.json({
+ok:true,
+role:"guest",
+email:"",
+hasMembership:false
+})
+
+}
+
+}
