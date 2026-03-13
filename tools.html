@@ -5,15 +5,19 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>BullProsperity Tools</title>
   <script>
-(async function () {
+(async () => {
+  try {
+    const res = await fetch("/api/access", {
+      credentials: "include"
+    });
+    const data = await res.json();
 
-  const res = await fetch("/api/access");
-  const data = await res.json();
-
-  if (data.role !== "admin" && data.role !== "premium") {
+    if (data.role !== "admin" && data.role !== "premium") {
+      window.location.href = "locked.html";
+    }
+  } catch (err) {
     window.location.href = "locked.html";
   }
-
 })();
 </script>
   <style>
