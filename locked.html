@@ -1,294 +1,305 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>BullProsperity Locked Access</title>
-  <style>
-    .button-area{
-  display:flex;
-  justify-content:center;
-  gap:16px;
-  margin-top:30px;
-  flex-wrap:wrap;
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BullProsperity Locked Access</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+body{
+font-family:Arial, Helvetica, sans-serif;
+background:#0a0a0a;
+color:#ffffff;
+line-height:1.6;
+min-height:100vh;
+display:flex;
+flex-direction:column;
+}
+
+/* HEADER */
+
+header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:22px 7%;
+background:#000000;
+border-bottom:1px solid #1f1f1f;
+}
+
+.logo{
+font-size:28px;
+font-weight:700;
+color:#d4af37;
+letter-spacing:1px;
+}
+
+nav a{
+color:#ffffff;
+text-decoration:none;
+margin-left:20px;
+font-size:15px;
+}
+
+nav a:hover{
+color:#d4af37;
+}
+
+/* MAIN */
+
+.wrap{
+flex:1;
+display:flex;
+align-items:center;
+justify-content:center;
+padding:40px 20px;
+}
+
+.locked-box{
+width:min(760px,100%);
+background:linear-gradient(135deg,#111111,#050505);
+border:1px solid #2a2418;
+border-radius:24px;
+padding:50px 32px;
+text-align:center;
+box-shadow:0 20px 60px rgba(0,0,0,0.35);
+}
+
+.lock-circle{
+width:110px;
+height:110px;
+margin:0 auto 24px;
+border-radius:50%;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:46px;
+background:rgba(212,175,55,0.08);
+border:1px solid rgba(212,175,55,0.28);
+color:#d4af37;
+}
+
+.badge{
+display:inline-block;
+margin-bottom:18px;
+padding:8px 16px;
+border-radius:999px;
+background:rgba(212,175,55,0.08);
+border:1px solid rgba(212,175,55,0.28);
+color:#d4af37;
+font-size:13px;
+font-weight:700;
+}
+
+h1{
+font-size:42px;
+color:#d4af37;
+margin-bottom:14px;
+}
+
+p{
+max-width:600px;
+margin:0 auto 16px;
+color:#d4d4d4;
+font-size:17px;
+}
+
+/* INFO BOX */
+
+.info-box{
+margin:28px auto 0;
+max-width:620px;
+background:#0d0d0d;
+border:1px solid #1f1f1f;
+border-radius:16px;
+padding:22px;
+text-align:left;
+}
+
+.info-box h3{
+color:#d4af37;
+margin-bottom:12px;
+font-size:22px;
+}
+
+.info-box ul{
+padding-left:18px;
+color:#d7d7d7;
+}
+
+.info-box li{
+margin-bottom:10px;
+}
+
+/* BUTTONS */
+
+.button-row{
+margin-top:30px;
+display:flex;
+justify-content:center;
+gap:14px;
+flex-wrap:wrap;
 }
 
 .btn{
-  display:inline-block;
-  padding:12px 24px;
-  border-radius:10px;
-  text-decoration:none;
-  font-weight:700;
-  transition:0.25s ease;
+display:inline-block;
+padding:14px 22px;
+border-radius:10px;
+text-decoration:none;
+font-weight:700;
+font-size:15px;
+transition:0.25s;
 }
 
 .btn-dark{
-  background:transparent;
-  color:#f5d76e;
-  border:1px solid rgba(245,215,110,0.4);
+background:#111111;
+color:#ffffff;
+border:1px solid #303030;
 }
 
 .btn-dark:hover{
-  transform:translateY(-2px);
-  box-shadow:0 0 12px rgba(245,215,110,0.15);
+transform:translateY(-2px);
+box-shadow:0 0 12px rgba(255,255,255,0.08);
 }
 
 .btn-gold{
-  background:linear-gradient(45deg,#ffd700,#ffbf00);
-  color:#111;
-  border:none;
-  box-shadow:0 0 14px rgba(255,215,0,0.35);
+background:linear-gradient(45deg,#ffd700,#ffbf00);
+color:#000000;
+box-shadow:0 0 14px rgba(255,215,0,0.35);
 }
 
 .btn-gold:hover{
-  transform:translateY(-2px) scale(1.03);
-  box-shadow:0 0 18px rgba(255,215,0,0.55);
+transform:translateY(-2px) scale(1.03);
+box-shadow:0 0 18px rgba(255,215,0,0.55);
 }
-    *{
-      margin:0;
-      padding:0;
-      box-sizing:border-box;
-    }
 
-    body{
-      font-family:Arial, Helvetica, sans-serif;
-      background:#0a0a0a;
-      color:#ffffff;
-      line-height:1.6;
-      min-height:100vh;
-      display:flex;
-      flex-direction:column;
-    }
+/* FOOTER */
 
-    header{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      padding:22px 7%;
-      background:#000000;
-      border-bottom:1px solid #1f1f1f;
-    }
+footer{
+text-align:center;
+padding:24px;
+border-top:1px solid #1f1f1f;
+background:#000000;
+color:#aaaaaa;
+}
 
-    .logo{
-      font-size:28px;
-      font-weight:700;
-      color:#d4af37;
-      letter-spacing:1px;
-    }
+/* MOBILE */
 
-    nav a{
-      color:#ffffff;
-      text-decoration:none;
-      margin-left:20px;
-      font-size:15px;
-    }
+@media (max-width:768px){
 
-    nav a:hover{
-      color:#d4af37;
-    }
+header{
+flex-direction:column;
+gap:14px;
+}
 
-    .wrap{
-      flex:1;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      padding:40px 20px;
-    }
+nav{
+display:flex;
+flex-wrap:wrap;
+justify-content:center;
+}
 
-    .locked-box{
-      width:min(760px, 100%);
-      background:linear-gradient(135deg, #111111, #050505);
-      border:1px solid #2a2418;
-      border-radius:24px;
-      padding:50px 32px;
-      text-align:center;
-      box-shadow:0 20px 60px rgba(0,0,0,0.35);
-    }
+nav a{
+margin:8px 10px;
+}
 
-    .lock-circle{
-      width:110px;
-      height:110px;
-      margin:0 auto 24px;
-      border-radius:50%;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      font-size:46px;
-      background:rgba(212,175,55,0.08);
-      border:1px solid rgba(212,175,55,0.28);
-      color:#d4af37;
-    }
+h1{
+font-size:32px;
+}
 
-    .badge{
-      display:inline-block;
-      margin-bottom:18px;
-      padding:8px 16px;
-      border-radius:999px;
-      background:rgba(212,175,55,0.08);
-      border:1px solid rgba(212,175,55,0.28);
-      color:#d4af37;
-      font-size:13px;
-      font-weight:700;
-      letter-spacing:0.4px;
-    }
+p{
+font-size:16px;
+}
 
-    h1{
-      font-size:42px;
-      color:#d4af37;
-      margin-bottom:14px;
-    }
+.locked-box{
+padding:36px 22px;
+}
 
-    p{
-      max-width:600px;
-      margin:0 auto 16px;
-      color:#d4d4d4;
-      font-size:17px;
-    }
+}
 
-    .info-box{
-      margin:28px auto 0;
-      max-width:620px;
-      background:#0d0d0d;
-      border:1px solid #1f1f1f;
-      border-radius:16px;
-      padding:22px;
-      text-align:left;
-    }
-
-    .info-box h3{
-      color:#d4af37;
-      margin-bottom:12px;
-      font-size:22px;
-    }
-
-    .info-box ul{
-      padding-left:18px;
-      color:#d7d7d7;
-    }
-
-    .info-box li{
-      margin-bottom:10px;
-    }
-
-    .button-row{
-      margin-top:30px;
-      display:flex;
-      justify-content:center;
-      gap:14px;
-      flex-wrap:wrap;
-    }
-
-    .btn{
-      display:inline-block;
-      padding:14px 22px;
-      border-radius:10px;
-      text-decoration:none;
-      font-weight:700;
-      font-size:15px;
-    }
-
-    .btn-gold{
-      background:#d4af37;
-      color:#000000;
-    }
-
-    .btn-dark{
-      background:#111111;
-      color:#ffffff;
-      border:1px solid #303030;
-    }
-
-    footer{
-      text-align:center;
-      padding:24px;
-      border-top:1px solid #1f1f1f;
-      background:#000000;
-      color:#aaaaaa;
-    }
-
-    @media (max-width:768px){
-      header{
-        flex-direction:column;
-        gap:14px;
-      }
-
-      nav{
-        display:flex;
-        flex-wrap:wrap;
-        justify-content:center;
-      }
-
-      nav a{
-        margin:8px 10px;
-      }
-
-      h1{
-        font-size:32px;
-      }
-
-      p{
-        font-size:16px;
-      }
-
-      .locked-box{
-        padding:36px 22px;
-      }
-    }
-  </style>
+</style>
 </head>
+
 <body>
 
-  <header>
-    <div class="logo">BullProsperity</div>
-    <nav>
-      <a href="/index.html">Home</a>
-      <a href="/hub.html">Hub</a>
-      <a href="/dashboard.html">Dashboard</a>
-      <a href="/course.html">Course</a>
-      <a href="/tools.html">Tools</a>
-    </nav>
-  </header>
+<header>
 
-  <div class="wrap">
-    <div class="locked-box">
-      <div class="lock-circle">🔒</div>
-      <div class="badge">Exklusiver Mitgliederbereich</div>
-      <h1>Zugang gesperrt</h1>
-      <p>
-        Dieser Bereich ist nur für Mitglieder mit aktivem Zugang verfügbar.
-        Bestimmte Inhalte innerhalb von BullProsperity sind exklusiv freigeschaltet
-        und nur nach erfolgreicher Berechtigung sichtbar.
-      </p>
-      <p>
-        Der Zugang zu Premium-Bereichen erfolgt später über Whop und ist an ein
-        aktives Paket oder eine Mitgliedschaft gebunden.
-      </p>
+<div class="logo">BullProsperity</div>
 
-      <div class="info-box">
-        <h3>Was dich hier später erwartet</h3>
-        <ul>
-          <li>Strategie-Bibliothek mit exklusiven Setups</li>
-          <li>Live Sessions und Marktanalysen</li>
-          <li>Community und interne Updates</li>
-          <li>Signal- und Setup-Room</li>
-          <li>Premium-Inhalte nur für aktive Mitglieder</li>
-        </ul>
-      </div>
+<nav>
+<a href="/index.html">Home</a>
+<a href="/hub.html">Hub</a>
+<a href="/dashboard.html">Dashboard</a>
+<a href="/course.html">Course</a>
+<a href="/tools.html">Tools</a>
+</nav>
 
-      <div class="button-row">
-        <a href="/hub.html" class="btn btn-dark">Zurück zum Hub</a>
-        <a href="#" class="btn btn-gold">Login mit Whop</a>
-      </div>
-    </div>
-  </div>
-  <div class="button-area">
-  <a href="/hub.html" class="btn btn-dark">Zurück zum Hub</a>
-  <a href="https://whop.com/bullprosperityfx" class="btn btn-gold">Login mit Whop</a>
+</header>
+
+
+<div class="wrap">
+
+<div class="locked-box">
+
+<div class="lock-circle">🔒</div>
+
+<div class="badge">Exklusiver Mitgliederbereich</div>
+
+<h1>Zugang gesperrt</h1>
+
+<p>
+Dieser Bereich ist nur für Mitglieder mit aktivem Zugang verfügbar.
+Bestimmte Inhalte innerhalb von BullProsperity sind exklusiv freigeschaltet
+und nur nach erfolgreicher Berechtigung sichtbar.
+</p>
+
+<p>
+Der Zugang zu Premium-Bereichen erfolgt über Whop und ist an eine aktive
+Mitgliedschaft oder ein Premium-Paket gebunden.
+</p>
+
+<div class="info-box">
+
+<h3>Was dich hier erwartet</h3>
+
+<ul>
+<li>Strategie-Bibliothek mit exklusiven Setups</li>
+<li>Live Sessions und Marktanalysen</li>
+<li>Community und interne Updates</li>
+<li>Signal- und Setup-Room</li>
+<li>Premium-Inhalte nur für aktive Mitglieder</li>
+</ul>
+
 </div>
 
-  <footer>
-    <p>© 2026 BullProsperity. Alle Rechte vorbehalten.</p>
-  </footer>
+<div class="button-row">
+
+<a href="/hub.html" class="btn btn-dark">
+Zurück zum Hub
+</a>
+
+<a href="https://whop.com/bullprosperityfx" class="btn btn-gold">
+Login mit Whop
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+
+<footer>
+
+<p>© 2026 BullProsperity. Alle Rechte vorbehalten.</p>
+
+</footer>
 
 </body>
 </html>
