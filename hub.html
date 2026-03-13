@@ -20,18 +20,6 @@
   }
 })();
 </script>
- <script>
-(async function () {
-
-  const res = await fetch("/api/access");
-  const data = await res.json();
-
-  if (data.role !== "admin" && data.role !== "premium") {
-    window.location.href = "locked.html";
-  }
-
-})();
-</script>
   <style>
     * {
       margin: 0;
