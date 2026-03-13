@@ -1,29 +1,25 @@
-export default async function handler(req, res) {
+module.exports = async function handler(req, res) {
+  try {
+    const cookie = req.headers.cookie || "";
 
-  const email = (req.headers["x-user-email"] || "").toLowerCase();
-  const hasMembership = req.headers["x-user-membership"] === "true";
+    const roleMatch = cookie.match(/bp_role=([^;]+)/);
+    const role = roleMatch ? roleMatch[1] : "guest";
 
-  const adminEmails = [
-    "bullprosperityfx@gmail.com"
-  ];
+    const isAdmin = role === "admin";
+    const hasMembership = role === "premium" || role === "admin";
 
-  const isAdmin = adminEmails.includes(email);
-
-  let role = "guest";
-
-  if (isAdmin) {
-    role = "admin";
-  } else if (hasMembership) {
-    role = "premium";
-  } else if (email) {
-    role = "free";
+    return res.status(200).json({
+      ok: true,
+      role,
+      isAdmin,
+      hasMembership
+    });
+  } catch (error) {
+    return res.status(500).json({
+      ok: false,
+      role: "guest",
+      isAdmin: false,
+      hasMembership: false
+    });
   }
-
-  res.status(200).json({
-    role,
-    email,
-    isAdmin,
-    hasMembership
-  });
-
-}
+};
