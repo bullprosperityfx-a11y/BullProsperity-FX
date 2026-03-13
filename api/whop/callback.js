@@ -10,6 +10,10 @@ module.exports = async function handler(req, res) {
     const clientSecret = process.env.WHOP_CLIENT_SECRET;
     const redirectUri = process.env.WHOP_REDIRECT_URI;
 
+    if (!clientId || !clientSecret || !redirectUri) {
+      return res.status(500).send("Missing WHOP environment variables");
+    }
+
     const cookie = req.headers.cookie || "";
     const verifierMatch = cookie.match(/whop_verifier=([^;]+)/);
     const codeVerifier = verifierMatch ? verifierMatch[1] : null;
@@ -35,43 +39,51 @@ module.exports = async function handler(req, res) {
 
     const tokenData = await tokenRes.json();
 
-    if (!tokenData.access_token) {
-      return res.status(500).send(`No access token returned: ${JSON.stringify(tokenData)}`);
+    if (!tokenRes.ok || !tokenData.access_token) {
+      return res
+        .status(500)
+        .send(`Token exchange failed: ${JSON.stringify(tokenData)}`);
     }
 
     const accessToken = tokenData.access_token;
 
+    // User-Profil laden
     const userRes = await fetch("https://api.whop.com/v5/me", {
       headers: {
         Authorization: `Bearer ${accessToken}`
       }
     });
 
-    const user = await userRes.json();
+    const userData = await userRes.json();
 
     const email =
-      user?.email?.toLowerCase() ||
-      user?.user?.email?.toLowerCase() ||
+      userData?.email?.toLowerCase() ||
+      userData?.user?.email?.toLowerCase() ||
       "";
 
+    // Memberships laden
     const membershipRes = await fetch("https://api.whop.com/v5/me/memberships", {
       headers: {
         Authorization: `Bearer ${accessToken}`
       }
     });
 
-    const memberships = await membershipRes.json();
+    const membershipData = await membershipRes.json();
 
-    const hasMembership =
-      Array.isArray(memberships?.data) ? memberships.data.length > 0 :
-      Array.isArray(memberships) ? memberships.length > 0 :
-      false;
+    const memberships = Array.isArray(membershipData?.data)
+      ? membershipData.data
+      : Array.isArray(membershipData)
+      ? membershipData
+      : [];
 
+    const hasMembership = memberships.length > 0;
+
+    // HIER DEINE ECHTE WHOP-EMAIL EINTRAGEN
     const adminEmails = [
       "bullprosperityfx@gmail.com"
-    ];
+    ].map((e) => e.toLowerCase());
 
-    const isAdmin = adminEmails.includes(email);
+    const isAdmin = email && adminEmails.includes(email);
 
     let role = "guest";
 
@@ -85,10 +97,12 @@ module.exports = async function handler(req, res) {
 
     res.setHeader("Set-Cookie", [
       `bp_role=${encodeURIComponent(role)}; Path=/; Max-Age=86400; SameSite=Lax; Secure`,
-      `bp_email=${encodeURIComponent(email)}; Path=/; Max-Age=86400; SameSite=Lax; Secure`
+      `whop_role=${encodeURIComponent(role)}; Path=/; Max-Age=86400; SameSite=Lax; Secure`,
+      `bp_email=${encodeURIComponent(email)}; Path=/; Max-Age=86400; SameSite=Lax; Secure`,
+      `bp_membership=${hasMembership}; Path=/; Max-Age=86400; SameSite=Lax; Secure`
     ]);
 
-    return res.redirect("/hub.html");
+    return res.redirect("/api/access");
   } catch (error) {
     console.error("WHOP CALLBACK ERROR:", error);
     return res.status(500).send(`OAuth callback failed: ${error.message}`);
