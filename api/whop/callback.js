@@ -1,6 +1,5 @@
 module.exports = async function handler(req, res) {
   try {
-
     const { code } = req.query;
 
     if (!code) {
@@ -19,7 +18,6 @@ module.exports = async function handler(req, res) {
       return res.status(400).send("Missing code verifier");
     }
 
-    // Token von Whop holen
     const tokenRes = await fetch("https://api.whop.com/oauth/token", {
       method: "POST",
       headers: {
@@ -38,12 +36,11 @@ module.exports = async function handler(req, res) {
     const tokenData = await tokenRes.json();
 
     if (!tokenData.access_token) {
-      return res.status(500).send("Failed to retrieve access token");
+      return res.status(500).send(`No access token returned: ${JSON.stringify(tokenData)}`);
     }
 
     const accessToken = tokenData.access_token;
 
-    // Whop User Daten abrufen
     const userRes = await fetch("https://api.whop.com/v5/me", {
       headers: {
         Authorization: `Bearer ${accessToken}`
@@ -51,9 +48,12 @@ module.exports = async function handler(req, res) {
     });
 
     const user = await userRes.json();
-    const email = user.email ? user.email.toLowerCase() : null;
 
-    // Membership prüfen
+    const email =
+      user?.email?.toLowerCase() ||
+      user?.user?.email?.toLowerCase() ||
+      "";
+
     const membershipRes = await fetch("https://api.whop.com/v5/me/memberships", {
       headers: {
         Authorization: `Bearer ${accessToken}`
@@ -61,11 +61,14 @@ module.exports = async function handler(req, res) {
     });
 
     const memberships = await membershipRes.json();
-    const hasMembership = memberships?.data?.length > 0;
 
-    // Admin Emails
+    const hasMembership =
+      Array.isArray(memberships?.data) ? memberships.data.length > 0 :
+      Array.isArray(memberships) ? memberships.length > 0 :
+      false;
+
     const adminEmails = [
-      "bullprosperityfx@gmail.com"
+      "DEINE_EMAIL_HIER"
     ];
 
     const isAdmin = adminEmails.includes(email);
@@ -80,19 +83,14 @@ module.exports = async function handler(req, res) {
       role = "free";
     }
 
-    // Cookie setzen
-    res.setHeader(
-      "Set-Cookie",
-      `bp_role=${role}; Path=/; HttpOnly; Secure; SameSite=Lax`
-    );
+    res.setHeader("Set-Cookie", [
+      `bp_role=${encodeURIComponent(role)}; Path=/; Max-Age=86400; SameSite=Lax; Secure`,
+      `bp_email=${encodeURIComponent(email)}; Path=/; Max-Age=86400; SameSite=Lax; Secure`
+    ]);
 
     return res.redirect("/hub.html");
-
   } catch (error) {
-
-    console.error(error);
-
-    return res.status(500).send("OAuth callback failed");
-
+    console.error("WHOP CALLBACK ERROR:", error);
+    return res.status(500).send(`OAuth callback failed: ${error.message}`);
   }
 };
