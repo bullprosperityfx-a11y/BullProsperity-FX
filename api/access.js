@@ -1,54 +1,78 @@
-export default async function handler(req, res) {
+module.exports = async function handler(req, res) {
+  try {
+    const cookie = req.headers.cookie || "";
 
-const cookie = req.headers.cookie || ""
+    const tokenMatch = cookie.match(/whop_access_token=([^;]+)/);
 
-const tokenMatch = cookie.match(/whop_access_token=([^;]+)/)
+    if (!tokenMatch) {
+      return res.status(200).json({
+        ok: true,
+        role: "guest",
+        email: "",
+        hasMembership: false
+      });
+    }
 
-if (!tokenMatch) {
-return res.json({
-ok:true,
-role:"guest",
-email:"",
-hasMembership:false
-})
-}
+    const token = decodeURIComponent(tokenMatch[1]);
 
-const token = tokenMatch[1]
+    const userRes = await fetch("https://api.whop.com/api/v5/me", {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
 
-try {
+    const userData = await userRes.json();
 
-const userRes = await fetch("https://api.whop.com/api/v5/me",{
-headers:{
-Authorization:`Bearer ${token}`
-}
-})
+    const email =
+userData?.email ||
+userData?.user?.email ||
+userData?.user?.primary_email ||
+userData?.data?.email ||
+"";
 
-const user = await userRes.json()
+    const membershipRes = await fetch("https://api.whop.com/api/v5/me/memberships", {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
 
-const email = user.email || ""
+    const membershipData = await membershipRes.json();
 
-let role = "guest"
+    const memberships = Array.isArray(membershipData?.data)
+      ? membershipData.data
+      : Array.isArray(membershipData)
+      ? membershipData
+      : [];
 
-if(email === "bullprosperityfx@gmail.com"){
-role = "admin"
-}
+    const hasMembership = memberships.length > 0;
 
-res.json({
-ok:true,
-role,
-email,
-hasMembership:true
-})
+    const adminEmails = [
+      "bullprosperityfx@gmail.com"
+    ].map((e) => e.toLowerCase());
 
-}catch(e){
+    let role = "guest";
 
-res.json({
-ok:true,
-role:"guest",
-email:"",
-hasMembership:false
-})
+    if (email && adminEmails.includes(email)) {
+      role = "admin";
+    } else if (hasMembership) {
+      role = "premium";
+    } else if (email) {
+      role = "free";
+    }
 
-}
-
-}
+    return res.status(200).json({
+      ok: true,
+      role,
+      email,
+      hasMembership
+    });
+  } catch (error) {
+    return res.status(200).json({
+      ok: false,
+      role: "guest",
+      email: "",
+      hasMembership: false,
+      error: error.message
+    });
+  }
+};
