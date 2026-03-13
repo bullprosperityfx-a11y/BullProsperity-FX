@@ -4,155 +4,25 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>BullProsperity Tools</title>
- <script>
-(async () => {
-  try {
-    const res = await fetch("/api/access", {
-      credentials: "include"
-    });
-    const data = await res.json();
 
-    if (data.role !== "admin" && data.role !== "premium") {
-      window.location.href = "locked.html";
-    }
-  } catch (err) {
-    window.location.href = "locked.html";
-  }
-})();
-</script>
+  <script>
+    (async () => {
+      try {
+        const res = await fetch("/api/access", {
+          credentials: "include"
+        });
+        const data = await res.json();
+
+        if (data.role !== "admin" && data.role !== "premium") {
+          window.location.href = "locked.html";
+        }
+      } catch (err) {
+        window.location.href = "locked.html";
+      }
+    })();
+  </script>
+
   <style>
-    .section {
-  padding: 40px 0;
-}
-
-.container {
-  width: min(1200px, 92%);
-  margin: 0 auto;
-}
-
-.section-title {
-  font-size: 32px;
-  font-weight: 800;
-  margin-bottom: 10px;
-  color: #ffffff;
-}
-
-.section-subtitle {
-  color: #bfbfbf;
-  line-height: 1.7;
-  margin-bottom: 24px;
-}
-
-.tv-wrapper {
-  background: #111111;
-  border: 1px solid rgba(212, 175, 55, 0.15);
-  border-radius: 20px;
-  padding: 18px;
-  box-shadow: 0 16px 30px rgba(0,0,0,0.20);
-}
-
-#tradingview_chart {
-  height: 650px;
-  width: 100%;
-  border-radius: 16px;
-  overflow: hidden;
-}
-
-.tool-box {
-  background: #111111;
-  border: 1px solid rgba(212, 175, 55, 0.15);
-  border-radius: 20px;
-  padding: 28px;
-  box-shadow: 0 16px 30px rgba(0,0,0,0.18);
-}
-
-.tool-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 18px;
-}
-
-.field {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.field label {
-  color: #d7d7d7;
-  font-size: 14px;
-  font-weight: 600;
-}
-
-.field input,
-.field textarea,
-textarea {
-  background: #0f0f0f;
-  border: 1px solid rgba(255,255,255,0.08);
-  color: #ffffff;
-  border-radius: 10px;
-  padding: 13px 14px;
-  font-size: 15px;
-  outline: none;
-}
-
-textarea {
-  min-height: 130px;
-  resize: vertical;
-}
-
-.tool-actions {
-  margin-top: 22px;
-}
-
-.result-grid {
-  margin-top: 24px;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 18px;
-}
-
-.result-card {
-  background: rgba(255,255,255,0.03);
-  border: 1px solid rgba(255,255,255,0.06);
-  border-radius: 16px;
-  padding: 18px;
-}
-
-.result-card span {
-  display: block;
-  color: #bfbfbf;
-  margin-bottom: 8px;
-}
-
-.result-card strong {
-  color: #d4af37;
-  font-size: 24px;
-}
-
-.journal-list {
-  margin-top: 24px;
-  display: grid;
-  gap: 16px;
-}
-
-.journal-entry {
-  background: rgba(255,255,255,0.03);
-  border: 1px solid rgba(255,255,255,0.06);
-  border-radius: 16px;
-  padding: 18px;
-}
-
-.journal-entry h4 {
-  color: #d4af37;
-  margin-bottom: 10px;
-}
-
-.journal-entry p {
-  color: #d6d6d6;
-  line-height: 1.7;
-  margin: 4px 0;
-}
     * {
       margin: 0;
       padding: 0;
@@ -250,7 +120,8 @@ textarea {
     }
 
     .hero,
-    .card {
+    .card,
+    .tool-box {
       background: rgba(18, 18, 18, 0.94);
       border: 1px solid rgba(255, 215, 0, 0.15);
       border-radius: 24px;
@@ -258,7 +129,9 @@ textarea {
       padding: 26px;
     }
 
-    .badge {
+    .badge,
+    .top-tag,
+    .entry-tag {
       display: inline-block;
       padding: 8px 14px;
       border-radius: 999px;
@@ -270,7 +143,8 @@ textarea {
       margin-bottom: 15px;
     }
 
-    .hero h1 {
+    .hero h1,
+    .section-title {
       font-size: clamp(2rem, 4vw, 3.4rem);
       line-height: 1.06;
       margin-bottom: 14px;
@@ -286,9 +160,30 @@ textarea {
     }
 
     .hero p,
-    .card p {
+    .card p,
+    .section-subtitle {
       color: #dddddd;
       line-height: 1.8;
+    }
+
+    .section {
+      padding: 8px 0;
+    }
+
+    .container {
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    .section-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #ffffff;
+    }
+
+    .section-subtitle {
+      margin-bottom: 24px;
+      color: #bfbfbf;
     }
 
     .grid-3 {
@@ -309,17 +204,6 @@ textarea {
       font-size: 1.55rem;
     }
 
-    .top-tag {
-      display: inline-block;
-      margin-bottom: 12px;
-      padding: 7px 12px;
-      border-radius: 999px;
-      font-size: 12px;
-      border: 1px solid rgba(255, 215, 0, 0.2);
-      color: #ffd84d;
-      background: rgba(255, 215, 0, 0.07);
-    }
-
     .tool-list {
       list-style: none;
       display: grid;
@@ -335,10 +219,18 @@ textarea {
       color: #f2f2f2;
     }
 
+    .tool-grid,
     .form-grid {
       display: grid;
       gap: 14px;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
       margin-top: 16px;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
     }
 
     label {
@@ -348,9 +240,17 @@ textarea {
       margin-bottom: 6px;
     }
 
+    .field label {
+      color: #d7d7d7;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
     input,
     select,
-    textarea {
+    textarea,
+    .field input,
+    .field textarea {
       width: 100%;
       padding: 14px 16px;
       border-radius: 14px;
@@ -373,11 +273,12 @@ textarea {
       box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.08);
     }
 
-    .btn-row {
+    .btn-row,
+    .tool-actions {
       display: flex;
       gap: 12px;
       flex-wrap: wrap;
-      margin-top: 8px;
+      margin-top: 18px;
     }
 
     .btn {
@@ -413,26 +314,32 @@ textarea {
       background: rgba(255,255,255,0.06);
     }
 
-    .result-box {
+    .result-box,
+    .result-grid {
       display: grid;
       gap: 16px;
       margin-top: 18px;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
     }
 
-    .result-item {
+    .result-item,
+    .result-card {
       background: rgba(255,255,255,0.03);
       border: 1px solid rgba(255, 215, 0, 0.14);
       border-radius: 18px;
       padding: 18px;
     }
 
-    .result-label {
+    .result-label,
+    .result-card span {
       color: #bdbdbd;
       font-size: 0.92rem;
       margin-bottom: 8px;
+      display: block;
     }
 
-    .result-value {
+    .result-value,
+    .result-card strong {
       color: #ffd700;
       font-size: 1.45rem;
       font-weight: 800;
@@ -449,28 +356,40 @@ textarea {
       border-radius: 18px;
       border: 1px solid rgba(255, 215, 0, 0.16);
       margin-top: 18px;
+      background: #111111;
+      padding: 0;
     }
 
-    .journal-entries {
+    #tradingview_chart {
+      width: 100%;
+      height: 540px;
+      min-height: 540px;
+    }
+
+    .journal-entries,
+    .journal-list {
       margin-top: 24px;
       display: grid;
       gap: 16px;
     }
 
-    .entry-card {
+    .entry-card,
+    .journal-entry {
       background: rgba(255,255,255,0.03);
       border: 1px solid rgba(255, 215, 0, 0.14);
       border-radius: 18px;
       padding: 18px;
     }
 
-    .entry-card h3 {
+    .entry-card h3,
+    .journal-entry h4 {
       color: #ffd700;
       margin-bottom: 10px;
       font-size: 1.15rem;
     }
 
-    .entry-card p {
+    .entry-card p,
+    .journal-entry p {
       margin: 6px 0;
       color: #e0e0e0;
       line-height: 1.6;
@@ -481,16 +400,6 @@ textarea {
       flex-wrap: wrap;
       gap: 10px;
       margin-bottom: 10px;
-    }
-
-    .entry-tag {
-      padding: 7px 11px;
-      border-radius: 999px;
-      border: 1px solid rgba(255, 215, 0, 0.22);
-      color: #ffd84d;
-      font-size: 12px;
-      background: rgba(255, 215, 0, 0.07);
-      white-space: nowrap;
     }
 
     .empty-state {
@@ -513,6 +422,8 @@ textarea {
       line-height: 1.8;
       text-align: center;
       font-size: 0.95rem;
+      position: relative;
+      z-index: 1;
     }
 
     @media (max-width: 1080px) {
@@ -531,90 +442,23 @@ textarea {
       }
 
       .hero,
-      .card {
+      .card,
+      .tool-box {
         padding: 20px;
       }
 
       nav {
         gap: 15px;
       }
+
+      #tradingview_chart {
+        height: 420px;
+        min-height: 420px;
+      }
     }
   </style>
 </head>
 <body>
-  <section class="section">
-<div class="container">
-
-<h2 class="section-title">Live Chart Analyse</h2>
-
-<div class="tv-wrapper">
-<div id="tradingview_chart"></div>
-</div>
-
-</div>
-</section>
-
-
-<section class="section">
-<div class="container">
-
-<h2 class="section-title">Lot Size Rechner</h2>
-
-<div class="tool-box">
-
-<label>Kontogröße (€)</label>
-<input id="accountSize" type="number" value="10000">
-
-<label>Risiko (%)</label>
-<input id="riskPercent" type="number" value="1">
-
-<label>Stop Loss (Pips)</label>
-<input id="stopLoss" type="number" value="20">
-
-<label>Pip Value</label>
-<input id="pipValue" type="number" value="10">
-
-<button onclick="calculateLotSize()">Berechnen</button>
-
-<p>Lot Size: <span id="lotResult">0</span></p>
-
-</div>
-</div>
-</section>
-
-
-<section class="section">
-<div class="container">
-
-<h2 class="section-title">Trading Journal</h2>
-
-<label>Pair</label>
-<input id="journalPair">
-
-<label>Entry</label>
-<input id="journalEntry">
-
-<label>Stop Loss</label>
-<input id="journalSL">
-
-<label>Take Profit</label>
-<input id="journalTP">
-
-<label>Ergebnis</label>
-<input id="journalResult">
-
-<label>Emotion</label>
-<input id="journalEmotion">
-
-<label>Notizen</label>
-<textarea id="journalNotes"></textarea>
-
-<button onclick="saveJournalEntry()">Trade speichern</button>
-
-<div id="journalList"></div>
-
-</div>
-</section>
   <div class="chart-bg">
     <svg viewBox="0 0 1600 900" preserveAspectRatio="none">
       <path class="line-alt" d="M0,650 C110,620 170,565 290,550 C380,540 470,570 560,495 C665,410 720,450 820,350 C905,265 980,290 1085,220 C1205,140 1285,185 1415,120 C1500,82 1548,108 1600,86" />
@@ -639,12 +483,12 @@ textarea {
   <header>
     <div class="logo">BullProsperity</div>
     <nav>
-<a href="/index.html">Home</a>
-<a href="/hub.html">Hub</a>
-<a href="/course.html">Course</a>
-<a href="/tools.html">Tools</a>
-<a href="/api/whop/login">Login</a>
-</nav>
+      <a href="/index.html">Home</a>
+      <a href="/hub.html">Hub</a>
+      <a href="/course.html">Course</a>
+      <a href="/tools.html">Tools</a>
+      <a href="/api/whop/login">Login</a>
+    </nav>
   </header>
 
   <main class="page">
@@ -784,9 +628,53 @@ textarea {
         </p>
 
         <div class="tv-wrapper">
-          <div class="tradingview-widget-container">
-            <div id="tradingview_chart"></div>
-          </div>
+          <div id="tradingview_chart"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="badge">Risk / Reward</div>
+      <h2>Risk Reward Rechner</h2>
+      <p>
+        Berechne dein Risiko, dein mögliches Reward und das Verhältnis zwischen beiden.
+      </p>
+
+      <div class="form-grid">
+        <div>
+          <label for="entryPrice">Entry</label>
+          <input id="entryPrice" type="number" step="0.0001" value="1.1000" />
+        </div>
+
+        <div>
+          <label for="slPrice">Stop Loss</label>
+          <input id="slPrice" type="number" step="0.0001" value="1.0980" />
+        </div>
+
+        <div>
+          <label for="tpPrice">Take Profit</label>
+          <input id="tpPrice" type="number" step="0.0001" value="1.1060" />
+        </div>
+
+        <div class="btn-row">
+          <button class="btn btn-primary" onclick="calculateRR()">Berechnen</button>
+        </div>
+      </div>
+
+      <div class="result-grid">
+        <div class="result-card">
+          <span>Risiko</span>
+          <strong id="riskResult">0</strong>
+        </div>
+
+        <div class="result-card">
+          <span>Reward</span>
+          <strong id="rewardResult">0</strong>
+        </div>
+
+        <div class="result-card">
+          <span>R:R Verhältnis</span>
+          <strong id="rrResult">0 : 0</strong>
         </div>
       </div>
     </section>
@@ -858,6 +746,62 @@ textarea {
 
       <div id="journalEntries" class="journal-entries"></div>
     </section>
+
+    <section class="card">
+      <div class="badge">Quick Journal</div>
+      <h2>Schnelles Trade Journal</h2>
+      <p>
+        Für kurze Trade-Dokumentation direkt im Tools-Bereich.
+      </p>
+
+      <div class="tool-grid">
+        <div class="field">
+          <label for="journalPair">Pair / Markt</label>
+          <input id="journalPair" type="text" placeholder="z. B. EURUSD" />
+        </div>
+
+        <div class="field">
+          <label for="journalDirection">Richtung</label>
+          <input id="journalDirection" type="text" placeholder="Buy / Sell" />
+        </div>
+
+        <div class="field">
+          <label for="journalEntry">Entry</label>
+          <input id="journalEntry" type="text" placeholder="z. B. 1.0845" />
+        </div>
+
+        <div class="field">
+          <label for="journalSL">Stop Loss</label>
+          <input id="journalSL" type="text" placeholder="z. B. 1.0820" />
+        </div>
+
+        <div class="field">
+          <label for="journalTP">Take Profit</label>
+          <input id="journalTP" type="text" placeholder="z. B. 1.0900" />
+        </div>
+
+        <div class="field">
+          <label for="journalResult">Ergebnis</label>
+          <input id="journalResult" type="text" placeholder="Win / Loss / BE" />
+        </div>
+
+        <div class="field">
+          <label for="journalEmotion">Emotion</label>
+          <input id="journalEmotion" type="text" placeholder="ruhig / FOMO / unsicher" />
+        </div>
+      </div>
+
+      <div class="field" style="margin-top:18px;">
+        <label for="journalNotes">Notizen</label>
+        <textarea id="journalNotes" placeholder="Warum war der Trade gut oder schlecht?"></textarea>
+      </div>
+
+      <div class="tool-actions">
+        <button class="btn btn-primary" onclick="saveQuickJournalEntry()">Trade speichern</button>
+      </div>
+
+      <div class="journal-list" id="journalList"></div>
+    </section>
   </main>
 
   <div class="footer-note">
@@ -866,11 +810,11 @@ textarea {
     Alle Tools, Charts und Journal-Funktionen dienen ausschließlich der Education und Selbstanalyse.
   </div>
 
-  <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
-  <script type="text/javascript">
+  <script src="https://s3.tradingview.com/tv.js"></script>
+  <script>
     new TradingView.widget({
-      width: "100%",
-      height: 540,
+      container_id: "tradingview_chart",
+      autosize: true,
       symbol: "OANDA:XAUUSD",
       interval: "15",
       timezone: "Europe/Berlin",
@@ -881,22 +825,23 @@ textarea {
       enable_publishing: false,
       hide_top_toolbar: false,
       hide_legend: false,
-      save_image: false,
-      container_id: "tradingview_chart"
+      save_image: false
     });
 
     const marketType = document.getElementById("marketType");
     const pipValueInput = document.getElementById("pipValue");
 
-    marketType.addEventListener("change", function () {
-      if (this.value === "forex") {
-        pipValueInput.value = 10;
-      } else if (this.value === "gold") {
-        pipValueInput.value = 10;
-      } else if (this.value === "indices") {
-        pipValueInput.value = 1;
-      }
-    });
+    if (marketType) {
+      marketType.addEventListener("change", function () {
+        if (this.value === "forex") {
+          pipValueInput.value = 10;
+        } else if (this.value === "gold") {
+          pipValueInput.value = 10;
+        } else if (this.value === "indices") {
+          pipValueInput.value = 1;
+        }
+      });
+    }
 
     function calculateLotSize() {
       const balance = parseFloat(document.getElementById("balance").value);
@@ -936,10 +881,30 @@ textarea {
       document.getElementById("stoploss").value = "";
       document.getElementById("pipValue").value = "";
       document.getElementById("marketType").value = "manual";
-
       document.getElementById("riskAmountResult").textContent = "–";
       document.getElementById("distanceResult").textContent = "–";
       document.getElementById("lotSizeResult").textContent = "–";
+    }
+
+    function calculateRR() {
+      const entry = parseFloat(document.getElementById("entryPrice").value);
+      const sl = parseFloat(document.getElementById("slPrice").value);
+      const tp = parseFloat(document.getElementById("tpPrice").value);
+
+      if (!entry || !sl || !tp) {
+        document.getElementById("riskResult").innerText = "0";
+        document.getElementById("rewardResult").innerText = "0";
+        document.getElementById("rrResult").innerText = "0 : 0";
+        return;
+      }
+
+      const risk = Math.abs(entry - sl);
+      const reward = Math.abs(tp - entry);
+      const rr = reward / risk;
+
+      document.getElementById("riskResult").innerText = risk.toFixed(4);
+      document.getElementById("rewardResult").innerText = reward.toFixed(4);
+      document.getElementById("rrResult").innerText = "1 : " + rr.toFixed(2);
     }
 
     const storageKey = "bpJournalEntries";
@@ -1033,109 +998,66 @@ textarea {
       renderJournalEntries();
     }
 
+    function saveQuickJournalEntry() {
+      const pair = document.getElementById("journalPair").value;
+      const direction = document.getElementById("journalDirection").value;
+      const entry = document.getElementById("journalEntry").value;
+      const sl = document.getElementById("journalSL").value;
+      const tp = document.getElementById("journalTP").value;
+      const result = document.getElementById("journalResult").value;
+      const emotion = document.getElementById("journalEmotion").value;
+      const notes = document.getElementById("journalNotes").value;
+
+      const data = { pair, direction, entry, sl, tp, result, emotion, notes };
+
+      const trades = JSON.parse(localStorage.getItem("bpQuickJournal") || "[]");
+      trades.unshift(data);
+      localStorage.setItem("bpQuickJournal", JSON.stringify(trades));
+
+      document.getElementById("journalPair").value = "";
+      document.getElementById("journalDirection").value = "";
+      document.getElementById("journalEntry").value = "";
+      document.getElementById("journalSL").value = "";
+      document.getElementById("journalTP").value = "";
+      document.getElementById("journalResult").value = "";
+      document.getElementById("journalEmotion").value = "";
+      document.getElementById("journalNotes").value = "";
+
+      renderQuickJournalEntries();
+    }
+
+    function renderQuickJournalEntries() {
+      const container = document.getElementById("journalList");
+      const trades = JSON.parse(localStorage.getItem("bpQuickJournal") || "[]");
+
+      if (!container) return;
+
+      container.innerHTML = "";
+
+      if (!trades.length) {
+        container.innerHTML = `<div class="empty-state">Noch keine Quick-Journal Einträge gespeichert.</div>`;
+        return;
+      }
+
+      trades.forEach((t) => {
+        container.innerHTML += `
+          <div class="journal-entry">
+            <h4>${escapeHtml(t.pair || "Unbekannter Markt")}</h4>
+            <p><strong>Richtung:</strong> ${escapeHtml(t.direction || "-")}</p>
+            <p><strong>Entry:</strong> ${escapeHtml(t.entry || "-")}</p>
+            <p><strong>SL:</strong> ${escapeHtml(t.sl || "-")}</p>
+            <p><strong>TP:</strong> ${escapeHtml(t.tp || "-")}</p>
+            <p><strong>Result:</strong> ${escapeHtml(t.result || "-")}</p>
+            <p><strong>Emotion:</strong> ${escapeHtml(t.emotion || "-")}</p>
+            <p>${escapeHtml(t.notes || "-")}</p>
+          </div>
+        `;
+      });
+    }
+
     renderJournalEntries();
-    <script src="https://s3.tradingview.com/tv.js"></script>
-
-<script>
-
-new TradingView.widget({
-container_id: "tradingview_chart",
-autosize: true,
-symbol: "OANDA:XAUUSD",
-interval: "60",
-timezone: "Europe/Berlin",
-theme: "dark",
-style: "1",
-locale: "de"
-});
-
-function calculateLotSize(){
-
-const accountSize =
-parseFloat(document.getElementById("accountSize").value) || 0;
-
-const riskPercent =
-parseFloat(document.getElementById("riskPercent").value) || 0;
-
-const stopLoss =
-parseFloat(document.getElementById("stopLoss").value) || 1;
-
-const pipValue =
-parseFloat(document.getElementById("pipValue").value) || 1;
-
-const riskAmount = accountSize * (riskPercent/100);
-
-const lotSize = riskAmount / (stopLoss * pipValue);
-
-document.getElementById("lotResult").textContent =
-lotSize.toFixed(2);
-
-}
-
-function saveJournalEntry(){
-
-const pair = document.getElementById("journalPair").value;
-
-const entry = document.getElementById("journalEntry").value;
-
-const sl = document.getElementById("journalSL").value;
-
-const tp = document.getElementById("journalTP").value;
-
-const result = document.getElementById("journalResult").value;
-
-const emotion = document.getElementById("journalEmotion").value;
-
-const notes = document.getElementById("journalNotes").value;
-
-const data = {
-pair,entry,sl,tp,result,emotion,notes
-};
-
-const trades =
-JSON.parse(localStorage.getItem("bpJournal") || "[]");
-
-trades.unshift(data);
-
-localStorage.setItem(
-"bpJournal",
-JSON.stringify(trades)
-);
-
-renderTrades();
-
-}
-
-function renderTrades(){
-
-const container =
-document.getElementById("journalList");
-
-const trades =
-JSON.parse(localStorage.getItem("bpJournal") || "[]");
-
-container.innerHTML = "";
-
-trades.forEach(t => {
-
-container.innerHTML += `
-<div class="journal-entry">
-<h4>${t.pair}</h4>
-<p>Entry: ${t.entry}</p>
-<p>SL: ${t.sl}</p>
-<p>TP: ${t.tp}</p>
-<p>Result: ${t.result}</p>
-<p>Emotion: ${t.emotion}</p>
-<p>${t.notes}</p>
-</div>
-`;
-
-});
-
-}
-
-renderTrades();
-
-</script>
+    renderQuickJournalEntries();
+    calculateRR();
+  </script>
 </body>
 </html>
