@@ -1,74 +1,44 @@
 export default async function handler(req, res) {
-  const code = req.query.code;
+  const { code } = req.query;
+
+  const clientId = process.env.WHOP_CLIENT_ID;
+  const clientSecret = process.env.WHOP_CLIENT_SECRET;
+  const redirectUri = process.env.WHOP_REDIRECT_URI;
 
   if (!code) {
-    return res.redirect('/locked.html');
+    return res.status(400).send("Missing code");
   }
 
   try {
-    const tokenRes = await fetch('https://api.whop.com/oauth/token', {
-      method: 'POST',
+    const tokenRes = await fetch("https://api.whop.com/oauth/token", {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        grant_type: 'authorization_code',
+        client_id: clientId,
+        client_secret: clientSecret,
         code,
-        redirect_uri: process.env.WHOP_REDIRECT_URI,
-        client_id: process.env.WHOP_CLIENT_ID,
-        client_secret: process.env.WHOP_CLIENT_SECRET,
-      }),
+        grant_type: "authorization_code",
+        redirect_uri: redirectUri
+      })
     });
-
-    if (!tokenRes.ok) {
-      return res.redirect('/locked.html');
-    }
 
     const tokenData = await tokenRes.json();
+
+    if (!tokenRes.ok) {
+      return res.status(500).send(`Token error: ${JSON.stringify(tokenData)}`);
+    }
+
     const accessToken = tokenData.access_token;
 
-    if (!accessToken) {
-      return res.redirect('/locked.html');
-    }
-
-    const userInfoRes = await fetch('https://api.whop.com/oauth/userinfo', {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    });
-
-    if (!userInfoRes.ok) {
-      return res.redirect('/locked.html');
-    }
-
-    const userInfo = await userInfoRes.json();
-    const userId = userInfo.sub;
-
-    if (!userId) {
-      return res.redirect('/locked.html');
-    }
-
-    const accessRes = await fetch(
-      `https://api.whop.com/api/v1/users/${userId}/access/${process.env.WHOP_RESOURCE_ID}`,
-      {
-        headers: {
-          Authorization: `Bearer ${process.env.WHOP_API_KEY}`,
-        },
-      }
+    res.setHeader(
+      "Set-Cookie",
+      `whop_access_token=${accessToken}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=604800`
     );
 
-    if (!accessRes.ok) {
-      return res.redirect('/locked.html');
-    }
-
-    const accessData = await accessRes.json();
-
-    if (accessData.has_access) {
-      return res.redirect('/hub.html');
-    }
-
-    return res.redirect('/locked.html');
+    return res.redirect("/hub.html");
   } catch (error) {
-    return res.redirect('/locked.html');
+    return res.status(500).send(`Callback error: ${error.message}`);
   }
 }
