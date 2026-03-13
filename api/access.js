@@ -11,13 +11,24 @@ export default async function handler(req, res) {
     return res.status(200).json({
       ok: true,
       role,
-      email
+      email,
+      isAdmin: role === "admin",
+      isPremium: role === "admin" || role === "premium",
+      statusLabel:
+        role === "admin"
+          ? "Admin"
+          : role === "premium"
+          ? "Premium"
+          : "Gast"
     });
   } catch (error) {
     return res.status(200).json({
       ok: false,
       role: "guest",
       email: "",
+      isAdmin: false,
+      isPremium: false,
+      statusLabel: "Gast",
       error: error.message
     });
   }
