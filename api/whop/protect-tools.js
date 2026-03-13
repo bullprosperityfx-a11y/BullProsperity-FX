@@ -1,4 +1,5 @@
 export default async function handler(req, res) {
+
   const cookie = req.headers.cookie || "";
   const hasToken = cookie.includes("whop_access_token=");
 
@@ -7,4 +8,5 @@ export default async function handler(req, res) {
   }
 
   return res.redirect("/tools.html");
+
 }
