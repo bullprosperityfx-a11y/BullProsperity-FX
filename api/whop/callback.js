@@ -11,7 +11,6 @@ module.exports = async function handler(req, res) {
     const redirectUri = process.env.WHOP_REDIRECT_URI;
 
     const cookie = req.headers.cookie || "";
-
     const verifierMatch = cookie.match(/whop_verifier=([^;]+)/);
     const stateMatch = cookie.match(/whop_state=([^;]+)/);
 
@@ -26,6 +25,7 @@ module.exports = async function handler(req, res) {
       return res.status(400).send("Invalid OAuth state");
     }
 
+    // 1) OAuth Token holen
     const tokenRes = await fetch("https://api.whop.com/oauth/token", {
       method: "POST",
       headers: {
@@ -52,6 +52,7 @@ module.exports = async function handler(req, res) {
 
     const accessToken = tokenData.access_token;
 
+    // 2) Userinfo holen
     const userInfoRes = await fetch("https://api.whop.com/oauth/userinfo", {
       headers: {
         Authorization: `Bearer ${accessToken}`
@@ -62,19 +63,55 @@ module.exports = async function handler(req, res) {
 
     if (!userInfoRes.ok) {
       return res.status(500).json({
-        error: "Failed to fetch OAuth userinfo",
+        error: "Failed to fetch userinfo",
         userInfo
       });
     }
 
     const email = (userInfo.email || "").toLowerCase();
 
+    // 3) Memberships holen
+    const membershipRes = await fetch("https://api.whop.com/api/v5/memberships", {
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      }
+    });
+
+    const membershipData = await membershipRes.json();
+
+    if (!membershipRes.ok) {
+      return res.status(500).json({
+        error: "Failed to fetch memberships",
+        membershipData
+      });
+    }
+
+    const memberships = Array.isArray(membershipData?.data)
+      ? membershipData.data
+      : Array.isArray(membershipData)
+      ? membershipData
+      : [];
+
+    // Nur aktive Memberships zählen
+    const activeMemberships = memberships.filter((membership) => {
+      const status = (membership.status || "").toLowerCase();
+      return status === "active" || status === "trialing";
+    });
+
+    // 4) Admin + Premium Logik
     const adminEmails = [
       "bullprosperityfx@gmail.com"
     ].map((e) => e.toLowerCase());
 
-    const role = adminEmails.includes(email) ? "admin" : "guest";
+    let role = "guest";
 
+    if (adminEmails.includes(email)) {
+      role = "admin";
+    } else if (activeMemberships.length > 0) {
+      role = "premium";
+    }
+
+    // 5) Cookies setzen
     res.setHeader("Set-Cookie", [
       `bp_role=${encodeURIComponent(role)}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=86400`,
       `bp_email=${encodeURIComponent(email)}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=86400`
