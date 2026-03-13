@@ -5,33 +5,24 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>BullProsperity FX</title>
   <style>
-    *{
-      margin:0;
-      padding:0;
-      box-sizing:border-box;
-    }
-
+    *{margin:0;padding:0;box-sizing:border-box;}
     :root{
       --bg:#060606;
-      --panel:rgba(14,14,14,0.78);
-      --panel-strong:rgba(10,10,10,0.88);
-      --text:#f3f3f3;
-      --muted:#cfcfcf;
       --gold:#ffd700;
       --gold-2:#ffbf00;
+      --text:#f3f3f3;
+      --muted:#d0d0d0;
       --line:rgba(255,255,255,0.06);
       --gold-line:rgba(255,215,0,0.16);
     }
-
     body{
       font-family:Arial, Helvetica, sans-serif;
       background:var(--bg);
       color:var(--text);
-      overflow-x:hidden;
       min-height:100vh;
+      overflow-x:hidden;
       position:relative;
     }
-
     body::before{
       content:"";
       position:fixed;
@@ -39,549 +30,186 @@
       background:
         radial-gradient(circle at 20% 15%, rgba(255,215,0,0.10), transparent 24%),
         radial-gradient(circle at 85% 75%, rgba(255,215,0,0.07), transparent 22%),
-        linear-gradient(180deg, rgba(6,6,6,0.82), rgba(6,6,6,0.95));
+        linear-gradient(180deg, rgba(6,6,6,0.84), rgba(6,6,6,0.96));
       z-index:-5;
-      pointer-events:none;
     }
-
     .grid-overlay{
       position:fixed;
       inset:0;
       z-index:-4;
-      pointer-events:none;
       opacity:0.10;
+      pointer-events:none;
       background-image:
         linear-gradient(to right, rgba(255,255,255,0.05) 1px, transparent 1px),
         linear-gradient(to bottom, rgba(255,255,255,0.05) 1px, transparent 1px);
       background-size:64px 64px;
-      mask-image:linear-gradient(to bottom, rgba(0,0,0,0.95), rgba(0,0,0,0.45));
     }
-
     .chart-bg{
       position:fixed;
       inset:0;
       z-index:-3;
-      pointer-events:none;
-      overflow:hidden;
       opacity:0.55;
+      pointer-events:none;
     }
-
-    .chart-svg{
-      position:absolute;
-      inset:0;
-      width:100%;
-      height:100%;
-    }
-
-    .chart-line{
-      fill:none;
-      stroke:rgba(255,215,0,0.45);
-      stroke-width:3.5;
-      filter:drop-shadow(0 0 8px rgba(255,215,0,0.16));
-      stroke-linecap:round;
-      stroke-linejoin:round;
-      stroke-dasharray:1400;
-      stroke-dashoffset:1400;
-      animation:drawLine 5s ease forwards;
-    }
-
-    .chart-line-2{
-      fill:none;
-      stroke:rgba(255,255,255,0.18);
-      stroke-width:2;
-      stroke-dasharray:1200;
-      stroke-dashoffset:1200;
-      animation:drawLine 6.5s ease forwards 0.4s;
-    }
-
-    .chart-line-3{
-      fill:none;
-      stroke:rgba(255,215,0,0.22);
-      stroke-width:2.5;
-      stroke-dasharray:1300;
-      stroke-dashoffset:1300;
-      animation:drawLine 7s ease forwards 0.7s;
-    }
-
-    .candle{
-      fill:rgba(255,215,0,0.26);
-      stroke:rgba(255,215,0,0.6);
-      stroke-width:1.3;
-      filter:drop-shadow(0 0 5px rgba(255,215,0,0.10));
-    }
-
-    .candle.alt{
-      fill:rgba(255,255,255,0.08);
-      stroke:rgba(255,255,255,0.22);
-    }
-
-    .floating-glow{
-      position:absolute;
-      width:420px;
-      height:420px;
-      border-radius:50%;
-      background:radial-gradient(circle, rgba(255,215,0,0.09), transparent 68%);
-      filter:blur(22px);
-      animation:floatGlow 9s ease-in-out infinite;
-    }
-
-    .floating-glow.one{
-      top:8%;
-      left:-8%;
-    }
-
-    .floating-glow.two{
-      bottom:-8%;
-      right:-6%;
-      animation-delay:1.6s;
-    }
-
-    @keyframes drawLine{
-      to{
-        stroke-dashoffset:0;
-      }
-    }
-
-    @keyframes floatGlow{
-      0%,100%{
-        transform:translateY(0px) translateX(0px);
-      }
-      50%{
-        transform:translateY(-18px) translateX(10px);
-      }
-    }
-
+    .chart-svg{position:absolute;inset:0;width:100%;height:100%;}
+    .chart-line{fill:none;stroke:rgba(255,215,0,0.45);stroke-width:3.5;stroke-linecap:round;stroke-linejoin:round;}
+    .chart-line-2{fill:none;stroke:rgba(255,255,255,0.18);stroke-width:2;}
+    .chart-line-3{fill:none;stroke:rgba(255,215,0,0.22);stroke-width:2.5;}
+    .candle{fill:rgba(255,215,0,0.26);stroke:rgba(255,215,0,0.60);stroke-width:1.3;}
+    .candle.alt{fill:rgba(255,255,255,0.08);stroke:rgba(255,255,255,0.22);}
     header{
-      position:sticky;
-      top:0;
-      z-index:20;
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
+      position:sticky;top:0;z-index:20;
+      display:flex;justify-content:space-between;align-items:center;
       padding:22px 7%;
       background:rgba(5,5,5,0.62);
       backdrop-filter:blur(12px);
       border-bottom:1px solid var(--line);
     }
-
     .logo{
-      font-size:34px;
-      font-weight:800;
-      color:var(--gold);
-      letter-spacing:0.4px;
-      text-shadow:0 0 14px rgba(255,215,0,0.18);
+      font-size:34px;font-weight:800;color:var(--gold);
+      letter-spacing:0.4px;text-shadow:0 0 14px rgba(255,215,0,0.18);
     }
-
-    nav{
-      display:flex;
-      gap:24px;
-      flex-wrap:wrap;
-      align-items:center;
-    }
-
+    nav{display:flex;gap:24px;flex-wrap:wrap;align-items:center;}
     nav a{
-      color:#ffffff;
-      text-decoration:none;
-      font-size:15px;
-      font-weight:700;
-      transition:0.25s ease;
-      position:relative;
+      color:#fff;text-decoration:none;font-size:15px;font-weight:700;transition:.25s ease;
     }
-
-    nav a:hover{
-      color:var(--gold);
-    }
-
-    .hero{
-      min-height:92vh;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      text-align:center;
-      padding:70px 20px 40px;
-      position:relative;
-    }
-
-    .hero-box{
-      max-width:1020px;
-      width:100%;
-      padding:58px 34px;
-      border-radius:30px;
-      background:linear-gradient(180deg, rgba(18,18,18,0.64), rgba(8,8,8,0.82));
-      border:1px solid var(--gold-line);
-      box-shadow:
-        0 0 0 1px rgba(255,255,255,0.02) inset,
-        0 30px 80px rgba(0,0,0,0.38);
-      backdrop-filter:blur(10px);
-      position:relative;
-      overflow:hidden;
-    }
-
-    .hero-box::before{
-      content:"";
-      position:absolute;
-      inset:auto -10% -40% auto;
-      width:340px;
-      height:340px;
-      border-radius:50%;
-      background:radial-gradient(circle, rgba(255,215,0,0.10), transparent 70%);
-      pointer-events:none;
-    }
-
-    .hero-badge{
-      display:inline-block;
-      margin-bottom:20px;
-      padding:9px 16px;
-      border-radius:999px;
-      border:1px solid rgba(255,215,0,0.26);
-      background:rgba(255,215,0,0.05);
-      color:var(--gold);
-      font-size:12px;
-      font-weight:800;
-      letter-spacing:0.5px;
-    }
-
-    .hero h1{
-      font-size:68px;
-      line-height:1.02;
-      margin-bottom:18px;
-      text-shadow:0 0 20px rgba(255,215,0,0.08);
-    }
-
-    .hero h1 .white{
-      color:#ffffff;
-    }
-
-    .hero h1 .gold{
-      color:var(--gold);
-    }
-
-    .hero p{
-      max-width:780px;
-      margin:0 auto;
-      font-size:20px;
-      line-height:1.75;
-      color:#e9e9e9;
-    }
-
-    .hero-buttons{
-      margin-top:34px;
-      display:flex;
-      justify-content:center;
-      gap:16px;
-      flex-wrap:wrap;
-    }
-
+    nav a:hover{color:var(--gold);}
     .btn{
-      display:inline-block;
-      padding:14px 26px;
-      border-radius:12px;
-      text-decoration:none;
-      font-weight:800;
-      font-size:15px;
-      transition:0.25s ease;
+      display:inline-block;padding:14px 26px;border-radius:12px;text-decoration:none;
+      font-weight:800;font-size:15px;transition:.25s ease;
     }
-
     .btn-gold{
       background:linear-gradient(45deg,var(--gold),var(--gold-2));
-      color:#111;
-      box-shadow:0 0 20px rgba(255,215,0,0.18);
+      color:#111;box-shadow:0 0 20px rgba(255,215,0,0.18);
     }
-
-    .btn-gold:hover{
-      transform:translateY(-2px);
-      box-shadow:0 0 28px rgba(255,215,0,0.28);
-    }
-
+    .btn-gold:hover{transform:translateY(-2px);box-shadow:0 0 28px rgba(255,215,0,0.28);}
     .btn-outline{
       border:1px solid rgba(255,215,0,0.34);
       color:var(--gold);
       background:rgba(255,215,0,0.04);
     }
-
-    .btn-outline:hover{
-      transform:translateY(-2px);
-      background:rgba(255,215,0,0.08);
+    .btn-outline:hover{transform:translateY(-2px);background:rgba(255,215,0,0.08);}
+    .hero{
+      min-height:92vh;display:flex;align-items:center;justify-content:center;
+      text-align:center;padding:70px 20px 40px;
     }
-
+    .hero-box{
+      max-width:1020px;width:100%;
+      padding:58px 34px;border-radius:30px;
+      background:linear-gradient(180deg, rgba(18,18,18,0.64), rgba(8,8,8,0.82));
+      border:1px solid var(--gold-line);
+      box-shadow:0 30px 80px rgba(0,0,0,0.38);
+      backdrop-filter:blur(10px);
+    }
+    .hero-badge{
+      display:inline-block;margin-bottom:20px;padding:9px 16px;border-radius:999px;
+      border:1px solid rgba(255,215,0,0.26);background:rgba(255,215,0,0.05);
+      color:var(--gold);font-size:12px;font-weight:800;
+    }
+    .hero h1{font-size:68px;line-height:1.02;margin-bottom:18px;}
+    .hero h1 .white{color:#fff;}
+    .hero h1 .gold{color:var(--gold);}
+    .hero p{
+      max-width:780px;margin:0 auto;font-size:20px;line-height:1.75;color:#e9e9e9;
+    }
+    .hero-buttons{
+      margin-top:34px;display:flex;justify-content:center;gap:16px;flex-wrap:wrap;
+    }
     .stats{
-      margin-top:38px;
-      display:grid;
-      grid-template-columns:repeat(3,minmax(0,1fr));
-      gap:16px;
+      margin-top:38px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;
     }
-
     .stat{
-      padding:18px;
-      border-radius:18px;
-      background:rgba(255,255,255,0.03);
+      padding:18px;border-radius:18px;background:rgba(255,255,255,0.03);
       border:1px solid rgba(255,255,255,0.06);
     }
-
-    .stat h3{
-      color:var(--gold);
-      font-size:24px;
-      margin-bottom:6px;
-    }
-
-    .stat p{
-      font-size:14px;
-      color:#d8d8d8;
-      line-height:1.6;
-    }
-
-    .section{
-      padding:90px 7%;
-    }
-
-    .section-title{
-      text-align:center;
-      margin-bottom:42px;
-    }
-
-    .section-title h2{
-      font-size:42px;
-      color:var(--gold);
-      margin-bottom:12px;
-    }
-
-    .section-title p{
-      max-width:760px;
-      margin:0 auto;
-      color:#dddddd;
-      line-height:1.8;
-    }
-
-    .cards{
-      display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(270px,1fr));
-      gap:24px;
-    }
-
+    .stat h3{color:var(--gold);font-size:24px;margin-bottom:6px;}
+    .stat p{font-size:14px;color:#d8d8d8;line-height:1.6;}
+    .section{padding:90px 7%;}
+    .section-title{text-align:center;margin-bottom:42px;}
+    .section-title h2{font-size:42px;color:var(--gold);margin-bottom:12px;}
+    .section-title p{max-width:760px;margin:0 auto;color:#ddd;line-height:1.8;}
+    .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:24px;}
     .card{
-      padding:28px;
-      border-radius:24px;
-      background:linear-gradient(180deg, rgba(18,18,18,0.82), rgba(9,9,9,0.92));
-      border:1px solid var(--gold-line);
-      box-shadow:0 18px 50px rgba(0,0,0,0.28);
-      transition:0.28s ease;
-      position:relative;
-      overflow:hidden;
+      padding:28px;border-radius:24px;background:linear-gradient(180deg, rgba(18,18,18,0.82), rgba(9,9,9,0.92));
+      border:1px solid var(--gold-line);box-shadow:0 18px 50px rgba(0,0,0,0.28);
+      transition:.28s ease;
     }
-
-    .card::before{
-      content:"";
-      position:absolute;
-      top:-60px;
-      right:-60px;
-      width:180px;
-      height:180px;
-      border-radius:50%;
-      background:radial-gradient(circle, rgba(255,215,0,0.08), transparent 70%);
-      pointer-events:none;
-    }
-
-    .card:hover{
-      transform:translateY(-6px);
-      border-color:rgba(255,215,0,0.28);
-      box-shadow:0 24px 60px rgba(0,0,0,0.36);
-    }
-
+    .card:hover{transform:translateY(-6px);border-color:rgba(255,215,0,0.28);}
     .card-tag{
-      display:inline-block;
-      margin-bottom:14px;
-      padding:7px 12px;
-      border-radius:999px;
-      background:rgba(255,215,0,0.08);
-      border:1px solid rgba(255,215,0,0.2);
-      color:var(--gold);
-      font-size:12px;
-      font-weight:800;
+      display:inline-block;margin-bottom:14px;padding:7px 12px;border-radius:999px;
+      background:rgba(255,215,0,0.08);border:1px solid rgba(255,215,0,0.2);
+      color:var(--gold);font-size:12px;font-weight:800;
     }
-
-    .card h3{
-      font-size:30px;
-      color:var(--gold);
-      margin-bottom:12px;
-    }
-
-    .card p{
-      color:#e1e1e1;
-      line-height:1.8;
-      min-height:92px;
-    }
-
-    .card .btn{
-      margin-top:18px;
-    }
-
-    .highlight{
-      padding:20px 7% 100px;
-    }
-
+    .card h3{font-size:30px;color:var(--gold);margin-bottom:12px;}
+    .card p{color:#e1e1e1;line-height:1.8;min-height:92px;}
+    .card .btn{margin-top:18px;}
+    .highlight{padding:20px 7% 100px;}
     .highlight-box{
-      display:grid;
-      grid-template-columns:1.1fr 0.9fr;
-      gap:28px;
-      align-items:center;
-      padding:38px 30px;
-      border-radius:28px;
+      display:grid;grid-template-columns:1.1fr 0.9fr;gap:28px;align-items:center;
+      padding:38px 30px;border-radius:28px;
       background:linear-gradient(90deg, rgba(255,215,0,0.07), rgba(255,215,0,0.02));
       border:1px solid rgba(255,215,0,0.16);
-      box-shadow:0 18px 50px rgba(0,0,0,0.24);
     }
-
-    .highlight-box h2{
-      font-size:42px;
-      color:var(--gold);
-      margin-bottom:12px;
-    }
-
-    .highlight-box p{
-      color:#e4e4e4;
-      line-height:1.85;
-      margin-bottom:18px;
-    }
-
-    .list{
-      display:grid;
-      gap:12px;
-    }
-
+    .highlight-box h2{font-size:42px;color:var(--gold);margin-bottom:12px;}
+    .highlight-box p{color:#e4e4e4;line-height:1.85;margin-bottom:18px;}
+    .list{display:grid;gap:12px;}
     .list-item{
-      padding:14px 16px;
-      border-radius:14px;
-      background:rgba(255,255,255,0.03);
-      border:1px solid rgba(255,255,255,0.06);
-      color:#f1f1f1;
+      padding:14px 16px;border-radius:14px;background:rgba(255,255,255,0.03);
+      border:1px solid rgba(255,255,255,0.06);color:#f1f1f1;
     }
-
     footer{
-      text-align:center;
-      padding:34px 20px;
-      color:#9f9f9f;
-      border-top:1px solid rgba(255,255,255,0.06);
-      background:rgba(0,0,0,0.3);
+      text-align:center;padding:34px 20px;color:#9f9f9f;
+      border-top:1px solid rgba(255,255,255,0.06);background:rgba(0,0,0,0.3);
     }
-
     @media (max-width:980px){
-      .hero h1{
-        font-size:50px;
-      }
-
-      .highlight-box{
-        grid-template-columns:1fr;
-      }
-
-      .stats{
-        grid-template-columns:1fr;
-      }
+      .hero h1{font-size:50px;}
+      .highlight-box{grid-template-columns:1fr;}
+      .stats{grid-template-columns:1fr;}
     }
-
     @media (max-width:700px){
-      header{
-        flex-direction:column;
-        gap:14px;
-      }
-
-      nav{
-        justify-content:center;
-      }
-
-      .hero{
-        padding-top:50px;
-      }
-
-      .hero-box{
-        padding:40px 22px;
-      }
-
-      .hero h1{
-        font-size:38px;
-      }
-
-      .hero p{
-        font-size:17px;
-      }
-
-      .logo{
-        font-size:28px;
-      }
-
-      .section-title h2,
-      .highlight-box h2{
-        font-size:32px;
-      }
+      header{flex-direction:column;gap:14px;}
+      nav{justify-content:center;}
+      .hero-box{padding:40px 22px;}
+      .hero h1{font-size:38px;}
+      .hero p{font-size:17px;}
+      .logo{font-size:28px;}
+      .section-title h2,.highlight-box h2{font-size:32px;}
     }
   </style>
 </head>
 <body>
-
   <div class="grid-overlay"></div>
-
   <div class="chart-bg">
-    <div class="floating-glow one"></div>
-    <div class="floating-glow two"></div>
-
     <svg class="chart-svg" viewBox="0 0 1600 900" preserveAspectRatio="none">
       <path class="chart-line-2" d="M0,620 C120,600 180,540 260,560 C340,580 420,500 500,470 C610,425 680,470 760,390 C840,315 900,345 980,280 C1080,200 1170,240 1260,185 C1360,124 1460,155 1600,90" />
       <path class="chart-line-3" d="M0,760 C110,720 200,770 300,690 C390,620 470,650 560,540 C650,430 720,500 810,435 C930,345 1010,365 1110,255 C1200,160 1300,190 1600,60" />
       <path class="chart-line" d="M0,700 C90,670 140,710 230,640 C320,570 390,610 470,520 C560,420 640,500 730,430 C820,360 900,390 995,290 C1090,190 1180,230 1290,145 C1390,67 1470,105 1600,40" />
-
-      <!-- Mehr Candles -->
-      <line class="candle" x1="180" y1="690" x2="180" y2="620"></line>
-      <rect class="candle" x="172" y="640" width="16" height="34"></rect>
-
-      <line class="candle alt" x1="250" y1="660" x2="250" y2="590"></line>
-      <rect class="candle alt" x="242" y="605" width="16" height="30"></rect>
-
-      <line class="candle" x1="330" y1="610" x2="330" y2="535"></line>
-      <rect class="candle" x="322" y="548" width="16" height="40"></rect>
-
-      <line class="candle alt" x1="405" y1="630" x2="405" y2="555"></line>
-      <rect class="candle alt" x="397" y="572" width="16" height="34"></rect>
-
-      <line class="candle" x1="500" y1="560" x2="500" y2="470"></line>
-      <rect class="candle" x="492" y="490" width="16" height="46"></rect>
-
-      <line class="candle" x1="590" y1="520" x2="590" y2="430"></line>
-      <rect class="candle" x="582" y="448" width="16" height="52"></rect>
-
-      <line class="candle alt" x1="675" y1="545" x2="675" y2="470"></line>
-      <rect class="candle alt" x="667" y="485" width="16" height="34"></rect>
-
-      <line class="candle" x1="760" y1="470" x2="760" y2="380"></line>
-      <rect class="candle" x="752" y="398" width="16" height="50"></rect>
-
-      <line class="candle alt" x1="850" y1="430" x2="850" y2="350"></line>
-      <rect class="candle alt" x="842" y="365" width="16" height="38"></rect>
-
-      <line class="candle" x1="940" y1="370" x2="940" y2="285"></line>
-      <rect class="candle" x="932" y="300" width="16" height="48"></rect>
-
-      <line class="candle alt" x1="1030" y1="315" x2="1030" y2="235"></line>
-      <rect class="candle alt" x="1022" y="248" width="16" height="42"></rect>
-
-      <line class="candle" x1="1120" y1="250" x2="1120" y2="170"></line>
-      <rect class="candle" x="1112" y="184" width="16" height="45"></rect>
-
-      <line class="candle alt" x1="1210" y1="215" x2="1210" y2="145"></line>
-      <rect class="candle alt" x="1202" y="158" width="16" height="36"></rect>
-
-      <line class="candle" x1="1315" y1="165" x2="1315" y2="95"></line>
-      <rect class="candle" x="1307" y="108" width="16" height="40"></rect>
-
-      <line class="candle alt" x1="1410" y1="135" x2="1410" y2="72"></line>
-      <rect class="candle alt" x="1402" y="84" width="16" height="33"></rect>
+      <line class="candle" x1="180" y1="690" x2="180" y2="620"></line><rect class="candle" x="172" y="640" width="16" height="34"></rect>
+      <line class="candle alt" x1="250" y1="660" x2="250" y2="590"></line><rect class="candle alt" x="242" y="605" width="16" height="30"></rect>
+      <line class="candle" x1="330" y1="610" x2="330" y2="535"></line><rect class="candle" x="322" y="548" width="16" height="40"></rect>
+      <line class="candle alt" x1="405" y1="630" x2="405" y2="555"></line><rect class="candle alt" x="397" y="572" width="16" height="34"></rect>
+      <line class="candle" x1="500" y1="560" x2="500" y2="470"></line><rect class="candle" x="492" y="490" width="16" height="46"></rect>
+      <line class="candle" x1="590" y1="520" x2="590" y2="430"></line><rect class="candle" x="582" y="448" width="16" height="52"></rect>
+      <line class="candle alt" x1="675" y1="545" x2="675" y2="470"></line><rect class="candle alt" x="667" y="485" width="16" height="34"></rect>
+      <line class="candle" x1="760" y1="470" x2="760" y2="380"></line><rect class="candle" x="752" y="398" width="16" height="50"></rect>
+      <line class="candle alt" x1="850" y1="430" x2="850" y2="350"></line><rect class="candle alt" x="842" y="365" width="16" height="38"></rect>
+      <line class="candle" x1="940" y1="370" x2="940" y2="285"></line><rect class="candle" x="932" y="300" width="16" height="48"></rect>
+      <line class="candle alt" x1="1030" y1="315" x2="1030" y2="235"></line><rect class="candle alt" x="1022" y="248" width="16" height="42"></rect>
+      <line class="candle" x1="1120" y1="250" x2="1120" y2="170"></line><rect class="candle" x="1112" y="184" width="16" height="45"></rect>
+      <line class="candle alt" x1="1210" y1="215" x2="1210" y2="145"></line><rect class="candle alt" x="1202" y="158" width="16" height="36"></rect>
+      <line class="candle" x1="1315" y1="165" x2="1315" y2="95"></line><rect class="candle" x="1307" y="108" width="16" height="40"></rect>
+      <line class="candle alt" x1="1410" y1="135" x2="1410" y2="72"></line><rect class="candle alt" x="1402" y="84" width="16" height="33"></rect>
     </svg>
   </div>
 
   <header>
     <div class="logo">BullProsperity</div>
     <nav>
+      <a href="/index.html">Home</a>
       <a href="/api/whop/protect-hub">Hub</a>
       <a href="/api/whop/protect-course">Course</a>
       <a href="/api/whop/protect-tools">Tools</a>
+      <a href="/api/whop/login">Login</a>
     </nav>
   </header>
 
@@ -685,6 +313,5 @@
   <footer>
     © 2026 BullProsperity FX. Alle Rechte vorbehalten.
   </footer>
-
 </body>
 </html>
