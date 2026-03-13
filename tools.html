@@ -11,462 +11,735 @@
       box-sizing:border-box;
     }
 
+    :root{
+      --bg:#060606;
+      --panel:rgba(18,18,18,0.82);
+      --panel-2:rgba(10,10,10,0.92);
+      --gold:#ffd700;
+      --gold-2:#ffbf00;
+      --text:#f3f3f3;
+      --muted:#cfcfcf;
+      --line:rgba(255,255,255,0.06);
+      --gold-line:rgba(255,215,0,0.16);
+    }
+
     body{
       font-family:Arial, Helvetica, sans-serif;
-      background:#0a0a0a;
-      color:#ffffff;
-      line-height:1.6;
+      background:var(--bg);
+      color:var(--text);
+      overflow-x:hidden;
+      min-height:100vh;
+      position:relative;
+    }
+
+    body::before{
+      content:"";
+      position:fixed;
+      inset:0;
+      background:
+        radial-gradient(circle at 20% 15%, rgba(255,215,0,0.10), transparent 24%),
+        radial-gradient(circle at 84% 75%, rgba(255,215,0,0.07), transparent 22%),
+        linear-gradient(180deg, rgba(6,6,6,0.84), rgba(6,6,6,0.96));
+      z-index:-5;
+      pointer-events:none;
+    }
+
+    .grid-overlay{
+      position:fixed;
+      inset:0;
+      z-index:-4;
+      pointer-events:none;
+      opacity:0.10;
+      background-image:
+        linear-gradient(to right, rgba(255,255,255,0.05) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255,255,255,0.05) 1px, transparent 1px);
+      background-size:64px 64px;
+      mask-image:linear-gradient(to bottom, rgba(0,0,0,0.95), rgba(0,0,0,0.45));
+    }
+
+    .chart-bg{
+      position:fixed;
+      inset:0;
+      z-index:-3;
+      pointer-events:none;
+      overflow:hidden;
+      opacity:0.50;
+    }
+
+    .chart-svg{
+      position:absolute;
+      inset:0;
+      width:100%;
+      height:100%;
+    }
+
+    .chart-line{
+      fill:none;
+      stroke:rgba(255,215,0,0.40);
+      stroke-width:3.5;
+      stroke-linecap:round;
+      stroke-linejoin:round;
+    }
+
+    .chart-line-2{
+      fill:none;
+      stroke:rgba(255,255,255,0.14);
+      stroke-width:2;
+    }
+
+    .candle{
+      fill:rgba(255,215,0,0.22);
+      stroke:rgba(255,215,0,0.55);
+      stroke-width:1.3;
+    }
+
+    .candle.alt{
+      fill:rgba(255,255,255,0.07);
+      stroke:rgba(255,255,255,0.22);
+    }
+
+    .floating-glow{
+      position:absolute;
+      width:420px;
+      height:420px;
+      border-radius:50%;
+      background:radial-gradient(circle, rgba(255,215,0,0.08), transparent 68%);
+      filter:blur(22px);
+    }
+
+    .floating-glow.one{
+      top:6%;
+      left:-8%;
+    }
+
+    .floating-glow.two{
+      bottom:-8%;
+      right:-6%;
     }
 
     header{
+      position:sticky;
+      top:0;
+      z-index:30;
       display:flex;
       justify-content:space-between;
       align-items:center;
       padding:22px 7%;
-      background:#000000;
-      border-bottom:1px solid #1f1f1f;
-      position:sticky;
-      top:0;
-      z-index:1000;
+      background:rgba(5,5,5,0.62);
+      backdrop-filter:blur(12px);
+      border-bottom:1px solid var(--line);
     }
 
     .logo{
-      font-size:28px;
-      font-weight:700;
-      color:#d4af37;
-      letter-spacing:1px;
+      font-size:34px;
+      font-weight:800;
+      color:var(--gold);
+      letter-spacing:0.4px;
+      text-shadow:0 0 14px rgba(255,215,0,0.18);
+    }
+
+    nav{
+      display:flex;
+      gap:24px;
+      flex-wrap:wrap;
     }
 
     nav a{
-      color:white;
+      color:#fff;
       text-decoration:none;
-      margin-left:22px;
       font-size:15px;
+      font-weight:700;
+      transition:0.25s ease;
     }
 
     nav a:hover{
-      color:#d4af37;
+      color:var(--gold);
+    }
+
+    .layout{
+      display:grid;
+      grid-template-columns:310px 1fr;
+      gap:24px;
+      padding:28px 7% 50px;
+      min-height:calc(100vh - 90px);
+    }
+
+    .sidebar{
+      background:linear-gradient(180deg, rgba(18,18,18,0.80), rgba(8,8,8,0.92));
+      border:1px solid var(--gold-line);
+      border-radius:28px;
+      padding:22px 18px;
+      box-shadow:0 20px 55px rgba(0,0,0,0.30);
+      height:fit-content;
+      position:sticky;
+      top:105px;
+      backdrop-filter:blur(10px);
+    }
+
+    .sidebar-top{
+      margin-bottom:18px;
+      padding-bottom:18px;
+      border-bottom:1px solid rgba(255,255,255,0.06);
+    }
+
+    .sidebar-top h2{
+      color:var(--gold);
+      font-size:24px;
+      margin-bottom:8px;
+    }
+
+    .sidebar-top p{
+      color:#d9d9d9;
+      line-height:1.7;
+      font-size:14px;
+    }
+
+    .tool-link{
+      display:block;
+      width:100%;
+      text-decoration:none;
+      color:#ffffff;
+      padding:14px 16px;
+      border-radius:14px;
+      background:rgba(255,255,255,0.03);
+      border:1px solid rgba(255,255,255,0.07);
+      margin-bottom:12px;
+      transition:0.25s ease;
+      font-weight:700;
+    }
+
+    .tool-link:hover,
+    .tool-link.active{
+      border-color:rgba(255,215,0,0.35);
+      color:var(--gold);
+      box-shadow:0 0 18px rgba(255,215,0,0.08);
+      transform:translateY(-1px);
+    }
+
+    .main{
+      display:flex;
+      flex-direction:column;
+      gap:22px;
     }
 
     .hero{
-      padding:70px 7% 35px;
-      text-align:center;
-      background:
-        linear-gradient(rgba(0,0,0,0.82), rgba(0,0,0,0.92)),
-        radial-gradient(circle at center, rgba(212,175,55,0.10), transparent 45%);
-      border-bottom:1px solid #1f1f1f;
+      padding:30px 28px;
+      border-radius:30px;
+      background:linear-gradient(180deg, rgba(18,18,18,0.74), rgba(8,8,8,0.88));
+      border:1px solid var(--gold-line);
+      box-shadow:0 24px 60px rgba(0,0,0,0.34);
+      backdrop-filter:blur(10px);
+      position:relative;
+      overflow:hidden;
+    }
+
+    .hero::before{
+      content:"";
+      position:absolute;
+      top:-80px;
+      right:-80px;
+      width:240px;
+      height:240px;
+      border-radius:50%;
+      background:radial-gradient(circle, rgba(255,215,0,0.08), transparent 70%);
+      pointer-events:none;
+    }
+
+    .badge{
+      display:inline-block;
+      margin-bottom:14px;
+      padding:8px 14px;
+      border-radius:999px;
+      border:1px solid rgba(255,215,0,0.24);
+      background:rgba(255,215,0,0.05);
+      color:var(--gold);
+      font-size:12px;
+      font-weight:800;
     }
 
     .hero h1{
-      font-size:48px;
-      color:#d4af37;
-      margin-bottom:12px;
+      font-size:46px;
+      line-height:1.06;
+      margin-bottom:10px;
+    }
+
+    .hero h1 .white{
+      color:#fff;
+    }
+
+    .hero h1 .gold{
+      color:var(--gold);
     }
 
     .hero p{
-      max-width:850px;
-      margin:0 auto;
-      color:#d0d0d0;
-      font-size:18px;
-    }
-
-    .container{
-      width:min(1200px, 92%);
-      margin:40px auto;
-    }
-
-    .section{
-      margin-bottom:28px;
-      background:#111111;
-      border:1px solid #1f1f1f;
-      border-radius:18px;
-      padding:28px;
-    }
-
-    .section h2{
-      color:#d4af37;
-      margin-bottom:18px;
-      font-size:28px;
-    }
-
-    .section p{
-      color:#d2d2d2;
-      margin-bottom:16px;
+      max-width:880px;
+      color:#e5e5e5;
+      font-size:17px;
+      line-height:1.8;
     }
 
     .grid{
       display:grid;
-      grid-template-columns:repeat(auto-fit, minmax(280px, 1fr));
-      gap:18px;
+      grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+      gap:22px;
     }
 
-    .tool-card{
-      background:#0d0d0d;
-      border:1px solid #1f1f1f;
-      border-radius:14px;
-      padding:20px;
+    .card{
+      border-radius:24px;
+      padding:26px;
+      background:linear-gradient(180deg, rgba(18,18,18,0.82), rgba(9,9,9,0.92));
+      border:1px solid var(--gold-line);
+      box-shadow:0 18px 50px rgba(0,0,0,0.28);
+      transition:0.28s ease;
+      position:relative;
+      overflow:hidden;
     }
 
-    .tool-card h3{
-      color:#d4af37;
-      margin-bottom:10px;
-      font-size:20px;
+    .card::before{
+      content:"";
+      position:absolute;
+      top:-60px;
+      right:-60px;
+      width:180px;
+      height:180px;
+      border-radius:50%;
+      background:radial-gradient(circle, rgba(255,215,0,0.08), transparent 70%);
+      pointer-events:none;
     }
 
-    .input-group{
+    .card:hover{
+      transform:translateY(-5px);
+      border-color:rgba(255,215,0,0.30);
+      box-shadow:0 25px 60px rgba(0,0,0,0.35);
+    }
+
+    .card-tag{
+      display:inline-block;
+      margin-bottom:14px;
+      padding:7px 12px;
+      border-radius:999px;
+      background:rgba(255,215,0,0.08);
+      border:1px solid rgba(255,215,0,0.22);
+      color:var(--gold);
+      font-size:12px;
+      font-weight:800;
+    }
+
+    .card h2{
+      color:var(--gold);
+      font-size:28px;
       margin-bottom:14px;
     }
 
-    .input-group label{
-      display:block;
-      margin-bottom:6px;
-      color:#d7d7d7;
-      font-size:14px;
-    }
-
-    .input-group input,
-    .input-group select,
-    .input-group textarea{
-      width:100%;
-      padding:12px;
-      border-radius:10px;
-      border:1px solid #2a2a2a;
-      background:#090909;
-      color:#ffffff;
-      font-size:15px;
-    }
-
-    .input-group textarea{
-      min-height:110px;
-      resize:vertical;
+    .card p{
+      color:#dfdfdf;
+      line-height:1.75;
+      margin-bottom:16px;
     }
 
     .btn{
       display:inline-block;
-      padding:12px 20px;
+      padding:12px 18px;
+      border-radius:12px;
+      text-decoration:none;
+      font-weight:800;
+      transition:0.25s ease;
+      font-size:14px;
       border:none;
-      border-radius:8px;
       cursor:pointer;
-      font-weight:700;
-      font-size:15px;
-      margin-top:6px;
-      margin-right:10px;
     }
 
     .btn-gold{
-      background:#d4af37;
-      color:#000000;
+      background:linear-gradient(45deg,var(--gold),var(--gold-2));
+      color:#111111;
+      box-shadow:0 0 16px rgba(255,215,0,0.2);
     }
 
-    .btn-dark{
-      background:#141414;
-      color:#ffffff;
-      border:1px solid #2d2d2d;
+    .btn-gold:hover{
+      transform:translateY(-2px);
+      box-shadow:0 0 22px rgba(255,215,0,0.34);
     }
 
-    .result-box,
-    .journal-preview{
-      margin-top:18px;
-      padding:16px;
-      background:#0a0a0a;
-      border:1px solid #2a2a2a;
-      border-radius:12px;
-      color:#d8d8d8;
+    .tool-panel{
+      border-radius:28px;
+      background:linear-gradient(180deg, rgba(18,18,18,0.84), rgba(8,8,8,0.92));
+      border:1px solid var(--gold-line);
+      box-shadow:0 20px 55px rgba(0,0,0,0.30);
+      padding:24px;
     }
 
-    .checklists-grid{
-      display:grid;
-      grid-template-columns:repeat(auto-fit, minmax(280px, 1fr));
-      gap:18px;
-    }
-
-    .checklist-box{
-      background:#0d0d0d;
-      border:1px solid #1f1f1f;
-      border-radius:14px;
-      padding:20px;
-    }
-
-    .checklist-box h3{
-      color:#d4af37;
-      margin-bottom:14px;
-    }
-
-    .check-item{
-      background:#111111;
-      border:1px solid #1f1f1f;
-      border-radius:12px;
-      padding:14px;
-      display:flex;
-      align-items:center;
-      gap:12px;
+    .tool-panel h2{
+      color:var(--gold);
+      font-size:30px;
       margin-bottom:12px;
     }
 
-    .check-item input{
-      width:18px;
-      height:18px;
-      accent-color:#d4af37;
+    .tool-panel p{
+      color:#dddddd;
+      line-height:1.8;
+      margin-bottom:20px;
     }
 
-    .saved-entries{
-      margin-top:22px;
+    .form-grid{
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:16px;
+      margin-bottom:18px;
     }
 
-    .entry-card{
-      background:#0a0a0a;
-      border:1px solid #242424;
-      border-radius:12px;
-      padding:16px;
-      margin-bottom:14px;
+    .field{
+      display:flex;
+      flex-direction:column;
+      gap:8px;
     }
 
-    .entry-card h4{
-      color:#d4af37;
-      margin-bottom:10px;
-      font-size:18px;
-    }
-
-    .entry-card p{
-      margin-bottom:8px;
-      color:#d8d8d8;
-    }
-
-    .entry-actions{
-      margin-top:12px;
-    }
-
-    .small-btn{
-      padding:10px 14px;
-      border:none;
-      border-radius:8px;
-      cursor:pointer;
+    .field label{
+      color:#e8e8e8;
+      font-size:14px;
       font-weight:700;
-      margin-right:8px;
     }
 
-    .delete-btn{
-      background:#3a1111;
+    .field input,
+    .field select,
+    .field textarea{
+      width:100%;
+      padding:14px 14px;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,0.08);
+      background:rgba(255,255,255,0.03);
       color:#ffffff;
-      border:1px solid #5a1f1f;
+      font-size:14px;
+      outline:none;
     }
 
-    .tv-wrap{
-      border-radius:16px;
+    .field textarea{
+      min-height:140px;
+      resize:vertical;
+    }
+
+    .field input:focus,
+    .field select:focus,
+    .field textarea:focus{
+      border-color:rgba(255,215,0,0.36);
+      box-shadow:0 0 0 3px rgba(255,215,0,0.08);
+    }
+
+    .result-box{
+      margin-top:18px;
+      padding:18px;
+      border-radius:18px;
+      background:rgba(255,215,0,0.05);
+      border:1px solid rgba(255,215,0,0.18);
+      color:#ffffff;
+      line-height:1.7;
+    }
+
+    .checklist{
+      display:grid;
+      gap:12px;
+    }
+
+    .check-item{
+      padding:14px 16px;
+      border-radius:14px;
+      background:rgba(255,255,255,0.03);
+      border:1px solid rgba(255,255,255,0.06);
+      color:#f1f1f1;
+    }
+
+    .chart-box{
+      min-height:320px;
+      border-radius:20px;
+      border:1px solid rgba(255,255,255,0.06);
+      background:
+        linear-gradient(180deg, rgba(0,0,0,0.55), rgba(0,0,0,0.82)),
+        radial-gradient(circle at center, rgba(255,215,0,0.08), transparent 35%),
+        #050505;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      text-align:center;
+      padding:30px;
+      position:relative;
       overflow:hidden;
-      border:1px solid #1f1f1f;
-      background:#0d0d0d;
-      min-height:520px;
+    }
+
+    .chart-box::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:
+        linear-gradient(to right, rgba(255,255,255,0.04) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255,255,255,0.04) 1px, transparent 1px);
+      background-size:56px 56px;
+      opacity:0.25;
+      pointer-events:none;
+    }
+
+    .chart-placeholder{
+      position:relative;
+      z-index:2;
+      max-width:620px;
+    }
+
+    .chart-placeholder h3{
+      color:var(--gold);
+      font-size:28px;
+      margin-bottom:10px;
+    }
+
+    .chart-placeholder p{
+      color:#d7d7d7;
+      line-height:1.8;
     }
 
     footer{
-      margin-top:40px;
-      background:#000000;
-      border-top:1px solid #1f1f1f;
       text-align:center;
-      padding:28px 7%;
-      color:#aaaaaa;
+      padding:30px 20px 40px;
+      color:#9d9d9d;
+      border-top:1px solid rgba(255,255,255,0.06);
+      background:rgba(0,0,0,0.28);
     }
 
-    @media (max-width: 768px){
+    @media (max-width:1100px){
+      .layout{
+        grid-template-columns:1fr;
+      }
+
+      .sidebar{
+        position:relative;
+        top:0;
+      }
+
+      .form-grid{
+        grid-template-columns:1fr;
+      }
+    }
+
+    @media (max-width:700px){
       header{
         flex-direction:column;
         gap:14px;
-      }
-
-      nav{
-        display:flex;
-        flex-wrap:wrap;
-        justify-content:center;
-      }
-
-      nav a{
-        margin:8px 10px;
       }
 
       .hero h1{
         font-size:36px;
       }
 
-      .hero p{
-        font-size:16px;
+      .logo{
+        font-size:28px;
+      }
+
+      .layout{
+        padding:20px 5% 40px;
       }
     }
   </style>
 </head>
 <body>
 
+  <div class="grid-overlay"></div>
+
+  <div class="chart-bg">
+    <div class="floating-glow one"></div>
+    <div class="floating-glow two"></div>
+    <svg class="chart-svg" viewBox="0 0 1600 900" preserveAspectRatio="none">
+      <path class="chart-line-2" d="M0,620 C120,600 180,540 260,560 C340,580 420,500 500,470 C610,425 680,470 760,390 C840,315 900,345 980,280 C1080,200 1170,240 1260,185 C1360,124 1460,155 1600,90" />
+      <path class="chart-line" d="M0,700 C90,670 140,710 230,640 C320,570 390,610 470,520 C560,420 640,500 730,430 C820,360 900,390 995,290 C1090,190 1180,230 1290,145 C1390,67 1470,105 1600,40" />
+      <line class="candle" x1="180" y1="690" x2="180" y2="620"></line><rect class="candle" x="172" y="640" width="16" height="34"></rect>
+      <line class="candle alt" x1="250" y1="660" x2="250" y2="590"></line><rect class="candle alt" x="242" y="605" width="16" height="30"></rect>
+      <line class="candle" x1="330" y1="610" x2="330" y2="535"></line><rect class="candle" x="322" y="548" width="16" height="40"></rect>
+      <line class="candle alt" x1="405" y1="630" x2="405" y2="555"></line><rect class="candle alt" x="397" y="572" width="16" height="34"></rect>
+      <line class="candle" x1="500" y1="560" x2="500" y2="470"></line><rect class="candle" x="492" y="490" width="16" height="46"></rect>
+      <line class="candle" x1="590" y1="520" x2="590" y2="430"></line><rect class="candle" x="582" y="448" width="16" height="52"></rect>
+      <line class="candle alt" x1="675" y1="545" x2="675" y2="470"></line><rect class="candle alt" x="667" y="485" width="16" height="34"></rect>
+      <line class="candle" x1="760" y1="470" x2="760" y2="380"></line><rect class="candle" x="752" y="398" width="16" height="50"></rect>
+      <line class="candle alt" x1="850" y1="430" x2="850" y2="350"></line><rect class="candle alt" x="842" y="365" width="16" height="38"></rect>
+      <line class="candle" x1="940" y1="370" x2="940" y2="285"></line><rect class="candle" x="932" y="300" width="16" height="48"></rect>
+      <line class="candle alt" x1="1030" y1="315" x2="1030" y2="235"></line><rect class="candle alt" x="1022" y="248" width="16" height="42"></rect>
+      <line class="candle" x1="1120" y1="250" x2="1120" y2="170"></line><rect class="candle" x="1112" y="184" width="16" height="45"></rect>
+      <line class="candle alt" x1="1210" y1="215" x2="1210" y2="145"></line><rect class="candle alt" x="1202" y="158" width="16" height="36"></rect>
+      <line class="candle" x1="1315" y1="165" x2="1315" y2="95"></line><rect class="candle" x="1307" y="108" width="16" height="40"></rect>
+      <line class="candle alt" x1="1410" y1="135" x2="1410" y2="72"></line><rect class="candle alt" x="1402" y="84" width="16" height="33"></rect>
+    </svg>
+  </div>
+
   <header>
     <div class="logo">BullProsperity</div>
     <nav>
       <a href="/index.html">Home</a>
-      <a href="/hub.html">Hub</a>
-      <a href="/dashboard.html">Dashboard</a>
-      <a href="/course.html">Course</a>
-      <a href="/tools.html">Tools</a>
+      <a href="/api/whop/protect-hub">Hub</a>
+      <a href="/api/whop/protect-course">Course</a>
+      <a href="/api/whop/protect-tools">Tools</a>
     </nav>
   </header>
 
-  <section class="hero">
-    <h1>Trading Tools</h1>
-    <p>
-      Dein zentraler Bereich für Risikomanagement, Journalführung, Checklisten
-      und Live-Chartanalyse mit TradingView.
-    </p>
-  </section>
+  <main class="layout">
+    <aside class="sidebar">
+      <div class="sidebar-top">
+        <h2>Trading Tools</h2>
+        <p>Alle wichtigen Werkzeuge für Risiko, Planung, Journal und Chart-Arbeit an einem Ort.</p>
+      </div>
 
-  <div class="container">
+      <a href="#lotsize" class="tool-link active">Lot Size Rechner</a>
+      <a href="#journal" class="tool-link">Trading Journal</a>
+      <a href="#checklist" class="tool-link">Checklisten</a>
+      <a href="#chart" class="tool-link">TradingView Bereich</a>
+    </aside>
 
-    <section class="section">
-      <h2>Lot Size Rechner</h2>
-      <p>Berechne deine Positionsgröße auf Basis von Kontogröße, Risiko und Stop Loss.</p>
+    <section class="main">
+      <div class="hero">
+        <div class="badge">BullProsperity Tools Suite</div>
+        <h1>
+          <span class="white">Professionelle</span><br>
+          <span class="gold">Trading Tools</span>
+        </h1>
+        <p>
+          Nutze Tools für Risikomanagement, Journalführung, Checklisten und Chart-Arbeit,
+          um strukturierter, disziplinierter und professioneller zu traden.
+        </p>
+      </div>
 
       <div class="grid">
-        <div class="tool-card">
-          <div class="input-group">
-            <label for="balance">Kontogröße (€ / $)</label>
-            <input type="number" id="balance" placeholder="z. B. 1000" />
-          </div>
+        <div class="card">
+          <div class="card-tag">Risk Management</div>
+          <h2>Lot Size Rechner</h2>
+          <p>Berechne dein Risiko pro Trade auf Basis von Kontogröße, Risiko-Prozent und Stop Loss.</p>
+          <a href="#lotsize" class="btn btn-gold">Öffnen</a>
+        </div>
 
-          <div class="input-group">
-            <label for="risk">Risiko pro Trade (%)</label>
-            <input type="number" id="risk" placeholder="z. B. 1" step="0.1" />
-          </div>
+        <div class="card">
+          <div class="card-tag">Dokumentation</div>
+          <h2>Trading Journal</h2>
+          <p>Notiere Entries, Gründe, Emotionen und Ergebnisse, um deine Entwicklung klar auszuwerten.</p>
+          <a href="#journal" class="btn btn-gold">Öffnen</a>
+        </div>
 
-          <div class="input-group">
-            <label for="stoploss">Stop Loss (Pips)</label>
-            <input type="number" id="stoploss" placeholder="z. B. 20" />
-          </div>
-
-          <div class="input-group">
-            <label for="pipvalue">Pip-Wert pro 1.00 Lot</label>
-            <input type="number" id="pipvalue" placeholder="z. B. 10" value="10" step="0.1" />
-          </div>
-
-          <button class="btn btn-gold" onclick="calculateLotSize()">Berechnen</button>
-
-          <div class="result-box" id="lotResult">
-            Ergebnis erscheint hier.
-          </div>
+        <div class="card">
+          <div class="card-tag">Routine</div>
+          <h2>Checklisten</h2>
+          <p>Arbeite mit klaren Pre-Trade und Post-Trade Checklisten für mehr Konsistenz.</p>
+          <a href="#checklist" class="btn btn-gold">Öffnen</a>
         </div>
       </div>
-    </section>
 
-    <section class="section">
-      <h2>Trading Journal</h2>
-      <p>Speichere deine Trades direkt im Browser und erkenne Muster, Fehler und Fortschritte.</p>
+      <div class="tool-panel" id="lotsize">
+        <h2>Lot Size Rechner</h2>
+        <p>Ein einfacher Rechner für deinen strukturierten Risikoansatz. Du kannst ihn später noch mit Symbol-spezifischen Pip-Werten erweitern.</p>
 
-      <div class="grid">
-        <div class="tool-card">
-          <div class="input-group">
-            <label for="journalDate">Datum</label>
-            <input type="date" id="journalDate" />
+        <div class="form-grid">
+          <div class="field">
+            <label for="balance">Kontogröße (€)</label>
+            <input type="number" id="balance" placeholder="z. B. 10000">
           </div>
 
-          <div class="input-group">
-            <label for="journalPair">Markt / Pair</label>
-            <input type="text" id="journalPair" placeholder="z. B. XAUUSD / EURUSD / NAS100" />
+          <div class="field">
+            <label for="risk">Risiko pro Trade (%)</label>
+            <input type="number" id="risk" placeholder="z. B. 1">
           </div>
 
-          <div class="input-group">
-            <label for="journalDirection">Richtung</label>
-            <select id="journalDirection">
+          <div class="field">
+            <label for="stoploss">Stop Loss (Pips)</label>
+            <input type="number" id="stoploss" placeholder="z. B. 20">
+          </div>
+
+          <div class="field">
+            <label for="pipvalue">Pip Wert pro Standard Lot</label>
+            <input type="number" id="pipvalue" placeholder="z. B. 10">
+          </div>
+        </div>
+
+        <button class="btn btn-gold" onclick="calculateLotSize()">Lot Size berechnen</button>
+
+        <div class="result-box" id="lotResult">
+          Ergebnis erscheint hier.
+        </div>
+      </div>
+
+      <div class="tool-panel" id="journal">
+        <h2>Trading Journal</h2>
+        <p>Nutze diesen Bereich, um deinen Trade sauber zu dokumentieren. Später kann daraus auch ein exportierbares Journal werden.</p>
+
+        <div class="form-grid">
+          <div class="field">
+            <label for="pair">Markt / Pair</label>
+            <input type="text" id="pair" placeholder="z. B. XAUUSD">
+          </div>
+
+          <div class="field">
+            <label for="direction">Richtung</label>
+            <select id="direction">
               <option>Buy</option>
               <option>Sell</option>
             </select>
           </div>
 
-          <div class="input-group">
-            <label for="journalReason">Setup / Begründung</label>
-            <textarea id="journalReason" placeholder="Warum hast du den Trade genommen?"></textarea>
+          <div class="field">
+            <label for="entry">Entry</label>
+            <input type="text" id="entry" placeholder="z. B. 2150.20">
           </div>
 
-          <div class="input-group">
-            <label for="journalEmotion">Emotion / Zustand</label>
-            <input type="text" id="journalEmotion" placeholder="z. B. ruhig, unsicher, fokussiert" />
+          <div class="field">
+            <label for="result">Ergebnis</label>
+            <select id="result">
+              <option>Win</option>
+              <option>Loss</option>
+              <option>BE</option>
+            </select>
           </div>
+        </div>
 
-          <div class="input-group">
-            <label for="journalResult">Ergebnis</label>
-            <input type="text" id="journalResult" placeholder="z. B. +2R oder -1R" />
-          </div>
-
-          <button class="btn btn-gold" onclick="saveJournalEntry()">Eintrag speichern</button>
-          <button class="btn btn-dark" onclick="previewJournalEntry()">Vorschau</button>
-
-          <div class="journal-preview" id="journalPreview">
-            Dein Journal-Eintrag erscheint hier.
-          </div>
+        <div class="field">
+          <label for="notes">Notizen / Begründung</label>
+          <textarea id="notes" placeholder="Warum hast du den Trade genommen? Was war gut? Was war schlecht?"></textarea>
         </div>
       </div>
 
-      <div class="saved-entries">
-        <h2 style="font-size:24px;">Gespeicherte Einträge</h2>
-        <div id="entriesContainer"></div>
+      <div class="tool-panel" id="checklist">
+        <h2>Trading Checklisten</h2>
+        <p>Arbeite mit einer klaren Routine vor und nach jedem Trade.</p>
+
+        <div class="checklist">
+          <div class="check-item">✔ Higher Timeframe Struktur geprüft</div>
+          <div class="check-item">✔ Liquidität / Kontext analysiert</div>
+          <div class="check-item">✔ Entry Modell klar definiert</div>
+          <div class="check-item">✔ Risiko korrekt berechnet</div>
+          <div class="check-item">✔ Emotionale Lage geprüft</div>
+          <div class="check-item">✔ Nach dem Trade Journal ausgefüllt</div>
+        </div>
       </div>
-    </section>
 
-    <section class="section">
-      <h2>Trading Checklisten</h2>
-      <p>Nutze strukturierte Checklisten vor, während und nach dem Trade.</p>
+      <div class="tool-panel" id="chart">
+        <h2>TradingView Bereich</h2>
+        <p>Hier kann später dein eingebetteter TradingView Chart stehen oder ein externer Bereich für Marktanalyse.</p>
 
-      <div class="checklists-grid">
-        <div class="checklist-box">
-          <h3>Pre-Trade Checkliste</h3>
-          <label class="check-item"><input type="checkbox"> Ist die Marktstruktur klar?</label>
-          <label class="check-item"><input type="checkbox"> Liegt mein Setup wirklich vor?</label>
-          <label class="check-item"><input type="checkbox"> Ist Liquidität klar erkennbar?</label>
-          <label class="check-item"><input type="checkbox"> Ist mein Entry bestätigt?</label>
-          <label class="check-item"><input type="checkbox"> Passt das Risiko zu meinem Plan?</label>
-        </div>
-
-        <div class="checklist-box">
-          <h3>During-Trade Checkliste</h3>
-          <label class="check-item"><input type="checkbox"> Bleibe ich diszipliniert im Plan?</label>
-          <label class="check-item"><input type="checkbox"> Verändere ich den Stop Loss nicht impulsiv?</label>
-          <label class="check-item"><input type="checkbox"> Reagiere ich nicht aus Angst oder Gier?</label>
-          <label class="check-item"><input type="checkbox"> Halte ich mich an mein Management?</label>
-          <label class="check-item"><input type="checkbox"> Vermeide ich unnötiges Eingreifen?</label>
-        </div>
-
-        <div class="checklist-box">
-          <h3>Post-Trade Checkliste</h3>
-          <label class="check-item"><input type="checkbox"> Habe ich den Trade dokumentiert?</label>
-          <label class="check-item"><input type="checkbox"> Habe ich meine Emotionen reflektiert?</label>
-          <label class="check-item"><input type="checkbox"> Habe ich Fehler erkannt?</label>
-          <label class="check-item"><input type="checkbox"> Habe ich meinen Prozess bewertet?</label>
-          <label class="check-item"><input type="checkbox"> Ziehe ich eine klare Lektion daraus?</label>
+        <div class="chart-box">
+          <div class="chart-placeholder">
+            <h3>TradingView Chart Platzhalter</h3>
+            <p>
+              Später kannst du hier deinen TradingView Embed Code einsetzen,
+              damit Mitglieder direkt im BullProsperity Hub analysieren können.
+            </p>
+          </div>
         </div>
       </div>
     </section>
-
-    <section class="section">
-      <h2>TradingView Chart</h2>
-      <p>Nutze einen Live-Chart direkt innerhalb deines Hubs.</p>
-
-      <div class="tv-wrap">
-        <div class="tradingview-widget-container" style="height:520px;width:100%">
-          <div id="tradingview_bullprosperity" style="height:520px;width:100%"></div>
-        </div>
-      </div>
-    </section>
-
-  </div>
+  </main>
 
   <footer>
-    <p>© 2026 BullProsperity. Alle Rechte vorbehalten.</p>
+    © 2026 BullProsperity FX. Alle Rechte vorbehalten.
   </footer>
 
   <script>
-    function calculateLotSize() {
-      const balance = parseFloat(document.getElementById("balance").value);
-      const risk = parseFloat(document.getElementById("risk").value);
-      const stoploss = parseFloat(document.getElementById("stoploss").value);
-      const pipvalue = parseFloat(document.getElementById("pipvalue").value);
-      const resultBox = document.getElementById("lotResult");
+    function calculateLotSize(){
+      const balance = parseFloat(document.getElementById('balance').value);
+      const risk = parseFloat(document.getElementById('risk').value);
+      const stoploss = parseFloat(document.getElementById('stoploss').value);
+      const pipvalue = parseFloat(document.getElementById('pipvalue').value);
+      const resultBox = document.getElementById('lotResult');
 
-      if (!balance || !risk || !stoploss || !pipvalue || stoploss <= 0 || pipvalue <= 0) {
-        resultBox.innerHTML = "Bitte alle Felder korrekt ausfüllen.";
+      if (!balance || !risk || !stoploss || !pipvalue) {
+        resultBox.innerHTML = 'Bitte fülle alle Felder korrekt aus.';
         return;
       }
 
@@ -474,117 +747,9 @@
       const lotSize = riskAmount / (stoploss * pipvalue);
 
       resultBox.innerHTML =
-        "Risikobetrag: <strong>" + riskAmount.toFixed(2) + "</strong><br>" +
-        "Empfohlene Lot Size: <strong>" + lotSize.toFixed(2) + " Lot</strong>";
+        `<strong>Risikobetrag:</strong> ${riskAmount.toFixed(2)} €<br>` +
+        `<strong>Empfohlene Lot Size:</strong> ${lotSize.toFixed(2)} Lot`;
     }
-
-    function getJournalData() {
-      return {
-        date: document.getElementById("journalDate").value,
-        pair: document.getElementById("journalPair").value,
-        direction: document.getElementById("journalDirection").value,
-        reason: document.getElementById("journalReason").value,
-        emotion: document.getElementById("journalEmotion").value,
-        result: document.getElementById("journalResult").value
-      };
-    }
-
-    function previewJournalEntry() {
-      const data = getJournalData();
-      const preview = document.getElementById("journalPreview");
-
-      preview.innerHTML =
-        "<strong>Datum:</strong> " + (data.date || "-") + "<br><br>" +
-        "<strong>Markt / Pair:</strong> " + (data.pair || "-") + "<br><br>" +
-        "<strong>Richtung:</strong> " + (data.direction || "-") + "<br><br>" +
-        "<strong>Setup / Begründung:</strong><br>" + (data.reason || "-") + "<br><br>" +
-        "<strong>Emotion / Zustand:</strong> " + (data.emotion || "-") + "<br><br>" +
-        "<strong>Ergebnis:</strong> " + (data.result || "-");
-    }
-
-    function saveJournalEntry() {
-      const data = getJournalData();
-
-      if (!data.date || !data.pair || !data.reason) {
-        alert("Bitte mindestens Datum, Markt und Begründung ausfüllen.");
-        return;
-      }
-
-      const entries = JSON.parse(localStorage.getItem("bpJournalEntries")) || [];
-      entries.unshift(data);
-      localStorage.setItem("bpJournalEntries", JSON.stringify(entries));
-
-      previewJournalEntry();
-      renderEntries();
-      clearForm();
-    }
-
-    function clearForm() {
-      document.getElementById("journalDate").value = "";
-      document.getElementById("journalPair").value = "";
-      document.getElementById("journalDirection").value = "Buy";
-      document.getElementById("journalReason").value = "";
-      document.getElementById("journalEmotion").value = "";
-      document.getElementById("journalResult").value = "";
-    }
-
-    function deleteEntry(index) {
-      const entries = JSON.parse(localStorage.getItem("bpJournalEntries")) || [];
-      entries.splice(index, 1);
-      localStorage.setItem("bpJournalEntries", JSON.stringify(entries));
-      renderEntries();
-    }
-
-    function renderEntries() {
-      const container = document.getElementById("entriesContainer");
-      const entries = JSON.parse(localStorage.getItem("bpJournalEntries")) || [];
-
-      if (entries.length === 0) {
-        container.innerHTML = '<div class="entry-card"><p>Noch keine Einträge gespeichert.</p></div>';
-        return;
-      }
-
-      container.innerHTML = "";
-
-      entries.forEach((entry, index) => {
-        container.innerHTML += `
-          <div class="entry-card">
-            <h4>${entry.pair} • ${entry.direction}</h4>
-            <p><strong>Datum:</strong> ${entry.date || "-"}</p>
-            <p><strong>Setup / Begründung:</strong> ${entry.reason || "-"}</p>
-            <p><strong>Emotion:</strong> ${entry.emotion || "-"}</p>
-            <p><strong>Ergebnis:</strong> ${entry.result || "-"}</p>
-            <div class="entry-actions">
-              <button class="small-btn delete-btn" onclick="deleteEntry(${index})">Löschen</button>
-            </div>
-          </div>
-        `;
-      });
-    }
-
-    window.onload = function () {
-      renderEntries();
-    };
-  </script>
-
-  <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
-  <script type="text/javascript">
-    new TradingView.widget({
-      "width": "100%",
-      "height": 520,
-      "symbol": "OANDA:XAUUSD",
-      "interval": "15",
-      "timezone": "Europe/Berlin",
-      "theme": "dark",
-      "style": "1",
-      "locale": "de_DE",
-      "toolbar_bg": "#0a0a0a",
-      "enable_publishing": false,
-      "hide_top_toolbar": false,
-      "hide_legend": false,
-      "save_image": false,
-      "container_id": "tradingview_bullprosperity"
-    });
   </script>
 
 </body>
