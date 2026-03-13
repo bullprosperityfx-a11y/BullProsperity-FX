@@ -1,67 +1,90 @@
 module.exports = async function handler(req, res) {
   try {
+    const { code, state } = req.query;
 
-    const { code } = req.query;
+    if (!code) {
+      return res.status(400).send("Missing OAuth code");
+    }
 
     const clientId = process.env.WHOP_CLIENT_ID;
     const clientSecret = process.env.WHOP_CLIENT_SECRET;
     const redirectUri = process.env.WHOP_REDIRECT_URI;
 
     const cookie = req.headers.cookie || "";
+
     const verifierMatch = cookie.match(/whop_verifier=([^;]+)/);
+    const stateMatch = cookie.match(/whop_state=([^;]+)/);
+
     const codeVerifier = verifierMatch ? verifierMatch[1] : null;
+    const storedState = stateMatch ? stateMatch[1] : null;
 
-    // TOKEN holen
-   const params = new URLSearchParams();
+    if (!codeVerifier) {
+      return res.status(400).send("Missing code verifier");
+    }
 
-params.append("client_id", clientId);
-params.append("client_secret", clientSecret);
-params.append("code", code);
-params.append("grant_type", "authorization_code");
-params.append("redirect_uri", redirectUri);
-params.append("code_verifier", codeVerifier);
+    if (!state || !storedState || state !== storedState) {
+      return res.status(400).send("Invalid OAuth state");
+    }
 
-const tokenRes = await fetch("https://api.whop.com/oauth/token", {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/x-www-form-urlencoded"
-  },
-  body: params.toString()
-});
+    const tokenRes = await fetch("https://api.whop.com/oauth/token", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        grant_type: "authorization_code",
+        code,
+        redirect_uri: redirectUri,
+        client_id: clientId,
+        client_secret: clientSecret,
+        code_verifier: codeVerifier
+      })
+    });
 
     const tokenData = await tokenRes.json();
 
+    if (!tokenRes.ok || !tokenData.access_token) {
+      return res.status(500).json({
+        error: "Token exchange failed",
+        tokenData
+      });
+    }
+
     const accessToken = tokenData.access_token;
 
-    // USER laden
-    const userRes = await fetch("https://api.whop.com/v5/me", {
+    const userInfoRes = await fetch("https://api.whop.com/oauth/userinfo", {
       headers: {
         Authorization: `Bearer ${accessToken}`
       }
     });
 
-    const userData = await userRes.json();
+    const userInfo = await userInfoRes.json();
 
-    // MEMBERSHIP laden
-    const membershipRes = await fetch("https://api.whop.com/v5/me/memberships", {
-      headers: {
-        Authorization: `Bearer ${accessToken}`
-      }
-    });
+    if (!userInfoRes.ok) {
+      return res.status(500).json({
+        error: "Failed to fetch OAuth userinfo",
+        userInfo
+      });
+    }
 
-    const membershipData = await membershipRes.json();
+    const email = (userInfo.email || "").toLowerCase();
 
-    return res.status(200).json({
-      tokenReceived: true,
-      userData,
-      membershipData
-    });
+    const adminEmails = [
+      "bullprosperityfx@gmail.com"
+    ].map((e) => e.toLowerCase());
 
-  } catch (err) {
+    const role = adminEmails.includes(email) ? "admin" : "guest";
 
+    res.setHeader("Set-Cookie", [
+      `bp_role=${encodeURIComponent(role)}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=86400`,
+      `bp_email=${encodeURIComponent(email)}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=86400`
+    ]);
+
+    return res.redirect("/hub.html");
+  } catch (error) {
     return res.status(500).json({
-      error: err.message
+      error: "OAuth callback failed",
+      message: error.message
     });
-
   }
 };
