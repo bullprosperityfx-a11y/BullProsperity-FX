@@ -12,9 +12,14 @@ export default async function handler(req, res) {
     .update(codeVerifier)
     .digest("base64url");
 
+  const nonce = crypto.randomBytes(16).toString("hex");
+
   res.setHeader(
     "Set-Cookie",
-    `whop_verifier=${codeVerifier}; Path=/; HttpOnly; Secure; SameSite=Lax`
+    [
+      `whop_verifier=${codeVerifier}; Path=/; HttpOnly; Secure; SameSite=Lax`,
+      `whop_nonce=${nonce}; Path=/; HttpOnly; Secure; SameSite=Lax`
+    ]
   );
 
   const authUrl =
@@ -24,7 +29,8 @@ export default async function handler(req, res) {
     `&response_type=code` +
     `&code_challenge=${codeChallenge}` +
     `&code_challenge_method=S256` +
-    `&scope=openid%20profile%20email`;
+    `&scope=openid%20profile%20email` +
+    `&nonce=${nonce}`;
 
   res.redirect(authUrl);
 }
