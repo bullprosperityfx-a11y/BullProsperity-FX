@@ -5,508 +5,156 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>BullProsperity Academy</title>
   <style>
-    *{
-      margin:0;
-      padding:0;
-      box-sizing:border-box;
-    }
-
+    *{margin:0;padding:0;box-sizing:border-box;}
     :root{
-      --bg:#060606;
-      --panel:rgba(18,18,18,0.82);
-      --panel-2:rgba(10,10,10,0.92);
-      --gold:#ffd700;
-      --gold-2:#ffbf00;
-      --text:#f3f3f3;
-      --muted:#cfcfcf;
-      --line:rgba(255,255,255,0.06);
-      --gold-line:rgba(255,215,0,0.16);
+      --bg:#060606;--gold:#ffd700;--gold-2:#ffbf00;--text:#f3f3f3;
+      --line:rgba(255,255,255,0.06);--gold-line:rgba(255,215,0,0.16);
     }
-
     body{
-      font-family:Arial, Helvetica, sans-serif;
-      background:var(--bg);
-      color:var(--text);
-      overflow-x:hidden;
-      min-height:100vh;
-      position:relative;
+      font-family:Arial, Helvetica, sans-serif;background:var(--bg);color:var(--text);
+      overflow-x:hidden;min-height:100vh;position:relative;
     }
-
     body::before{
-      content:"";
-      position:fixed;
-      inset:0;
+      content:"";position:fixed;inset:0;
       background:
         radial-gradient(circle at 20% 15%, rgba(255,215,0,0.10), transparent 24%),
         radial-gradient(circle at 84% 75%, rgba(255,215,0,0.07), transparent 22%),
         linear-gradient(180deg, rgba(6,6,6,0.84), rgba(6,6,6,0.96));
       z-index:-5;
-      pointer-events:none;
     }
-
     .grid-overlay{
-      position:fixed;
-      inset:0;
-      z-index:-4;
-      pointer-events:none;
-      opacity:0.10;
+      position:fixed;inset:0;z-index:-4;opacity:0.10;pointer-events:none;
       background-image:
         linear-gradient(to right, rgba(255,255,255,0.05) 1px, transparent 1px),
         linear-gradient(to bottom, rgba(255,255,255,0.05) 1px, transparent 1px);
       background-size:64px 64px;
-      mask-image:linear-gradient(to bottom, rgba(0,0,0,0.95), rgba(0,0,0,0.45));
     }
-
-    .chart-bg{
-      position:fixed;
-      inset:0;
-      z-index:-3;
-      pointer-events:none;
-      overflow:hidden;
-      opacity:0.48;
-    }
-
-    .chart-svg{
-      position:absolute;
-      inset:0;
-      width:100%;
-      height:100%;
-    }
-
-    .chart-line{
-      fill:none;
-      stroke:rgba(255,215,0,0.40);
-      stroke-width:3.5;
-      stroke-linecap:round;
-      stroke-linejoin:round;
-    }
-
-    .chart-line-2{
-      fill:none;
-      stroke:rgba(255,255,255,0.14);
-      stroke-width:2;
-    }
-
-    .candle{
-      fill:rgba(255,215,0,0.22);
-      stroke:rgba(255,215,0,0.55);
-      stroke-width:1.3;
-    }
-
-    .candle.alt{
-      fill:rgba(255,255,255,0.07);
-      stroke:rgba(255,255,255,0.22);
-    }
-
+    .chart-bg{position:fixed;inset:0;z-index:-3;opacity:0.48;pointer-events:none;}
+    .chart-svg{position:absolute;inset:0;width:100%;height:100%;}
+    .chart-line{fill:none;stroke:rgba(255,215,0,0.40);stroke-width:3.5;stroke-linecap:round;stroke-linejoin:round;}
+    .chart-line-2{fill:none;stroke:rgba(255,255,255,0.14);stroke-width:2;}
+    .candle{fill:rgba(255,215,0,0.22);stroke:rgba(255,215,0,0.55);stroke-width:1.3;}
+    .candle.alt{fill:rgba(255,255,255,0.07);stroke:rgba(255,255,255,0.22);}
     header{
-      position:sticky;
-      top:0;
-      z-index:30;
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      padding:22px 7%;
-      background:rgba(5,5,5,0.62);
-      backdrop-filter:blur(12px);
+      position:sticky;top:0;z-index:30;display:flex;justify-content:space-between;align-items:center;
+      padding:22px 7%;background:rgba(5,5,5,0.62);backdrop-filter:blur(12px);
       border-bottom:1px solid var(--line);
     }
-
-    .logo{
-      font-size:34px;
-      font-weight:800;
-      color:var(--gold);
-      letter-spacing:0.4px;
-      text-shadow:0 0 14px rgba(255,215,0,0.18);
+    .logo{font-size:34px;font-weight:800;color:var(--gold);text-shadow:0 0 14px rgba(255,215,0,0.18);}
+    nav{display:flex;gap:24px;flex-wrap:wrap;}
+    nav a{color:#fff;text-decoration:none;font-size:15px;font-weight:700;transition:.25s ease;}
+    nav a:hover{color:var(--gold);}
+    .btn{
+      display:inline-block;padding:12px 18px;border-radius:12px;text-decoration:none;
+      font-weight:800;transition:.25s ease;font-size:14px;border:none;cursor:pointer;
     }
-
-    nav{
-      display:flex;
-      gap:24px;
-      flex-wrap:wrap;
-    }
-
-    nav a{
-      color:#fff;
-      text-decoration:none;
-      font-size:15px;
-      font-weight:700;
-      transition:0.25s ease;
-    }
-
-    nav a:hover{
-      color:var(--gold);
-    }
-
+    .btn-gold{background:linear-gradient(45deg,var(--gold),var(--gold-2));color:#111;box-shadow:0 0 16px rgba(255,215,0,0.2);}
+    .btn-gold:hover{transform:translateY(-2px);box-shadow:0 0 22px rgba(255,215,0,0.34);}
+    .btn-outline{background:rgba(255,215,0,0.04);border:1px solid rgba(255,215,0,0.3);color:var(--gold);}
+    .btn-outline:hover{transform:translateY(-2px);background:rgba(255,215,0,0.08);}
     .layout{
-      display:grid;
-      grid-template-columns:360px 1fr;
-      gap:24px;
-      padding:28px 7% 50px;
+      display:grid;grid-template-columns:360px 1fr;gap:24px;padding:28px 7% 50px;
       min-height:calc(100vh - 90px);
     }
-
     .sidebar{
       background:linear-gradient(180deg, rgba(18,18,18,0.80), rgba(8,8,8,0.92));
-      border:1px solid var(--gold-line);
-      border-radius:28px;
-      padding:22px 18px;
-      box-shadow:0 20px 55px rgba(0,0,0,0.30);
-      height:fit-content;
-      position:sticky;
-      top:105px;
-      backdrop-filter:blur(10px);
+      border:1px solid var(--gold-line);border-radius:28px;padding:22px 18px;height:fit-content;
+      position:sticky;top:105px;
     }
-
-    .sidebar-top{
-      margin-bottom:18px;
-      padding-bottom:18px;
-      border-bottom:1px solid rgba(255,255,255,0.06);
-    }
-
-    .sidebar-top h2{
-      color:var(--gold);
-      font-size:24px;
-      margin-bottom:8px;
-    }
-
-    .sidebar-top p{
-      color:#d9d9d9;
-      line-height:1.7;
-      font-size:14px;
-    }
-
-    .progress-wrap{
-      margin-top:14px;
-    }
-
-    .progress-label{
-      display:flex;
-      justify-content:space-between;
-      margin-bottom:8px;
-      font-size:13px;
-      color:#ddd;
-    }
-
-    .progress-bar{
-      width:100%;
-      height:10px;
-      border-radius:999px;
-      background:rgba(255,255,255,0.08);
-      overflow:hidden;
-    }
-
-    .progress-fill{
-      width:18%;
-      height:100%;
-      background:linear-gradient(45deg,var(--gold),var(--gold-2));
-      border-radius:999px;
-    }
-
-    .module{
-      margin-bottom:12px;
-      border-radius:18px;
-      overflow:hidden;
-      border:1px solid rgba(255,255,255,0.06);
-      background:rgba(255,255,255,0.02);
-    }
-
+    .sidebar-top{margin-bottom:18px;padding-bottom:18px;border-bottom:1px solid rgba(255,255,255,0.06);}
+    .sidebar-top h2{color:var(--gold);font-size:24px;margin-bottom:8px;}
+    .sidebar-top p{color:#d9d9d9;line-height:1.7;font-size:14px;margin-bottom:14px;}
+    .progress-label{display:flex;justify-content:space-between;margin-bottom:8px;font-size:13px;color:#ddd;}
+    .progress-bar{width:100%;height:10px;border-radius:999px;background:rgba(255,255,255,0.08);overflow:hidden;}
+    .progress-fill{width:18%;height:100%;background:linear-gradient(45deg,var(--gold),var(--gold-2));border-radius:999px;}
+    .module{margin-bottom:12px;border-radius:18px;overflow:hidden;border:1px solid rgba(255,255,255,0.06);background:rgba(255,255,255,0.02);}
     .module-header{
-      width:100%;
-      border:none;
-      background:transparent;
-      color:var(--gold);
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap:16px;
-      text-align:left;
-      padding:16px 16px;
-      font-size:15px;
-      font-weight:800;
-      cursor:pointer;
+      width:100%;border:none;background:transparent;color:var(--gold);display:flex;justify-content:space-between;
+      align-items:center;gap:16px;text-align:left;padding:16px 16px;font-size:15px;font-weight:800;cursor:pointer;
     }
-
-    .module-header:hover{
-      background:rgba(255,255,255,0.02);
-    }
-
-    .module-count{
-      color:#fff;
-      font-size:12px;
-      font-weight:700;
-      opacity:0.85;
-      white-space:nowrap;
-    }
-
-    .lesson-list{
-      display:none;
-      padding:0 10px 12px;
-    }
-
-    .module.open .lesson-list{
-      display:block;
-    }
-
+    .module-count{color:#fff;font-size:12px;font-weight:700;opacity:.85;white-space:nowrap;}
+    .lesson-list{display:none;padding:0 10px 12px;}
+    .module.open .lesson-list{display:block;}
     .lesson-item{
-      width:100%;
-      border:none;
-      background:rgba(255,255,255,0.02);
-      color:#fff;
-      margin-top:8px;
-      padding:13px 14px;
-      border-radius:14px;
-      text-align:left;
-      cursor:pointer;
-      border:1px solid rgba(255,255,255,0.06);
-      transition:0.22s ease;
-      font-size:14px;
-      line-height:1.5;
+      width:100%;border:none;background:rgba(255,255,255,0.02);color:#fff;margin-top:8px;padding:13px 14px;
+      border-radius:14px;text-align:left;cursor:pointer;border:1px solid rgba(255,255,255,0.06);transition:.22s ease;
+      font-size:14px;line-height:1.5;
     }
-
-    .lesson-item:hover{
-      border-color:rgba(255,215,0,0.28);
-      color:var(--gold);
-      transform:translateY(-1px);
-    }
-
-    .lesson-item.active{
-      border-color:rgba(255,215,0,0.36);
-      color:var(--gold);
-      background:rgba(255,215,0,0.05);
-    }
-
-    .lesson-item.locked{
-      color:#cfcfcf;
-      opacity:0.8;
-    }
-
-    .main{
-      display:flex;
-      flex-direction:column;
-      gap:22px;
-    }
-
+    .lesson-item:hover{border-color:rgba(255,215,0,0.28);color:var(--gold);}
+    .lesson-item.active{border-color:rgba(255,215,0,0.36);color:var(--gold);background:rgba(255,215,0,0.05);}
+    .lesson-item.locked{color:#cfcfcf;opacity:.8;}
+    .main{display:flex;flex-direction:column;gap:22px;}
     .hero{
-      padding:28px 28px;
-      border-radius:30px;
-      background:linear-gradient(180deg, rgba(18,18,18,0.74), rgba(8,8,8,0.88));
-      border:1px solid var(--gold-line);
-      box-shadow:0 24px 60px rgba(0,0,0,0.32);
-      backdrop-filter:blur(10px);
+      padding:28px 28px;border-radius:30px;background:linear-gradient(180deg, rgba(18,18,18,0.74), rgba(8,8,8,0.88));
+      border:1px solid var(--gold-line);box-shadow:0 24px 60px rgba(0,0,0,0.32);
     }
-
     .badge{
-      display:inline-block;
-      margin-bottom:14px;
-      padding:8px 14px;
-      border-radius:999px;
-      border:1px solid rgba(255,215,0,0.24);
-      background:rgba(255,215,0,0.05);
-      color:var(--gold);
-      font-size:12px;
-      font-weight:800;
+      display:inline-block;margin-bottom:14px;padding:8px 14px;border-radius:999px;
+      border:1px solid rgba(255,215,0,0.24);background:rgba(255,215,0,0.05);color:var(--gold);
+      font-size:12px;font-weight:800;
     }
-
-    .hero h1{
-      font-size:46px;
-      line-height:1.06;
-      margin-bottom:10px;
-    }
-
-    .hero h1 .white{
-      color:#fff;
-    }
-
-    .hero h1 .gold{
-      color:var(--gold);
-    }
-
-    .hero p{
-      max-width:880px;
-      color:#e5e5e5;
-      font-size:17px;
-      line-height:1.8;
-    }
-
+    .hero h1{font-size:46px;line-height:1.06;margin-bottom:10px;}
+    .hero h1 .white{color:#fff;}
+    .hero h1 .gold{color:var(--gold);}
+    .hero p{max-width:880px;color:#e5e5e5;font-size:17px;line-height:1.8;}
     .player-card{
-      border-radius:28px;
-      background:linear-gradient(180deg, rgba(18,18,18,0.84), rgba(8,8,8,0.92));
-      border:1px solid var(--gold-line);
-      box-shadow:0 20px 55px rgba(0,0,0,0.30);
-      overflow:hidden;
+      border-radius:28px;background:linear-gradient(180deg, rgba(18,18,18,0.84), rgba(8,8,8,0.92));
+      border:1px solid var(--gold-line);overflow:hidden;
     }
-
-    .player-top{
-      display:flex;
-      justify-content:space-between;
-      gap:16px;
-      align-items:flex-start;
-      padding:24px 24px 0;
-      flex-wrap:wrap;
-    }
-
-    .player-top h2{
-      color:var(--gold);
-      font-size:30px;
-      margin-bottom:8px;
-    }
-
-    .player-top p{
-      color:#dddddd;
-      line-height:1.75;
-      max-width:860px;
-    }
-
+    .player-top{display:flex;justify-content:space-between;gap:16px;align-items:flex-start;padding:24px 24px 0;flex-wrap:wrap;}
+    .player-top h2{color:var(--gold);font-size:30px;margin-bottom:8px;}
+    .player-top p{color:#ddd;line-height:1.75;max-width:860px;}
     .lesson-status{
-      padding:8px 12px;
-      border-radius:999px;
-      background:rgba(255,215,0,0.06);
-      border:1px solid rgba(255,215,0,0.22);
-      color:var(--gold);
-      font-size:12px;
-      font-weight:800;
-      white-space:nowrap;
+      padding:8px 12px;border-radius:999px;background:rgba(255,215,0,0.06);border:1px solid rgba(255,215,0,0.22);
+      color:var(--gold);font-size:12px;font-weight:800;white-space:nowrap;
     }
-
     .video-box{
-      margin:22px 24px 24px;
-      min-height:460px;
-      border-radius:22px;
-      border:1px solid rgba(255,255,255,0.06);
-      background:
-        linear-gradient(180deg, rgba(0,0,0,0.55), rgba(0,0,0,0.82)),
-        radial-gradient(circle at center, rgba(255,215,0,0.08), transparent 35%),
-        #050505;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      text-align:center;
-      padding:30px;
-      position:relative;
-      overflow:hidden;
+      margin:22px 24px 24px;min-height:460px;border-radius:22px;border:1px solid rgba(255,255,255,0.06);
+      background:linear-gradient(180deg, rgba(0,0,0,0.55), rgba(0,0,0,0.82)), radial-gradient(circle at center, rgba(255,215,0,0.08), transparent 35%), #050505;
+      display:flex;align-items:center;justify-content:center;text-align:center;padding:30px;position:relative;overflow:hidden;
     }
-
     .video-box::before{
-      content:"";
-      position:absolute;
-      inset:0;
+      content:"";position:absolute;inset:0;
       background:
         linear-gradient(to right, rgba(255,255,255,0.04) 1px, transparent 1px),
         linear-gradient(to bottom, rgba(255,255,255,0.04) 1px, transparent 1px);
-      background-size:56px 56px;
-      opacity:0.25;
-      pointer-events:none;
+      background-size:56px 56px;opacity:.25;
     }
-
-    .play-placeholder{
-      position:relative;
-      z-index:2;
-      max-width:720px;
-    }
-
+    .play-placeholder{position:relative;z-index:2;max-width:720px;}
     .play-icon{
-      width:88px;
-      height:88px;
-      margin:0 auto 18px;
-      border-radius:50%;
+      width:88px;height:88px;margin:0 auto 18px;border-radius:50%;
       background:linear-gradient(45deg,var(--gold),var(--gold-2));
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      color:#111;
-      font-size:34px;
+      display:flex;align-items:center;justify-content:center;color:#111;font-size:34px;
       box-shadow:0 0 24px rgba(255,215,0,0.22);
     }
-
-    .play-placeholder h3{
-      font-size:28px;
-      color:#fff;
-      margin-bottom:10px;
-    }
-
-    .play-placeholder p{
-      color:#d7d7d7;
-      line-height:1.8;
-      font-size:16px;
-    }
-
-    .note-grid{
-      display:grid;
-      grid-template-columns:repeat(2,minmax(0,1fr));
-      gap:18px;
-    }
-
+    .play-placeholder h3{font-size:28px;color:#fff;margin-bottom:10px;}
+    .play-placeholder p{color:#d7d7d7;line-height:1.8;font-size:16px;}
+    .note-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;}
     .note-card{
-      border-radius:22px;
-      padding:22px;
-      background:linear-gradient(180deg, rgba(18,18,18,0.80), rgba(8,8,8,0.90));
+      border-radius:22px;padding:22px;background:linear-gradient(180deg, rgba(18,18,18,0.80), rgba(8,8,8,0.90));
       border:1px solid var(--gold-line);
-      box-shadow:0 18px 45px rgba(0,0,0,0.26);
     }
-
-    .note-card h3{
-      color:var(--gold);
-      font-size:22px;
-      margin-bottom:12px;
-    }
-
-    .note-card p,
-    .note-card li{
-      color:#dddddd;
-      line-height:1.8;
-      font-size:15px;
-    }
-
-    .note-card ul{
-      padding-left:18px;
-    }
-
+    .note-card h3{color:var(--gold);font-size:22px;margin-bottom:12px;}
+    .note-card p,.note-card li{color:#ddd;line-height:1.8;font-size:15px;}
+    .note-card ul{padding-left:18px;}
+    footer{text-align:center;padding:30px 20px 40px;color:#9d9d9d;border-top:1px solid rgba(255,255,255,0.06);background:rgba(0,0,0,0.28);}
     @media (max-width:1100px){
-      .layout{
-        grid-template-columns:1fr;
-      }
-
-      .sidebar{
-        position:relative;
-        top:0;
-      }
-
-      .note-grid{
-        grid-template-columns:1fr;
-      }
+      .layout{grid-template-columns:1fr;}
+      .sidebar{position:relative;top:0;}
+      .note-grid{grid-template-columns:1fr;}
     }
-
     @media (max-width:700px){
-      header{
-        flex-direction:column;
-        gap:14px;
-      }
-
-      .hero h1{
-        font-size:36px;
-      }
-
-      .logo{
-        font-size:28px;
-      }
-
-      .layout{
-        padding:20px 5% 40px;
-      }
-
-      .video-box{
-        min-height:320px;
-      }
+      header{flex-direction:column;gap:14px;}
+      .hero h1{font-size:36px;}
+      .logo{font-size:28px;}
+      .layout{padding:20px 5% 40px;}
+      .video-box{min-height:320px;}
     }
   </style>
 </head>
 <body>
-
   <div class="grid-overlay"></div>
-
   <div class="chart-bg">
-    <div class="floating-glow one"></div>
-    <div class="floating-glow two"></div>
     <svg class="chart-svg" viewBox="0 0 1600 900" preserveAspectRatio="none">
       <path class="chart-line-2" d="M0,620 C120,600 180,540 260,560 C340,580 420,500 500,470 C610,425 680,470 760,390 C840,315 900,345 980,280 C1080,200 1170,240 1260,185 C1360,124 1460,155 1600,90" />
       <path class="chart-line" d="M0,700 C90,670 140,710 230,640 C320,570 390,610 470,520 C560,420 640,500 730,430 C820,360 900,390 995,290 C1090,190 1180,230 1290,145 C1390,67 1470,105 1600,40" />
@@ -535,6 +183,7 @@
       <a href="/api/whop/protect-hub">Hub</a>
       <a href="/api/whop/protect-course">Course</a>
       <a href="/api/whop/protect-tools">Tools</a>
+      <a href="/api/whop/login">Login</a>
     </nav>
   </header>
 
@@ -543,107 +192,93 @@
       <div class="sidebar-top">
         <h2>Trading Academy</h2>
         <p>Alle Module, Lektionen und Guides an einem Ort. Arbeite dich strukturiert durch den gesamten Kurs.</p>
-        <div class="progress-wrap">
-          <div class="progress-label">
-            <span>Gesamtfortschritt</span>
-            <span>18%</span>
-          </div>
-          <div class="progress-bar">
-            <div class="progress-fill"></div>
-          </div>
-        </div>
+        <div class="progress-label"><span>Gesamtfortschritt</span><span>18%</span></div>
+        <div class="progress-bar"><div class="progress-fill"></div></div>
       </div>
 
       <div class="module open">
         <button class="module-header" onclick="toggleModule(this)">
-          <span>Modul 1 – Kurs Einführung</span>
-          <span class="module-count">2 Lektionen</span>
+          <span>Modul 1 – Kurs Einführung</span><span class="module-count">2 Lektionen</span>
         </button>
         <div class="lesson-list">
-          <button class="lesson-item active" onclick="loadLesson('Wie du den Kurs richtig durcharbeitest','Lerne, wie du den Kurs strukturiert nutzt, Inhalte sinnvoll umsetzt und deinen Lernfortschritt professionell aufbaust.','Video bereit für Einbindung','Pflichtlektion')">Wie du den Kurs richtig durcharbeitest</button>
-          <button class="lesson-item" onclick="loadLesson('Wichtiger Hinweis & Risikoaufklärung','Trading an den Finanzmärkten ist mit Risiken verbunden. Diese Lektion erklärt den verantwortungsvollen Umgang mit Kapital, Hebelprodukten und Volatilität.','Video bereit für Einbindung','Pflichtlektion')">Wichtiger Hinweis & Risikoaufklärung</button>
+          <button class="lesson-item active" onclick="loadLesson(event,'Wie du den Kurs richtig durcharbeitest','Lerne, wie du den Kurs strukturiert nutzt, Inhalte sinnvoll umsetzt und deinen Lernfortschritt professionell aufbaust.','Video bereit für Einbindung','Pflichtlektion')">Wie du den Kurs richtig durcharbeitest</button>
+          <button class="lesson-item" onclick="loadLesson(event,'Wichtiger Hinweis & Risikoaufklärung','Trading an den Finanzmärkten ist mit Risiken verbunden. Diese Lektion erklärt den verantwortungsvollen Umgang mit Kapital, Hebelprodukten und Volatilität.','Video bereit für Einbindung','Pflichtlektion')">Wichtiger Hinweis & Risikoaufklärung</button>
         </div>
       </div>
 
       <div class="module">
         <button class="module-header" onclick="toggleModule(this)">
-          <span>Modul 2 – Trading Grundlagen</span>
-          <span class="module-count">8 Lektionen</span>
+          <span>Modul 2 – Trading Grundlagen</span><span class="module-count">8 Lektionen</span>
         </button>
         <div class="lesson-list">
-          <button class="lesson-item" onclick="loadLesson('Was Trading wirklich ist','Ein realistischer Blick auf das Trading und darauf, warum es kein schnelles Geld, sondern ein strukturiertes Handwerk ist.','Video bereit für Einbindung','Grundlagen')">Was Trading wirklich ist</button>
-          <button class="lesson-item" onclick="loadLesson('Wie der Finanzmarkt funktioniert','Verstehe, wie Märkte aufgebaut sind, wer sie bewegt und wie Preisbewegungen entstehen.','Video bereit für Einbindung','Grundlagen')">Wie der Finanzmarkt funktioniert</button>
-          <button class="lesson-item" onclick="loadLesson('Liquidität im Markt verstehen','Lerne, warum Liquidität eine zentrale Rolle spielt und wie sie Marktbewegungen beeinflusst.','Video bereit für Einbindung','Grundlagen')">Liquidität im Markt verstehen</button>
-          <button class="lesson-item" onclick="loadLesson('Marktteilnehmer verstehen','Ein Überblick über Banken, Institutionen, Retail Trader und ihre Rollen im Markt.','Video bereit für Einbindung','Grundlagen')">Marktteilnehmer verstehen</button>
-          <button class="lesson-item" onclick="loadLesson('Wie Geld im Markt bewegt wird','Verstehe die Dynamik hinter Kapitalflüssen und großen Bewegungen im Markt.','Video bereit für Einbindung','Grundlagen')">Wie Geld im Markt bewegt wird</button>
-          <button class="lesson-item" onclick="loadLesson('Retail vs Smart Money','Der Unterschied zwischen klassischem Retail-Denken und professioneller Marktlogik.','Video bereit für Einbindung','Grundlagen')">Retail vs Smart Money</button>
-          <button class="lesson-item" onclick="loadLesson('Die Realität von Trading','Ein ehrlicher Blick auf Trading, Erwartungen, Lernkurve und professionelle Entwicklung.','Video bereit für Einbindung','Grundlagen')">Die Realität von Trading</button>
-          <button class="lesson-item" onclick="loadLesson('Erwartungen vs Realität im Trading','Setze realistische Ziele und entwickle ein langfristiges Verständnis für Fortschritt.','Video bereit für Einbindung','Grundlagen')">Erwartungen vs Realität im Trading</button>
+          <button class="lesson-item" onclick="loadLesson(event,'Was Trading wirklich ist','Ein realistischer Blick auf das Trading und darauf, warum es kein schnelles Geld, sondern ein strukturiertes Handwerk ist.','Video bereit für Einbindung','Grundlagen')">Was Trading wirklich ist</button>
+          <button class="lesson-item" onclick="loadLesson(event,'Wie der Finanzmarkt funktioniert','Verstehe, wie Märkte aufgebaut sind, wer sie bewegt und wie Preisbewegungen entstehen.','Video bereit für Einbindung','Grundlagen')">Wie der Finanzmarkt funktioniert</button>
+          <button class="lesson-item" onclick="loadLesson(event,'Liquidität im Markt verstehen','Lerne, warum Liquidität eine zentrale Rolle spielt und wie sie Marktbewegungen beeinflusst.','Video bereit für Einbindung','Grundlagen')">Liquidität im Markt verstehen</button>
+          <button class="lesson-item" onclick="loadLesson(event,'Marktteilnehmer verstehen','Ein Überblick über Banken, Institutionen, Retail Trader und ihre Rollen im Markt.','Video bereit für Einbindung','Grundlagen')">Marktteilnehmer verstehen</button>
+          <button class="lesson-item" onclick="loadLesson(event,'Wie Geld im Markt bewegt wird','Verstehe die Dynamik hinter Kapitalflüssen und großen Bewegungen im Markt.','Video bereit für Einbindung','Grundlagen')">Wie Geld im Markt bewegt wird</button>
+          <button class="lesson-item" onclick="loadLesson(event,'Retail vs Smart Money','Der Unterschied zwischen klassischem Retail-Denken und professioneller Marktlogik.','Video bereit für Einbindung','Grundlagen')">Retail vs Smart Money</button>
+          <button class="lesson-item" onclick="loadLesson(event,'Die Realität von Trading','Ein ehrlicher Blick auf Trading, Erwartungen, Lernkurve und professionelle Entwicklung.','Video bereit für Einbindung','Grundlagen')">Die Realität von Trading</button>
+          <button class="lesson-item" onclick="loadLesson(event,'Erwartungen vs Realität im Trading','Setze realistische Ziele und entwickle ein langfristiges Verständnis für Fortschritt.','Video bereit für Einbindung','Grundlagen')">Erwartungen vs Realität im Trading</button>
         </div>
       </div>
 
       <div class="module">
         <button class="module-header" onclick="toggleModule(this)">
-          <span>Modul 3 – Tools & Grundlagen</span>
-          <span class="module-count">3 Guides</span>
+          <span>Modul 3 – Tools & Grundlagen</span><span class="module-count">3 Guides</span>
         </button>
         <div class="lesson-list">
-          <button class="lesson-item" onclick="loadLesson('TradingView Setup Guide','Dieser Guide hilft dir dabei, dein TradingView sauber einzurichten und professionell zu nutzen.','Guide Bereich','Guide')">TradingView Setup Guide</button>
-          <button class="lesson-item" onclick="loadLesson('Lot Size Rechner Guide','Hier lernst du, wie du den Lot Size Rechner für besseres Risikomanagement einsetzt.','Guide Bereich','Guide')">Lot Size Rechner Guide</button>
-          <button class="lesson-item" onclick="loadLesson('Trading Journal Guide','Ein strukturierter Guide, wie du dein Journal aufbaust und richtig auswertest.','Guide Bereich','Guide')">Trading Journal Guide</button>
+          <button class="lesson-item" onclick="loadLesson(event,'TradingView Setup Guide','Dieser Guide hilft dir dabei, dein TradingView sauber einzurichten und professionell zu nutzen.','Guide Bereich','Guide')">TradingView Setup Guide</button>
+          <button class="lesson-item" onclick="loadLesson(event,'Lot Size Rechner Guide','Hier lernst du, wie du den Lot Size Rechner für besseres Risikomanagement einsetzt.','Guide Bereich','Guide')">Lot Size Rechner Guide</button>
+          <button class="lesson-item" onclick="loadLesson(event,'Trading Journal Guide','Ein strukturierter Guide, wie du dein Journal aufbaust und richtig auswertest.','Guide Bereich','Guide')">Trading Journal Guide</button>
         </div>
       </div>
 
       <div class="module">
         <button class="module-header" onclick="toggleModule(this)">
-          <span>Modul 4 – Smart Money Concept</span>
-          <span class="module-count">7 Lektionen</span>
+          <span>Modul 4 – Smart Money Concept</span><span class="module-count">7 Lektionen</span>
         </button>
         <div class="lesson-list">
-          <button class="lesson-item locked" onclick="loadLesson('Marktstruktur verstehen','Verstehe Aufwärts- und Abwärtsstrukturen und wie du Marktphasen richtig liest.','Premium Inhalt','Premium')">Marktstruktur verstehen</button>
-          <button class="lesson-item locked" onclick="loadLesson('Break of Structure','Lerne, wie BOS für Trendwechsel und Fortsetzung interpretiert wird.','Premium Inhalt','Premium')">Break of Structure</button>
-          <button class="lesson-item locked" onclick="loadLesson('Change of Character','Einführung in CHOCH und seine Rolle für Kontext und Entry Timing.','Premium Inhalt','Premium')">Change of Character</button>
-          <button class="lesson-item locked" onclick="loadLesson('Liquidity Pools','Verstehe, wo Liquidität liegt und warum der Markt gezielt dorthin läuft.','Premium Inhalt','Premium')">Liquidity Pools</button>
-          <button class="lesson-item locked" onclick="loadLesson('Orderblocks','Orderblocks professionell erkennen und sauber in den Kontext einordnen.','Premium Inhalt','Premium')">Orderblocks</button>
-          <button class="lesson-item locked" onclick="loadLesson('Fair Value Gaps','Fair Value Gaps als Ineffizienz und Strukturbaustein im Markt lesen.','Premium Inhalt','Premium')">Fair Value Gaps</button>
-          <button class="lesson-item locked" onclick="loadLesson('Entry Modelle','Konkrete Entry Modelle für strukturierte Setups und besseres Timing.','Premium Inhalt','Premium')">Entry Modelle</button>
+          <button class="lesson-item locked" onclick="loadLesson(event,'Marktstruktur verstehen','Verstehe Aufwärts- und Abwärtsstrukturen und wie du Marktphasen richtig liest.','Premium Inhalt','Premium')">Marktstruktur verstehen</button>
+          <button class="lesson-item locked" onclick="loadLesson(event,'Break of Structure','Lerne, wie BOS für Trendwechsel und Fortsetzung interpretiert wird.','Premium Inhalt','Premium')">Break of Structure</button>
+          <button class="lesson-item locked" onclick="loadLesson(event,'Change of Character','Einführung in CHOCH und seine Rolle für Kontext und Entry Timing.','Premium Inhalt','Premium')">Change of Character</button>
+          <button class="lesson-item locked" onclick="loadLesson(event,'Liquidity Pools','Verstehe, wo Liquidität liegt und warum der Markt gezielt dorthin läuft.','Premium Inhalt','Premium')">Liquidity Pools</button>
+          <button class="lesson-item locked" onclick="loadLesson(event,'Orderblocks','Orderblocks professionell erkennen und sauber in den Kontext einordnen.','Premium Inhalt','Premium')">Orderblocks</button>
+          <button class="lesson-item locked" onclick="loadLesson(event,'Fair Value Gaps','Fair Value Gaps als Ineffizienz und Strukturbaustein im Markt lesen.','Premium Inhalt','Premium')">Fair Value Gaps</button>
+          <button class="lesson-item locked" onclick="loadLesson(event,'Entry Modelle','Konkrete Entry Modelle für strukturierte Setups und besseres Timing.','Premium Inhalt','Premium')">Entry Modelle</button>
         </div>
       </div>
 
       <div class="module">
         <button class="module-header" onclick="toggleModule(this)">
-          <span>Modul 5 – Backtesting & Statistik</span>
-          <span class="module-count">3 Lektionen</span>
+          <span>Modul 5 – Backtesting & Statistik</span><span class="module-count">3 Lektionen</span>
         </button>
         <div class="lesson-list">
-          <button class="lesson-item locked" onclick="loadLesson('Warum Backtesting entscheidend ist','Backtesting schafft Vertrauen in dein System und gibt dir statistische Klarheit.','Premium Inhalt','Premium')">Warum Backtesting entscheidend ist</button>
-          <button class="lesson-item locked" onclick="loadLesson('Wie du Backtests richtig machst','Ein klarer Ablauf, wie du Backtests professionell und sauber dokumentierst.','Premium Inhalt','Premium')">Wie du Backtests richtig machst</button>
-          <button class="lesson-item locked" onclick="loadLesson('Statistik & Erwartungswert','Verstehe, warum Erwartungswert und Statistik entscheidend für nachhaltiges Trading sind.','Premium Inhalt','Premium')">Statistik & Erwartungswert</button>
+          <button class="lesson-item locked" onclick="loadLesson(event,'Warum Backtesting entscheidend ist','Backtesting schafft Vertrauen in dein System und gibt dir statistische Klarheit.','Premium Inhalt','Premium')">Warum Backtesting entscheidend ist</button>
+          <button class="lesson-item locked" onclick="loadLesson(event,'Wie du Backtests richtig machst','Ein klarer Ablauf, wie du Backtests professionell und sauber dokumentierst.','Premium Inhalt','Premium')">Wie du Backtests richtig machst</button>
+          <button class="lesson-item locked" onclick="loadLesson(event,'Statistik & Erwartungswert','Verstehe, warum Erwartungswert und Statistik entscheidend für nachhaltiges Trading sind.','Premium Inhalt','Premium')">Statistik & Erwartungswert</button>
         </div>
       </div>
 
       <div class="module">
         <button class="module-header" onclick="toggleModule(this)">
-          <span>Modul 6 – Psychologie Masterclass</span>
-          <span class="module-count">4 Lektionen</span>
+          <span>Modul 6 – Psychologie Masterclass</span><span class="module-count">4 Lektionen</span>
         </button>
         <div class="lesson-list">
-          <button class="lesson-item locked" onclick="loadLesson('Trading Mindset','Baue ein starkes Mindset für Disziplin, Geduld und klare Entscheidungen auf.','Premium Inhalt','Premium')">Trading Mindset</button>
-          <button class="lesson-item locked" onclick="loadLesson('Emotionen kontrollieren','Lerne, wie du Angst, Gier und Überreaktionen im Trading reduzierst.','Premium Inhalt','Premium')">Emotionen kontrollieren</button>
-          <button class="lesson-item locked" onclick="loadLesson('Disziplin & Routine','Entwickle Abläufe, die dich langfristig konsistent machen.','Premium Inhalt','Premium')">Disziplin & Routine</button>
-          <button class="lesson-item locked" onclick="loadLesson('Fehleranalyse','Analysiere Fehler strukturiert und entwickle dich dadurch weiter.','Premium Inhalt','Premium')">Fehleranalyse</button>
+          <button class="lesson-item locked" onclick="loadLesson(event,'Trading Mindset','Baue ein starkes Mindset für Disziplin, Geduld und klare Entscheidungen auf.','Premium Inhalt','Premium')">Trading Mindset</button>
+          <button class="lesson-item locked" onclick="loadLesson(event,'Emotionen kontrollieren','Lerne, wie du Angst, Gier und Überreaktionen im Trading reduzierst.','Premium Inhalt','Premium')">Emotionen kontrollieren</button>
+          <button class="lesson-item locked" onclick="loadLesson(event,'Disziplin & Routine','Entwickle Abläufe, die dich langfristig konsistent machen.','Premium Inhalt','Premium')">Disziplin & Routine</button>
+          <button class="lesson-item locked" onclick="loadLesson(event,'Fehleranalyse','Analysiere Fehler strukturiert und entwickle dich dadurch weiter.','Premium Inhalt','Premium')">Fehleranalyse</button>
         </div>
       </div>
 
       <div class="module">
         <button class="module-header" onclick="toggleModule(this)">
-          <span>Modul 7 – Market Structure</span>
-          <span class="module-count">3 Lektionen</span>
+          <span>Modul 7 – Market Structure</span><span class="module-count">3 Lektionen</span>
         </button>
         <div class="lesson-list">
-          <button class="lesson-item locked" onclick="loadLesson('Marktzyklen verstehen','Verstehe Expansion, Retracement und Konsolidierung professionell im Kontext.','Premium Inhalt','Premium')">Marktzyklen verstehen</button>
-          <button class="lesson-item locked" onclick="loadLesson('Higher Timeframe Struktur','Nutze den höheren Timeframe für Bias, Richtung und bessere Entscheidungen.','Premium Inhalt','Premium')">Higher Timeframe Struktur</button>
-          <button class="lesson-item locked" onclick="loadLesson('Entry Timing','Timing für Entries sauber mit Struktur, Liquidität und Konfluenz aufbauen.','Premium Inhalt','Premium')">Entry Timing</button>
+          <button class="lesson-item locked" onclick="loadLesson(event,'Marktzyklen verstehen','Verstehe Expansion, Retracement und Konsolidierung professionell im Kontext.','Premium Inhalt','Premium')">Marktzyklen verstehen</button>
+          <button class="lesson-item locked" onclick="loadLesson(event,'Higher Timeframe Struktur','Nutze den höheren Timeframe für Bias, Richtung und bessere Entscheidungen.','Premium Inhalt','Premium')">Higher Timeframe Struktur</button>
+          <button class="lesson-item locked" onclick="loadLesson(event,'Entry Timing','Timing für Entries sauber mit Struktur, Liquidität und Konfluenz aufbauen.','Premium Inhalt','Premium')">Entry Timing</button>
         </div>
       </div>
     </aside>
@@ -651,10 +286,7 @@
     <section class="main">
       <div class="hero">
         <div class="badge">BullProsperity Academy</div>
-        <h1>
-          <span class="white">Strukturierter</span><br>
-          <span class="gold">Trading Kurs</span>
-        </h1>
+        <h1><span class="white">Strukturierter</span><br><span class="gold">Trading Kurs</span></h1>
         <p>
           Eine Premium Academy Oberfläche für Lektionen, Guides, Smart Money Inhalte,
           Risikoaufklärung und professionelles Trading-Verständnis. Wähle links eine
@@ -666,10 +298,7 @@
         <div class="player-top">
           <div>
             <h2 id="lessonTitle">Wie du den Kurs richtig durcharbeitest</h2>
-            <p id="lessonDescription">
-              Lerne, wie du den Kurs strukturiert nutzt, Inhalte sinnvoll umsetzt und deinen
-              Lernfortschritt professionell aufbaust.
-            </p>
+            <p id="lessonDescription">Lerne, wie du den Kurs strukturiert nutzt, Inhalte sinnvoll umsetzt und deinen Lernfortschritt professionell aufbaust.</p>
           </div>
           <div class="lesson-status" id="lessonStatus">Pflichtlektion</div>
         </div>
@@ -678,10 +307,7 @@
           <div class="play-placeholder">
             <div class="play-icon">▶</div>
             <h3 id="videoHeadline">Video bereit für Einbindung</h3>
-            <p>
-              Hier kann später dein echtes Kursvideo, Vimeo-Link, YouTube Embed
-              oder privater Video Player eingebunden werden.
-            </p>
+            <p>Hier kann später dein echtes Kursvideo, Vimeo-Link, YouTube Embed oder privater Video Player eingebunden werden.</p>
           </div>
         </div>
       </div>
@@ -689,11 +315,7 @@
       <div class="note-grid">
         <div class="note-card">
           <h3>So nutzt du diese Academy Seite</h3>
-          <p>
-            Klicke links auf ein Modul und wähle darunter eine Lektion oder einen Guide.
-            Rechts wird direkt der Inhaltstitel und die Beschreibung gewechselt. So wirkt
-            dein Kurs deutlich professioneller und strukturierter.
-          </p>
+          <p>Klicke links auf ein Modul und wähle darunter eine Lektion oder einen Guide. Rechts wird direkt der Inhaltstitel und die Beschreibung gewechselt.</p>
         </div>
 
         <div class="note-card">
@@ -719,7 +341,7 @@
       module.classList.toggle('open');
     }
 
-    function loadLesson(title, description, videoHeadline, status){
+    function loadLesson(e, title, description, videoHeadline, status){
       document.getElementById('lessonTitle').textContent = title;
       document.getElementById('lessonDescription').textContent = description;
       document.getElementById('videoHeadline').textContent = videoHeadline;
@@ -729,11 +351,10 @@
         item.classList.remove('active');
       });
 
-      if (event && event.currentTarget) {
-        event.currentTarget.classList.add('active');
+      if (e && e.currentTarget) {
+        e.currentTarget.classList.add('active');
       }
     }
   </script>
-
 </body>
 </html>
