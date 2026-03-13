@@ -5,544 +5,136 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>BullProsperity Tools</title>
   <style>
-    *{
-      margin:0;
-      padding:0;
-      box-sizing:border-box;
-    }
-
+    *{margin:0;padding:0;box-sizing:border-box;}
     :root{
-      --bg:#060606;
-      --panel:rgba(18,18,18,0.82);
-      --panel-2:rgba(10,10,10,0.92);
-      --gold:#ffd700;
-      --gold-2:#ffbf00;
-      --text:#f3f3f3;
-      --muted:#cfcfcf;
-      --line:rgba(255,255,255,0.06);
-      --gold-line:rgba(255,215,0,0.16);
+      --bg:#060606;--gold:#ffd700;--gold-2:#ffbf00;--text:#f3f3f3;
+      --line:rgba(255,255,255,0.06);--gold-line:rgba(255,215,0,0.16);
     }
-
     body{
-      font-family:Arial, Helvetica, sans-serif;
-      background:var(--bg);
-      color:var(--text);
-      overflow-x:hidden;
-      min-height:100vh;
-      position:relative;
+      font-family:Arial, Helvetica, sans-serif;background:var(--bg);color:var(--text);
+      overflow-x:hidden;min-height:100vh;position:relative;
     }
-
     body::before{
-      content:"";
-      position:fixed;
-      inset:0;
+      content:"";position:fixed;inset:0;
       background:
         radial-gradient(circle at 20% 15%, rgba(255,215,0,0.10), transparent 24%),
         radial-gradient(circle at 84% 75%, rgba(255,215,0,0.07), transparent 22%),
         linear-gradient(180deg, rgba(6,6,6,0.84), rgba(6,6,6,0.96));
       z-index:-5;
-      pointer-events:none;
     }
-
     .grid-overlay{
-      position:fixed;
-      inset:0;
-      z-index:-4;
-      pointer-events:none;
-      opacity:0.10;
+      position:fixed;inset:0;z-index:-4;opacity:0.10;pointer-events:none;
       background-image:
         linear-gradient(to right, rgba(255,255,255,0.05) 1px, transparent 1px),
         linear-gradient(to bottom, rgba(255,255,255,0.05) 1px, transparent 1px);
       background-size:64px 64px;
-      mask-image:linear-gradient(to bottom, rgba(0,0,0,0.95), rgba(0,0,0,0.45));
     }
-
-    .chart-bg{
-      position:fixed;
-      inset:0;
-      z-index:-3;
-      pointer-events:none;
-      overflow:hidden;
-      opacity:0.50;
-    }
-
-    .chart-svg{
-      position:absolute;
-      inset:0;
-      width:100%;
-      height:100%;
-    }
-
-    .chart-line{
-      fill:none;
-      stroke:rgba(255,215,0,0.40);
-      stroke-width:3.5;
-      stroke-linecap:round;
-      stroke-linejoin:round;
-    }
-
-    .chart-line-2{
-      fill:none;
-      stroke:rgba(255,255,255,0.14);
-      stroke-width:2;
-    }
-
-    .candle{
-      fill:rgba(255,215,0,0.22);
-      stroke:rgba(255,215,0,0.55);
-      stroke-width:1.3;
-    }
-
-    .candle.alt{
-      fill:rgba(255,255,255,0.07);
-      stroke:rgba(255,255,255,0.22);
-    }
-
-    .floating-glow{
-      position:absolute;
-      width:420px;
-      height:420px;
-      border-radius:50%;
-      background:radial-gradient(circle, rgba(255,215,0,0.08), transparent 68%);
-      filter:blur(22px);
-    }
-
-    .floating-glow.one{
-      top:6%;
-      left:-8%;
-    }
-
-    .floating-glow.two{
-      bottom:-8%;
-      right:-6%;
-    }
-
+    .chart-bg{position:fixed;inset:0;z-index:-3;opacity:0.50;pointer-events:none;}
+    .chart-svg{position:absolute;inset:0;width:100%;height:100%;}
+    .chart-line{fill:none;stroke:rgba(255,215,0,0.40);stroke-width:3.5;stroke-linecap:round;stroke-linejoin:round;}
+    .chart-line-2{fill:none;stroke:rgba(255,255,255,0.14);stroke-width:2;}
+    .candle{fill:rgba(255,215,0,0.22);stroke:rgba(255,215,0,0.55);stroke-width:1.3;}
+    .candle.alt{fill:rgba(255,255,255,0.07);stroke:rgba(255,255,255,0.22);}
     header{
-      position:sticky;
-      top:0;
-      z-index:30;
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      padding:22px 7%;
-      background:rgba(5,5,5,0.62);
-      backdrop-filter:blur(12px);
+      position:sticky;top:0;z-index:30;display:flex;justify-content:space-between;align-items:center;
+      padding:22px 7%;background:rgba(5,5,5,0.62);backdrop-filter:blur(12px);
       border-bottom:1px solid var(--line);
     }
-
-    .logo{
-      font-size:34px;
-      font-weight:800;
-      color:var(--gold);
-      letter-spacing:0.4px;
-      text-shadow:0 0 14px rgba(255,215,0,0.18);
+    .logo{font-size:34px;font-weight:800;color:var(--gold);text-shadow:0 0 14px rgba(255,215,0,0.18);}
+    nav{display:flex;gap:24px;flex-wrap:wrap;}
+    nav a{color:#fff;text-decoration:none;font-size:15px;font-weight:700;transition:.25s ease;}
+    nav a:hover{color:var(--gold);}
+    .btn{
+      display:inline-block;padding:12px 18px;border-radius:12px;text-decoration:none;
+      font-weight:800;transition:.25s ease;font-size:14px;border:none;cursor:pointer;
     }
-
-    nav{
-      display:flex;
-      gap:24px;
-      flex-wrap:wrap;
-    }
-
-    nav a{
-      color:#fff;
-      text-decoration:none;
-      font-size:15px;
-      font-weight:700;
-      transition:0.25s ease;
-    }
-
-    nav a:hover{
-      color:var(--gold);
-    }
-
+    .btn-gold{background:linear-gradient(45deg,var(--gold),var(--gold-2));color:#111;box-shadow:0 0 16px rgba(255,215,0,0.2);}
+    .btn-gold:hover{transform:translateY(-2px);box-shadow:0 0 22px rgba(255,215,0,0.34);}
     .layout{
-      display:grid;
-      grid-template-columns:310px 1fr;
-      gap:24px;
-      padding:28px 7% 50px;
+      display:grid;grid-template-columns:310px 1fr;gap:24px;padding:28px 7% 50px;
       min-height:calc(100vh - 90px);
     }
-
     .sidebar{
       background:linear-gradient(180deg, rgba(18,18,18,0.80), rgba(8,8,8,0.92));
-      border:1px solid var(--gold-line);
-      border-radius:28px;
-      padding:22px 18px;
-      box-shadow:0 20px 55px rgba(0,0,0,0.30);
-      height:fit-content;
-      position:sticky;
-      top:105px;
-      backdrop-filter:blur(10px);
+      border:1px solid var(--gold-line);border-radius:28px;padding:22px 18px;height:fit-content;
+      position:sticky;top:105px;
     }
-
-    .sidebar-top{
-      margin-bottom:18px;
-      padding-bottom:18px;
-      border-bottom:1px solid rgba(255,255,255,0.06);
-    }
-
-    .sidebar-top h2{
-      color:var(--gold);
-      font-size:24px;
-      margin-bottom:8px;
-    }
-
-    .sidebar-top p{
-      color:#d9d9d9;
-      line-height:1.7;
-      font-size:14px;
-    }
-
+    .sidebar-top{margin-bottom:18px;padding-bottom:18px;border-bottom:1px solid rgba(255,255,255,0.06);}
+    .sidebar-top h2{color:var(--gold);font-size:24px;margin-bottom:8px;}
+    .sidebar-top p{color:#d9d9d9;line-height:1.7;font-size:14px;}
     .tool-link{
-      display:block;
-      width:100%;
-      text-decoration:none;
-      color:#ffffff;
-      padding:14px 16px;
-      border-radius:14px;
-      background:rgba(255,255,255,0.03);
-      border:1px solid rgba(255,255,255,0.07);
-      margin-bottom:12px;
-      transition:0.25s ease;
-      font-weight:700;
+      display:block;text-decoration:none;color:#fff;padding:14px 16px;border-radius:14px;
+      background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);margin-bottom:12px;
+      transition:.25s ease;font-weight:700;
     }
-
-    .tool-link:hover,
-    .tool-link.active{
-      border-color:rgba(255,215,0,0.35);
-      color:var(--gold);
-      box-shadow:0 0 18px rgba(255,215,0,0.08);
-      transform:translateY(-1px);
-    }
-
-    .main{
-      display:flex;
-      flex-direction:column;
-      gap:22px;
-    }
-
+    .tool-link:hover,.tool-link.active{border-color:rgba(255,215,0,0.35);color:var(--gold);}
+    .main{display:flex;flex-direction:column;gap:22px;}
     .hero{
-      padding:30px 28px;
-      border-radius:30px;
-      background:linear-gradient(180deg, rgba(18,18,18,0.74), rgba(8,8,8,0.88));
+      padding:30px 28px;border-radius:30px;background:linear-gradient(180deg, rgba(18,18,18,0.74), rgba(8,8,8,0.88));
       border:1px solid var(--gold-line);
-      box-shadow:0 24px 60px rgba(0,0,0,0.34);
-      backdrop-filter:blur(10px);
-      position:relative;
-      overflow:hidden;
     }
-
-    .hero::before{
-      content:"";
-      position:absolute;
-      top:-80px;
-      right:-80px;
-      width:240px;
-      height:240px;
-      border-radius:50%;
-      background:radial-gradient(circle, rgba(255,215,0,0.08), transparent 70%);
-      pointer-events:none;
-    }
-
     .badge{
-      display:inline-block;
-      margin-bottom:14px;
-      padding:8px 14px;
-      border-radius:999px;
-      border:1px solid rgba(255,215,0,0.24);
-      background:rgba(255,215,0,0.05);
-      color:var(--gold);
-      font-size:12px;
-      font-weight:800;
+      display:inline-block;margin-bottom:14px;padding:8px 14px;border-radius:999px;
+      border:1px solid rgba(255,215,0,0.24);background:rgba(255,215,0,0.05);color:var(--gold);
+      font-size:12px;font-weight:800;
     }
-
-    .hero h1{
-      font-size:46px;
-      line-height:1.06;
-      margin-bottom:10px;
-    }
-
-    .hero h1 .white{
-      color:#fff;
-    }
-
-    .hero h1 .gold{
-      color:var(--gold);
-    }
-
-    .hero p{
-      max-width:880px;
-      color:#e5e5e5;
-      font-size:17px;
-      line-height:1.8;
-    }
-
-    .grid{
-      display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
-      gap:22px;
-    }
-
-    .card{
-      border-radius:24px;
-      padding:26px;
-      background:linear-gradient(180deg, rgba(18,18,18,0.82), rgba(9,9,9,0.92));
+    .hero h1{font-size:46px;line-height:1.06;margin-bottom:10px;}
+    .hero h1 .white{color:#fff;}
+    .hero h1 .gold{color:var(--gold);}
+    .hero p{max-width:880px;color:#e5e5e5;font-size:17px;line-height:1.8;}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:22px;}
+    .card,.tool-panel{
+      border-radius:24px;padding:26px;background:linear-gradient(180deg, rgba(18,18,18,0.82), rgba(9,9,9,0.92));
       border:1px solid var(--gold-line);
-      box-shadow:0 18px 50px rgba(0,0,0,0.28);
-      transition:0.28s ease;
-      position:relative;
-      overflow:hidden;
     }
-
-    .card::before{
-      content:"";
-      position:absolute;
-      top:-60px;
-      right:-60px;
-      width:180px;
-      height:180px;
-      border-radius:50%;
-      background:radial-gradient(circle, rgba(255,215,0,0.08), transparent 70%);
-      pointer-events:none;
-    }
-
-    .card:hover{
-      transform:translateY(-5px);
-      border-color:rgba(255,215,0,0.30);
-      box-shadow:0 25px 60px rgba(0,0,0,0.35);
-    }
-
     .card-tag{
-      display:inline-block;
-      margin-bottom:14px;
-      padding:7px 12px;
-      border-radius:999px;
-      background:rgba(255,215,0,0.08);
-      border:1px solid rgba(255,215,0,0.22);
-      color:var(--gold);
-      font-size:12px;
-      font-weight:800;
+      display:inline-block;margin-bottom:14px;padding:7px 12px;border-radius:999px;
+      background:rgba(255,215,0,0.08);border:1px solid rgba(255,215,0,0.22);
+      color:var(--gold);font-size:12px;font-weight:800;
     }
-
-    .card h2{
-      color:var(--gold);
-      font-size:28px;
-      margin-bottom:14px;
+    .card h2,.tool-panel h2{color:var(--gold);font-size:28px;margin-bottom:14px;}
+    .card p,.tool-panel p{color:#dfdfdf;line-height:1.75;margin-bottom:16px;}
+    .form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin-bottom:18px;}
+    .field{display:flex;flex-direction:column;gap:8px;}
+    .field label{color:#e8e8e8;font-size:14px;font-weight:700;}
+    .field input,.field select,.field textarea{
+      width:100%;padding:14px;border-radius:14px;border:1px solid rgba(255,255,255,0.08);
+      background:rgba(255,255,255,0.03);color:#fff;font-size:14px;outline:none;
     }
-
-    .card p{
-      color:#dfdfdf;
-      line-height:1.75;
-      margin-bottom:16px;
-    }
-
-    .btn{
-      display:inline-block;
-      padding:12px 18px;
-      border-radius:12px;
-      text-decoration:none;
-      font-weight:800;
-      transition:0.25s ease;
-      font-size:14px;
-      border:none;
-      cursor:pointer;
-    }
-
-    .btn-gold{
-      background:linear-gradient(45deg,var(--gold),var(--gold-2));
-      color:#111111;
-      box-shadow:0 0 16px rgba(255,215,0,0.2);
-    }
-
-    .btn-gold:hover{
-      transform:translateY(-2px);
-      box-shadow:0 0 22px rgba(255,215,0,0.34);
-    }
-
-    .tool-panel{
-      border-radius:28px;
-      background:linear-gradient(180deg, rgba(18,18,18,0.84), rgba(8,8,8,0.92));
-      border:1px solid var(--gold-line);
-      box-shadow:0 20px 55px rgba(0,0,0,0.30);
-      padding:24px;
-    }
-
-    .tool-panel h2{
-      color:var(--gold);
-      font-size:30px;
-      margin-bottom:12px;
-    }
-
-    .tool-panel p{
-      color:#dddddd;
-      line-height:1.8;
-      margin-bottom:20px;
-    }
-
-    .form-grid{
-      display:grid;
-      grid-template-columns:repeat(2,minmax(0,1fr));
-      gap:16px;
-      margin-bottom:18px;
-    }
-
-    .field{
-      display:flex;
-      flex-direction:column;
-      gap:8px;
-    }
-
-    .field label{
-      color:#e8e8e8;
-      font-size:14px;
-      font-weight:700;
-    }
-
-    .field input,
-    .field select,
-    .field textarea{
-      width:100%;
-      padding:14px 14px;
-      border-radius:14px;
-      border:1px solid rgba(255,255,255,0.08);
-      background:rgba(255,255,255,0.03);
-      color:#ffffff;
-      font-size:14px;
-      outline:none;
-    }
-
-    .field textarea{
-      min-height:140px;
-      resize:vertical;
-    }
-
-    .field input:focus,
-    .field select:focus,
-    .field textarea:focus{
-      border-color:rgba(255,215,0,0.36);
-      box-shadow:0 0 0 3px rgba(255,215,0,0.08);
-    }
-
+    .field textarea{min-height:140px;resize:vertical;}
     .result-box{
-      margin-top:18px;
-      padding:18px;
-      border-radius:18px;
-      background:rgba(255,215,0,0.05);
-      border:1px solid rgba(255,215,0,0.18);
-      color:#ffffff;
-      line-height:1.7;
+      margin-top:18px;padding:18px;border-radius:18px;background:rgba(255,215,0,0.05);
+      border:1px solid rgba(255,215,0,0.18);color:#fff;line-height:1.7;
     }
-
-    .checklist{
-      display:grid;
-      gap:12px;
-    }
-
+    .checklist{display:grid;gap:12px;}
     .check-item{
-      padding:14px 16px;
-      border-radius:14px;
-      background:rgba(255,255,255,0.03);
-      border:1px solid rgba(255,255,255,0.06);
-      color:#f1f1f1;
+      padding:14px 16px;border-radius:14px;background:rgba(255,255,255,0.03);
+      border:1px solid rgba(255,255,255,0.06);color:#f1f1f1;
     }
-
     .chart-box{
-      min-height:320px;
-      border-radius:20px;
-      border:1px solid rgba(255,255,255,0.06);
-      background:
-        linear-gradient(180deg, rgba(0,0,0,0.55), rgba(0,0,0,0.82)),
-        radial-gradient(circle at center, rgba(255,215,0,0.08), transparent 35%),
-        #050505;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      text-align:center;
-      padding:30px;
-      position:relative;
-      overflow:hidden;
+      min-height:320px;border-radius:20px;border:1px solid rgba(255,255,255,0.06);
+      background:linear-gradient(180deg, rgba(0,0,0,0.55), rgba(0,0,0,0.82)), radial-gradient(circle at center, rgba(255,215,0,0.08), transparent 35%), #050505;
+      display:flex;align-items:center;justify-content:center;text-align:center;padding:30px;position:relative;overflow:hidden;
     }
-
-    .chart-box::before{
-      content:"";
-      position:absolute;
-      inset:0;
-      background:
-        linear-gradient(to right, rgba(255,255,255,0.04) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(255,255,255,0.04) 1px, transparent 1px);
-      background-size:56px 56px;
-      opacity:0.25;
-      pointer-events:none;
-    }
-
-    .chart-placeholder{
-      position:relative;
-      z-index:2;
-      max-width:620px;
-    }
-
-    .chart-placeholder h3{
-      color:var(--gold);
-      font-size:28px;
-      margin-bottom:10px;
-    }
-
-    .chart-placeholder p{
-      color:#d7d7d7;
-      line-height:1.8;
-    }
-
-    footer{
-      text-align:center;
-      padding:30px 20px 40px;
-      color:#9d9d9d;
-      border-top:1px solid rgba(255,255,255,0.06);
-      background:rgba(0,0,0,0.28);
-    }
-
+    .chart-placeholder h3{color:var(--gold);font-size:28px;margin-bottom:10px;}
+    .chart-placeholder p{color:#d7d7d7;line-height:1.8;}
+    footer{text-align:center;padding:30px 20px 40px;color:#9d9d9d;border-top:1px solid rgba(255,255,255,0.06);background:rgba(0,0,0,0.28);}
     @media (max-width:1100px){
-      .layout{
-        grid-template-columns:1fr;
-      }
-
-      .sidebar{
-        position:relative;
-        top:0;
-      }
-
-      .form-grid{
-        grid-template-columns:1fr;
-      }
+      .layout{grid-template-columns:1fr;}
+      .sidebar{position:relative;top:0;}
+      .form-grid{grid-template-columns:1fr;}
     }
-
     @media (max-width:700px){
-      header{
-        flex-direction:column;
-        gap:14px;
-      }
-
-      .hero h1{
-        font-size:36px;
-      }
-
-      .logo{
-        font-size:28px;
-      }
-
-      .layout{
-        padding:20px 5% 40px;
-      }
+      header{flex-direction:column;gap:14px;}
+      .hero h1{font-size:36px;}
+      .logo{font-size:28px;}
+      .layout{padding:20px 5% 40px;}
     }
   </style>
 </head>
 <body>
-
   <div class="grid-overlay"></div>
-
   <div class="chart-bg">
-    <div class="floating-glow one"></div>
-    <div class="floating-glow two"></div>
     <svg class="chart-svg" viewBox="0 0 1600 900" preserveAspectRatio="none">
       <path class="chart-line-2" d="M0,620 C120,600 180,540 260,560 C340,580 420,500 500,470 C610,425 680,470 760,390 C840,315 900,345 980,280 C1080,200 1170,240 1260,185 C1360,124 1460,155 1600,90" />
       <path class="chart-line" d="M0,700 C90,670 140,710 230,640 C320,570 390,610 470,520 C560,420 640,500 730,430 C820,360 900,390 995,290 C1090,190 1180,230 1290,145 C1390,67 1470,105 1600,40" />
@@ -571,6 +163,7 @@
       <a href="/api/whop/protect-hub">Hub</a>
       <a href="/api/whop/protect-course">Course</a>
       <a href="/api/whop/protect-tools">Tools</a>
+      <a href="/api/whop/login">Login</a>
     </nav>
   </header>
 
@@ -580,7 +173,6 @@
         <h2>Trading Tools</h2>
         <p>Alle wichtigen Werkzeuge für Risiko, Planung, Journal und Chart-Arbeit an einem Ort.</p>
       </div>
-
       <a href="#lotsize" class="tool-link active">Lot Size Rechner</a>
       <a href="#journal" class="tool-link">Trading Journal</a>
       <a href="#checklist" class="tool-link">Checklisten</a>
@@ -590,14 +182,8 @@
     <section class="main">
       <div class="hero">
         <div class="badge">BullProsperity Tools Suite</div>
-        <h1>
-          <span class="white">Professionelle</span><br>
-          <span class="gold">Trading Tools</span>
-        </h1>
-        <p>
-          Nutze Tools für Risikomanagement, Journalführung, Checklisten und Chart-Arbeit,
-          um strukturierter, disziplinierter und professioneller zu traden.
-        </p>
+        <h1><span class="white">Professionelle</span><br><span class="gold">Trading Tools</span></h1>
+        <p>Nutze Tools für Risikomanagement, Journalführung, Checklisten und Chart-Arbeit, um strukturierter, disziplinierter und professioneller zu traden.</p>
       </div>
 
       <div class="grid">
@@ -625,70 +211,26 @@
 
       <div class="tool-panel" id="lotsize">
         <h2>Lot Size Rechner</h2>
-        <p>Ein einfacher Rechner für deinen strukturierten Risikoansatz. Du kannst ihn später noch mit Symbol-spezifischen Pip-Werten erweitern.</p>
-
+        <p>Ein einfacher Rechner für deinen strukturierten Risikoansatz.</p>
         <div class="form-grid">
-          <div class="field">
-            <label for="balance">Kontogröße (€)</label>
-            <input type="number" id="balance" placeholder="z. B. 10000">
-          </div>
-
-          <div class="field">
-            <label for="risk">Risiko pro Trade (%)</label>
-            <input type="number" id="risk" placeholder="z. B. 1">
-          </div>
-
-          <div class="field">
-            <label for="stoploss">Stop Loss (Pips)</label>
-            <input type="number" id="stoploss" placeholder="z. B. 20">
-          </div>
-
-          <div class="field">
-            <label for="pipvalue">Pip Wert pro Standard Lot</label>
-            <input type="number" id="pipvalue" placeholder="z. B. 10">
-          </div>
+          <div class="field"><label for="balance">Kontogröße (€)</label><input type="number" id="balance" placeholder="z. B. 10000"></div>
+          <div class="field"><label for="risk">Risiko pro Trade (%)</label><input type="number" id="risk" placeholder="z. B. 1"></div>
+          <div class="field"><label for="stoploss">Stop Loss (Pips)</label><input type="number" id="stoploss" placeholder="z. B. 20"></div>
+          <div class="field"><label for="pipvalue">Pip Wert pro Standard Lot</label><input type="number" id="pipvalue" placeholder="z. B. 10"></div>
         </div>
-
         <button class="btn btn-gold" onclick="calculateLotSize()">Lot Size berechnen</button>
-
-        <div class="result-box" id="lotResult">
-          Ergebnis erscheint hier.
-        </div>
+        <div class="result-box" id="lotResult">Ergebnis erscheint hier.</div>
       </div>
 
       <div class="tool-panel" id="journal">
         <h2>Trading Journal</h2>
-        <p>Nutze diesen Bereich, um deinen Trade sauber zu dokumentieren. Später kann daraus auch ein exportierbares Journal werden.</p>
-
+        <p>Nutze diesen Bereich, um deinen Trade sauber zu dokumentieren.</p>
         <div class="form-grid">
-          <div class="field">
-            <label for="pair">Markt / Pair</label>
-            <input type="text" id="pair" placeholder="z. B. XAUUSD">
-          </div>
-
-          <div class="field">
-            <label for="direction">Richtung</label>
-            <select id="direction">
-              <option>Buy</option>
-              <option>Sell</option>
-            </select>
-          </div>
-
-          <div class="field">
-            <label for="entry">Entry</label>
-            <input type="text" id="entry" placeholder="z. B. 2150.20">
-          </div>
-
-          <div class="field">
-            <label for="result">Ergebnis</label>
-            <select id="result">
-              <option>Win</option>
-              <option>Loss</option>
-              <option>BE</option>
-            </select>
-          </div>
+          <div class="field"><label for="pair">Markt / Pair</label><input type="text" id="pair" placeholder="z. B. XAUUSD"></div>
+          <div class="field"><label for="direction">Richtung</label><select id="direction"><option>Buy</option><option>Sell</option></select></div>
+          <div class="field"><label for="entry">Entry</label><input type="text" id="entry" placeholder="z. B. 2150.20"></div>
+          <div class="field"><label for="result">Ergebnis</label><select id="result"><option>Win</option><option>Loss</option><option>BE</option></select></div>
         </div>
-
         <div class="field">
           <label for="notes">Notizen / Begründung</label>
           <textarea id="notes" placeholder="Warum hast du den Trade genommen? Was war gut? Was war schlecht?"></textarea>
@@ -698,7 +240,6 @@
       <div class="tool-panel" id="checklist">
         <h2>Trading Checklisten</h2>
         <p>Arbeite mit einer klaren Routine vor und nach jedem Trade.</p>
-
         <div class="checklist">
           <div class="check-item">✔ Higher Timeframe Struktur geprüft</div>
           <div class="check-item">✔ Liquidität / Kontext analysiert</div>
@@ -711,15 +252,11 @@
 
       <div class="tool-panel" id="chart">
         <h2>TradingView Bereich</h2>
-        <p>Hier kann später dein eingebetteter TradingView Chart stehen oder ein externer Bereich für Marktanalyse.</p>
-
+        <p>Hier kann später dein eingebetteter TradingView Chart stehen.</p>
         <div class="chart-box">
           <div class="chart-placeholder">
             <h3>TradingView Chart Platzhalter</h3>
-            <p>
-              Später kannst du hier deinen TradingView Embed Code einsetzen,
-              damit Mitglieder direkt im BullProsperity Hub analysieren können.
-            </p>
+            <p>Später kannst du hier deinen TradingView Embed Code einsetzen, damit Mitglieder direkt im BullProsperity Hub analysieren können.</p>
           </div>
         </div>
       </div>
@@ -751,6 +288,5 @@
         `<strong>Empfohlene Lot Size:</strong> ${lotSize.toFixed(2)} Lot`;
     }
   </script>
-
 </body>
 </html>
