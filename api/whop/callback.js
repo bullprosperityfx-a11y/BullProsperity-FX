@@ -41,7 +41,7 @@ const userRes = await fetch("https://api.whop.com/v5/me", {
 const userData = await userRes.json();
 
 const hasMembership = userData.memberships?.some(
-  m => m.product?.name === "BullProsperity"
+  m => m.product?.name === "BullProsperity SMC Mastery"
 );
 
   if (!tokenRes.ok) {
