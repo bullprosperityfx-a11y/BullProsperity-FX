@@ -57,9 +57,10 @@ module.exports = async function handler(req, res) {
     const userData = await userRes.json();
 
     const email =
-      userData?.email?.toLowerCase() ||
-      userData?.user?.email?.toLowerCase() ||
-      "";
+  userData?.email?.toLowerCase() ||
+  userData?.user?.email?.toLowerCase() ||
+  userData?.user?.primary_email?.toLowerCase() ||
+  "";
 
     // Memberships laden
     const membershipRes = await fetch("https://api.whop.com/v5/me/memberships", {
