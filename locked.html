@@ -167,5 +167,19 @@
   <footer>
     © 2026 BullProsperity FX. Alle Rechte vorbehalten.
   </footer>
+  <script>
+
+(async function () {
+
+  const res = await fetch("/api/access");
+  const data = await res.json();
+
+  if (data.role === "admin") {
+    window.location.href = "hub.html";
+  }
+
+})();
+
+</script>
 </body>
 </html>
