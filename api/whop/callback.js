@@ -61,6 +61,42 @@ if (hasMembership) {
   }
 
   const accessToken = tokenData.access_token;
+  const userRes = await fetch("https://api.whop.com/v5/me", {
+  headers: {
+    Authorization: `Bearer ${access_token}`
+  }
+});
+
+const user = await userRes.json();
+const email = user.email?.toLowerCase();
+const membershipRes = await fetch("https://api.whop.com/v5/me/memberships", {
+  headers: {
+    Authorization: `Bearer ${access_token}`
+  }
+});
+
+const memberships = await membershipRes.json();
+
+const hasMembership = memberships.data && memberships.data.length > 0;
+const adminEmails = [
+  "bullprosperityfx@gmail.com"
+];
+let role = "guest";
+
+if (isAdmin) {
+  role = "admin";
+} else if (hasMembership) {
+  role = "premium";
+} else if (email) {
+  role = "free";
+}
+res.setHeader(
+  "Set-Cookie",
+  `bp_role=${role}; Path=/; HttpOnly; Secure; SameSite=Lax`
+);
+return res.redirect("/hub.html");
+
+const isAdmin = adminEmails.includes(email);
 
   res.setHeader(
     "Set-Cookie",
