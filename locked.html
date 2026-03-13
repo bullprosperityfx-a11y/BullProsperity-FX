@@ -167,16 +167,20 @@
   <footer>
     © 2026 BullProsperity FX. Alle Rechte vorbehalten.
   </footer>
- <script>
+<script>
 (async function () {
+  try {
+    const res = await fetch("/api/access", {
+      credentials: "include"
+    });
+    const data = await res.json();
 
-const res = await fetch("/api/access", { credentials: "include" });
-const data = await res.json();
-
-if (data.role === "premium" || data.role === "admin") {
-    window.location.href = "hub.html";
-}
-
+    if (data.role === "premium" || data.role === "admin") {
+      window.location.href = "hub.html";
+    }
+  } catch (error) {
+    console.error("Access check failed", error);
+  }
 })();
 </script>
 </body>
