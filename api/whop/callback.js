@@ -68,7 +68,7 @@ module.exports = async function handler(req, res) {
       false;
 
     const adminEmails = [
-      "DEINE_EMAIL_HIER"
+      "bullprosperityfx@gmail.com"
     ];
 
     const isAdmin = adminEmails.includes(email);
