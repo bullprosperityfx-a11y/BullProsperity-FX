@@ -15,7 +15,7 @@
       font-family: Arial, Helvetica, sans-serif;
       background:
         radial-gradient(circle at top, rgba(255, 215, 0, 0.08), transparent 35%),
-        linear-gradient(135deg, #050505, #0c0c0c 55%, #111111);
+        linear-gradient(135deg, #050505, #0c0c0c 58%, #111111);
       color: #ffffff;
       min-height: 100vh;
       overflow-x: hidden;
@@ -25,7 +25,7 @@
       position: fixed;
       inset: 0;
       pointer-events: none;
-      opacity: 0.24;
+      opacity: 0.22;
       z-index: 0;
     }
 
@@ -36,18 +36,18 @@
 
     .line-main {
       fill: none;
-      stroke: rgba(255, 215, 0, 0.55);
+      stroke: rgba(255, 215, 0, 0.58);
       stroke-width: 3;
     }
 
     .line-alt {
       fill: none;
-      stroke: rgba(255, 255, 255, 0.18);
+      stroke: rgba(255, 255, 255, 0.16);
       stroke-width: 2;
     }
 
     .candle {
-      stroke: rgba(255, 215, 0, 0.45);
+      stroke: rgba(255, 215, 0, 0.42);
       stroke-width: 2;
     }
 
@@ -58,12 +58,12 @@
     header {
       position: sticky;
       top: 0;
-      z-index: 20;
+      z-index: 30;
       display: flex;
       justify-content: space-between;
       align-items: center;
       padding: 24px 42px;
-      background: rgba(10, 10, 10, 0.78);
+      background: rgba(10, 10, 10, 0.8);
       backdrop-filter: blur(10px);
       border-bottom: 1px solid rgba(255, 215, 0, 0.12);
     }
@@ -72,7 +72,7 @@
       font-size: 2rem;
       font-weight: 800;
       color: #ffd700;
-      text-shadow: 0 0 18px rgba(255, 215, 0, 0.22);
+      text-shadow: 0 0 16px rgba(255, 215, 0, 0.22);
     }
 
     nav {
@@ -95,34 +95,36 @@
     .page {
       position: relative;
       z-index: 1;
-      width: min(1200px, calc(100% - 32px));
+      width: min(1280px, calc(100% - 24px));
       margin: 28px auto 40px;
+      display: grid;
+      gap: 24px;
     }
 
-    .hero {
-      background: rgba(18, 18, 18, 0.92);
-      border: 1px solid rgba(255, 215, 0, 0.16);
-      border-radius: 28px;
-      padding: 34px;
-      box-shadow: 0 0 40px rgba(255, 215, 0, 0.08);
-      margin-bottom: 24px;
+    .hero,
+    .card {
+      background: rgba(18, 18, 18, 0.94);
+      border: 1px solid rgba(255, 215, 0, 0.15);
+      border-radius: 24px;
+      box-shadow: 0 0 26px rgba(255, 215, 0, 0.05);
+      padding: 26px;
     }
 
     .badge {
       display: inline-block;
-      padding: 8px 15px;
+      padding: 8px 14px;
       border-radius: 999px;
       border: 1px solid rgba(255, 215, 0, 0.34);
       color: #ffd84d;
       font-size: 13px;
       font-weight: 700;
       background: rgba(255, 215, 0, 0.08);
-      margin-bottom: 16px;
+      margin-bottom: 15px;
     }
 
     .hero h1 {
       font-size: clamp(2rem, 4vw, 3.4rem);
-      line-height: 1.08;
+      line-height: 1.06;
       margin-bottom: 14px;
     }
 
@@ -132,38 +134,25 @@
 
     .hero h1 .gold {
       color: #ffd700;
-      text-shadow: 0 0 22px rgba(255, 215, 0, 0.18);
+      text-shadow: 0 0 18px rgba(255, 215, 0, 0.18);
     }
 
-    .hero p {
+    .hero p,
+    .card p {
       color: #dddddd;
-      max-width: 920px;
       line-height: 1.8;
-      font-size: 1rem;
     }
 
-    .education-note {
-      margin-top: 22px;
-      padding: 16px 18px;
-      border-left: 3px solid #ffd700;
-      background: rgba(255, 215, 0, 0.06);
-      color: #ececec;
-      border-radius: 14px;
-      line-height: 1.7;
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 20px;
     }
 
-    .grid {
+    .grid-2 {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 24px;
-    }
-
-    .card {
-      background: rgba(18, 18, 18, 0.94);
-      border: 1px solid rgba(255, 215, 0, 0.16);
-      border-radius: 24px;
-      padding: 24px;
-      box-shadow: 0 0 25px rgba(255, 215, 0, 0.05);
     }
 
     .card h2 {
@@ -172,16 +161,22 @@
       font-size: 1.55rem;
     }
 
-    .card p {
-      color: #dddddd;
-      line-height: 1.7;
-      margin-bottom: 16px;
+    .top-tag {
+      display: inline-block;
+      margin-bottom: 12px;
+      padding: 7px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      border: 1px solid rgba(255, 215, 0, 0.2);
+      color: #ffd84d;
+      background: rgba(255, 215, 0, 0.07);
     }
 
     .tool-list {
       list-style: none;
       display: grid;
       gap: 12px;
+      margin-top: 16px;
     }
 
     .tool-list li {
@@ -192,15 +187,22 @@
       color: #f2f2f2;
     }
 
-    .journal-form {
+    .form-grid {
       display: grid;
       gap: 14px;
-      margin-top: 12px;
+      margin-top: 16px;
     }
 
-    .journal-form input,
-    .journal-form select,
-    .journal-form textarea {
+    label {
+      display: block;
+      font-weight: 700;
+      color: #f5f5f5;
+      margin-bottom: 6px;
+    }
+
+    input,
+    select,
+    textarea {
       width: 100%;
       padding: 14px 16px;
       border-radius: 14px;
@@ -211,14 +213,14 @@
       outline: none;
     }
 
-    .journal-form textarea {
+    textarea {
       min-height: 120px;
       resize: vertical;
     }
 
-    .journal-form input:focus,
-    .journal-form select:focus,
-    .journal-form textarea:focus {
+    input:focus,
+    select:focus,
+    textarea:focus {
       border-color: rgba(255, 215, 0, 0.5);
       box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.08);
     }
@@ -227,15 +229,20 @@
       display: flex;
       gap: 12px;
       flex-wrap: wrap;
+      margin-top: 8px;
     }
 
     .btn {
-      border: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
       border-radius: 14px;
       padding: 14px 18px;
       font-weight: 800;
       cursor: pointer;
       transition: 0.2s ease;
+      border: none;
+      text-decoration: none;
     }
 
     .btn-primary {
@@ -249,13 +256,51 @@
     }
 
     .btn-secondary {
-      background: rgba(255,255,255,0.05);
       color: #ffffff;
-      border: 1px solid rgba(255, 215, 0, 0.18);
+      border: 1px solid rgba(255, 215, 0, 0.22);
+      background: rgba(255,255,255,0.03);
     }
 
     .btn-secondary:hover {
-      background: rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.06);
+    }
+
+    .result-box {
+      display: grid;
+      gap: 16px;
+      margin-top: 18px;
+    }
+
+    .result-item {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255, 215, 0, 0.14);
+      border-radius: 18px;
+      padding: 18px;
+    }
+
+    .result-label {
+      color: #bdbdbd;
+      font-size: 0.92rem;
+      margin-bottom: 8px;
+    }
+
+    .result-value {
+      color: #ffd700;
+      font-size: 1.45rem;
+      font-weight: 800;
+    }
+
+    .result-sub {
+      color: #dddddd;
+      margin-top: 8px;
+      line-height: 1.7;
+    }
+
+    .tv-wrapper {
+      overflow: hidden;
+      border-radius: 18px;
+      border: 1px solid rgba(255, 215, 0, 0.16);
+      margin-top: 18px;
     }
 
     .journal-entries {
@@ -297,6 +342,7 @@
       color: #ffd84d;
       font-size: 12px;
       background: rgba(255, 215, 0, 0.07);
+      white-space: nowrap;
     }
 
     .empty-state {
@@ -309,21 +355,21 @@
     }
 
     .footer-note {
-      margin-top: 24px;
+      width: min(1280px, calc(100% - 24px));
+      margin: 0 auto 28px;
+      background: rgba(18, 18, 18, 0.94);
+      border: 1px solid rgba(255, 215, 0, 0.15);
+      border-radius: 20px;
+      padding: 18px 20px;
       color: #bdbdbd;
-      font-size: 0.95rem;
-      line-height: 1.7;
-    }
-
-    footer {
+      line-height: 1.8;
       text-align: center;
-      color: #a8a8a8;
-      padding: 24px 12px 40px;
-      font-size: 0.92rem;
+      font-size: 0.95rem;
     }
 
-    @media (max-width: 980px) {
-      .grid {
+    @media (max-width: 1080px) {
+      .grid-3,
+      .grid-2 {
         grid-template-columns: 1fr;
       }
 
@@ -331,8 +377,9 @@
         padding: 20px 18px;
       }
 
-      .page {
-        width: min(100% - 18px, 1200px);
+      .page,
+      .footer-note {
+        width: min(100% - 18px, 1280px);
       }
 
       .hero,
@@ -341,7 +388,7 @@
       }
 
       nav {
-        gap: 16px;
+        gap: 15px;
       }
     }
   </style>
@@ -349,22 +396,22 @@
 <body>
   <div class="chart-bg">
     <svg viewBox="0 0 1600 900" preserveAspectRatio="none">
-      <path class="line-alt" d="M0,640 C120,620 180,560 280,540 C390,520 420,560 520,500 C640,430 690,460 810,380 C910,315 980,340 1100,250 C1200,175 1310,205 1440,120 C1505,82 1550,105 1600,70" />
-      <path class="line-main" d="M0,720 C90,680 165,690 260,590 C365,482 430,545 535,470 C650,390 708,428 820,315 C930,205 1010,255 1130,180 C1228,120 1325,152 1460,90 C1520,65 1560,78 1600,56" />
+      <path class="line-alt" d="M0,650 C110,620 170,565 290,550 C380,540 470,570 560,495 C665,410 720,450 820,350 C905,265 980,290 1085,220 C1205,140 1285,185 1415,120 C1500,82 1548,108 1600,86" />
+      <path class="line-main" d="M0,730 C85,695 160,685 255,610 C375,505 445,560 555,475 C655,396 725,420 835,315 C925,228 1010,258 1125,180 C1238,105 1325,145 1450,94 C1512,66 1560,70 1600,58" />
 
-      <line class="candle" x1="90" y1="758" x2="90" y2="690"></line>
-      <line class="candle alt" x1="180" y1="700" x2="180" y2="620"></line>
-      <line class="candle" x1="280" y1="620" x2="280" y2="545"></line>
-      <line class="candle alt" x1="390" y1="555" x2="390" y2="490"></line>
-      <line class="candle" x1="500" y1="510" x2="500" y2="430"></line>
-      <line class="candle alt" x1="610" y1="470" x2="610" y2="385"></line>
-      <line class="candle" x1="730" y1="420" x2="730" y2="330"></line>
-      <line class="candle alt" x1="845" y1="350" x2="845" y2="270"></line>
-      <line class="candle" x1="965" y1="292" x2="965" y2="208"></line>
-      <line class="candle alt" x1="1090" y1="232" x2="1090" y2="160"></line>
-      <line class="candle" x1="1225" y1="172" x2="1225" y2="110"></line>
-      <line class="candle alt" x1="1370" y1="120" x2="1370" y2="72"></line>
-      <line class="candle" x1="1510" y1="92" x2="1510" y2="50"></line>
+      <line class="candle" x1="85" y1="768" x2="85" y2="705"></line>
+      <line class="candle alt" x1="165" y1="702" x2="165" y2="625"></line>
+      <line class="candle" x1="255" y1="645" x2="255" y2="565"></line>
+      <line class="candle alt" x1="360" y1="582" x2="360" y2="500"></line>
+      <line class="candle" x1="470" y1="545" x2="470" y2="460"></line>
+      <line class="candle alt" x1="580" y1="490" x2="580" y2="405"></line>
+      <line class="candle" x1="700" y1="435" x2="700" y2="348"></line>
+      <line class="candle alt" x1="820" y1="360" x2="820" y2="275"></line>
+      <line class="candle" x1="935" y1="286" x2="935" y2="210"></line>
+      <line class="candle alt" x1="1060" y1="220" x2="1060" y2="150"></line>
+      <line class="candle" x1="1190" y1="160" x2="1190" y2="102"></line>
+      <line class="candle alt" x1="1330" y1="116" x2="1330" y2="76"></line>
+      <line class="candle" x1="1480" y1="92" x2="1480" y2="55"></line>
     </svg>
   </div>
 
@@ -381,108 +428,301 @@
 
   <main class="page">
     <section class="hero">
-      <div class="badge">Education Tools</div>
+      <div class="badge">Tools Suite</div>
       <h1>
         <span class="white">BullProsperity</span><br>
-        <span class="gold">Trading Lernjournal</span>
+        <span class="gold">Trading Tools</span>
       </h1>
       <p>
-        Dieses Tool dient ausschließlich zur Dokumentation von Marktbeobachtungen,
-        Setup-Ideen, Lernfortschritten und Regel-Disziplin innerhalb deiner Ausbildung.
-        Es handelt sich nicht um Finanzberatung, Anlageberatung oder eine konkrete Handelsempfehlung.
+        Nutze den Bereich für Marktbeobachtung, Risikologik, Lernjournal und saubere Struktur.
+        Alles ist im selben Premium-Stil aufgebaut wie dein Hub.
       </p>
+    </section>
 
-      <div class="education-note">
-        Alle Inhalte, Tools und Dokumentationen auf BullProsperity dienen ausschließlich zu Lern-,
-        Ausbildungs- und Analysezwecken. Es werden keine Kauf-, Verkaufs- oder Investmentempfehlungen gegeben.
+    <section class="grid-3">
+      <div class="card">
+        <div class="top-tag">Education Tool</div>
+        <h2>Lot Size Rechner</h2>
+        <p>
+          Berechne Risikobetrag, Stop-Loss-Abstand und eine beispielhafte Lot Size
+          zur Veranschaulichung von Risikomanagement und Positionsgröße.
+        </p>
+        <ul class="tool-list">
+          <li>Kontogröße und Risiko definieren</li>
+          <li>Entry und Stop Loss vergleichen</li>
+          <li>Beispielhafte Lot Size berechnen</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <div class="top-tag">Journal</div>
+        <h2>Automatisches Lernjournal</h2>
+        <p>
+          Speichere Marktideen, Setup-Typen, Fehler und Learnings automatisch lokal im Browser,
+          um deinen Ausbildungsfortschritt sauber zu dokumentieren.
+        </p>
+        <ul class="tool-list">
+          <li>Setups und Regeln dokumentieren</li>
+          <li>Fehler und Unsicherheiten analysieren</li>
+          <li>Fortschritt strukturiert nachvollziehen</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <div class="top-tag">Live Chart</div>
+        <h2>TradingView Marktübersicht</h2>
+        <p>
+          Nutze den Live Chart zur Veranschaulichung von Marktstruktur, Liquidity,
+          Entries und Setups im Rahmen deiner Education.
+        </p>
+        <ul class="tool-list">
+          <li>Marktbeobachtung in Echtzeit</li>
+          <li>Analyse von Struktur und Zonen</li>
+          <li>Sauber in den Hub integriert</li>
+        </ul>
       </div>
     </section>
 
-    <section class="grid">
+    <section class="grid-2">
       <div class="card">
-        <div class="badge">Lernbereich</div>
-        <h2>Was dieses Journal speichert</h2>
+        <div class="badge">Lot Size Rechner</div>
+        <h2>Risikologik & Positionsgröße</h2>
         <p>
-          Dokumentiere strukturiert, was du im Markt gesehen hast, welche Idee du hattest,
-          welche Regeln du eingehalten hast und was du daraus für deine Ausbildung mitnimmst.
+          Trage deine Daten ein und berechne eine beispielhafte Lot Size für dein Setup.
         </p>
 
-        <ul class="tool-list">
-          <li>Markt und Setup-Typ dokumentieren</li>
-          <li>Long-, Short- oder neutrale Idee festhalten</li>
-          <li>Fehler, Unsicherheiten und Regelbrüche analysieren</li>
-          <li>Lernfortschritt sauber strukturieren</li>
-          <li>Automatische Speicherung direkt im Browser</li>
-        </ul>
+        <div class="form-grid">
+          <div>
+            <label for="balance">Kontogröße</label>
+            <input type="number" id="balance" placeholder="z. B. 10000" />
+          </div>
 
-        <p class="footer-note">
-          Hinweis: Dieses Journal dient der Selbstanalyse und Lernstruktur.
-          Es ersetzt keine eigene Verantwortung und ist keine Handelsempfehlung.
-        </p>
+          <div>
+            <label for="riskPercent">Risiko in %</label>
+            <input type="number" id="riskPercent" placeholder="z. B. 1" step="0.1" />
+          </div>
+
+          <div>
+            <label for="entry">Entry Preis</label>
+            <input type="number" id="entry" placeholder="z. B. 2180.50" step="0.01" />
+          </div>
+
+          <div>
+            <label for="stoploss">Stop Loss Preis</label>
+            <input type="number" id="stoploss" placeholder="z. B. 2175.50" step="0.01" />
+          </div>
+
+          <div>
+            <label for="pipValue">Wert pro Punkt / Pip pro 1 Lot</label>
+            <input type="number" id="pipValue" placeholder="z. B. 10" step="0.01" />
+          </div>
+
+          <div>
+            <label for="marketType">Markt Typ</label>
+            <select id="marketType">
+              <option value="manual">Manuell</option>
+              <option value="forex">Forex Standard</option>
+              <option value="gold">Gold / XAUUSD Beispiel</option>
+              <option value="indices">Indices Beispiel</option>
+            </select>
+          </div>
+
+          <div class="btn-row">
+            <button class="btn btn-primary" onclick="calculateLotSize()">Berechnen</button>
+            <button class="btn btn-secondary" onclick="resetCalculator()">Zurücksetzen</button>
+          </div>
+        </div>
+
+        <div class="result-box">
+          <div class="result-item">
+            <div class="result-label">Risikobetrag</div>
+            <div class="result-value" id="riskAmountResult">–</div>
+            <div class="result-sub">Maximaler Beispielbetrag, der bei diesem Setup riskiert wird.</div>
+          </div>
+
+          <div class="result-item">
+            <div class="result-label">Abstand Entry zu SL</div>
+            <div class="result-value" id="distanceResult">–</div>
+            <div class="result-sub">Preisabstand zwischen Entry und Stop Loss.</div>
+          </div>
+
+          <div class="result-item">
+            <div class="result-label">Empfohlene Lot Size</div>
+            <div class="result-value" id="lotSizeResult">–</div>
+            <div class="result-sub">Ausbildungsbezogene Beispielrechnung für Positionsgröße.</div>
+          </div>
+        </div>
       </div>
 
       <div class="card">
-        <div class="badge">Journal Eingabe</div>
-        <h2>Neuen Eintrag erstellen</h2>
-        <p>Fülle die Felder aus und speichere deinen Lernjournal-Eintrag.</p>
+        <div class="badge">TradingView Chart</div>
+        <h2>Live Marktübersicht</h2>
+        <p>
+          Der Chart ist direkt im Tools-Bereich eingebunden und eignet sich ideal
+          für Marktbeobachtung, Strukturtraining und Setup-Visualisierung.
+        </p>
 
-        <form id="journalForm" class="journal-form">
-          <input type="date" id="tradeDate" required />
-          <input type="text" id="market" placeholder="Markt, z. B. XAUUSD oder NAS100" required />
-          <input type="text" id="setupType" placeholder="Setup-Typ, z. B. Liquidity Sweep" required />
+        <div class="tv-wrapper">
+          <div class="tradingview-widget-container">
+            <div id="tradingview_chart"></div>
+          </div>
+        </div>
+      </div>
+    </section>
 
-          <select id="direction" required>
+    <section class="card">
+      <div class="badge">Automatisches Journal</div>
+      <h2>Trading Lernjournal</h2>
+      <p>
+        Dokumentiere Marktideen, Setups, Fehler und Learnings sauber in deinem BullProsperity Journal.
+        Alle Einträge werden lokal in deinem Browser gespeichert.
+      </p>
+
+      <div class="form-grid">
+        <div>
+          <label for="tradeDate">Datum</label>
+          <input type="date" id="tradeDate" />
+        </div>
+
+        <div>
+          <label for="market">Markt</label>
+          <input type="text" id="market" placeholder="z. B. XAUUSD oder NAS100" />
+        </div>
+
+        <div>
+          <label for="setupType">Setup-Typ</label>
+          <input type="text" id="setupType" placeholder="z. B. Liquidity Sweep" />
+        </div>
+
+        <div>
+          <label for="direction">Richtung</label>
+          <select id="direction">
             <option value="">Richtung wählen</option>
             <option value="Long">Long</option>
             <option value="Short">Short</option>
             <option value="Neutral">Neutral</option>
           </select>
+        </div>
 
-          <textarea id="idea" placeholder="Was war deine Marktidee oder dein Analysegedanke?" required></textarea>
+        <div>
+          <label for="idea">Analyse-Idee</label>
+          <textarea id="idea" placeholder="Was war deine Marktidee oder dein Analysegedanke?"></textarea>
+        </div>
+
+        <div>
+          <label for="mistake">Fehler / Unsicherheiten</label>
           <textarea id="mistake" placeholder="Welche Fehler, Unsicherheiten oder Regelverstöße gab es?"></textarea>
-          <textarea id="lesson" placeholder="Was hast du daraus gelernt?" required></textarea>
+        </div>
 
-          <select id="ruleFollowed" required>
-            <option value="">Regeln eingehalten?</option>
+        <div>
+          <label for="lesson">Lektion / Learning</label>
+          <textarea id="lesson" placeholder="Was hast du aus diesem Setup gelernt?"></textarea>
+        </div>
+
+        <div>
+          <label for="ruleFollowed">Regeln eingehalten?</label>
+          <select id="ruleFollowed">
+            <option value="">Auswählen</option>
             <option value="Ja">Ja</option>
-            <option value="Nein">Nein</option>
             <option value="Teilweise">Teilweise</option>
+            <option value="Nein">Nein</option>
           </select>
+        </div>
 
-          <div class="btn-row">
-            <button type="submit" class="btn btn-primary">Eintrag speichern</button>
-            <button type="button" class="btn btn-secondary" id="clearEntries">Alle Einträge löschen</button>
-          </div>
-        </form>
-      </div>
-    </section>
-
-    <section class="card" style="margin-top: 24px;">
-      <div class="badge">Automatisches Journal</div>
-      <h2>Gespeicherte Einträge</h2>
-      <p>
-        Deine Einträge werden lokal in deinem Browser gespeichert. So kannst du deine Lernentwicklung
-        und Setups jederzeit nachvollziehen.
-      </p>
-
-      <div class="education-note">
-        Auch gespeicherte Einträge dienen ausschließlich zu Ausbildungs-, Reflexions- und Analysezwecken.
-        Sie sind keine Performance-Garantie und keine Finanzberatung.
+        <div class="btn-row">
+          <button class="btn btn-primary" onclick="saveJournalEntry()">Eintrag speichern</button>
+          <button class="btn btn-secondary" onclick="clearJournalEntries()">Alle Einträge löschen</button>
+        </div>
       </div>
 
       <div id="journalEntries" class="journal-entries"></div>
     </section>
   </main>
 
-  <footer>
-    © 2026 BullProsperity FX. Alle Inhalte dienen ausschließlich zu Lern- und Ausbildungszwecken.
-  </footer>
+  <div class="footer-note">
+    Alle Inhalte auf BullProsperity dienen ausschließlich zu Ausbildungs-, Lern- und Analysezwecken.
+    Es handelt sich nicht um Finanzberatung, Anlageberatung oder konkrete Handelsempfehlungen.
+    Alle Tools, Charts und Journal-Funktionen dienen ausschließlich der Education und Selbstanalyse.
+  </div>
 
-  <script>
-    const form = document.getElementById("journalForm");
-    const entriesBox = document.getElementById("journalEntries");
-    const clearButton = document.getElementById("clearEntries");
+  <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+  <script type="text/javascript">
+    new TradingView.widget({
+      width: "100%",
+      height: 540,
+      symbol: "OANDA:XAUUSD",
+      interval: "15",
+      timezone: "Europe/Berlin",
+      theme: "dark",
+      style: "1",
+      locale: "de",
+      toolbar_bg: "#0f0f0f",
+      enable_publishing: false,
+      hide_top_toolbar: false,
+      hide_legend: false,
+      save_image: false,
+      container_id: "tradingview_chart"
+    });
+
+    const marketType = document.getElementById("marketType");
+    const pipValueInput = document.getElementById("pipValue");
+
+    marketType.addEventListener("change", function () {
+      if (this.value === "forex") {
+        pipValueInput.value = 10;
+      } else if (this.value === "gold") {
+        pipValueInput.value = 10;
+      } else if (this.value === "indices") {
+        pipValueInput.value = 1;
+      }
+    });
+
+    function calculateLotSize() {
+      const balance = parseFloat(document.getElementById("balance").value);
+      const riskPercent = parseFloat(document.getElementById("riskPercent").value);
+      const entry = parseFloat(document.getElementById("entry").value);
+      const stoploss = parseFloat(document.getElementById("stoploss").value);
+      const pipValue = parseFloat(document.getElementById("pipValue").value);
+
+      if (
+        isNaN(balance) ||
+        isNaN(riskPercent) ||
+        isNaN(entry) ||
+        isNaN(stoploss) ||
+        isNaN(pipValue) ||
+        balance <= 0 ||
+        riskPercent <= 0 ||
+        pipValue <= 0 ||
+        entry === stoploss
+      ) {
+        alert("Bitte gib gültige Werte ein.");
+        return;
+      }
+
+      const riskAmount = balance * (riskPercent / 100);
+      const distance = Math.abs(entry - stoploss);
+      const lotSize = riskAmount / (distance * pipValue);
+
+      document.getElementById("riskAmountResult").textContent = riskAmount.toFixed(2) + " $";
+      document.getElementById("distanceResult").textContent = distance.toFixed(2);
+      document.getElementById("lotSizeResult").textContent = lotSize.toFixed(2) + " Lot";
+    }
+
+    function resetCalculator() {
+      document.getElementById("balance").value = "";
+      document.getElementById("riskPercent").value = "";
+      document.getElementById("entry").value = "";
+      document.getElementById("stoploss").value = "";
+      document.getElementById("pipValue").value = "";
+      document.getElementById("marketType").value = "manual";
+
+      document.getElementById("riskAmountResult").textContent = "–";
+      document.getElementById("distanceResult").textContent = "–";
+      document.getElementById("lotSizeResult").textContent = "–";
+    }
+
     const storageKey = "bpJournalEntries";
+    const entriesBox = document.getElementById("journalEntries");
 
     function escapeHtml(text) {
       const div = document.createElement("div");
@@ -490,14 +730,14 @@
       return div.innerHTML;
     }
 
-    function loadEntries() {
+    function renderJournalEntries() {
       const entries = JSON.parse(localStorage.getItem(storageKey) || "[]");
       entriesBox.innerHTML = "";
 
       if (!entries.length) {
         entriesBox.innerHTML = `
           <div class="empty-state">
-            Noch keine Einträge vorhanden. Erstelle deinen ersten Journal-Eintrag, um deinen Lernfortschritt festzuhalten.
+            Noch keine Journal-Einträge vorhanden. Speichere deinen ersten Eintrag.
           </div>
         `;
         return;
@@ -517,43 +757,62 @@
           <h3>${escapeHtml(entry.market)} – ${escapeHtml(entry.setupType)}</h3>
           <p><strong>Analyse-Idee:</strong> ${escapeHtml(entry.idea)}</p>
           <p><strong>Fehler / Unsicherheiten:</strong> ${escapeHtml(entry.mistake || "-")}</p>
-          <p><strong>Lektion:</strong> ${escapeHtml(entry.lesson)}</p>
+          <p><strong>Lektion / Learning:</strong> ${escapeHtml(entry.lesson)}</p>
         `;
         entriesBox.appendChild(card);
       });
     }
 
-    form.addEventListener("submit", function (e) {
-      e.preventDefault();
+    function saveJournalEntry() {
+      const tradeDate = document.getElementById("tradeDate").value;
+      const market = document.getElementById("market").value.trim();
+      const setupType = document.getElementById("setupType").value.trim();
+      const direction = document.getElementById("direction").value;
+      const idea = document.getElementById("idea").value.trim();
+      const mistake = document.getElementById("mistake").value.trim();
+      const lesson = document.getElementById("lesson").value.trim();
+      const ruleFollowed = document.getElementById("ruleFollowed").value;
+
+      if (!tradeDate || !market || !setupType || !direction || !idea || !lesson || !ruleFollowed) {
+        alert("Bitte fülle alle wichtigen Felder aus.");
+        return;
+      }
 
       const newEntry = {
-        tradeDate: document.getElementById("tradeDate").value,
-        market: document.getElementById("market").value.trim(),
-        setupType: document.getElementById("setupType").value.trim(),
-        direction: document.getElementById("direction").value,
-        idea: document.getElementById("idea").value.trim(),
-        mistake: document.getElementById("mistake").value.trim(),
-        lesson: document.getElementById("lesson").value.trim(),
-        ruleFollowed: document.getElementById("ruleFollowed").value
+        tradeDate,
+        market,
+        setupType,
+        direction,
+        idea,
+        mistake,
+        lesson,
+        ruleFollowed
       };
 
       const entries = JSON.parse(localStorage.getItem(storageKey) || "[]");
       entries.push(newEntry);
       localStorage.setItem(storageKey, JSON.stringify(entries));
 
-      form.reset();
-      loadEntries();
-    });
+      document.getElementById("tradeDate").value = "";
+      document.getElementById("market").value = "";
+      document.getElementById("setupType").value = "";
+      document.getElementById("direction").value = "";
+      document.getElementById("idea").value = "";
+      document.getElementById("mistake").value = "";
+      document.getElementById("lesson").value = "";
+      document.getElementById("ruleFollowed").value = "";
 
-    clearButton.addEventListener("click", function () {
-      const confirmDelete = confirm("Möchtest du wirklich alle Journal-Einträge löschen?");
-      if (!confirmDelete) return;
+      renderJournalEntries();
+    }
 
+    function clearJournalEntries() {
+      const confirmed = confirm("Möchtest du wirklich alle Journal-Einträge löschen?");
+      if (!confirmed) return;
       localStorage.removeItem(storageKey);
-      loadEntries();
-    });
+      renderJournalEntries();
+    }
 
-    loadEntries();
+    renderJournalEntries();
   </script>
 </body>
 </html>
