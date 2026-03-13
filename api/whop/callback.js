@@ -30,6 +30,19 @@ export default async function handler(req, res) {
   });
 
   const tokenData = await tokenRes.json();
+  const access_token = tokenData.access_token;
+
+const userRes = await fetch("https://api.whop.com/v5/me", {
+  headers: {
+    Authorization: `Bearer ${access_token}`
+  }
+});
+
+const userData = await userRes.json();
+
+const hasMembership = userData.memberships?.some(
+  m => m.product?.name === "BullProsperity"
+);
 
   if (!tokenRes.ok) {
     return res.status(500).send(`Token error: ${JSON.stringify(tokenData)}`);
@@ -42,6 +55,10 @@ export default async function handler(req, res) {
     `whop_access_token=${accessToken}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=604800`
   );
 
-  res.redirect("/hub.html");
+  if (hasMembership) {
+  return res.redirect("/hub.html");
+} else {
+  return res.redirect("/locked.html");
+}
 
 }
