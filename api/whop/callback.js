@@ -3,7 +3,9 @@ export default async function handler(req, res) {
     const { code, state } = req.query;
 
     if (!code) {
-      return res.status(400).json({ error: "Missing OAuth code" });
+      return res.status(400).json({
+        error: "Missing OAuth code"
+      });
     }
 
     const clientId = process.env.WHOP_CLIENT_ID;
@@ -11,18 +13,23 @@ export default async function handler(req, res) {
     const redirectUri = process.env.WHOP_REDIRECT_URI;
 
     const cookie = req.headers.cookie || "";
+
     const verifierMatch = cookie.match(/whop_verifier=([^;]+)/);
     const stateMatch = cookie.match(/whop_state=([^;]+)/);
 
-    const codeVerifier = verifierMatch ? verifierMatch[1] : null;
-    const storedState = stateMatch ? stateMatch[1] : null;
+    const codeVerifier = verifierMatch ? decodeURIComponent(verifierMatch[1]) : null;
+    const storedState = stateMatch ? decodeURIComponent(stateMatch[1]) : null;
 
     if (!codeVerifier) {
-      return res.status(400).json({ error: "Missing code verifier" });
+      return res.status(400).json({
+        error: "Missing code verifier"
+      });
     }
 
     if (!state || !storedState || state !== storedState) {
-      return res.status(400).json({ error: "Invalid OAuth state" });
+      return res.status(400).json({
+        error: "Invalid OAuth state"
+      });
     }
 
     const tokenRes = await fetch("https://api.whop.com/oauth/token", {
@@ -52,7 +59,6 @@ export default async function handler(req, res) {
 
     const accessToken = tokenData.access_token;
 
-    // Userinfo holen
     const userInfoRes = await fetch("https://api.whop.com/oauth/userinfo", {
       headers: {
         Authorization: `Bearer ${accessToken}`
@@ -71,7 +77,6 @@ export default async function handler(req, res) {
 
     const email = (userInfo.email || "").toLowerCase();
 
-    // Memberships holen
     const membershipRes = await fetch("https://api.whop.com/api/v5/memberships", {
       headers: {
         Authorization: `Bearer ${accessToken}`
@@ -104,11 +109,15 @@ export default async function handler(req, res) {
       role = "admin";
     } else if (activeMemberships.length > 0) {
       role = "premium";
+    } else {
+      role = "guest";
     }
 
     res.setHeader("Set-Cookie", [
       `bp_role=${encodeURIComponent(role)}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=86400`,
-      `bp_email=${encodeURIComponent(email)}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=86400`
+      `bp_email=${encodeURIComponent(email)}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=86400`,
+      `whop_verifier=; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=0`,
+      `whop_state=; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=0`
     ]);
 
     return res.redirect("/hub.html");
