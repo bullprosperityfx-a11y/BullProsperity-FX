@@ -39,10 +39,22 @@ const userRes = await fetch("https://api.whop.com/v5/me", {
 });
 
 const userData = await userRes.json();
+  const allowedProducts = [
+  "BullProsperity SMC Mastery",
+  "BullProsperity Swing Trading",
+  "BP FX",
+  "EL SOLDADO SIGNALS",
+  "BullProsperity Login"
+];
 
 const hasMembership = userData.memberships?.some(
-  m => m.product?.name === "BullProsperity SMC Mastery"
+  m => allowedProducts.includes(m.product?.name)
 );
+if (hasMembership) {
+  return res.redirect("https://bull-prosperity-fx.vercel.app/hub.html");
+} else {
+  return res.redirect("https://bull-prosperity-fx.vercel.app/locked.html");
+}
 
   if (!tokenRes.ok) {
     return res.status(500).send(`Token error: ${JSON.stringify(tokenData)}`);
