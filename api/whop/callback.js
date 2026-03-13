@@ -48,13 +48,12 @@ module.exports = async function handler(req, res) {
     const accessToken = tokenData.access_token;
 
     // User-Profil laden
-    const userRes = await fetch("https://api.whop.com/v5/me", {
-      headers: {
-        Authorization: `Bearer ${accessToken}`
-      }
-    });
-
-    const userData = await userRes.json();
+   const email =
+  userData?.email ||
+  userData?.user?.email ||
+  userData?.user?.primary_email ||
+  userData?.data?.email ||
+  "";
 
     const email =
   userData?.email?.toLowerCase() ||
