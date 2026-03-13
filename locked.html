@@ -5,357 +5,96 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>BullProsperity Locked Access</title>
   <style>
-    *{
-      margin:0;
-      padding:0;
-      box-sizing:border-box;
-    }
-
+    *{margin:0;padding:0;box-sizing:border-box;}
     :root{
-      --bg:#060606;
-      --panel:rgba(18,18,18,0.82);
-      --panel-2:rgba(10,10,10,0.92);
-      --gold:#ffd700;
-      --gold-2:#ffbf00;
-      --text:#f3f3f3;
-      --muted:#cfcfcf;
-      --line:rgba(255,255,255,0.06);
-      --gold-line:rgba(255,215,0,0.16);
+      --bg:#060606;--gold:#ffd700;--gold-2:#ffbf00;--text:#f3f3f3;
+      --line:rgba(255,255,255,0.06);--gold-line:rgba(255,215,0,0.16);
     }
-
     body{
-      font-family:Arial, Helvetica, sans-serif;
-      background:var(--bg);
-      color:var(--text);
-      overflow-x:hidden;
-      min-height:100vh;
-      position:relative;
+      font-family:Arial, Helvetica, sans-serif;background:var(--bg);color:var(--text);
+      overflow-x:hidden;min-height:100vh;position:relative;
     }
-
     body::before{
-      content:"";
-      position:fixed;
-      inset:0;
+      content:"";position:fixed;inset:0;
       background:
         radial-gradient(circle at 20% 15%, rgba(255,215,0,0.10), transparent 24%),
         radial-gradient(circle at 84% 75%, rgba(255,215,0,0.07), transparent 22%),
         linear-gradient(180deg, rgba(6,6,6,0.84), rgba(6,6,6,0.96));
       z-index:-5;
-      pointer-events:none;
     }
-
     .grid-overlay{
-      position:fixed;
-      inset:0;
-      z-index:-4;
-      pointer-events:none;
-      opacity:0.10;
+      position:fixed;inset:0;z-index:-4;opacity:0.10;pointer-events:none;
       background-image:
         linear-gradient(to right, rgba(255,255,255,0.05) 1px, transparent 1px),
         linear-gradient(to bottom, rgba(255,255,255,0.05) 1px, transparent 1px);
       background-size:64px 64px;
-      mask-image:linear-gradient(to bottom, rgba(0,0,0,0.95), rgba(0,0,0,0.45));
     }
-
-    .chart-bg{
-      position:fixed;
-      inset:0;
-      z-index:-3;
-      pointer-events:none;
-      overflow:hidden;
-      opacity:0.50;
-    }
-
-    .chart-svg{
-      position:absolute;
-      inset:0;
-      width:100%;
-      height:100%;
-    }
-
-    .chart-line{
-      fill:none;
-      stroke:rgba(255,215,0,0.40);
-      stroke-width:3.5;
-      stroke-linecap:round;
-      stroke-linejoin:round;
-    }
-
-    .chart-line-2{
-      fill:none;
-      stroke:rgba(255,255,255,0.14);
-      stroke-width:2;
-    }
-
-    .candle{
-      fill:rgba(255,215,0,0.22);
-      stroke:rgba(255,215,0,0.55);
-      stroke-width:1.3;
-    }
-
-    .candle.alt{
-      fill:rgba(255,255,255,0.07);
-      stroke:rgba(255,255,255,0.22);
-    }
-
-    .floating-glow{
-      position:absolute;
-      width:420px;
-      height:420px;
-      border-radius:50%;
-      background:radial-gradient(circle, rgba(255,215,0,0.08), transparent 68%);
-      filter:blur(22px);
-    }
-
-    .floating-glow.one{
-      top:6%;
-      left:-8%;
-    }
-
-    .floating-glow.two{
-      bottom:-8%;
-      right:-6%;
-    }
-
+    .chart-bg{position:fixed;inset:0;z-index:-3;opacity:0.50;pointer-events:none;}
+    .chart-svg{position:absolute;inset:0;width:100%;height:100%;}
+    .chart-line{fill:none;stroke:rgba(255,215,0,0.40);stroke-width:3.5;stroke-linecap:round;stroke-linejoin:round;}
+    .chart-line-2{fill:none;stroke:rgba(255,255,255,0.14);stroke-width:2;}
+    .candle{fill:rgba(255,215,0,0.22);stroke:rgba(255,215,0,0.55);stroke-width:1.3;}
+    .candle.alt{fill:rgba(255,255,255,0.07);stroke:rgba(255,255,255,0.22);}
     header{
-      position:sticky;
-      top:0;
-      z-index:30;
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      padding:22px 7%;
-      background:rgba(5,5,5,0.62);
-      backdrop-filter:blur(12px);
+      position:sticky;top:0;z-index:30;display:flex;justify-content:space-between;align-items:center;
+      padding:22px 7%;background:rgba(5,5,5,0.62);backdrop-filter:blur(12px);
       border-bottom:1px solid var(--line);
     }
-
-    .logo{
-      font-size:34px;
-      font-weight:800;
-      color:var(--gold);
-      letter-spacing:0.4px;
-      text-shadow:0 0 14px rgba(255,215,0,0.18);
-    }
-
-    nav{
-      display:flex;
-      gap:24px;
-      flex-wrap:wrap;
-    }
-
-    nav a{
-      color:#fff;
-      text-decoration:none;
-      font-size:15px;
-      font-weight:700;
-      transition:0.25s ease;
-    }
-
-    nav a:hover{
-      color:var(--gold);
-    }
-
-    .wrap{
-      min-height:calc(100vh - 90px);
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      padding:40px 20px 60px;
-    }
-
-    .locked-box{
-      width:min(860px, 100%);
-      border-radius:32px;
-      background:linear-gradient(180deg, rgba(18,18,18,0.78), rgba(8,8,8,0.92));
-      border:1px solid var(--gold-line);
-      box-shadow:0 26px 70px rgba(0,0,0,0.35);
-      backdrop-filter:blur(12px);
-      padding:44px 34px;
-      text-align:center;
-      position:relative;
-      overflow:hidden;
-    }
-
-    .locked-box::before{
-      content:"";
-      position:absolute;
-      top:-90px;
-      right:-90px;
-      width:260px;
-      height:260px;
-      border-radius:50%;
-      background:radial-gradient(circle, rgba(255,215,0,0.09), transparent 70%);
-      pointer-events:none;
-    }
-
-    .lock-circle{
-      width:118px;
-      height:118px;
-      margin:0 auto 24px;
-      border-radius:50%;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      font-size:48px;
-      color:var(--gold);
-      background:rgba(255,215,0,0.06);
-      border:1px solid rgba(255,215,0,0.24);
-      box-shadow:0 0 30px rgba(255,215,0,0.08);
-    }
-
-    .badge{
-      display:inline-block;
-      margin-bottom:18px;
-      padding:9px 16px;
-      border-radius:999px;
-      border:1px solid rgba(255,215,0,0.24);
-      background:rgba(255,215,0,0.05);
-      color:var(--gold);
-      font-size:12px;
-      font-weight:800;
-      letter-spacing:0.4px;
-    }
-
-    h1{
-      font-size:48px;
-      line-height:1.05;
-      margin-bottom:14px;
-    }
-
-    h1 .white{
-      color:#fff;
-    }
-
-    h1 .gold{
-      color:var(--gold);
-    }
-
-    .lead{
-      max-width:700px;
-      margin:0 auto 14px;
-      color:#e7e7e7;
-      line-height:1.8;
-      font-size:17px;
-    }
-
-    .info-box{
-      margin:30px auto 0;
-      max-width:690px;
-      padding:24px;
-      border-radius:22px;
-      background:rgba(255,255,255,0.03);
-      border:1px solid rgba(255,255,255,0.06);
-      text-align:left;
-    }
-
-    .info-box h3{
-      color:var(--gold);
-      font-size:24px;
-      margin-bottom:14px;
-    }
-
-    .info-box ul{
-      padding-left:18px;
-    }
-
-    .info-box li{
-      color:#dfdfdf;
-      line-height:1.8;
-      margin-bottom:8px;
-    }
-
-    .button-row{
-      margin-top:30px;
-      display:flex;
-      justify-content:center;
-      gap:14px;
-      flex-wrap:wrap;
-    }
-
+    .logo{font-size:34px;font-weight:800;color:var(--gold);text-shadow:0 0 14px rgba(255,215,0,0.18);}
+    nav{display:flex;gap:24px;flex-wrap:wrap;}
+    nav a{color:#fff;text-decoration:none;font-size:15px;font-weight:700;transition:.25s ease;}
+    nav a:hover{color:var(--gold);}
     .btn{
-      display:inline-block;
-      padding:14px 22px;
-      border-radius:12px;
-      text-decoration:none;
-      font-weight:800;
-      font-size:15px;
-      transition:0.25s ease;
+      display:inline-block;padding:14px 22px;border-radius:12px;text-decoration:none;
+      font-weight:800;font-size:15px;transition:.25s ease;
     }
-
-    .btn-gold{
-      background:linear-gradient(45deg,var(--gold),var(--gold-2));
-      color:#111;
-      box-shadow:0 0 18px rgba(255,215,0,0.20);
+    .btn-gold{background:linear-gradient(45deg,var(--gold),var(--gold-2));color:#111;box-shadow:0 0 18px rgba(255,215,0,0.20);}
+    .btn-gold:hover{transform:translateY(-2px);box-shadow:0 0 26px rgba(255,215,0,0.30);}
+    .btn-outline{border:1px solid rgba(255,215,0,0.30);color:var(--gold);background:rgba(255,215,0,0.04);}
+    .btn-outline:hover{transform:translateY(-2px);background:rgba(255,215,0,0.08);}
+    .btn-dark{background:rgba(255,255,255,0.03);color:#fff;border:1px solid rgba(255,255,255,0.08);}
+    .btn-dark:hover{transform:translateY(-2px);border-color:rgba(255,215,0,0.22);color:var(--gold);}
+    .wrap{
+      min-height:calc(100vh - 90px);display:flex;align-items:center;justify-content:center;padding:40px 20px 60px;
     }
-
-    .btn-gold:hover{
-      transform:translateY(-2px);
-      box-shadow:0 0 26px rgba(255,215,0,0.30);
+    .locked-box{
+      width:min(860px, 100%);border-radius:32px;background:linear-gradient(180deg, rgba(18,18,18,0.78), rgba(8,8,8,0.92));
+      border:1px solid var(--gold-line);padding:44px 34px;text-align:center;
     }
-
-    .btn-outline{
-      border:1px solid rgba(255,215,0,0.30);
-      color:var(--gold);
-      background:rgba(255,215,0,0.04);
+    .lock-circle{
+      width:118px;height:118px;margin:0 auto 24px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+      font-size:48px;color:var(--gold);background:rgba(255,215,0,0.06);border:1px solid rgba(255,215,0,0.24);
     }
-
-    .btn-outline:hover{
-      transform:translateY(-2px);
-      background:rgba(255,215,0,0.08);
+    .badge{
+      display:inline-block;margin-bottom:18px;padding:9px 16px;border-radius:999px;
+      border:1px solid rgba(255,215,0,0.24);background:rgba(255,215,0,0.05);color:var(--gold);
+      font-size:12px;font-weight:800;
     }
-
-    .btn-dark{
-      background:rgba(255,255,255,0.03);
-      color:#fff;
-      border:1px solid rgba(255,255,255,0.08);
+    h1{font-size:48px;line-height:1.05;margin-bottom:14px;}
+    h1 .white{color:#fff;}
+    h1 .gold{color:var(--gold);}
+    .lead{max-width:700px;margin:0 auto 14px;color:#e7e7e7;line-height:1.8;font-size:17px;}
+    .info-box{
+      margin:30px auto 0;max-width:690px;padding:24px;border-radius:22px;
+      background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);text-align:left;
     }
-
-    .btn-dark:hover{
-      transform:translateY(-2px);
-      border-color:rgba(255,215,0,0.22);
-      color:var(--gold);
-    }
-
-    footer{
-      text-align:center;
-      padding:30px 20px 40px;
-      color:#9d9d9d;
-      border-top:1px solid rgba(255,255,255,0.06);
-      background:rgba(0,0,0,0.28);
-    }
-
+    .info-box h3{color:var(--gold);font-size:24px;margin-bottom:14px;}
+    .info-box ul{padding-left:18px;}
+    .info-box li{color:#dfdfdf;line-height:1.8;margin-bottom:8px;}
+    .button-row{margin-top:30px;display:flex;justify-content:center;gap:14px;flex-wrap:wrap;}
+    footer{text-align:center;padding:30px 20px 40px;color:#9d9d9d;border-top:1px solid rgba(255,255,255,0.06);background:rgba(0,0,0,0.28);}
     @media (max-width:700px){
-      header{
-        flex-direction:column;
-        gap:14px;
-      }
-
-      .logo{
-        font-size:28px;
-      }
-
-      h1{
-        font-size:36px;
-      }
-
-      .lead{
-        font-size:16px;
-      }
-
-      .locked-box{
-        padding:34px 22px;
-      }
+      header{flex-direction:column;gap:14px;}
+      .logo{font-size:28px;}
+      h1{font-size:36px;}
+      .lead{font-size:16px;}
+      .locked-box{padding:34px 22px;}
     }
   </style>
 </head>
 <body>
-
   <div class="grid-overlay"></div>
-
   <div class="chart-bg">
-    <div class="floating-glow one"></div>
-    <div class="floating-glow two"></div>
     <svg class="chart-svg" viewBox="0 0 1600 900" preserveAspectRatio="none">
       <path class="chart-line-2" d="M0,620 C120,600 180,540 260,560 C340,580 420,500 500,470 C610,425 680,470 760,390 C840,315 900,345 980,280 C1080,200 1170,240 1260,185 C1360,124 1460,155 1600,90" />
       <path class="chart-line" d="M0,700 C90,670 140,710 230,640 C320,570 390,610 470,520 C560,420 640,500 730,430 C820,360 900,390 995,290 C1090,190 1180,230 1290,145 C1390,67 1470,105 1600,40" />
@@ -384,6 +123,7 @@
       <a href="/api/whop/protect-hub">Hub</a>
       <a href="/api/whop/protect-course">Course</a>
       <a href="/api/whop/protect-tools">Tools</a>
+      <a href="/api/whop/login">Login</a>
     </nav>
   </header>
 
@@ -392,10 +132,7 @@
       <div class="lock-circle">🔒</div>
       <div class="badge">Exklusiver Mitgliederbereich</div>
 
-      <h1>
-        <span class="white">Zugang</span><br>
-        <span class="gold">gesperrt</span>
-      </h1>
+      <h1><span class="white">Zugang</span><br><span class="gold">gesperrt</span></h1>
 
       <p class="lead">
         Dieser Bereich ist nur für Mitglieder mit aktivem Zugang verfügbar.
@@ -430,6 +167,5 @@
   <footer>
     © 2026 BullProsperity FX. Alle Rechte vorbehalten.
   </footer>
-
 </body>
 </html>
