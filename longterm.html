@@ -35,6 +35,8 @@
       --white: #ffffff;
       --text: #e7e7e7;
       --muted: #d6d6d6;
+      --card: rgba(14, 14, 14, 0.95);
+      --card-2: rgba(18, 18, 18, 0.92);
     }
 
     body {
@@ -159,7 +161,11 @@
     .hero-wrap {
       width: min(1180px, 100%);
       margin: 0 auto;
-      padding: 42px 40px 34px;
+      padding: 48px 42px 36px;
+      background:
+        radial-gradient(circle at top left, rgba(255, 215, 0, 0.12), transparent 28%),
+        radial-gradient(circle at bottom right, rgba(255, 215, 0, 0.05), transparent 24%),
+        linear-gradient(180deg, rgba(13,13,13,0.98), rgba(9,9,9,0.96));
     }
 
     .card,
@@ -185,8 +191,8 @@
     }
 
     .hero-title {
-      font-size: clamp(2.8rem, 5vw, 5.4rem);
-      line-height: 0.95;
+      font-size: clamp(3rem, 5vw, 5.8rem);
+      line-height: 0.92;
       font-weight: 900;
       letter-spacing: -0.04em;
       margin-bottom: 18px;
@@ -202,10 +208,10 @@
     }
 
     .hero-text {
-      max-width: 930px;
+      max-width: 960px;
       margin: 0 auto;
       font-size: 1rem;
-      line-height: 1.75;
+      line-height: 1.8;
       color: #ededed;
     }
 
@@ -214,7 +220,7 @@
       justify-content: center;
       gap: 14px;
       flex-wrap: wrap;
-      margin-top: 24px;
+      margin-top: 26px;
     }
 
     .btn-row.left {
@@ -222,7 +228,7 @@
     }
 
     .btn {
-      min-width: 165px;
+      min-width: 170px;
       display: inline-flex;
       justify-content: center;
       align-items: center;
@@ -267,6 +273,12 @@
     .grid-4 {
       display: grid;
       grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 18px;
     }
 
@@ -319,6 +331,84 @@
       font-weight: 600;
     }
 
+    .highlight-card {
+      background:
+        radial-gradient(circle at top left, rgba(255, 215, 0, 0.12), transparent 24%),
+        linear-gradient(180deg, rgba(18,18,18,0.98), rgba(11,11,11,0.97));
+      border: 1px solid rgba(255, 215, 0, 0.18);
+      box-shadow:
+        0 0 0 1px rgba(255,255,255,0.03),
+        0 24px 50px rgba(0,0,0,0.32);
+    }
+
+    .allocation-grid {
+      display: grid;
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .allocation-row {
+      display: grid;
+      grid-template-columns: 150px 1fr 70px;
+      align-items: center;
+      gap: 14px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,215,0,0.10);
+      border-radius: 16px;
+      padding: 14px;
+    }
+
+    .allocation-label {
+      color: #ffffff;
+      font-weight: 700;
+    }
+
+    .allocation-bar {
+      height: 12px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.06);
+      overflow: hidden;
+      border: 1px solid rgba(255,215,0,0.08);
+    }
+
+    .allocation-fill {
+      height: 100%;
+      border-radius: 999px;
+      background: linear-gradient(135deg, #ffe15b, #f0b90b);
+    }
+
+    .allocation-value {
+      color: var(--gold);
+      font-weight: 900;
+      text-align: right;
+    }
+
+    .faq-list {
+      display: grid;
+      gap: 14px;
+      margin-top: 16px;
+    }
+
+    .faq-item {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,215,0,0.10);
+      border-radius: 18px;
+      padding: 16px;
+    }
+
+    .faq-item h4 {
+      color: var(--gold);
+      font-size: 1rem;
+      margin-bottom: 8px;
+      font-weight: 800;
+    }
+
+    .faq-item p {
+      font-size: 0.93rem;
+      line-height: 1.65;
+      color: #ededed;
+    }
+
     .stats-grid {
       display: grid;
       grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -345,6 +435,68 @@
       color: var(--gold);
       font-size: 1.15rem;
       font-weight: 900;
+    }
+
+    input,
+    select,
+    textarea {
+      width: 100%;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255, 215, 0, 0.12);
+      color: #ffffff;
+      border-radius: 16px;
+      padding: 14px 14px;
+      font-size: 0.95rem;
+      outline: none;
+    }
+
+    textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      border-color: rgba(255, 215, 0, 0.32);
+      box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.05);
+    }
+
+    .watchlist-list {
+      display: grid;
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .watchlist-item {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,215,0,0.10);
+      border-radius: 18px;
+      padding: 16px;
+    }
+
+    .watchlist-item h4 {
+      color: var(--gold);
+      font-size: 1rem;
+      margin-bottom: 8px;
+      font-weight: 800;
+    }
+
+    .watchlist-item p {
+      font-size: 0.92rem;
+      line-height: 1.6;
+      color: #ededed;
+      margin: 4px 0;
+    }
+
+    .watchlist-item button {
+      margin-top: 10px;
+      background: none;
+      border: 1px solid rgba(255,215,0,0.25);
+      color: #fff;
+      padding: 8px 12px;
+      border-radius: 10px;
+      cursor: pointer;
     }
 
     .center-note {
@@ -374,9 +526,18 @@
 
     @media (max-width: 1100px) {
       .grid-4,
+      .grid-3,
       .grid-2,
       .stats-grid {
         grid-template-columns: 1fr;
+      }
+
+      .allocation-row {
+        grid-template-columns: 1fr;
+      }
+
+      .allocation-value {
+        text-align: left;
       }
 
       .page-shell {
@@ -469,8 +630,8 @@
         </div>
 
         <p class="hero-text">
-          Dieser Bereich ist auf langfristiges Denken aufgebaut. Statt kurzfristiger Hektik geht es hier
-          um Vermögensaufbau, Struktur, Geduld und strategische Entscheidungen über Jahre hinweg.
+          Dieser Bereich fühlt sich bewusst wie eine eigene Investment-Unterseite an. Fokus:
+          Vermögensaufbau, Geduld, Struktur, Diversifikation und langfristige Entscheidungen.
         </p>
 
         <div class="btn-row">
@@ -485,37 +646,29 @@
         <div class="card">
           <div class="top-tag">ETFs</div>
           <h3>ETF Education</h3>
-          <p>
-            Lerne, wie ETFs funktionieren und warum sie für viele Anleger der Kern eines
-            strukturierten Langfrist-Portfolios sind.
-          </p>
+          <p>Breite Streuung und saubere Grundstruktur für langfristigen Kapitalaufbau.</p>
           <ul class="topic-list">
-            <li>Breite Diversifikation</li>
-            <li>Langfristige Sparpläne</li>
+            <li>Welt-ETFs verstehen</li>
+            <li>Sparplan-Logik</li>
             <li>Indexbasiertes Investieren</li>
           </ul>
         </div>
 
-        <div class="card">
+        <div class="card highlight-card">
           <div class="top-tag">Aktien</div>
-          <h3>Aktien Bildung</h3>
-          <p>
-            Verstehe Qualitätsunternehmen, Bewertung, Sektoren und langfristige Perspektiven
-            beim Investieren in Einzelaktien.
-          </p>
+          <h3>NVIDIA Fokus</h3>
+          <p>NVIDIA statt Apple als Beispielwert für starke Marktstellung, Wachstum und Zukunftsrelevanz.</p>
           <ul class="topic-list">
-            <li>Unternehmensqualität</li>
-            <li>Wachstum vs. Value</li>
-            <li>Geduld statt Aktionismus</li>
+            <li>Wachstumsstory verstehen</li>
+            <li>Bewertung richtig einordnen</li>
+            <li>Langfristige Perspektive prüfen</li>
           </ul>
         </div>
 
         <div class="card">
           <div class="top-tag">Krypto</div>
           <h3>Krypto Grundlagen</h3>
-          <p>
-            Lerne, wie du Krypto im Long-Term-Kontext einordnen kannst, ohne Hype und ohne blindes Risiko.
-          </p>
+          <p>Krypto im Long-Term-Kontext einordnen, ohne Hype und ohne blindes Risiko.</p>
           <ul class="topic-list">
             <li>Volatilität verstehen</li>
             <li>Langfristige Szenarien</li>
@@ -525,11 +678,8 @@
 
         <div class="card">
           <div class="top-tag">Rohstoffe</div>
-          <h3>Rohstoffe & Fonds</h3>
-          <p>
-            Ergänze dein Verständnis für Gold, Rohstoffe und Fonds als Bestandteile eines breiteren
-            Vermögensaufbaus.
-          </p>
+          <h3>Gold & Rohstoffe</h3>
+          <p>Gold, Rohstoffe und Fonds als ergänzende Bausteine eines robusteren Portfolios.</p>
           <ul class="topic-list">
             <li>Gold als Sicherheitsbaustein</li>
             <li>Rohstoffe einordnen</li>
@@ -539,63 +689,189 @@
       </section>
 
       <section class="wide-card">
-        <div class="top-tag">Investment Fokus</div>
-        <h2>Warum Long Term Investing ein eigener Bereich ist</h2>
+        <div class="top-tag">Investment Strategien</div>
+        <h2>Langfristige Strategien statt kurzfristiger Hektik</h2>
         <p>
-          Trading und langfristiges Investieren sind zwei unterschiedliche Denkweisen. Während Trading
-          oft mit Timing, Execution und kurzfristiger Marktstruktur arbeitet, geht es im Long-Term-Bereich
-          um Geduld, Kapitalallokation, Risikostreuung und sauberen Vermögensaufbau.
+          Gute langfristige Investoren denken in Jahren, nicht in Stunden. Entscheidend sind Wiederholbarkeit,
+          Geduld, Allokation und ein klarer Rahmen statt dauernder Aktion.
         </p>
 
         <div class="stats-grid">
           <div class="stat-box">
-            <span>Fokus</span>
-            <strong>Vermögensaufbau</strong>
+            <span>Strategie 1</span>
+            <strong>Buy & Hold</strong>
           </div>
           <div class="stat-box">
-            <span>Denkweise</span>
-            <strong>Langfristig</strong>
+            <span>Strategie 2</span>
+            <strong>Sparplan</strong>
           </div>
           <div class="stat-box">
-            <span>Ansatz</span>
-            <strong>Strategisch</strong>
+            <span>Strategie 3</span>
+            <strong>Diversifikation</strong>
           </div>
           <div class="stat-box">
-            <span>Ziel</span>
-            <strong>Struktur & Geduld</strong>
+            <span>Strategie 4</span>
+            <strong>Core-Satellite</strong>
           </div>
         </div>
       </section>
 
       <section class="grid-2">
         <div class="card">
-          <div class="top-tag">Long Term Mindset</div>
+          <div class="top-tag">Portfolio Beispiel</div>
+          <h2>Beispielhafte Aufteilung</h2>
+          <p>Dieses Beispiel dient nur zur Education und zeigt eine mögliche gedankliche Struktur.</p>
+
+          <div class="allocation-grid">
+            <div class="allocation-row">
+              <div class="allocation-label">ETFs</div>
+              <div class="allocation-bar"><div class="allocation-fill" style="width:50%;"></div></div>
+              <div class="allocation-value">50%</div>
+            </div>
+
+            <div class="allocation-row">
+              <div class="allocation-label">Aktien</div>
+              <div class="allocation-bar"><div class="allocation-fill" style="width:20%;"></div></div>
+              <div class="allocation-value">20%</div>
+            </div>
+
+            <div class="allocation-row">
+              <div class="allocation-label">Krypto</div>
+              <div class="allocation-bar"><div class="allocation-fill" style="width:10%;"></div></div>
+              <div class="allocation-value">10%</div>
+            </div>
+
+            <div class="allocation-row">
+              <div class="allocation-label">Rohstoffe</div>
+              <div class="allocation-bar"><div class="allocation-fill" style="width:10%;"></div></div>
+              <div class="allocation-value">10%</div>
+            </div>
+
+            <div class="allocation-row">
+              <div class="allocation-label">Reserve / Cash</div>
+              <div class="allocation-bar"><div class="allocation-fill" style="width:10%;"></div></div>
+              <div class="allocation-value">10%</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="top-tag">Investment Grundsätze</div>
           <h2>Worauf es langfristig ankommt</h2>
           <ul class="topic-list">
             <li>Geduld schlägt ständige Aktivität</li>
-            <li>Diversifikation reduziert unnötige Einzelrisiken</li>
+            <li>Diversifikation reduziert Klumpenrisiken</li>
             <li>Regelmäßigkeit ist oft wichtiger als Perfektion</li>
             <li>Langfristiger Erfolg braucht klare Prinzipien</li>
-          </ul>
-        </div>
-
-        <div class="card">
-          <div class="top-tag">Education Fokus</div>
-          <h2>Kein Hype, sondern Struktur</h2>
-          <p>
-            Dieser Bereich dient nicht dazu, dir schnelle Versprechen zu geben. Er ist dafür da,
-            dir ein klares Verständnis für langfristiges Investieren aufzubauen.
-          </p>
-          <ul class="topic-list">
-            <li>Keine Finanzberatung</li>
-            <li>Keine Kauf- oder Verkaufsempfehlungen</li>
-            <li>Education, Analyse und langfristiges Denken</li>
-            <li>Strukturierte Wissensbasis statt Aktionismus</li>
+            <li>Keine Entscheidungen aus Hype oder Angst</li>
           </ul>
         </div>
       </section>
 
       <section class="grid-2">
+        <div class="card">
+          <div class="top-tag">Long Term Rechner</div>
+          <h2>Wachstumsrechner</h2>
+          <p>Berechne beispielhaft, wie sich Startkapital und Sparraten über Jahre entwickeln könnten.</p>
+
+          <div class="topic-list" style="background:none; border:none; padding:0; gap:14px;">
+            <div>
+              <label for="startCapital" style="display:block; margin-bottom:8px; font-weight:700; color:#fff;">Startkapital (€)</label>
+              <input type="number" id="startCapital" placeholder="z. B. 5000" />
+            </div>
+
+            <div>
+              <label for="monthlyContribution" style="display:block; margin-bottom:8px; font-weight:700; color:#fff;">Monatliche Sparrate (€)</label>
+              <input type="number" id="monthlyContribution" placeholder="z. B. 250" />
+            </div>
+
+            <div>
+              <label for="years" style="display:block; margin-bottom:8px; font-weight:700; color:#fff;">Jahre</label>
+              <input type="number" id="years" placeholder="z. B. 10" />
+            </div>
+
+            <div>
+              <label for="annualReturn" style="display:block; margin-bottom:8px; font-weight:700; color:#fff;">Erwartete Rendite p.a. (%)</label>
+              <input type="number" id="annualReturn" placeholder="z. B. 7" step="0.1" />
+            </div>
+          </div>
+
+          <div class="btn-row left">
+            <button class="btn btn-gold" onclick="calculateLongTerm()">Berechnen</button>
+            <button class="btn btn-outline" onclick="resetLongTermCalculator()">Zurücksetzen</button>
+          </div>
+
+          <div class="stats-grid">
+            <div class="stat-box">
+              <span>Endkapital</span>
+              <strong id="ltEndValue">–</strong>
+            </div>
+            <div class="stat-box">
+              <span>Eingezahlt</span>
+              <strong id="ltInvested">–</strong>
+            </div>
+            <div class="stat-box">
+              <span>Wachstum</span>
+              <strong id="ltGrowth">–</strong>
+            </div>
+            <div class="stat-box">
+              <span>Zeitraum</span>
+              <strong id="ltYears">–</strong>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="top-tag">Watchlist</div>
+          <h2>Investment Watchlist</h2>
+          <p>Speichere interessante Assets lokal in deinem Browser und halte deinen Fokus strukturiert.</p>
+
+          <div class="topic-list" style="background:none; border:none; padding:0; gap:14px;">
+            <div>
+              <label for="watchAsset" style="display:block; margin-bottom:8px; font-weight:700; color:#fff;">Name / Asset</label>
+              <input type="text" id="watchAsset" placeholder="z. B. NVIDIA" />
+            </div>
+
+            <div>
+              <label for="watchType" style="display:block; margin-bottom:8px; font-weight:700; color:#fff;">Kategorie</label>
+              <select id="watchType">
+                <option value="">Kategorie wählen</option>
+                <option value="ETF">ETF</option>
+                <option value="Aktie">Aktie</option>
+                <option value="Krypto">Krypto</option>
+                <option value="Rohstoff">Rohstoff</option>
+                <option value="Fonds">Fonds</option>
+              </select>
+            </div>
+
+            <div>
+              <label for="watchReason" style="display:block; margin-bottom:8px; font-weight:700; color:#fff;">Warum auf der Watchlist?</label>
+              <textarea id="watchReason" placeholder="z. B. starke Marktstellung, langfristig interessant, Wachstum"></textarea>
+            </div>
+          </div>
+
+          <div class="btn-row left">
+            <button class="btn btn-gold" onclick="saveWatchItem()">Zur Watchlist hinzufügen</button>
+            <button class="btn btn-outline" onclick="clearWatchlist()">Watchlist löschen</button>
+          </div>
+
+          <div id="watchlistEntries" class="watchlist-list"></div>
+        </div>
+      </section>
+
+      <section class="grid-2">
+        <div class="card">
+          <div class="top-tag">Watch Bereiche</div>
+          <h2>Beobachtungsfelder</h2>
+          <ul class="topic-list">
+            <li>Welt-ETFs und Index-ETFs</li>
+            <li>NVIDIA und andere Qualitätsaktien</li>
+            <li>Krypto-Projekte mit langfristiger Relevanz</li>
+            <li>Gold und Rohstoffe als Beimischung</li>
+            <li>Technologie, Gesundheit, Energie und Konsum</li>
+          </ul>
+        </div>
+
         <div class="card">
           <div class="top-tag">Quick Access</div>
           <h2>Schnellzugriff</h2>
@@ -604,21 +880,52 @@
             <li><a href="/course.html" style="color:#fff; text-decoration:none;">Education Kurs öffnen</a></li>
             <li><a href="/tools.html" style="color:#fff; text-decoration:none;">Trading Tools öffnen</a></li>
             <li><a href="/lesson1.html" style="color:#fff; text-decoration:none;">Zur ersten Lektion</a></li>
+            <li><a href="/index.html" style="color:#fff; text-decoration:none;">Zur Startseite</a></li>
           </ul>
         </div>
+      </section>
 
-        <div class="card">
-          <div class="top-tag">Long Term Education</div>
-          <h2>Eigener Bereich, gleiche Brand</h2>
-          <p>
-            Der Long-Term-Bereich fühlt sich bewusst wie eine eigene Unterwebseite an, bleibt aber klar
-            Teil der BullProsperity Plattform und ergänzt den Trading-Bereich um strategischen Vermögensaufbau.
-          </p>
+      <section class="wide-card">
+        <div class="top-tag">FAQ</div>
+        <h2>Häufige Fragen zum Long Term Investing</h2>
+
+        <div class="faq-list">
+          <div class="faq-item">
+            <h4>Was ist der Unterschied zwischen Trading und Long Term Investing?</h4>
+            <p>
+              Trading arbeitet oft kurzfristiger mit Timing und Execution. Long Term Investing fokussiert sich
+              auf Vermögensaufbau, Geduld, Allokation und langfristige Marktteilnahme.
+            </p>
+          </div>
+
+          <div class="faq-item">
+            <h4>Warum sind ETFs für viele Anleger so interessant?</h4>
+            <p>
+              ETFs bieten oft eine breite Streuung und eignen sich gut, um mit weniger Einzelrisiko
+              an ganzen Märkten oder Indizes teilzunehmen.
+            </p>
+          </div>
+
+          <div class="faq-item">
+            <h4>Warum NVIDIA statt Apple in diesem Bereich?</h4>
+            <p>
+              Du wolltest NVIDIA als prominentes Beispiel. Deshalb ist die Aktien-Sektion gezielt dynamischer
+              auf NVIDIA und wachstumsstarke Technologiewerte ausgerichtet.
+            </p>
+          </div>
+
+          <div class="faq-item">
+            <h4>Ist dieser Bereich Finanzberatung?</h4>
+            <p>
+              Nein. Dieser Bereich dient ausschließlich der Education, Analyse und dem besseren Verständnis
+              langfristiger Investment-Konzepte.
+            </p>
+          </div>
         </div>
       </section>
 
       <section class="center-note">
-        <h2>Langfristig denken. Strukturiert handeln.</h2>
+        <h2>Langfristig denken. Strukturiert aufbauen.</h2>
         <p>
           Dieser Bereich wurde für Menschen gebaut, die nicht nur traden, sondern Vermögen mit einem
           klaren, langfristigen Ansatz aufbauen möchten.
@@ -626,5 +933,122 @@
       </section>
     </div>
   </div>
+
+  <script>
+    function calculateLongTerm() {
+      const startCapital = parseFloat(document.getElementById("startCapital").value) || 0;
+      const monthlyContribution = parseFloat(document.getElementById("monthlyContribution").value) || 0;
+      const years = parseFloat(document.getElementById("years").value) || 0;
+      const annualReturn = parseFloat(document.getElementById("annualReturn").value) || 0;
+
+      if (years <= 0 || annualReturn < 0) {
+        alert("Bitte gib gültige Werte ein.");
+        return;
+      }
+
+      const monthlyRate = annualReturn / 100 / 12;
+      const months = years * 12;
+
+      let futureValue = startCapital;
+
+      for (let i = 0; i < months; i++) {
+        futureValue = futureValue * (1 + monthlyRate) + monthlyContribution;
+      }
+
+      const invested = startCapital + monthlyContribution * months;
+      const growth = futureValue - invested;
+
+      document.getElementById("ltEndValue").textContent = futureValue.toFixed(2) + " €";
+      document.getElementById("ltInvested").textContent = invested.toFixed(2) + " €";
+      document.getElementById("ltGrowth").textContent = growth.toFixed(2) + " €";
+      document.getElementById("ltYears").textContent = years + " Jahre";
+    }
+
+    function resetLongTermCalculator() {
+      document.getElementById("startCapital").value = "";
+      document.getElementById("monthlyContribution").value = "";
+      document.getElementById("years").value = "";
+      document.getElementById("annualReturn").value = "";
+
+      document.getElementById("ltEndValue").textContent = "–";
+      document.getElementById("ltInvested").textContent = "–";
+      document.getElementById("ltGrowth").textContent = "–";
+      document.getElementById("ltYears").textContent = "–";
+    }
+
+    const watchlistKey = "bpLongTermWatchlist";
+
+    function escapeHtml(text) {
+      const div = document.createElement("div");
+      div.textContent = text || "";
+      return div.innerHTML;
+    }
+
+    function renderWatchlist() {
+      const container = document.getElementById("watchlistEntries");
+      const items = JSON.parse(localStorage.getItem(watchlistKey) || "[]");
+
+      container.innerHTML = "";
+
+      if (!items.length) {
+        container.innerHTML = `
+          <div class="watchlist-item">
+            <h4>Watchlist leer</h4>
+            <p>Füge Werte wie NVIDIA, ETF-Ideen oder Rohstoffe hinzu.</p>
+          </div>
+        `;
+        return;
+      }
+
+      items.forEach((item, index) => {
+        const element = document.createElement("div");
+        element.className = "watchlist-item";
+        element.innerHTML = `
+          <h4>${escapeHtml(item.asset)}</h4>
+          <p><strong>Kategorie:</strong> ${escapeHtml(item.type || "-")}</p>
+          <p><strong>Grund:</strong> ${escapeHtml(item.reason || "-")}</p>
+          <button onclick="removeWatchItem(${index})">Entfernen</button>
+        `;
+        container.appendChild(element);
+      });
+    }
+
+    function saveWatchItem() {
+      const asset = document.getElementById("watchAsset").value.trim();
+      const type = document.getElementById("watchType").value;
+      const reason = document.getElementById("watchReason").value.trim();
+
+      if (!asset || !type) {
+        alert("Bitte gib mindestens Asset und Kategorie an.");
+        return;
+      }
+
+      const items = JSON.parse(localStorage.getItem(watchlistKey) || "[]");
+      items.unshift({ asset, type, reason });
+      localStorage.setItem(watchlistKey, JSON.stringify(items));
+
+      document.getElementById("watchAsset").value = "";
+      document.getElementById("watchType").value = "";
+      document.getElementById("watchReason").value = "";
+
+      renderWatchlist();
+    }
+
+    function removeWatchItem(index) {
+      const items = JSON.parse(localStorage.getItem(watchlistKey) || "[]");
+      items.splice(index, 1);
+      localStorage.setItem(watchlistKey, JSON.stringify(items));
+      renderWatchlist();
+    }
+
+    function clearWatchlist() {
+      const confirmed = confirm("Möchtest du die komplette Watchlist löschen?");
+      if (!confirmed) return;
+      localStorage.removeItem(watchlistKey);
+      renderWatchlist();
+    }
+
+    renderWatchlist();
+  </script>
 </body>
 </html>
