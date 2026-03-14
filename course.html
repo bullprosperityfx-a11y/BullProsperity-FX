@@ -148,7 +148,7 @@
       width: min(1120px, 100%);
       margin: 0 auto;
       display: grid;
-      grid-template-columns: 320px 1fr;
+      grid-template-columns: 340px 1fr;
       gap: 18px;
       align-items: start;
     }
@@ -238,8 +238,20 @@
 
     .module-list {
       display: grid;
-      gap: 12px;
+      gap: 14px;
       margin-top: 18px;
+      max-height: 74vh;
+      overflow-y: auto;
+      padding-right: 6px;
+    }
+
+    .module-list::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .module-list::-webkit-scrollbar-thumb {
+      background: rgba(255, 215, 0, 0.2);
+      border-radius: 999px;
     }
 
     .module-item {
@@ -261,7 +273,7 @@
 
     .module-head {
       display: flex;
-      align-items: center;
+      align-items: flex-start;
       justify-content: space-between;
       gap: 10px;
       margin-bottom: 8px;
@@ -270,7 +282,7 @@
     .module-name {
       color: var(--gold);
       font-weight: 800;
-      font-size: 0.98rem;
+      font-size: 1rem;
       line-height: 1.25;
     }
 
@@ -279,6 +291,7 @@
       font-size: 0.82rem;
       font-weight: 700;
       white-space: nowrap;
+      padding-top: 4px;
     }
 
     .module-sub {
@@ -477,6 +490,12 @@
       nav a {
         font-size: 0.88rem;
       }
+
+      .module-list {
+        max-height: none;
+        overflow: visible;
+        padding-right: 0;
+      }
     }
   </style>
 </head>
@@ -539,8 +558,8 @@
         <div class="top-tag">Education Bereich</div>
         <h2 class="sidebar-title">Strukturierte Education</h2>
         <p class="sidebar-text">
-          Alle Module, Lektionen und Guides an einem Ort. Arbeite dich Schritt für Schritt
-          strukturiert durch deine Inhalte.
+          Alle Module, Lektionen und Videos an einem Ort. Arbeite dich Schritt für Schritt
+          sauber und professionell durch deine Inhalte.
         </p>
 
         <div class="progress-wrap">
@@ -554,6 +573,7 @@
         </div>
 
         <div class="module-list">
+
           <div class="module-item active">
             <div class="module-head">
               <span class="module-name">Modul 1 – Kurs Einführung</span>
@@ -562,7 +582,7 @@
 
             <div class="module-sub">
               <a href="/lesson1.html" class="lesson-link active">Lesson 1 – Wie du den Kurs richtig durcharbeitest</a>
-              <a href="/locked.html" class="lesson-link">Wichtiger Hinweis & Risikoaufklärung</a>
+              <a href="/lesson2.html" class="lesson-link">Lesson 2 – Wichtiger Hinweis & Risikoaufklärung</a>
             </div>
           </div>
 
@@ -573,16 +593,27 @@
             </div>
 
             <div class="module-sub">
-              <a href="/lesson2.html" class="lesson-link">Lesson 2 – Was ist Trading wirklich</a>
-              <a href="/lesson3.html" class="lesson-link">Lesson 3 – Vom Wissen zur Anwendung</a>
-              <a href="/locked.html" class="lesson-link">Weitere Lektionen folgen</a>
+              <a href="/lesson3.html" class="lesson-link">Lesson 3 – Was ist Trading wirklich</a>
+              <a href="/locked.html" class="lesson-link">Lesson 4 – Marktstruktur verstehen</a>
+              <a href="/locked.html" class="lesson-link">Lesson 5 – Trend, Range, Impuls</a>
+              <a href="/locked.html" class="lesson-link">Lesson 6 – Liquidity Grundlagen</a>
+              <a href="/locked.html" class="lesson-link">Lesson 7 – Timing & Sessions</a>
+              <a href="/locked.html" class="lesson-link">Lesson 8 – Entries verstehen</a>
+              <a href="/locked.html" class="lesson-link">Lesson 9 – Risk Management Grundlagen</a>
+              <a href="/locked.html" class="lesson-link">Lesson 10 – Trading Psychologie Basics</a>
             </div>
           </div>
 
           <div class="module-item">
             <div class="module-head">
               <span class="module-name">Modul 3 – Tools & Grundlagen</span>
-              <span class="module-count">3 Guides</span>
+              <span class="module-count">3 Lektionen</span>
+            </div>
+
+            <div class="module-sub">
+              <a href="/locked.html" class="lesson-link">Lesson 11 – Trading Tools Überblick</a>
+              <a href="/locked.html" class="lesson-link">Lesson 12 – Journal richtig nutzen</a>
+              <a href="/locked.html" class="lesson-link">Lesson 13 – Vorbereitung & Routine</a>
             </div>
           </div>
 
@@ -591,6 +622,16 @@
               <span class="module-name">Modul 4 – Smart Money Concept</span>
               <span class="module-count">7 Lektionen</span>
             </div>
+
+            <div class="module-sub">
+              <a href="/locked.html" class="lesson-link">Lesson 14 – SMC Einführung</a>
+              <a href="/locked.html" class="lesson-link">Lesson 15 – Liquidity Sweeps</a>
+              <a href="/locked.html" class="lesson-link">Lesson 16 – Market Structure Shift</a>
+              <a href="/locked.html" class="lesson-link">Lesson 17 – Order Blocks</a>
+              <a href="/locked.html" class="lesson-link">Lesson 18 – Fair Value Gaps</a>
+              <a href="/locked.html" class="lesson-link">Lesson 19 – Entry Modelle</a>
+              <a href="/locked.html" class="lesson-link">Lesson 20 – SMC in der Praxis</a>
+            </div>
           </div>
 
           <div class="module-item">
@@ -598,7 +639,14 @@
               <span class="module-name">Modul 5 – Backtesting & Statistik</span>
               <span class="module-count">3 Lektionen</span>
             </div>
+
+            <div class="module-sub">
+              <a href="/locked.html" class="lesson-link">Lesson 21 – Backtesting Grundlagen</a>
+              <a href="/locked.html" class="lesson-link">Lesson 22 – Statistik verstehen</a>
+              <a href="/locked.html" class="lesson-link">Lesson 23 – Performance auswerten</a>
+            </div>
           </div>
+
         </div>
       </aside>
 
@@ -610,9 +658,8 @@
             <span class="gold">Trading Kurs</span>
           </h1>
           <p class="hero-text">
-            Eine Premium Education Oberfläche für Lektionen, Guides, Smart Money Inhalte,
-            Risikoaufklärung und professionelles Trading-Verständnis. Wähle links eine Lektion aus,
-            um Titel, Beschreibung und den Video-Bereich zu wechseln.
+            Dieser Bereich ist deine zentrale Kursübersicht. Alle Module sind geordnet aufgebaut,
+            damit jede Lektion, jedes Video und jeder Bereich klar an seinem Platz ist.
           </p>
 
           <div class="btn-row">
@@ -625,55 +672,54 @@
           <div class="top-tag">Pflichtlektion</div>
           <h3>Wie du den Kurs richtig durcharbeitest</h3>
           <p>
-            Lerne, wie du den Kurs strukturiert nutzt, Inhalte sinnvoll umsetzt und deinen
-            Lernfortschritt professionell aufbaust.
+            Starte mit Lesson 1 und arbeite dich danach Modul für Modul durch den Kurs.
+            So bleibt deine Education strukturiert und professionell aufgebaut.
           </p>
 
           <div class="video-box">
             <p>
-              Hier kannst du später dein Kursvideo, einen Embed oder einen geschützten Video-Player
-              einsetzen. Die Fläche ist bewusst im selben Premium-Stil wie Hub und Setup Room aufgebaut.
+              Hier kannst du später ein Überblicksvideo, eine kurze Einführung oder eine Begrüßung
+              für den gesamten Kurs einfügen.
             </p>
           </div>
         </section>
 
         <section class="lesson-grid">
           <div class="lesson-card">
-            <div class="top-tag">Kurslogik</div>
-            <h3>Warum Struktur entscheidend ist</h3>
+            <div class="top-tag">Warum diese Struktur?</div>
+            <h3>Module statt Chaos</h3>
             <ul class="mini-list">
-              <li>Kein chaotisches Springen zwischen Lektionen</li>
-              <li>Inhalte nacheinander professionell aufbauen</li>
-              <li>Wissen direkt praktisch umsetzen</li>
+              <li>Jedes Thema ist klar einem Modul zugeordnet</li>
+              <li>Jede Lektion hat ihren festen Platz im Kurs</li>
+              <li>Die Navigation bleibt sauber und professionell</li>
             </ul>
           </div>
 
           <div class="lesson-card">
-            <div class="top-tag">Education Fokus</div>
-            <h3>Was dich hier erwartet</h3>
+            <div class="top-tag">Dein Vorteil</div>
+            <h3>Einfacher Lernfluss</h3>
             <ul class="mini-list">
-              <li>Trading Grundlagen und Marktverständnis</li>
-              <li>Smart Money Inhalte und Setup-Logik</li>
-              <li>Tools, Journal und strukturierter Lernaufbau</li>
+              <li>Du erkennst sofort, was schon da ist</li>
+              <li>Neue Lessons lassen sich später leicht ergänzen</li>
+              <li>Die Plattform wirkt wie ein echter Mitgliederkurs</li>
             </ul>
           </div>
         </section>
 
         <section class="card">
           <div class="top-tag">Wichtiger Hinweis</div>
-          <h3>Education statt Finanzberatung</h3>
+          <h3>Unfertige Lektionen</h3>
           <p>
-            Alle Inhalte dienen ausschließlich zu Ausbildungs-, Lern- und Analysezwecken.
-            Es handelt sich nicht um Finanzberatung, Anlageberatung oder eine Aufforderung
-            zum Kauf oder Verkauf von Finanzinstrumenten.
+            Alle noch nicht gebauten Lektionen führen aktuell bewusst auf <strong>locked.html</strong>.
+            Sobald du neue Lesson-Seiten erstellst, ersetzt du den Link einfach durch die echte Datei,
+            zum Beispiel <strong>/lesson4.html</strong>.
           </p>
         </section>
 
         <section class="center-note">
-          <h2>Einheitlich. Strukturiert. Premium.</h2>
+          <h2>Ein Kurs. Klare Reihenfolge. Saubere Module.</h2>
           <p>
-            Dieser Kursbereich ist bewusst im selben Design wie Hub, Tools, Long Term und Setup Room
-            aufgebaut, damit BullProsperity wie eine durchgängige Plattform wirkt.
+            Genau so bleibt deine BullProsperity Education übersichtlich, hochwertig und jederzeit erweiterbar.
           </p>
         </section>
       </main>
