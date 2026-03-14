@@ -14,20 +14,22 @@
 
     :root {
       --bg: #070707;
-      --card: rgba(16, 16, 16, 0.94);
-      --card-border: rgba(255, 215, 0, 0.16);
+      --panel: rgba(13, 13, 13, 0.94);
+      --panel-2: rgba(18, 18, 18, 0.92);
       --gold: #ffd700;
-      --gold-soft: #ffdf4d;
-      --text: #ffffff;
-      --muted: #dddddd;
+      --gold-soft: #ffe45e;
+      --white: #ffffff;
+      --text: #e7e7e7;
+      --line: rgba(255, 215, 0, 0.16);
+      --line-soft: rgba(255, 255, 255, 0.08);
     }
 
     body {
       font-family: Arial, Helvetica, sans-serif;
       background:
-        radial-gradient(circle at top, rgba(255, 215, 0, 0.08), transparent 35%),
-        linear-gradient(135deg, #050505, #0b0b0b 58%, #101010);
-      color: var(--text);
+        radial-gradient(circle at top, rgba(255, 215, 0, 0.07), transparent 35%),
+        linear-gradient(135deg, #050505, #090909 58%, #101010);
+      color: var(--white);
       min-height: 100vh;
       overflow-x: hidden;
     }
@@ -35,171 +37,178 @@
     .chart-bg {
       position: fixed;
       inset: 0;
-      pointer-events: none;
-      opacity: 0.2;
       z-index: 0;
+      pointer-events: none;
+      opacity: 0.22;
     }
 
     .chart-bg svg {
       width: 100%;
       height: 100%;
+      display: block;
     }
 
     .line-main {
       fill: none;
-      stroke: rgba(255, 215, 0, 0.58);
-      stroke-width: 3;
+      stroke: rgba(255, 215, 0, 0.62);
+      stroke-width: 3.5;
     }
 
     .line-alt {
       fill: none;
       stroke: rgba(255, 255, 255, 0.12);
+      stroke-width: 2.2;
+    }
+
+    .wick-gold {
+      stroke: rgba(255, 215, 0, 0.4);
+      stroke-width: 2.2;
+    }
+
+    .wick-white {
+      stroke: rgba(255, 255, 255, 0.16);
       stroke-width: 2;
     }
 
-    .candle {
-      stroke: rgba(255, 215, 0, 0.32);
-      stroke-width: 2;
+    .body-gold {
+      fill: rgba(255, 215, 0, 0.16);
+      stroke: rgba(255, 215, 0, 0.34);
+      stroke-width: 1.4;
     }
 
-    .candle.alt {
-      stroke: rgba(255, 255, 255, 0.14);
-    }
-
-    .candle-body-up {
-      fill: rgba(255, 215, 0, 0.1);
-      stroke: rgba(255, 215, 0, 0.25);
-      stroke-width: 1.2;
-      rx: 4;
-    }
-
-    .candle-body-down {
+    .body-white {
       fill: rgba(255, 255, 255, 0.05);
       stroke: rgba(255, 255, 255, 0.14);
-      stroke-width: 1.1;
-      rx: 4;
+      stroke-width: 1.2;
     }
 
-    header {
-      position: sticky;
-      top: 0;
-      z-index: 30;
+    .page-shell {
+      position: relative;
+      z-index: 1;
+      width: min(1320px, calc(100% - 36px));
+      margin: 18px auto;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-radius: 16px;
+      padding: 22px 26px 34px;
+      background: rgba(0, 0, 0, 0.08);
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.02);
+    }
+
+    .topbar {
       display: flex;
-      justify-content: space-between;
       align-items: center;
-      padding: 24px 42px;
-      background: rgba(10, 10, 10, 0.82);
-      backdrop-filter: blur(10px);
-      border-bottom: 1px solid rgba(255, 215, 0, 0.12);
+      justify-content: space-between;
+      margin-bottom: 26px;
     }
 
     .logo {
-      font-size: 2rem;
-      font-weight: 800;
       color: var(--gold);
-      text-shadow: 0 0 16px rgba(255, 215, 0, 0.22);
+      font-weight: 800;
+      font-size: 2.1rem;
+      letter-spacing: -0.03em;
+      text-shadow: 0 0 15px rgba(255, 215, 0, 0.18);
     }
 
     nav {
       display: flex;
-      gap: 24px;
-      flex-wrap: wrap;
+      gap: 26px;
+      align-items: center;
     }
 
     nav a {
       color: #ffffff;
       text-decoration: none;
+      font-size: 0.95rem;
       font-weight: 700;
-      transition: 0.25s ease;
+      transition: 0.2s ease;
     }
 
     nav a:hover {
       color: var(--gold);
     }
 
-    .page {
-      position: relative;
-      z-index: 1;
-      width: min(1280px, calc(100% - 24px));
-      margin: 28px auto 40px;
-      display: grid;
-      gap: 24px;
-    }
-
-    .hero-box,
-    .card,
-    .wide-card {
-      background: var(--card);
-      border: 1px solid var(--card-border);
+    .hero-wrap {
+      width: min(1120px, 100%);
+      margin: 0 auto;
+      border: 1px solid rgba(255, 215, 0, 0.12);
       border-radius: 28px;
-      box-shadow: 0 0 26px rgba(255, 215, 0, 0.05);
-    }
-
-    .hero-box {
-      padding: 34px;
-      overflow: hidden;
+      background:
+        radial-gradient(circle at top left, rgba(255, 215, 0, 0.1), transparent 28%),
+        linear-gradient(180deg, rgba(16,16,16,0.96), rgba(11,11,11,0.95));
+      padding: 34px 34px 26px;
       position: relative;
+      overflow: hidden;
+      box-shadow:
+        0 0 0 1px rgba(255, 255, 255, 0.03),
+        0 20px 40px rgba(0,0,0,0.24);
     }
 
-    .hero-badge,
-    .top-tag {
+    .hero-badge {
       display: inline-block;
-      padding: 8px 14px;
+      margin: 0 auto 18px;
+      padding: 8px 16px;
       border-radius: 999px;
-      border: 1px solid rgba(255, 215, 0, 0.34);
+      border: 1px solid rgba(255, 215, 0, 0.32);
       color: var(--gold-soft);
+      background: rgba(255, 215, 0, 0.07);
       font-size: 13px;
       font-weight: 700;
-      background: rgba(255, 215, 0, 0.08);
-      margin-bottom: 16px;
     }
 
-    .hero-box h1 {
-      font-size: clamp(2.4rem, 5vw, 5rem);
-      line-height: 0.98;
+    .hero-center {
+      text-align: center;
+    }
+
+    .hero-title {
+      font-size: clamp(2.9rem, 5vw, 5.6rem);
+      line-height: 0.95;
+      font-weight: 900;
+      letter-spacing: -0.04em;
       margin-bottom: 18px;
-      letter-spacing: -0.02em;
     }
 
-    .hero-box h1 .white {
-      color: #ffffff;
+    .hero-title .white {
+      color: var(--white);
     }
 
-    .hero-box h1 .gold {
+    .hero-title .gold {
       color: var(--gold);
-      text-shadow: 0 0 18px rgba(255, 215, 0, 0.18);
+      text-shadow: 0 0 18px rgba(255, 215, 0, 0.14);
     }
 
-    .hero-box p {
-      max-width: 980px;
-      font-size: 1.05rem;
-      line-height: 1.75;
-      color: var(--muted);
+    .hero-text {
+      max-width: 900px;
+      margin: 0 auto;
+      font-size: 0.98rem;
+      line-height: 1.65;
+      color: #ededed;
     }
 
     .btn-row {
       display: flex;
+      justify-content: center;
       gap: 14px;
       flex-wrap: wrap;
-      margin-top: 22px;
+      margin-top: 26px;
     }
 
     .btn {
+      min-width: 155px;
       display: inline-flex;
-      align-items: center;
       justify-content: center;
-      min-width: 170px;
-      padding: 15px 20px;
+      align-items: center;
+      padding: 14px 20px;
       border-radius: 16px;
-      text-decoration: none;
       font-weight: 800;
+      text-decoration: none;
       transition: 0.2s ease;
+      font-size: 0.95rem;
     }
 
     .btn-gold {
-      background: linear-gradient(135deg, #ffe15b, #f0b90b);
       color: #111111;
-      box-shadow: 0 8px 18px rgba(255, 215, 0, 0.18);
+      background: linear-gradient(135deg, #ffe15b, #f0b90b);
+      box-shadow: 0 6px 16px rgba(255, 215, 0, 0.14);
     }
 
     .btn-gold:hover {
@@ -209,181 +218,98 @@
     .btn-outline {
       color: #ffffff;
       border: 1px solid rgba(255, 215, 0, 0.28);
-      background: rgba(255, 255, 255, 0.03);
+      background: rgba(255,255,255,0.02);
     }
 
     .btn-outline:hover {
-      background: rgba(255, 255, 255, 0.06);
       color: var(--gold);
+      background: rgba(255,255,255,0.04);
     }
 
-    .feature-grid {
+    .mini-grid {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 18px;
-      margin-top: 28px;
+      gap: 16px;
+      margin-top: 26px;
     }
 
-    .feature-card {
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px solid rgba(255, 215, 0, 0.12);
-      border-radius: 22px;
-      padding: 22px 18px;
+    .mini-card {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255, 215, 0, 0.1);
+      border-radius: 18px;
+      padding: 18px 16px;
       text-align: center;
+      min-height: 112px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
     }
 
-    .feature-card h3 {
+    .mini-card h3 {
       color: var(--gold);
       font-size: 2rem;
-      margin-bottom: 8px;
       line-height: 1;
-    }
-
-    .feature-card p {
-      color: #f0f0f0;
-      line-height: 1.65;
-      font-size: 0.98rem;
-    }
-
-    .section-title-card,
-    .card,
-    .wide-card {
-      padding: 28px;
-    }
-
-    .wide-card h2,
-    .card h2 {
-      font-size: 2.2rem;
-      color: var(--gold);
-      margin-bottom: 10px;
-      line-height: 1.1;
-    }
-
-    .wide-card p,
-    .card p {
-      color: var(--muted);
-      line-height: 1.8;
-    }
-
-    .grid-2 {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 24px;
-    }
-
-    .tool-list {
-      list-style: none;
-      display: grid;
-      gap: 12px;
-      margin-top: 18px;
-    }
-
-    .tool-list li {
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px solid rgba(255, 215, 0, 0.12);
-      border-radius: 14px;
-      padding: 14px 16px;
-      color: #f2f2f2;
-      line-height: 1.6;
-    }
-
-    .progress-wrap {
-      margin-top: 18px;
-    }
-
-    .progress-label {
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 10px;
-      color: #d9d9d9;
-      font-weight: 700;
-    }
-
-    .progress-bar {
-      width: 100%;
-      height: 14px;
-      border-radius: 999px;
-      background: rgba(255,255,255,0.06);
-      overflow: hidden;
-      border: 1px solid rgba(255, 215, 0, 0.12);
-    }
-
-    .progress-fill {
-      height: 100%;
-      width: 35%;
-      background: linear-gradient(135deg, #ffe15b, #f0b90b);
-      border-radius: 999px;
-    }
-
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-      gap: 16px;
-      margin-top: 20px;
-    }
-
-    .stat-box {
-      background: rgba(255,255,255,0.03);
-      border: 1px solid rgba(255, 215, 0, 0.14);
-      border-radius: 18px;
-      padding: 18px;
-    }
-
-    .stat-box span {
-      display: block;
-      color: #bfbfbf;
       margin-bottom: 8px;
-      font-size: 0.95rem;
+      font-weight: 900;
+      letter-spacing: -0.03em;
     }
 
-    .stat-box strong {
-      color: var(--gold);
-      font-size: 1.35rem;
-      font-weight: 800;
+    .mini-card p {
+      color: #f2f2f2;
+      font-size: 0.92rem;
+      line-height: 1.45;
+      font-weight: 600;
     }
 
-    .footer-note {
-      width: min(1280px, calc(100% - 24px));
-      margin: 0 auto 28px;
-      background: rgba(18, 18, 18, 0.94);
-      border: 1px solid rgba(255, 215, 0, 0.15);
-      border-radius: 20px;
-      padding: 18px 20px;
-      color: #bdbdbd;
-      line-height: 1.8;
+    .info-block {
+      width: min(960px, 100%);
+      margin: 34px auto 0;
       text-align: center;
-      font-size: 0.95rem;
-      position: relative;
-      z-index: 1;
+      padding: 8px 10px 0;
     }
 
-    @media (max-width: 1080px) {
-      .feature-grid,
-      .grid-2 {
+    .info-block h2 {
+      color: var(--gold);
+      font-size: clamp(2.1rem, 3.4vw, 3.4rem);
+      line-height: 1.05;
+      margin-bottom: 12px;
+      letter-spacing: -0.03em;
+      font-weight: 900;
+    }
+
+    .info-block p {
+      color: #ededed;
+      line-height: 1.7;
+      font-size: 1rem;
+      max-width: 820px;
+      margin: 0 auto;
+      font-weight: 600;
+    }
+
+    @media (max-width: 1000px) {
+      .mini-grid {
         grid-template-columns: 1fr;
       }
 
-      header {
-        padding: 20px 18px;
+      .page-shell {
+        width: min(100% - 20px, 1320px);
+        padding: 18px 14px 28px;
       }
 
-      .page,
-      .footer-note {
-        width: min(100% - 18px, 1280px);
+      .hero-wrap {
+        padding: 24px 18px 18px;
       }
 
-      .hero-box,
-      .card,
-      .wide-card {
-        padding: 22px;
+      .logo {
+        font-size: 1.6rem;
       }
 
       nav {
-        gap: 15px;
+        gap: 14px;
       }
 
-      .feature-card h3 {
-        font-size: 1.7rem;
+      nav a {
+        font-size: 0.88rem;
       }
     }
   </style>
@@ -391,193 +317,102 @@
 <body>
   <div class="chart-bg">
     <svg viewBox="0 0 1600 900" preserveAspectRatio="none">
-      <path class="line-alt" d="M0,650 C110,620 170,565 290,550 C380,540 470,570 560,495 C665,410 720,450 820,350 C905,265 980,290 1085,220 C1205,140 1285,185 1415,120 C1500,82 1548,108 1600,86" />
-      <path class="line-main" d="M0,730 C85,695 160,685 255,610 C375,505 445,560 555,475 C655,396 725,420 835,315 C925,228 1010,258 1125,180 C1238,105 1325,145 1450,94 C1512,66 1560,70 1600,58" />
+      <path class="line-alt" d="M0,645 C130,620 190,565 320,548 C435,532 520,564 635,485 C760,398 825,435 935,342 C1045,248 1135,280 1255,198 C1360,126 1465,142 1600,128" />
+      <path class="line-main" d="M0,730 C120,708 220,650 335,618 C455,585 545,534 670,448 C790,365 890,390 1008,298 C1110,220 1205,210 1325,154 C1430,105 1515,105 1600,88" />
 
-      <line class="candle" x1="85" y1="785" x2="85" y2="700"></line>
-      <rect class="candle-body-up" x="75" y="730" width="20" height="35"></rect>
+      <line class="wick-gold" x1="112" y1="770" x2="112" y2="694"></line>
+      <rect class="body-gold" x="101" y="722" width="22" height="34" rx="4"></rect>
 
-      <line class="candle alt" x1="165" y1="720" x2="165" y2="630"></line>
-      <rect class="candle-body-down" x="155" y="655" width="20" height="35"></rect>
+      <line class="wick-white" x1="220" y1="688" x2="220" y2="615"></line>
+      <rect class="body-white" x="209" y="640" width="22" height="31" rx="4"></rect>
 
-      <line class="candle" x1="255" y1="670" x2="255" y2="560"></line>
-      <rect class="candle-body-up" x="245" y="590" width="20" height="48"></rect>
+      <line class="wick-gold" x1="332" y1="650" x2="332" y2="582"></line>
+      <rect class="body-gold" x="321" y="604" width="22" height="30" rx="4"></rect>
 
-      <line class="candle alt" x1="360" y1="610" x2="360" y2="500"></line>
-      <rect class="candle-body-down" x="350" y="530" width="20" height="45"></rect>
+      <line class="wick-white" x1="478" y1="585" x2="478" y2="515"></line>
+      <rect class="body-white" x="467" y="536" width="22" height="33" rx="4"></rect>
 
-      <line class="candle" x1="470" y1="560" x2="470" y2="455"></line>
-      <rect class="candle-body-up" x="460" y="485" width="20" height="42"></rect>
+      <line class="wick-gold" x1="622" y1="515" x2="622" y2="440"></line>
+      <rect class="body-gold" x="611" y="460" width="22" height="36" rx="4"></rect>
 
-      <line class="candle alt" x1="580" y1="510" x2="580" y2="400"></line>
-      <rect class="candle-body-down" x="570" y="425" width="20" height="50"></rect>
+      <line class="wick-white" x1="770" y1="432" x2="770" y2="360"></line>
+      <rect class="body-white" x="759" y="382" width="22" height="32" rx="4"></rect>
 
-      <line class="candle" x1="700" y1="455" x2="700" y2="345"></line>
-      <rect class="candle-body-up" x="690" y="375" width="20" height="46"></rect>
+      <line class="wick-gold" x1="915" y1="355" x2="915" y2="286"></line>
+      <rect class="body-gold" x="904" y="304" width="22" height="35" rx="4"></rect>
 
-      <line class="candle alt" x1="820" y1="382" x2="820" y2="275"></line>
-      <rect class="candle-body-down" x="810" y="300" width="20" height="45"></rect>
+      <line class="wick-white" x1="1060" y1="285" x2="1060" y2="222"></line>
+      <rect class="body-white" x="1049" y="238" width="22" height="28" rx="4"></rect>
 
-      <line class="candle" x1="935" y1="305" x2="935" y2="205"></line>
-      <rect class="candle-body-up" x="925" y="230" width="20" height="42"></rect>
+      <line class="wick-gold" x1="1212" y1="220" x2="1212" y2="160"></line>
+      <rect class="body-gold" x="1201" y="174" width="22" height="30" rx="4"></rect>
 
-      <line class="candle alt" x1="1060" y1="235" x2="1060" y2="145"></line>
-      <rect class="candle-body-down" x="1050" y="165" width="20" height="36"></rect>
+      <line class="wick-white" x1="1390" y1="170" x2="1390" y2="108"></line>
+      <rect class="body-white" x="1379" y="124" width="22" height="26" rx="4"></rect>
 
-      <line class="candle" x1="1190" y1="176" x2="1190" y2="98"></line>
-      <rect class="candle-body-up" x="1180" y="118" width="20" height="30"></rect>
-
-      <line class="candle alt" x1="1330" y1="128" x2="1330" y2="72"></line>
-      <rect class="candle-body-down" x="1320" y="84" width="20" height="24"></rect>
-
-      <line class="candle" x1="1480" y1="100" x2="1480" y2="52"></line>
-      <rect class="candle-body-up" x="1470" y="64" width="20" height="20"></rect>
+      <line class="wick-gold" x1="1496" y1="135" x2="1496" y2="84"></line>
+      <rect class="body-gold" x="1485" y="95" width="22" height="24" rx="4"></rect>
     </svg>
   </div>
 
-  <header>
-    <div class="logo">BullProsperity</div>
-    <nav>
-      <a href="/index.html">Home</a>
-      <a href="/hub.html">Hub</a>
-      <a href="/course.html">Course</a>
-      <a href="/tools.html">Tools</a>
-      <a href="/api/whop/login">Login</a>
-    </nav>
-  </header>
+  <div class="page-shell">
+    <div class="topbar">
+      <div class="logo">BullProsperity</div>
 
-  <main class="page">
-    <section class="hero-box">
-      <div class="hero-badge">Premium Trading Education</div>
+      <nav>
+        <a href="/index.html">Home</a>
+        <a href="/hub.html">Hub</a>
+        <a href="/course.html">Course</a>
+        <a href="/tools.html">Tools</a>
+        <a href="/api/whop/login">Login</a>
+      </nav>
+    </div>
 
-      <h1>
-        <span class="white">BullProsperity</span><br>
-        <span class="gold">Trading Education</span>
-      </h1>
+    <section class="hero-wrap">
+      <div class="hero-center">
+        <div class="hero-badge">Pro Trading Education</div>
 
-      <p>
-        Lerne Marktstruktur, Entries, Risikomanagement und Trading-Psychologie auf einer
-        modernen Education Plattform, die elegant, professionell und wie eine echte Premium-Brand aufgebaut ist.
-      </p>
-
-      <div class="btn-row">
-        <a href="/api/whop/login" class="btn btn-gold">Jetzt starten</a>
-        <a href="/hub.html" class="btn btn-outline">Mehr erfahren</a>
-      </div>
-
-      <div class="feature-grid">
-        <div class="feature-card">
-          <h3>Kurs</h3>
-          <p>Strukturierte Lektionen, Module und professioneller Lernaufbau.</p>
+        <div class="hero-title">
+          <span class="white">Build Wealth With</span><br>
+          <span class="gold">BullProsperity</span>
         </div>
 
-        <div class="feature-card">
-          <h3>Tools</h3>
-          <p>Lot Size Rechner, Journal, Checklisten und TradingView Integration.</p>
+        <p class="hero-text">
+          Lerne Marktstruktur, Entries, Risikomanagement und Trading-Psychologie auf einer
+          Plattform, die elegant, modern und wie eine echte Premium-Brand aufgebaut ist.
+        </p>
+
+        <div class="btn-row">
+          <a href="/api/whop/login" class="btn btn-gold">Jetzt starten</a>
+          <a href="/hub.html" class="btn btn-outline">Mehr erfahren</a>
         </div>
 
-        <div class="feature-card">
-          <h3>Premium</h3>
-          <p>Setup Room, Strategy Library und exklusive Mitgliederbereiche.</p>
+        <div class="mini-grid">
+          <div class="mini-card">
+            <h3>Kurs</h3>
+            <p>Strukturierte Lektionen, Module und professioneller Lernaufbau.</p>
+          </div>
+
+          <div class="mini-card">
+            <h3>Tools</h3>
+            <p>Lot Size Rechner, Journal, Checklisten und TradingView Integration.</p>
+          </div>
+
+          <div class="mini-card">
+            <h3>Premium</h3>
+            <p>Setup Room, Strategy Material und exklusive Mitgliederbereiche.</p>
+          </div>
         </div>
       </div>
     </section>
 
-    <section class="wide-card">
+    <section class="info-block">
       <h2>Dein Zugang bei BullProsperity</h2>
       <p>
         Eine moderne Trading Education Plattform mit Kursbereich, Tools, exklusiven Setups und
         strukturierten Inhalten für ambitionierte Trader.
       </p>
     </section>
-
-    <section class="grid-2">
-      <div class="card">
-        <div class="top-tag">Education</div>
-        <h2>Was du lernst</h2>
-        <ul class="tool-list">
-          <li>Marktstruktur und institutionelle Bewegungen verstehen</li>
-          <li>Liquidity erkennen und sauber einordnen</li>
-          <li>Risk Management und Positionsgröße richtig planen</li>
-          <li>Trading Psychologie und Disziplin aufbauen</li>
-        </ul>
-      </div>
-
-      <div class="card">
-        <div class="top-tag">Tools</div>
-        <h2>Integrierte Trading Tools</h2>
-        <ul class="tool-list">
-          <li>Lot Size Rechner</li>
-          <li>Trading Journal</li>
-          <li>TradingView Integration</li>
-          <li>Risk / Reward Unterstützung</li>
-        </ul>
-      </div>
-    </section>
-
-    <section class="grid-2">
-      <div class="card">
-        <div class="top-tag">Fortschritt</div>
-        <h2>Strukturierter Lernweg</h2>
-        <p>
-          Arbeite die Inhalte Schritt für Schritt durch und baue dir eine klare Education Struktur auf.
-        </p>
-
-        <div class="progress-wrap">
-          <div class="progress-label">
-            <span>Beispiel Fortschritt</span>
-            <span>35%</span>
-          </div>
-          <div class="progress-bar">
-            <div class="progress-fill"></div>
-          </div>
-        </div>
-
-        <div class="stats-grid">
-          <div class="stat-box">
-            <span>Education Module</span>
-            <strong>6</strong>
-          </div>
-          <div class="stat-box">
-            <span>Trading Tools</span>
-            <strong>4</strong>
-          </div>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="top-tag">Premium Education</div>
-        <h2>Education Programm</h2>
-        <p>
-          Der BullProsperity Bereich verbindet Trading Education, Long Term Inhalte und moderne Tools.
-        </p>
-        <ul class="tool-list">
-          <li>Trading Grundlagen</li>
-          <li>Marktstruktur & Liquidity</li>
-          <li>Risk Management</li>
-          <li>Long Term Investing</li>
-        </ul>
-      </div>
-    </section>
-
-    <section class="wide-card">
-      <div class="top-tag">BullProsperity Education</div>
-      <h2>Eine moderne Education Plattform für ambitionierte Trader</h2>
-      <p>
-        BullProsperity verbindet Education, Analyse, Struktur und langfristiges Denken in einer
-        modernen Premium-Umgebung.
-      </p>
-
-      <div class="btn-row">
-        <a href="/api/whop/login" class="btn btn-gold">Jetzt starten</a>
-        <a href="/hub.html" class="btn btn-outline">Zum Hub</a>
-      </div>
-    </section>
-  </main>
-
-  <div class="footer-note">
-    Alle Inhalte auf BullProsperity dienen ausschließlich zu Ausbildungs-, Lern- und Analysezwecken.
-    Es handelt sich nicht um Finanzberatung, Anlageberatung oder konkrete Handelsempfehlungen.
   </div>
 </body>
 </html>
