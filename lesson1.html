@@ -3,625 +3,561 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>BullProsperity Lesson 1</title>
+  <title>BullProsperity | Lesson 1</title>
+
   <script>
-(async function () {
+    (async () => {
+      try {
+        const res = await fetch("/api/access", {
+          credentials: "include"
+        });
+        const data = await res.json();
 
-  const res = await fetch("/api/access");
-  const data = await res.json();
+        if (data.role !== "admin" && data.role !== "premium") {
+          window.location.href = "locked.html";
+        }
+      } catch (err) {
+        window.location.href = "locked.html";
+      }
+    })();
+  </script>
 
-  if (data.role !== "admin" && data.role !== "premium") {
-    window.location.href = "locked.html";
-  }
-
-})();
-</script>
   <style>
-    *{
-      margin:0;
-      padding:0;
-      box-sizing:border-box;
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
     }
 
-    :root{
-      --bg:#060606;
-      --panel:rgba(18,18,18,0.82);
-      --panel-2:rgba(10,10,10,0.92);
-      --gold:#ffd700;
-      --gold-2:#ffbf00;
-      --text:#f3f3f3;
-      --muted:#cfcfcf;
-      --line:rgba(255,255,255,0.06);
-      --gold-line:rgba(255,215,0,0.16);
+    :root {
+      --gold: #ffd700;
+      --gold-soft: #ffe45e;
+      --white: #ffffff;
+      --text: #e7e7e7;
     }
 
-    body{
-      font-family:Arial, Helvetica, sans-serif;
-      background:var(--bg);
-      color:var(--text);
-      overflow-x:hidden;
-      min-height:100vh;
-      position:relative;
-    }
-
-    body::before{
-      content:"";
-      position:fixed;
-      inset:0;
+    body {
+      font-family: Arial, Helvetica, sans-serif;
       background:
-        radial-gradient(circle at 20% 15%, rgba(255,215,0,0.10), transparent 24%),
-        radial-gradient(circle at 84% 75%, rgba(255,215,0,0.07), transparent 22%),
-        linear-gradient(180deg, rgba(6,6,6,0.84), rgba(6,6,6,0.96));
-      z-index:-5;
-      pointer-events:none;
+        radial-gradient(circle at top, rgba(255, 215, 0, 0.07), transparent 35%),
+        linear-gradient(135deg, #050505, #090909 58%, #101010);
+      color: var(--white);
+      min-height: 100vh;
+      overflow-x: hidden;
     }
 
-    .grid-overlay{
-      position:fixed;
-      inset:0;
-      z-index:-4;
-      pointer-events:none;
-      opacity:0.10;
-      background-image:
-        linear-gradient(to right, rgba(255,255,255,0.05) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(255,255,255,0.05) 1px, transparent 1px);
-      background-size:64px 64px;
-      mask-image:linear-gradient(to bottom, rgba(0,0,0,0.95), rgba(0,0,0,0.45));
+    .chart-bg {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      opacity: 0.22;
     }
 
-    .chart-bg{
-      position:fixed;
-      inset:0;
-      z-index:-3;
-      pointer-events:none;
-      overflow:hidden;
-      opacity:0.50;
+    .chart-bg svg {
+      width: 100%;
+      height: 100%;
+      display: block;
     }
 
-    .chart-svg{
-      position:absolute;
-      inset:0;
-      width:100%;
-      height:100%;
+    .line-main {
+      fill: none;
+      stroke: rgba(255, 215, 0, 0.62);
+      stroke-width: 3.5;
     }
 
-    .chart-line{
-      fill:none;
-      stroke:rgba(255,215,0,0.40);
-      stroke-width:3.5;
-      stroke-linecap:round;
-      stroke-linejoin:round;
+    .line-alt {
+      fill: none;
+      stroke: rgba(255, 255, 255, 0.12);
+      stroke-width: 2.2;
     }
 
-    .chart-line-2{
-      fill:none;
-      stroke:rgba(255,255,255,0.14);
-      stroke-width:2;
+    .wick-gold {
+      stroke: rgba(255, 215, 0, 0.4);
+      stroke-width: 2.2;
     }
 
-    .candle{
-      fill:rgba(255,215,0,0.22);
-      stroke:rgba(255,215,0,0.55);
-      stroke-width:1.3;
+    .wick-white {
+      stroke: rgba(255, 255, 255, 0.16);
+      stroke-width: 2;
     }
 
-    .candle.alt{
-      fill:rgba(255,255,255,0.07);
-      stroke:rgba(255,255,255,0.22);
+    .body-gold {
+      fill: rgba(255, 215, 0, 0.16);
+      stroke: rgba(255, 215, 0, 0.34);
+      stroke-width: 1.4;
     }
 
-    .floating-glow{
-      position:absolute;
-      width:420px;
-      height:420px;
-      border-radius:50%;
-      background:radial-gradient(circle, rgba(255,215,0,0.08), transparent 68%);
-      filter:blur(22px);
+    .body-white {
+      fill: rgba(255, 255, 255, 0.05);
+      stroke: rgba(255, 255, 255, 0.14);
+      stroke-width: 1.2;
     }
 
-    .floating-glow.one{
-      top:6%;
-      left:-8%;
+    .page-shell {
+      position: relative;
+      z-index: 1;
+      width: min(1320px, calc(100% - 36px));
+      margin: 18px auto;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-radius: 16px;
+      padding: 22px 26px 34px;
+      background: rgba(0, 0, 0, 0.08);
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.02);
     }
 
-    .floating-glow.two{
-      bottom:-8%;
-      right:-6%;
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 26px;
     }
 
-    header{
-      position:sticky;
-      top:0;
-      z-index:30;
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      padding:22px 7%;
-      background:rgba(5,5,5,0.62);
-      backdrop-filter:blur(12px);
-      border-bottom:1px solid var(--line);
+    .logo {
+      color: var(--gold);
+      font-weight: 800;
+      font-size: 2.1rem;
+      letter-spacing: -0.03em;
+      text-shadow: 0 0 15px rgba(255, 215, 0, 0.18);
     }
 
-    .logo{
-      font-size:34px;
-      font-weight:800;
-      color:var(--gold);
-      letter-spacing:0.4px;
-      text-shadow:0 0 14px rgba(255,215,0,0.18);
+    nav {
+      display: flex;
+      gap: 26px;
+      align-items: center;
+      flex-wrap: wrap;
     }
 
-    nav{
-      display:flex;
-      gap:24px;
-      flex-wrap:wrap;
+    nav a {
+      color: #ffffff;
+      text-decoration: none;
+      font-size: 0.95rem;
+      font-weight: 700;
+      transition: 0.2s ease;
     }
 
-    nav a{
-      color:#fff;
-      text-decoration:none;
-      font-size:15px;
-      font-weight:700;
-      transition:0.25s ease;
+    nav a:hover {
+      color: var(--gold);
     }
 
-    nav a:hover{
-      color:var(--gold);
+    .hero-wrap,
+    .card {
+      border: 1px solid rgba(255, 215, 0, 0.12);
+      border-radius: 28px;
+      background:
+        radial-gradient(circle at top left, rgba(255, 215, 0, 0.08), transparent 26%),
+        linear-gradient(180deg, rgba(16,16,16,0.96), rgba(11,11,11,0.95));
+      position: relative;
+      overflow: hidden;
+      box-shadow:
+        0 0 0 1px rgba(255, 255, 255, 0.03),
+        0 20px 40px rgba(0,0,0,0.24);
     }
 
-    .page{
-      display:grid;
-      grid-template-columns:320px 1fr;
-      gap:24px;
-      padding:28px 7% 50px;
-      min-height:calc(100vh - 90px);
+    .hero-wrap {
+      width: min(1120px, 100%);
+      margin: 0 auto;
+      padding: 34px 34px 26px;
     }
 
-    .sidebar{
-      background:linear-gradient(180deg, rgba(18,18,18,0.80), rgba(8,8,8,0.92));
-      border:1px solid var(--gold-line);
-      border-radius:28px;
-      padding:22px 18px;
-      box-shadow:0 20px 55px rgba(0,0,0,0.30);
-      height:fit-content;
-      position:sticky;
-      top:105px;
-      backdrop-filter:blur(10px);
+    .card {
+      padding: 24px 24px 22px;
     }
 
-    .sidebar h2{
-      color:var(--gold);
-      font-size:24px;
-      margin-bottom:8px;
+    .hero-badge,
+    .top-tag {
+      display: inline-block;
+      padding: 8px 16px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 215, 0, 0.32);
+      color: var(--gold-soft);
+      background: rgba(255, 215, 0, 0.07);
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 16px;
     }
 
-    .sidebar p{
-      color:#d9d9d9;
-      line-height:1.7;
-      font-size:14px;
-      margin-bottom:18px;
+    .hero-center {
+      text-align: center;
     }
 
-    .side-link{
-      display:block;
-      width:100%;
-      text-decoration:none;
-      color:#ffffff;
-      padding:14px 16px;
-      border-radius:14px;
-      background:rgba(255,255,255,0.03);
-      border:1px solid rgba(255,255,255,0.07);
-      margin-bottom:12px;
-      transition:0.25s ease;
-      font-weight:700;
+    .hero-title {
+      font-size: clamp(2.7rem, 5vw, 5.2rem);
+      line-height: 0.95;
+      font-weight: 900;
+      letter-spacing: -0.04em;
+      margin-bottom: 18px;
+    }
+
+    .hero-title .white {
+      color: var(--white);
+    }
+
+    .hero-title .gold {
+      color: var(--gold);
+      text-shadow: 0 0 18px rgba(255, 215, 0, 0.14);
+    }
+
+    .hero-text {
+      max-width: 900px;
+      margin: 0 auto;
+      font-size: 0.98rem;
+      line-height: 1.65;
+      color: #ededed;
+    }
+
+    .layout {
+      width: min(1120px, 100%);
+      margin: 26px auto 0;
+      display: grid;
+      gap: 18px;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      gap: 18px;
+    }
+
+    .card h2 {
+      color: var(--gold);
+      font-size: 2rem;
+      line-height: 1;
+      margin-bottom: 10px;
+      font-weight: 900;
+      letter-spacing: -0.03em;
+    }
+
+    .card h3 {
+      color: var(--gold);
+      font-size: 1.25rem;
+      line-height: 1.2;
+      margin-bottom: 10px;
+      font-weight: 800;
+    }
+
+    .card p {
+      color: #f0f0f0;
+      font-size: 0.95rem;
+      line-height: 1.65;
+    }
+
+    .side-links {
+      display: grid;
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .side-link {
+      display: block;
+      text-decoration: none;
+      color: #ffffff;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255, 215, 0, 0.1);
+      border-radius: 16px;
+      padding: 14px 16px;
+      font-size: 0.93rem;
+      font-weight: 700;
+      transition: 0.2s ease;
     }
 
     .side-link:hover,
-    .side-link.active{
-      border-color:rgba(255,215,0,0.35);
-      color:var(--gold);
-      box-shadow:0 0 18px rgba(255,215,0,0.08);
-      transform:translateY(-1px);
+    .side-link.active {
+      color: var(--gold);
+      background: rgba(255,255,255,0.04);
     }
 
-    .content{
-      display:flex;
-      flex-direction:column;
-      gap:22px;
+    .content-stack {
+      display: grid;
+      gap: 18px;
     }
 
-    .hero{
-      padding:28px 28px;
-      border-radius:30px;
-      background:linear-gradient(180deg, rgba(18,18,18,0.74), rgba(8,8,8,0.88));
-      border:1px solid var(--gold-line);
-      box-shadow:0 24px 60px rgba(0,0,0,0.34);
-      backdrop-filter:blur(10px);
-      position:relative;
-      overflow:hidden;
+    .bullet-list {
+      list-style: none;
+      display: grid;
+      gap: 12px;
+      margin-top: 16px;
     }
 
-    .hero::before{
-      content:"";
-      position:absolute;
-      top:-80px;
-      right:-80px;
-      width:240px;
-      height:240px;
-      border-radius:50%;
-      background:radial-gradient(circle, rgba(255,215,0,0.08), transparent 70%);
-      pointer-events:none;
+    .bullet-list li {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255, 215, 0, 0.1);
+      border-radius: 16px;
+      padding: 14px 14px;
+      color: #f2f2f2;
+      font-size: 0.93rem;
+      line-height: 1.55;
+      font-weight: 600;
     }
 
-    .badge{
-      display:inline-block;
-      margin-bottom:14px;
-      padding:8px 14px;
-      border-radius:999px;
-      border:1px solid rgba(255,215,0,0.24);
-      background:rgba(255,215,0,0.05);
-      color:var(--gold);
-      font-size:12px;
-      font-weight:800;
+    .note-box {
+      margin-top: 16px;
+      padding: 16px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255, 215, 0, 0.1);
     }
 
-    .hero h1{
-      font-size:42px;
-      line-height:1.08;
-      margin-bottom:10px;
+    .note-box p {
+      font-size: 0.93rem;
+      line-height: 1.65;
     }
 
-    .hero h1 .white{
-      color:#fff;
+    .btn-row {
+      display: flex;
+      justify-content: flex-start;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin-top: 20px;
     }
 
-    .hero h1 .gold{
-      color:var(--gold);
+    .btn {
+      min-width: 155px;
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      padding: 14px 20px;
+      border-radius: 16px;
+      font-weight: 800;
+      text-decoration: none;
+      transition: 0.2s ease;
+      font-size: 0.95rem;
+      border: none;
+      cursor: pointer;
     }
 
-    .hero p{
-      max-width:860px;
-      color:#e5e5e5;
-      font-size:17px;
-      line-height:1.8;
+    .btn-gold {
+      color: #111111;
+      background: linear-gradient(135deg, #ffe15b, #f0b90b);
+      box-shadow: 0 6px 16px rgba(255, 215, 0, 0.14);
     }
 
-    .video-card{
-      border-radius:28px;
-      background:linear-gradient(180deg, rgba(18,18,18,0.84), rgba(8,8,8,0.92));
-      border:1px solid var(--gold-line);
-      box-shadow:0 20px 55px rgba(0,0,0,0.30);
-      overflow:hidden;
+    .btn-gold:hover {
+      transform: translateY(-1px);
     }
 
-    .video-head{
-      display:flex;
-      justify-content:space-between;
-      gap:16px;
-      align-items:flex-start;
-      padding:24px 24px 0;
-      flex-wrap:wrap;
+    .btn-outline {
+      color: #ffffff;
+      border: 1px solid rgba(255, 215, 0, 0.28);
+      background: rgba(255,255,255,0.02);
     }
 
-    .video-head h2{
-      color:var(--gold);
-      font-size:30px;
-      margin-bottom:8px;
+    .btn-outline:hover {
+      color: var(--gold);
+      background: rgba(255,255,255,0.04);
     }
 
-    .video-head p{
-      color:#dddddd;
-      line-height:1.75;
-      max-width:860px;
+    .center-note {
+      width: min(960px, 100%);
+      margin: 10px auto 0;
+      text-align: center;
+      padding: 8px 10px 0;
     }
 
-    .lesson-status{
-      padding:8px 12px;
-      border-radius:999px;
-      background:rgba(255,215,0,0.06);
-      border:1px solid rgba(255,215,0,0.22);
-      color:var(--gold);
-      font-size:12px;
-      font-weight:800;
-      white-space:nowrap;
+    .center-note h2 {
+      color: var(--gold);
+      font-size: clamp(2rem, 3.4vw, 3.1rem);
+      line-height: 1.05;
+      margin-bottom: 12px;
+      letter-spacing: -0.03em;
+      font-weight: 900;
     }
 
-    .video-box{
-      margin:22px 24px 24px;
-      min-height:480px;
-      border-radius:22px;
-      border:1px solid rgba(255,255,255,0.06);
-      background:
-        linear-gradient(180deg, rgba(0,0,0,0.55), rgba(0,0,0,0.82)),
-        radial-gradient(circle at center, rgba(255,215,0,0.08), transparent 35%),
-        #050505;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      text-align:center;
-      padding:30px;
-      position:relative;
-      overflow:hidden;
+    .center-note p {
+      color: #ededed;
+      line-height: 1.7;
+      font-size: 1rem;
+      max-width: 820px;
+      margin: 0 auto;
+      font-weight: 600;
     }
 
-    .video-box::before{
-      content:"";
-      position:absolute;
-      inset:0;
-      background:
-        linear-gradient(to right, rgba(255,255,255,0.04) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(255,255,255,0.04) 1px, transparent 1px);
-      background-size:56px 56px;
-      opacity:0.25;
-      pointer-events:none;
-    }
-
-    .play-placeholder{
-      position:relative;
-      z-index:2;
-      max-width:760px;
-    }
-
-    .play-icon{
-      width:88px;
-      height:88px;
-      margin:0 auto 18px;
-      border-radius:50%;
-      background:linear-gradient(45deg,var(--gold),var(--gold-2));
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      color:#111;
-      font-size:34px;
-      box-shadow:0 0 24px rgba(255,215,0,0.22);
-    }
-
-    .play-placeholder h3{
-      font-size:28px;
-      color:#fff;
-      margin-bottom:10px;
-    }
-
-    .play-placeholder p{
-      color:#d7d7d7;
-      line-height:1.8;
-      font-size:16px;
-    }
-
-    .two-col{
-      display:grid;
-      grid-template-columns:repeat(2,minmax(0,1fr));
-      gap:18px;
-    }
-
-    .card{
-      border-radius:22px;
-      padding:22px;
-      background:linear-gradient(180deg, rgba(18,18,18,0.80), rgba(8,8,8,0.90));
-      border:1px solid var(--gold-line);
-      box-shadow:0 18px 45px rgba(0,0,0,0.26);
-    }
-
-    .card h3{
-      color:var(--gold);
-      font-size:22px;
-      margin-bottom:12px;
-    }
-
-    .card p,
-    .card li{
-      color:#dddddd;
-      line-height:1.8;
-      font-size:15px;
-    }
-
-    .card ul{
-      padding-left:18px;
-    }
-
-    .btn-row{
-      display:flex;
-      gap:12px;
-      flex-wrap:wrap;
-      margin-top:16px;
-    }
-
-    .btn{
-      display:inline-block;
-      padding:12px 18px;
-      border-radius:12px;
-      text-decoration:none;
-      font-weight:800;
-      transition:0.25s ease;
-      font-size:14px;
-      border:none;
-      cursor:pointer;
-    }
-
-    .btn-gold{
-      background:linear-gradient(45deg,var(--gold),var(--gold-2));
-      color:#111111;
-      box-shadow:0 0 16px rgba(255,215,0,0.2);
-    }
-
-    .btn-gold:hover{
-      transform:translateY(-2px);
-      box-shadow:0 0 22px rgba(255,215,0,0.34);
-    }
-
-    .btn-outline{
-      background:rgba(255,215,0,0.04);
-      border:1px solid rgba(255,215,0,0.3);
-      color:var(--gold);
-    }
-
-    .btn-outline:hover{
-      transform:translateY(-2px);
-      background:rgba(255,215,0,0.08);
-    }
-
-    footer{
-      text-align:center;
-      padding:30px 20px 40px;
-      color:#9d9d9d;
-      border-top:1px solid rgba(255,255,255,0.06);
-      background:rgba(0,0,0,0.28);
-    }
-
-    @media (max-width:1100px){
-      .page{
-        grid-template-columns:1fr;
+    @media (max-width: 1000px) {
+      .grid-2 {
+        grid-template-columns: 1fr;
       }
 
-      .sidebar{
-        position:relative;
-        top:0;
+      .page-shell {
+        width: min(100% - 20px, 1320px);
+        padding: 18px 14px 28px;
       }
 
-      .two-col{
-        grid-template-columns:1fr;
-      }
-    }
-
-    @media (max-width:700px){
-      header{
-        flex-direction:column;
-        gap:14px;
+      .hero-wrap,
+      .card {
+        padding: 22px 18px 18px;
       }
 
-      .hero h1{
-        font-size:34px;
+      .logo {
+        font-size: 1.6rem;
       }
 
-      .logo{
-        font-size:28px;
+      nav {
+        gap: 14px;
       }
 
-      .page{
-        padding:20px 5% 40px;
-      }
-
-      .video-box{
-        min-height:320px;
+      nav a {
+        font-size: 0.88rem;
       }
     }
   </style>
 </head>
 <body>
-
-  <div class="grid-overlay"></div>
-
   <div class="chart-bg">
-    <div class="floating-glow one"></div>
-    <div class="floating-glow two"></div>
-    <svg class="chart-svg" viewBox="0 0 1600 900" preserveAspectRatio="none">
-      <path class="chart-line-2" d="M0,620 C120,600 180,540 260,560 C340,580 420,500 500,470 C610,425 680,470 760,390 C840,315 900,345 980,280 C1080,200 1170,240 1260,185 C1360,124 1460,155 1600,90" />
-      <path class="chart-line" d="M0,700 C90,670 140,710 230,640 C320,570 390,610 470,520 C560,420 640,500 730,430 C820,360 900,390 995,290 C1090,190 1180,230 1290,145 C1390,67 1470,105 1600,40" />
-      <line class="candle" x1="180" y1="690" x2="180" y2="620"></line><rect class="candle" x="172" y="640" width="16" height="34"></rect>
-      <line class="candle alt" x1="250" y1="660" x2="250" y2="590"></line><rect class="candle alt" x="242" y="605" width="16" height="30"></rect>
-      <line class="candle" x1="330" y1="610" x2="330" y2="535"></line><rect class="candle" x="322" y="548" width="16" height="40"></rect>
-      <line class="candle alt" x1="405" y1="630" x2="405" y2="555"></line><rect class="candle alt" x="397" y="572" width="16" height="34"></rect>
-      <line class="candle" x1="500" y1="560" x2="500" y2="470"></line><rect class="candle" x="492" y="490" width="16" height="46"></rect>
-      <line class="candle" x1="590" y1="520" x2="590" y2="430"></line><rect class="candle" x="582" y="448" width="16" height="52"></rect>
-      <line class="candle alt" x1="675" y1="545" x2="675" y2="470"></line><rect class="candle alt" x="667" y="485" width="16" height="34"></rect>
-      <line class="candle" x1="760" y1="470" x2="760" y2="380"></line><rect class="candle" x="752" y="398" width="16" height="50"></rect>
-      <line class="candle alt" x1="850" y1="430" x2="850" y2="350"></line><rect class="candle alt" x="842" y="365" width="16" height="38"></rect>
-      <line class="candle" x1="940" y1="370" x2="940" y2="285"></line><rect class="candle" x="932" y="300" width="16" height="48"></rect>
-      <line class="candle alt" x1="1030" y1="315" x2="1030" y2="235"></line><rect class="candle alt" x="1022" y="248" width="16" height="42"></rect>
-      <line class="candle" x1="1120" y1="250" x2="1120" y2="170"></line><rect class="candle" x="1112" y="184" width="16" height="45"></rect>
-      <line class="candle alt" x1="1210" y1="215" x2="1210" y2="145"></line><rect class="candle alt" x="1202" y="158" width="16" height="36"></rect>
-      <line class="candle" x1="1315" y1="165" x2="1315" y2="95"></line><rect class="candle" x="1307" y="108" width="16" height="40"></rect>
-      <line class="candle alt" x1="1410" y1="135" x2="1410" y2="72"></line><rect class="candle alt" x="1402" y="84" width="16" height="33"></rect>
+    <svg viewBox="0 0 1600 900" preserveAspectRatio="none">
+      <path class="line-alt" d="M0,645 C130,620 190,565 320,548 C435,532 520,564 635,485 C760,398 825,435 935,342 C1045,248 1135,280 1255,198 C1360,126 1465,142 1600,128" />
+      <path class="line-main" d="M0,730 C120,708 220,650 335,618 C455,585 545,534 670,448 C790,365 890,390 1008,298 C1110,220 1205,210 1325,154 C1430,105 1515,105 1600,88" />
+
+      <line class="wick-gold" x1="112" y1="770" x2="112" y2="694"></line>
+      <rect class="body-gold" x="101" y="722" width="22" height="34" rx="4"></rect>
+
+      <line class="wick-white" x1="220" y1="688" x2="220" y2="615"></line>
+      <rect class="body-white" x="209" y="640" width="22" height="31" rx="4"></rect>
+
+      <line class="wick-gold" x1="332" y1="650" x2="332" y2="582"></line>
+      <rect class="body-gold" x="321" y="604" width="22" height="30" rx="4"></rect>
+
+      <line class="wick-white" x1="478" y1="585" x2="478" y2="515"></line>
+      <rect class="body-white" x="467" y="536" width="22" height="33" rx="4"></rect>
+
+      <line class="wick-gold" x1="622" y1="515" x2="622" y2="440"></line>
+      <rect class="body-gold" x="611" y="460" width="22" height="36" rx="4"></rect>
+
+      <line class="wick-white" x1="770" y1="432" x2="770" y2="360"></line>
+      <rect class="body-white" x="759" y="382" width="22" height="32" rx="4"></rect>
+
+      <line class="wick-gold" x1="915" y1="355" x2="915" y2="286"></line>
+      <rect class="body-gold" x="904" y="304" width="22" height="35" rx="4"></rect>
+
+      <line class="wick-white" x1="1060" y1="285" x2="1060" y2="222"></line>
+      <rect class="body-white" x="1049" y="238" width="22" height="28" rx="4"></rect>
+
+      <line class="wick-gold" x1="1212" y1="220" x2="1212" y2="160"></line>
+      <rect class="body-gold" x="1201" y="174" width="22" height="30" rx="4"></rect>
+
+      <line class="wick-white" x1="1390" y1="170" x2="1390" y2="108"></line>
+      <rect class="body-white" x="1379" y="124" width="22" height="26" rx="4"></rect>
+
+      <line class="wick-gold" x1="1496" y1="135" x2="1496" y2="84"></line>
+      <rect class="body-gold" x="1485" y="95" width="22" height="24" rx="4"></rect>
     </svg>
   </div>
 
-  <header>
-    <div class="logo">BullProsperity</div>
-    <a href="/index.html">Home</a>
-<a href="/hub.html">Hub</a>
-<a href="/course.html">Course</a>
-<a href="/tools.html">Tools</a>
-  </header>
+  <div class="page-shell">
+    <div class="topbar">
+      <div class="logo">BullProsperity</div>
 
-  <main class="page">
-    <aside class="sidebar">
-      <h2>Lesson Navigation</h2>
-      <p>Nutze diese Seite als hochwertige Video-Lektion innerhalb deiner BullProsperity Academy.</p>
+      <nav>
+        <a href="/index.html">Home</a>
+        <a href="/hub.html">Hub</a>
+        <a href="/course.html">Course</a>
+        <a href="/tools.html">Tools</a>
+        <a href="/api/whop/login">Login</a>
+      </nav>
+    </div>
 
-      <a href="/course.html" class="side-link">Zur Kursübersicht</a>
-      <a href="/lesson1.html" class="side-link active">Lesson 1</a>
-      <a href="/locked.html" class="side-link">Nächste Lektion</a>
-      <a href="/hub.html" class="side-link">Zurück zum Hub</a>
-    </aside>
+    <section class="hero-wrap">
+      <div class="hero-center">
+        <div class="hero-badge">Lesson 1</div>
 
-    <section class="content">
-      <div class="hero">
-        <div class="badge">Modul 1 • Lesson 1</div>
-        <h1>
-          <span class="white">Wie du den Kurs</span><br>
-          <span class="gold">richtig durcharbeitest</span>
-        </h1>
-        <p>
-          Diese Lektion zeigt dir, wie du BullProsperity strukturiert nutzt,
-          Inhalte nicht nur konsumierst, sondern richtig umsetzt und mit einem
-          klaren Lernprozess arbeitest.
+        <div class="hero-title">
+          <span class="white">BullProsperity</span><br>
+          <span class="gold">Course Introduction</span>
+        </div>
+
+        <p class="hero-text">
+          Diese Lektion zeigt dir, wie du die BullProsperity Education richtig durcharbeitest,
+          damit du strukturiert lernst und nicht einfach nur Inhalte konsumierst.
         </p>
       </div>
-
-      <div class="video-card">
-        <div class="video-head">
-          <div>
-            <h2>Videolektion</h2>
-            <p>
-              Hier kann später dein echtes Video eingebettet werden — zum Beispiel
-              über Vimeo, YouTube privat oder einen anderen geschützten Player.
-            </p>
-          </div>
-          <div class="lesson-status">Pflichtlektion</div>
-        </div>
-
-        <div class="video-box">
-          <div class="play-placeholder">
-            <div class="play-icon">▶</div>
-            <h3>Video bereit für Einbindung</h3>
-            <p>
-              Ersetze diesen Bereich später durch deinen echten Embed-Code oder
-              einen privaten Video-Player für Mitglieder.
-            </p>
-          </div>
-        </div>
-      </div>
-
-      <div class="two-col">
-        <div class="card">
-          <h3>Keypoints der Lektion</h3>
-          <ul>
-            <li>Arbeite den Kurs Modul für Modul durch</li>
-            <li>Überspringe wichtige Grundlagen nicht</li>
-            <li>Setze Inhalte direkt praktisch um</li>
-            <li>Nutze Journal und Tools parallel zum Lernen</li>
-            <li>Baue Trading Schritt für Schritt strukturiert auf</li>
-          </ul>
-        </div>
-
-        <div class="card">
-          <h3>Notizen & Umsetzung</h3>
-          <p>
-            Diese Lektion soll dir helfen, BullProsperity wie eine echte Academy
-            zu nutzen: mit Disziplin, Reihenfolge und klarer Umsetzung statt nur
-            Inhalte zu konsumieren.
-          </p>
-          <div class="btn-row">
-            <a href="/locked.html" class="btn btn-gold">Nächste Lektion</a>
-            <a href="/course.html" class="btn btn-outline">Zur Kursübersicht</a>
-          </div>
-        </div>
-      </div>
     </section>
-  </main>
 
-  <footer>
-    © 2026 BullProsperity FX. Alle Rechte vorbehalten.
-  </footer>
+    <div class="layout">
+      <section class="grid-2">
+        <aside class="card">
+          <div class="top-tag">Lesson Navigation</div>
+          <h2>Navigation</h2>
+          <p>Nutze diese Seite als hochwertige Video-Lektion innerhalb deiner BullProsperity Education.</p>
 
+          <div class="side-links">
+            <a href="/course.html" class="side-link">Zur Kursübersicht</a>
+            <a href="/lesson1.html" class="side-link active">Lesson 1</a>
+            <a href="/locked.html" class="side-link">Nächste Lektion</a>
+            <a href="/hub.html" class="side-link">Zurück zum Hub</a>
+          </div>
+        </aside>
+
+        <div class="content-stack">
+          <section class="card">
+            <div class="top-tag">Video Bereich</div>
+            <h2>Lesson Content</h2>
+            <p>
+              Hier kannst du später dein Video, deine Aufnahme oder einen eingebetteten Player einsetzen.
+              Der Bereich ist bewusst im Premium-Stil gehalten und kann jederzeit erweitert werden.
+            </p>
+
+            <div class="note-box">
+              <p>
+                <strong style="color:#ffd700;">Hinweis:</strong>
+                Füge hier dein Kursvideo oder einen externen Video-Embed ein, damit Mitglieder
+                die Lektion direkt im geschützten Bereich anschauen können.
+              </p>
+            </div>
+          </section>
+
+          <section class="card">
+            <div class="top-tag">Lernziele</div>
+            <h2>Was du in dieser Lektion verstehen sollst</h2>
+            <ul class="bullet-list">
+              <li>Wie du den Kurs strukturiert statt chaotisch durcharbeitest</li>
+              <li>Warum Reihenfolge, Disziplin und Umsetzung entscheidend sind</li>
+              <li>Wie du Kurs, Tools und Journal sinnvoll kombinierst</li>
+              <li>Warum diese Education für langfristigen Fortschritt gebaut ist</li>
+            </ul>
+          </section>
+
+          <section class="card">
+            <div class="top-tag">Wichtiger Hinweis</div>
+            <h2>Education & Risiko Aufklärung</h2>
+            <p>
+              Alle Inhalte dienen ausschließlich zu Ausbildungs-, Lern- und Analysezwecken.
+              Es handelt sich nicht um Finanzberatung, Anlageberatung oder eine Aufforderung zum Kauf
+              oder Verkauf von Finanzinstrumenten.
+            </p>
+
+            <div class="note-box">
+              <p>
+                Trading und Investing sind mit Risiken verbunden. Gewinne sind nie garantiert.
+                Nutze die Inhalte verantwortungsvoll und arbeite mit einem klaren Risk Management.
+              </p>
+            </div>
+          </section>
+
+          <section class="card">
+            <div class="top-tag">Notizen & Umsetzung</div>
+            <h2>So arbeitest du die Education richtig durch</h2>
+            <ul class="bullet-list">
+              <li>Überspringe wichtige Grundlagen nicht</li>
+              <li>Setze Inhalte direkt praktisch um</li>
+              <li>Nutze Journal und Tools parallel zum Lernen</li>
+              <li>Baue Trading Schritt für Schritt strukturiert auf</li>
+            </ul>
+
+            <div class="btn-row">
+              <a href="/locked.html" class="btn btn-gold">Nächste Lektion</a>
+              <a href="/course.html" class="btn btn-outline">Zur Kursübersicht</a>
+            </div>
+          </section>
+        </div>
+      </section>
+
+      <section class="center-note">
+        <h2>Struktur zuerst, dann Tempo</h2>
+        <p>
+          Diese erste Lektion soll dir helfen, BullProsperity wie eine echte Education zu nutzen:
+          mit Disziplin, Reihenfolge und klarer Umsetzung statt nur Inhalte zu konsumieren.
+        </p>
+      </section>
+    </div>
+  </div>
 </body>
 </html>
