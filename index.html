@@ -48,8 +48,26 @@
     }
 
     .candle {
-      stroke: rgba(255, 215, 0, 0.32);
+      stroke: rgba(255, 215, 0, 0.34);
       stroke-width: 2;
+    }
+
+    .candle.alt {
+      stroke: rgba(255, 255, 255, 0.14);
+    }
+
+    .candle-body-up {
+      fill: rgba(255, 215, 0, 0.12);
+      stroke: rgba(255, 215, 0, 0.28);
+      stroke-width: 1.4;
+      rx: 4;
+    }
+
+    .candle-body-down {
+      fill: rgba(255, 255, 255, 0.06);
+      stroke: rgba(255, 255, 255, 0.16);
+      stroke-width: 1.2;
+      rx: 4;
     }
 
     header {
@@ -320,13 +338,44 @@
       <path class="line-alt" d="M0,650 C110,620 170,565 290,550 C380,540 470,570 560,495 C665,410 720,450 820,350 C905,265 980,290 1085,220 C1205,140 1285,185 1415,120 C1500,82 1548,108 1600,86" />
       <path class="line-main" d="M0,730 C85,695 160,685 255,610 C375,505 445,560 555,475 C655,396 725,420 835,315 C925,228 1010,258 1125,180 C1238,105 1325,145 1450,94 C1512,66 1560,70 1600,58" />
 
-      <line class="candle" x1="85" y1="768" x2="85" y2="705"></line>
-      <line class="candle" x1="255" y1="645" x2="255" y2="565"></line>
-      <line class="candle" x1="470" y1="545" x2="470" y2="460"></line>
-      <line class="candle" x1="700" y1="435" x2="700" y2="348"></line>
-      <line class="candle" x1="935" y1="286" x2="935" y2="210"></line>
-      <line class="candle" x1="1190" y1="160" x2="1190" y2="102"></line>
-      <line class="candle" x1="1480" y1="92" x2="1480" y2="55"></line>
+      <line class="candle" x1="85" y1="785" x2="85" y2="700"></line>
+      <rect class="candle-body-up" x="75" y="730" width="20" height="35"></rect>
+
+      <line class="candle alt" x1="165" y1="720" x2="165" y2="630"></line>
+      <rect class="candle-body-down" x="155" y="655" width="20" height="35"></rect>
+
+      <line class="candle" x1="255" y1="670" x2="255" y2="560"></line>
+      <rect class="candle-body-up" x="245" y="590" width="20" height="48"></rect>
+
+      <line class="candle alt" x1="360" y1="610" x2="360" y2="500"></line>
+      <rect class="candle-body-down" x="350" y="530" width="20" height="45"></rect>
+
+      <line class="candle" x1="470" y1="560" x2="470" y2="455"></line>
+      <rect class="candle-body-up" x="460" y="485" width="20" height="42"></rect>
+
+      <line class="candle alt" x1="580" y1="510" x2="580" y2="400"></line>
+      <rect class="candle-body-down" x="570" y="425" width="20" height="50"></rect>
+
+      <line class="candle" x1="700" y1="455" x2="700" y2="345"></line>
+      <rect class="candle-body-up" x="690" y="375" width="20" height="46"></rect>
+
+      <line class="candle alt" x1="820" y1="382" x2="820" y2="275"></line>
+      <rect class="candle-body-down" x="810" y="300" width="20" height="45"></rect>
+
+      <line class="candle" x1="935" y1="305" x2="935" y2="205"></line>
+      <rect class="candle-body-up" x="925" y="230" width="20" height="42"></rect>
+
+      <line class="candle alt" x1="1060" y1="235" x2="1060" y2="145"></line>
+      <rect class="candle-body-down" x="1050" y="165" width="20" height="36"></rect>
+
+      <line class="candle" x1="1190" y1="176" x2="1190" y2="98"></line>
+      <rect class="candle-body-up" x="1180" y="118" width="20" height="30"></rect>
+
+      <line class="candle alt" x1="1330" y1="128" x2="1330" y2="72"></line>
+      <rect class="candle-body-down" x="1320" y="84" width="20" height="24"></rect>
+
+      <line class="candle" x1="1480" y1="100" x2="1480" y2="52"></line>
+      <rect class="candle-body-up" x="1470" y="64" width="20" height="20"></rect>
     </svg>
   </div>
 
