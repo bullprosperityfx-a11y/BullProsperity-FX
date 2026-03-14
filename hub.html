@@ -21,27 +21,8 @@
       }
     })();
   </script>
-  
-  <style>
-    .longterm-highlight {
-  border: 1px solid rgba(255, 215, 0, 0.45);
-  background: linear-gradient(135deg,#ffd700,#f5b800);
-  color: #111 !important;
-  font-weight: 800;
-  box-shadow:
-    0 0 25px rgba(255,215,0,0.35),
-    0 8px 20px rgba(255,215,0,0.25);
-  transform: scale(1.02);
-  transition: all 0.25s ease;
-}
 
-.longterm-highlight:hover {
-  background: linear-gradient(135deg,#ffe75a,#ffd700);
-  transform: scale(1.06);
-  box-shadow:
-    0 0 40px rgba(255,215,0,0.6),
-    0 12px 28px rgba(255,215,0,0.35);
-}
+  <style>
     * {
       margin: 0;
       padding: 0;
@@ -49,15 +30,10 @@
     }
 
     :root {
-      --bg: #070707;
-      --panel: rgba(13, 13, 13, 0.94);
-      --panel-2: rgba(18, 18, 18, 0.92);
       --gold: #ffd700;
       --gold-soft: #ffe45e;
       --white: #ffffff;
       --text: #e7e7e7;
-      --line: rgba(255, 215, 0, 0.16);
-      --line-soft: rgba(255, 255, 255, 0.08);
     }
 
     body {
@@ -135,6 +111,7 @@
       align-items: center;
       justify-content: space-between;
       margin-bottom: 26px;
+      gap: 18px;
     }
 
     .logo {
@@ -143,6 +120,7 @@
       font-size: 2.1rem;
       letter-spacing: -0.03em;
       text-shadow: 0 0 15px rgba(255, 215, 0, 0.18);
+      white-space: nowrap;
     }
 
     nav {
@@ -150,6 +128,7 @@
       gap: 26px;
       align-items: center;
       flex-wrap: wrap;
+      justify-content: flex-end;
     }
 
     nav a {
@@ -186,6 +165,7 @@
 
     .card {
       padding: 24px 24px 22px;
+      min-height: 100%;
     }
 
     .hero-badge,
@@ -238,6 +218,10 @@
       margin-top: 24px;
     }
 
+    .btn-row.left {
+      justify-content: flex-start;
+    }
+
     .btn {
       min-width: 155px;
       display: inline-flex;
@@ -249,6 +233,8 @@
       text-decoration: none;
       transition: 0.2s ease;
       font-size: 0.95rem;
+      border: none;
+      cursor: pointer;
     }
 
     .btn-gold {
@@ -283,6 +269,7 @@
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 18px;
+      align-items: stretch;
     }
 
     .grid-2 {
@@ -300,28 +287,17 @@
       letter-spacing: -0.03em;
     }
 
+    .card h3 {
+      color: var(--gold);
+      font-size: 1.2rem;
+      margin-bottom: 8px;
+      font-weight: 800;
+    }
+
     .card p {
       color: #f0f0f0;
       font-size: 0.95rem;
       line-height: 1.6;
-    }
-
-    .mini-list {
-      list-style: none;
-      display: grid;
-      gap: 12px;
-      margin-top: 16px;
-    }
-
-    .mini-list li {
-      background: rgba(255,255,255,0.03);
-      border: 1px solid rgba(255, 215, 0, 0.1);
-      border-radius: 16px;
-      padding: 14px 14px;
-      color: #f2f2f2;
-      font-size: 0.93rem;
-      line-height: 1.5;
-      font-weight: 600;
     }
 
     .status-line {
@@ -332,13 +308,17 @@
       font-weight: 700;
     }
 
-    .quick-links {
+    .quick-links,
+    .mini-list,
+    .setup-list {
       display: grid;
       gap: 12px;
       margin-top: 16px;
     }
 
-    .quick-link {
+    .quick-link,
+    .mini-list li,
+    .setup-list li {
       display: block;
       text-decoration: none;
       color: #ffffff;
@@ -346,14 +326,36 @@
       border: 1px solid rgba(255, 215, 0, 0.1);
       border-radius: 16px;
       padding: 14px 16px;
-      font-size: 0.95rem;
+      font-size: 0.93rem;
       font-weight: 700;
       transition: 0.2s ease;
+      line-height: 1.5;
     }
 
     .quick-link:hover {
       color: var(--gold);
       background: rgba(255,255,255,0.04);
+    }
+
+    .longterm-highlight {
+      border: 1px solid rgba(255, 215, 0, 0.45);
+      background: linear-gradient(135deg,#ffd700,#f5b800);
+      color: #111 !important;
+      font-weight: 800;
+      box-shadow:
+        0 0 25px rgba(255,215,0,0.35),
+        0 8px 20px rgba(255,215,0,0.25);
+      transform: scale(1.02);
+      transition: all 0.25s ease;
+    }
+
+    .longterm-highlight:hover {
+      background: linear-gradient(135deg,#ffe75a,#ffd700);
+      transform: scale(1.06);
+      box-shadow:
+        0 0 40px rgba(255,215,0,0.6),
+        0 12px 28px rgba(255,215,0,0.35);
+      color: #111 !important;
     }
 
     .progress-wrap {
@@ -392,14 +394,18 @@
       margin-top: 16px;
     }
 
-    .stat-box {
+    .stat-box,
+    .market-box,
+    .journal-box {
       background: rgba(255,255,255,0.03);
       border: 1px solid rgba(255, 215, 0, 0.1);
       border-radius: 16px;
       padding: 16px 14px;
     }
 
-    .stat-box span {
+    .stat-box span,
+    .market-box span,
+    .journal-box span {
       display: block;
       color: #d4d4d4;
       font-size: 0.9rem;
@@ -407,10 +413,94 @@
       font-weight: 600;
     }
 
-    .stat-box strong {
+    .stat-box strong,
+    .market-box strong,
+    .journal-box strong {
       color: var(--gold);
       font-size: 1.2rem;
       font-weight: 900;
+    }
+
+    .tv-chart {
+      margin-top: 20px;
+      border-radius: 22px;
+      overflow: hidden;
+      border: 1px solid rgba(255,215,0,0.15);
+      background: rgba(0,0,0,0.35);
+    }
+
+    #tradingview_chart {
+      width: 100%;
+      height: 600px;
+    }
+
+    .journal-inputs {
+      display: grid;
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .journal-row {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    input,
+    select,
+    textarea {
+      width: 100%;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255, 215, 0, 0.12);
+      color: #ffffff;
+      border-radius: 16px;
+      padding: 14px 14px;
+      font-size: 0.95rem;
+      outline: none;
+    }
+
+    textarea {
+      min-height: 110px;
+      resize: vertical;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      border-color: rgba(255, 215, 0, 0.32);
+      box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.05);
+    }
+
+    .journal-list {
+      display: grid;
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .journal-entry {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,215,0,0.10);
+      border-radius: 18px;
+      padding: 16px;
+    }
+
+    .journal-entry h4 {
+      color: var(--gold);
+      margin-bottom: 8px;
+      font-size: 1rem;
+    }
+
+    .journal-entry p {
+      font-size: 0.92rem;
+      line-height: 1.6;
+      margin: 4px 0;
+    }
+
+    .market-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 16px;
     }
 
     .center-note {
@@ -441,7 +531,9 @@
     @media (max-width: 1000px) {
       .grid-3,
       .grid-2,
-      .stats-grid {
+      .stats-grid,
+      .market-grid,
+      .journal-row {
         grid-template-columns: 1fr;
       }
 
@@ -465,6 +557,10 @@
 
       nav a {
         font-size: 0.88rem;
+      }
+
+      #tradingview_chart {
+        height: 480px;
       }
     }
   </style>
@@ -557,7 +653,7 @@
           <div class="top-tag">Kursbereich</div>
           <h2>Kurs</h2>
           <p>Greife auf strukturierte Lektionen, Module und professionellen Lernaufbau zu.</p>
-          <div class="btn-row" style="justify-content:flex-start;">
+          <div class="btn-row left">
             <a href="/course.html" class="btn btn-outline">Kurs öffnen</a>
           </div>
         </div>
@@ -566,7 +662,7 @@
           <div class="top-tag">Analyse</div>
           <h2>Tools</h2>
           <p>Nutze Lot Size Rechner, Journal, Risk Management und Live Chart Werkzeuge.</p>
-          <div class="btn-row" style="justify-content:flex-start;">
+          <div class="btn-row left">
             <a href="/tools.html" class="btn btn-outline">Tools öffnen</a>
           </div>
         </div>
@@ -575,7 +671,7 @@
           <div class="top-tag">Investing</div>
           <h2>Long Term</h2>
           <p>Erhalte Zugriff auf langfristige Inhalte rund um Vermögensaufbau und Märkte.</p>
-          <div class="btn-row" style="justify-content:flex-start;">
+          <div class="btn-row left">
             <a href="/longterm.html" class="quick-link longterm-highlight">Long Term Bereich öffnen</a>
           </div>
         </div>
@@ -618,7 +714,96 @@
             <a href="/course.html" class="quick-link">Education Kurs öffnen</a>
             <a href="/lesson1.html" class="quick-link">Erste Lektion starten</a>
             <a href="/tools.html" class="quick-link">Trading Tools öffnen</a>
-            <a href="/longterm.html" class="quick-link">Long Term Bereich öffnen</a>
+            <a href="/longterm.html" class="quick-link longterm-highlight">Long Term Bereich öffnen</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="top-tag">Live Markt</div>
+        <h2>TradingView Chart</h2>
+        <p>
+          Beobachte den Markt direkt im BullProsperity Hub und analysiere Struktur,
+          Trends und Setups in Echtzeit.
+        </p>
+
+        <div class="tv-chart">
+          <div id="tradingview_chart"></div>
+        </div>
+      </section>
+
+      <section class="grid-2">
+        <div class="card">
+          <div class="top-tag">Trading Journal</div>
+          <h2>Journal Dashboard</h2>
+          <p>Halte Setups, Ergebnisse und Learnings direkt im Hub fest.</p>
+
+          <div class="journal-inputs">
+            <div class="journal-row">
+              <input type="text" id="journalMarket" placeholder="Markt, z. B. XAUUSD" />
+              <select id="journalDirection">
+                <option value="">Richtung wählen</option>
+                <option value="Long">Long</option>
+                <option value="Short">Short</option>
+              </select>
+            </div>
+
+            <div class="journal-row">
+              <input type="text" id="journalResult" placeholder="Ergebnis, z. B. +2R" />
+              <input type="text" id="journalSetup" placeholder="Setup, z. B. Liquidity Sweep" />
+            </div>
+
+            <textarea id="journalNotes" placeholder="Learning / Notizen"></textarea>
+          </div>
+
+          <div class="btn-row left">
+            <button class="btn btn-gold" onclick="saveHubJournalEntry()">Eintrag speichern</button>
+            <button class="btn btn-outline" onclick="clearHubJournalEntries()">Journal löschen</button>
+          </div>
+
+          <div id="hubJournalList" class="journal-list"></div>
+        </div>
+
+        <div class="card">
+          <div class="top-tag">Setups</div>
+          <h2>Setup Room Preview</h2>
+          <p>Ein schneller Überblick über deinen strukturierten Analysebereich.</p>
+
+          <ul class="setup-list">
+            <li>London Session Struktur prüfen</li>
+            <li>Liquidity Zonen markieren</li>
+            <li>Bias für den Tag definieren</li>
+            <li>Entry nur mit Bestätigung</li>
+            <li>Risk Management vor Ausführung festlegen</li>
+          </ul>
+
+          <div class="btn-row left">
+            <a href="/setup.html" class="btn btn-outline">Setup Room öffnen</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="top-tag">Marktstruktur</div>
+        <h2>Marktstruktur Dashboard</h2>
+        <p>Nutze diesen Bereich als tägliche Strukturhilfe für deine Vorbereitung.</p>
+
+        <div class="market-grid">
+          <div class="market-box">
+            <span>Bias</span>
+            <strong>Bullish</strong>
+          </div>
+          <div class="market-box">
+            <span>Trend</span>
+            <strong>Higher Highs</strong>
+          </div>
+          <div class="market-box">
+            <span>Liquidity</span>
+            <strong>Buy Side</strong>
+          </div>
+          <div class="market-box">
+            <span>News</span>
+            <strong>Check Kalender</strong>
           </div>
         </div>
       </section>
@@ -633,7 +818,26 @@
     </div>
   </div>
 
+  <script src="https://s3.tradingview.com/tv.js"></script>
   <script>
+    new TradingView.widget({
+      container_id: "tradingview_chart",
+      width: "100%",
+      height: 600,
+      symbol: "OANDA:XAUUSD",
+      interval: "15",
+      timezone: "Europe/Berlin",
+      theme: "dark",
+      style: "1",
+      locale: "de",
+      toolbar_bg: "#0f0f0f",
+      enable_publishing: false,
+      allow_symbol_change: true,
+      hide_top_toolbar: false,
+      hide_legend: false,
+      save_image: false
+    });
+
     (async function () {
       try {
         const res = await fetch("/api/access", {
@@ -683,6 +887,77 @@
       if (doneLessons) doneLessons.textContent = done;
       if (openLessons) openLessons.textContent = open;
     })();
+
+    const hubJournalKey = "bpHubJournalEntries";
+
+    function escapeHtml(text) {
+      const div = document.createElement("div");
+      div.textContent = text || "";
+      return div.innerHTML;
+    }
+
+    function renderHubJournalEntries() {
+      const list = document.getElementById("hubJournalList");
+      const entries = JSON.parse(localStorage.getItem(hubJournalKey) || "[]");
+
+      list.innerHTML = "";
+
+      if (!entries.length) {
+        list.innerHTML = `
+          <div class="journal-entry">
+            <h4>Noch keine Einträge</h4>
+            <p>Speichere deinen ersten Journal-Eintrag direkt im Hub.</p>
+          </div>
+        `;
+        return;
+      }
+
+      entries.forEach((entry) => {
+        const item = document.createElement("div");
+        item.className = "journal-entry";
+        item.innerHTML = `
+          <h4>${escapeHtml(entry.market)} – ${escapeHtml(entry.setup)}</h4>
+          <p><strong>Richtung:</strong> ${escapeHtml(entry.direction)}</p>
+          <p><strong>Ergebnis:</strong> ${escapeHtml(entry.result)}</p>
+          <p><strong>Notizen:</strong> ${escapeHtml(entry.notes)}</p>
+        `;
+        list.appendChild(item);
+      });
+    }
+
+    function saveHubJournalEntry() {
+      const market = document.getElementById("journalMarket").value.trim();
+      const direction = document.getElementById("journalDirection").value;
+      const result = document.getElementById("journalResult").value.trim();
+      const setup = document.getElementById("journalSetup").value.trim();
+      const notes = document.getElementById("journalNotes").value.trim();
+
+      if (!market || !direction || !result || !setup) {
+        alert("Bitte fülle Markt, Richtung, Ergebnis und Setup aus.");
+        return;
+      }
+
+      const entries = JSON.parse(localStorage.getItem(hubJournalKey) || "[]");
+      entries.unshift({ market, direction, result, setup, notes });
+      localStorage.setItem(hubJournalKey, JSON.stringify(entries));
+
+      document.getElementById("journalMarket").value = "";
+      document.getElementById("journalDirection").value = "";
+      document.getElementById("journalResult").value = "";
+      document.getElementById("journalSetup").value = "";
+      document.getElementById("journalNotes").value = "";
+
+      renderHubJournalEntries();
+    }
+
+    function clearHubJournalEntries() {
+      const confirmed = confirm("Möchtest du das Hub Journal wirklich löschen?");
+      if (!confirmed) return;
+      localStorage.removeItem(hubJournalKey);
+      renderHubJournalEntries();
+    }
+
+    renderHubJournalEntries();
   </script>
 </body>
 </html>
