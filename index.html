@@ -12,12 +12,22 @@
       box-sizing: border-box;
     }
 
+    :root {
+      --bg: #070707;
+      --card: rgba(16, 16, 16, 0.94);
+      --card-border: rgba(255, 215, 0, 0.16);
+      --gold: #ffd700;
+      --gold-soft: #ffdf4d;
+      --text: #ffffff;
+      --muted: #dddddd;
+    }
+
     body {
       font-family: Arial, Helvetica, sans-serif;
       background:
         radial-gradient(circle at top, rgba(255, 215, 0, 0.08), transparent 35%),
-        linear-gradient(135deg, #050505, #0c0c0c 58%, #111111);
-      color: #ffffff;
+        linear-gradient(135deg, #050505, #0b0b0b 58%, #101010);
+      color: var(--text);
       min-height: 100vh;
       overflow-x: hidden;
     }
@@ -26,7 +36,7 @@
       position: fixed;
       inset: 0;
       pointer-events: none;
-      opacity: 0.18;
+      opacity: 0.2;
       z-index: 0;
     }
 
@@ -43,12 +53,12 @@
 
     .line-alt {
       fill: none;
-      stroke: rgba(255, 255, 255, 0.14);
+      stroke: rgba(255, 255, 255, 0.12);
       stroke-width: 2;
     }
 
     .candle {
-      stroke: rgba(255, 215, 0, 0.34);
+      stroke: rgba(255, 215, 0, 0.32);
       stroke-width: 2;
     }
 
@@ -57,16 +67,16 @@
     }
 
     .candle-body-up {
-      fill: rgba(255, 215, 0, 0.12);
-      stroke: rgba(255, 215, 0, 0.28);
-      stroke-width: 1.4;
+      fill: rgba(255, 215, 0, 0.1);
+      stroke: rgba(255, 215, 0, 0.25);
+      stroke-width: 1.2;
       rx: 4;
     }
 
     .candle-body-down {
-      fill: rgba(255, 255, 255, 0.06);
-      stroke: rgba(255, 255, 255, 0.16);
-      stroke-width: 1.2;
+      fill: rgba(255, 255, 255, 0.05);
+      stroke: rgba(255, 255, 255, 0.14);
+      stroke-width: 1.1;
       rx: 4;
     }
 
@@ -86,7 +96,7 @@
     .logo {
       font-size: 2rem;
       font-weight: 800;
-      color: #ffd700;
+      color: var(--gold);
       text-shadow: 0 0 16px rgba(255, 215, 0, 0.22);
     }
 
@@ -104,7 +114,7 @@
     }
 
     nav a:hover {
-      color: #ffd700;
+      color: var(--gold);
     }
 
     .page {
@@ -116,97 +126,143 @@
       gap: 24px;
     }
 
-    .hero,
-    .card {
-      background: rgba(18, 18, 18, 0.94);
-      border: 1px solid rgba(255, 215, 0, 0.15);
-      border-radius: 24px;
+    .hero-box,
+    .card,
+    .wide-card {
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: 28px;
       box-shadow: 0 0 26px rgba(255, 215, 0, 0.05);
-      padding: 26px;
     }
 
-    .badge,
+    .hero-box {
+      padding: 34px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .hero-badge,
     .top-tag {
       display: inline-block;
       padding: 8px 14px;
       border-radius: 999px;
       border: 1px solid rgba(255, 215, 0, 0.34);
-      color: #ffd84d;
+      color: var(--gold-soft);
       font-size: 13px;
       font-weight: 700;
       background: rgba(255, 215, 0, 0.08);
-      margin-bottom: 15px;
-    }
-
-    .hero h1 {
-      font-size: clamp(2.1rem, 4vw, 4rem);
-      line-height: 1.05;
       margin-bottom: 16px;
     }
 
-    .hero h1 .white {
+    .hero-box h1 {
+      font-size: clamp(2.4rem, 5vw, 5rem);
+      line-height: 0.98;
+      margin-bottom: 18px;
+      letter-spacing: -0.02em;
+    }
+
+    .hero-box h1 .white {
       color: #ffffff;
     }
 
-    .hero h1 .gold {
-      color: #ffd700;
+    .hero-box h1 .gold {
+      color: var(--gold);
       text-shadow: 0 0 18px rgba(255, 215, 0, 0.18);
     }
 
-    .hero p,
-    .card p {
-      color: #dddddd;
-      line-height: 1.8;
-    }
-
-    .hero-sub {
-      max-width: 900px;
+    .hero-box p {
+      max-width: 980px;
+      font-size: 1.05rem;
+      line-height: 1.75;
+      color: var(--muted);
     }
 
     .btn-row {
       display: flex;
-      gap: 12px;
+      gap: 14px;
       flex-wrap: wrap;
-      margin-top: 20px;
+      margin-top: 22px;
     }
 
     .btn {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      border-radius: 14px;
-      padding: 14px 18px;
-      font-weight: 800;
-      cursor: pointer;
-      transition: 0.2s ease;
-      border: none;
+      min-width: 170px;
+      padding: 15px 20px;
+      border-radius: 16px;
       text-decoration: none;
+      font-weight: 800;
+      transition: 0.2s ease;
     }
 
-    .btn-primary {
+    .btn-gold {
       background: linear-gradient(135deg, #ffe15b, #f0b90b);
       color: #111111;
-    }
-
-    .btn-primary:hover {
-      transform: translateY(-1px);
       box-shadow: 0 8px 18px rgba(255, 215, 0, 0.18);
     }
 
-    .btn-secondary {
+    .btn-gold:hover {
+      transform: translateY(-1px);
+    }
+
+    .btn-outline {
       color: #ffffff;
-      border: 1px solid rgba(255, 215, 0, 0.22);
-      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255, 215, 0, 0.28);
+      background: rgba(255, 255, 255, 0.03);
     }
 
-    .btn-secondary:hover {
-      background: rgba(255,255,255,0.06);
+    .btn-outline:hover {
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--gold);
     }
 
-    .grid-3 {
+    .feature-grid {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 20px;
+      gap: 18px;
+      margin-top: 28px;
+    }
+
+    .feature-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 215, 0, 0.12);
+      border-radius: 22px;
+      padding: 22px 18px;
+      text-align: center;
+    }
+
+    .feature-card h3 {
+      color: var(--gold);
+      font-size: 2rem;
+      margin-bottom: 8px;
+      line-height: 1;
+    }
+
+    .feature-card p {
+      color: #f0f0f0;
+      line-height: 1.65;
+      font-size: 0.98rem;
+    }
+
+    .section-title-card,
+    .card,
+    .wide-card {
+      padding: 28px;
+    }
+
+    .wide-card h2,
+    .card h2 {
+      font-size: 2.2rem;
+      color: var(--gold);
+      margin-bottom: 10px;
+      line-height: 1.1;
+    }
+
+    .wide-card p,
+    .card p {
+      color: var(--muted);
+      line-height: 1.8;
     }
 
     .grid-2 {
@@ -215,17 +271,11 @@
       gap: 24px;
     }
 
-    .card h2 {
-      color: #ffd700;
-      margin-bottom: 10px;
-      font-size: 1.55rem;
-    }
-
     .tool-list {
       list-style: none;
       display: grid;
       gap: 12px;
-      margin-top: 16px;
+      margin-top: 18px;
     }
 
     .tool-list li {
@@ -234,33 +284,7 @@
       border-radius: 14px;
       padding: 14px 16px;
       color: #f2f2f2;
-    }
-
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-      gap: 16px;
-      margin-top: 20px;
-    }
-
-    .stat-box {
-      background: rgba(255,255,255,0.03);
-      border: 1px solid rgba(255, 215, 0, 0.14);
-      border-radius: 18px;
-      padding: 18px;
-    }
-
-    .stat-box span {
-      display: block;
-      color: #bfbfbf;
-      margin-bottom: 8px;
-      font-size: 0.95rem;
-    }
-
-    .stat-box strong {
-      color: #ffd700;
-      font-size: 1.35rem;
-      font-weight: 800;
+      line-height: 1.6;
     }
 
     .progress-wrap {
@@ -291,6 +315,33 @@
       border-radius: 999px;
     }
 
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 16px;
+      margin-top: 20px;
+    }
+
+    .stat-box {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255, 215, 0, 0.14);
+      border-radius: 18px;
+      padding: 18px;
+    }
+
+    .stat-box span {
+      display: block;
+      color: #bfbfbf;
+      margin-bottom: 8px;
+      font-size: 0.95rem;
+    }
+
+    .stat-box strong {
+      color: var(--gold);
+      font-size: 1.35rem;
+      font-weight: 800;
+    }
+
     .footer-note {
       width: min(1280px, calc(100% - 24px));
       margin: 0 auto 28px;
@@ -307,7 +358,7 @@
     }
 
     @media (max-width: 1080px) {
-      .grid-3,
+      .feature-grid,
       .grid-2 {
         grid-template-columns: 1fr;
       }
@@ -321,13 +372,18 @@
         width: min(100% - 18px, 1280px);
       }
 
-      .hero,
-      .card {
-        padding: 20px;
+      .hero-box,
+      .card,
+      .wide-card {
+        padding: 22px;
       }
 
       nav {
         gap: 15px;
+      }
+
+      .feature-card h3 {
+        font-size: 1.7rem;
       }
     }
   </style>
@@ -386,110 +442,76 @@
       <a href="/hub.html">Hub</a>
       <a href="/course.html">Course</a>
       <a href="/tools.html">Tools</a>
-      <a href="/longterm.html">Long Term</a>
       <a href="/api/whop/login">Login</a>
     </nav>
   </header>
 
   <main class="page">
-    <section class="hero">
-      <div class="badge">Professional Trading Education</div>
+    <section class="hero-box">
+      <div class="hero-badge">Premium Trading Education</div>
+
       <h1>
         <span class="white">BullProsperity</span><br>
         <span class="gold">Trading Education</span>
       </h1>
-      <p class="hero-sub">
-        Lerne Marktstruktur, Liquidity, Risk Management und Trading Psychologie
-        auf einer modernen Education Plattform für ambitionierte Trader.
-      </p>
-      <div class="btn-row">
-        <a href="/api/whop/login" class="btn btn-primary">Jetzt starten</a>
-        <a href="/hub.html" class="btn btn-secondary">Mehr erfahren</a>
-      </div>
-    </section>
 
-    <section class="grid-3">
-      <div class="card">
-        <div class="top-tag">Education</div>
-        <h2>Marktstruktur</h2>
-        <p>
-          Lerne wie Trends entstehen, wann Struktur bricht
-          und wie institutionelle Marktbewegungen funktionieren.
-        </p>
-      </div>
-
-      <div class="card">
-        <div class="top-tag">Education</div>
-        <h2>Liquidity</h2>
-        <p>
-          Verstehe wie Liquidität funktioniert und wie große
-          Marktteilnehmer Liquidität nutzen.
-        </p>
-      </div>
-
-      <div class="card">
-        <div class="top-tag">Education</div>
-        <h2>Risk Management</h2>
-        <p>
-          Professionelles Risiko-Management und
-          Positionsgrößen-Berechnung für sauberes Trading.
-        </p>
-      </div>
-    </section>
-
-    <section class="card">
-      <div class="top-tag">Trading Tools</div>
-      <h2>Professionelle Trading Tools</h2>
       <p>
-        Nutze integrierte Tools für deine Analyse und verbessere deine Struktur beim Trading.
+        Lerne Marktstruktur, Entries, Risikomanagement und Trading-Psychologie auf einer
+        modernen Education Plattform, die elegant, professionell und wie eine echte Premium-Brand aufgebaut ist.
       </p>
-      <ul class="tool-list">
-        <li>Lot Size Rechner</li>
-        <li>Trading Journal</li>
-        <li>TradingView Live Charts</li>
-        <li>Risk Management Tools</li>
-      </ul>
+
       <div class="btn-row">
-        <a href="/tools.html" class="btn btn-primary">Tools öffnen</a>
+        <a href="/api/whop/login" class="btn btn-gold">Jetzt starten</a>
+        <a href="/hub.html" class="btn btn-outline">Mehr erfahren</a>
       </div>
+
+      <div class="feature-grid">
+        <div class="feature-card">
+          <h3>Kurs</h3>
+          <p>Strukturierte Lektionen, Module und professioneller Lernaufbau.</p>
+        </div>
+
+        <div class="feature-card">
+          <h3>Tools</h3>
+          <p>Lot Size Rechner, Journal, Checklisten und TradingView Integration.</p>
+        </div>
+
+        <div class="feature-card">
+          <h3>Premium</h3>
+          <p>Setup Room, Strategy Library und exklusive Mitgliederbereiche.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="wide-card">
+      <h2>Dein Zugang bei BullProsperity</h2>
+      <p>
+        Eine moderne Trading Education Plattform mit Kursbereich, Tools, exklusiven Setups und
+        strukturierten Inhalten für ambitionierte Trader.
+      </p>
     </section>
 
     <section class="grid-2">
       <div class="card">
-        <div class="top-tag">Premium Education</div>
-        <h2>Trading Education Programm</h2>
-        <p>
-          Der BullProsperity Kurs vermittelt dir strukturiertes
-          Trading Wissen über mehrere Education Module.
-        </p>
+        <div class="top-tag">Education</div>
+        <h2>Was du lernst</h2>
         <ul class="tool-list">
-          <li>Trading Grundlagen</li>
-          <li>Marktstruktur & Liquidity</li>
-          <li>Entry Modelle</li>
-          <li>Risk Management</li>
-          <li>Trading Psychologie</li>
+          <li>Marktstruktur und institutionelle Bewegungen verstehen</li>
+          <li>Liquidity erkennen und sauber einordnen</li>
+          <li>Risk Management und Positionsgröße richtig planen</li>
+          <li>Trading Psychologie und Disziplin aufbauen</li>
         </ul>
-        <div class="btn-row">
-          <a href="/course.html" class="btn btn-primary">Education Kurs öffnen</a>
-        </div>
       </div>
 
       <div class="card">
-        <div class="top-tag">Investing</div>
-        <h2>Long Term Education</h2>
-        <p>
-          Zusätzlich zum Trading lernst du Strategien
-          für langfristigen Vermögensaufbau.
-        </p>
+        <div class="top-tag">Tools</div>
+        <h2>Integrierte Trading Tools</h2>
         <ul class="tool-list">
-          <li>ETF Strategien</li>
-          <li>Aktien Analyse</li>
-          <li>Krypto Grundlagen</li>
-          <li>Rohstoffe & Märkte</li>
+          <li>Lot Size Rechner</li>
+          <li>Trading Journal</li>
+          <li>TradingView Integration</li>
+          <li>Risk / Reward Unterstützung</li>
         </ul>
-        <div class="btn-row">
-          <a href="/longterm.html" class="btn btn-primary">Long Term Bereich</a>
-        </div>
       </div>
     </section>
 
@@ -498,8 +520,7 @@
         <div class="top-tag">Fortschritt</div>
         <h2>Strukturierter Lernweg</h2>
         <p>
-          Arbeite die Inhalte Schritt für Schritt durch und baue
-          dir eine klare Education Struktur für dein Trading auf.
+          Arbeite die Inhalte Schritt für Schritt durch und baue dir eine klare Education Struktur auf.
         </p>
 
         <div class="progress-wrap">
@@ -507,7 +528,6 @@
             <span>Beispiel Fortschritt</span>
             <span>35%</span>
           </div>
-
           <div class="progress-bar">
             <div class="progress-fill"></div>
           </div>
@@ -518,7 +538,6 @@
             <span>Education Module</span>
             <strong>6</strong>
           </div>
-
           <div class="stat-box">
             <span>Trading Tools</span>
             <strong>4</strong>
@@ -527,49 +546,31 @@
       </div>
 
       <div class="card">
-        <div class="top-tag">Setup Room</div>
-        <h2>Praxisnahe Marktbeispiele</h2>
+        <div class="top-tag">Premium Education</div>
+        <h2>Education Programm</h2>
         <p>
-          Nutze den Setup Room, um Marktideen, Strukturbeispiele
-          und Education Setups übersichtlich zu analysieren.
+          Der BullProsperity Bereich verbindet Trading Education, Long Term Inhalte und moderne Tools.
         </p>
         <ul class="tool-list">
-          <li>Chart Beispiele</li>
-          <li>Setup Erklärungen</li>
-          <li>Struktur & Liquidity Beispiele</li>
-          <li>Education Focus statt Signalversprechen</li>
+          <li>Trading Grundlagen</li>
+          <li>Marktstruktur & Liquidity</li>
+          <li>Risk Management</li>
+          <li>Long Term Investing</li>
         </ul>
-        <div class="btn-row">
-          <a href="/setup.html" class="btn btn-primary">Setup Room öffnen</a>
-        </div>
       </div>
     </section>
 
-    <section class="card">
+    <section class="wide-card">
       <div class="top-tag">BullProsperity Education</div>
       <h2>Eine moderne Education Plattform für ambitionierte Trader</h2>
       <p>
-        BullProsperity verbindet Trading Education, praktische Tools,
-        Marktanalyse und langfristiges Denken in einer modernen Plattform.
-        Der Fokus liegt auf Struktur, Disziplin, Education und nachvollziehbaren Lernprozessen.
+        BullProsperity verbindet Education, Analyse, Struktur und langfristiges Denken in einer
+        modernen Premium-Umgebung.
       </p>
-      <div class="stats-grid">
-        <div class="stat-box">
-          <span>Education Inhalte</span>
-          <strong>Trading + Investing</strong>
-        </div>
-        <div class="stat-box">
-          <span>Fokus</span>
-          <strong>Struktur & Risk</strong>
-        </div>
-        <div class="stat-box">
-          <span>Format</span>
-          <strong>Premium Education</strong>
-        </div>
-      </div>
+
       <div class="btn-row">
-        <a href="/api/whop/login" class="btn btn-primary">Jetzt starten</a>
-        <a href="/hub.html" class="btn btn-secondary">Mehr erfahren</a>
+        <a href="/api/whop/login" class="btn btn-gold">Jetzt starten</a>
+        <a href="/hub.html" class="btn btn-outline">Zum Hub</a>
       </div>
     </section>
   </main>
