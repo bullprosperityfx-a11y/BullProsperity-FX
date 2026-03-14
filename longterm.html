@@ -114,6 +114,7 @@
       align-items: center;
       justify-content: space-between;
       margin-bottom: 26px;
+      gap: 20px;
     }
 
     .logo {
@@ -122,6 +123,7 @@
       font-size: 2.1rem;
       letter-spacing: -0.03em;
       text-shadow: 0 0 15px rgba(255, 215, 0, 0.18);
+      white-space: nowrap;
     }
 
     nav {
@@ -129,6 +131,7 @@
       gap: 26px;
       align-items: center;
       flex-wrap: wrap;
+      justify-content: flex-end;
     }
 
     nav a {
@@ -159,19 +162,20 @@
     }
 
     .hero-wrap {
-  width: min(1180px, 100%);
-  margin: 0 auto;
-  padding: 64px 42px 42px;
+      width: min(1180px, 100%);
+      margin: 0 auto;
+      padding: 64px 42px 42px;
       background:
         radial-gradient(circle at top left, rgba(255, 215, 0, 0.12), transparent 28%),
         radial-gradient(circle at bottom right, rgba(255, 215, 0, 0.05), transparent 24%),
         linear-gradient(180deg, rgba(13,13,13,0.98), rgba(9,9,9,0.96));
     }
 
-    .card {
-  padding: 26px 24px 24px;
-  min-height: 100%;
-}
+    .card,
+    .wide-card {
+      padding: 26px 24px 24px;
+      min-height: 100%;
+    }
 
     .hero-badge,
     .top-tag {
@@ -191,8 +195,8 @@
     }
 
     .hero-title {
-  font-size: clamp(2.4rem, 4.2vw, 4.6rem);
-      line-height: 0.92;
+      font-size: clamp(2.4rem, 4.2vw, 4.6rem);
+      line-height: 0.95;
       font-weight: 900;
       letter-spacing: -0.04em;
       margin-bottom: 18px;
@@ -213,6 +217,14 @@
       font-size: 1rem;
       line-height: 1.8;
       color: #ededed;
+    }
+
+    .hero-subline {
+      margin-top: 16px;
+      color: #ffd700;
+      font-weight: 700;
+      font-size: 0.95rem;
+      letter-spacing: 0.04em;
     }
 
     .btn-row {
@@ -274,6 +286,7 @@
       display: grid;
       grid-template-columns: repeat(4, minmax(0, 1fr));
       gap: 18px;
+      align-items: stretch;
     }
 
     .grid-3 {
@@ -499,6 +512,35 @@
       cursor: pointer;
     }
 
+    .timeline {
+      display: grid;
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .timeline-item {
+      display: grid;
+      grid-template-columns: 90px 1fr;
+      gap: 14px;
+      align-items: start;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,215,0,0.10);
+      border-radius: 18px;
+      padding: 16px;
+    }
+
+    .timeline-year {
+      color: var(--gold);
+      font-weight: 900;
+      font-size: 1.1rem;
+    }
+
+    .timeline-text {
+      color: #ededed;
+      line-height: 1.6;
+      font-size: 0.93rem;
+    }
+
     .center-note {
       width: min(980px, 100%);
       margin: 12px auto 0;
@@ -532,7 +574,8 @@
         grid-template-columns: 1fr;
       }
 
-      .allocation-row {
+      .allocation-row,
+      .timeline-item {
         grid-template-columns: 1fr;
       }
 
@@ -634,6 +677,10 @@
           Vermögensaufbau, Geduld, Struktur, Diversifikation und langfristige Entscheidungen.
         </p>
 
+        <p class="hero-subline">
+          ETFs · NVIDIA · Krypto · Rohstoffe · Compounding · Allocation
+        </p>
+
         <div class="btn-row">
           <a href="/hub.html" class="btn btn-outline">Zurück zum Hub</a>
           <a href="/tools.html" class="btn btn-gold">Tools öffnen</a>
@@ -657,7 +704,7 @@
         <div class="card highlight-card">
           <div class="top-tag">Aktien</div>
           <h3>NVIDIA Fokus</h3>
-          <p>NVIDIA statt Apple als Beispielwert für starke Marktstellung, Wachstum und Zukunftsrelevanz.</p>
+          <p>NVIDIA statt Apple als Beispiel für starke Marktstellung, Wachstum und Zukunftsrelevanz.</p>
           <ul class="topic-list">
             <li>Wachstumsstory verstehen</li>
             <li>Bewertung richtig einordnen</li>
@@ -861,15 +908,22 @@
 
       <section class="grid-2">
         <div class="card">
-          <div class="top-tag">Watch Bereiche</div>
-          <h2>Beobachtungsfelder</h2>
-          <ul class="topic-list">
-            <li>Welt-ETFs und Index-ETFs</li>
-            <li>NVIDIA und andere Qualitätsaktien</li>
-            <li>Krypto-Projekte mit langfristiger Relevanz</li>
-            <li>Gold und Rohstoffe als Beimischung</li>
-            <li>Technologie, Gesundheit, Energie und Konsum</li>
-          </ul>
+          <div class="top-tag">Investment Timeline</div>
+          <h2>Langfristige Perspektive</h2>
+          <div class="timeline">
+            <div class="timeline-item">
+              <div class="timeline-year">2025</div>
+              <div class="timeline-text">Grundstruktur aufbauen, Watchlist definieren, erste klare Investment-Regeln festlegen.</div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-year">2030</div>
+              <div class="timeline-text">Konsistenz, Sparplan-Disziplin und saubere Allokation zahlen sich zunehmend aus.</div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-year">2040</div>
+              <div class="timeline-text">Compounding wird stärker sichtbar. Geduld und Struktur schlagen impulsive Entscheidungen.</div>
+            </div>
+          </div>
         </div>
 
         <div class="card">
@@ -909,8 +963,7 @@
           <div class="faq-item">
             <h4>Warum NVIDIA statt Apple in diesem Bereich?</h4>
             <p>
-              Du wolltest NVIDIA als prominentes Beispiel. Deshalb ist die Aktien-Sektion gezielt dynamischer
-              auf NVIDIA und wachstumsstarke Technologiewerte ausgerichtet.
+              NVIDIA ist hier bewusst als dynamischeres Beispiel eingebaut, weil du genau diesen Fokus wolltest.
             </p>
           </div>
 
