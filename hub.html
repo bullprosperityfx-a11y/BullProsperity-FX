@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>BullProsperity Hub</title>
+  <title>BullProsperity | Hub</title>
 
   <script>
     (async () => {
@@ -29,12 +29,24 @@
       box-sizing: border-box;
     }
 
+    :root {
+      --bg: #070707;
+      --panel: rgba(13, 13, 13, 0.94);
+      --panel-2: rgba(18, 18, 18, 0.92);
+      --gold: #ffd700;
+      --gold-soft: #ffe45e;
+      --white: #ffffff;
+      --text: #e7e7e7;
+      --line: rgba(255, 215, 0, 0.16);
+      --line-soft: rgba(255, 255, 255, 0.08);
+    }
+
     body {
       font-family: Arial, Helvetica, sans-serif;
       background:
-        radial-gradient(circle at top, rgba(255, 215, 0, 0.08), transparent 35%),
-        linear-gradient(135deg, #050505, #0c0c0c 58%, #111111);
-      color: #ffffff;
+        radial-gradient(circle at top, rgba(255, 215, 0, 0.07), transparent 35%),
+        linear-gradient(135deg, #050505, #090909 58%, #101010);
+      color: var(--white);
       min-height: 100vh;
       overflow-x: hidden;
     }
@@ -42,191 +54,300 @@
     .chart-bg {
       position: fixed;
       inset: 0;
-      pointer-events: none;
-      opacity: 0.18;
       z-index: 0;
+      pointer-events: none;
+      opacity: 0.22;
     }
 
     .chart-bg svg {
       width: 100%;
       height: 100%;
+      display: block;
     }
 
     .line-main {
       fill: none;
-      stroke: rgba(255, 215, 0, 0.58);
-      stroke-width: 3;
+      stroke: rgba(255, 215, 0, 0.62);
+      stroke-width: 3.5;
     }
 
     .line-alt {
       fill: none;
+      stroke: rgba(255, 255, 255, 0.12);
+      stroke-width: 2.2;
+    }
+
+    .wick-gold {
+      stroke: rgba(255, 215, 0, 0.4);
+      stroke-width: 2.2;
+    }
+
+    .wick-white {
+      stroke: rgba(255, 255, 255, 0.16);
+      stroke-width: 2;
+    }
+
+    .body-gold {
+      fill: rgba(255, 215, 0, 0.16);
+      stroke: rgba(255, 215, 0, 0.34);
+      stroke-width: 1.4;
+    }
+
+    .body-white {
+      fill: rgba(255, 255, 255, 0.05);
       stroke: rgba(255, 255, 255, 0.14);
-      stroke-width: 2;
+      stroke-width: 1.2;
     }
 
-    .candle {
-      stroke: rgba(255, 215, 0, 0.32);
-      stroke-width: 2;
+    .page-shell {
+      position: relative;
+      z-index: 1;
+      width: min(1320px, calc(100% - 36px));
+      margin: 18px auto;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-radius: 16px;
+      padding: 22px 26px 34px;
+      background: rgba(0, 0, 0, 0.08);
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.02);
     }
 
-    header {
-      position: sticky;
-      top: 0;
-      z-index: 30;
+    .topbar {
       display: flex;
-      justify-content: space-between;
       align-items: center;
-      padding: 24px 42px;
-      background: rgba(10, 10, 10, 0.82);
-      backdrop-filter: blur(10px);
-      border-bottom: 1px solid rgba(255, 215, 0, 0.12);
+      justify-content: space-between;
+      margin-bottom: 26px;
     }
 
     .logo {
-      font-size: 2rem;
+      color: var(--gold);
       font-weight: 800;
-      color: #ffd700;
-      text-shadow: 0 0 16px rgba(255, 215, 0, 0.22);
+      font-size: 2.1rem;
+      letter-spacing: -0.03em;
+      text-shadow: 0 0 15px rgba(255, 215, 0, 0.18);
     }
 
     nav {
       display: flex;
-      gap: 24px;
+      gap: 26px;
+      align-items: center;
       flex-wrap: wrap;
     }
 
     nav a {
       color: #ffffff;
       text-decoration: none;
+      font-size: 0.95rem;
       font-weight: 700;
-      transition: 0.25s ease;
+      transition: 0.2s ease;
     }
 
     nav a:hover {
-      color: #ffd700;
+      color: var(--gold);
     }
 
-    .page {
-      position: relative;
-      z-index: 1;
-      width: min(1280px, calc(100% - 24px));
-      margin: 28px auto 40px;
-      display: grid;
-      gap: 24px;
-    }
-
-    .hero,
+    .hero-wrap,
     .card {
-      background: rgba(18, 18, 18, 0.94);
-      border: 1px solid rgba(255, 215, 0, 0.15);
-      border-radius: 24px;
-      box-shadow: 0 0 26px rgba(255, 215, 0, 0.05);
-      padding: 26px;
+      border: 1px solid rgba(255, 215, 0, 0.12);
+      border-radius: 28px;
+      background:
+        radial-gradient(circle at top left, rgba(255, 215, 0, 0.08), transparent 26%),
+        linear-gradient(180deg, rgba(16,16,16,0.96), rgba(11,11,11,0.95));
+      position: relative;
+      overflow: hidden;
+      box-shadow:
+        0 0 0 1px rgba(255, 255, 255, 0.03),
+        0 20px 40px rgba(0,0,0,0.24);
     }
 
-    .badge,
-    .top-tag,
-    .entry-tag {
+    .hero-wrap {
+      width: min(1120px, 100%);
+      margin: 0 auto;
+      padding: 34px 34px 26px;
+    }
+
+    .card {
+      padding: 24px 24px 22px;
+    }
+
+    .hero-badge,
+    .top-tag {
       display: inline-block;
-      padding: 8px 14px;
+      padding: 8px 16px;
       border-radius: 999px;
-      border: 1px solid rgba(255, 215, 0, 0.34);
-      color: #ffd84d;
+      border: 1px solid rgba(255, 215, 0, 0.32);
+      color: var(--gold-soft);
+      background: rgba(255, 215, 0, 0.07);
       font-size: 13px;
       font-weight: 700;
-      background: rgba(255, 215, 0, 0.08);
-      margin-bottom: 15px;
+      margin-bottom: 16px;
     }
 
-    .hero h1 {
-      font-size: clamp(2rem, 4vw, 3.6rem);
-      line-height: 1.06;
-      margin-bottom: 14px;
+    .hero-center {
+      text-align: center;
     }
 
-    .hero h1 .white {
+    .hero-title {
+      font-size: clamp(2.7rem, 5vw, 5.2rem);
+      line-height: 0.95;
+      font-weight: 900;
+      letter-spacing: -0.04em;
+      margin-bottom: 18px;
+    }
+
+    .hero-title .white {
+      color: var(--white);
+    }
+
+    .hero-title .gold {
+      color: var(--gold);
+      text-shadow: 0 0 18px rgba(255, 215, 0, 0.14);
+    }
+
+    .hero-text {
+      max-width: 900px;
+      margin: 0 auto;
+      font-size: 0.98rem;
+      line-height: 1.65;
+      color: #ededed;
+    }
+
+    .btn-row {
+      display: flex;
+      justify-content: center;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin-top: 24px;
+    }
+
+    .btn {
+      min-width: 155px;
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      padding: 14px 20px;
+      border-radius: 16px;
+      font-weight: 800;
+      text-decoration: none;
+      transition: 0.2s ease;
+      font-size: 0.95rem;
+    }
+
+    .btn-gold {
+      color: #111111;
+      background: linear-gradient(135deg, #ffe15b, #f0b90b);
+      box-shadow: 0 6px 16px rgba(255, 215, 0, 0.14);
+    }
+
+    .btn-gold:hover {
+      transform: translateY(-1px);
+    }
+
+    .btn-outline {
       color: #ffffff;
+      border: 1px solid rgba(255, 215, 0, 0.28);
+      background: rgba(255,255,255,0.02);
     }
 
-    .hero h1 .gold {
-      color: #ffd700;
-      text-shadow: 0 0 18px rgba(255, 215, 0, 0.18);
+    .btn-outline:hover {
+      color: var(--gold);
+      background: rgba(255,255,255,0.04);
     }
 
-    .hero p,
-    .card p {
-      color: #dddddd;
-      line-height: 1.8;
+    .layout {
+      width: min(1120px, 100%);
+      margin: 26px auto 0;
+      display: grid;
+      gap: 18px;
     }
 
     .grid-3 {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 20px;
+      gap: 18px;
     }
 
     .grid-2 {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 24px;
+      gap: 18px;
     }
 
     .card h2 {
-      color: #ffd700;
+      color: var(--gold);
+      font-size: 2rem;
+      line-height: 1;
       margin-bottom: 10px;
-      font-size: 1.55rem;
+      font-weight: 900;
+      letter-spacing: -0.03em;
     }
 
-    .btn-row {
-      display: flex;
+    .card p {
+      color: #f0f0f0;
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+
+    .mini-list {
+      list-style: none;
+      display: grid;
       gap: 12px;
-      flex-wrap: wrap;
-      margin-top: 18px;
+      margin-top: 16px;
     }
 
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 14px;
-      padding: 14px 18px;
-      font-weight: 800;
-      cursor: pointer;
-      transition: 0.2s ease;
-      border: none;
-      text-decoration: none;
-    }
-
-    .btn-primary {
-      background: linear-gradient(135deg, #ffe15b, #f0b90b);
-      color: #111111;
-    }
-
-    .btn-primary:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 8px 18px rgba(255, 215, 0, 0.18);
-    }
-
-    .btn-secondary {
-      color: #ffffff;
-      border: 1px solid rgba(255, 215, 0, 0.22);
+    .mini-list li {
       background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255, 215, 0, 0.1);
+      border-radius: 16px;
+      padding: 14px 14px;
+      color: #f2f2f2;
+      font-size: 0.93rem;
+      line-height: 1.5;
+      font-weight: 600;
     }
 
-    .btn-secondary:hover {
-      background: rgba(255,255,255,0.06);
+    .status-line {
+      margin-top: 8px;
+      font-size: 1rem;
+      line-height: 1.7;
+      color: #f4f4f4;
+      font-weight: 700;
+    }
+
+    .quick-links {
+      display: grid;
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .quick-link {
+      display: block;
+      text-decoration: none;
+      color: #ffffff;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255, 215, 0, 0.1);
+      border-radius: 16px;
+      padding: 14px 16px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      transition: 0.2s ease;
+    }
+
+    .quick-link:hover {
+      color: var(--gold);
+      background: rgba(255,255,255,0.04);
     }
 
     .progress-wrap {
-      margin-top: 18px;
+      margin-top: 16px;
     }
 
     .progress-label {
       display: flex;
       justify-content: space-between;
-      margin-bottom: 10px;
-      color: #d9d9d9;
+      color: #efefef;
+      font-size: 0.95rem;
       font-weight: 700;
+      margin-bottom: 10px;
     }
 
     .progress-bar {
@@ -234,119 +355,97 @@
       height: 14px;
       border-radius: 999px;
       background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,215,0,0.1);
       overflow: hidden;
-      border: 1px solid rgba(255, 215, 0, 0.12);
     }
 
     .progress-fill {
-      height: 100%;
       width: 35%;
+      height: 100%;
       background: linear-gradient(135deg, #ffe15b, #f0b90b);
       border-radius: 999px;
     }
 
     .stats-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-      gap: 16px;
-      margin-top: 20px;
-    }
-
-    .stat-box {
-      background: rgba(255,255,255,0.03);
-      border: 1px solid rgba(255, 215, 0, 0.14);
-      border-radius: 18px;
-      padding: 18px;
-    }
-
-    .stat-box span {
-      display: block;
-      color: #bfbfbf;
-      margin-bottom: 8px;
-      font-size: 0.95rem;
-    }
-
-    .stat-box strong {
-      color: #ffd700;
-      font-size: 1.35rem;
-      font-weight: 800;
-    }
-
-    .quick-links {
-      display: grid;
-      gap: 12px;
-      margin-top: 18px;
-    }
-
-    .quick-link {
-      display: block;
-      padding: 14px 16px;
-      border-radius: 14px;
-      text-decoration: none;
-      color: #ffffff;
-      background: rgba(255,255,255,0.03);
-      border: 1px solid rgba(255, 215, 0, 0.14);
-      transition: 0.2s ease;
-      font-weight: 700;
-    }
-
-    .quick-link:hover {
-      background: rgba(255,255,255,0.06);
-      color: #ffd700;
-    }
-
-    .feature-list {
-      list-style: none;
-      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 12px;
       margin-top: 16px;
     }
 
-    .feature-list li {
+    .stat-box {
       background: rgba(255,255,255,0.03);
-      border: 1px solid rgba(255, 215, 0, 0.12);
-      border-radius: 14px;
-      padding: 14px 16px;
-      color: #f2f2f2;
+      border: 1px solid rgba(255, 215, 0, 0.1);
+      border-radius: 16px;
+      padding: 16px 14px;
     }
 
-    .footer-note {
-      width: min(1280px, calc(100% - 24px));
-      margin: 0 auto 28px;
-      background: rgba(18, 18, 18, 0.94);
-      border: 1px solid rgba(255, 215, 0, 0.15);
-      border-radius: 20px;
-      padding: 18px 20px;
-      color: #bdbdbd;
-      line-height: 1.8;
+    .stat-box span {
+      display: block;
+      color: #d4d4d4;
+      font-size: 0.9rem;
+      margin-bottom: 8px;
+      font-weight: 600;
+    }
+
+    .stat-box strong {
+      color: var(--gold);
+      font-size: 1.2rem;
+      font-weight: 900;
+    }
+
+    .center-note {
+      width: min(960px, 100%);
+      margin: 10px auto 0;
       text-align: center;
-      font-size: 0.95rem;
-      position: relative;
-      z-index: 1;
+      padding: 8px 10px 0;
     }
 
-    @media (max-width: 1080px) {
+    .center-note h2 {
+      color: var(--gold);
+      font-size: clamp(2rem, 3.4vw, 3.1rem);
+      line-height: 1.05;
+      margin-bottom: 12px;
+      letter-spacing: -0.03em;
+      font-weight: 900;
+    }
+
+    .center-note p {
+      color: #ededed;
+      line-height: 1.7;
+      font-size: 1rem;
+      max-width: 820px;
+      margin: 0 auto;
+      font-weight: 600;
+    }
+
+    @media (max-width: 1000px) {
       .grid-3,
-      .grid-2 {
+      .grid-2,
+      .stats-grid {
         grid-template-columns: 1fr;
       }
 
-      header {
-        padding: 20px 18px;
+      .page-shell {
+        width: min(100% - 20px, 1320px);
+        padding: 18px 14px 28px;
       }
 
-      .page,
-      .footer-note {
-        width: min(100% - 18px, 1280px);
-      }
-
-      .hero,
+      .hero-wrap,
       .card {
-        padding: 20px;
+        padding: 22px 18px 18px;
+      }
+
+      .logo {
+        font-size: 1.6rem;
       }
 
       nav {
-        gap: 15px;
+        gap: 14px;
+      }
+
+      nav a {
+        font-size: 0.88rem;
       }
     }
   </style>
@@ -354,193 +453,165 @@
 <body>
   <div class="chart-bg">
     <svg viewBox="0 0 1600 900" preserveAspectRatio="none">
-      <path class="line-alt" d="M0,650 C110,620 170,565 290,550 C380,540 470,570 560,495 C665,410 720,450 820,350 C905,265 980,290 1085,220 C1205,140 1285,185 1415,120 C1500,82 1548,108 1600,86" />
-      <path class="line-main" d="M0,730 C85,695 160,685 255,610 C375,505 445,560 555,475 C655,396 725,420 835,315 C925,228 1010,258 1125,180 C1238,105 1325,145 1450,94 C1512,66 1560,70 1600,58" />
+      <path class="line-alt" d="M0,645 C130,620 190,565 320,548 C435,532 520,564 635,485 C760,398 825,435 935,342 C1045,248 1135,280 1255,198 C1360,126 1465,142 1600,128" />
+      <path class="line-main" d="M0,730 C120,708 220,650 335,618 C455,585 545,534 670,448 C790,365 890,390 1008,298 C1110,220 1205,210 1325,154 C1430,105 1515,105 1600,88" />
 
-      <line class="candle" x1="85" y1="768" x2="85" y2="705"></line>
-      <line class="candle" x1="255" y1="645" x2="255" y2="565"></line>
-      <line class="candle" x1="470" y1="545" x2="470" y2="460"></line>
-      <line class="candle" x1="700" y1="435" x2="700" y2="348"></line>
-      <line class="candle" x1="935" y1="286" x2="935" y2="210"></line>
-      <line class="candle" x1="1190" y1="160" x2="1190" y2="102"></line>
-      <line class="candle" x1="1480" y1="92" x2="1480" y2="55"></line>
+      <line class="wick-gold" x1="112" y1="770" x2="112" y2="694"></line>
+      <rect class="body-gold" x="101" y="722" width="22" height="34" rx="4"></rect>
+
+      <line class="wick-white" x1="220" y1="688" x2="220" y2="615"></line>
+      <rect class="body-white" x="209" y="640" width="22" height="31" rx="4"></rect>
+
+      <line class="wick-gold" x1="332" y1="650" x2="332" y2="582"></line>
+      <rect class="body-gold" x="321" y="604" width="22" height="30" rx="4"></rect>
+
+      <line class="wick-white" x1="478" y1="585" x2="478" y2="515"></line>
+      <rect class="body-white" x="467" y="536" width="22" height="33" rx="4"></rect>
+
+      <line class="wick-gold" x1="622" y1="515" x2="622" y2="440"></line>
+      <rect class="body-gold" x="611" y="460" width="22" height="36" rx="4"></rect>
+
+      <line class="wick-white" x1="770" y1="432" x2="770" y2="360"></line>
+      <rect class="body-white" x="759" y="382" width="22" height="32" rx="4"></rect>
+
+      <line class="wick-gold" x1="915" y1="355" x2="915" y2="286"></line>
+      <rect class="body-gold" x="904" y="304" width="22" height="35" rx="4"></rect>
+
+      <line class="wick-white" x1="1060" y1="285" x2="1060" y2="222"></line>
+      <rect class="body-white" x="1049" y="238" width="22" height="28" rx="4"></rect>
+
+      <line class="wick-gold" x1="1212" y1="220" x2="1212" y2="160"></line>
+      <rect class="body-gold" x="1201" y="174" width="22" height="30" rx="4"></rect>
+
+      <line class="wick-white" x1="1390" y1="170" x2="1390" y2="108"></line>
+      <rect class="body-white" x="1379" y="124" width="22" height="26" rx="4"></rect>
+
+      <line class="wick-gold" x1="1496" y1="135" x2="1496" y2="84"></line>
+      <rect class="body-gold" x="1485" y="95" width="22" height="24" rx="4"></rect>
     </svg>
   </div>
 
-  <header>
-    <div class="logo">BullProsperity</div>
-    <nav>
-      <a href="/index.html">Home</a>
-      <a href="/hub.html">Hub</a>
-      <a href="/course.html">Course</a>
-      <a href="/tools.html">Tools</a>
-      <a href="/longterm.html">Long Term</a>
-      <a href="/api/whop/login">Login</a>
-    </nav>
-  </header>
+  <div class="page-shell">
+    <div class="topbar">
+      <div class="logo">BullProsperity</div>
 
-  <main class="page">
-    <section class="hero">
-      <div class="badge">Premium Hub</div>
-      <h1>
-        <span class="white">BullProsperity</span><br>
-        <span class="gold">Member Dashboard</span>
-      </h1>
-      <p>
-        Willkommen im zentralen Hub deiner Academy. Von hier aus erhältst du Zugriff auf Kursinhalte,
-        Tools, Long-Term-Bereiche und deinen Mitgliederstatus.
-      </p>
-      <div class="btn-row">
-        <a href="/course.html" class="btn btn-primary">Zum Kurs</a>
-        <a href="/tools.html" class="btn btn-secondary">Zu den Tools</a>
-      </div>
-    </section>
+      <nav>
+        <a href="/index.html">Home</a>
+        <a href="/hub.html">Hub</a>
+        <a href="/course.html">Course</a>
+        <a href="/tools.html">Tools</a>
+        <a href="/api/whop/login">Login</a>
+      </nav>
+    </div>
 
-    <section class="card" id="memberStatusCard">
-      <div class="top-tag">Mitgliederstatus</div>
-      <h2>Dein Zugriff</h2>
-      <p id="memberWelcome">Lade Benutzerdaten...</p>
-      <p id="memberRole">Status wird geladen...</p>
-    </section>
+    <section class="hero-wrap">
+      <div class="hero-center">
+        <div class="hero-badge">Member Hub</div>
 
-    <section class="grid-3">
-      <div class="card">
-        <div class="top-tag">Kursbereich</div>
-        <h2>Kursübersicht</h2>
-        <p>
-          Greife auf Trading-Lektionen, Module und strukturierte Lerninhalte zu.
+        <div class="hero-title">
+          <span class="white">BullProsperity</span><br>
+          <span class="gold">Member Dashboard</span>
+        </div>
+
+        <p class="hero-text">
+          Willkommen im zentralen Hub deiner Education Plattform. Von hier aus greifst du auf
+          Kursinhalte, Tools, Long Term Bereiche und deine Mitgliederfunktionen zu.
         </p>
+
         <div class="btn-row">
-          <a href="/course.html" class="btn btn-primary">Zum Kurs</a>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="top-tag">Analyse</div>
-        <h2>Trading Tools</h2>
-        <p>
-          Nutze Lot Size Rechner, Journal, Risk/Reward Rechner und weitere Tools.
-        </p>
-        <div class="btn-row">
-          <a href="/tools.html" class="btn btn-primary">Zu den Tools</a>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="top-tag">Investing</div>
-        <h2>Long Term Bereich</h2>
-        <p>
-          ETFs, Aktien, Krypto, Fonds und Rohstoffe für langfristigen Vermögensaufbau.
-        </p>
-        <div class="btn-row">
-          <a href="/longterm.html" class="btn btn-primary">Long Term öffnen</a>
+          <a href="/course.html" class="btn btn-gold">Zum Kurs</a>
+          <a href="/tools.html" class="btn btn-outline">Zu den Tools</a>
         </div>
       </div>
     </section>
 
-    <section class="grid-2">
-      <div class="card">
-        <div class="top-tag">Fortschritt</div>
-        <h2>Dein Lernfortschritt</h2>
+    <div class="layout">
+      <section class="card">
+        <div class="top-tag">Mitgliederstatus</div>
+        <h2>Dein Zugriff</h2>
+        <p id="memberWelcome">Lade Benutzerdaten...</p>
+        <div class="status-line" id="memberRole">Status wird geladen...</div>
+      </section>
+
+      <section class="grid-3">
+        <div class="card">
+          <div class="top-tag">Kursbereich</div>
+          <h2>Kurs</h2>
+          <p>Greife auf strukturierte Lektionen, Module und professionellen Lernaufbau zu.</p>
+          <div class="btn-row" style="justify-content:flex-start;">
+            <a href="/course.html" class="btn btn-outline">Kurs öffnen</a>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="top-tag">Analyse</div>
+          <h2>Tools</h2>
+          <p>Nutze Lot Size Rechner, Journal, Risk Management und Live Chart Werkzeuge.</p>
+          <div class="btn-row" style="justify-content:flex-start;">
+            <a href="/tools.html" class="btn btn-outline">Tools öffnen</a>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="top-tag">Investing</div>
+          <h2>Long Term</h2>
+          <p>Erhalte Zugriff auf langfristige Inhalte rund um Vermögensaufbau und Märkte.</p>
+          <div class="btn-row" style="justify-content:flex-start;">
+            <a href="/longterm.html" class="btn btn-outline">Bereich öffnen</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="grid-2">
+        <div class="card">
+          <div class="top-tag">Fortschritt</div>
+          <h2>Lernfortschritt</h2>
+          <p>Arbeite dich strukturiert durch deine Inhalte und behalte deinen Progress im Blick.</p>
+
+          <div class="progress-wrap">
+            <div class="progress-label">
+              <span>Beispiel Fortschritt</span>
+              <span id="progressPercent">35%</span>
+            </div>
+            <div class="progress-bar">
+              <div class="progress-fill" id="progressFill"></div>
+            </div>
+          </div>
+
+          <div class="stats-grid">
+            <div class="stat-box">
+              <span>Abgeschlossene Lektionen</span>
+              <strong id="doneLessons">7</strong>
+            </div>
+            <div class="stat-box">
+              <span>Offene Lektionen</span>
+              <strong id="openLessons">13</strong>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="top-tag">Quick Access</div>
+          <h2>Schnellzugriff</h2>
+          <p>Öffne die wichtigsten Bereiche deiner Plattform direkt über den Hub.</p>
+
+          <div class="quick-links">
+            <a href="/course.html" class="quick-link">Education Kurs öffnen</a>
+            <a href="/lesson1.html" class="quick-link">Erste Lektion starten</a>
+            <a href="/tools.html" class="quick-link">Trading Tools öffnen</a>
+            <a href="/longterm.html" class="quick-link">Long Term Bereich öffnen</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="center-note">
+        <h2>Dein Zugang bei BullProsperity</h2>
         <p>
-          Behalte im Blick, wie weit du in deinem Ausbildungsprozess bist.
+          Dieser Hub ist deine zentrale Übersicht für Education, Tools, Fortschritt und exklusive
+          Mitgliederbereiche innerhalb von BullProsperity.
         </p>
-
-        <div class="progress-wrap">
-          <div class="progress-label">
-            <span>Fortschritt</span>
-            <span id="progressPercent">35%</span>
-          </div>
-          <div class="progress-bar">
-            <div class="progress-fill" id="progressFill"></div>
-          </div>
-        </div>
-
-        <div class="stats-grid">
-          <div class="stat-box">
-            <span>Abgeschlossene Lektionen</span>
-            <strong id="doneLessons">7</strong>
-          </div>
-          <div class="stat-box">
-            <span>Offene Lektionen</span>
-            <strong id="openLessons">13</strong>
-          </div>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="top-tag">Quick Access</div>
-        <h2>Schnellzugriff</h2>
-        <p>
-          Öffne direkt die wichtigsten Premium-Bereiche deiner Plattform.
-        </p>
-
-        <div class="quick-links">
-          <a href="/course.html" class="quick-link">Kurs öffnen</a>
-          <a href="/lesson1.html" class="quick-link">Erste Lektion</a>
-          <a href="/tools.html" class="quick-link">Trading Tools</a>
-          <a href="/longterm.html" class="quick-link">Long Term Bereich</a>
-        </div>
-      </div>
-    </section>
-
-    <section class="card">
-      <div class="top-tag">Premium Dashboard</div>
-      <h2>BullProsperity Hub Übersicht</h2>
-      <p>
-        Dieser Bereich dient als zentrale Übersicht für Mitglieder. Von hier aus kannst du
-        auf alle wichtigen Funktionen deiner Academy zugreifen und deinen Fortschritt
-        strukturiert verfolgen.
-      </p>
-
-      <div class="stats-grid" style="margin-top:18px;">
-        <div class="stat-box">
-          <span>Status</span>
-          <strong id="dashboardStatus">Wird geladen...</strong>
-        </div>
-        <div class="stat-box">
-          <span>Zugang</span>
-          <strong>Aktiv</strong>
-        </div>
-        <div class="stat-box">
-          <span>Bereiche</span>
-          <strong>Hub / Kurs / Tools</strong>
-        </div>
-        <div class="stat-box">
-          <span>Mitgliedschaft</span>
-          <strong id="membershipType">Premium</strong>
-        </div>
-      </div>
-    </section>
-
-    <section class="grid-2">
-      <div class="card">
-        <div class="top-tag">Academy Features</div>
-        <h2>Was du hier findest</h2>
-        <ul class="feature-list">
-          <li>Premium Trading Kurs mit mehreren Lektionen</li>
-          <li>Tools für Risk Management und Journalführung</li>
-          <li>Long-Term-Investing Bereich</li>
-          <li>Mitgliederstatus und Zugangskontrolle über Whop</li>
-        </ul>
-      </div>
-
-      <div class="card">
-        <div class="top-tag">Nächste Schritte</div>
-        <h2>Empfohlener Ablauf</h2>
-        <ul class="feature-list">
-          <li>Starte in der Kursübersicht</li>
-          <li>Arbeite Lesson für Lesson sauber durch</li>
-          <li>Nutze die Tools zur Selbstanalyse</li>
-          <li>Dokumentiere deinen Fortschritt regelmäßig</li>
-        </ul>
-      </div>
-    </section>
-  </main>
-
-  <div class="footer-note">
-    Alle Inhalte auf BullProsperity dienen ausschließlich zu Ausbildungs-, Lern- und Analysezwecken.
-    Es handelt sich nicht um Finanzberatung, Anlageberatung oder konkrete Handelsempfehlungen.
+      </section>
+    </div>
   </div>
 
   <script>
@@ -553,8 +624,6 @@
 
         const welcomeEl = document.getElementById("memberWelcome");
         const roleEl = document.getElementById("memberRole");
-        const dashboardStatus = document.getElementById("dashboardStatus");
-        const membershipType = document.getElementById("membershipType");
 
         if (welcomeEl) {
           welcomeEl.textContent = data.email
@@ -564,19 +633,6 @@
 
         if (roleEl) {
           roleEl.textContent = `Status: ${data.statusLabel || data.role || "Unbekannt"}`;
-        }
-
-        if (dashboardStatus) {
-          dashboardStatus.textContent = data.statusLabel || data.role || "Unbekannt";
-        }
-
-        if (membershipType) {
-          membershipType.textContent =
-            data.role === "admin"
-              ? "Admin"
-              : data.role === "premium"
-              ? "Premium"
-              : "Gast";
         }
       } catch (err) {
         const welcomeEl = document.getElementById("memberWelcome");
