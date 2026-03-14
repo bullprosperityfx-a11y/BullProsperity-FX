@@ -3,23 +3,24 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Long Term Investing | BullProsperity</title>
- <script>
-(async () => {
-  try {
-    const res = await fetch("/api/access", {
-      credentials: "include"
-    });
-    const data = await res.json();
+  <title>BullProsperity | Long Term Investing</title>
 
-    if (data.role !== "admin" && data.role !== "premium") {
-      window.location.href = "locked.html";
-    }
-  } catch (err) {
-    window.location.href = "locked.html";
-  }
-})();
-</script>
+  <script>
+    (async () => {
+      try {
+        const res = await fetch("/api/access", {
+          credentials: "include"
+        });
+        const data = await res.json();
+
+        if (data.role !== "admin" && data.role !== "premium") {
+          window.location.href = "locked.html";
+        }
+      } catch (err) {
+        window.location.href = "locked.html";
+      }
+    })();
+  </script>
 
   <style>
     * {
@@ -28,978 +29,602 @@
       box-sizing: border-box;
     }
 
-    html {
-      scroll-behavior: smooth;
+    :root {
+      --gold: #ffd700;
+      --gold-soft: #ffe45e;
+      --white: #ffffff;
+      --text: #e7e7e7;
+      --muted: #d6d6d6;
     }
 
     body {
       font-family: Arial, Helvetica, sans-serif;
       background:
-        radial-gradient(circle at top, rgba(255, 215, 0, 0.08), transparent 30%),
-        linear-gradient(135deg, #050505, #0b0b0b 50%, #111111);
-      color: #ffffff;
+        radial-gradient(circle at top, rgba(255, 215, 0, 0.06), transparent 35%),
+        linear-gradient(135deg, #040404, #090909 58%, #101010);
+      color: var(--white);
       min-height: 100vh;
       overflow-x: hidden;
     }
 
-    a {
-      text-decoration: none;
-      color: inherit;
+    .chart-bg {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      opacity: 0.18;
     }
 
-    .navbar {
-      position: sticky;
-      top: 0;
-      z-index: 1000;
+    .chart-bg svg {
       width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .line-main {
+      fill: none;
+      stroke: rgba(255, 215, 0, 0.55);
+      stroke-width: 3.2;
+    }
+
+    .line-alt {
+      fill: none;
+      stroke: rgba(255, 255, 255, 0.10);
+      stroke-width: 2;
+    }
+
+    .wick-gold {
+      stroke: rgba(255, 215, 0, 0.34);
+      stroke-width: 2;
+    }
+
+    .wick-white {
+      stroke: rgba(255, 255, 255, 0.14);
+      stroke-width: 1.9;
+    }
+
+    .body-gold {
+      fill: rgba(255, 215, 0, 0.12);
+      stroke: rgba(255, 215, 0, 0.26);
+      stroke-width: 1.2;
+    }
+
+    .body-white {
+      fill: rgba(255, 255, 255, 0.05);
+      stroke: rgba(255, 255, 255, 0.12);
+      stroke-width: 1.1;
+    }
+
+    .page-shell {
+      position: relative;
+      z-index: 1;
+      width: min(1360px, calc(100% - 36px));
+      margin: 18px auto;
+      border: 2px solid rgba(255, 255, 255, 0.28);
+      border-radius: 16px;
+      padding: 22px 26px 34px;
+      background: rgba(0, 0, 0, 0.08);
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.02);
+    }
+
+    .topbar {
       display: flex;
-      justify-content: space-between;
       align-items: center;
-      padding: 18px 40px;
-      background: rgba(8, 8, 8, 0.92);
-      backdrop-filter: blur(12px);
-      border-bottom: 1px solid rgba(212, 175, 55, 0.12);
+      justify-content: space-between;
+      margin-bottom: 26px;
     }
 
     .logo {
-      font-size: 24px;
-      font-weight: 700;
-      color: #d4af37;
-      letter-spacing: 0.6px;
-      white-space: nowrap;
+      color: var(--gold);
+      font-weight: 800;
+      font-size: 2.1rem;
+      letter-spacing: -0.03em;
+      text-shadow: 0 0 15px rgba(255, 215, 0, 0.18);
     }
 
-    .nav-links {
+    nav {
       display: flex;
+      gap: 26px;
       align-items: center;
-      gap: 14px;
       flex-wrap: wrap;
     }
 
-    .nav-links a {
-      color: #f2f2f2;
-      font-size: 15px;
-      padding: 10px 14px;
-      border-radius: 8px;
-      transition: all 0.25s ease;
-    }
-
-    .nav-links a:hover {
-      color: #d4af37;
-      background: rgba(255, 255, 255, 0.04);
-    }
-
-    .active-link {
-      background: #d4af37;
-      color: #000000 !important;
+    nav a {
+      color: #ffffff;
+      text-decoration: none;
+      font-size: 0.95rem;
       font-weight: 700;
+      transition: 0.2s ease;
     }
 
-    .hero {
-      padding: 90px 20px 60px;
+    nav a:hover {
+      color: var(--gold);
     }
 
-    .hero-inner {
-      max-width: 1250px;
+    .hero-wrap,
+    .card,
+    .wide-card {
+      border: 1px solid rgba(255, 215, 0, 0.10);
+      border-radius: 30px;
+      background:
+        radial-gradient(circle at top left, rgba(255, 215, 0, 0.06), transparent 24%),
+        linear-gradient(180deg, rgba(14,14,14,0.96), rgba(10,10,10,0.95));
+      position: relative;
+      overflow: hidden;
+      box-shadow:
+        0 0 0 1px rgba(255,255,255,0.03),
+        0 24px 45px rgba(0,0,0,0.28);
+    }
+
+    .hero-wrap {
+      width: min(1180px, 100%);
       margin: 0 auto;
-      display: grid;
-      grid-template-columns: 1.2fr 0.8fr;
-      gap: 34px;
-      align-items: center;
+      padding: 42px 40px 34px;
     }
 
-    .hero-text h1 {
-      font-size: 60px;
-      line-height: 1.05;
-      margin-bottom: 18px;
+    .card,
+    .wide-card {
+      padding: 26px 24px 24px;
     }
 
-    .hero-text h1 span {
-      color: #d4af37;
-    }
-
-    .hero-text p {
-      color: #cfcfcf;
-      font-size: 18px;
-      line-height: 1.75;
-      max-width: 730px;
-      margin-bottom: 28px;
-    }
-
-    .hero-buttons {
-      display: flex;
-      gap: 16px;
-      flex-wrap: wrap;
-    }
-
-    .btn {
+    .hero-badge,
+    .top-tag {
       display: inline-block;
-      padding: 14px 22px;
-      border-radius: 10px;
-      font-size: 15px;
+      padding: 8px 16px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 215, 0, 0.28);
+      color: var(--gold-soft);
+      background: rgba(255, 215, 0, 0.06);
+      font-size: 13px;
       font-weight: 700;
-      transition: 0.25s ease;
-      cursor: pointer;
-      border: none;
-    }
-
-    .btn-primary {
-      background: #d4af37;
-      color: #000000;
-    }
-
-    .btn-primary:hover {
-      background: #ebc85a;
-      transform: translateY(-2px);
-    }
-
-    .btn-secondary {
-      border: 1px solid rgba(212, 175, 55, 0.55);
-      color: #d4af37;
-      background: transparent;
-    }
-
-    .btn-secondary:hover {
-      background: rgba(212, 175, 55, 0.08);
-      transform: translateY(-2px);
-    }
-
-    .hero-card {
-      background: linear-gradient(180deg, rgba(21,21,21,0.96), rgba(10,10,10,0.96));
-      border: 1px solid rgba(212, 175, 55, 0.18);
-      border-radius: 22px;
-      padding: 28px;
-      box-shadow: 0 18px 50px rgba(0,0,0,0.25);
-    }
-
-    .hero-card h3 {
-      color: #d4af37;
-      font-size: 24px;
       margin-bottom: 16px;
     }
 
-    .hero-card p {
-      color: #d0d0d0;
-      line-height: 1.7;
+    .hero-center {
+      text-align: center;
+    }
+
+    .hero-title {
+      font-size: clamp(2.8rem, 5vw, 5.4rem);
+      line-height: 0.95;
+      font-weight: 900;
+      letter-spacing: -0.04em;
       margin-bottom: 18px;
     }
 
-    .mini-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 14px;
-      margin-top: 14px;
+    .hero-title .white {
+      color: var(--white);
     }
 
-    .mini-box {
-      background: rgba(255,255,255,0.03);
-      border: 1px solid rgba(255,255,255,0.06);
-      border-radius: 14px;
-      padding: 16px;
+    .hero-title .gold {
+      color: var(--gold);
+      text-shadow: 0 0 18px rgba(255, 215, 0, 0.12);
     }
 
-    .mini-box strong {
-      display: block;
-      color: #d4af37;
-      font-size: 18px;
-      margin-bottom: 6px;
-    }
-
-    .mini-box span {
-      color: #d0d0d0;
-      font-size: 14px;
-    }
-
-    .section {
-      padding: 75px 20px;
-    }
-
-    .section-dark {
-      background: rgba(255,255,255,0.015);
-      border-top: 1px solid rgba(255,255,255,0.04);
-      border-bottom: 1px solid rgba(255,255,255,0.04);
-    }
-
-    .container {
-      max-width: 1250px;
+    .hero-text {
+      max-width: 930px;
       margin: 0 auto;
-    }
-
-    .section-title {
-      text-align: center;
-      font-size: 42px;
-      margin-bottom: 14px;
-    }
-
-    .section-subtitle {
-      text-align: center;
-      max-width: 800px;
-      margin: 0 auto 42px;
-      color: #bdbdbd;
-      font-size: 17px;
+      font-size: 1rem;
       line-height: 1.75;
+      color: #ededed;
     }
 
-    .cards {
+    .btn-row {
+      display: flex;
+      justify-content: center;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin-top: 24px;
+    }
+
+    .btn-row.left {
+      justify-content: flex-start;
+    }
+
+    .btn {
+      min-width: 165px;
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      padding: 14px 20px;
+      border-radius: 16px;
+      font-weight: 800;
+      text-decoration: none;
+      transition: 0.2s ease;
+      font-size: 0.95rem;
+      border: none;
+      cursor: pointer;
+    }
+
+    .btn-gold {
+      color: #111111;
+      background: linear-gradient(135deg, #ffe15b, #f0b90b);
+      box-shadow: 0 6px 16px rgba(255, 215, 0, 0.14);
+    }
+
+    .btn-gold:hover {
+      transform: translateY(-1px);
+    }
+
+    .btn-outline {
+      color: #ffffff;
+      border: 1px solid rgba(255, 215, 0, 0.24);
+      background: rgba(255,255,255,0.02);
+    }
+
+    .btn-outline:hover {
+      color: var(--gold);
+      background: rgba(255,255,255,0.04);
+    }
+
+    .layout {
+      width: min(1180px, 100%);
+      margin: 28px auto 0;
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 22px;
+      gap: 18px;
     }
 
-    .card {
-      background: #111111;
-      border: 1px solid rgba(212, 175, 55, 0.12);
-      border-radius: 18px;
-      padding: 26px;
-      transition: 0.25s ease;
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 18px;
     }
 
-    .card:hover {
-      transform: translateY(-5px);
-      border-color: rgba(212, 175, 55, 0.28);
-      box-shadow: 0 18px 34px rgba(0,0,0,0.22);
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .card h2,
+    .wide-card h2 {
+      color: var(--gold);
+      font-size: 2rem;
+      line-height: 1;
+      margin-bottom: 10px;
+      font-weight: 900;
+      letter-spacing: -0.03em;
     }
 
     .card h3 {
-      color: #d4af37;
-      font-size: 24px;
-      margin-bottom: 12px;
+      color: var(--gold);
+      font-size: 1.3rem;
+      line-height: 1.15;
+      margin-bottom: 8px;
+      font-weight: 800;
     }
 
-    .card p {
-      color: #d0d0d0;
-      font-size: 15px;
-      line-height: 1.7;
-      margin-bottom: 14px;
+    .card p,
+    .wide-card p {
+      color: #f0f0f0;
+      font-size: 0.95rem;
+      line-height: 1.65;
     }
 
-    .card ul {
-      padding-left: 18px;
-      color: #d6d6d6;
-      line-height: 1.8;
-      font-size: 14px;
-    }
-
-    .strategy-grid,
-    .reason-grid {
+    .topic-list {
+      list-style: none;
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 22px;
+      gap: 12px;
+      margin-top: 16px;
     }
 
-    .strategy-box,
-    .reason-box {
-      background: #121212;
-      border-radius: 18px;
-      border: 1px solid rgba(255,255,255,0.05);
-      padding: 24px;
-    }
-
-    .strategy-box h4,
-    .reason-box h4 {
-      color: #d4af37;
-      margin-bottom: 12px;
-      font-size: 22px;
-    }
-
-    .strategy-box p,
-    .reason-box p {
-      color: #d0d0d0;
-      line-height: 1.7;
-      font-size: 15px;
-    }
-
-    .plan-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 20px;
-      margin-top: 12px;
-    }
-
-    .plan-step {
-      background: #111111;
-      border: 1px solid rgba(212, 175, 55, 0.12);
-      border-radius: 18px;
-      padding: 24px;
-    }
-
-    .plan-step .number {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      background: #d4af37;
-      color: #000000;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 700;
-      margin-bottom: 14px;
-    }
-
-    .plan-step h4 {
-      font-size: 21px;
-      margin-bottom: 10px;
-    }
-
-    .plan-step p {
-      color: #cdcdcd;
-      line-height: 1.7;
-      font-size: 14px;
-    }
-
-    .allocation-wrapper {
-      display: grid;
-      grid-template-columns: 0.9fr 1.1fr;
-      gap: 28px;
-      align-items: center;
-    }
-
-    .allocation-chart {
-      width: 100%;
-      max-width: 380px;
-      aspect-ratio: 1 / 1;
-      margin: 0 auto;
-      border-radius: 50%;
-      background:
-        conic-gradient(
-          #d4af37 0% 45%,
-          #8f7440 45% 70%,
-          #5d4a25 70% 80%,
-          #3c2f18 80% 90%,
-          #1f1a12 90% 100%
-        );
-      border: 8px solid rgba(255,255,255,0.04);
-      box-shadow: 0 20px 40px rgba(0,0,0,0.25);
-      position: relative;
-    }
-
-    .allocation-chart::after {
-      content: "";
-      position: absolute;
-      inset: 24%;
-      background: #0d0d0d;
-      border-radius: 50%;
-      border: 1px solid rgba(255,255,255,0.05);
-    }
-
-    .allocation-list {
-      display: grid;
-      gap: 14px;
-    }
-
-    .allocation-item {
-      background: #111111;
-      border: 1px solid rgba(255,255,255,0.05);
-      border-radius: 14px;
-      padding: 16px 18px;
-      display: flex;
-      justify-content: space-between;
-      gap: 14px;
-      align-items: center;
-    }
-
-    .allocation-item strong {
-      color: #ffffff;
-      font-size: 16px;
-    }
-
-    .allocation-item span {
-      color: #d4af37;
-      font-weight: 700;
-      white-space: nowrap;
-    }
-
-    .calculator-box {
-      max-width: 980px;
-      margin: 0 auto;
-      background: linear-gradient(180deg, rgba(18,18,18,0.95), rgba(10,10,10,0.95));
-      border: 1px solid rgba(212, 175, 55, 0.18);
-      border-radius: 24px;
-      padding: 28px;
-    }
-
-    .calculator-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 18px;
-      margin-top: 20px;
-    }
-
-    .field {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    .field label {
-      font-size: 14px;
-      color: #d2d2d2;
-      font-weight: 600;
-    }
-
-    .field input {
-      background: #111111;
-      border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 10px;
-      color: #ffffff;
+    .topic-list li {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255, 215, 0, 0.10);
+      border-radius: 16px;
       padding: 14px 14px;
-      font-size: 15px;
-      outline: none;
-    }
-
-    .field input:focus {
-      border-color: rgba(212, 175, 55, 0.5);
-    }
-
-    .calculator-action {
-      margin-top: 20px;
-      text-align: center;
-    }
-
-    .result-boxes {
-      margin-top: 24px;
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 16px;
-    }
-
-    .result-box {
-      background: #111111;
-      border: 1px solid rgba(212, 175, 55, 0.12);
-      border-radius: 18px;
-      padding: 20px;
-      text-align: center;
-    }
-
-    .result-box h4 {
-      color: #bdbdbd;
-      font-size: 14px;
-      margin-bottom: 10px;
+      color: #f2f2f2;
+      font-size: 0.93rem;
+      line-height: 1.55;
       font-weight: 600;
     }
 
-    .result-box p {
-      color: #d4af37;
-      font-size: 24px;
-      font-weight: 700;
-    }
-
-    .note {
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
       margin-top: 18px;
-      color: #a9a9a9;
+    }
+
+    .stat-box {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255, 215, 0, 0.10);
+      border-radius: 16px;
+      padding: 16px 14px;
+    }
+
+    .stat-box span {
+      display: block;
+      color: #d4d4d4;
+      font-size: 0.9rem;
+      margin-bottom: 8px;
+      font-weight: 600;
+    }
+
+    .stat-box strong {
+      color: var(--gold);
+      font-size: 1.15rem;
+      font-weight: 900;
+    }
+
+    .center-note {
+      width: min(980px, 100%);
+      margin: 12px auto 0;
       text-align: center;
+      padding: 8px 10px 0;
+    }
+
+    .center-note h2 {
+      color: var(--gold);
+      font-size: clamp(2.1rem, 3.4vw, 3.2rem);
+      line-height: 1.05;
+      margin-bottom: 12px;
+      letter-spacing: -0.03em;
+      font-weight: 900;
+    }
+
+    .center-note p {
+      color: #ededed;
       line-height: 1.7;
-      font-size: 13px;
-    }
-
-    .cta {
-      padding: 80px 20px 90px;
-      text-align: center;
-    }
-
-    .cta-box {
-      max-width: 960px;
+      font-size: 1rem;
+      max-width: 860px;
       margin: 0 auto;
-      background: linear-gradient(180deg, rgba(18,18,18,0.95), rgba(10,10,10,0.95));
-      border: 1px solid rgba(212, 175, 55, 0.18);
-      border-radius: 24px;
-      padding: 40px 24px;
+      font-weight: 600;
     }
 
-    .cta-box h2 {
-      font-size: 40px;
-      margin-bottom: 14px;
-    }
-
-    .cta-box p {
-      color: #cdcdcd;
-      font-size: 17px;
-      max-width: 760px;
-      margin: 0 auto 26px;
-      line-height: 1.7;
-    }
-
-    .footer {
-      padding: 28px 20px 40px;
-      text-align: center;
-      color: #9f9f9f;
-      font-size: 13px;
-      border-top: 1px solid rgba(255,255,255,0.05);
-      background: #080808;
-    }
-
-    .footer .disclaimer {
-      max-width: 980px;
-      margin: 0 auto;
-      line-height: 1.8;
-    }
-
-    @media (max-width: 1000px) {
-      .hero-inner,
-      .allocation-wrapper {
+    @media (max-width: 1100px) {
+      .grid-4,
+      .grid-2,
+      .stats-grid {
         grid-template-columns: 1fr;
       }
 
-      .hero-text h1 {
-        font-size: 46px;
+      .page-shell {
+        width: min(100% - 20px, 1360px);
+        padding: 18px 14px 28px;
       }
 
-      .calculator-grid,
-      .result-boxes {
-        grid-template-columns: 1fr;
+      .hero-wrap,
+      .card,
+      .wide-card {
+        padding: 22px 18px 18px;
       }
-    }
 
-    @media (max-width: 768px) {
-      .navbar {
-        padding: 18px 18px;
-        flex-direction: column;
-        align-items: flex-start;
+      .logo {
+        font-size: 1.6rem;
+      }
+
+      nav {
         gap: 14px;
       }
 
-      .nav-links {
-        gap: 10px;
-      }
-
-      .nav-links a {
-        font-size: 14px;
-        padding: 9px 12px;
-      }
-
-      .hero {
-        padding: 70px 18px 50px;
-      }
-
-      .hero-text h1 {
-        font-size: 35px;
-      }
-
-      .hero-text p {
-        font-size: 16px;
-      }
-
-      .section-title {
-        font-size: 30px;
-      }
-
-      .cta-box h2 {
-        font-size: 30px;
-      }
-
-      .mini-grid {
-        grid-template-columns: 1fr;
+      nav a {
+        font-size: 0.88rem;
       }
     }
   </style>
 </head>
 <body>
+  <div class="chart-bg">
+    <svg viewBox="0 0 1600 900" preserveAspectRatio="none">
+      <path class="line-alt" d="M0,645 C130,620 190,565 320,548 C435,532 520,564 635,485 C760,398 825,435 935,342 C1045,248 1135,280 1255,198 C1360,126 1465,142 1600,128" />
+      <path class="line-main" d="M0,730 C120,708 220,650 335,618 C455,585 545,534 670,448 C790,365 890,390 1008,298 C1110,220 1205,210 1325,154 C1430,105 1515,105 1600,88" />
 
-  <nav class="navbar">
-    <div class="logo">BullProsperity</div>
+      <line class="wick-gold" x1="112" y1="770" x2="112" y2="694"></line>
+      <rect class="body-gold" x="101" y="722" width="22" height="34" rx="4"></rect>
 
-    <div class="nav-links">
-      <a href="index.html">Home</a>
-      <a href="hub.html">Hub</a>
-      <a href="setup.html">Setup Room</a>
-      <a href="longterm.html" class="active-link">Long Term Investing</a>
-      <a href="tools.html">Tools</a>
-      <a href="login.html">Login</a>
+      <line class="wick-white" x1="220" y1="688" x2="220" y2="615"></line>
+      <rect class="body-white" x="209" y="640" width="22" height="31" rx="4"></rect>
+
+      <line class="wick-gold" x1="332" y1="650" x2="332" y2="582"></line>
+      <rect class="body-gold" x="321" y="604" width="22" height="30" rx="4"></rect>
+
+      <line class="wick-white" x1="478" y1="585" x2="478" y2="515"></line>
+      <rect class="body-white" x="467" y="536" width="22" height="33" rx="4"></rect>
+
+      <line class="wick-gold" x1="622" y1="515" x2="622" y2="440"></line>
+      <rect class="body-gold" x="611" y="460" width="22" height="36" rx="4"></rect>
+
+      <line class="wick-white" x1="770" y1="432" x2="770" y2="360"></line>
+      <rect class="body-white" x="759" y="382" width="22" height="32" rx="4"></rect>
+
+      <line class="wick-gold" x1="915" y1="355" x2="915" y2="286"></line>
+      <rect class="body-gold" x="904" y="304" width="22" height="35" rx="4"></rect>
+
+      <line class="wick-white" x1="1060" y1="285" x2="1060" y2="222"></line>
+      <rect class="body-white" x="1049" y="238" width="22" height="28" rx="4"></rect>
+
+      <line class="wick-gold" x1="1212" y1="220" x2="1212" y2="160"></line>
+      <rect class="body-gold" x="1201" y="174" width="22" height="30" rx="4"></rect>
+
+      <line class="wick-white" x1="1390" y1="170" x2="1390" y2="108"></line>
+      <rect class="body-white" x="1379" y="124" width="22" height="26" rx="4"></rect>
+
+      <line class="wick-gold" x1="1496" y1="135" x2="1496" y2="84"></line>
+      <rect class="body-gold" x="1485" y="95" width="22" height="24" rx="4"></rect>
+    </svg>
+  </div>
+
+  <div class="page-shell">
+    <div class="topbar">
+      <div class="logo">BullProsperity</div>
+
+      <nav>
+        <a href="/index.html">Home</a>
+        <a href="/hub.html">Hub</a>
+        <a href="/course.html">Course</a>
+        <a href="/tools.html">Tools</a>
+        <a href="/longterm.html">Long Term</a>
+        <a href="/api/whop/login">Login</a>
+      </nav>
     </div>
-  </nav>
 
-  <section class="hero">
-    <div class="hero-inner">
-      <div class="hero-text">
-        <h1>Long Term <span>Investing</span></h1>
-        <p>
-          Dieser Bereich ist für langfristigen Vermögensaufbau gedacht. Fokus auf ETFs, Fonds,
-          Aktien, Krypto und Rohstoffe. Nicht kurzfristiger Hype, sondern Struktur, Geduld,
-          Diversifikation und ein sauberer Investment-Plan.
+    <section class="hero-wrap">
+      <div class="hero-center">
+        <div class="hero-badge">Long Term Investing</div>
+
+        <div class="hero-title">
+          <span class="white">BullProsperity</span><br>
+          <span class="gold">Long Term Investing</span>
+        </div>
+
+        <p class="hero-text">
+          Dieser Bereich ist auf langfristiges Denken aufgebaut. Statt kurzfristiger Hektik geht es hier
+          um Vermögensaufbau, Struktur, Geduld und strategische Entscheidungen über Jahre hinweg.
         </p>
 
-        <div class="hero-buttons">
-          <a href="#anlageklassen" class="btn btn-primary">Anlageklassen ansehen</a>
-          <a href="#rechner" class="btn btn-secondary">Investment Rechner</a>
+        <div class="btn-row">
+          <a href="/hub.html" class="btn btn-outline">Zurück zum Hub</a>
+          <a href="/tools.html" class="btn btn-gold">Tools öffnen</a>
         </div>
       </div>
+    </section>
 
-      <div class="hero-card">
-        <h3>Long Term Fokus</h3>
-        <p>
-          Ein gutes Portfolio basiert nicht nur auf guten Ideen, sondern auf klarer Gewichtung,
-          regelmäßigem Investieren und einem Zeithorizont, den man wirklich durchhalten kann.
-        </p>
-
-        <div class="mini-grid">
-          <div class="mini-box">
-            <strong>ETF</strong>
-            <span>Breite Streuung</span>
-          </div>
-
-          <div class="mini-box">
-            <strong>Fonds</strong>
-            <span>Themen & Regionen</span>
-          </div>
-
-          <div class="mini-box">
-            <strong>Aktien</strong>
-            <span>Wachstum & Qualität</span>
-          </div>
-
-          <div class="mini-box">
-            <strong>Krypto</strong>
-            <span>Spekulative Beimischung</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="section" id="anlageklassen">
-    <div class="container">
-      <h2 class="section-title">Die wichtigsten Anlageklassen</h2>
-      <p class="section-subtitle">
-        Jede Anlageklasse erfüllt einen eigenen Zweck im Portfolio. Entscheidend ist nicht nur,
-        was du kaufst, sondern wie sinnvoll du es kombinierst.
-      </p>
-
-      <div class="cards">
+    <div class="layout">
+      <section class="grid-4">
         <div class="card">
-          <h3>ETF</h3>
+          <div class="top-tag">ETFs</div>
+          <h3>ETF Education</h3>
           <p>
-            ETFs sind für viele Anleger die Grundlage eines ruhigen Long-Term Portfolios.
+            Lerne, wie ETFs funktionieren und warum sie für viele Anleger der Kern eines
+            strukturierten Langfrist-Portfolios sind.
           </p>
-          <ul>
+          <ul class="topic-list">
             <li>Breite Diversifikation</li>
-            <li>Oft niedrige Kosten</li>
-            <li>Ideal für Sparpläne</li>
+            <li>Langfristige Sparpläne</li>
+            <li>Indexbasiertes Investieren</li>
           </ul>
         </div>
 
         <div class="card">
-          <h3>Fonds</h3>
+          <div class="top-tag">Aktien</div>
+          <h3>Aktien Bildung</h3>
           <p>
-            Fonds können aktiv verwaltet sein und bestimmte Themen gezielt abdecken.
+            Verstehe Qualitätsunternehmen, Bewertung, Sektoren und langfristige Perspektiven
+            beim Investieren in Einzelaktien.
           </p>
-          <ul>
-            <li>Aktive Strategien möglich</li>
-            <li>Branchen- oder Regionenfokus</li>
-            <li>Teilweise höhere Gebühren</li>
+          <ul class="topic-list">
+            <li>Unternehmensqualität</li>
+            <li>Wachstum vs. Value</li>
+            <li>Geduld statt Aktionismus</li>
           </ul>
         </div>
 
         <div class="card">
-          <h3>Aktien</h3>
+          <div class="top-tag">Krypto</div>
+          <h3>Krypto Grundlagen</h3>
           <p>
-            Einzelaktien bieten starkes Potenzial, brauchen aber mehr Analyse und Disziplin.
+            Lerne, wie du Krypto im Long-Term-Kontext einordnen kannst, ohne Hype und ohne blindes Risiko.
           </p>
-          <ul>
-            <li>Direkte Unternehmensbeteiligung</li>
-            <li>Langfristiges Wachstum</li>
-            <li>Höheres Einzelrisiko</li>
+          <ul class="topic-list">
+            <li>Volatilität verstehen</li>
+            <li>Langfristige Szenarien</li>
+            <li>Risikobewusste Gewichtung</li>
           </ul>
         </div>
 
         <div class="card">
-          <h3>Krypto</h3>
+          <div class="top-tag">Rohstoffe</div>
+          <h3>Rohstoffe & Fonds</h3>
           <p>
-            Kryptowährungen können eine spekulative Ergänzung sein, sollten aber bewusst klein gehalten werden.
+            Ergänze dein Verständnis für Gold, Rohstoffe und Fonds als Bestandteile eines breiteren
+            Vermögensaufbaus.
           </p>
-          <ul>
-            <li>Hohe Volatilität</li>
-            <li>Hohe Chancen und Risiken</li>
-            <li>Nur mit klarer Gewichtung</li>
+          <ul class="topic-list">
+            <li>Gold als Sicherheitsbaustein</li>
+            <li>Rohstoffe einordnen</li>
+            <li>Fonds verstehen</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="wide-card">
+        <div class="top-tag">Investment Fokus</div>
+        <h2>Warum Long Term Investing ein eigener Bereich ist</h2>
+        <p>
+          Trading und langfristiges Investieren sind zwei unterschiedliche Denkweisen. Während Trading
+          oft mit Timing, Execution und kurzfristiger Marktstruktur arbeitet, geht es im Long-Term-Bereich
+          um Geduld, Kapitalallokation, Risikostreuung und sauberen Vermögensaufbau.
+        </p>
+
+        <div class="stats-grid">
+          <div class="stat-box">
+            <span>Fokus</span>
+            <strong>Vermögensaufbau</strong>
+          </div>
+          <div class="stat-box">
+            <span>Denkweise</span>
+            <strong>Langfristig</strong>
+          </div>
+          <div class="stat-box">
+            <span>Ansatz</span>
+            <strong>Strategisch</strong>
+          </div>
+          <div class="stat-box">
+            <span>Ziel</span>
+            <strong>Struktur & Geduld</strong>
+          </div>
+        </div>
+      </section>
+
+      <section class="grid-2">
+        <div class="card">
+          <div class="top-tag">Long Term Mindset</div>
+          <h2>Worauf es langfristig ankommt</h2>
+          <ul class="topic-list">
+            <li>Geduld schlägt ständige Aktivität</li>
+            <li>Diversifikation reduziert unnötige Einzelrisiken</li>
+            <li>Regelmäßigkeit ist oft wichtiger als Perfektion</li>
+            <li>Langfristiger Erfolg braucht klare Prinzipien</li>
           </ul>
         </div>
 
         <div class="card">
-          <h3>Rohstoffe</h3>
+          <div class="top-tag">Education Fokus</div>
+          <h2>Kein Hype, sondern Struktur</h2>
           <p>
-            Gold, Silber und andere Rohstoffe können als zusätzliche Diversifikation dienen.
+            Dieser Bereich dient nicht dazu, dir schnelle Versprechen zu geben. Er ist dafür da,
+            dir ein klares Verständnis für langfristiges Investieren aufzubauen.
           </p>
-          <ul>
-            <li>Portfolio-Ergänzung</li>
-            <li>Möglicher Inflationsschutz</li>
-            <li>Marktumfeld entscheidend</li>
+          <ul class="topic-list">
+            <li>Keine Finanzberatung</li>
+            <li>Keine Kauf- oder Verkaufsempfehlungen</li>
+            <li>Education, Analyse und langfristiges Denken</li>
+            <li>Strukturierte Wissensbasis statt Aktionismus</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="grid-2">
+        <div class="card">
+          <div class="top-tag">Quick Access</div>
+          <h2>Schnellzugriff</h2>
+          <ul class="topic-list">
+            <li><a href="/hub.html" style="color:#fff; text-decoration:none;">Zurück zum Hub</a></li>
+            <li><a href="/course.html" style="color:#fff; text-decoration:none;">Education Kurs öffnen</a></li>
+            <li><a href="/tools.html" style="color:#fff; text-decoration:none;">Trading Tools öffnen</a></li>
+            <li><a href="/lesson1.html" style="color:#fff; text-decoration:none;">Zur ersten Lektion</a></li>
           </ul>
         </div>
 
         <div class="card">
-          <h3>Portfolio Balance</h3>
+          <div class="top-tag">Long Term Education</div>
+          <h2>Eigener Bereich, gleiche Brand</h2>
           <p>
-            Langfristiger Erfolg entsteht durch Struktur, Gewichtung und Kontinuität.
-          </p>
-          <ul>
-            <li>Risiko bewusst verteilen</li>
-            <li>Emotionen rausnehmen</li>
-            <li>Strategie langfristig halten</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="section section-dark">
-    <div class="container">
-      <h2 class="section-title">Long Term Strategie</h2>
-      <p class="section-subtitle">
-        Ein langfristiger Ansatz braucht mehr als nur gute Assets. Entscheidend ist die Struktur dahinter.
-      </p>
-
-      <div class="strategy-grid">
-        <div class="strategy-box">
-          <h4>Diversifikation</h4>
-          <p>
-            Verteile Kapital über verschiedene Bereiche, damit dein Portfolio stabiler aufgestellt ist.
+            Der Long-Term-Bereich fühlt sich bewusst wie eine eigene Unterwebseite an, bleibt aber klar
+            Teil der BullProsperity Plattform und ergänzt den Trading-Bereich um strategischen Vermögensaufbau.
           </p>
         </div>
+      </section>
 
-        <div class="strategy-box">
-          <h4>Regelmäßigkeit</h4>
-          <p>
-            Monatliche Investments können langfristig mehr bringen als ständiges Timing.
-          </p>
-        </div>
-
-        <div class="strategy-box">
-          <h4>Geduld</h4>
-          <p>
-            Vermögensaufbau passiert selten sofort. Zeit im Markt ist oft wichtiger als Perfektion.
-          </p>
-        </div>
-
-        <div class="strategy-box">
-          <h4>Risikoverständnis</h4>
-          <p>
-            Vor jedem Investment muss klar sein, welche Schwankungen du wirklich tragen kannst.
-          </p>
-        </div>
-      </div>
+      <section class="center-note">
+        <h2>Langfristig denken. Strukturiert handeln.</h2>
+        <p>
+          Dieser Bereich wurde für Menschen gebaut, die nicht nur traden, sondern Vermögen mit einem
+          klaren, langfristigen Ansatz aufbauen möchten.
+        </p>
+      </section>
     </div>
-  </section>
-
-  <section class="section">
-    <div class="container">
-      <h2 class="section-title">Beispiel für Portfolio Allocation</h2>
-      <p class="section-subtitle">
-        Das hier ist nur ein Beispiel, wie eine grobe Long-Term Aufteilung aussehen kann.
-      </p>
-
-      <div class="allocation-wrapper">
-        <div class="allocation-chart"></div>
-
-        <div class="allocation-list">
-          <div class="allocation-item">
-            <strong>ETF</strong>
-            <span>45%</span>
-          </div>
-          <div class="allocation-item">
-            <strong>Aktien</strong>
-            <span>25%</span>
-          </div>
-          <div class="allocation-item">
-            <strong>Fonds</strong>
-            <span>10%</span>
-          </div>
-          <div class="allocation-item">
-            <strong>Krypto</strong>
-            <span>10%</span>
-          </div>
-          <div class="allocation-item">
-            <strong>Rohstoffe / Cash</strong>
-            <span>10%</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="section section-dark" id="rechner">
-    <div class="container">
-      <h2 class="section-title">Investment Rechner</h2>
-      <p class="section-subtitle">
-        Hier kann der Nutzer grob berechnen, wie sich Startkapital und monatliche Einzahlungen
-        langfristig entwickeln könnten.
-      </p>
-
-      <div class="calculator-box">
-        <div class="calculator-grid">
-          <div class="field">
-            <label for="startCapital">Startkapital (€)</label>
-            <input type="number" id="startCapital" value="1000" />
-          </div>
-
-          <div class="field">
-            <label for="monthlyInvestment">Monatliche Einzahlung (€)</label>
-            <input type="number" id="monthlyInvestment" value="200" />
-          </div>
-
-          <div class="field">
-            <label for="annualReturn">Jährliche Rendite (%)</label>
-            <input type="number" id="annualReturn" value="8" step="0.1" />
-          </div>
-
-          <div class="field">
-            <label for="years">Laufzeit (Jahre)</label>
-            <input type="number" id="years" value="20" />
-          </div>
-        </div>
-
-        <div class="calculator-action">
-          <button class="btn btn-primary" onclick="calculateInvestment()">Jetzt berechnen</button>
-        </div>
-
-        <div class="result-boxes">
-          <div class="result-box">
-            <h4>Endkapital</h4>
-            <p id="finalAmount">€ 0</p>
-          </div>
-
-          <div class="result-box">
-            <h4>Einzahlungen gesamt</h4>
-            <p id="totalPaid">€ 0</p>
-          </div>
-
-          <div class="result-box">
-            <h4>Erwirtschafteter Gewinn</h4>
-            <p id="profitAmount">€ 0</p>
-          </div>
-        </div>
-
-        <div class="note">
-          Dieser Rechner dient nur zur groben Veranschaulichung und ersetzt keine Finanzberatung.
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="section" id="investmentplan">
-    <div class="container">
-      <h2 class="section-title">Investment Plan</h2>
-      <p class="section-subtitle">
-        So kann ein strukturierter Einstieg in langfristiges Investieren aussehen.
-      </p>
-
-      <div class="plan-grid">
-        <div class="plan-step">
-          <div class="number">1</div>
-          <h4>Ziele festlegen</h4>
-          <p>Definiere, ob du Vermögen aufbauen, absichern oder langfristig frei werden willst.</p>
-        </div>
-
-        <div class="plan-step">
-          <div class="number">2</div>
-          <h4>Risiko einschätzen</h4>
-          <p>Überlege ehrlich, welche Schwankungen du finanziell und mental tragen kannst.</p>
-        </div>
-
-        <div class="plan-step">
-          <div class="number">3</div>
-          <h4>Portfolio aufbauen</h4>
-          <p>Stelle deine Mischung aus ETFs, Aktien, Krypto, Fonds und Rohstoffen bewusst zusammen.</p>
-        </div>
-
-        <div class="plan-step">
-          <div class="number">4</div>
-          <h4>Regelmäßig investieren</h4>
-          <p>Mit Struktur und Konstanz entsteht langfristig mehr Ruhe und Klarheit.</p>
-        </div>
-
-        <div class="plan-step">
-          <div class="number">5</div>
-          <h4>Kontrollieren</h4>
-          <p>Überprüfe dein Portfolio in sinnvollen Abständen und passe es nur mit Plan an.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="section section-dark">
-    <div class="container">
-      <h2 class="section-title">Warum dieser Bereich wichtig ist</h2>
-      <p class="section-subtitle">
-        BullProsperity soll nicht nur kurzfristige Marktideen zeigen, sondern auch langfristiges Denken fördern.
-      </p>
-
-      <div class="reason-grid">
-        <div class="reason-box">
-          <h4>Mehr Weitblick</h4>
-          <p>Long-Term Investing schafft einen Gegenpol zu kurzfristigen Entscheidungen und Hype.</p>
-        </div>
-
-        <div class="reason-box">
-          <h4>Mehr Stabilität</h4>
-          <p>Ein strukturiertes Portfolio kann langfristig für mehr Ruhe und klarere Entscheidungen sorgen.</p>
-        </div>
-
-        <div class="reason-box">
-          <h4>Mehr Bildung</h4>
-          <p>Nutzer lernen, dass Vermögen oft mit Geduld, Strategie und Konsistenz aufgebaut wird.</p>
-        </div>
-
-        <div class="reason-box">
-          <h4>Mehr Qualität</h4>
-          <p>Die Plattform wirkt professioneller, wenn auch langfristiger Kapitalaufbau sauber integriert ist.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="cta">
-    <div class="cta-box">
-      <h2>Long Term Investing gehört mit in BullProsperity</h2>
-      <p>
-        Diese Seite ist die Grundlage. Später kannst du sie noch erweitern mit ETF-Vergleich,
-        Watchlist, Asset-Übersicht, Marktüberblick oder einer Portfolio-Check Sektion.
-      </p>
-      <a href="hub.html" class="btn btn-primary">Zurück zum Hub</a>
-    </div>
-  </section>
-
-  <footer class="footer">
-    <div class="disclaimer">
-      Alle Inhalte auf BullProsperity dienen ausschließlich zu Informations- und Bildungszwecken
-      und stellen keine Finanzberatung, Anlageberatung oder Kauf- beziehungsweise Verkaufsempfehlung dar.
-      Investments in ETFs, Fonds, Aktien, Kryptowährungen und Rohstoffe sind mit Risiken verbunden.
-      Vergangene Entwicklungen sind kein verlässlicher Indikator für zukünftige Ergebnisse.
-    </div>
-  </footer>
-
-  <script>
-    function formatCurrency(value) {
-      return new Intl.NumberFormat('de-DE', {
-        style: 'currency',
-        currency: 'EUR',
-        maximumFractionDigits: 0
-      }).format(value);
-    }
-
-    function calculateInvestment() {
-      const startCapital = parseFloat(document.getElementById('startCapital').value) || 0;
-      const monthlyInvestment = parseFloat(document.getElementById('monthlyInvestment').value) || 0;
-      const annualReturn = parseFloat(document.getElementById('annualReturn').value) || 0;
-      const years = parseFloat(document.getElementById('years').value) || 0;
-
-      const monthlyRate = annualReturn / 100 / 12;
-      const months = years * 12;
-
-      let finalAmount = startCapital;
-
-      for (let i = 0; i < months; i++) {
-        finalAmount = finalAmount * (1 + monthlyRate) + monthlyInvestment;
-      }
-
-      const totalPaid = startCapital + (monthlyInvestment * months);
-      const profit = finalAmount - totalPaid;
-
-      document.getElementById('finalAmount').textContent = formatCurrency(finalAmount);
-      document.getElementById('totalPaid').textContent = formatCurrency(totalPaid);
-      document.getElementById('profitAmount').textContent = formatCurrency(profit);
-    }
-
-    calculateInvestment();
-  </script>
-
+  </div>
 </body>
 </html>
