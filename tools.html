@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="de">
 <head>
@@ -6,66 +5,343 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>BullProsperity | Tools</title>
 <link rel="stylesheet" href="theme.css">
-</head>
 
+<script>
+(async () => {
+  try {
+    const res = await fetch("/api/access",{credentials:"include"});
+    const data = await res.json();
+
+    if(data.role !== "admin" && data.role !== "premium"){
+      window.location.href = "locked.html";
+    }
+  } catch(err){
+    window.location.href = "locked.html";
+  }
+})();
+</script>
+
+<style>
+
+.chart-frame{
+border:1px solid var(--line);
+border-radius:22px;
+overflow:hidden;
+background:#0c0c0c;
+margin-top:20px;
+}
+
+.chart-frame iframe{
+width:100%;
+height:500px;
+border:none;
+display:block;
+}
+
+@media(max-width:860px){
+
+.chart-frame iframe{
+height:400px;
+}
+
+}
+
+</style>
+
+</head>
 <body>
+
 <div class="page">
 
 <nav class="navbar">
-<a href="index.html" class="logo">BullProsperity</a>
+
+<a href="index.html" class="logo">
+BullProsperity
+</a>
+
 <div class="nav-links">
+
 <a href="index.html">Home</a>
 <a href="hub.html">Hub</a>
 <a href="course.html">Course</a>
-<a href="tools.html">Tools</a>
+<a href="tools.html" class="active">Tools</a>
 <a href="setup-room.html">Setup Room</a>
 <a href="community.html">Community</a>
+<a href="login.html">Login</a>
+
 </div>
+
 </nav>
 
+
 <section class="hero-shell">
-<div class="badge">BullProsperity</div>
-<h1 class="hero-title">Tools</h1>
+
+<div class="badge">
+Trading Tools
+</div>
+
+<h1 class="hero-title">
+
+BullProsperity
+<span class="gold">Trading Tools</span>
+
+</h1>
+
 <p class="hero-text">
-Dieser Bereich gehört zur BullProsperity Plattform. Die Seite nutzt dein zentrales Theme,
-damit alle Bereiche visuell einheitlich bleiben.
+
+Diese Tools helfen dir deine Trades professioneller vorzubereiten.
+Von Risiko-Berechnung über Journal bis zur Chart Analyse – alles an einem Ort.
+
 </p>
 
 <div class="hero-buttons">
-<a href="hub.html" class="btn primary">Zum Hub</a>
-<a href="course.html" class="btn secondary">Zum Kurs</a>
+
+<a href="#tools" class="btn primary">
+Tools öffnen
+</a>
+
+<a href="course.html" class="btn secondary">
+Zurück zum Kurs
+</a>
+
 </div>
+
 </section>
 
+
 <section class="section">
-<h2 class="section-heading">Inhalt</h2>
+
+<h2 class="section-heading">
+Tool Bereiche
+</h2>
+
 <p class="section-subtext">
-Hier kannst du später Inhalte, Videos oder Charts einfügen.
+
+Diese Bereiche helfen Mitgliedern dabei Wissen richtig umzusetzen
+und strukturierter zu traden.
+
 </p>
+
+
+<div id="tools" class="grid-4">
+
+<div class="tool-card">
+
+<div>
+
+<div class="badge">Risk Tool</div>
+
+<h3>Lot Size Rechner</h3>
+
+<p>
+
+Berechne deine Positionsgröße anhand von Kontogröße,
+Risiko in Prozent und Stop Loss Distanz.
+
+</p>
+
+</div>
+
+<a href="lot-size.html" class="tool-link">
+Tool öffnen
+</a>
+
+</div>
+
+
+<div class="tool-card">
+
+<div>
+
+<div class="badge">Journal</div>
+
+<h3>Trading Journal</h3>
+
+<p>
+
+Dokumentiere deine Trades,
+Emotionen und Erkenntnisse um dich langfristig zu verbessern.
+
+</p>
+
+</div>
+
+<a href="journal.html" class="tool-link">
+Journal öffnen
+</a>
+
+</div>
+
+
+<div class="tool-card">
+
+<div>
+
+<div class="badge">Routine</div>
+
+<h3>Trading Checkliste</h3>
+
+<p>
+
+Überprüfe vor jedem Trade Struktur,
+Liquidität, Confirmation und Risiko.
+
+</p>
+
+</div>
+
+<a href="checklist.html" class="tool-link">
+Checkliste öffnen
+</a>
+
+</div>
+
+
+<div class="tool-card">
+
+<div>
+
+<div class="badge">Charts</div>
+
+<h3>TradingView Bereich</h3>
+
+<p>
+
+Greife direkt auf Charts und Analysen
+innerhalb deiner Plattform zu.
+
+</p>
+
+</div>
+
+<a href="#charts" class="tool-link">
+Charts öffnen
+</a>
+
+</div>
+
+</div>
+
+</section>
+
+
+<section id="charts" class="section-card">
+
+<div class="badge">
+Live Charts
+</div>
+
+<h2 class="section-heading" style="font-size:36px;margin-bottom:10px">
+
+TradingView Chart Analyse
+
+</h2>
+
+<p class="section-subtext">
+
+Hier kannst du direkt innerhalb deiner Plattform
+Charts analysieren ohne eine externe Seite zu öffnen.
+
+</p>
+
+<div class="chart-frame">
+
+<iframe
+src="https://www.tradingview.com/widgetembed/?symbol=FX%3AEURUSD&interval=60&theme=dark&style=1"
+allowfullscreen>
+</iframe>
+
+</div>
+
+</section>
+
+
+<section class="section">
 
 <div class="grid-2">
 
 <div class="section-card">
-<div class="badge">Bereich</div>
-<h3>Tools</h3>
-<p>Hier kommt dein Content rein.</p>
-<a href="#" class="card-link">Mehr anzeigen</a>
+
+<div class="badge">
+Warum Tools wichtig sind
 </div>
+
+<h2 class="section-heading" style="font-size:36px;margin-bottom:10px">
+
+Von Wissen zu Umsetzung
+
+</h2>
+
+<div class="list-box">
+
+<div class="list-item">
+Weniger emotionale Entscheidungen
+</div>
+
+<div class="list-item">
+Saubere Positionsgrößen
+</div>
+
+<div class="list-item">
+Strukturierte Vorbereitung
+</div>
+
+<div class="list-item">
+Bessere Lernkurve
+</div>
+
+</div>
+
+</div>
+
 
 <div class="section-card">
-<div class="badge">Information</div>
-<h3>BullProsperity</h3>
-<p>Diese Seite ist Teil deiner Education Plattform.</p>
-<a href="#" class="card-link">Details</a>
+
+<div class="badge">
+BullProsperity Workflow
+</div>
+
+<h2 class="section-heading" style="font-size:36px;margin-bottom:10px">
+
+So nutzt du die Tools
+
+</h2>
+
+<div class="list-box">
+
+<div class="list-item">
+1. Chart Analyse
+</div>
+
+<div class="list-item">
+2. Setup prüfen
+</div>
+
+<div class="list-item">
+3. Risiko berechnen
+</div>
+
+<div class="list-item">
+4. Trade dokumentieren
 </div>
 
 </div>
+
+</div>
+
+</div>
+
 </section>
 
+
 <div class="footer-note">
-BullProsperity dient ausschließlich Bildungszwecken und stellt keine Finanzberatung dar.
+
+BullProsperity dient ausschließlich Bildungszwecken
+und stellt keine Finanzberatung dar.
+
 </div>
 
 </div>
+
 </body>
 </html>
