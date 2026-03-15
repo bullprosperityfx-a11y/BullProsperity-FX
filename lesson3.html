@@ -33,7 +33,6 @@
       --gold: #ffd700;
       --gold-soft: #ffe45e;
       --white: #ffffff;
-      --text: #e7e7e7;
     }
 
     body {
@@ -258,17 +257,28 @@
 
     .video-box {
       margin-top: 16px;
-      min-height: 260px;
       border-radius: 22px;
       border: 1px solid rgba(255,215,0,0.12);
       background:
         radial-gradient(circle at center, rgba(255,215,0,0.08), transparent 30%),
         rgba(255,255,255,0.02);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 24px;
+      padding: 18px;
+    }
+
+    .video-embed {
+      position: relative;
+      width: 100%;
+      padding-top: 56.25%;
+      border-radius: 18px;
+      overflow: hidden;
+      background: #000;
+    }
+
+    .video-embed iframe {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
     }
 
     .lesson-grid {
@@ -324,10 +334,19 @@
       box-shadow: 0 6px 16px rgba(255, 215, 0, 0.14);
     }
 
+    .btn-gold:hover {
+      transform: translateY(-1px);
+    }
+
     .btn-outline {
       color: #ffffff;
       border: 1px solid rgba(255, 215, 0, 0.28);
       background: rgba(255,255,255,0.02);
+    }
+
+    .btn-outline:hover {
+      color: var(--gold);
+      background: rgba(255,255,255,0.04);
     }
 
     .center-note {
@@ -358,14 +377,20 @@
       .lesson-grid {
         grid-template-columns: 1fr;
       }
+
       .page-shell {
         width: min(100% - 20px, 1320px);
         padding: 18px 14px 28px;
       }
+
       .card,
       .hero-card,
       .lesson-card {
         padding: 22px 18px 18px;
+      }
+
+      .logo {
+        font-size: 1.6rem;
       }
     }
   </style>
@@ -389,6 +414,7 @@
   <div class="page-shell">
     <div class="topbar">
       <div class="logo">BullProsperity</div>
+
       <nav>
         <a href="/index.html">Home</a>
         <a href="/hub.html">Hub</a>
@@ -403,7 +429,8 @@
         <div class="top-tag">Lesson Navigation</div>
         <h2 class="sidebar-title">Lesson 3</h2>
         <p class="sidebar-text">
-          Diese Lektion verbindet Trading Grundlagen mit deinem praktischen Arbeitsprozess.
+          Diese Lektion verbindet Trading Grundlagen mit einem der häufigsten Gründe,
+          warum viele Retail Trader langfristig scheitern.
         </p>
 
         <div class="side-links">
@@ -419,71 +446,72 @@
         <section class="hero-card">
           <div class="top-tag">Trading Grundlagen</div>
 
-<h1>
-<span class="white">Warum Retail Trader</span><br>
-<span class="gold">verlieren</span>
-</h1>
+          <h1>
+            <span class="white">Warum Retail Trader</span><br>
+            <span class="gold">verlieren</span>
+          </h1>
+
           <p class="hero-text">
-In dieser Lektion verstehst du, warum die meisten Retail Trader am Markt verlieren,
-welche Fehler sie machen und warum institutionelle Marktteilnehmer langfristig
-die Kontrolle über den Marktfluss haben.
-</p>
-       <div class="video-box">
+            In dieser Lektion verstehst du, warum die meisten Retail Trader am Markt verlieren,
+            welche Fehler sie machen und warum institutionelle Marktteilnehmer langfristig
+            die Kontrolle über den Marktfluss haben.
+          </p>
 
-<div style="padding:56.25% 0 0 0;position:relative;">
-<iframe src="https://player.vimeo.com/video/1173678522?badge=0&autopause=0&player_id=0&app_id=58479"
-frameborder="0"
-allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share"
-referrerpolicy="strict-origin-when-cross-origin"
-style="position:absolute;top:0;left:0;width:100%;height:100%;"
-title="Warum Retail Trader verlieren?">
-</iframe>
-</div>
-
-<script src="https://player.vimeo.com/api/player.js"></script>
-
-</div>
+          <div class="video-box">
+            <div class="video-embed">
+              <iframe
+                src="https://player.vimeo.com/video/1173678522"
+                frameborder="0"
+                allow="autoplay; fullscreen; picture-in-picture"
+                allowfullscreen
+                title="Warum Retail Trader verlieren?">
+              </iframe>
+            </div>
+          </div>
 
           <div class="btn-row">
-            <a href="/locked.html" class="btn btn-gold">Nächste Lektion</a>
+            <a href="/lesson4.html" class="btn btn-gold">Nächste Lektion</a>
             <a href="/course.html" class="btn btn-outline">Zur Kursübersicht</a>
           </div>
         </section>
 
         <section class="lesson-grid">
           <div class="lesson-card">
-            <div class="top-tag">Praxis</div>
-            <h3>Was du parallel machen solltest</h3>
+            <div class="top-tag">Typische Fehler</div>
+            <h3>Warum die meisten verlieren</h3>
             <ul class="mini-list">
-              <li>Setups direkt dokumentieren</li>
-              <li>Tools parallel zum Lernen nutzen</li>
-              <li>Fehler früh erkennen und notieren</li>
+              <li>Zu viel Emotion statt klarer Struktur</li>
+              <li>Kein sauberes Risk Management</li>
+              <li>Blindes Hinterhertraden ohne Plan</li>
             </ul>
           </div>
 
           <div class="lesson-card">
-            <div class="top-tag">Routine</div>
-            <h3>Wie Fortschritt entsteht</h3>
+            <div class="top-tag">Education Fokus</div>
+            <h3>Was du daraus lernen sollst</h3>
             <ul class="mini-list">
-              <li>Klare Wiederholung statt Zufall</li>
-              <li>Journal statt bloßem Erinnern</li>
-              <li>Analyse vor Ausführung</li>
+              <li>Marktlogik vor Aktion verstehen</li>
+              <li>Disziplin über kurzfristige Gefühle stellen</li>
+              <li>Trading professionell statt impulsiv angehen</li>
             </ul>
           </div>
         </section>
 
         <section class="card">
           <div class="top-tag">Kernidee</div>
-          <h3>Professioneller Lernprozess</h3>
+          <h3>Retail gegen professionelles Denken</h3>
           <p>
-            Trading wird erst dann wirklich lernbar, wenn du Inhalte nicht nur verstehst, sondern sie
-            in strukturierte Abläufe, Checklisten und echte Umsetzung übersetzt.
+            Der Unterschied zwischen dauerhaft verlierenden und strukturiert arbeitenden Tradern
+            liegt selten nur im Setup. Meist liegt er in Denkweise, Disziplin, Erwartungshaltung
+            und sauberer Vorbereitung.
           </p>
         </section>
 
         <section class="center-note">
-          <h2>Wissen wird durch Umsetzung wertvoll.</h2>
-          <p>Diese Lektion verbindet Theorie mit dem Arbeitsstil, den du später täglich brauchst.</p>
+          <h2>Erst verstehen, warum viele verlieren.</h2>
+          <p>
+            Diese Lektion ist ein wichtiger Übergang von reiner Theorie hin zu echtem Trading-Verständnis.
+          </p>
         </section>
       </main>
     </div>
