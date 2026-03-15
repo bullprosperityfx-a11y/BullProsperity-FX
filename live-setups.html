@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BullProsperity | Live Beispiele</title>
+
+  <script>
+    (async () => {
+      try {
+        const res = await fetch("/api/access", {
+          credentials: "include"
+        });
+        const data = await res.json();
+
+        if (data.role !== "admin" && data.role !== "premium") {
+          window.location.href = "locked.html";
+        }
+      } catch (err) {
+        window.location.href = "locked.html";
+      }
+    })();
+  </script>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    :root {
+      --bg: #050505;
+      --gold: #f3d21b;
+      --gold-soft: rgba(243, 210, 27, 0.24);
+      --text: #ffffff;
+      --line: rgba(243, 210, 27, 0.20);
+    }
+
+    body {
+      background:
+        radial-gradient(circle at 20% 10%, rgba(255,255,255,0.05), transparent 22%),
+        radial-gradient(circle at 80% 20%, rgba(255,255,255,0.03), transparent 18%),
+        radial-gradient(circle at 50% 80%, rgba(243,210,27,0.05), transparent 28%),
+        var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    body::before,
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    body::before {
+      background-image:
+        linear-gradient(rgba(243,210,27,0.07), rgba(243,210,27,0.07)),
+        linear-gradient(rgba(243,210,27,0.07), rgba(243,210,27,0.07));
+      background-size: 1px 100%, 100% 1px;
+      background-position: 72px 0, 0 72px;
+      background-repeat: no-repeat;
+      opacity: 0.35;
+    }
+
+    body::after {
+      background:
+        linear-gradient(115deg, transparent 0%, transparent 33%, rgba(243,210,27,0.08) 33.2%, transparent 34%),
+        linear-gradient(200deg, transparent 0%, transparent 70%, rgba(243,210,27,0.06) 70.2%, transparent 71%);
+      opacity: 0.45;
+    }
+
+    .page {
+      position: relative;
+      z-index: 1;
+      max-width: 1450px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+      padding: 18px 0 24px;
+      margin-bottom: 10px;
+      flex-wrap: wrap;
+    }
+
+    .logo {
+      font-size: 20px;
+      font-weight: 900;
+      color: var(--gold);
+      text-decoration: none;
+      letter-spacing: -0.3px;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 26px;
+      flex-wrap: wrap;
+    }
+
+    .nav-links a {
+      color: #fff;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 15px;
+      transition: 0.2s ease;
+    }
+
+    .nav-links a:hover,
+    .nav-links a.active {
+      color: var(--gold);
+    }
+
+    .hero-shell,
+    .section-card,
+    .chart-card,
+    .example-card {
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      background: linear-gradient(180deg, rgba(22,22,22,0.88), rgba(10,10,10,0.94));
+      box-shadow: 0 0 0 1px rgba(255,255,255,0.02) inset;
+    }
+
+    .hero-shell {
+      padding: 34px;
+      margin-bottom: 28px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-shell::before {
+      content: "";
+      position: absolute;
+      top: -120px;
+      right: -120px;
+      width: 300px;
+      height: 300px;
+      background: radial-gradient(circle, rgba(243,210,27,0.12), transparent 68%);
+      pointer-events: none;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 8px 16px;
+      border-radius: 999px;
+      border: 1px solid var(--gold-soft);
+      color: var(--gold);
+      background: rgba(243,210,27,0.06);
+      font-size: 14px;
+      font-weight: 800;
+      margin-bottom: 18px;
+    }
+
+    .hero-title {
+      font-size: 58px;
+      line-height: 0.98;
+      font-weight: 900;
+      letter-spacing: -1.5px;
+      margin-bottom: 16px;
+      max-width: 900px;
+    }
+
+    .hero-title .gold {
+      color: var(--gold);
+      display: inline-block;
+    }
+
+    .hero-text {
+      max-width: 920px;
+      color: #ececec;
+      font-size: 17px;
+      line-height: 1.7;
+      margin-bottom: 24px;
+    }
+
+    .hero-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+    }
+
+    .btn {
+      text-decoration: none;
+      padding: 14px 24px;
+      border-radius: 999px;
+      font-weight: 800;
+      font-size: 15px;
+      transition: 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .btn.primary {
+      background: var(--gold);
+      color: #111;
+      box-shadow: 0 0 24px rgba(243,210,27,0.16);
+    }
+
+    .btn.secondary {
+      color: #fff;
+      border: 1px solid rgba(255,255,255,0.18);
+      background: rgba(255,255,255,0.02);
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+    }
+
+    .section {
+      margin-bottom: 28px;
+    }
+
+    .section-heading {
+      font-size: 42px;
+      line-height: 1.02;
+      font-weight: 900;
+      letter-spacing: -1.2px;
+      margin-bottom: 8px;
+      color: var(--gold);
+    }
+
+    .section-subtext {
+      color: #ebebeb;
+      font-size: 17px;
+      line-height: 1.65;
+      max-width: 920px;
+      margin-bottom: 20px;
+    }
+
+    .double-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 18px;
+      margin-bottom: 28px;
+    }
+
+    .chart-card,
+    .section-card {
+      padding: 24px;
+    }
+
+    .chart-placeholder {
+      border-radius: 22px;
+      border: 1px solid rgba(243,210,27,0.18);
+      background:
+        radial-gradient(circle at center, rgba(255,255,255,0.03), rgba(255,255,255,0.01)),
+        #0c0c0c;
+      min-height: 420px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #d4d4d4;
+      text-align: center;
+      padding: 24px;
+      line-height: 1.7;
+      font-size: 16px;
+    }
+
+    .list-box {
+      display: grid;
+      gap: 12px;
+    }
+
+    .list-item {
+      border: 1px solid rgba(243,210,27,0.14);
+      background: rgba(255,255,255,0.02);
+      border-radius: 16px;
+      padding: 15px 16px;
+      color: #f4f4f4;
+      line-height: 1.5;
+      font-weight: 700;
+      font-size: 15px;
+    }
+
+    .example-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+
+    .example-card {
+      padding: 22px;
+      min-height: 245px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: 0.2s ease;
+    }
+
+    .example-card:hover {
+      transform: translateY(-2px);
+      border-color: rgba(243,210,27,0.42);
+      box-shadow: 0 0 20px rgba(243,210,27,0.08);
+    }
+
+    .example-pill {
+      display: inline-block;
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 800;
+      border: 1px solid var(--gold-soft);
+      color: var(--gold);
+      background: rgba(243,210,27,0.06);
+      margin-bottom: 14px;
+    }
+
+    .example-card h3 {
+      font-size: 22px;
+      line-height: 1.15;
+      color: var(--gold);
+      margin-bottom: 10px;
+      font-weight: 900;
+    }
+
+    .example-card p {
+      font-size: 15px;
+      line-height: 1.6;
+      color: #efefef;
+      margin-bottom: 18px;
+    }
+
+    .example-link {
+      text-decoration: none;
+      width: 100%;
+      text-align: center;
+      padding: 13px 16px;
+      border-radius: 14px;
+      font-weight: 800;
+      background: var(--gold);
+      color: #111;
+      transition: 0.2s ease;
+      display: block;
+    }
+
+    .example-link:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 0 18px rgba(243,210,27,0.14);
+    }
+
+    .footer-note {
+      padding: 18px 8px 8px;
+      text-align: center;
+      color: #bcbcbc;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    @media (max-width: 1200px) {
+      .hero-title,
+      .section-heading {
+        font-size: 40px;
+      }
+
+      .double-grid,
+      .example-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 860px) {
+      .navbar {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .hero-shell,
+      .chart-card,
+      .section-card {
+        padding: 22px;
+      }
+
+      .hero-title,
+      .section-heading {
+        font-size: 30px;
+        letter-spacing: -1px;
+      }
+
+      .nav-links {
+        gap: 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+
+    <nav class="navbar">
+      <a href="index.html" class="logo">BullProsperity</a>
+
+      <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="hub.html">Hub</a>
+        <a href="course.html">Course</a>
+        <a href="tools.html">Tools</a>
+        <a href="setup-room.html" class="active">Setup Room</a>
+        <a href="login.html">Login</a>
+      </div>
+    </nav>
+
+    <section class="hero-shell">
+      <div class="badge">Praxis Kategorie</div>
+
+      <h1 class="hero-title">
+        Live
+        <span class="gold">Beispiele</span>
+      </h1>
+
+      <p class="hero-text">
+        In diesem Bereich siehst du, wie BullProsperity Setups in echten
+        Marktbewegungen aussehen. Hier geht es nicht nur um Theorie, sondern um
+        konkrete Buy- und Sell-Beispiele, Setup-Qualität, Timing, Confirmation
+        und die vollständige Anwendung deiner Strategie.
+      </p>
+
+      <div class="hero-buttons">
+        <a href="setup-room.html" class="btn primary">Zurück zum Setup Room</a>
+        <a href="course.html" class="btn secondary">Zum Kurs</a>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="section-heading">Echte Setups im Markt</h2>
+      <p class="section-subtext">
+        Dieser Bereich ist für deine echten Praxisbeispiele gedacht. Hier kannst du
+        später Screenshots, markierte Charts oder ein Video mit kompletter Analyse einfügen.
+      </p>
+
+      <div class="double-grid">
+        <div class="chart-card">
+          <div class="chart-placeholder">
+            Hier kannst du später ein echtes Setup-Bild, ein TradingView-Embed<br />
+            oder ein kommentiertes Marktbeispiel einfügen.<br /><br />
+            Beispiel:<br />
+            London Sweep → BOS → FVG Retest → Buy Entry → TP Hit
+          </div>
+        </div>
+
+        <div class="section-card">
+          <div class="badge">Live Setup Check</div>
+
+          <div class="list-box">
+            <div class="list-item">War vor dem Setup klare Liquidität sichtbar?</div>
+            <div class="list-item">Gab es eine saubere Confirmation durch Struktur?</div>
+            <div class="list-item">Lag der Entry an einer hochwertigen Zone?</div>
+            <div class="list-item">War das Chance-Risiko-Verhältnis stark genug?</div>
+            <div class="list-item">Wäre das Setup auch live wirklich handelbar gewesen?</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="section-heading">Praxis Beispiele</h2>
+      <p class="section-subtext">
+        Diese Karten kannst du später mit einzelnen Marktbeispielen, Videos
+        oder erweiterten Setup-Analysen verknüpfen.
+      </p>
+
+      <div class="example-grid">
+        <div class="example-card">
+          <div>
+            <span class="example-pill">Buy Setup</span>
+            <h3>Long nach Sweep</h3>
+            <p>
+              Ein Beispiel, bei dem Sell-Side Liquidität abgeholt wird und der Markt
+              danach mit Structure Shift und sauberem Entry nach oben reagiert.
+            </p>
+          </div>
+          <a href="#" class="example-link">Beispiel öffnen</a>
+        </div>
+
+        <div class="example-card">
+          <div>
+            <span class="example-pill">Sell Setup</span>
+            <h3>Short nach Rejection</h3>
+            <p>
+              Der Markt nimmt Buy-Side Liquidität, zeigt Schwäche und liefert
+              danach ein klares Short-Modell mit Confirmation und Target-Struktur.
+            </p>
+          </div>
+          <a href="#" class="example-link">Beispiel öffnen</a>
+        </div>
+
+        <div class="example-card">
+          <div>
+            <span class="example-pill">Review</span>
+            <h3>Komplette Analyse</h3>
+            <p>
+              Vom Bias über die Liquidität bis zur Ausführung und dem Management:
+              ein vollständiges Beispiel im BullProsperity Stil.
+            </p>
+          </div>
+          <a href="#" class="example-link">Beispiel öffnen</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section-card">
+      <div class="badge">Warum wichtig?</div>
+      <h2 class="section-heading" style="font-size:36px; margin-bottom:10px;">
+        Warum Live Beispiele so wertvoll sind
+      </h2>
+      <p class="section-subtext" style="margin-bottom:0;">
+        Live Beispiele machen aus Konzepten echte Erfahrung. Mitglieder verstehen
+        dadurch nicht nur was ein Setup ist, sondern wie es im echten Markt aussieht,
+        wann es stark ist und wann man besser die Finger davon lässt.
+      </p>
+    </section>
+
+    <div class="footer-note">
+      BullProsperity dient ausschließlich Bildungszwecken und stellt keine Finanzberatung dar.
+    </div>
+  </div>
+</body>
+</html>
