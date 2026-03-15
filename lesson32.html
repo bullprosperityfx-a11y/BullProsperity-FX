@@ -1,1 +1,97 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lesson 32 – Institutionelle Preiszonen</title>
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; font-family:Arial,sans-serif; }
+    body { background:#050505; color:#fff; min-height:100vh; padding:30px 20px; }
+    .page { max-width:1100px; margin:0 auto; }
+    .back-btn {
+      display:inline-block; margin-bottom:25px; color:#ffd700; text-decoration:none; font-weight:bold;
+      border:1px solid rgba(255,215,0,.35); padding:12px 18px; border-radius:14px; background:#111;
+    }
+    .lesson-header, .card {
+      background:linear-gradient(180deg,#161616,#0d0d0d);
+      border:2px solid rgba(255,215,0,.3);
+      border-radius:24px;
+      padding:24px;
+      box-shadow:0 0 25px rgba(255,215,0,.06);
+    }
+    .lesson-header { margin-bottom:24px; }
+    .module-tag {
+      display:inline-block; margin-bottom:16px; padding:8px 14px; border-radius:999px;
+      background:rgba(255,215,0,.12); color:#ffd700; border:1px solid rgba(255,215,0,.35); font-weight:bold;
+    }
+    h1 { color:#ffd700; margin-bottom:10px; font-size:2rem; }
+    .subtitle { color:#d7d7d7; line-height:1.6; }
+    .content-grid { display:grid; grid-template-columns:1.4fr .9fr; gap:24px; }
+    .card h2 { color:#ffd700; margin-bottom:16px; }
+    .video-wrap {
+      position:relative; width:100%; padding-top:56.25%; border-radius:18px; overflow:hidden;
+      border:1px solid rgba(255,215,0,.2); background:#000;
+    }
+    .video-wrap iframe { position:absolute; inset:0; width:100%; height:100%; border:none; }
+    ul { padding-left:18px; line-height:1.8; color:#ececec; }
+    .notes-box {
+      width:100%; min-height:240px; border-radius:16px; padding:16px; resize:vertical;
+      background:#0a0a0a; color:#fff; border:1px solid rgba(255,215,0,.25);
+    }
+    .bottom-nav { display:flex; gap:15px; margin-top:24px; }
+    .nav-btn {
+      flex:1; text-align:center; text-decoration:none; padding:15px 20px; border-radius:16px; font-weight:bold;
+    }
+    .secondary { background:#141414; color:#fff; border:1px solid rgba(255,255,255,.12); }
+    .primary { background:#ffd700; color:#111; }
+    @media (max-width:900px){ .content-grid{ grid-template-columns:1fr; } h1{ font-size:1.6rem; } }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <a href="course.html" class="back-btn">← Zurück zum Kurs</a>
 
+    <div class="lesson-header">
+      <div class="module-tag">Modul 8 — BullProsperity SMC Strategie</div>
+      <h1>Lesson 32 — Institutionelle Preiszonen</h1>
+      <p class="subtitle">
+        In dieser Lektion geht es um die Zonen, in denen große Marktteilnehmer reagieren:
+        Orderblocks, IC Candle, Fair Value Gaps und Marktineffizienzen.
+      </p>
+    </div>
+
+    <div class="content-grid">
+      <div class="card">
+        <h2>Video Lesson</h2>
+        <div class="video-wrap">
+          <iframe
+            src="https://www.youtube.com/embed/DEINE_VIDEO_ID"
+            allowfullscreen>
+          </iframe>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Was du in dieser Lektion lernst</h2>
+        <ul>
+          <li>Was echte institutionelle Zonen sind</li>
+          <li>Orderblocks sauber identifizieren</li>
+          <li>Die IC Candle verstehen</li>
+          <li>Fair Value Gaps und Inverse FVG nutzen</li>
+          <li>Warum Märkte Ineffizienzen oft ausgleichen</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top: 24px;">
+      <h2>Deine Notizen</h2>
+      <textarea class="notes-box" placeholder="Schreibe hier deine Notizen zu Lesson 32..."></textarea>
+    </div>
+
+    <div class="bottom-nav">
+      <a href="lesson31.html" class="nav-btn secondary">← Vorherige Lektion</a>
+      <a href="lesson33.html" class="nav-btn primary">Nächste Lektion →</a>
+    </div>
+  </div>
+</body>
+</html>
