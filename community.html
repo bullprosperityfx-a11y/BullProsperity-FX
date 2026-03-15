@@ -1,1 +1,495 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BullProsperity | Community</title>
 
+  <script>
+    (async () => {
+      try {
+        const res = await fetch("/api/access", {
+          credentials: "include"
+        });
+        const data = await res.json();
+
+        if (data.role !== "admin" && data.role !== "premium") {
+          window.location.href = "locked.html";
+        }
+      } catch (err) {
+        window.location.href = "locked.html";
+      }
+    })();
+  </script>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    :root {
+      --bg: #050505;
+      --gold: #f3d21b;
+      --gold-soft: rgba(243, 210, 27, 0.24);
+      --text: #ffffff;
+      --line: rgba(243, 210, 27, 0.20);
+    }
+
+    body {
+      background:
+        radial-gradient(circle at 20% 10%, rgba(255,255,255,0.05), transparent 22%),
+        radial-gradient(circle at 80% 20%, rgba(255,255,255,0.03), transparent 18%),
+        radial-gradient(circle at 50% 80%, rgba(243,210,27,0.05), transparent 28%),
+        var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    body::before,
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    body::before {
+      background-image:
+        linear-gradient(rgba(243,210,27,0.07), rgba(243,210,27,0.07)),
+        linear-gradient(rgba(243,210,27,0.07), rgba(243,210,27,0.07));
+      background-size: 1px 100%, 100% 1px;
+      background-position: 72px 0, 0 72px;
+      background-repeat: no-repeat;
+      opacity: 0.35;
+    }
+
+    body::after {
+      background:
+        linear-gradient(115deg, transparent 0%, transparent 33%, rgba(243,210,27,0.08) 33.2%, transparent 34%),
+        linear-gradient(200deg, transparent 0%, transparent 70%, rgba(243,210,27,0.06) 70.2%, transparent 71%);
+      opacity: 0.45;
+    }
+
+    .page {
+      position: relative;
+      z-index: 1;
+      max-width: 1450px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+      padding: 18px 0 24px;
+      margin-bottom: 10px;
+      flex-wrap: wrap;
+    }
+
+    .logo {
+      font-size: 20px;
+      font-weight: 900;
+      color: var(--gold);
+      text-decoration: none;
+      letter-spacing: -0.3px;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 26px;
+      flex-wrap: wrap;
+    }
+
+    .nav-links a {
+      color: #fff;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 15px;
+      transition: 0.2s ease;
+    }
+
+    .nav-links a:hover,
+    .nav-links a.active {
+      color: var(--gold);
+    }
+
+    .hero-shell,
+    .section-card,
+    .community-card,
+    .info-card {
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      background: linear-gradient(180deg, rgba(22,22,22,0.88), rgba(10,10,10,0.94));
+      box-shadow: 0 0 0 1px rgba(255,255,255,0.02) inset;
+    }
+
+    .hero-shell {
+      padding: 34px;
+      margin-bottom: 28px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-shell::before {
+      content: "";
+      position: absolute;
+      top: -120px;
+      right: -120px;
+      width: 300px;
+      height: 300px;
+      background: radial-gradient(circle, rgba(243,210,27,0.12), transparent 68%);
+      pointer-events: none;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 8px 16px;
+      border-radius: 999px;
+      border: 1px solid var(--gold-soft);
+      color: var(--gold);
+      background: rgba(243,210,27,0.06);
+      font-size: 14px;
+      font-weight: 800;
+      margin-bottom: 18px;
+    }
+
+    .hero-title {
+      font-size: 58px;
+      line-height: 0.98;
+      font-weight: 900;
+      letter-spacing: -1.5px;
+      margin-bottom: 16px;
+      max-width: 900px;
+    }
+
+    .hero-title .gold {
+      color: var(--gold);
+      display: inline-block;
+    }
+
+    .hero-text {
+      max-width: 920px;
+      color: #ececec;
+      font-size: 17px;
+      line-height: 1.7;
+      margin-bottom: 24px;
+    }
+
+    .hero-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+    }
+
+    .btn {
+      text-decoration: none;
+      padding: 14px 24px;
+      border-radius: 999px;
+      font-weight: 800;
+      font-size: 15px;
+      transition: 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .btn.primary {
+      background: var(--gold);
+      color: #111;
+      box-shadow: 0 0 24px rgba(243,210,27,0.16);
+    }
+
+    .btn.secondary {
+      color: #fff;
+      border: 1px solid rgba(255,255,255,0.18);
+      background: rgba(255,255,255,0.02);
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+    }
+
+    .section {
+      margin-bottom: 28px;
+    }
+
+    .section-heading {
+      font-size: 42px;
+      line-height: 1.02;
+      font-weight: 900;
+      letter-spacing: -1.2px;
+      margin-bottom: 8px;
+      color: var(--gold);
+    }
+
+    .section-subtext {
+      color: #ebebeb;
+      font-size: 17px;
+      line-height: 1.65;
+      max-width: 920px;
+      margin-bottom: 20px;
+    }
+
+    .community-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+      margin-bottom: 28px;
+    }
+
+    .community-card {
+      padding: 22px;
+      min-height: 250px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: 0.2s ease;
+    }
+
+    .community-card:hover {
+      transform: translateY(-2px);
+      border-color: rgba(243,210,27,0.42);
+      box-shadow: 0 0 20px rgba(243,210,27,0.08);
+    }
+
+    .community-pill {
+      display: inline-block;
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 800;
+      border: 1px solid var(--gold-soft);
+      color: var(--gold);
+      background: rgba(243,210,27,0.06);
+      margin-bottom: 14px;
+    }
+
+    .community-card h3 {
+      font-size: 22px;
+      line-height: 1.15;
+      color: var(--gold);
+      margin-bottom: 10px;
+      font-weight: 900;
+    }
+
+    .community-card p {
+      font-size: 15px;
+      line-height: 1.6;
+      color: #efefef;
+      margin-bottom: 18px;
+    }
+
+    .community-link {
+      text-decoration: none;
+      width: 100%;
+      text-align: center;
+      padding: 13px 16px;
+      border-radius: 14px;
+      font-weight: 800;
+      background: var(--gold);
+      color: #111;
+      transition: 0.2s ease;
+      display: block;
+    }
+
+    .community-link:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 0 18px rgba(243,210,27,0.14);
+    }
+
+    .double-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+    }
+
+    .section-card,
+    .info-card {
+      padding: 24px;
+    }
+
+    .list-box {
+      display: grid;
+      gap: 12px;
+      margin-top: 10px;
+    }
+
+    .list-item {
+      border: 1px solid rgba(243,210,27,0.14);
+      background: rgba(255,255,255,0.02);
+      border-radius: 16px;
+      padding: 15px 16px;
+      color: #f4f4f4;
+      line-height: 1.5;
+      font-weight: 700;
+      font-size: 15px;
+    }
+
+    .footer-note {
+      padding: 18px 8px 8px;
+      text-align: center;
+      color: #bcbcbc;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    @media (max-width: 1200px) {
+      .hero-title,
+      .section-heading {
+        font-size: 40px;
+      }
+
+      .community-grid,
+      .double-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 860px) {
+      .navbar {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .hero-shell,
+      .section-card,
+      .info-card {
+        padding: 22px;
+      }
+
+      .hero-title,
+      .section-heading {
+        font-size: 30px;
+        letter-spacing: -1px;
+      }
+
+      .nav-links {
+        gap: 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+
+    <nav class="navbar">
+      <a href="index.html" class="logo">BullProsperity</a>
+
+      <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="hub.html">Hub</a>
+        <a href="course.html">Course</a>
+        <a href="tools.html">Tools</a>
+        <a href="setup-room.html">Setup Room</a>
+        <a href="community.html" class="active">Community</a>
+        <a href="login.html">Login</a>
+      </div>
+    </nav>
+
+    <section class="hero-shell">
+      <div class="badge">Members Bereich</div>
+
+      <h1 class="hero-title">
+        Die BullProsperity
+        <span class="gold">Community</span>
+      </h1>
+
+      <p class="hero-text">
+        Hier kommt der Austausch der Mitglieder zusammen. Die Community ist dafür da,
+        Setups zu teilen, Gedanken zu Marktbewegungen auszutauschen, Motivation hochzuhalten
+        und voneinander zu lernen. So wird aus einer Plattform eine echte Bewegung.
+      </p>
+
+      <div class="hero-buttons">
+        <a href="setup-room.html" class="btn primary">Zum Setup Room</a>
+        <a href="hub.html" class="btn secondary">Zum Hub</a>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="section-heading">Community Bereiche</h2>
+      <p class="section-subtext">
+        Diese Karten kannst du später mit Discord, Telegram, Chat-Bereichen
+        oder eigenen Mitgliederseiten verbinden.
+      </p>
+
+      <div class="community-grid">
+        <div class="community-card">
+          <div>
+            <span class="community-pill">Setups</span>
+            <h3>Setup Austausch</h3>
+            <p>
+              Mitglieder teilen ihre Setups, Gedanken zu Liquidität, Struktur
+              und mögliche Ausführungen im Markt.
+            </p>
+          </div>
+          <a href="#" class="community-link">Bereich öffnen</a>
+        </div>
+
+        <div class="community-card">
+          <div>
+            <span class="community-pill">Mindset</span>
+            <h3>Motivation & Disziplin</h3>
+            <p>
+              Austausch über Psychologie, Routinen, Rückschläge und alles,
+              was langfristig starke Trader formt.
+            </p>
+          </div>
+          <a href="#" class="community-link">Bereich öffnen</a>
+        </div>
+
+        <div class="community-card">
+          <div>
+            <span class="community-pill">Feedback</span>
+            <h3>Trade Review</h3>
+            <p>
+              Mitglieder können Trades reflektieren, Feedback bekommen und
+              gemeinsam aus Fehlern und guten Entscheidungen lernen.
+            </p>
+          </div>
+          <a href="#" class="community-link">Bereich öffnen</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="double-grid">
+      <div class="section-card">
+        <div class="badge">Warum Community?</div>
+        <h2 class="section-heading" style="font-size:36px; margin-bottom:10px;">
+          Warum dieser Bereich wichtig ist
+        </h2>
+        <p class="section-subtext" style="margin-bottom:0;">
+          Eine starke Community erhöht den Wert deiner Plattform extrem. Mitglieder
+          bleiben motivierter, fühlen sich eingebunden und haben einen Ort, an dem
+          sie nicht alleine mit ihren Fragen und Prozessen sind.
+        </p>
+      </div>
+
+      <div class="info-card">
+        <div class="badge">BullProsperity Fokus</div>
+        <div class="list-box">
+          <div class="list-item">Mehr Austausch statt isoliertem Lernen.</div>
+          <div class="list-item">Setups aus verschiedenen Blickwinkeln sehen.</div>
+          <div class="list-item">Motivation und Disziplin gemeinsam aufbauen.</div>
+          <div class="list-item">Die Plattform wirkt deutlich lebendiger und hochwertiger.</div>
+        </div>
+      </div>
+    </section>
+
+    <div class="footer-note">
+      BullProsperity dient ausschließlich Bildungszwecken und stellt keine Finanzberatung dar.
+    </div>
+  </div>
+</body>
+</html>
