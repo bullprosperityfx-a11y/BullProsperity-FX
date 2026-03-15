@@ -4,15 +4,13 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>BullProsperity | Liquidity Setups</title>
+  <link rel="stylesheet" href="theme.css" />
 
   <script>
     (async () => {
       try {
-        const res = await fetch("/api/access", {
-          credentials: "include"
-        });
+        const res = await fetch("/api/access", { credentials: "include" });
         const data = await res.json();
-
         if (data.role !== "admin" && data.role !== "premium") {
           window.location.href = "locked.html";
         }
@@ -23,411 +21,46 @@
   </script>
 
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: Arial, sans-serif;
-    }
-
-    :root {
-      --bg: #050505;
-      --gold: #f3d21b;
-      --gold-soft: rgba(243, 210, 27, 0.24);
-      --text: #ffffff;
-      --muted: #d8d8d8;
-      --line: rgba(243, 210, 27, 0.20);
-    }
-
-    body {
-      background:
-        radial-gradient(circle at 20% 10%, rgba(255,255,255,0.05), transparent 22%),
-        radial-gradient(circle at 80% 20%, rgba(255,255,255,0.03), transparent 18%),
-        radial-gradient(circle at 50% 80%, rgba(243,210,27,0.05), transparent 28%),
-        var(--bg);
-      color: var(--text);
-      min-height: 100vh;
-      overflow-x: hidden;
-      position: relative;
-    }
-
-    body::before,
-    body::after {
-      content: "";
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      z-index: 0;
-    }
-
-    body::before {
-      background-image:
-        linear-gradient(rgba(243,210,27,0.07), rgba(243,210,27,0.07)),
-        linear-gradient(rgba(243,210,27,0.07), rgba(243,210,27,0.07));
-      background-size: 1px 100%, 100% 1px;
-      background-position: 72px 0, 0 72px;
-      background-repeat: no-repeat;
-      opacity: 0.35;
-    }
-
-    body::after {
-      background:
-        linear-gradient(115deg, transparent 0%, transparent 33%, rgba(243,210,27,0.08) 33.2%, transparent 34%),
-        linear-gradient(200deg, transparent 0%, transparent 70%, rgba(243,210,27,0.06) 70.2%, transparent 71%);
-      opacity: 0.45;
-    }
-
-    .page {
-      position: relative;
-      z-index: 1;
-      max-width: 1450px;
-      margin: 0 auto;
-      padding: 24px;
-    }
-
-    .navbar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 20px;
-      padding: 18px 0 24px;
-      margin-bottom: 10px;
-      flex-wrap: wrap;
-    }
-
-    .logo {
-      font-size: 20px;
-      font-weight: 900;
-      color: var(--gold);
-      text-decoration: none;
-      letter-spacing: -0.3px;
-    }
-
-    .nav-links {
-      display: flex;
-      align-items: center;
-      gap: 26px;
-      flex-wrap: wrap;
-    }
-
-    .nav-links a {
-      color: #fff;
-      text-decoration: none;
-      font-weight: 700;
-      font-size: 15px;
-      transition: 0.2s ease;
-    }
-
-    .nav-links a:hover,
-    .nav-links a.active {
-      color: var(--gold);
-    }
-
-    .hero-shell,
-    .section-card,
-    .chart-card,
-    .example-card {
-      border: 1px solid var(--line);
-      border-radius: 28px;
-      background: linear-gradient(180deg, rgba(22,22,22,0.88), rgba(10,10,10,0.94));
-      box-shadow: 0 0 0 1px rgba(255,255,255,0.02) inset;
-    }
-
-    .hero-shell {
-      padding: 34px;
-      margin-bottom: 28px;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .hero-shell::before {
-      content: "";
-      position: absolute;
-      top: -120px;
-      right: -120px;
-      width: 300px;
-      height: 300px;
-      background: radial-gradient(circle, rgba(243,210,27,0.12), transparent 68%);
-      pointer-events: none;
-    }
-
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      padding: 8px 16px;
-      border-radius: 999px;
-      border: 1px solid var(--gold-soft);
-      color: var(--gold);
-      background: rgba(243,210,27,0.06);
-      font-size: 14px;
-      font-weight: 800;
-      margin-bottom: 18px;
-    }
-
-    .hero-title {
-      font-size: 58px;
-      line-height: 0.98;
-      font-weight: 900;
-      letter-spacing: -1.5px;
-      margin-bottom: 16px;
-      max-width: 900px;
-    }
-
-    .hero-title .gold {
-      color: var(--gold);
-      display: inline-block;
-    }
-
-    .hero-text {
-      max-width: 920px;
-      color: #ececec;
-      font-size: 17px;
-      line-height: 1.7;
-      margin-bottom: 24px;
-    }
-
-    .hero-buttons {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 14px;
-    }
-
-    .btn {
-      text-decoration: none;
-      padding: 14px 24px;
-      border-radius: 999px;
-      font-weight: 800;
-      font-size: 15px;
-      transition: 0.2s ease;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .btn.primary {
-      background: var(--gold);
-      color: #111;
-      box-shadow: 0 0 24px rgba(243,210,27,0.16);
-    }
-
-    .btn.secondary {
-      color: #fff;
-      border: 1px solid rgba(255,255,255,0.18);
-      background: rgba(255,255,255,0.02);
-    }
-
-    .btn:hover {
-      transform: translateY(-1px);
-    }
-
-    .section {
-      margin-bottom: 28px;
-    }
-
-    .section-heading {
-      font-size: 42px;
-      line-height: 1.02;
-      font-weight: 900;
-      letter-spacing: -1.2px;
-      margin-bottom: 8px;
-      color: var(--gold);
-    }
-
-    .section-subtext {
-      color: #ebebeb;
-      font-size: 17px;
-      line-height: 1.65;
-      max-width: 920px;
-      margin-bottom: 20px;
-    }
-
-    .double-grid {
-      display: grid;
-      grid-template-columns: 1.2fr 0.8fr;
-      gap: 18px;
-      margin-bottom: 28px;
-    }
-
-    .chart-card,
-    .section-card {
-      padding: 24px;
-    }
-
-    .chart-placeholder {
-      border-radius: 22px;
-      border: 1px solid rgba(243,210,27,0.18);
+    .chart-placeholder{
+      border:1px solid var(--line);
+      border-radius:22px;
+      min-height:420px;
       background:
         radial-gradient(circle at center, rgba(255,255,255,0.03), rgba(255,255,255,0.01)),
         #0c0c0c;
-      min-height: 420px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #d4d4d4;
-      text-align: center;
-      padding: 24px;
-      line-height: 1.7;
-      font-size: 16px;
-    }
-
-    .list-box {
-      display: grid;
-      gap: 12px;
-    }
-
-    .list-item {
-      border: 1px solid rgba(243,210,27,0.14);
-      background: rgba(255,255,255,0.02);
-      border-radius: 16px;
-      padding: 15px 16px;
-      color: #f4f4f4;
-      line-height: 1.5;
-      font-weight: 700;
-      font-size: 15px;
-    }
-
-    .example-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 18px;
-    }
-
-    .example-card {
-      padding: 22px;
-      min-height: 240px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      transition: 0.2s ease;
-    }
-
-    .example-card:hover {
-      transform: translateY(-2px);
-      border-color: rgba(243,210,27,0.42);
-      box-shadow: 0 0 20px rgba(243,210,27,0.08);
-    }
-
-    .example-pill {
-      display: inline-block;
-      padding: 6px 12px;
-      border-radius: 999px;
-      font-size: 12px;
-      font-weight: 800;
-      border: 1px solid var(--gold-soft);
-      color: var(--gold);
-      background: rgba(243,210,27,0.06);
-      margin-bottom: 14px;
-    }
-
-    .example-card h3 {
-      font-size: 22px;
-      line-height: 1.15;
-      color: var(--gold);
-      margin-bottom: 10px;
-      font-weight: 900;
-    }
-
-    .example-card p {
-      font-size: 15px;
-      line-height: 1.6;
-      color: #efefef;
-      margin-bottom: 18px;
-    }
-
-    .example-link {
-      text-decoration: none;
-      width: 100%;
-      text-align: center;
-      padding: 13px 16px;
-      border-radius: 14px;
-      font-weight: 800;
-      background: var(--gold);
-      color: #111;
-      transition: 0.2s ease;
-      display: block;
-    }
-
-    .example-link:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 0 18px rgba(243,210,27,0.14);
-    }
-
-    .footer-note {
-      padding: 18px 8px 8px;
-      text-align: center;
-      color: #bcbcbc;
-      font-size: 13px;
-      line-height: 1.6;
-    }
-
-    @media (max-width: 1200px) {
-      .hero-title,
-      .section-heading {
-        font-size: 40px;
-      }
-
-      .double-grid,
-      .example-grid {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    @media (max-width: 860px) {
-      .navbar {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-
-      .hero-shell,
-      .chart-card,
-      .section-card {
-        padding: 22px;
-      }
-
-      .hero-title,
-      .section-heading {
-        font-size: 30px;
-        letter-spacing: -1px;
-      }
-
-      .nav-links {
-        gap: 16px;
-      }
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      text-align:center;
+      color:#d4d4d4;
+      padding:24px;
+      line-height:1.7;
     }
   </style>
 </head>
 <body>
   <div class="page">
-
     <nav class="navbar">
       <a href="index.html" class="logo">BullProsperity</a>
-
       <div class="nav-links">
         <a href="index.html">Home</a>
         <a href="hub.html">Hub</a>
         <a href="course.html">Course</a>
         <a href="tools.html">Tools</a>
         <a href="setup-room.html" class="active">Setup Room</a>
+        <a href="community.html">Community</a>
         <a href="login.html">Login</a>
       </div>
     </nav>
 
     <section class="hero-shell">
       <div class="badge">SMC Kategorie</div>
-
-      <h1 class="hero-title">
-        Liquidity
-        <span class="gold">Setups</span>
-      </h1>
-
+      <h1 class="hero-title">Liquidity <span class="gold">Setups</span></h1>
       <p class="hero-text">
-        In diesem Bereich geht es um Liquidity Sweeps, Stop Hunts, Equal Highs,
-        Equal Lows und die Frage, warum Märkte häufig erst Liquidität abholen,
-        bevor die eigentliche Bewegung startet. Genau hier beginnt oft der
-        Unterschied zwischen Retail-Denken und Smart-Money-Verständnis.
+        In diesem Bereich geht es um Liquidity Sweeps, Stop Hunts, Equal Highs und
+        Equal Lows. Genau hier beginnt oft der Unterschied zwischen Retail-Denken
+        und Smart-Money-Verständnis.
       </p>
-
       <div class="hero-buttons">
         <a href="setup-room.html" class="btn primary">Zurück zum Setup Room</a>
         <a href="course.html" class="btn secondary">Zum Kurs</a>
@@ -437,23 +70,21 @@
     <section class="section">
       <h2 class="section-heading">Liquidity im Chart verstehen</h2>
       <p class="section-subtext">
-        Nutze diesen Bereich, um deinen Chart oder später echte Analysebilder
-        einzubauen. Im Moment ist das ein sauberer Platzhalter für deine Setups.
+        Hier kannst du später echte Chart-Screenshots, TradingView-Embeds oder
+        markierte Setups einsetzen.
       </p>
 
-      <div class="double-grid">
-        <div class="chart-card">
+      <div class="grid-2">
+        <div class="section-card">
           <div class="chart-placeholder">
-            Hier kannst du später ein Chart-Screenshot, ein TradingView-Embed<br />
-            oder ein analysiertes Setup-Bild einfügen.<br /><br />
-            Zum Beispiel:<br />
-            EURUSD Liquidity Sweep → Rejection → BOS → Entry
+            Hier kommt später dein Chart rein.<br><br>
+            Beispiel:<br>
+            Sell-Side Sweep → Rejection → BOS → Entry
           </div>
         </div>
 
         <div class="section-card">
           <div class="badge">Worauf achten?</div>
-
           <div class="list-box">
             <div class="list-item">Liegt Buy-Side oder Sell-Side Liquidität im Markt?</div>
             <div class="list-item">Gibt es Equal Highs oder Equal Lows?</div>
@@ -467,60 +98,36 @@
 
     <section class="section">
       <h2 class="section-heading">Setup Beispiele</h2>
-      <p class="section-subtext">
-        Diese Karten kannst du später jeweils mit echten Einzelseiten, Charts
-        oder Videos verknüpfen.
-      </p>
+      <p class="section-subtext">Diese Karten kannst du später mit echten Einzelbeispielen verbinden.</p>
 
-      <div class="example-grid">
+      <div class="grid-3">
         <div class="example-card">
           <div>
-            <span class="example-pill">Buy Side</span>
+            <div class="badge">Buy Side</div>
             <h3>Equal High Sweep</h3>
-            <p>
-              Klassisches Szenario, bei dem Hochs abgeholt werden, bevor der Markt
-              wieder nach unten reagiert und Struktur bricht.
-            </p>
+            <p>Klassisches Szenario, bei dem Hochs abgeholt werden, bevor der Markt wieder reagiert.</p>
           </div>
           <a href="#" class="example-link">Beispiel öffnen</a>
         </div>
 
         <div class="example-card">
           <div>
-            <span class="example-pill">Sell Side</span>
+            <div class="badge">Sell Side</div>
             <h3>Low Sweep Reversal</h3>
-            <p>
-              Der Markt nimmt Tiefs raus, erzeugt Panik bei Retail-Tradern und
-              dreht dann aus einer starken Reaktionszone nach oben.
-            </p>
+            <p>Der Markt nimmt Tiefs raus und dreht danach aus einer starken Zone nach oben.</p>
           </div>
           <a href="#" class="example-link">Beispiel öffnen</a>
         </div>
 
         <div class="example-card">
           <div>
-            <span class="example-pill">Institutional</span>
+            <div class="badge">Institutional</div>
             <h3>Liquidity + BOS</h3>
-            <p>
-              Erst Liquidität sweepen, dann Break of Structure und danach
-              ein präziser Entry mit Smart-Money-Logik.
-            </p>
+            <p>Erst Sweep, dann Break of Structure und anschließend ein präziser Entry.</p>
           </div>
           <a href="#" class="example-link">Beispiel öffnen</a>
         </div>
       </div>
-    </section>
-
-    <section class="section-card">
-      <div class="badge">Warum wichtig?</div>
-      <h2 class="section-heading" style="font-size:36px; margin-bottom:10px;">
-        Warum Liquidity so entscheidend ist
-      </h2>
-      <p class="section-subtext" style="margin-bottom:0;">
-        Wer Liquidität versteht, versteht oft zum ersten Mal wirklich, warum Märkte
-        scheinbar „falsche“ Bewegungen machen. Genau diese Bewegungen sind häufig
-        die Vorbereitung für den eigentlichen Move.
-      </p>
     </section>
 
     <div class="footer-note">
