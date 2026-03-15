@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>BullProsperity | Hub</title>
+  <link rel="stylesheet" href="theme.css" />
 
   <script>
     (async () => {
@@ -21,619 +22,184 @@
       }
     })();
   </script>
-
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: Arial, sans-serif;
-    }
-
-    body {
-      background:
-        radial-gradient(circle at top left, rgba(255, 215, 0, 0.06), transparent 20%),
-        radial-gradient(circle at bottom right, rgba(255, 215, 0, 0.04), transparent 22%),
-        #050505;
-      color: #fff;
-      min-height: 100vh;
-      overflow-x: hidden;
-    }
-
-    .page {
-      max-width: 1500px;
-      margin: 0 auto;
-      padding: 24px;
-    }
-
-    .topbar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 16px;
-      margin-bottom: 24px;
-      flex-wrap: wrap;
-    }
-
-    .brand {
-      font-size: 28px;
-      font-weight: 800;
-      color: #ffd700;
-      letter-spacing: 0.3px;
-    }
-
-    .brand span {
-      color: #fff;
-      font-weight: 700;
-    }
-
-    .top-actions {
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-
-    .top-btn {
-      text-decoration: none;
-      background: #111;
-      color: #fff;
-      border: 1px solid rgba(255, 215, 0, 0.28);
-      padding: 12px 18px;
-      border-radius: 14px;
-      font-weight: 700;
-      transition: 0.2s ease;
-    }
-
-    .top-btn.primary {
-      background: #ffd700;
-      color: #111;
-      box-shadow: 0 0 20px rgba(255, 215, 0, 0.16);
-    }
-
-    .top-btn:hover {
-      transform: translateY(-1px);
-    }
-
-    .hero {
-      display: grid;
-      grid-template-columns: 1.3fr 0.8fr;
-      gap: 24px;
-      margin-bottom: 24px;
-    }
-
-    .hero-card,
-    .panel,
-    .tool-card,
-    .quick-card,
-    .stat-card {
-      background: linear-gradient(180deg, #141414, #0c0c0c);
-      border: 2px solid rgba(255, 215, 0, 0.28);
-      border-radius: 28px;
-      box-shadow: 0 0 30px rgba(255, 215, 0, 0.05);
-    }
-
-    .hero-card {
-      padding: 30px;
-      min-height: 320px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .hero-card::after {
-      content: "";
-      position: absolute;
-      width: 260px;
-      height: 260px;
-      right: -60px;
-      top: -60px;
-      background: radial-gradient(circle, rgba(255, 215, 0, 0.12), transparent 65%);
-      pointer-events: none;
-    }
-
-    .pill {
-      display: inline-block;
-      width: fit-content;
-      padding: 8px 14px;
-      border-radius: 999px;
-      border: 1px solid rgba(255, 215, 0, 0.35);
-      background: rgba(255, 215, 0, 0.08);
-      color: #ffd700;
-      font-size: 14px;
-      font-weight: 800;
-      margin-bottom: 16px;
-    }
-
-    .hero-title {
-      font-size: 42px;
-      line-height: 1.08;
-      font-weight: 900;
-      color: #ffd700;
-      margin-bottom: 14px;
-      max-width: 720px;
-    }
-
-    .hero-text {
-      font-size: 17px;
-      line-height: 1.65;
-      color: #efefef;
-      max-width: 760px;
-      margin-bottom: 22px;
-    }
-
-    .hero-actions {
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-
-    .hero-btn {
-      text-decoration: none;
-      padding: 15px 20px;
-      border-radius: 16px;
-      font-weight: 800;
-      transition: 0.2s ease;
-    }
-
-    .hero-btn.primary {
-      background: #ffd700;
-      color: #111;
-    }
-
-    .hero-btn.secondary {
-      background: #151515;
-      color: #fff;
-      border: 1px solid rgba(255,255,255,0.14);
-    }
-
-    .hero-btn:hover {
-      transform: translateY(-1px);
-    }
-
-    .hero-side {
-      display: grid;
-      gap: 24px;
-    }
-
-    .stat-card {
-      padding: 24px;
-      min-height: 148px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-    }
-
-    .stat-label {
-      color: #bdbdbd;
-      font-size: 14px;
-      margin-bottom: 10px;
-      font-weight: 700;
-    }
-
-    .stat-value {
-      font-size: 34px;
-      font-weight: 900;
-      color: #ffd700;
-      margin-bottom: 8px;
-    }
-
-    .stat-sub {
-      color: #ededed;
-      font-size: 15px;
-      line-height: 1.5;
-    }
-
-    .progress-wrap {
-      margin-top: 14px;
-    }
-
-    .progress-head {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 12px;
-      font-size: 15px;
-      font-weight: 800;
-    }
-
-    .progress-bar {
-      width: 100%;
-      height: 16px;
-      background: #2b2b2b;
-      border-radius: 999px;
-      overflow: hidden;
-      border: 1px solid rgba(255,255,255,0.08);
-    }
-
-    .progress-fill {
-      width: 18%;
-      height: 100%;
-      background: linear-gradient(90deg, #ffd700, #ffea61);
-      border-radius: 999px;
-      box-shadow: 0 0 20px rgba(255, 215, 0, 0.22);
-    }
-
-    .section-title {
-      font-size: 24px;
-      font-weight: 900;
-      color: #ffd700;
-      margin-bottom: 16px;
-    }
-
-    .dashboard-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 24px;
-      margin-bottom: 24px;
-    }
-
-    .panel {
-      padding: 24px;
-    }
-
-    .panel-text {
-      color: #efefef;
-      line-height: 1.6;
-      font-size: 16px;
-      margin-bottom: 18px;
-    }
-
-    .quick-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 18px;
-      margin-bottom: 24px;
-    }
-
-    .quick-card {
-      text-decoration: none;
-      color: #fff;
-      padding: 22px;
-      min-height: 170px;
-      transition: 0.2s ease;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
-
-    .quick-card:hover,
-    .tool-card:hover {
-      transform: translateY(-2px);
-      border-color: rgba(255, 215, 0, 0.48);
-      box-shadow: 0 0 20px rgba(255, 215, 0, 0.08);
-    }
-
-    .quick-top {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 12px;
-    }
-
-    .quick-badge {
-      display: inline-block;
-      padding: 7px 12px;
-      border-radius: 999px;
-      background: rgba(255, 215, 0, 0.08);
-      border: 1px solid rgba(255, 215, 0, 0.28);
-      color: #ffd700;
-      font-size: 13px;
-      font-weight: 800;
-    }
-
-    .quick-arrow {
-      color: #ffd700;
-      font-size: 22px;
-      font-weight: 900;
-    }
-
-    .quick-title {
-      color: #ffd700;
-      font-size: 20px;
-      font-weight: 900;
-      margin-bottom: 10px;
-      line-height: 1.2;
-    }
-
-    .quick-text {
-      color: #ededed;
-      font-size: 15px;
-      line-height: 1.55;
-    }
-
-    .tools-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 18px;
-    }
-
-    .tool-card {
-      text-decoration: none;
-      color: #fff;
-      padding: 22px;
-      min-height: 180px;
-      transition: 0.2s ease;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
-
-    .tool-title {
-      color: #ffd700;
-      font-size: 20px;
-      font-weight: 900;
-      margin-bottom: 10px;
-      line-height: 1.2;
-    }
-
-    .tool-text {
-      color: #ededed;
-      font-size: 15px;
-      line-height: 1.55;
-    }
-
-    .mini-list {
-      display: grid;
-      gap: 12px;
-    }
-
-    .mini-item {
-      background: #242424;
-      border: 1px solid rgba(255, 215, 0, 0.16);
-      border-radius: 16px;
-      padding: 14px 16px;
-      color: #fff;
-      font-weight: 700;
-      line-height: 1.4;
-    }
-
-    .footer-note {
-      margin-top: 28px;
-      color: #bdbdbd;
-      font-size: 13px;
-      line-height: 1.6;
-      text-align: center;
-      padding: 0 10px 20px;
-    }
-
-    @media (max-width: 1250px) {
-      .hero,
-      .dashboard-grid,
-      .quick-grid,
-      .tools-grid {
-        grid-template-columns: 1fr 1fr;
-      }
-    }
-
-    @media (max-width: 900px) {
-      .hero,
-      .dashboard-grid,
-      .quick-grid,
-      .tools-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .hero-title {
-        font-size: 32px;
-      }
-    }
-
-    @media (max-width: 768px) {
-      .page {
-        padding: 16px;
-      }
-
-      .brand {
-        font-size: 22px;
-      }
-
-      .hero-title {
-        font-size: 28px;
-      }
-
-      .section-title {
-        font-size: 21px;
-      }
-    }
-  </style>
 </head>
 <body>
   <div class="page">
 
-    <div class="topbar">
-      <div class="brand">BullProsperity <span>| Hub</span></div>
+    <nav class="navbar">
+      <a href="index.html" class="logo">BullProsperity</a>
 
-      <div class="top-actions">
-        <a href="course.html" class="top-btn">Zum Kurs</a>
-        <a href="tools.html" class="top-btn">Trading Tools</a>
-        <a href="community.html" class="top-btn primary">Community</a>
+      <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="hub.html" class="active">Hub</a>
+        <a href="course.html">Course</a>
+        <a href="tools.html">Tools</a>
+        <a href="setup-room.html">Setup Room</a>
+        <a href="community.html">Community</a>
+        <a href="login.html">Login</a>
       </div>
-    </div>
+    </nav>
 
-    <section class="hero">
-      <div class="hero-card">
-        <div class="pill">Members Area</div>
-        <h1 class="hero-title">Willkommen im BullProsperity Hub</h1>
-        <p class="hero-text">
-          Hier findest du deine komplette Education, Trading Tools, Journal-Bereich,
-          Setups, Analysen und den Zugang zur BullProsperity Smart Money Struktur.
-          Alles sauber aufgebaut, damit Mitglieder fokussiert lernen und umsetzen können.
-        </p>
+    <section class="hero-shell">
+      <div class="badge">Members Area</div>
 
-        <div class="hero-actions">
-          <a href="course.html" class="hero-btn primary">Zum kompletten Kurs</a>
-          <a href="lesson1.html" class="hero-btn secondary">Mit Lektion 1 starten</a>
+      <h1 class="hero-title">
+        Willkommen im
+        <span class="gold">BullProsperity Hub</span>
+      </h1>
+
+      <p class="hero-text">
+        Hier findest du deine komplette Education, Trading Tools, Journal-Bereich,
+        Setups, Analysen und den Zugang zur BullProsperity Smart Money Struktur.
+        Alles sauber aufgebaut, damit Mitglieder fokussiert lernen und umsetzen können.
+      </p>
+
+      <div class="hero-buttons">
+        <a href="course.html" class="btn primary">Zum kompletten Kurs</a>
+        <a href="lesson1.html" class="btn secondary">Mit Lektion 1 starten</a>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="section-heading">Schnellzugriffe</h2>
+      <p class="section-subtext">
+        Spring direkt in die wichtigsten Bereiche deiner Plattform.
+      </p>
+
+      <div class="grid-4">
+        <div class="tool-card">
+          <div>
+            <div class="badge">Education</div>
+            <h3>Course</h3>
+            <p>
+              Alle Module von Einführung bis zur BullProsperity SMC Strategie.
+            </p>
+          </div>
+          <a href="course.html" class="tool-link">Bereich öffnen</a>
+        </div>
+
+        <div class="tool-card">
+          <div>
+            <div class="badge">Trading</div>
+            <h3>Tools</h3>
+            <p>
+              Lot Size Rechner, Journal, Checklisten und weitere Trading-Hilfen.
+            </p>
+          </div>
+          <a href="tools.html" class="tool-link">Bereich öffnen</a>
+        </div>
+
+        <div class="tool-card">
+          <div>
+            <div class="badge">Members</div>
+            <h3>Setup Room</h3>
+            <p>
+              Analysen, Marktideen und strukturierte Setups für Mitglieder.
+            </p>
+          </div>
+          <a href="setup-room.html" class="tool-link">Bereich öffnen</a>
+        </div>
+
+        <div class="tool-card">
+          <div>
+            <div class="badge">Network</div>
+            <h3>Community</h3>
+            <p>
+              Austausch, Motivation und BullProsperity Member-Bereich.
+            </p>
+          </div>
+          <a href="community.html" class="tool-link">Bereich öffnen</a>
         </div>
       </div>
+    </section>
 
-      <div class="hero-side">
-        <div class="stat-card">
-          <div class="stat-label">Gesamtfortschritt</div>
-          <div class="stat-value">18%</div>
-          <div class="progress-wrap">
-            <div class="progress-head">
-              <span>Course Progress</span>
-              <span>18%</span>
-            </div>
-            <div class="progress-bar">
-              <div class="progress-fill"></div>
-            </div>
+    <section class="section">
+      <div class="grid-2">
+        <div class="section-card">
+          <div class="badge">Starte hier</div>
+          <h2 class="section-heading" style="font-size:36px; margin-bottom:10px;">Dein Lernweg</h2>
+          <p class="section-subtext" style="margin-bottom:16px;">
+            Arbeite dich logisch durch die Module. Erst die Grundlagen, dann Chartanalyse,
+            Liquidität, Entry-Verständnis, Risk Management, Psychologie und zum Schluss
+            das Herzstück: die BullProsperity SMC Strategie.
+          </p>
+
+          <div class="list-box">
+            <div class="list-item">Modul 1–2: Fundament & Trading Basics</div>
+            <div class="list-item">Modul 3–5: Analyse, Liquidität & Entries</div>
+            <div class="list-item">Modul 6–7: Risk Management & Psychologie</div>
+            <div class="list-item">Modul 8: BullProsperity SMC Strategie</div>
           </div>
         </div>
 
-        <div class="stat-card">
-          <div class="stat-label">Aktueller Fokus</div>
-          <div class="stat-value" style="font-size: 24px;">Modul 8</div>
-          <div class="stat-sub">
-            BullProsperity SMC Strategie als Hauptmodul für die komplette Systemtiefe.
+        <div class="section-card">
+          <div class="badge">BullProsperity Fokus</div>
+          <h2 class="section-heading" style="font-size:36px; margin-bottom:10px;">Was dich hier erwartet</h2>
+          <p class="section-subtext" style="margin-bottom:16px;">
+            Diese Plattform ist so aufgebaut, dass Mitglieder nicht nur Wissen sammeln,
+            sondern daraus ein klares Trading-System entwickeln. Das Ziel ist Struktur,
+            Verständnis, Disziplin und saubere Umsetzung.
+          </p>
+
+          <div class="list-box">
+            <div class="list-item">Klare Modulstruktur statt Chaos</div>
+            <div class="list-item">Fokus auf Smart Money Logik</div>
+            <div class="list-item">Praktische Anwendung statt nur Theorie</div>
+            <div class="list-item">Premium Aufbau für eine starke Member Experience</div>
           </div>
         </div>
       </div>
     </section>
 
-    <h2 class="section-title">Schnellzugriffe</h2>
+    <section class="section">
+      <h2 class="section-heading">BullProsperity Fokus</h2>
+      <p class="section-subtext">
+        Die wichtigsten Kernbereiche deiner Plattform auf einen Blick.
+      </p>
 
-    <section class="quick-grid">
-      <a href="course.html" class="quick-card">
-        <div>
-          <div class="quick-top">
-            <span class="quick-badge">Education</span>
-            <span class="quick-arrow">→</span>
+      <div class="grid-3">
+        <div class="example-card">
+          <div>
+            <div class="badge">Strategie</div>
+            <h3>Modul 8</h3>
+            <p>
+              Die BullProsperity SMC Strategie ist das Herzstück deiner Education
+              und verbindet Struktur, Liquidität und Entry-Logik.
+            </p>
           </div>
-          <div class="quick-title">Course</div>
-          <div class="quick-text">
-            Alle Module von Einführung bis BullProsperity SMC Strategie.
-          </div>
+          <a href="lesson31.html" class="example-link">Modul ansehen</a>
         </div>
-      </a>
 
-      <a href="tools.html" class="quick-card">
-        <div>
-          <div class="quick-top">
-            <span class="quick-badge">Trading</span>
-            <span class="quick-arrow">→</span>
+        <div class="example-card">
+          <div>
+            <div class="badge">Praxis</div>
+            <h3>Setup Room</h3>
+            <p>
+              Theorie wird hier in reale Marktbeispiele übersetzt, damit Mitglieder
+              den Transfer in echte Charts besser verstehen.
+            </p>
           </div>
-          <div class="quick-title">Tools</div>
-          <div class="quick-text">
-            Lot Size Rechner, Journal, Checklisten und weitere Trading-Hilfen.
-          </div>
+          <a href="setup-room.html" class="example-link">Setups öffnen</a>
         </div>
-      </a>
 
-      <a href="setup-room.html" class="quick-card">
-        <div>
-          <div class="quick-top">
-            <span class="quick-badge">Members</span>
-            <span class="quick-arrow">→</span>
+        <div class="example-card">
+          <div>
+            <div class="badge">Umsetzung</div>
+            <h3>Trading Tools</h3>
+            <p>
+              Hilfsmittel für Risiko, Checklisten, Journal und Chart-Arbeit,
+              damit aus Wissen saubere Ausführung wird.
+            </p>
           </div>
-          <div class="quick-title">Setup Room</div>
-          <div class="quick-text">
-            Analysen, Marktideen und strukturierte Setups für Mitglieder.
-          </div>
-        </div>
-      </a>
-
-      <a href="community.html" class="quick-card">
-        <div>
-          <div class="quick-top">
-            <span class="quick-badge">Network</span>
-            <span class="quick-arrow">→</span>
-          </div>
-          <div class="quick-title">Community</div>
-          <div class="quick-text">
-            Austausch, Motivation und BullProsperity Member-Bereich.
-          </div>
-        </div>
-      </a>
-    </section>
-
-    <section class="dashboard-grid">
-      <div class="panel">
-        <div class="pill">Starte hier</div>
-        <div class="section-title" style="margin-bottom:12px;">Dein Lernweg</div>
-        <p class="panel-text">
-          Arbeite dich logisch durch die Module. Erst die Grundlagen, dann Chartanalyse,
-          Liquidität, Entry-Verständnis, Risk Management, Psychologie und zum Schluss
-          das Herzstück: die BullProsperity SMC Strategie.
-        </p>
-
-        <div class="mini-list">
-          <div class="mini-item">Modul 1–2: Fundament & Trading Basics</div>
-          <div class="mini-item">Modul 3–5: Analyse, Liquidität & Entries</div>
-          <div class="mini-item">Modul 6–7: Risk Management & Psychologie</div>
-          <div class="mini-item">Modul 8: BullProsperity SMC Strategie</div>
+          <a href="tools.html" class="example-link">Tools öffnen</a>
         </div>
       </div>
-
-      <div class="panel">
-        <div class="pill">BullProsperity Fokus</div>
-        <div class="section-title" style="margin-bottom:12px;">Was dich hier erwartet</div>
-        <p class="panel-text">
-          Diese Plattform ist so aufgebaut, dass Mitglieder nicht nur Wissen sammeln,
-          sondern daraus ein klares Trading-System entwickeln. Das Ziel ist Struktur,
-          Verständnis, Disziplin und saubere Umsetzung.
-        </p>
-
-        <div class="mini-list">
-          <div class="mini-item">Klare Modulstruktur statt Chaos</div>
-          <div class="mini-item">Fokus auf Smart Money Logik</div>
-          <div class="mini-item">Praktische Anwendung statt nur Theorie</div>
-          <div class="mini-item">Premium Aufbau für eine starke Member Experience</div>
-        </div>
-      </div>
-    </section>
-
-    <h2 class="section-title">Trading Tools</h2>
-
-    <section class="tools-grid">
-      <a href="lot-size.html" class="tool-card">
-        <div>
-          <div class="pill">Risk Tool</div>
-          <div class="tool-title">Lot Size Rechner</div>
-          <div class="tool-text">
-            Berechne schnell deine Positionsgröße passend zu Risiko und Stop Loss.
-          </div>
-        </div>
-      </a>
-
-      <a href="journal.html" class="tool-card">
-        <div>
-          <div class="pill">Journal</div>
-          <div class="tool-title">Trading Journal</div>
-          <div class="tool-text">
-            Dokumentiere deine Trades, Muster, Fehler und Verbesserungen strukturiert.
-          </div>
-        </div>
-      </a>
-
-      <a href="checklist.html" class="tool-card">
-        <div>
-          <div class="pill">Routine</div>
-          <div class="tool-title">Trading Checkliste</div>
-          <div class="tool-text">
-            Nutze deine Pre-Trade Routine, damit du disziplinierter und sauberer arbeitest.
-          </div>
-        </div>
-      </a>
-
-      <a href="tradingview.html" class="tool-card">
-        <div>
-          <div class="pill">Charts</div>
-          <div class="tool-title">TradingView Bereich</div>
-          <div class="tool-text">
-            Greife direkt auf Charts und Analysebereiche innerhalb deiner Plattform zu.
-          </div>
-        </div>
-      </a>
     </section>
 
     <div class="footer-note">
-      BullProsperity dient ausschließlich Bildungs- und Informationszwecken. Es handelt sich nicht um Finanzberatung,
-      Anlageberatung oder eine Aufforderung zum Kauf oder Verkauf von Finanzinstrumenten. Trading ist mit Risiko verbunden.
+      BullProsperity dient ausschließlich Bildungs- und Informationszwecken und stellt keine Finanzberatung dar.
     </div>
+
   </div>
 </body>
 </html>
