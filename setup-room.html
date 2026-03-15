@@ -1,170 +1,71 @@
+
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>BullProsperity | Setup Room</title>
-  <link rel="stylesheet" href="theme.css" />
-
-  <script>
-    (async () => {
-      try {
-        const res = await fetch("/api/access", {
-          credentials: "include"
-        });
-        const data = await res.json();
-
-        if (data.role !== "admin" && data.role !== "premium") {
-          window.location.href = "locked.html";
-        }
-      } catch (err) {
-        window.location.href = "locked.html";
-      }
-    })();
-  </script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BullProsperity | Setup Room</title>
+<link rel="stylesheet" href="theme.css">
 </head>
+
 <body>
-  <div class="page">
+<div class="page">
 
-    <nav class="navbar">
-      <a href="index.html" class="logo">BullProsperity</a>
+<nav class="navbar">
+<a href="index.html" class="logo">BullProsperity</a>
+<div class="nav-links">
+<a href="index.html">Home</a>
+<a href="hub.html">Hub</a>
+<a href="course.html">Course</a>
+<a href="tools.html">Tools</a>
+<a href="setup-room.html">Setup Room</a>
+<a href="community.html">Community</a>
+</div>
+</nav>
 
-      <div class="nav-links">
-        <a href="index.html">Home</a>
-        <a href="hub.html">Hub</a>
-        <a href="course.html">Course</a>
-        <a href="tools.html">Tools</a>
-        <a href="setup-room.html" class="active">Setup Room</a>
-        <a href="community.html">Community</a>
-        <a href="login.html">Login</a>
-      </div>
-    </nav>
+<section class="hero-shell">
+<div class="badge">BullProsperity</div>
+<h1 class="hero-title">Setup Room</h1>
+<p class="hero-text">
+Dieser Bereich gehört zur BullProsperity Plattform. Die Seite nutzt dein zentrales Theme,
+damit alle Bereiche visuell einheitlich bleiben.
+</p>
 
-    <section class="hero-shell">
-      <div class="badge">Premium Mitgliederbereich</div>
+<div class="hero-buttons">
+<a href="hub.html" class="btn primary">Zum Hub</a>
+<a href="course.html" class="btn secondary">Zum Kurs</a>
+</div>
+</section>
 
-      <h1 class="hero-title">
-        Echte Marktbeispiele im
-        <span class="gold">BullProsperity Setup Room</span>
-      </h1>
+<section class="section">
+<h2 class="section-heading">Inhalt</h2>
+<p class="section-subtext">
+Hier kannst du später Inhalte, Videos oder Charts einfügen.
+</p>
 
-      <p class="hero-text">
-        Hier findest du Marktanalysen, Setup-Ideen und Praxisbeispiele aus der
-        BullProsperity Strategie. Dieser Bereich hilft dir, das Wissen aus Modul 8
-        direkt in echten Marktbewegungen zu verstehen und sauber nachzuvollziehen.
-      </p>
+<div class="grid-2">
 
-      <div class="hero-buttons">
-        <a href="course.html" class="btn primary">Zum Kurs</a>
-        <a href="tools.html" class="btn secondary">Zu den Tools</a>
-      </div>
-    </section>
+<div class="section-card">
+<div class="badge">Bereich</div>
+<h3>Setup Room</h3>
+<p>Hier kommt dein Content rein.</p>
+<a href="#" class="card-link">Mehr anzeigen</a>
+</div>
 
-    <section class="section">
-      <h2 class="section-heading">Aktuelle Setup Kategorien</h2>
-      <p class="section-subtext">
-        Diese Bereiche sind direkt verlinkt. Du kannst später jede Kategorie
-        mit einer eigenen Unterseite oder einem eigenen Analysebereich verbinden.
-      </p>
+<div class="section-card">
+<div class="badge">Information</div>
+<h3>BullProsperity</h3>
+<p>Diese Seite ist Teil deiner Education Plattform.</p>
+<a href="#" class="card-link">Details</a>
+</div>
 
-      <div class="grid-3">
-        <div class="setup-card">
-          <div>
-            <div class="badge">SMC</div>
-            <h3>Liquidity Setups</h3>
-            <p>
-              Beispiele für Liquidity Sweeps, Stop Hunts und institutionelle
-              Bewegungen rund um Equal Highs und Equal Lows.
-            </p>
-          </div>
-          <a href="liquidity.html" class="setup-link">Setups ansehen</a>
-        </div>
+</div>
+</section>
 
-        <div class="setup-card">
-          <div>
-            <div class="badge">Entries</div>
-            <h3>Entry Modelle</h3>
-            <p>
-              BullProsperity Entry Modelle mit Confirmation, Struktur,
-              Timing und sauberer Ausführung.
-            </p>
-          </div>
-          <a href="entry-models.html" class="setup-link">Beispiele ansehen</a>
-        </div>
+<div class="footer-note">
+BullProsperity dient ausschließlich Bildungszwecken und stellt keine Finanzberatung dar.
+</div>
 
-        <div class="setup-card">
-          <div>
-            <div class="badge">Structure</div>
-            <h3>Marktstruktur</h3>
-            <p>
-              BOS, CHoCH, Strukturwechsel und Trendverständnis im Chart
-              mit klarer visueller Erklärung.
-            </p>
-          </div>
-          <a href="market-structure.html" class="setup-link">Charts öffnen</a>
-        </div>
-
-        <div class="setup-card">
-          <div>
-            <div class="badge">Practice</div>
-            <h3>Replay Analyse</h3>
-            <p>
-              Trainiere dein Auge mit Replay Analysen und markiere
-              eigene Setups zur besseren Routineentwicklung.
-            </p>
-          </div>
-          <a href="replay.html" class="setup-link">Analyse starten</a>
-        </div>
-
-        <div class="setup-card">
-          <div>
-            <div class="badge">Examples</div>
-            <h3>Live Beispiele</h3>
-            <p>
-              Beispiele aus echten Marktbewegungen erklärt, damit du
-              Timing, Struktur und Bestätigung besser verstehst.
-            </p>
-          </div>
-          <a href="live-setups.html" class="setup-link">Beispiele ansehen</a>
-        </div>
-
-        <div class="setup-card">
-          <div>
-            <div class="badge">Members</div>
-            <h3>Community Setups</h3>
-            <p>
-              Setup-Ideen und Beispiele aus dem Mitgliederbereich
-              für mehr Austausch und mehrere Perspektiven.
-            </p>
-          </div>
-          <a href="community.html" class="setup-link">Community öffnen</a>
-        </div>
-      </div>
-    </section>
-
-    <section class="section-card">
-      <div class="grid-2">
-        <div>
-          <h2 class="section-heading" style="font-size:36px; margin-bottom:10px;">Warum dieser Bereich?</h2>
-          <p class="section-subtext" style="margin-bottom:0;">
-            Ein Setup Room macht deine Plattform stärker, weil Mitglieder nicht nur
-            Lektionen sehen, sondern echte Marktanwendungen direkt vor sich haben.
-          </p>
-        </div>
-
-        <div class="list-box">
-          <div class="list-item">Setups verbinden Modul 8 direkt mit echten Chart-Beispielen.</div>
-          <div class="list-item">Mitglieder verstehen Theorie, Kontext und Timing deutlich besser.</div>
-          <div class="list-item">Die Plattform wirkt sofort hochwertiger und professioneller.</div>
-          <div class="list-item">Jeder Bereich kann später mit eigenen Analysen ausgebaut werden.</div>
-        </div>
-      </div>
-    </section>
-
-    <div class="footer-note">
-      BullProsperity dient ausschließlich Bildungszwecken und stellt keine Finanzberatung dar.
-    </div>
-
-  </div>
+</div>
 </body>
 </html>

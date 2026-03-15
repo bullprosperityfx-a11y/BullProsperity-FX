@@ -1,135 +1,71 @@
+
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>BullProsperity | Live Beispiele</title>
-  <link rel="stylesheet" href="theme.css" />
-
-  <script>
-    (async () => {
-      try {
-        const res = await fetch("/api/access", { credentials: "include" });
-        const data = await res.json();
-        if (data.role !== "admin" && data.role !== "premium") {
-          window.location.href = "locked.html";
-        }
-      } catch (err) {
-        window.location.href = "locked.html";
-      }
-    })();
-  </script>
-
-  <style>
-    .chart-placeholder{
-      border:1px solid var(--line);
-      border-radius:22px;
-      min-height:420px;
-      background:
-        radial-gradient(circle at center, rgba(255,255,255,0.03), rgba(255,255,255,0.01)),
-        #0c0c0c;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      text-align:center;
-      color:#d4d4d4;
-      padding:24px;
-      line-height:1.7;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BullProsperity | Live Setups</title>
+<link rel="stylesheet" href="theme.css">
 </head>
+
 <body>
-  <div class="page">
-    <nav class="navbar">
-      <a href="index.html" class="logo">BullProsperity</a>
-      <div class="nav-links">
-        <a href="index.html">Home</a>
-        <a href="hub.html">Hub</a>
-        <a href="course.html">Course</a>
-        <a href="tools.html">Tools</a>
-        <a href="setup-room.html" class="active">Setup Room</a>
-        <a href="community.html">Community</a>
-        <a href="login.html">Login</a>
-      </div>
-    </nav>
+<div class="page">
 
-    <section class="hero-shell">
-      <div class="badge">Praxis Kategorie</div>
-      <h1 class="hero-title">Live <span class="gold">Beispiele</span></h1>
-      <p class="hero-text">
-        In diesem Bereich siehst du, wie BullProsperity Setups in echten
-        Marktbewegungen aussehen – inklusive Timing, Confirmation, Qualität
-        und vollständiger Ausführung.
-      </p>
-      <div class="hero-buttons">
-        <a href="setup-room.html" class="btn primary">Zurück zum Setup Room</a>
-        <a href="course.html" class="btn secondary">Zum Kurs</a>
-      </div>
-    </section>
+<nav class="navbar">
+<a href="index.html" class="logo">BullProsperity</a>
+<div class="nav-links">
+<a href="index.html">Home</a>
+<a href="hub.html">Hub</a>
+<a href="course.html">Course</a>
+<a href="tools.html">Tools</a>
+<a href="setup-room.html">Setup Room</a>
+<a href="community.html">Community</a>
+</div>
+</nav>
 
-    <section class="section">
-      <h2 class="section-heading">Echte Setups im Markt</h2>
-      <p class="section-subtext">Hier kannst du später echte Praxisbeispiele, Screenshots oder Videos einsetzen.</p>
+<section class="hero-shell">
+<div class="badge">BullProsperity</div>
+<h1 class="hero-title">Live Setups</h1>
+<p class="hero-text">
+Dieser Bereich gehört zur BullProsperity Plattform. Die Seite nutzt dein zentrales Theme,
+damit alle Bereiche visuell einheitlich bleiben.
+</p>
 
-      <div class="grid-2">
-        <div class="section-card">
-          <div class="chart-placeholder">
-            Hier kommt später dein Live-Setup-Chart rein.<br><br>
-            Beispiel:<br>
-            London Sweep → BOS → FVG Retest → Entry → TP Hit
-          </div>
-        </div>
+<div class="hero-buttons">
+<a href="hub.html" class="btn primary">Zum Hub</a>
+<a href="course.html" class="btn secondary">Zum Kurs</a>
+</div>
+</section>
 
-        <div class="section-card">
-          <div class="badge">Live Setup Check</div>
-          <div class="list-box">
-            <div class="list-item">War vor dem Setup klare Liquidität sichtbar?</div>
-            <div class="list-item">Gab es eine saubere Confirmation durch Struktur?</div>
-            <div class="list-item">Lag der Entry an einer hochwertigen Zone?</div>
-            <div class="list-item">War das CRV stark genug?</div>
-            <div class="list-item">Wäre das Setup live wirklich handelbar gewesen?</div>
-          </div>
-        </div>
-      </div>
-    </section>
+<section class="section">
+<h2 class="section-heading">Inhalt</h2>
+<p class="section-subtext">
+Hier kannst du später Inhalte, Videos oder Charts einfügen.
+</p>
 
-    <section class="section">
-      <h2 class="section-heading">Praxis Beispiele</h2>
-      <p class="section-subtext">Diese Karten kannst du später mit echten Marktbeispielen verknüpfen.</p>
+<div class="grid-2">
 
-      <div class="grid-3">
-        <div class="example-card">
-          <div>
-            <div class="badge">Buy Setup</div>
-            <h3>Long nach Sweep</h3>
-            <p>Sell-Side Liquidität wird abgeholt und der Markt reagiert nach oben.</p>
-          </div>
-          <a href="#" class="example-link">Beispiel öffnen</a>
-        </div>
+<div class="section-card">
+<div class="badge">Bereich</div>
+<h3>Live Setups</h3>
+<p>Hier kommt dein Content rein.</p>
+<a href="#" class="card-link">Mehr anzeigen</a>
+</div>
 
-        <div class="example-card">
-          <div>
-            <div class="badge">Sell Setup</div>
-            <h3>Short nach Rejection</h3>
-            <p>Buy-Side Liquidität wird genommen und anschließend kommt die Schwäche.</p>
-          </div>
-          <a href="#" class="example-link">Beispiel öffnen</a>
-        </div>
+<div class="section-card">
+<div class="badge">Information</div>
+<h3>BullProsperity</h3>
+<p>Diese Seite ist Teil deiner Education Plattform.</p>
+<a href="#" class="card-link">Details</a>
+</div>
 
-        <div class="example-card">
-          <div>
-            <div class="badge">Review</div>
-            <h3>Komplette Analyse</h3>
-            <p>Vom Bias bis zum Management: ein vollständiges Beispiel im BullProsperity Stil.</p>
-          </div>
-          <a href="#" class="example-link">Beispiel öffnen</a>
-        </div>
-      </div>
-    </section>
+</div>
+</section>
 
-    <div class="footer-note">
-      BullProsperity dient ausschließlich Bildungszwecken und stellt keine Finanzberatung dar.
-    </div>
-  </div>
+<div class="footer-note">
+BullProsperity dient ausschließlich Bildungszwecken und stellt keine Finanzberatung dar.
+</div>
+
+</div>
 </body>
 </html>

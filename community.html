@@ -1,141 +1,71 @@
+
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>BullProsperity | Community</title>
-  <link rel="stylesheet" href="theme.css" />
-
-  <script>
-    (async () => {
-      try {
-        const res = await fetch("/api/access", {
-          credentials: "include"
-        });
-        const data = await res.json();
-
-        if (data.role !== "admin" && data.role !== "premium") {
-          window.location.href = "locked.html";
-        }
-      } catch (err) {
-        window.location.href = "locked.html";
-      }
-    })();
-  </script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BullProsperity | Community</title>
+<link rel="stylesheet" href="theme.css">
 </head>
+
 <body>
-  <div class="page">
+<div class="page">
 
-    <nav class="navbar">
-      <a href="index.html" class="logo">BullProsperity</a>
+<nav class="navbar">
+<a href="index.html" class="logo">BullProsperity</a>
+<div class="nav-links">
+<a href="index.html">Home</a>
+<a href="hub.html">Hub</a>
+<a href="course.html">Course</a>
+<a href="tools.html">Tools</a>
+<a href="setup-room.html">Setup Room</a>
+<a href="community.html">Community</a>
+</div>
+</nav>
 
-      <div class="nav-links">
-        <a href="index.html">Home</a>
-        <a href="hub.html">Hub</a>
-        <a href="course.html">Course</a>
-        <a href="tools.html">Tools</a>
-        <a href="setup-room.html">Setup Room</a>
-        <a href="community.html" class="active">Community</a>
-        <a href="login.html">Login</a>
-      </div>
-    </nav>
+<section class="hero-shell">
+<div class="badge">BullProsperity</div>
+<h1 class="hero-title">Community</h1>
+<p class="hero-text">
+Dieser Bereich gehört zur BullProsperity Plattform. Die Seite nutzt dein zentrales Theme,
+damit alle Bereiche visuell einheitlich bleiben.
+</p>
 
-    <section class="hero-shell">
-      <div class="badge">Members Bereich</div>
+<div class="hero-buttons">
+<a href="hub.html" class="btn primary">Zum Hub</a>
+<a href="course.html" class="btn secondary">Zum Kurs</a>
+</div>
+</section>
 
-      <h1 class="hero-title">
-        Die BullProsperity
-        <span class="gold">Community</span>
-      </h1>
+<section class="section">
+<h2 class="section-heading">Inhalt</h2>
+<p class="section-subtext">
+Hier kannst du später Inhalte, Videos oder Charts einfügen.
+</p>
 
-      <p class="hero-text">
-        Hier kommt der Austausch der Mitglieder zusammen. Die Community ist dafür da,
-        Setups zu teilen, Gedanken zu Marktbewegungen auszutauschen, Motivation hochzuhalten
-        und voneinander zu lernen. So wird aus einer Plattform eine echte Bewegung.
-      </p>
+<div class="grid-2">
 
-      <div class="hero-buttons">
-        <a href="setup-room.html" class="btn primary">Zum Setup Room</a>
-        <a href="hub.html" class="btn secondary">Zum Hub</a>
-      </div>
-    </section>
+<div class="section-card">
+<div class="badge">Bereich</div>
+<h3>Community</h3>
+<p>Hier kommt dein Content rein.</p>
+<a href="#" class="card-link">Mehr anzeigen</a>
+</div>
 
-    <section class="section">
-      <h2 class="section-heading">Community Bereiche</h2>
-      <p class="section-subtext">
-        Diese Bereiche kannst du später mit Discord, Telegram, Chat-Bereichen
-        oder eigenen Mitgliederseiten verbinden.
-      </p>
+<div class="section-card">
+<div class="badge">Information</div>
+<h3>BullProsperity</h3>
+<p>Diese Seite ist Teil deiner Education Plattform.</p>
+<a href="#" class="card-link">Details</a>
+</div>
 
-      <div class="grid-3">
-        <div class="community-card">
-          <div>
-            <div class="badge">Setups</div>
-            <h3>Setup Austausch</h3>
-            <p>
-              Mitglieder teilen ihre Setups, Gedanken zu Liquidität, Struktur
-              und mögliche Ausführungen im Markt.
-            </p>
-          </div>
-          <a href="#" class="community-link">Bereich öffnen</a>
-        </div>
+</div>
+</section>
 
-        <div class="community-card">
-          <div>
-            <div class="badge">Mindset</div>
-            <h3>Motivation & Disziplin</h3>
-            <p>
-              Austausch über Psychologie, Routinen, Rückschläge und alles,
-              was langfristig starke Trader formt.
-            </p>
-          </div>
-          <a href="#" class="community-link">Bereich öffnen</a>
-        </div>
+<div class="footer-note">
+BullProsperity dient ausschließlich Bildungszwecken und stellt keine Finanzberatung dar.
+</div>
 
-        <div class="community-card">
-          <div>
-            <div class="badge">Feedback</div>
-            <h3>Trade Review</h3>
-            <p>
-              Mitglieder können Trades reflektieren, Feedback bekommen und
-              gemeinsam aus Fehlern und guten Entscheidungen lernen.
-            </p>
-          </div>
-          <a href="#" class="community-link">Bereich öffnen</a>
-        </div>
-      </div>
-    </section>
-
-    <section class="section">
-      <div class="grid-2">
-        <div class="section-card">
-          <div class="badge">Warum Community?</div>
-          <h2 class="section-heading" style="font-size:36px; margin-bottom:10px;">
-            Warum dieser Bereich wichtig ist
-          </h2>
-          <p class="section-subtext" style="margin-bottom:0;">
-            Eine starke Community erhöht den Wert deiner Plattform extrem. Mitglieder
-            bleiben motivierter, fühlen sich eingebunden und haben einen Ort, an dem
-            sie nicht alleine mit ihren Fragen und Prozessen sind.
-          </p>
-        </div>
-
-        <div class="section-card">
-          <div class="badge">BullProsperity Fokus</div>
-          <div class="list-box">
-            <div class="list-item">Mehr Austausch statt isoliertem Lernen.</div>
-            <div class="list-item">Setups aus verschiedenen Blickwinkeln sehen.</div>
-            <div class="list-item">Motivation und Disziplin gemeinsam aufbauen.</div>
-            <div class="list-item">Die Plattform wirkt deutlich lebendiger und hochwertiger.</div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <div class="footer-note">
-      BullProsperity dient ausschließlich Bildungszwecken und stellt keine Finanzberatung dar.
-    </div>
-
-  </div>
+</div>
 </body>
 </html>
