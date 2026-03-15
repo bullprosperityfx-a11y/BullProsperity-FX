@@ -432,3 +432,17 @@ body::after{
     grid-template-columns:1fr;
   }
 }
+.card-buttons,
+.top-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+
+.tool-card a,
+.setup-card a,
+.example-card a,
+.community-card a,
+.section-card a {
+  text-decoration: none;
+}
