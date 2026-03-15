@@ -1,773 +1,245 @@
 <!DOCTYPE html>
 <html lang="de">
+
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>BullProsperity | Course</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BullProsperity | Course</title>
 
-  <script>
-    (async () => {
-      try {
-        const res = await fetch("/api/access", {
-          credentials: "include"
-        });
-        const data = await res.json();
+<style>
 
-        if (data.role !== "admin" && data.role !== "premium") {
-          window.location.href = "locked.html";
-        }
-      } catch (err) {
-        window.location.href = "locked.html";
-      }
-    })();
-  </script>
-
-  <style>
-    .module{
-margin-top:20px;
+body{
+background:#0b0b0b;
+color:white;
+font-family:Arial;
+margin:0;
 }
 
-.module-header{
-display:flex;
-justify-content:space-between;
-align-items:center;
-font-weight:700;
-font-size:16px;
+.container{
+max-width:1200px;
+margin:auto;
+padding:40px 20px;
+}
+
+h1{
 color:#ffd700;
 margin-bottom:10px;
 }
 
-.lesson-item{
-display:block;
-text-decoration:none;
-color:#ffffff;
-background:rgba(255,255,255,0.03);
-border:1px solid rgba(255,215,0,0.15);
-border-radius:14px;
-padding:14px 16px;
+.progress-bar{
+width:100%;
+height:10px;
+background:#1b1b1b;
+border-radius:20px;
+overflow:hidden;
 margin-top:10px;
-font-weight:600;
+margin-bottom:30px;
+}
+
+.progress{
+height:100%;
+width:18%;
+background:#ffd700;
+}
+
+.module{
+background:#121212;
+border:1px solid rgba(255,215,0,0.2);
+border-radius:16px;
+padding:20px;
+margin-bottom:20px;
+}
+
+.module-title{
+display:flex;
+justify-content:space-between;
+color:#ffd700;
+font-weight:700;
+margin-bottom:15px;
+}
+
+.lesson{
+display:block;
+padding:14px;
+margin-bottom:10px;
+border-radius:10px;
+background:#1a1a1a;
+border:1px solid rgba(255,215,0,0.1);
+text-decoration:none;
+color:white;
 transition:0.2s;
 }
 
-.lesson-item:hover{
-color:#ffd700;
-background:rgba(255,255,255,0.05);
-border:1px solid rgba(255,215,0,0.4);
-}
-
-.lesson-item.active{
+.lesson:hover{
 border:1px solid #ffd700;
 color:#ffd700;
-background:rgba(255,215,0,0.08);
 }
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
 
-    :root {
-      --gold: #ffd700;
-      --gold-soft: #ffe45e;
-      --white: #ffffff;
-      --text: #e7e7e7;
-    }
+.lesson.active{
+background:rgba(255,215,0,0.08);
+border:1px solid #ffd700;
+color:#ffd700;
+}
 
-    body {
-      font-family: Arial, Helvetica, sans-serif;
-      background:
-        radial-gradient(circle at top, rgba(255, 215, 0, 0.07), transparent 35%),
-        linear-gradient(135deg, #050505, #090909 58%, #101010);
-      color: var(--white);
-      min-height: 100vh;
-      overflow-x: hidden;
-    }
+.lesson.locked{
+opacity:0.5;
+cursor:not-allowed;
+}
 
-    .chart-bg {
-      position: fixed;
-      inset: 0;
-      z-index: 0;
-      pointer-events: none;
-      opacity: 0.22;
-    }
-
-    .chart-bg svg {
-      width: 100%;
-      height: 100%;
-      display: block;
-    }
-
-    .line-main {
-      fill: none;
-      stroke: rgba(255, 215, 0, 0.62);
-      stroke-width: 3.5;
-    }
-
-    .line-alt {
-      fill: none;
-      stroke: rgba(255, 255, 255, 0.12);
-      stroke-width: 2.2;
-    }
-
-    .wick-gold {
-      stroke: rgba(255, 215, 0, 0.4);
-      stroke-width: 2.2;
-    }
-
-    .wick-white {
-      stroke: rgba(255, 255, 255, 0.16);
-      stroke-width: 2;
-    }
-
-    .body-gold {
-      fill: rgba(255, 215, 0, 0.16);
-      stroke: rgba(255, 215, 0, 0.34);
-      stroke-width: 1.4;
-    }
-
-    .body-white {
-      fill: rgba(255, 255, 255, 0.05);
-      stroke: rgba(255, 255, 255, 0.14);
-      stroke-width: 1.2;
-    }
-
-    .page-shell {
-      position: relative;
-      z-index: 1;
-      width: min(1320px, calc(100% - 36px));
-      margin: 18px auto;
-      border: 2px solid rgba(255, 255, 255, 0.3);
-      border-radius: 16px;
-      padding: 22px 26px 34px;
-      background: rgba(0, 0, 0, 0.08);
-      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.02);
-    }
-
-    .topbar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 26px;
-      gap: 18px;
-    }
-
-    .logo {
-      color: var(--gold);
-      font-weight: 800;
-      font-size: 2.1rem;
-      letter-spacing: -0.03em;
-      text-shadow: 0 0 15px rgba(255, 215, 0, 0.18);
-      white-space: nowrap;
-    }
-
-    nav {
-      display: flex;
-      gap: 26px;
-      align-items: center;
-      flex-wrap: wrap;
-      justify-content: flex-end;
-    }
-
-    nav a {
-      color: #ffffff;
-      text-decoration: none;
-      font-size: 0.95rem;
-      font-weight: 700;
-      transition: 0.2s ease;
-    }
-
-    nav a:hover,
-    nav a.active {
-      color: var(--gold);
-    }
-
-    .layout {
-      width: min(1120px, 100%);
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: 340px 1fr;
-      gap: 18px;
-      align-items: start;
-    }
-
-    .card,
-    .hero-card,
-    .module-card,
-    .lesson-card {
-      border: 1px solid rgba(255, 215, 0, 0.12);
-      border-radius: 28px;
-      background:
-        radial-gradient(circle at top left, rgba(255, 215, 0, 0.08), transparent 26%),
-        linear-gradient(180deg, rgba(16,16,16,0.96), rgba(11,11,11,0.95));
-      position: relative;
-      overflow: hidden;
-      box-shadow:
-        0 0 0 1px rgba(255, 255, 255, 0.03),
-        0 20px 40px rgba(0,0,0,0.24);
-    }
-
-    .card,
-    .hero-card,
-    .module-card,
-    .lesson-card {
-      padding: 24px 24px 22px;
-    }
-
-    .top-tag {
-      display: inline-block;
-      padding: 8px 16px;
-      border-radius: 999px;
-      border: 1px solid rgba(255, 215, 0, 0.32);
-      color: var(--gold-soft);
-      background: rgba(255, 215, 0, 0.07);
-      font-size: 13px;
-      font-weight: 700;
-      margin-bottom: 16px;
-    }
-
-    .sidebar-title {
-      color: var(--gold);
-      font-size: 2rem;
-      line-height: 1;
-      margin-bottom: 10px;
-      font-weight: 900;
-      letter-spacing: -0.03em;
-    }
-
-    .sidebar-text,
-    .hero-text,
-    .card p,
-    .module-card p,
-    .lesson-card p {
-      color: #f0f0f0;
-      font-size: 0.95rem;
-      line-height: 1.6;
-    }
-
-    .progress-wrap {
-      margin-top: 16px;
-    }
-
-    .progress-label {
-      display: flex;
-      justify-content: space-between;
-      color: #efefef;
-      font-size: 0.95rem;
-      font-weight: 700;
-      margin-bottom: 10px;
-    }
-
-    .progress-bar {
-      width: 100%;
-      height: 14px;
-      border-radius: 999px;
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,215,0,0.1);
-      overflow: hidden;
-    }
-
-    .progress-fill {
-      width: 18%;
-      height: 100%;
-      background: linear-gradient(135deg, #ffe15b, #f0b90b);
-      border-radius: 999px;
-    }
-
-    .module-list {
-      display: grid;
-      gap: 14px;
-      margin-top: 18px;
-      max-height: 74vh;
-      overflow-y: auto;
-      padding-right: 6px;
-    }
-
-    .module-list::-webkit-scrollbar {
-      width: 8px;
-    }
-
-    .module-list::-webkit-scrollbar-thumb {
-      background: rgba(255, 215, 0, 0.2);
-      border-radius: 999px;
-    }
-
-    .module-item {
-      display: block;
-      text-decoration: none;
-      color: #fff;
-      background: rgba(255,255,255,0.03);
-      border: 1px solid rgba(255, 215, 0, 0.1);
-      border-radius: 18px;
-      padding: 14px 14px;
-      transition: 0.2s ease;
-    }
-
-    .module-item:hover,
-    .module-item.active {
-      border-color: rgba(255,215,0,0.24);
-      background: rgba(255,255,255,0.05);
-    }
-
-    .module-head {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      gap: 10px;
-      margin-bottom: 8px;
-    }
-
-    .module-name {
-      color: var(--gold);
-      font-weight: 800;
-      font-size: 1rem;
-      line-height: 1.25;
-    }
-
-    .module-count {
-      color: #d8d8d8;
-      font-size: 0.82rem;
-      font-weight: 700;
-      white-space: nowrap;
-      padding-top: 4px;
-    }
-
-    .module-sub {
-      display: grid;
-      gap: 8px;
-      margin-top: 10px;
-    }
-
-    .lesson-link {
-      display: block;
-      text-decoration: none;
-      color: #ffffff;
-      border: 1px solid rgba(255,215,0,0.1);
-      background: rgba(255,255,255,0.02);
-      border-radius: 14px;
-      padding: 10px 12px;
-      font-size: 0.88rem;
-      font-weight: 700;
-      line-height: 1.4;
-      transition: 0.2s ease;
-    }
-
-    .lesson-link:hover,
-    .lesson-link.active {
-      color: var(--gold);
-      background: rgba(255,255,255,0.04);
-    }
-
-    .content-stack {
-      display: grid;
-      gap: 18px;
-    }
-
-    .hero-card h1 {
-      font-size: clamp(2.5rem, 4vw, 4.2rem);
-      line-height: 0.98;
-      font-weight: 900;
-      letter-spacing: -0.04em;
-      margin-bottom: 16px;
-    }
-
-    .hero-card h1 .white {
-      color: var(--white);
-    }
-
-    .hero-card h1 .gold {
-      color: var(--gold);
-      text-shadow: 0 0 18px rgba(255, 215, 0, 0.14);
-    }
-
-    .btn-row {
-      display: flex;
-      justify-content: flex-start;
-      gap: 14px;
-      flex-wrap: wrap;
-      margin-top: 18px;
-    }
-
-    .btn {
-      min-width: 155px;
-      display: inline-flex;
-      justify-content: center;
-      align-items: center;
-      padding: 14px 20px;
-      border-radius: 16px;
-      font-weight: 800;
-      text-decoration: none;
-      transition: 0.2s ease;
-      font-size: 0.95rem;
-      border: none;
-      cursor: pointer;
-    }
-
-    .btn-gold {
-      color: #111111;
-      background: linear-gradient(135deg, #ffe15b, #f0b90b);
-      box-shadow: 0 6px 16px rgba(255, 215, 0, 0.14);
-    }
-
-    .btn-gold:hover {
-      transform: translateY(-1px);
-    }
-
-    .btn-outline {
-      color: #ffffff;
-      border: 1px solid rgba(255, 215, 0, 0.28);
-      background: rgba(255,255,255,0.02);
-    }
-
-    .btn-outline:hover {
-      color: var(--gold);
-      background: rgba(255,255,255,0.04);
-    }
-
-    .lesson-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 18px;
-    }
-
-    .lesson-card h3,
-    .module-card h3,
-    .card h3 {
-      color: var(--gold);
-      font-size: 1.25rem;
-      margin-bottom: 10px;
-      font-weight: 800;
-    }
-
-    .mini-list {
-      list-style: none;
-      display: grid;
-      gap: 12px;
-      margin-top: 14px;
-    }
-
-    .mini-list li {
-      background: rgba(255,255,255,0.03);
-      border: 1px solid rgba(255, 215, 0, 0.1);
-      border-radius: 16px;
-      padding: 14px 16px;
-      font-size: 0.93rem;
-      font-weight: 700;
-      line-height: 1.5;
-      color: #fff;
-    }
-
-    .video-box {
-      margin-top: 16px;
-      min-height: 260px;
-      border-radius: 22px;
-      border: 1px solid rgba(255,215,0,0.12);
-      background:
-        radial-gradient(circle at center, rgba(255,215,0,0.08), transparent 30%),
-        rgba(255,255,255,0.02);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 24px;
-    }
-
-    .video-box p {
-      max-width: 620px;
-    }
-
-    .center-note {
-      text-align: center;
-      padding-top: 4px;
-    }
-
-    .center-note h2 {
-      color: var(--gold);
-      font-size: clamp(2rem, 3.4vw, 3.1rem);
-      line-height: 1.05;
-      margin-bottom: 12px;
-      letter-spacing: -0.03em;
-      font-weight: 900;
-    }
-
-    .center-note p {
-      color: #ededed;
-      line-height: 1.7;
-      font-size: 1rem;
-      max-width: 820px;
-      margin: 0 auto;
-      font-weight: 600;
-    }
-
-    @media (max-width: 1000px) {
-      .layout,
-      .lesson-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .page-shell {
-        width: min(100% - 20px, 1320px);
-        padding: 18px 14px 28px;
-      }
-
-      .card,
-      .hero-card,
-      .module-card,
-      .lesson-card {
-        padding: 22px 18px 18px;
-      }
-
-      .logo {
-        font-size: 1.6rem;
-      }
-
-      nav {
-        gap: 14px;
-      }
-
-      nav a {
-        font-size: 0.88rem;
-      }
-
-      .module-list {
-        max-height: none;
-        overflow: visible;
-        padding-right: 0;
-      }
-    }
-  </style>
+</style>
 </head>
+
 <body>
-  <div class="chart-bg">
-    <svg viewBox="0 0 1600 900" preserveAspectRatio="none">
-      <path class="line-alt" d="M0,645 C130,620 190,565 320,548 C435,532 520,564 635,485 C760,398 825,435 935,342 C1045,248 1135,280 1255,198 C1360,126 1465,142 1600,128" />
-      <path class="line-main" d="M0,730 C120,708 220,650 335,618 C455,585 545,534 670,448 C790,365 890,390 1008,298 C1110,220 1205,210 1325,154 C1430,105 1515,105 1600,88" />
 
-      <line class="wick-gold" x1="112" y1="770" x2="112" y2="694"></line>
-      <rect class="body-gold" x="101" y="722" width="22" height="34" rx="4"></rect>
+<div class="container">
 
-      <line class="wick-white" x1="220" y1="688" x2="220" y2="615"></line>
-      <rect class="body-white" x="209" y="640" width="22" height="31" rx="4"></rect>
+<h1>Strukturierte Education</h1>
 
-      <line class="wick-gold" x1="332" y1="650" x2="332" y2="582"></line>
-      <rect class="body-gold" x="321" y="604" width="22" height="30" rx="4"></rect>
+<p>
+Alle Module, Lektionen und Videos an einem Ort.
+Arbeite dich Schritt für Schritt sauber und professionell durch deine Inhalte.
+</p>
 
-      <line class="wick-white" x1="478" y1="585" x2="478" y2="515"></line>
-      <rect class="body-white" x="467" y="536" width="22" height="33" rx="4"></rect>
+<p><b>Gesamtfortschritt</b></p>
 
-      <line class="wick-gold" x1="622" y1="515" x2="622" y2="440"></line>
-      <rect class="body-gold" x="611" y="460" width="22" height="36" rx="4"></rect>
-
-      <line class="wick-white" x1="770" y1="432" x2="770" y2="360"></line>
-      <rect class="body-white" x="759" y="382" width="22" height="32" rx="4"></rect>
-
-      <line class="wick-gold" x1="915" y1="355" x2="915" y2="286"></line>
-      <rect class="body-gold" x="904" y="304" width="22" height="35" rx="4"></rect>
-
-      <line class="wick-white" x1="1060" y1="285" x2="1060" y2="222"></line>
-      <rect class="body-white" x="1049" y="238" width="22" height="28" rx="4"></rect>
-
-      <line class="wick-gold" x1="1212" y1="220" x2="1212" y2="160"></line>
-      <rect class="body-gold" x="1201" y="174" width="22" height="30" rx="4"></rect>
-
-      <line class="wick-white" x1="1390" y1="170" x2="1390" y2="108"></line>
-      <rect class="body-white" x="1379" y="124" width="22" height="26" rx="4"></rect>
-
-      <line class="wick-gold" x1="1496" y1="135" x2="1496" y2="84"></line>
-      <rect class="body-gold" x="1485" y="95" width="22" height="24" rx="4"></rect>
-    </svg>
-  </div>
-
-  <div class="page-shell">
-    <div class="topbar">
-      <div class="logo">BullProsperity</div>
-
-      <nav>
-        <a href="/index.html">Home</a>
-        <a href="/hub.html">Hub</a>
-        <a href="/course.html" class="active">Course</a>
-        <a href="/tools.html">Tools</a>
-        <a href="/api/whop/login">Login</a>
-      </nav>
-    </div>
-
-    <div class="layout">
-      <aside class="card">
-        <div class="top-tag">Education Bereich</div>
-        <h2 class="sidebar-title">Strukturierte Education</h2>
-        <p class="sidebar-text">
-          Alle Module, Lektionen und Videos an einem Ort. Arbeite dich Schritt für Schritt
-          sauber und professionell durch deine Inhalte.
-        </p>
-
-        <div class="progress-wrap">
-          <div class="progress-label">
-            <span>Gesamtfortschritt</span>
-            <span>18%</span>
-          </div>
-          <div class="progress-bar">
-            <div class="progress-fill"></div>
-          </div>
-        </div>
-
-        <div class="module-list">
-
-          <div class="module-item active">
-            <div class="module-head">
-              <span class="module-name">Modul 1 – Kurs Einführung</span>
-              <span class="module-count">2 Lektionen</span>
-            </div>
-
-            <div class="module-sub">
-              <a href="/lesson1.html" class="lesson-link active">Lesson 1 – Wie du den Kurs richtig durcharbeitest</a>
-              <a href="/lesson2.html" class="lesson-link">Lesson 2 – Wichtiger Hinweis & Risikoaufklärung</a>
-            </div>
-          </div>
-
-          <div class="module-item">
-  <div class="module-head">
-    <span class="module-name">Modul 2 – Trading Grundlagen</span>
-    <span class="module-count">8 Lektionen</span>
-  </div>
-
-  <div class="module-item">
-  <div class="module-head">
-    <span class="module-name">Modul 2 – Trading Grundlagen</span>
-    <span class="module-count">8 Lektionen</span>
-  </div>
-
-  <div class="module-sub">
-    <a href="/lesson2.html" class="lesson-link">Lesson 3 – Was ist Trading wirklich</a>
-    <a href="/lesson3.html" class="lesson-link">Lesson 4 – Warum Retail Trader verlieren</a>
-    <a href="/lesson4.html" class="lesson-link">Lesson 5 – Marktstruktur verstehen</a>
-    <a href="/locked.html" class="lesson-link">Lesson 6 – Trend, Range und Impuls</a>
-    <a href="/locked.html" class="lesson-link">Lesson 7 – Liquidity Grundlagen</a>
-    <a href="/locked.html" class="lesson-link">Lesson 8 – Timing & Sessions</a>
-    <a href="/locked.html" class="lesson-link">Lesson 9 – Entries verstehen</a>
-    <a href="/locked.html" class="lesson-link">Lesson 10 – Risk Management Grundlagen</a>
-  </div>
+<div class="progress-bar">
+<div class="progress"></div>
 </div>
 
-          <div class="module-item">
-            <div class="module-head">
-              <span class="module-name">Modul 3 – Tools & Grundlagen</span>
-              <span class="module-count">3 Lektionen</span>
-            </div>
 
-            <div class="module-sub">
-              <a href="/locked.html" class="lesson-link">Lesson 11 – Trading Tools Überblick</a>
-              <a href="/locked.html" class="lesson-link">Lesson 12 – Journal richtig nutzen</a>
-              <a href="/locked.html" class="lesson-link">Lesson 13 – Vorbereitung & Routine</a>
-            </div>
-          </div>
+<!-- Modul 1 -->
 
-          <div class="module-item">
-            <div class="module-head">
-              <span class="module-name">Modul 4 – Smart Money Concept</span>
-              <span class="module-count">7 Lektionen</span>
-            </div>
+<div class="module">
 
-            <div class="module-sub">
-              <a href="/locked.html" class="lesson-link">Lesson 14 – SMC Einführung</a>
-              <a href="/locked.html" class="lesson-link">Lesson 15 – Liquidity Sweeps</a>
-              <a href="/locked.html" class="lesson-link">Lesson 16 – Market Structure Shift</a>
-              <a href="/locked.html" class="lesson-link">Lesson 17 – Order Blocks</a>
-              <a href="/locked.html" class="lesson-link">Lesson 18 – Fair Value Gaps</a>
-              <a href="/locked.html" class="lesson-link">Lesson 19 – Entry Modelle</a>
-              <a href="/locked.html" class="lesson-link">Lesson 20 – SMC in der Praxis</a>
-            </div>
-          </div>
+<div class="module-title">
+<span>Modul 1 – Kurs Einführung</span>
+<span>2 Lektionen</span>
+</div>
 
-          <div class="module-item">
-            <div class="module-head">
-              <span class="module-name">Modul 5 – Backtesting & Statistik</span>
-              <span class="module-count">3 Lektionen</span>
-            </div>
+<a href="/lesson1.html" class="lesson">
+Lesson 1 – Wie du den Kurs richtig durcharbeitest
+</a>
 
-            <div class="module-sub">
-              <a href="/locked.html" class="lesson-link">Lesson 21 – Backtesting Grundlagen</a>
-              <a href="/locked.html" class="lesson-link">Lesson 22 – Statistik verstehen</a>
-              <a href="/locked.html" class="lesson-link">Lesson 23 – Performance auswerten</a>
-            </div>
-          </div>
+<a href="/lesson2.html" class="lesson">
+Lesson 2 – Wichtiger Hinweis & Risikoaufklärung
+</a>
 
-        </div>
-      </aside>
+</div>
 
-      <main class="content-stack">
-        <section class="hero-card">
-          <div class="top-tag">BullProsperity Education</div>
-          <h1>
-            <span class="white">Strukturierter</span><br>
-            <span class="gold">Trading Kurs</span>
-          </h1>
-          <p class="hero-text">
-            Dieser Bereich ist deine zentrale Kursübersicht. Alle Module sind geordnet aufgebaut,
-            damit jede Lektion, jedes Video und jeder Bereich klar an seinem Platz ist.
-          </p>
 
-          <div class="btn-row">
-            <a href="/lesson1.html" class="btn btn-gold">Erste Lektion öffnen</a>
-            <a href="/hub.html" class="btn btn-outline">Zurück zum Hub</a>
-          </div>
-        </section>
 
-        <section class="module-card">
-          <div class="top-tag">Pflichtlektion</div>
-          <h3>Wie du den Kurs richtig durcharbeitest</h3>
-          <p>
-            Starte mit Lesson 1 und arbeite dich danach Modul für Modul durch den Kurs.
-            So bleibt deine Education strukturiert und professionell aufgebaut.
-          </p>
+<!-- Modul 2 -->
 
-          <div class="video-box">
-            <p>
-              Hier kannst du später ein Überblicksvideo, eine kurze Einführung oder eine Begrüßung
-              für den gesamten Kurs einfügen.
-            </p>
-          </div>
-        </section>
+<div class="module">
 
-        <section class="lesson-grid">
-          <div class="lesson-card">
-            <div class="top-tag">Warum diese Struktur?</div>
-            <h3>Module statt Chaos</h3>
-            <ul class="mini-list">
-              <li>Jedes Thema ist klar einem Modul zugeordnet</li>
-              <li>Jede Lektion hat ihren festen Platz im Kurs</li>
-              <li>Die Navigation bleibt sauber und professionell</li>
-            </ul>
-          </div>
+<div class="module-title">
+<span>Modul 2 – Trading Grundlagen</span>
+<span>8 Lektionen</span>
+</div>
 
-          <div class="lesson-card">
-            <div class="top-tag">Dein Vorteil</div>
-            <h3>Einfacher Lernfluss</h3>
-            <ul class="mini-list">
-              <li>Du erkennst sofort, was schon da ist</li>
-              <li>Neue Lessons lassen sich später leicht ergänzen</li>
-              <li>Die Plattform wirkt wie ein echter Mitgliederkurs</li>
-            </ul>
-          </div>
-        </section>
+<a href="/lesson2.html" class="lesson">
+Lesson 3 – Was ist Trading wirklich
+</a>
 
-        <section class="card">
-          <div class="top-tag">Wichtiger Hinweis</div>
-          <h3>Unfertige Lektionen</h3>
-          <p>
-            Alle noch nicht gebauten Lektionen führen aktuell bewusst auf <strong>locked.html</strong>.
-            Sobald du neue Lesson-Seiten erstellst, ersetzt du den Link einfach durch die echte Datei,
-            zum Beispiel <strong>/lesson4.html</strong>.
-          </p>
-        </section>
+<a href="/lesson3.html" class="lesson active">
+Lesson 4 – Warum Retail Trader verlieren
+</a>
 
-        <section class="center-note">
-          <h2>Ein Kurs. Klare Reihenfolge. Saubere Module.</h2>
-          <p>
-            Genau so bleibt deine BullProsperity Education übersichtlich, hochwertig und jederzeit erweiterbar.
-          </p>
-        </section>
-      </main>
-    </div>
-  </div>
+<a href="/locked.html" class="lesson locked">
+Lesson 5 – Marktstruktur verstehen
+</a>
+
+<a href="/locked.html" class="lesson locked">
+Lesson 6 – Trend, Range und Impuls
+</a>
+
+<a href="/locked.html" class="lesson locked">
+Lesson 7 – Liquidity Grundlagen
+</a>
+
+<a href="/locked.html" class="lesson locked">
+Lesson 8 – Timing & Sessions
+</a>
+
+<a href="/locked.html" class="lesson locked">
+Lesson 9 – Entries verstehen
+</a>
+
+<a href="/locked.html" class="lesson locked">
+Lesson 10 – Risk Management Grundlagen
+</a>
+
+</div>
+
+
+
+<!-- Modul 3 -->
+
+<div class="module">
+
+<div class="module-title">
+<span>Modul 3 – Tools & Grundlagen</span>
+<span>3 Guides</span>
+</div>
+
+<a href="/tools.html" class="lesson locked">
+TradingView Setup
+</a>
+
+<a href="/tools.html" class="lesson locked">
+Lot Size Rechner
+</a>
+
+<a href="/tools.html" class="lesson locked">
+Trading Journal
+</a>
+
+</div>
+
+
+
+<!-- Modul 4 -->
+
+<div class="module">
+
+<div class="module-title">
+<span>Modul 4 – Smart Money Concept</span>
+<span>7 Lektionen</span>
+</div>
+
+<a href="/locked.html" class="lesson locked">
+Market Structure
+</a>
+
+<a href="/locked.html" class="lesson locked">
+Liquidity
+</a>
+
+<a href="/locked.html" class="lesson locked">
+Orderblocks
+</a>
+
+<a href="/locked.html" class="lesson locked">
+Fair Value Gaps
+</a>
+
+<a href="/locked.html" class="lesson locked">
+Premium & Discount
+</a>
+
+<a href="/locked.html" class="lesson locked">
+Institutionelle Entries
+</a>
+
+<a href="/locked.html" class="lesson locked">
+Backtesting
+</a>
+
+</div>
+
+
+
+</div>
+
 </body>
 </html>
