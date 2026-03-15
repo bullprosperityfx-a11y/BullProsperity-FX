@@ -1,425 +1,609 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BullProsperity | Setup Room</title>
 
-<title>BullProsperity | Setup Room</title>
+  <script>
+    (async () => {
+      try {
+        const res = await fetch("/api/access", {
+          credentials: "include"
+        });
+        const data = await res.json();
 
-<script>
-(async () => {
-  try {
-    const res = await fetch("/api/access",{credentials:"include"});
-    const data = await res.json();
+        if (data.role !== "admin" && data.role !== "premium") {
+          window.location.href = "locked.html";
+        }
+      } catch (err) {
+        window.location.href = "locked.html";
+      }
+    })();
+  </script>
 
-    if(data.role !== "admin" && data.role !== "premium"){
-      window.location.href="locked.html";
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
     }
-  } catch(err){
-    window.location.href="locked.html";
-  }
-})();
-</script>
 
-<style>
-
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Arial, Helvetica, sans-serif;
-}
-
-body{
-
-background:
-radial-gradient(circle at top left, rgba(255,215,0,0.06), transparent 20%),
-radial-gradient(circle at bottom right, rgba(255,215,0,0.05), transparent 25%),
-#050505;
-
-color:white;
-min-height:100vh;
-}
-
-.page{
-max-width:1400px;
-margin:auto;
-padding:25px;
-}
-
-.topbar{
-
-display:flex;
-justify-content:space-between;
-align-items:center;
-margin-bottom:30px;
-flex-wrap:wrap;
-gap:15px;
-
-}
-
-.brand{
-font-size:28px;
-font-weight:900;
-color:#ffd700;
-}
-
-.brand span{
-color:white;
-}
-
-.nav{
-display:flex;
-gap:10px;
-flex-wrap:wrap;
-}
-
-.nav a{
-
-text-decoration:none;
-background:#111;
-color:white;
-padding:12px 18px;
-border-radius:14px;
-font-weight:700;
-border:1px solid rgba(255,215,0,0.35);
-
-}
-
-.nav a:hover{
-transform:translateY(-1px);
-}
-
-.hero{
-
-background:linear-gradient(180deg,#141414,#0c0c0c);
-border:2px solid rgba(255,215,0,0.25);
-border-radius:25px;
-
-padding:35px;
-margin-bottom:30px;
-
-}
-
-.hero h1{
-
-font-size:36px;
-color:#ffd700;
-margin-bottom:10px;
-
-}
-
-.hero p{
-
-font-size:17px;
-line-height:1.6;
-color:#eaeaea;
-max-width:700px;
-
-}
-
-.section-title{
-
-font-size:24px;
-font-weight:900;
-color:#ffd700;
-margin-bottom:15px;
-
-}
-
-.grid{
-
-display:grid;
-grid-template-columns:repeat(3,1fr);
-gap:20px;
-
-}
-
-.card{
-
-background:linear-gradient(180deg,#141414,#0c0c0c);
-border:2px solid rgba(255,215,0,0.25);
-border-radius:22px;
-
-padding:20px;
-min-height:200px;
-
-display:flex;
-flex-direction:column;
-justify-content:space-between;
-
-transition:0.2s;
-
-}
-
-.card:hover{
-
-transform:translateY(-3px);
-border-color:rgba(255,215,0,0.5);
-box-shadow:0 0 20px rgba(255,215,0,0.1);
-
-}
-
-.badge{
-
-display:inline-block;
-padding:7px 12px;
-border-radius:999px;
-
-border:1px solid rgba(255,215,0,0.3);
-background:rgba(255,215,0,0.1);
-color:#ffd700;
-font-weight:700;
-font-size:13px;
-
-margin-bottom:10px;
-
-}
-
-.card h3{
-
-font-size:20px;
-color:#ffd700;
-margin-bottom:10px;
-
-}
-
-.card p{
-
-font-size:15px;
-color:#eee;
-line-height:1.5;
-
-}
-
-.card a{
-
-margin-top:15px;
-text-decoration:none;
-
-background:#ffd700;
-color:#111;
-font-weight:800;
-
-padding:12px;
-border-radius:12px;
-text-align:center;
-
-}
-
-.card a:hover{
-transform:translateY(-1px);
-}
-
-.footer{
-
-margin-top:40px;
-font-size:13px;
-color:#aaa;
-text-align:center;
-
-}
-
-@media(max-width:1000px){
-
-.grid{
-grid-template-columns:1fr 1fr;
-}
-
-}
-
-@media(max-width:700px){
-
-.grid{
-grid-template-columns:1fr;
-}
-
-.hero h1{
-font-size:28px;
-}
-
-}
-
-</style>
-
+    :root {
+      --bg: #050505;
+      --panel: rgba(18, 18, 18, 0.92);
+      --panel-2: rgba(24, 24, 24, 0.95);
+      --gold: #f3d21b;
+      --gold-soft: rgba(243, 210, 27, 0.24);
+      --text: #ffffff;
+      --muted: #d8d8d8;
+      --line: rgba(243, 210, 27, 0.20);
+    }
+
+    body {
+      background:
+        radial-gradient(circle at 20% 10%, rgba(255,255,255,0.05), transparent 22%),
+        radial-gradient(circle at 80% 20%, rgba(255,255,255,0.03), transparent 18%),
+        radial-gradient(circle at 50% 80%, rgba(243,210,27,0.05), transparent 28%),
+        var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    body::before,
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    body::before {
+      background-image:
+        linear-gradient(rgba(243,210,27,0.07), rgba(243,210,27,0.07)),
+        linear-gradient(rgba(243,210,27,0.07), rgba(243,210,27,0.07));
+      background-size: 1px 100%, 100% 1px;
+      background-position: 72px 0, 0 72px;
+      background-repeat: no-repeat;
+      opacity: 0.35;
+    }
+
+    body::after {
+      background:
+        linear-gradient(115deg, transparent 0%, transparent 33%, rgba(243,210,27,0.08) 33.2%, transparent 34%),
+        linear-gradient(200deg, transparent 0%, transparent 70%, rgba(243,210,27,0.06) 70.2%, transparent 71%);
+      opacity: 0.45;
+    }
+
+    .page {
+      position: relative;
+      z-index: 1;
+      max-width: 1450px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+      padding: 18px 0 24px;
+      margin-bottom: 10px;
+      flex-wrap: wrap;
+    }
+
+    .logo {
+      font-size: 20px;
+      font-weight: 900;
+      color: var(--gold);
+      text-decoration: none;
+      letter-spacing: -0.3px;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 26px;
+      flex-wrap: wrap;
+    }
+
+    .nav-links a {
+      color: #fff;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 15px;
+      transition: 0.2s ease;
+    }
+
+    .nav-links a:hover,
+    .nav-links a.active {
+      color: var(--gold);
+    }
+
+    .hero-shell {
+      border: 1px solid var(--line);
+      border-radius: 32px;
+      background: linear-gradient(180deg, rgba(22,22,22,0.88), rgba(10,10,10,0.94));
+      box-shadow: 0 0 0 1px rgba(255,255,255,0.02) inset;
+      padding: 34px;
+      margin-bottom: 28px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-shell::before {
+      content: "";
+      position: absolute;
+      top: -120px;
+      right: -120px;
+      width: 300px;
+      height: 300px;
+      background: radial-gradient(circle, rgba(243,210,27,0.12), transparent 68%);
+      pointer-events: none;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 8px 16px;
+      border-radius: 999px;
+      border: 1px solid var(--gold-soft);
+      color: var(--gold);
+      background: rgba(243,210,27,0.06);
+      font-size: 14px;
+      font-weight: 800;
+      margin-bottom: 18px;
+    }
+
+    .hero-title {
+      font-size: 60px;
+      line-height: 0.98;
+      font-weight: 900;
+      letter-spacing: -1.5px;
+      margin-bottom: 16px;
+      max-width: 900px;
+    }
+
+    .hero-title .gold {
+      color: var(--gold);
+      display: inline-block;
+    }
+
+    .hero-text {
+      max-width: 920px;
+      color: #ececec;
+      font-size: 17px;
+      line-height: 1.7;
+      margin-bottom: 24px;
+    }
+
+    .hero-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-bottom: 28px;
+    }
+
+    .btn {
+      text-decoration: none;
+      padding: 14px 24px;
+      border-radius: 999px;
+      font-weight: 800;
+      font-size: 15px;
+      transition: 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .btn.primary {
+      background: var(--gold);
+      color: #111;
+      box-shadow: 0 0 24px rgba(243,210,27,0.16);
+    }
+
+    .btn.secondary {
+      color: #fff;
+      border: 1px solid rgba(255,255,255,0.18);
+      background: rgba(255,255,255,0.02);
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+    }
+
+    .hero-cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+
+    .mini-card,
+    .section-card,
+    .setup-card {
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      background: linear-gradient(180deg, rgba(28,28,28,0.84), rgba(16,16,16,0.92));
+      box-shadow: 0 0 0 1px rgba(255,255,255,0.02) inset;
+    }
+
+    .mini-card {
+      padding: 22px;
+      min-height: 130px;
+    }
+
+    .mini-card h3 {
+      font-size: 18px;
+      color: var(--gold);
+      font-weight: 900;
+      margin-bottom: 10px;
+    }
+
+    .mini-card p {
+      color: #efefef;
+      line-height: 1.55;
+      font-size: 14px;
+    }
+
+    .section {
+      margin-bottom: 28px;
+    }
+
+    .section-heading {
+      font-size: 46px;
+      line-height: 1.02;
+      font-weight: 900;
+      letter-spacing: -1.3px;
+      margin-bottom: 8px;
+      color: var(--gold);
+    }
+
+    .section-subtext {
+      color: #ebebeb;
+      font-size: 17px;
+      line-height: 1.65;
+      max-width: 920px;
+      margin-bottom: 20px;
+    }
+
+    .setup-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+
+    .setup-card {
+      padding: 22px;
+      min-height: 240px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: 0.2s ease;
+    }
+
+    .setup-card:hover {
+      transform: translateY(-2px);
+      border-color: rgba(243,210,27,0.42);
+      box-shadow: 0 0 20px rgba(243,210,27,0.08);
+    }
+
+    .setup-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: flex-start;
+      margin-bottom: 14px;
+    }
+
+    .setup-pill {
+      display: inline-block;
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 800;
+      border: 1px solid var(--gold-soft);
+      color: var(--gold);
+      background: rgba(243,210,27,0.06);
+    }
+
+    .setup-status {
+      font-size: 12px;
+      font-weight: 800;
+      color: #fff;
+      opacity: 0.72;
+    }
+
+    .setup-card h3 {
+      font-size: 22px;
+      line-height: 1.15;
+      color: var(--gold);
+      margin-bottom: 10px;
+      font-weight: 900;
+    }
+
+    .setup-card p {
+      font-size: 15px;
+      line-height: 1.6;
+      color: #efefef;
+      margin-bottom: 18px;
+    }
+
+    .setup-link {
+      text-decoration: none;
+      width: 100%;
+      text-align: center;
+      padding: 13px 16px;
+      border-radius: 14px;
+      font-weight: 800;
+      background: var(--gold);
+      color: #111;
+      transition: 0.2s ease;
+      display: block;
+    }
+
+    .setup-link:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 0 18px rgba(243,210,27,0.14);
+    }
+
+    .section-card {
+      padding: 26px;
+    }
+
+    .double-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+    }
+
+    .list-box {
+      display: grid;
+      gap: 12px;
+      margin-top: 10px;
+    }
+
+    .list-item {
+      border: 1px solid rgba(243,210,27,0.14);
+      background: rgba(255,255,255,0.02);
+      border-radius: 16px;
+      padding: 15px 16px;
+      color: #f4f4f4;
+      line-height: 1.5;
+      font-weight: 700;
+      font-size: 15px;
+    }
+
+    .footer-note {
+      padding: 18px 8px 8px;
+      text-align: center;
+      color: #bcbcbc;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    @media (max-width: 1200px) {
+      .hero-title,
+      .section-heading {
+        font-size: 42px;
+      }
+
+      .hero-cards,
+      .setup-grid,
+      .double-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 860px) {
+      .navbar {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .hero-shell,
+      .section-card {
+        padding: 22px;
+      }
+
+      .hero-title,
+      .section-heading {
+        font-size: 32px;
+        letter-spacing: -1px;
+      }
+
+      .hero-cards,
+      .setup-grid,
+      .double-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .nav-links {
+        gap: 16px;
+      }
+    }
+  </style>
 </head>
-
 <body>
-
-<div class="page">
-
-<div class="topbar">
-
-<div class="brand">BullProsperity <span>| Setup Room</span></div>
-
-<div class="nav">
-
-<a href="hub.html">Hub</a>
-<a href="course.html">Course</a>
-<a href="tools.html">Tools</a>
-
-</div>
-
-</div>
-
-
-<div class="hero">
-
-<h1>Setup Room</h1>
-
-<p>
-
-Hier findest du Marktanalysen, Setups und Beispiele aus der BullProsperity Strategie.
-
-Dieser Bereich hilft dir zu verstehen, wie das Konzept aus Modul 8
-in echten Marktbewegungen angewendet wird.
-
-</p>
-
-</div>
-
-
-
-<h2 class="section-title">Aktuelle Setup Kategorien</h2>
-
-<div class="grid">
-
-<div class="card">
-
-<div>
-
-<div class="badge">SMC</div>
-
-<h3>Liquidity Setups</h3>
-
-<p>
-
-Beispiele für Liquidity Sweeps, Stop Hunts und institutionelle Bewegungen.
-
-</p>
-
-</div>
-
-<a href="#">Setups ansehen</a>
-
-</div>
-
-
-<div class="card">
-
-<div>
-
-<div class="badge">Entries</div>
-
-<h3>Entry Modelle</h3>
-
-<p>
-
-BullProsperity Entry Modelle mit Confirmation und Struktur.
-
-</p>
-
-</div>
-
-<a href="#">Beispiele ansehen</a>
-
-</div>
-
-
-<div class="card">
-
-<div>
-
-<div class="badge">Structure</div>
-
-<h3>Marktstruktur</h3>
-
-<p>
-
-BOS, CHoCH, Strukturwechsel und Trendverständnis im Chart.
-
-</p>
-
-</div>
-
-<a href="#">Charts öffnen</a>
-
-</div>
-
-
-<div class="card">
-
-<div>
-
-<div class="badge">Practice</div>
-
-<h3>Replay Analyse</h3>
-
-<p>
-
-Trainiere dein Auge mit Replay Analysen und markiere eigene Setups.
-
-</p>
-
-</div>
-
-<a href="#">Analyse starten</a>
-
-</div>
-
-
-<div class="card">
-
-<div>
-
-<div class="badge">Examples</div>
-
-<h3>Live Beispiele</h3>
-
-<p>
-
-Beispiele aus echten Marktbewegungen erklärt.
-
-</p>
-
-</div>
-
-<a href="#">Beispiele ansehen</a>
-
-</div>
-
-
-<div class="card">
-
-<div>
-
-<div class="badge">Members</div>
-
-<h3>Community Setups</h3>
-
-<p>
-
-Setups und Ideen von anderen BullProsperity Mitgliedern.
-
-</p>
-
-</div>
-
-<a href="#">Community öffnen</a>
-
-</div>
-
-
-</div>
-
-
-<div class="footer">
-
-BullProsperity dient ausschließlich Bildungszwecken und stellt keine Finanzberatung dar.
-
-</div>
-
-</div>
-
+  <div class="page">
+
+    <nav class="navbar">
+      <a href="index.html" class="logo">BullProsperity</a>
+
+      <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="hub.html">Hub</a>
+        <a href="course.html">Course</a>
+        <a href="tools.html">Tools</a>
+        <a href="setup-room.html" class="active">Setup Room</a>
+        <a href="login.html">Login</a>
+      </div>
+    </nav>
+
+    <section class="hero-shell">
+      <div class="badge">Premium Mitgliederbereich</div>
+
+      <h1 class="hero-title">
+        Echte Marktbeispiele im
+        <span class="gold">BullProsperity Setup Room</span>
+      </h1>
+
+      <p class="hero-text">
+        Hier findest du Marktanalysen, Setup-Ideen und Praxisbeispiele aus der
+        BullProsperity Strategie. Dieser Bereich hilft dir, das Wissen aus Modul 8
+        direkt in echten Marktbewegungen zu verstehen und sauber nachzuvollziehen.
+      </p>
+
+      <div class="hero-buttons">
+        <a href="course.html" class="btn primary">Zum Kurs</a>
+        <a href="tools.html" class="btn secondary">Zu den Tools</a>
+      </div>
+
+      <div class="hero-cards">
+        <div class="mini-card">
+          <h3>Liquidity</h3>
+          <p>Setups rund um Sweeps, Stop Hunts und institutionelle Bewegungen.</p>
+        </div>
+
+        <div class="mini-card">
+          <h3>Entries</h3>
+          <p>Klare Entry-Beispiele mit Confirmation, Timing und Struktur.</p>
+        </div>
+
+        <div class="mini-card">
+          <h3>Premium</h3>
+          <p>Exklusive Mitgliederbeispiele, Analysen und strukturierte Setup-Ideen.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="section-heading">Aktuelle Setup Kategorien</h2>
+      <p class="section-subtext">
+        Diese Bereiche sind direkt verlinkt. Du kannst später jede Kategorie
+        mit einer eigenen Unterseite oder einem eigenen Analysebereich verbinden.
+      </p>
+
+      <div class="setup-grid">
+        <div class="setup-card">
+          <div>
+            <div class="setup-top">
+              <span class="setup-pill">SMC</span>
+              <span class="setup-status">Live Fokus</span>
+            </div>
+            <h3>Liquidity Setups</h3>
+            <p>
+              Beispiele für Liquidity Sweeps, Stop Hunts und institutionelle
+              Bewegungen rund um Equal Highs und Equal Lows.
+            </p>
+          </div>
+          <a href="liquidity.html" class="setup-link">Setups ansehen</a>
+        </div>
+
+        <div class="setup-card">
+          <div>
+            <div class="setup-top">
+              <span class="setup-pill">Entries</span>
+              <span class="setup-status">High Value</span>
+            </div>
+            <h3>Entry Modelle</h3>
+            <p>
+              BullProsperity Entry Modelle mit Confirmation, Struktur,
+              Timing und sauberer Ausführung.
+            </p>
+          </div>
+          <a href="entry-models.html" class="setup-link">Beispiele ansehen</a>
+        </div>
+
+        <div class="setup-card">
+          <div>
+            <div class="setup-top">
+              <span class="setup-pill">Structure</span>
+              <span class="setup-status">Core</span>
+            </div>
+            <h3>Marktstruktur</h3>
+            <p>
+              BOS, CHoCH, Strukturwechsel und Trendverständnis im Chart
+              mit klarer visueller Erklärung.
+            </p>
+          </div>
+          <a href="market-structure.html" class="setup-link">Charts öffnen</a>
+        </div>
+
+        <div class="setup-card">
+          <div>
+            <div class="setup-top">
+              <span class="setup-pill">Practice</span>
+              <span class="setup-status">Training</span>
+            </div>
+            <h3>Replay Analyse</h3>
+            <p>
+              Trainiere dein Auge mit Replay Analysen und markiere
+              eigene Setups zur besseren Routineentwicklung.
+            </p>
+          </div>
+          <a href="replay.html" class="setup-link">Analyse starten</a>
+        </div>
+
+        <div class="setup-card">
+          <div>
+            <div class="setup-top">
+              <span class="setup-pill">Examples</span>
+              <span class="setup-status">Praxis</span>
+            </div>
+            <h3>Live Beispiele</h3>
+            <p>
+              Beispiele aus echten Marktbewegungen erklärt, damit du
+              Timing, Struktur und Bestätigung besser verstehst.
+            </p>
+          </div>
+          <a href="live-setups.html" class="setup-link">Beispiele ansehen</a>
+        </div>
+
+        <div class="setup-card">
+          <div>
+            <div class="setup-top">
+              <span class="setup-pill">Members</span>
+              <span class="setup-status">Community</span>
+            </div>
+            <h3>Community Setups</h3>
+            <p>
+              Setup-Ideen und Beispiele aus dem Mitgliederbereich
+              für mehr Austausch und mehrere Perspektiven.
+            </p>
+          </div>
+          <a href="community.html" class="setup-link">Community öffnen</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section-card">
+      <div class="double-grid">
+        <div>
+          <h2 class="section-heading" style="font-size:36px; margin-bottom:10px;">Warum dieser Bereich?</h2>
+          <p class="section-subtext" style="margin-bottom:0;">
+            Ein Setup Room macht deine Plattform stärker, weil Mitglieder nicht nur
+            Lektionen sehen, sondern echte Marktanwendungen direkt vor sich haben.
+          </p>
+        </div>
+
+        <div class="list-box">
+          <div class="list-item">Setups verbinden Modul 8 direkt mit echten Chart-Beispielen.</div>
+          <div class="list-item">Mitglieder verstehen Theorie, Kontext und Timing deutlich besser.</div>
+          <div class="list-item">Die Plattform wirkt sofort hochwertiger und professioneller.</div>
+          <div class="list-item">Jeder Bereich kann später mit eigenen Analysen ausgebaut werden.</div>
+        </div>
+      </div>
+    </section>
+
+    <div class="footer-note">
+      BullProsperity dient ausschließlich Bildungszwecken und stellt keine Finanzberatung dar.
+    </div>
+  </div>
 </body>
 </html>
