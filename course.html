@@ -1,71 +1,374 @@
-
 <!DOCTYPE html>
 <html lang="de">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BullProsperity | Course</title>
-<link rel="stylesheet" href="theme.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BullProsperity | Course</title>
+  <link rel="stylesheet" href="theme.css" />
+
+  <script>
+    (async () => {
+      try {
+        const res = await fetch("/api/access", {
+          credentials: "include"
+        });
+        const data = await res.json();
+
+        if (data.role !== "admin" && data.role !== "premium") {
+          window.location.href = "locked.html";
+        }
+      } catch (err) {
+        window.location.href = "locked.html";
+      }
+    })();
+  </script>
+
+  <style>
+    .course-layout{
+      display:grid;
+      grid-template-columns:430px 1fr;
+      gap:24px;
+      align-items:start;
+    }
+
+    .course-sidebar,
+    .course-main-card{
+      border:1px solid var(--line);
+      border-radius:28px;
+      background:linear-gradient(180deg, var(--panel), var(--panel-2));
+      box-shadow:0 0 0 1px rgba(255,255,255,0.02) inset;
+    }
+
+    .course-sidebar{
+      padding:22px;
+      position:sticky;
+      top:20px;
+      max-height:calc(100vh - 40px);
+      overflow:hidden;
+    }
+
+    .course-scroll{
+      height:calc(100vh - 140px);
+      overflow-y:auto;
+      padding-right:8px;
+    }
+
+    .course-scroll::-webkit-scrollbar{
+      width:8px;
+    }
+
+    .course-scroll::-webkit-scrollbar-thumb{
+      background:var(--gold);
+      border-radius:999px;
+    }
+
+    .course-scroll::-webkit-scrollbar-track{
+      background:rgba(255,255,255,0.06);
+      border-radius:999px;
+    }
+
+    .course-subtitle{
+      color:var(--subtle);
+      font-size:15px;
+      margin-bottom:16px;
+    }
+
+    .progress-head{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      margin-bottom:12px;
+      font-weight:800;
+      font-size:16px;
+    }
+
+    .progress-bar{
+      width:100%;
+      height:16px;
+      background:#2b2b2b;
+      border-radius:999px;
+      overflow:hidden;
+      border:1px solid rgba(255,255,255,0.08);
+      margin-bottom:22px;
+    }
+
+    .progress-fill{
+      width:18%;
+      height:100%;
+      background:linear-gradient(90deg,var(--gold),#ffea61);
+      border-radius:999px;
+      box-shadow:0 0 20px rgba(243,210,27,0.22);
+    }
+
+    .course-main{
+      display:grid;
+      gap:24px;
+    }
+
+    .course-main-card{
+      padding:24px;
+    }
+
+    .video-placeholder{
+      margin-top:18px;
+      min-height:240px;
+      border-radius:22px;
+      border:1px solid rgba(243,210,27,0.18);
+      background:
+        radial-gradient(circle at center, rgba(255,255,255,0.03), rgba(255,255,255,0.01)),
+        #101010;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      text-align:center;
+      color:#d7d7d7;
+      padding:24px;
+      line-height:1.5;
+    }
+
+    @media(max-width:1200px){
+      .course-layout{
+        grid-template-columns:1fr;
+      }
+
+      .course-sidebar{
+        position:relative;
+        top:0;
+        max-height:none;
+      }
+
+      .course-scroll{
+        height:auto;
+        overflow:visible;
+        padding-right:0;
+      }
+    }
+  </style>
 </head>
-
 <body>
-<div class="page">
+  <div class="page">
 
-<nav class="navbar">
-<a href="index.html" class="logo">BullProsperity</a>
-<div class="nav-links">
-<a href="index.html">Home</a>
-<a href="hub.html">Hub</a>
-<a href="course.html">Course</a>
-<a href="tools.html">Tools</a>
-<a href="setup-room.html">Setup Room</a>
-<a href="community.html">Community</a>
-</div>
-</nav>
+    <nav class="navbar">
+      <a href="index.html" class="logo">BullProsperity</a>
 
-<section class="hero-shell">
-<div class="badge">BullProsperity</div>
-<h1 class="hero-title">Course</h1>
-<p class="hero-text">
-Dieser Bereich gehört zur BullProsperity Plattform. Die Seite nutzt dein zentrales Theme,
-damit alle Bereiche visuell einheitlich bleiben.
-</p>
+      <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="hub.html">Hub</a>
+        <a href="course.html" class="active">Course</a>
+        <a href="tools.html">Tools</a>
+        <a href="setup-room.html">Setup Room</a>
+        <a href="community.html">Community</a>
+        <a href="login.html">Login</a>
+      </div>
+    </nav>
 
-<div class="hero-buttons">
-<a href="hub.html" class="btn primary">Zum Hub</a>
-<a href="course.html" class="btn secondary">Zum Kurs</a>
-</div>
-</section>
+    <section class="hero-shell">
+      <div class="badge">Education Platform</div>
 
-<section class="section">
-<h2 class="section-heading">Inhalt</h2>
-<p class="section-subtext">
-Hier kannst du später Inhalte, Videos oder Charts einfügen.
-</p>
+      <h1 class="hero-title">
+        Der komplette
+        <span class="gold">BullProsperity Course</span>
+      </h1>
 
-<div class="grid-2">
+      <p class="hero-text">
+        Arbeite dich strukturiert durch alle Module – von den Grundlagen bis zur
+        BullProsperity SMC Strategie. Jedes Thema baut logisch aufeinander auf,
+        damit Mitglieder nicht nur Wissen sammeln, sondern echte Klarheit entwickeln.
+      </p>
 
-<div class="section-card">
-<div class="badge">Bereich</div>
-<h3>Course</h3>
-<p>Hier kommt dein Content rein.</p>
-<a href="#" class="card-link">Mehr anzeigen</a>
-</div>
+      <div class="hero-buttons">
+        <a href="lesson1.html" class="btn primary">Mit Lektion 1 starten</a>
+        <a href="hub.html" class="btn secondary">Zurück zum Hub</a>
+      </div>
+    </section>
 
-<div class="section-card">
-<div class="badge">Information</div>
-<h3>BullProsperity</h3>
-<p>Diese Seite ist Teil deiner Education Plattform.</p>
-<a href="#" class="card-link">Details</a>
-</div>
+    <section class="course-layout">
 
-</div>
-</section>
+      <aside class="course-sidebar">
+        <div class="course-subtitle">Education Platform.</div>
 
-<div class="footer-note">
-BullProsperity dient ausschließlich Bildungszwecken und stellt keine Finanzberatung dar.
-</div>
+        <div class="progress-head">
+          <span>Gesamtfortschritt</span>
+          <span>18%</span>
+        </div>
 
-</div>
+        <div class="progress-bar">
+          <div class="progress-fill"></div>
+        </div>
+
+        <div class="course-scroll">
+
+          <div class="module">
+            <div class="module-header">
+              <div class="module-title">Modul 1 — Einführung</div>
+              <div class="module-count">4 Lektionen</div>
+            </div>
+
+            <a href="lesson1.html" class="lesson active">Lesson 1 — Willkommen bei BullProsperity</a>
+            <a href="lesson2.html" class="lesson">Lesson 2 — Wie du diese Plattform richtig nutzt</a>
+            <a href="lesson3.html" class="lesson">Lesson 3 — Risikoaufklärung & wichtiger Hinweis</a>
+            <a href="lesson4.html" class="lesson">Lesson 4 — Warum die meisten Trader scheitern</a>
+          </div>
+
+          <div class="module">
+            <div class="module-header">
+              <div class="module-title">Modul 2 — Trading Grundlagen</div>
+              <div class="module-count">4 Lektionen</div>
+            </div>
+
+            <a href="lesson5.html" class="lesson">Lesson 5 — Was ist Trading wirklich</a>
+            <a href="lesson6.html" class="lesson">Lesson 6 — Warum Retail Trader verlieren</a>
+            <a href="lesson7.html" class="lesson">Lesson 7 — Die wichtigsten Märkte erklärt</a>
+            <a href="lesson8.html" class="lesson">Lesson 8 — Was du zum Traden brauchst</a>
+          </div>
+
+          <div class="module">
+            <div class="module-header">
+              <div class="module-title">Modul 3 — Chartanalyse</div>
+              <div class="module-count">4 Lektionen</div>
+            </div>
+
+            <a href="lesson9.html" class="lesson">Lesson 9 — Grundlagen der Chartanalyse</a>
+            <a href="lesson10.html" class="lesson">Lesson 10 — Marktstruktur verstehen</a>
+            <a href="lesson11.html" class="lesson">Lesson 11 — Trend, Range und Impuls</a>
+            <a href="lesson12.html" class="lesson">Lesson 12 — Support & Resistance</a>
+          </div>
+
+          <div class="module">
+            <div class="module-header">
+              <div class="module-title">Modul 4 — Liquidität & Marktbewegung</div>
+              <div class="module-count">4 Lektionen</div>
+            </div>
+
+            <a href="lesson13.html" class="lesson">Lesson 13 — Liquidity Grundlagen</a>
+            <a href="lesson14.html" class="lesson">Lesson 14 — Warum Märkte Liquidität suchen</a>
+            <a href="lesson15.html" class="lesson">Lesson 15 — Marktbewegungen verstehen</a>
+            <a href="lesson16.html" class="lesson">Lesson 16 — Institutionelle Marktteilnehmer</a>
+          </div>
+
+          <div class="module">
+            <div class="module-header">
+              <div class="module-title">Modul 5 — Entry Verständnis</div>
+              <div class="module-count">4 Lektionen</div>
+            </div>
+
+            <a href="lesson17.html" class="lesson">Lesson 17 — Timing & Trading Sessions</a>
+            <a href="lesson18.html" class="lesson">Lesson 18 — Entries verstehen</a>
+            <a href="lesson19.html" class="lesson">Lesson 19 — Confirmation Signale</a>
+            <a href="lesson20.html" class="lesson">Lesson 20 — Beispielanalysen</a>
+          </div>
+
+          <div class="module">
+            <div class="module-header">
+              <div class="module-title">Modul 6 — Risk Management</div>
+              <div class="module-count">4 Lektionen</div>
+            </div>
+
+            <a href="lesson21.html" class="lesson">Lesson 21 — Risk Management Grundlagen</a>
+            <a href="lesson22.html" class="lesson">Lesson 22 — Positionsgröße berechnen</a>
+            <a href="lesson23.html" class="lesson">Lesson 23 — Risk-Reward Verhältnis</a>
+            <a href="lesson24.html" class="lesson">Lesson 24 — Drawdown Kontrolle</a>
+          </div>
+
+          <div class="module">
+            <div class="module-header">
+              <div class="module-title">Modul 7 — Psychologie & Routine</div>
+              <div class="module-count">6 Lektionen</div>
+            </div>
+
+            <a href="lesson25.html" class="lesson">Lesson 25 — Trading Psychologie</a>
+            <a href="lesson26.html" class="lesson">Lesson 26 — Emotionen im Trading</a>
+            <a href="lesson27.html" class="lesson">Lesson 27 — Disziplin entwickeln</a>
+            <a href="lesson28.html" class="lesson">Lesson 28 — Tagesablauf eines Traders</a>
+            <a href="lesson29.html" class="lesson">Lesson 29 — Trading Journal</a>
+            <a href="lesson30.html" class="lesson">Lesson 30 — Kontinuierliche Verbesserung</a>
+          </div>
+
+          <div class="module">
+            <div class="module-header">
+              <div class="module-title">Modul 8 — BullProsperity SMC Strategie</div>
+              <div class="module-count">4 Lektionen</div>
+            </div>
+
+            <a href="lesson31.html" class="lesson">Lesson 31 — Das BullProsperity Marktmodell</a>
+            <a href="lesson32.html" class="lesson">Lesson 32 — Institutionelle Preiszonen</a>
+            <a href="lesson33.html" class="lesson">Lesson 33 — Das BullProsperity Entry Modell</a>
+            <a href="lesson34.html" class="lesson">Lesson 34 — Live Setup Beispiele</a>
+          </div>
+
+        </div>
+      </aside>
+
+      <div class="course-main">
+
+        <div class="course-main-card">
+          <div class="badge">Pflichtlektion</div>
+          <h2 class="section-heading" style="font-size:36px; margin-bottom:10px;">Starte mit Modul 1</h2>
+          <p class="section-subtext" style="margin-bottom:16px;">
+            Beginne mit der Einführung und arbeite dich danach Modul für Modul durch.
+            Die Education ist sauber strukturiert und leicht nachvollziehbar aufgebaut.
+          </p>
+
+          <div class="button-row">
+            <a href="lesson1.html" class="btn primary">Erste Lektion öffnen</a>
+            <a href="hub.html" class="btn secondary">Zurück zum Hub</a>
+          </div>
+
+          <div class="video-placeholder">
+            Hier kannst du später ein Einführungsvideo, ein Overview-Video
+            oder einen kurzen Guide für die komplette Course-Struktur einbauen.
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div class="section-card">
+            <div class="badge">Warum diese Struktur?</div>
+            <h2 class="section-heading" style="font-size:34px; margin-bottom:10px;">Logischer Lernaufbau</h2>
+
+            <div class="list-box">
+              <div class="list-item">Jedes Thema ist klar einem Modul zugeordnet.</div>
+              <div class="list-item">Die Reihenfolge baut sinnvoll aufeinander auf.</div>
+              <div class="list-item">Die Navigation bleibt übersichtlich und professionell.</div>
+              <div class="list-item">Modul 8 bündelt die BullProsperity Hauptstrategie.</div>
+            </div>
+          </div>
+
+          <div class="section-card">
+            <div class="badge">BullProsperity Fokus</div>
+            <h2 class="section-heading" style="font-size:34px; margin-bottom:10px;">Was Mitglieder hier lernen</h2>
+            <p class="section-subtext" style="margin-bottom:0;">
+              Von den absoluten Grundlagen über Marktstruktur, Liquidität,
+              Entry-Verständnis, Risk Management und Trading Psychologie bis hin
+              zur vollständigen BullProsperity SMC Strategie.
+            </p>
+          </div>
+        </div>
+
+        <div class="section-card">
+          <div class="badge">Modul 8 Highlight</div>
+          <h2 class="section-heading" style="font-size:34px; margin-bottom:10px;">Die BullProsperity SMC Strategie</h2>
+
+          <div class="grid-2">
+            <div class="list-box">
+              <div class="list-item">Lesson 31 — Das BullProsperity Marktmodell</div>
+              <div class="list-item">Lesson 32 — Institutionelle Preiszonen</div>
+            </div>
+
+            <div class="list-box">
+              <div class="list-item">Lesson 33 — Das BullProsperity Entry Modell</div>
+              <div class="list-item">Lesson 34 — Live Setup Beispiele</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </section>
+
+    <div class="footer-note">
+      BullProsperity dient ausschließlich Bildungs- und Informationszwecken und stellt keine Finanzberatung dar.
+    </div>
+
+  </div>
 </body>
 </html>
