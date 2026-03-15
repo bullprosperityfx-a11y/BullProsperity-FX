@@ -23,6 +23,44 @@
   </script>
 
   <style>
+    .module{
+margin-top:20px;
+}
+
+.module-header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+font-weight:700;
+font-size:16px;
+color:#ffd700;
+margin-bottom:10px;
+}
+
+.lesson-item{
+display:block;
+text-decoration:none;
+color:#ffffff;
+background:rgba(255,255,255,0.03);
+border:1px solid rgba(255,215,0,0.15);
+border-radius:14px;
+padding:14px 16px;
+margin-top:10px;
+font-weight:600;
+transition:0.2s;
+}
+
+.lesson-item:hover{
+color:#ffd700;
+background:rgba(255,255,255,0.05);
+border:1px solid rgba(255,215,0,0.4);
+}
+
+.lesson-item.active{
+border:1px solid #ffd700;
+color:#ffd700;
+background:rgba(255,215,0,0.08);
+}
     * {
       margin: 0;
       padding: 0;
