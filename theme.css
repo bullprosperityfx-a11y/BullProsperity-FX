@@ -285,15 +285,13 @@ body::after{
 .community-link,
 .tool-link{
   text-decoration:none;
-  width:100%;
-  text-align:center;
-  padding:13px 16px;
+  padding:13px 18px;
   border-radius:14px;
   font-weight:800;
   background:var(--gold);
   color:#111;
   transition:0.2s ease;
-  display:block;
+  display:inline-block;
   margin-top:18px;
 }
 
