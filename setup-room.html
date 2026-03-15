@@ -1,1 +1,425 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<title>BullProsperity | Setup Room</title>
+
+<script>
+(async () => {
+  try {
+    const res = await fetch("/api/access",{credentials:"include"});
+    const data = await res.json();
+
+    if(data.role !== "admin" && data.role !== "premium"){
+      window.location.href="locked.html";
+    }
+  } catch(err){
+    window.location.href="locked.html";
+  }
+})();
+</script>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial, Helvetica, sans-serif;
+}
+
+body{
+
+background:
+radial-gradient(circle at top left, rgba(255,215,0,0.06), transparent 20%),
+radial-gradient(circle at bottom right, rgba(255,215,0,0.05), transparent 25%),
+#050505;
+
+color:white;
+min-height:100vh;
+}
+
+.page{
+max-width:1400px;
+margin:auto;
+padding:25px;
+}
+
+.topbar{
+
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:30px;
+flex-wrap:wrap;
+gap:15px;
+
+}
+
+.brand{
+font-size:28px;
+font-weight:900;
+color:#ffd700;
+}
+
+.brand span{
+color:white;
+}
+
+.nav{
+display:flex;
+gap:10px;
+flex-wrap:wrap;
+}
+
+.nav a{
+
+text-decoration:none;
+background:#111;
+color:white;
+padding:12px 18px;
+border-radius:14px;
+font-weight:700;
+border:1px solid rgba(255,215,0,0.35);
+
+}
+
+.nav a:hover{
+transform:translateY(-1px);
+}
+
+.hero{
+
+background:linear-gradient(180deg,#141414,#0c0c0c);
+border:2px solid rgba(255,215,0,0.25);
+border-radius:25px;
+
+padding:35px;
+margin-bottom:30px;
+
+}
+
+.hero h1{
+
+font-size:36px;
+color:#ffd700;
+margin-bottom:10px;
+
+}
+
+.hero p{
+
+font-size:17px;
+line-height:1.6;
+color:#eaeaea;
+max-width:700px;
+
+}
+
+.section-title{
+
+font-size:24px;
+font-weight:900;
+color:#ffd700;
+margin-bottom:15px;
+
+}
+
+.grid{
+
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:20px;
+
+}
+
+.card{
+
+background:linear-gradient(180deg,#141414,#0c0c0c);
+border:2px solid rgba(255,215,0,0.25);
+border-radius:22px;
+
+padding:20px;
+min-height:200px;
+
+display:flex;
+flex-direction:column;
+justify-content:space-between;
+
+transition:0.2s;
+
+}
+
+.card:hover{
+
+transform:translateY(-3px);
+border-color:rgba(255,215,0,0.5);
+box-shadow:0 0 20px rgba(255,215,0,0.1);
+
+}
+
+.badge{
+
+display:inline-block;
+padding:7px 12px;
+border-radius:999px;
+
+border:1px solid rgba(255,215,0,0.3);
+background:rgba(255,215,0,0.1);
+color:#ffd700;
+font-weight:700;
+font-size:13px;
+
+margin-bottom:10px;
+
+}
+
+.card h3{
+
+font-size:20px;
+color:#ffd700;
+margin-bottom:10px;
+
+}
+
+.card p{
+
+font-size:15px;
+color:#eee;
+line-height:1.5;
+
+}
+
+.card a{
+
+margin-top:15px;
+text-decoration:none;
+
+background:#ffd700;
+color:#111;
+font-weight:800;
+
+padding:12px;
+border-radius:12px;
+text-align:center;
+
+}
+
+.card a:hover{
+transform:translateY(-1px);
+}
+
+.footer{
+
+margin-top:40px;
+font-size:13px;
+color:#aaa;
+text-align:center;
+
+}
+
+@media(max-width:1000px){
+
+.grid{
+grid-template-columns:1fr 1fr;
+}
+
+}
+
+@media(max-width:700px){
+
+.grid{
+grid-template-columns:1fr;
+}
+
+.hero h1{
+font-size:28px;
+}
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="page">
+
+<div class="topbar">
+
+<div class="brand">BullProsperity <span>| Setup Room</span></div>
+
+<div class="nav">
+
+<a href="hub.html">Hub</a>
+<a href="course.html">Course</a>
+<a href="tools.html">Tools</a>
+
+</div>
+
+</div>
+
+
+<div class="hero">
+
+<h1>Setup Room</h1>
+
+<p>
+
+Hier findest du Marktanalysen, Setups und Beispiele aus der BullProsperity Strategie.
+
+Dieser Bereich hilft dir zu verstehen, wie das Konzept aus Modul 8
+in echten Marktbewegungen angewendet wird.
+
+</p>
+
+</div>
+
+
+
+<h2 class="section-title">Aktuelle Setup Kategorien</h2>
+
+<div class="grid">
+
+<div class="card">
+
+<div>
+
+<div class="badge">SMC</div>
+
+<h3>Liquidity Setups</h3>
+
+<p>
+
+Beispiele für Liquidity Sweeps, Stop Hunts und institutionelle Bewegungen.
+
+</p>
+
+</div>
+
+<a href="#">Setups ansehen</a>
+
+</div>
+
+
+<div class="card">
+
+<div>
+
+<div class="badge">Entries</div>
+
+<h3>Entry Modelle</h3>
+
+<p>
+
+BullProsperity Entry Modelle mit Confirmation und Struktur.
+
+</p>
+
+</div>
+
+<a href="#">Beispiele ansehen</a>
+
+</div>
+
+
+<div class="card">
+
+<div>
+
+<div class="badge">Structure</div>
+
+<h3>Marktstruktur</h3>
+
+<p>
+
+BOS, CHoCH, Strukturwechsel und Trendverständnis im Chart.
+
+</p>
+
+</div>
+
+<a href="#">Charts öffnen</a>
+
+</div>
+
+
+<div class="card">
+
+<div>
+
+<div class="badge">Practice</div>
+
+<h3>Replay Analyse</h3>
+
+<p>
+
+Trainiere dein Auge mit Replay Analysen und markiere eigene Setups.
+
+</p>
+
+</div>
+
+<a href="#">Analyse starten</a>
+
+</div>
+
+
+<div class="card">
+
+<div>
+
+<div class="badge">Examples</div>
+
+<h3>Live Beispiele</h3>
+
+<p>
+
+Beispiele aus echten Marktbewegungen erklärt.
+
+</p>
+
+</div>
+
+<a href="#">Beispiele ansehen</a>
+
+</div>
+
+
+<div class="card">
+
+<div>
+
+<div class="badge">Members</div>
+
+<h3>Community Setups</h3>
+
+<p>
+
+Setups und Ideen von anderen BullProsperity Mitgliedern.
+
+</p>
+
+</div>
+
+<a href="#">Community öffnen</a>
+
+</div>
+
+
+</div>
+
+
+<div class="footer">
+
+BullProsperity dient ausschließlich Bildungszwecken und stellt keine Finanzberatung dar.
+
+</div>
+
+</div>
+
+</body>
+</html>
