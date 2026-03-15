@@ -4,12 +4,16 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>BullProsperity | Lesson 21</title>
+  <link rel="stylesheet" href="theme.css" />
 
   <script>
     (async () => {
       try {
-        const res = await fetch("/api/access", { credentials: "include" });
+        const res = await fetch("/api/access", {
+          credentials: "include"
+        });
         const data = await res.json();
+
         if (data.role !== "admin" && data.role !== "premium") {
           window.location.href = "locked.html";
         }
@@ -20,180 +24,137 @@
   </script>
 
   <style>
-    * { margin:0; padding:0; box-sizing:border-box; }
-    :root { --gold:#ffd700; --gold-soft:#ffe45e; --white:#ffffff; }
-    body {
-      font-family: Arial, Helvetica, sans-serif;
-      background:
-        radial-gradient(circle at top, rgba(255,215,0,0.07), transparent 35%),
-        linear-gradient(135deg, #050505, #090909 58%, #101010);
-      color: var(--white);
-      min-height:100vh;
+    .lesson-video-wrap{
+      border:1px solid var(--line);
+      border-radius:22px;
+      overflow:hidden;
+      background:#0c0c0c;
+      min-height:420px;
     }
-    .page-shell { width:min(1320px, calc(100% - 36px)); margin:18px auto; border:2px solid rgba(255,255,255,0.3); border-radius:16px; padding:22px 26px 34px; background:rgba(0,0,0,0.08); }
-    .topbar { display:flex; align-items:center; justify-content:space-between; margin-bottom:26px; gap:18px; }
-    .logo { color:var(--gold); font-weight:800; font-size:2.1rem; }
-    nav { display:flex; gap:26px; flex-wrap:wrap; }
-    nav a { color:#fff; text-decoration:none; font-weight:700; }
-    nav a.active, nav a:hover { color:var(--gold); }
-    .layout { width:min(1120px,100%); margin:0 auto; display:grid; grid-template-columns:340px 1fr; gap:18px; }
-    .card,.hero-card,.lesson-card { border:1px solid rgba(255,215,0,0.12); border-radius:28px; background:linear-gradient(180deg, rgba(16,16,16,0.96), rgba(11,11,11,0.95)); padding:24px 24px 22px; }
-    .top-tag { display:inline-block; padding:8px 16px; border-radius:999px; border:1px solid rgba(255,215,0,0.32); color:var(--gold-soft); background:rgba(255,215,0,0.07); font-size:13px; font-weight:700; margin-bottom:16px; }
-    .sidebar-title,.card h2,.lesson-card h3 { color:var(--gold); font-weight:900; }
-    .sidebar-title { font-size:2rem; margin-bottom:10px; }
-    .sidebar-text,.hero-text,.card p,.lesson-card p { color:#f0f0f0; font-size:.95rem; line-height:1.6; }
-    .progress-wrap { margin-top:16px; }
-    .progress-label { display:flex; justify-content:space-between; font-size:.95rem; font-weight:700; margin-bottom:10px; }
-    .progress-bar { width:100%; height:14px; border-radius:999px; background:rgba(255,255,255,0.06); overflow:hidden; }
-    .progress-fill { width:70%; height:100%; background:linear-gradient(135deg,#ffe15b,#f0b90b); }
-    .module-list { display:grid; gap:14px; margin-top:18px; }
-    .module-item { background:rgba(255,255,255,0.03); border:1px solid rgba(255,215,0,0.1); border-radius:18px; padding:14px; }
-    .module-item.active { border-color:rgba(255,215,0,0.24); background:rgba(255,255,255,0.05); }
-    .module-head { display:flex; justify-content:space-between; gap:10px; margin-bottom:8px; }
-    .module-name { color:var(--gold); font-weight:800; }
-    .module-count { color:#d8d8d8; font-size:.82rem; font-weight:700; }
-    .module-sub { display:grid; gap:8px; margin-top:10px; }
-    .lesson-link { display:block; text-decoration:none; color:#fff; border:1px solid rgba(255,215,0,0.1); background:rgba(255,255,255,0.02); border-radius:14px; padding:10px 12px; font-size:.88rem; font-weight:700; }
-    .lesson-link.active,.lesson-link:hover { color:var(--gold); border-color:rgba(255,215,0,0.3); }
-    .content-stack { display:grid; gap:18px; }
-    .hero-card h1 { font-size:clamp(2.5rem,4vw,4.2rem); line-height:.98; font-weight:900; margin-bottom:16px; }
-    .hero-card h1 .white { color:#fff; }
-    .hero-card h1 .gold { color:var(--gold); }
-    .btn-row { display:flex; gap:14px; flex-wrap:wrap; margin-top:18px; }
-    .btn { min-width:155px; display:inline-flex; justify-content:center; align-items:center; padding:14px 20px; border-radius:16px; font-weight:800; text-decoration:none; font-size:.95rem; }
-    .btn-gold { color:#111; background:linear-gradient(135deg,#ffe15b,#f0b90b); }
-    .btn-outline { color:#fff; border:1px solid rgba(255,215,0,0.28); background:rgba(255,255,255,0.02); }
-    .video-placeholder { margin-top:16px; min-height:260px; border-radius:22px; border:1px solid rgba(255,215,0,0.12); background:rgba(255,255,255,0.02); display:flex; align-items:center; justify-content:center; text-align:center; padding:24px; }
-    .lesson-grid,.nav-row { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:18px; }
-    .mini-list { list-style:none; display:grid; gap:12px; margin-top:14px; }
-    .mini-list li { background:rgba(255,255,255,0.03); border:1px solid rgba(255,215,0,0.1); border-radius:16px; padding:14px 16px; font-weight:700; }
-    .nav-card { display:block; text-decoration:none; color:#fff; border:1px solid rgba(255,215,0,0.12); border-radius:20px; padding:18px; background:rgba(255,255,255,0.02); }
-    .nav-card span { display:block; font-size:.82rem; font-weight:700; color:#cfcfcf; margin-bottom:8px; }
-    .nav-card strong { display:block; font-size:1rem; line-height:1.4; }
-    .center-note { text-align:center; padding-top:4px; }
-    .center-note h2 { color:var(--gold); font-size:clamp(2rem,3.4vw,3.1rem); margin-bottom:12px; font-weight:900; }
-    .center-note p { color:#ededed; line-height:1.7; font-size:1rem; max-width:820px; margin:0 auto; font-weight:600; }
-    @media (max-width:1000px){ .layout,.lesson-grid,.nav-row{grid-template-columns:1fr;} }
+
+    .lesson-video-wrap iframe{
+      width:100%;
+      height:500px;
+      border:none;
+      display:block;
+      background:#0c0c0c;
+    }
+
+    .notes-box{
+      width:100%;
+      min-height:220px;
+      border-radius:18px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,0.02);
+      color:#fff;
+      padding:16px;
+      resize:vertical;
+      outline:none;
+      font-size:15px;
+    }
+
+    .lesson-nav{
+      display:flex;
+      gap:14px;
+      flex-wrap:wrap;
+      margin-top:18px;
+    }
+
+    @media(max-width:860px){
+      .lesson-video-wrap iframe{
+        height:320px;
+      }
+    }
   </style>
 </head>
 <body>
-  <div class="page-shell">
-    <div class="topbar">
-      <div class="logo">BullProsperity</div>
-      <nav>
-        <a href="/index.html">Home</a>
-        <a href="/hub.html">Hub</a>
-        <a href="/course.html" class="active">Course</a>
-        <a href="/tools.html">Tools</a>
-        <a href="/api/whop/login">Login</a>
-      </nav>
-    </div>
+  <div class="page">
 
-    <div class="layout">
-      <aside class="card">
-        <div class="top-tag">Education Bereich</div>
-        <h2 class="sidebar-title">Learning Modules</h2>
-        <p class="sidebar-text">Alle Module, Lektionen und Inhalte an einem Ort. Arbeite dich Schritt für Schritt sauber und strukturiert durch deine Education Platform.</p>
+    <nav class="navbar">
+      <a href="index.html" class="logo">BullProsperity</a>
 
-        <div class="progress-wrap">
-          <div class="progress-label">
-            <span>Gesamtfortschritt</span>
-            <span>70%</span>
+      <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="hub.html">Hub</a>
+        <a href="course.html" class="active">Course</a>
+        <a href="tools.html">Tools</a>
+        <a href="setup-room.html">Setup Room</a>
+        <a href="community.html">Community</a>
+        <a href="login.html">Login</a>
+      </div>
+    </nav>
+
+    <section class="hero-shell">
+      <div class="badge">Modul 6 • Lesson 21</div>
+
+      <h1 class="hero-title">
+        Lesson 21 — <span class="gold">Risk Management Grundlagen</span>
+      </h1>
+
+      <p class="hero-text">
+        Hier lernst du, warum Risk Management langfristig wichtiger ist als einzelne Trades und wie du dich vor unnötigem Schaden schützt.
+      </p>
+
+      <div class="hero-buttons">
+        <a href="course.html" class="btn primary">Zurück zum Kurs</a>
+        <a href="lesson22.html" class="btn secondary">Nächste Lektion</a>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="grid-2">
+        <div class="section-card">
+          <div class="badge">Video Lesson</div>
+          <div class="lesson-video-wrap">
+            <iframe
+              src="https://www.youtube.com/embed/DEINE_VIDEO_ID"
+              allowfullscreen>
+            </iframe>
           </div>
-          <div class="progress-bar"><div class="progress-fill"></div></div>
         </div>
 
-        <div class="module-list">
-          <div class="module-item active">
-            <div class="module-head">
-              <span class="module-name">Modul 6 – Risk Management</span>
-              <span class="module-count">4 Lektionen</span>
-            </div>
-            <div class="module-sub">
-              <a href="/lesson21.html" class="lesson-link active">Lesson 21 – Risk Management Grundlagen</a>
-              <a href="/lesson22.html" class="lesson-link">Lesson 22 – Positionsgröße berechnen</a>
-              <a href="/lesson23.html" class="lesson-link">Lesson 23 – Risk-Reward Verhältnis</a>
-              <a href="/lesson24.html" class="lesson-link">Lesson 24 – Drawdown Kontrolle</a>
-            </div>
+        <div class="section-card">
+          <div class="badge">Was du lernst</div>
+          <div class="list-box">
+            <div class="list-item">Warum Risiko überleben sichert</div>
+            <div class="list-item">Wie du pro Trade denkst</div>
+            <div class="list-item">Warum gute Setups trotzdem verlieren können</div>
+            <div class="list-item">Weshalb Konsistenz wichtiger als Nervenkitzel ist</div>
           </div>
         </div>
-      </aside>
+      </div>
+    </section>
 
-      <main class="content-stack">
-        <section class="hero-card">
-          <div class="top-tag">Lesson 21</div>
-          <h1>
-            <span class="white">Risk Management</span><br>
-            <span class="gold">Grundlagen</span>
-          </h1>
-          <p class="hero-text">
-            Diese Lesson vermittelt dir die Grundlagen eines sauberen und langfristig sinnvollen Risikomanagements.
-          </p>
+    <section class="section">
+      <div class="section-card">
+        <div class="badge">Deine Notizen</div>
+        <textarea id="lessonNotes" class="notes-box" placeholder="Schreibe hier deine Notizen..."></textarea>
 
-          <div class="btn-row">
-            <a href="/course.html" class="btn btn-outline">Zur Kursübersicht</a>
-            <a href="/lesson22.html" class="btn btn-gold">Nächste Lesson</a>
-          </div>
-        </section>
+        <div class="lesson-nav">
+          <a href="lesson20.html" class="btn secondary">Vorherige Lektion</a>
+          <a href="lesson22.html" class="btn primary">Nächste Lektion</a>
+        </div>
+      </div>
+    </section>
 
-        <section class="card">
-          <div class="top-tag">Lesson Video</div>
-          <h3>Video</h3>
-          <p>Füge hier später dein Video für diese Lesson ein.</p>
-          <div class="video-placeholder">
-            <p>Hier kommt später dein Video für „Risk Management Grundlagen“ rein.</p>
-          </div>
-        </section>
-
-        <section class="lesson-grid">
-          <div class="lesson-card">
-            <div class="top-tag">In dieser Lesson</div>
-            <h3>Was du hier lernst</h3>
-            <ul class="mini-list">
-              <li>Warum Risiko wichtiger als einzelne Trades ist</li>
-              <li>Wie Kapital geschützt wird</li>
-              <li>Warum Struktur im Risiko entscheidend ist</li>
-            </ul>
-          </div>
-
-          <div class="lesson-card">
-            <div class="top-tag">Wichtiger Fokus</div>
-            <h3>Dein Fokus in dieser Lesson</h3>
-            <ul class="mini-list">
-              <li>Risiko vor dem Trade festlegen</li>
-              <li>Verlust akzeptieren können</li>
-              <li>Langfristig statt kurzfristig denken</li>
-            </ul>
-          </div>
-        </section>
-
-        <section class="card">
-          <div class="top-tag">Zusammenfassung</div>
-          <h3>Worum es in dieser Lesson geht</h3>
-          <p>Du lernst, warum Risikomanagement eine zentrale Grundlage für langfristige Stabilität im Trading ist.</p>
-        </section>
-
-        <section class="card">
-          <div class="top-tag">Navigation</div>
-          <h3>Weiter durch die Plattform</h3>
-          <div class="nav-row">
-            <a href="/lesson20.html" class="nav-card">
-              <span>Vorherige Lesson</span>
-              <strong>Lesson 20 – Beispielanalysen</strong>
-            </a>
-            <a href="/lesson22.html" class="nav-card">
-              <span>Nächste Lesson</span>
-              <strong>Lesson 22 – Positionsgröße berechnen</strong>
-            </a>
-          </div>
-        </section>
-
-        <section class="center-note">
-          <h2>Strukturiert lernen. Klarer Fortschritt.</h2>
-          <p>Genau so bleibt deine BullProsperity Education übersichtlich, professionell und leicht erweiterbar.</p>
-        </section>
-      </main>
+    <div class="footer-note">
+      BullProsperity dient ausschließlich Bildungs- und Informationszwecken und stellt keine Finanzberatung dar.
     </div>
+
   </div>
+
+  <script>
+    const notesBox = document.getElementById("lessonNotes");
+    const storageKey = "bullprosperity_notes_" + window.location.pathname;
+
+    const savedNotes = localStorage.getItem(storageKey);
+    if (savedNotes) {
+      notesBox.value = savedNotes;
+    }
+
+    notesBox.addEventListener("input", () => {
+      localStorage.setItem(storageKey, notesBox.value);
+    });
+  </script>
 </body>
 </html>

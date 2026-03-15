@@ -3,95 +3,158 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Lesson 32 – Institutionelle Preiszonen</title>
+  <title>BullProsperity | Lesson 32</title>
+  <link rel="stylesheet" href="theme.css" />
+
+  <script>
+    (async () => {
+      try {
+        const res = await fetch("/api/access", {
+          credentials: "include"
+        });
+        const data = await res.json();
+
+        if (data.role !== "admin" && data.role !== "premium") {
+          window.location.href = "locked.html";
+        }
+      } catch (err) {
+        window.location.href = "locked.html";
+      }
+    })();
+  </script>
+
   <style>
-    * { margin:0; padding:0; box-sizing:border-box; font-family:Arial,sans-serif; }
-    body { background:#050505; color:#fff; min-height:100vh; padding:30px 20px; }
-    .page { max-width:1100px; margin:0 auto; }
-    .back-btn {
-      display:inline-block; margin-bottom:25px; color:#ffd700; text-decoration:none; font-weight:bold;
-      border:1px solid rgba(255,215,0,.35); padding:12px 18px; border-radius:14px; background:#111;
+    .lesson-video-wrap{
+      border:1px solid var(--line);
+      border-radius:22px;
+      overflow:hidden;
+      background:#0c0c0c;
+      min-height:420px;
     }
-    .lesson-header, .card {
-      background:linear-gradient(180deg,#161616,#0d0d0d);
-      border:2px solid rgba(255,215,0,.3);
-      border-radius:24px;
-      padding:24px;
-      box-shadow:0 0 25px rgba(255,215,0,.06);
+
+    .lesson-video-wrap iframe{
+      width:100%;
+      height:500px;
+      border:none;
+      display:block;
+      background:#0c0c0c;
     }
-    .lesson-header { margin-bottom:24px; }
-    .module-tag {
-      display:inline-block; margin-bottom:16px; padding:8px 14px; border-radius:999px;
-      background:rgba(255,215,0,.12); color:#ffd700; border:1px solid rgba(255,215,0,.35); font-weight:bold;
+
+    .notes-box{
+      width:100%;
+      min-height:220px;
+      border-radius:18px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,0.02);
+      color:#fff;
+      padding:16px;
+      resize:vertical;
+      outline:none;
+      font-size:15px;
     }
-    h1 { color:#ffd700; margin-bottom:10px; font-size:2rem; }
-    .subtitle { color:#d7d7d7; line-height:1.6; }
-    .content-grid { display:grid; grid-template-columns:1.4fr .9fr; gap:24px; }
-    .card h2 { color:#ffd700; margin-bottom:16px; }
-    .video-wrap {
-      position:relative; width:100%; padding-top:56.25%; border-radius:18px; overflow:hidden;
-      border:1px solid rgba(255,215,0,.2); background:#000;
+
+    .lesson-nav{
+      display:flex;
+      gap:14px;
+      flex-wrap:wrap;
+      margin-top:18px;
     }
-    .video-wrap iframe { position:absolute; inset:0; width:100%; height:100%; border:none; }
-    ul { padding-left:18px; line-height:1.8; color:#ececec; }
-    .notes-box {
-      width:100%; min-height:240px; border-radius:16px; padding:16px; resize:vertical;
-      background:#0a0a0a; color:#fff; border:1px solid rgba(255,215,0,.25);
+
+    @media(max-width:860px){
+      .lesson-video-wrap iframe{
+        height:320px;
+      }
     }
-    .bottom-nav { display:flex; gap:15px; margin-top:24px; }
-    .nav-btn {
-      flex:1; text-align:center; text-decoration:none; padding:15px 20px; border-radius:16px; font-weight:bold;
-    }
-    .secondary { background:#141414; color:#fff; border:1px solid rgba(255,255,255,.12); }
-    .primary { background:#ffd700; color:#111; }
-    @media (max-width:900px){ .content-grid{ grid-template-columns:1fr; } h1{ font-size:1.6rem; } }
   </style>
 </head>
 <body>
   <div class="page">
-    <a href="course.html" class="back-btn">← Zurück zum Kurs</a>
 
-    <div class="lesson-header">
-      <div class="module-tag">Modul 8 — BullProsperity SMC Strategie</div>
-      <h1>Lesson 32 — Institutionelle Preiszonen</h1>
-      <p class="subtitle">
-        In dieser Lektion geht es um die Zonen, in denen große Marktteilnehmer reagieren:
-        Orderblocks, IC Candle, Fair Value Gaps und Marktineffizienzen.
+    <nav class="navbar">
+      <a href="index.html" class="logo">BullProsperity</a>
+
+      <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="hub.html">Hub</a>
+        <a href="course.html" class="active">Course</a>
+        <a href="tools.html">Tools</a>
+        <a href="setup-room.html">Setup Room</a>
+        <a href="community.html">Community</a>
+        <a href="login.html">Login</a>
+      </div>
+    </nav>
+
+    <section class="hero-shell">
+      <div class="badge">Modul 8 • Lesson 32</div>
+
+      <h1 class="hero-title">
+        Lesson 32 — <span class="gold">Institutionelle Preiszonen</span>
+      </h1>
+
+      <p class="hero-text">
+        Hier geht es um die Zonen, in denen große Marktteilnehmer reagieren: Orderblocks, IC Candle, Fair Value Gaps und Marktineffizienzen.
       </p>
-    </div>
 
-    <div class="content-grid">
-      <div class="card">
-        <h2>Video Lesson</h2>
-        <div class="video-wrap">
-          <iframe
-            src="https://www.youtube.com/embed/DEINE_VIDEO_ID"
-            allowfullscreen>
-          </iframe>
+      <div class="hero-buttons">
+        <a href="course.html" class="btn primary">Zurück zum Kurs</a>
+        <a href="lesson33.html" class="btn secondary">Nächste Lektion</a>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="grid-2">
+        <div class="section-card">
+          <div class="badge">Video Lesson</div>
+          <div class="lesson-video-wrap">
+            <iframe
+              src="https://www.youtube.com/embed/DEINE_VIDEO_ID"
+              allowfullscreen>
+            </iframe>
+          </div>
+        </div>
+
+        <div class="section-card">
+          <div class="badge">Was du lernst</div>
+          <div class="list-box">
+            <div class="list-item">Was institutionelle Preiszonen sind</div>
+            <div class="list-item">Wie Orderblocks gelesen werden</div>
+            <div class="list-item">Wie Fair Value Gaps genutzt werden</div>
+            <div class="list-item">Warum Zonen präzise Entries unterstützen</div>
+          </div>
         </div>
       </div>
+    </section>
 
-      <div class="card">
-        <h2>Was du in dieser Lektion lernst</h2>
-        <ul>
-          <li>Was echte institutionelle Zonen sind</li>
-          <li>Orderblocks sauber identifizieren</li>
-          <li>Die IC Candle verstehen</li>
-          <li>Fair Value Gaps und Inverse FVG nutzen</li>
-          <li>Warum Märkte Ineffizienzen oft ausgleichen</li>
-        </ul>
+    <section class="section">
+      <div class="section-card">
+        <div class="badge">Deine Notizen</div>
+        <textarea id="lessonNotes" class="notes-box" placeholder="Schreibe hier deine Notizen..."></textarea>
+
+        <div class="lesson-nav">
+          <a href="lesson31.html" class="btn secondary">Vorherige Lektion</a>
+          <a href="lesson33.html" class="btn primary">Nächste Lektion</a>
+        </div>
       </div>
+    </section>
+
+    <div class="footer-note">
+      BullProsperity dient ausschließlich Bildungs- und Informationszwecken und stellt keine Finanzberatung dar.
     </div>
 
-    <div class="card" style="margin-top: 24px;">
-      <h2>Deine Notizen</h2>
-      <textarea class="notes-box" placeholder="Schreibe hier deine Notizen zu Lesson 32..."></textarea>
-    </div>
-
-    <div class="bottom-nav">
-      <a href="lesson31.html" class="nav-btn secondary">← Vorherige Lektion</a>
-      <a href="lesson33.html" class="nav-btn primary">Nächste Lektion →</a>
-    </div>
   </div>
+
+  <script>
+    const notesBox = document.getElementById("lessonNotes");
+    const storageKey = "bullprosperity_notes_" + window.location.pathname;
+
+    const savedNotes = localStorage.getItem(storageKey);
+    if (savedNotes) {
+      notesBox.value = savedNotes;
+    }
+
+    notesBox.addEventListener("input", () => {
+      localStorage.setItem(storageKey, notesBox.value);
+    });
+  </script>
 </body>
 </html>
