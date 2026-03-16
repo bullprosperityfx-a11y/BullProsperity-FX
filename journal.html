@@ -1,1 +1,629 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BullProsperity | Trading Journal</title>
+  <link rel="stylesheet" href="theme.css" />
 
+  <script>
+    (async () => {
+      try {
+        const res = await fetch("/api/access", {
+          credentials: "include"
+        });
+        const data = await res.json();
+
+        if (data.role !== "admin" && data.role !== "premium") {
+          window.location.href = "locked.html";
+        }
+      } catch (err) {
+        window.location.href = "locked.html";
+      }
+    })();
+  </script>
+
+  <style>
+    .journal-layout{
+      display:grid;
+      grid-template-columns:1.05fr 0.95fr;
+      gap:24px;
+      align-items:start;
+    }
+
+    .journal-panel{
+      border:1px solid var(--line);
+      border-radius:28px;
+      background:linear-gradient(180deg, var(--panel), var(--panel-2));
+      box-shadow:0 0 0 1px rgba(255,255,255,0.02) inset;
+      padding:24px;
+    }
+
+    .form-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:16px;
+      margin-top:18px;
+    }
+
+    .field{
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+    }
+
+    .field.full{
+      grid-column:1 / -1;
+    }
+
+    .field label{
+      color:#f1f1f1;
+      font-size:14px;
+      font-weight:800;
+    }
+
+    .field input,
+    .field select,
+    .field textarea{
+      width:100%;
+      border-radius:16px;
+      border:1px solid rgba(243,210,27,0.18);
+      background:rgba(255,255,255,0.03);
+      color:#fff;
+      padding:14px 16px;
+      font-size:15px;
+      outline:none;
+    }
+
+    .field textarea{
+      min-height:130px;
+      resize:vertical;
+    }
+
+    .field input:focus,
+    .field select:focus,
+    .field textarea:focus{
+      border-color:rgba(243,210,27,0.48);
+      box-shadow:0 0 0 3px rgba(243,210,27,0.08);
+    }
+
+    .journal-actions{
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+      margin-top:20px;
+    }
+
+    .action-btn{
+      border:none;
+      cursor:pointer;
+    }
+
+    .stats-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:14px;
+      margin-top:18px;
+    }
+
+    .stat-card{
+      border:1px solid rgba(243,210,27,0.14);
+      border-radius:20px;
+      background:rgba(255,255,255,0.02);
+      padding:18px;
+    }
+
+    .stat-card .label{
+      color:#bdbdbd;
+      font-size:13px;
+      font-weight:700;
+      margin-bottom:8px;
+    }
+
+    .stat-card .value{
+      color:var(--gold);
+      font-size:28px;
+      font-weight:900;
+      line-height:1;
+    }
+
+    .helper-text{
+      color:#d8d8d8;
+      line-height:1.7;
+      font-size:15px;
+    }
+
+    .journal-list{
+      display:grid;
+      gap:14px;
+      margin-top:18px;
+    }
+
+    .entry-card{
+      border:1px solid rgba(243,210,27,0.14);
+      border-radius:20px;
+      background:rgba(255,255,255,0.02);
+      padding:18px;
+    }
+
+    .entry-top{
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      align-items:flex-start;
+      flex-wrap:wrap;
+      margin-bottom:12px;
+    }
+
+    .entry-title{
+      color:var(--gold);
+      font-size:18px;
+      font-weight:900;
+      line-height:1.2;
+    }
+
+    .entry-badge{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding:8px 14px;
+      border-radius:999px;
+      border:1px solid var(--gold-soft);
+      color:var(--gold);
+      background:rgba(243,210,27,0.06);
+      font-size:12px;
+      font-weight:800;
+    }
+
+    .entry-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
+      margin-bottom:12px;
+    }
+
+    .entry-item{
+      border:1px solid rgba(243,210,27,0.10);
+      border-radius:14px;
+      background:rgba(255,255,255,0.02);
+      padding:10px 12px;
+    }
+
+    .entry-item .k{
+      color:#a8a8a8;
+      font-size:12px;
+      font-weight:700;
+      margin-bottom:4px;
+    }
+
+    .entry-item .v{
+      color:#fff;
+      font-size:14px;
+      font-weight:800;
+      line-height:1.4;
+    }
+
+    .entry-notes{
+      color:#e6e6e6;
+      line-height:1.6;
+      font-size:14px;
+      margin-bottom:14px;
+      white-space:pre-wrap;
+    }
+
+    .entry-actions{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
+    .small-btn{
+      border:none;
+      cursor:pointer;
+      padding:10px 14px;
+      border-radius:12px;
+      font-weight:800;
+      font-size:14px;
+      transition:0.2s ease;
+    }
+
+    .small-btn.primary{
+      background:var(--gold);
+      color:#111;
+    }
+
+    .small-btn.secondary{
+      background:rgba(255,255,255,0.03);
+      color:#fff;
+      border:1px solid rgba(255,255,255,0.14);
+    }
+
+    .empty-state{
+      border:1px dashed rgba(243,210,27,0.18);
+      border-radius:20px;
+      padding:24px;
+      text-align:center;
+      color:#bdbdbd;
+      line-height:1.7;
+      margin-top:18px;
+      background:rgba(255,255,255,0.02);
+    }
+
+    @media(max-width:1100px){
+      .journal-layout{
+        grid-template-columns:1fr;
+      }
+    }
+
+    @media(max-width:760px){
+      .form-grid,
+      .stats-grid,
+      .entry-grid{
+        grid-template-columns:1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+
+    <nav class="navbar">
+      <a href="index.html" class="logo">BullProsperity</a>
+
+      <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="hub.html">Hub</a>
+        <a href="course.html">Course</a>
+        <a href="tools.html" class="active">Tools</a>
+        <a href="setup-room.html">Setup Room</a>
+        <a href="community.html">Community</a>
+        <a href="login.html">Login</a>
+      </div>
+    </nav>
+
+    <section class="hero-shell">
+      <div class="badge">Journal</div>
+
+      <h1 class="hero-title">
+        BullProsperity
+        <span class="gold">Trading Journal</span>
+      </h1>
+
+      <p class="hero-text">
+        Dokumentiere deine Trades, Gedanken, Fehler und Erkenntnisse an einem Ort.
+        So erkennst du Muster, verbesserst deine Entscheidungen und entwickelst dich
+        systematisch weiter.
+      </p>
+
+      <div class="hero-buttons">
+        <a href="tools.html" class="btn primary">Zurück zu den Tools</a>
+        <a href="#journal-form" class="btn secondary">Trade eintragen</a>
+      </div>
+    </section>
+
+    <section class="journal-layout">
+
+      <div class="journal-panel" id="journal-form">
+        <div class="badge">Neuer Eintrag</div>
+        <h2 class="section-heading" style="font-size:36px; margin-bottom:10px;">Trade dokumentieren</h2>
+        <p class="section-subtext" style="margin-bottom:0;">
+          Halte jeden Trade sauber fest, damit du nicht nur tradest, sondern auch daraus lernst.
+        </p>
+
+        <div class="form-grid">
+          <div class="field">
+            <label for="tradeDate">Datum</label>
+            <input type="date" id="tradeDate" />
+          </div>
+
+          <div class="field">
+            <label for="market">Markt / Pair</label>
+            <input type="text" id="market" placeholder="z. B. EURUSD / XAUUSD / NAS100" />
+          </div>
+
+          <div class="field">
+            <label for="direction">Richtung</label>
+            <select id="direction">
+              <option value="">Bitte wählen</option>
+              <option value="Buy">Buy</option>
+              <option value="Sell">Sell</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="session">Session</label>
+            <select id="session">
+              <option value="">Bitte wählen</option>
+              <option value="Asia">Asia</option>
+              <option value="London">London</option>
+              <option value="New York">New York</option>
+              <option value="London / New York">London / New York</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="entryPrice">Entry</label>
+            <input type="text" id="entryPrice" placeholder="z. B. 1.08450" />
+          </div>
+
+          <div class="field">
+            <label for="stopLoss">Stop Loss</label>
+            <input type="text" id="stopLoss" placeholder="z. B. 1.08350" />
+          </div>
+
+          <div class="field">
+            <label for="takeProfit">Take Profit</label>
+            <input type="text" id="takeProfit" placeholder="z. B. 1.08700" />
+          </div>
+
+          <div class="field">
+            <label for="rr">RR / Ergebnis</label>
+            <input type="text" id="rr" placeholder="z. B. 1:3 / +2R / -1R" />
+          </div>
+
+          <div class="field full">
+            <label for="setupType">Setup / Modell</label>
+            <input type="text" id="setupType" placeholder="z. B. Liquidity Sweep + BOS + FVG Retest" />
+          </div>
+
+          <div class="field full">
+            <label for="emotion">Emotion / Zustand</label>
+            <input type="text" id="emotion" placeholder="z. B. ruhig, fokussiert / ungeduldig / unsicher" />
+          </div>
+
+          <div class="field full">
+            <label for="notes">Notizen / Learnings</label>
+            <textarea id="notes" placeholder="Was war gut? Was war schlecht? Was würdest du nächstes Mal besser machen?"></textarea>
+          </div>
+        </div>
+
+        <div class="journal-actions">
+          <button class="btn primary action-btn" id="saveTradeBtn">Trade speichern</button>
+          <button class="btn secondary action-btn" id="resetFormBtn">Felder leeren</button>
+        </div>
+      </div>
+
+      <div class="journal-panel">
+        <div class="badge">Übersicht</div>
+        <h2 class="section-heading" style="font-size:36px; margin-bottom:10px;">Journal Statistik</h2>
+        <p class="helper-text">
+          Nutze dein Journal nicht nur zum Speichern, sondern zum Verstehen. Je sauberer du dokumentierst,
+          desto schneller erkennst du Muster in deinem Verhalten und in deiner Ausführung.
+        </p>
+
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="label">Gespeicherte Trades</div>
+            <div class="value" id="tradeCount">0</div>
+          </div>
+
+          <div class="stat-card">
+            <div class="label">Letzter Markt</div>
+            <div class="value" id="lastMarket" style="font-size:20px;">-</div>
+          </div>
+
+          <div class="stat-card">
+            <div class="label">Letzte Richtung</div>
+            <div class="value" id="lastDirection" style="font-size:20px;">-</div>
+          </div>
+
+          <div class="stat-card">
+            <div class="label">Letztes Ergebnis</div>
+            <div class="value" id="lastResult" style="font-size:20px;">-</div>
+          </div>
+        </div>
+
+        <div class="disclaimer-box" style="margin-top:18px;">
+          Tipp: Ein starkes Journal dokumentiert nicht nur Zahlen, sondern vor allem Muster, Emotionen,
+          Disziplin und Entscheidungsqualität. Genau dort liegt oft der größte Hebel für bessere Performance.
+        </div>
+      </div>
+
+    </section>
+
+    <section class="section">
+      <div class="journal-panel">
+        <div class="badge">Deine Einträge</div>
+        <h2 class="section-heading" style="font-size:36px; margin-bottom:10px;">Gespeicherte Trades</h2>
+        <p class="section-subtext" style="margin-bottom:0;">
+          Alle Trades werden lokal in deinem Browser gespeichert und bleiben dort erhalten, bis du sie löschst.
+        </p>
+
+        <div id="journalList" class="journal-list"></div>
+
+        <div id="emptyState" class="empty-state">
+          Noch keine Trades gespeichert.<br>
+          Trage oben deinen ersten Trade ein und beginne dein BullProsperity Journal.
+        </div>
+      </div>
+    </section>
+
+    <div class="footer-note">
+      BullProsperity dient ausschließlich Bildungszwecken und stellt keine Finanzberatung dar.
+    </div>
+
+  </div>
+
+  <script>
+    const storageKey = "bullprosperity_trading_journal";
+
+    const tradeDate = document.getElementById("tradeDate");
+    const market = document.getElementById("market");
+    const direction = document.getElementById("direction");
+    const session = document.getElementById("session");
+    const entryPrice = document.getElementById("entryPrice");
+    const stopLoss = document.getElementById("stopLoss");
+    const takeProfit = document.getElementById("takeProfit");
+    const rr = document.getElementById("rr");
+    const setupType = document.getElementById("setupType");
+    const emotion = document.getElementById("emotion");
+    const notes = document.getElementById("notes");
+
+    const saveTradeBtn = document.getElementById("saveTradeBtn");
+    const resetFormBtn = document.getElementById("resetFormBtn");
+
+    const journalList = document.getElementById("journalList");
+    const emptyState = document.getElementById("emptyState");
+
+    const tradeCount = document.getElementById("tradeCount");
+    const lastMarket = document.getElementById("lastMarket");
+    const lastDirection = document.getElementById("lastDirection");
+    const lastResult = document.getElementById("lastResult");
+
+    function getTrades() {
+      const raw = localStorage.getItem(storageKey);
+      return raw ? JSON.parse(raw) : [];
+    }
+
+    function saveTrades(trades) {
+      localStorage.setItem(storageKey, JSON.stringify(trades));
+    }
+
+    function resetForm() {
+      tradeDate.value = "";
+      market.value = "";
+      direction.value = "";
+      session.value = "";
+      entryPrice.value = "";
+      stopLoss.value = "";
+      takeProfit.value = "";
+      rr.value = "";
+      setupType.value = "";
+      emotion.value = "";
+      notes.value = "";
+    }
+
+    function renderStats(trades) {
+      tradeCount.textContent = trades.length;
+
+      if (trades.length === 0) {
+        lastMarket.textContent = "-";
+        lastDirection.textContent = "-";
+        lastResult.textContent = "-";
+        return;
+      }
+
+      const latest = trades[0];
+      lastMarket.textContent = latest.market || "-";
+      lastDirection.textContent = latest.direction || "-";
+      lastResult.textContent = latest.rr || "-";
+    }
+
+    function renderTrades() {
+      const trades = getTrades();
+      journalList.innerHTML = "";
+
+      renderStats(trades);
+
+      if (trades.length === 0) {
+        emptyState.style.display = "block";
+        return;
+      }
+
+      emptyState.style.display = "none";
+
+      trades.forEach((trade, index) => {
+        const card = document.createElement("div");
+        card.className = "entry-card";
+
+        card.innerHTML = `
+          <div class="entry-top">
+            <div>
+              <div class="entry-title">${trade.market || "Unbekannter Markt"}</div>
+              <div style="color:#bdbdbd; font-size:14px; margin-top:6px;">${trade.date || "Kein Datum"} • ${trade.session || "Keine Session"}</div>
+            </div>
+            <div class="entry-badge">${trade.direction || "Keine Richtung"}</div>
+          </div>
+
+          <div class="entry-grid">
+            <div class="entry-item">
+              <div class="k">Entry</div>
+              <div class="v">${trade.entry || "-"}</div>
+            </div>
+
+            <div class="entry-item">
+              <div class="k">Stop Loss</div>
+              <div class="v">${trade.stopLoss || "-"}</div>
+            </div>
+
+            <div class="entry-item">
+              <div class="k">Take Profit</div>
+              <div class="v">${trade.takeProfit || "-"}</div>
+            </div>
+
+            <div class="entry-item">
+              <div class="k">RR / Ergebnis</div>
+              <div class="v">${trade.rr || "-"}</div>
+            </div>
+
+            <div class="entry-item">
+              <div class="k">Setup</div>
+              <div class="v">${trade.setupType || "-"}</div>
+            </div>
+
+            <div class="entry-item">
+              <div class="k">Emotion</div>
+              <div class="v">${trade.emotion || "-"}</div>
+            </div>
+          </div>
+
+          <div class="entry-notes">${trade.notes || "Keine Notizen vorhanden."}</div>
+
+          <div class="entry-actions">
+            <button class="small-btn secondary" onclick="deleteTrade(${index})">Eintrag löschen</button>
+          </div>
+        `;
+
+        journalList.appendChild(card);
+      });
+    }
+
+    function validateForm() {
+      return market.value.trim() !== "" && direction.value.trim() !== "";
+    }
+
+    saveTradeBtn.addEventListener("click", () => {
+      if (!validateForm()) {
+        alert("Bitte mindestens Markt und Richtung ausfüllen.");
+        return;
+      }
+
+      const trades = getTrades();
+
+      const newTrade = {
+        date: tradeDate.value,
+        market: market.value.trim(),
+        direction: direction.value,
+        session: session.value,
+        entry: entryPrice.value.trim(),
+        stopLoss: stopLoss.value.trim(),
+        takeProfit: takeProfit.value.trim(),
+        rr: rr.value.trim(),
+        setupType: setupType.value.trim(),
+        emotion: emotion.value.trim(),
+        notes: notes.value.trim()
+      };
+
+      trades.unshift(newTrade);
+      saveTrades(trades);
+      renderTrades();
+      resetForm();
+    });
+
+    resetFormBtn.addEventListener("click", () => {
+      resetForm();
+    });
+
+    function deleteTrade(index) {
+      const trades = getTrades();
+      trades.splice(index, 1);
+      saveTrades(trades);
+      renderTrades();
+    }
+
+    window.deleteTrade = deleteTrade;
+
+    renderTrades();
+  </script>
+</body>
+</html>
