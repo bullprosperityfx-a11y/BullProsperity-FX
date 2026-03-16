@@ -1,6 +1,12 @@
 const BullProsperityAuth = (() => {
   const ACCESS_ENDPOINT = "/api/access";
-  const WHOP_LOGIN_URL = "https://whop.com/bullprosperity-fx/bullprosperity-fx/"; // <- deinen echten Link hier einsetzen
+
+  // HIER DEINEN ECHTEN WHOP LINK EINTRAGEN
+  const WHOP_LOGIN_URL = "https://whop.com/joined/bullprosperity-fx/products/bullprosperity-fx/";
+
+  function hasPremiumAccess(data) {
+    return !!data && (data.role === "admin" || data.role === "premium");
+  }
 
   async function getAccess() {
     try {
@@ -9,19 +15,11 @@ const BullProsperityAuth = (() => {
         cache: "no-store"
       });
 
-      if (!res.ok) {
-        throw new Error("Access check failed");
-      }
-
+      if (!res.ok) throw new Error("Access check failed");
       return await res.json();
     } catch (error) {
       return null;
     }
-  }
-
-  function hasPremiumAccess(data) {
-    if (!data || !data.role) return false;
-    return data.role === "admin" || data.role === "premium";
   }
 
   async function protectPage() {
@@ -32,17 +30,20 @@ const BullProsperityAuth = (() => {
       return;
     }
 
-    document.documentElement.setAttribute("data-auth-ready", "true");
+    const authStatus = document.getElementById("authStatus");
+    if (authStatus) {
+      authStatus.textContent = `Zugang aktiv${data.role ? " • " + data.role : ""}`;
+    }
   }
 
-  async function setupPublicButtons() {
+  async function setupPublicPage() {
     const data = await getAccess();
     const hasAccess = hasPremiumAccess(data);
 
     const startButton = document.getElementById("startButton");
     const memberButtons = document.querySelectorAll("[data-member-link]");
     const loginButtons = document.querySelectorAll("[data-login-link]");
-    const logoutButtons = document.querySelectorAll("[data-logout-link]");
+    const authStatus = document.getElementById("authStatus");
 
     if (startButton) {
       if (hasAccess) {
@@ -62,22 +63,6 @@ const BullProsperityAuth = (() => {
       btn.href = WHOP_LOGIN_URL;
     });
 
-    logoutButtons.forEach((btn) => {
-      btn.addEventListener("click", async (e) => {
-        e.preventDefault();
-
-        try {
-          await fetch("/api/logout", {
-            method: "POST",
-            credentials: "include"
-          });
-        } catch (error) {}
-
-        window.location.href = "index.html";
-      });
-    });
-
-    const authStatus = document.getElementById("authStatus");
     if (authStatus) {
       authStatus.textContent = hasAccess
         ? "Premium Zugang erkannt."
@@ -91,7 +76,7 @@ const BullProsperityAuth = (() => {
     if (isProtected) {
       await protectPage();
     } else {
-      await setupPublicButtons();
+      await setupPublicPage();
     }
   }
 
