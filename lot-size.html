@@ -1,1 +1,395 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BullProsperity | Lot Size Rechner</title>
+  <link rel="stylesheet" href="theme.css" />
 
+  <script>
+    (async () => {
+      try {
+        const res = await fetch("/api/access", {
+          credentials: "include"
+        });
+        const data = await res.json();
+
+        if (data.role !== "admin" && data.role !== "premium") {
+          window.location.href = "locked.html";
+        }
+      } catch (err) {
+        window.location.href = "locked.html";
+      }
+    })();
+  </script>
+
+  <style>
+    .tool-layout{
+      display:grid;
+      grid-template-columns:1.1fr 0.9fr;
+      gap:24px;
+      align-items:start;
+    }
+
+    .tool-panel{
+      border:1px solid var(--line);
+      border-radius:28px;
+      background:linear-gradient(180deg, var(--panel), var(--panel-2));
+      box-shadow:0 0 0 1px rgba(255,255,255,0.02) inset;
+      padding:24px;
+    }
+
+    .form-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:16px;
+      margin-top:18px;
+    }
+
+    .field{
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+    }
+
+    .field.full{
+      grid-column:1 / -1;
+    }
+
+    .field label{
+      color:#f1f1f1;
+      font-size:14px;
+      font-weight:800;
+    }
+
+    .field input,
+    .field select{
+      width:100%;
+      border-radius:16px;
+      border:1px solid rgba(243,210,27,0.18);
+      background:rgba(255,255,255,0.03);
+      color:#fff;
+      padding:14px 16px;
+      font-size:15px;
+      outline:none;
+    }
+
+    .field input:focus,
+    .field select:focus{
+      border-color:rgba(243,210,27,0.48);
+      box-shadow:0 0 0 3px rgba(243,210,27,0.08);
+    }
+
+    .calc-actions{
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+      margin-top:20px;
+    }
+
+    .calc-btn{
+      border:none;
+      cursor:pointer;
+    }
+
+    .result-box{
+      border:1px solid rgba(243,210,27,0.18);
+      border-radius:22px;
+      background:rgba(255,255,255,0.03);
+      padding:22px;
+      margin-top:18px;
+    }
+
+    .result-label{
+      color:#bfbfbf;
+      font-size:14px;
+      font-weight:700;
+      margin-bottom:8px;
+    }
+
+    .result-value{
+      color:var(--gold);
+      font-size:40px;
+      font-weight:900;
+      line-height:1;
+      margin-bottom:10px;
+    }
+
+    .result-sub{
+      color:#e7e7e7;
+      line-height:1.6;
+      font-size:15px;
+    }
+
+    .mini-results{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:14px;
+      margin-top:16px;
+    }
+
+    .mini-card{
+      border:1px solid rgba(243,210,27,0.14);
+      border-radius:18px;
+      background:rgba(255,255,255,0.02);
+      padding:16px;
+    }
+
+    .mini-card .mini-title{
+      color:#cfcfcf;
+      font-size:13px;
+      font-weight:700;
+      margin-bottom:8px;
+    }
+
+    .mini-card .mini-value{
+      color:#fff;
+      font-size:22px;
+      font-weight:900;
+    }
+
+    .helper-text{
+      color:#cfcfcf;
+      line-height:1.7;
+      font-size:15px;
+    }
+
+    .disclaimer-box{
+      margin-top:18px;
+      padding:16px;
+      border-radius:18px;
+      border:1px solid rgba(243,210,27,0.14);
+      background:rgba(255,255,255,0.02);
+      color:#d8d8d8;
+      line-height:1.6;
+      font-size:14px;
+    }
+
+    @media(max-width:1100px){
+      .tool-layout{
+        grid-template-columns:1fr;
+      }
+    }
+
+    @media(max-width:760px){
+      .form-grid,
+      .mini-results{
+        grid-template-columns:1fr;
+      }
+
+      .result-value{
+        font-size:32px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+
+    <nav class="navbar">
+      <a href="index.html" class="logo">BullProsperity</a>
+
+      <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="hub.html">Hub</a>
+        <a href="course.html">Course</a>
+        <a href="tools.html" class="active">Tools</a>
+        <a href="setup-room.html">Setup Room</a>
+        <a href="community.html">Community</a>
+        <a href="login.html">Login</a>
+      </div>
+    </nav>
+
+    <section class="hero-shell">
+      <div class="badge">Risk Tool</div>
+
+      <h1 class="hero-title">
+        BullProsperity
+        <span class="gold">Lot Size Rechner</span>
+      </h1>
+
+      <p class="hero-text">
+        Berechne deine Positionsgröße sauber anhand von Kontogröße, Risiko und Stop Loss.
+        So triffst du keine Bauchentscheidungen, sondern arbeitest strukturiert und professionell.
+      </p>
+
+      <div class="hero-buttons">
+        <a href="tools.html" class="btn primary">Zurück zu den Tools</a>
+        <a href="#rechner" class="btn secondary">Direkt berechnen</a>
+      </div>
+    </section>
+
+    <section id="rechner" class="tool-layout">
+
+      <div class="tool-panel">
+        <div class="badge">Berechnung</div>
+        <h2 class="section-heading" style="font-size:36px; margin-bottom:10px;">Positionsgröße berechnen</h2>
+        <p class="section-subtext" style="margin-bottom:0;">
+          Gib deine Werte ein und der Rechner ermittelt deine mögliche Lot Size,
+          deinen maximalen Risiko-Betrag und den Wert pro Pip.
+        </p>
+
+        <div class="form-grid">
+          <div class="field">
+            <label for="accountSize">Kontogröße</label>
+            <input type="number" id="accountSize" placeholder="z. B. 10000" />
+          </div>
+
+          <div class="field">
+            <label for="riskPercent">Risiko in %</label>
+            <input type="number" id="riskPercent" step="0.1" placeholder="z. B. 1" />
+          </div>
+
+          <div class="field">
+            <label for="stopLoss">Stop Loss in Pips</label>
+            <input type="number" id="stopLoss" step="0.1" placeholder="z. B. 10" />
+          </div>
+
+          <div class="field">
+            <label for="pipValue">Pip Wert pro 1.00 Lot</label>
+            <input type="number" id="pipValue" step="0.01" placeholder="z. B. 10" value="10" />
+          </div>
+
+          <div class="field full">
+            <label for="marketType">Markt / Hinweis</label>
+            <select id="marketType">
+              <option value="forex">Forex Standard (oft ca. $10 pro Pip bei 1.00 Lot)</option>
+              <option value="gold">Gold / XAUUSD (bitte Pip-/Point-Wert prüfen)</option>
+              <option value="indices">Indices (bitte Kontraktgröße prüfen)</option>
+              <option value="custom">Eigener Wert</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="calc-actions">
+          <button class="btn primary calc-btn" id="calculateBtn">Lot Size berechnen</button>
+          <button class="btn secondary calc-btn" id="resetBtn">Zurücksetzen</button>
+        </div>
+
+        <div class="result-box">
+          <div class="result-label">Empfohlene Lot Size</div>
+          <div class="result-value" id="lotResult">0.00</div>
+          <div class="result-sub" id="resultText">
+            Gib oben deine Werte ein und berechne deine Positionsgröße.
+          </div>
+
+          <div class="mini-results">
+            <div class="mini-card">
+              <div class="mini-title">Max. Risiko Betrag</div>
+              <div class="mini-value" id="riskAmountResult">0.00</div>
+            </div>
+
+            <div class="mini-card">
+              <div class="mini-title">Wert pro Pip</div>
+              <div class="mini-value" id="pipResult">0.00</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tool-panel">
+        <div class="badge">Warum das wichtig ist</div>
+        <h2 class="section-heading" style="font-size:36px; margin-bottom:10px;">Risk first</h2>
+        <p class="helper-text">
+          Viele Trader steigen mit zufälliger Größe ein und riskieren dadurch mal zu viel
+          und mal zu wenig. Ein sauberer Lot Size Rechner sorgt dafür, dass dein Risiko
+          konstant bleibt und du nicht emotional oder impulsiv handelst.
+        </p>
+
+        <div class="list-box" style="margin-top:18px;">
+          <div class="list-item">Jeder Trade startet mit sauberem Risiko.</div>
+          <div class="list-item">Du schützt dein Konto langfristig besser.</div>
+          <div class="list-item">Du vermeidest Überhebelung und spontane Fehler.</div>
+          <div class="list-item">Du handelst wie ein strukturierter Trader und nicht nach Gefühl.</div>
+        </div>
+
+        <div class="disclaimer-box">
+          Hinweis: Der Rechner dient zur Unterstützung und zu Bildungszwecken.
+          Je nach Markt, Broker und Kontraktgröße kann der Pip-/Point-Wert variieren.
+          Prüfe besonders bei Gold, Indizes oder speziellen Produkten immer die genauen Spezifikationen.
+        </div>
+      </div>
+
+    </section>
+
+    <div class="footer-note">
+      BullProsperity dient ausschließlich Bildungszwecken und stellt keine Finanzberatung dar.
+    </div>
+
+  </div>
+
+  <script>
+    const accountSize = document.getElementById("accountSize");
+    const riskPercent = document.getElementById("riskPercent");
+    const stopLoss = document.getElementById("stopLoss");
+    const pipValue = document.getElementById("pipValue");
+    const marketType = document.getElementById("marketType");
+
+    const lotResult = document.getElementById("lotResult");
+    const riskAmountResult = document.getElementById("riskAmountResult");
+    const pipResult = document.getElementById("pipResult");
+    const resultText = document.getElementById("resultText");
+
+    const calculateBtn = document.getElementById("calculateBtn");
+    const resetBtn = document.getElementById("resetBtn");
+
+    function formatNumber(value, digits = 2) {
+      return Number(value).toFixed(digits);
+    }
+
+    function setDefaultPipValue() {
+      const selected = marketType.value;
+
+      if (selected === "forex") pipValue.value = 10;
+      if (selected === "gold") pipValue.value = 1;
+      if (selected === "indices") pipValue.value = 1;
+    }
+
+    marketType.addEventListener("change", () => {
+      if (marketType.value !== "custom") {
+        setDefaultPipValue();
+      }
+    });
+
+    calculateBtn.addEventListener("click", () => {
+      const account = parseFloat(accountSize.value);
+      const risk = parseFloat(riskPercent.value);
+      const sl = parseFloat(stopLoss.value);
+      const pip = parseFloat(pipValue.value);
+
+      if (!account || !risk || !sl || !pip || account <= 0 || risk <= 0 || sl <= 0 || pip <= 0) {
+        lotResult.textContent = "0.00";
+        riskAmountResult.textContent = "0.00";
+        pipResult.textContent = "0.00";
+        resultText.textContent = "Bitte gib gültige Werte für Kontogröße, Risiko, Stop Loss und Pip-Wert ein.";
+        return;
+      }
+
+      const riskAmount = account * (risk / 100);
+      const lotSize = riskAmount / (sl * pip);
+      const valuePerPip = lotSize * pip;
+
+      lotResult.textContent = formatNumber(lotSize, 2);
+      riskAmountResult.textContent = formatNumber(riskAmount, 2);
+      pipResult.textContent = formatNumber(valuePerPip, 2);
+
+      resultText.textContent =
+        `Bei einer Kontogröße von ${formatNumber(account, 2)} und ${formatNumber(risk, 2)}% Risiko liegt dein maximaler Verlust bei ${formatNumber(riskAmount, 2)}. ` +
+        `Mit einem Stop Loss von ${formatNumber(sl, 2)} Pips ergibt sich eine empfohlene Lot Size von ${formatNumber(lotSize, 2)}.`;
+    });
+
+    resetBtn.addEventListener("click", () => {
+      accountSize.value = "";
+      riskPercent.value = "";
+      stopLoss.value = "";
+      marketType.value = "forex";
+      pipValue.value = 10;
+
+      lotResult.textContent = "0.00";
+      riskAmountResult.textContent = "0.00";
+      pipResult.textContent = "0.00";
+      resultText.textContent = "Gib oben deine Werte ein und berechne deine Positionsgröße.";
+    });
+  </script>
+</body>
+</html>
