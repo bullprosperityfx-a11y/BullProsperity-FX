@@ -1,1 +1,450 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BullProsperity | Trading Checkliste</title>
+  <link rel="stylesheet" href="theme.css" />
 
+  <script>
+    (async () => {
+      try {
+        const res = await fetch("/api/access", {
+          credentials: "include"
+        });
+        const data = await res.json();
+
+        if (data.role !== "admin" && data.role !== "premium") {
+          window.location.href = "locked.html";
+        }
+      } catch (err) {
+        window.location.href = "locked.html";
+      }
+    })();
+  </script>
+
+  <style>
+    .checklist-layout{
+      display:grid;
+      grid-template-columns:1.05fr 0.95fr;
+      gap:24px;
+      align-items:start;
+    }
+
+    .checklist-panel{
+      border:1px solid var(--line);
+      border-radius:28px;
+      background:linear-gradient(180deg, var(--panel), var(--panel-2));
+      box-shadow:0 0 0 1px rgba(255,255,255,0.02) inset;
+      padding:24px;
+    }
+
+    .checklist-group{
+      margin-top:20px;
+      border:1px solid rgba(243,210,27,0.14);
+      border-radius:22px;
+      background:rgba(255,255,255,0.02);
+      padding:18px;
+    }
+
+    .group-title{
+      color:var(--gold);
+      font-size:22px;
+      font-weight:900;
+      margin-bottom:8px;
+    }
+
+    .group-sub{
+      color:#d8d8d8;
+      line-height:1.6;
+      font-size:14px;
+      margin-bottom:14px;
+    }
+
+    .check-row{
+      display:flex;
+      align-items:flex-start;
+      gap:12px;
+      padding:14px 12px;
+      border-radius:16px;
+      border:1px solid rgba(243,210,27,0.10);
+      background:rgba(255,255,255,0.02);
+      margin-bottom:10px;
+    }
+
+    .check-row:last-child{
+      margin-bottom:0;
+    }
+
+    .check-row input[type="checkbox"]{
+      margin-top:3px;
+      width:18px;
+      height:18px;
+      accent-color: var(--gold);
+      cursor:pointer;
+      flex-shrink:0;
+    }
+
+    .check-label{
+      color:#f1f1f1;
+      font-size:15px;
+      line-height:1.6;
+      font-weight:700;
+      cursor:pointer;
+    }
+
+    .actions{
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+      margin-top:22px;
+    }
+
+    .action-btn{
+      border:none;
+      cursor:pointer;
+    }
+
+    .stats-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:14px;
+      margin-top:18px;
+    }
+
+    .stat-card{
+      border:1px solid rgba(243,210,27,0.14);
+      border-radius:20px;
+      background:rgba(255,255,255,0.02);
+      padding:18px;
+    }
+
+    .stat-card .label{
+      color:#bdbdbd;
+      font-size:13px;
+      font-weight:700;
+      margin-bottom:8px;
+    }
+
+    .stat-card .value{
+      color:var(--gold);
+      font-size:28px;
+      font-weight:900;
+      line-height:1;
+    }
+
+    .status-box{
+      margin-top:18px;
+      border:1px solid rgba(243,210,27,0.14);
+      border-radius:22px;
+      background:rgba(255,255,255,0.02);
+      padding:18px;
+    }
+
+    .status-title{
+      color:#fff;
+      font-size:18px;
+      font-weight:900;
+      margin-bottom:8px;
+    }
+
+    .status-text{
+      color:#ddd;
+      line-height:1.7;
+      font-size:15px;
+    }
+
+    .helper-list{
+      display:grid;
+      gap:12px;
+      margin-top:18px;
+    }
+
+    .helper-item{
+      border:1px solid rgba(243,210,27,0.12);
+      border-radius:16px;
+      background:rgba(255,255,255,0.02);
+      padding:14px 16px;
+      color:#efefef;
+      line-height:1.6;
+      font-size:14px;
+      font-weight:700;
+    }
+
+    @media(max-width:1100px){
+      .checklist-layout{
+        grid-template-columns:1fr;
+      }
+    }
+
+    @media(max-width:760px){
+      .stats-grid{
+        grid-template-columns:1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+
+    <nav class="navbar">
+      <a href="index.html" class="logo">BullProsperity</a>
+
+      <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="hub.html">Hub</a>
+        <a href="course.html">Course</a>
+        <a href="tools.html" class="active">Tools</a>
+        <a href="setup-room.html">Setup Room</a>
+        <a href="community.html">Community</a>
+        <a href="login.html">Login</a>
+      </div>
+    </nav>
+
+    <section class="hero-shell">
+      <div class="badge">Routine Tool</div>
+
+      <h1 class="hero-title">
+        BullProsperity
+        <span class="gold">Trading Checkliste</span>
+      </h1>
+
+      <p class="hero-text">
+        Prüfe vor jedem Trade Struktur, Liquidität, Confirmation, Risiko und Session.
+        So gehst du nicht impulsiv in den Markt, sondern mit Klarheit und Disziplin.
+      </p>
+
+      <div class="hero-buttons">
+        <a href="tools.html" class="btn primary">Zurück zu den Tools</a>
+        <a href="#trade-checklist" class="btn secondary">Checkliste starten</a>
+      </div>
+    </section>
+
+    <section id="trade-checklist" class="checklist-layout">
+
+      <div class="checklist-panel">
+        <div class="badge">Pre-Trade Routine</div>
+        <h2 class="section-heading" style="font-size:36px; margin-bottom:10px;">Vor jedem Entry prüfen</h2>
+        <p class="section-subtext" style="margin-bottom:0;">
+          Eine saubere Checkliste schützt dich vor spontanen Fehlern und sorgt dafür,
+          dass du nicht aus Emotionen oder Ungeduld handelst.
+        </p>
+
+        <div class="checklist-group">
+          <div class="group-title">1. Marktstruktur</div>
+          <div class="group-sub">Erst verstehen, was der Markt macht, bevor überhaupt an einen Entry gedacht wird.</div>
+
+          <div class="check-row">
+            <input type="checkbox" id="c1" class="trade-check">
+            <label for="c1" class="check-label">Ist der Higher Timeframe Bias klar und logisch?</label>
+          </div>
+
+          <div class="check-row">
+            <input type="checkbox" id="c2" class="trade-check">
+            <label for="c2" class="check-label">Ist die aktuelle Marktstruktur sauber lesbar (Trend, Range, Shift)?</label>
+          </div>
+
+          <div class="check-row">
+            <input type="checkbox" id="c3" class="trade-check">
+            <label for="c3" class="check-label">Handelst du mit Struktur und nicht gegen sie?</label>
+          </div>
+        </div>
+
+        <div class="checklist-group">
+          <div class="group-title">2. Liquidität & Setup</div>
+          <div class="group-sub">Smart Money Logik heißt auch: verstehen, wo Liquidität liegt und warum der Markt dorthin laufen könnte.</div>
+
+          <div class="check-row">
+            <input type="checkbox" id="c4" class="trade-check">
+            <label for="c4" class="check-label">Ist relevante Liquidität im Markt sichtbar (Equal Highs / Lows, Stops, Sweeps)?</label>
+          </div>
+
+          <div class="check-row">
+            <input type="checkbox" id="c5" class="trade-check">
+            <label for="c5" class="check-label">Wurde Liquidität bereits geholt oder erwartest du den Sweep erst noch?</label>
+          </div>
+
+          <div class="check-row">
+            <input type="checkbox" id="c6" class="trade-check">
+            <label for="c6" class="check-label">Passt dein Setup zur BullProsperity Logik und nicht nur zu Hoffnung?</label>
+          </div>
+        </div>
+
+        <div class="checklist-group">
+          <div class="group-title">3. Confirmation</div>
+          <div class="group-sub">Confirmation trennt impulsive Einstiege von sauberen Entries.</div>
+
+          <div class="check-row">
+            <input type="checkbox" id="c7" class="trade-check">
+            <label for="c7" class="check-label">Gibt es BOS, CHoCH oder andere Bestätigung für deinen Entry?</label>
+          </div>
+
+          <div class="check-row">
+            <input type="checkbox" id="c8" class="trade-check">
+            <label for="c8" class="check-label">Liegt der Entry in einer sinnvollen Zone (z. B. FVG, Orderblock, Reaktion)?</label>
+          </div>
+
+          <div class="check-row">
+            <input type="checkbox" id="c9" class="trade-check">
+            <label for="c9" class="check-label">Bist du nicht zu früh im Markt?</label>
+          </div>
+        </div>
+
+        <div class="checklist-group">
+          <div class="group-title">4. Risiko & Management</div>
+          <div class="group-sub">Kein Setup ist gut genug, um unkontrolliertes Risiko zu rechtfertigen.</div>
+
+          <div class="check-row">
+            <input type="checkbox" id="c10" class="trade-check">
+            <label for="c10" class="check-label">Ist dein Risiko pro Trade sauber festgelegt?</label>
+          </div>
+
+          <div class="check-row">
+            <input type="checkbox" id="c11" class="trade-check">
+            <label for="c11" class="check-label">Ist deine Lot Size korrekt berechnet?</label>
+          </div>
+
+          <div class="check-row">
+            <input type="checkbox" id="c12" class="trade-check">
+            <label for="c12" class="check-label">Passt das Risk-Reward Verhältnis zum Setup?</label>
+          </div>
+        </div>
+
+        <div class="checklist-group">
+          <div class="group-title">5. Session & Zustand</div>
+          <div class="group-sub">Auch Timing und dein mentaler Zustand beeinflussen deine Ausführung enorm.</div>
+
+          <div class="check-row">
+            <input type="checkbox" id="c13" class="trade-check">
+            <label for="c13" class="check-label">Handelst du in einer sinnvollen Session oder Zeit?</label>
+          </div>
+
+          <div class="check-row">
+            <input type="checkbox" id="c14" class="trade-check">
+            <label for="c14" class="check-label">Bist du ruhig, fokussiert und nicht emotional?</label>
+          </div>
+
+          <div class="check-row">
+            <input type="checkbox" id="c15" class="trade-check">
+            <label for="c15" class="check-label">Ist das ein A-Setup und kein erzwungener Trade?</label>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button class="btn primary action-btn" id="saveChecklistBtn">Checkliste speichern</button>
+          <button class="btn secondary action-btn" id="resetChecklistBtn">Alles zurücksetzen</button>
+        </div>
+      </div>
+
+      <div class="checklist-panel">
+        <div class="badge">Auswertung</div>
+        <h2 class="section-heading" style="font-size:36px; margin-bottom:10px;">Dein Check Status</h2>
+        <p class="section-subtext" style="margin-bottom:0;">
+          Je mehr Punkte sauber erfüllt sind, desto professioneller ist dein Entscheidungsprozess.
+        </p>
+
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="label">Erledigte Punkte</div>
+            <div class="value" id="doneCount">0 / 15</div>
+          </div>
+
+          <div class="stat-card">
+            <div class="label">Check Fortschritt</div>
+            <div class="value" id="donePercent">0%</div>
+          </div>
+        </div>
+
+        <div class="status-box">
+          <div class="status-title">Aktuelle Einschätzung</div>
+          <div class="status-text" id="statusText">
+            Starte deine Checkliste und prüfe deinen Trade Schritt für Schritt.
+          </div>
+        </div>
+
+        <div class="helper-list">
+          <div class="helper-item">Eine starke Checkliste schützt dich vor impulsiven Trades.</div>
+          <div class="helper-item">Nicht jeder Markt muss gehandelt werden – Qualität vor Aktivität.</div>
+          <div class="helper-item">Wenn wichtige Punkte fehlen, ist Warten oft die professionellere Entscheidung.</div>
+          <div class="helper-item">Disziplin zeigt sich oft genau dann, wenn du einen schlechten Trade nicht nimmst.</div>
+        </div>
+      </div>
+
+    </section>
+
+    <div class="footer-note">
+      BullProsperity dient ausschließlich Bildungszwecken und stellt keine Finanzberatung dar.
+    </div>
+
+  </div>
+
+  <script>
+    const checklistKey = "bullprosperity_trade_checklist_state";
+    const checkboxes = document.querySelectorAll(".trade-check");
+    const doneCount = document.getElementById("doneCount");
+    const donePercent = document.getElementById("donePercent");
+    const statusText = document.getElementById("statusText");
+    const saveChecklistBtn = document.getElementById("saveChecklistBtn");
+    const resetChecklistBtn = document.getElementById("resetChecklistBtn");
+
+    function updateStatus() {
+      const total = checkboxes.length;
+      const checked = Array.from(checkboxes).filter(cb => cb.checked).length;
+      const percent = Math.round((checked / total) * 100);
+
+      doneCount.textContent = `${checked} / ${total}`;
+      donePercent.textContent = `${percent}%`;
+
+      if (checked === 0) {
+        statusText.textContent = "Starte deine Checkliste und prüfe deinen Trade Schritt für Schritt.";
+      } else if (percent < 40) {
+        statusText.textContent = "Aktuell fehlen noch viele wichtige Punkte. Das Setup wirkt noch nicht sauber genug vorbereitet.";
+      } else if (percent < 70) {
+        statusText.textContent = "Einige wichtige Punkte sind erfüllt, aber es gibt noch offene Bereiche. Prüfe den Trade weiter mit Ruhe.";
+      } else if (percent < 100) {
+        statusText.textContent = "Das Setup wirkt bereits deutlich strukturierter. Prüfe die letzten offenen Punkte, bevor du entscheidest.";
+      } else {
+        statusText.textContent = "Alle Punkte sind erfüllt. Der Trade ist sauber vorbereitet und entspricht einer disziplinierten Ausführung.";
+      }
+    }
+
+    function saveChecklist() {
+      const state = {};
+      checkboxes.forEach(cb => {
+        state[cb.id] = cb.checked;
+      });
+      localStorage.setItem(checklistKey, JSON.stringify(state));
+    }
+
+    function loadChecklist() {
+      const raw = localStorage.getItem(checklistKey);
+      if (!raw) return;
+
+      const state = JSON.parse(raw);
+      checkboxes.forEach(cb => {
+        cb.checked = !!state[cb.id];
+      });
+    }
+
+    checkboxes.forEach(cb => {
+      cb.addEventListener("change", () => {
+        updateStatus();
+      });
+    });
+
+    saveChecklistBtn.addEventListener("click", () => {
+      saveChecklist();
+      updateStatus();
+    });
+
+    resetChecklistBtn.addEventListener("click", () => {
+      checkboxes.forEach(cb => cb.checked = false);
+      localStorage.removeItem(checklistKey);
+      updateStatus();
+    });
+
+    loadChecklist();
+    updateStatus();
+  </script>
+</body>
+</html>
