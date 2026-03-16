@@ -5,21 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>BullProsperity | Home</title>
   <link rel="stylesheet" href="theme.css" />
+  <script src="login.js" defer></script>
 
-  <script>
-    (async () => {
-      try {
-        const res = await fetch("/api/access", {
-          credentials: "include"
-        });
-        const data = await res.json();
-
-        window.bullprosperityAccess = data;
-      } catch (err) {
-        window.bullprosperityAccess = null;
-      }
-    })();
-  </script>
 
   <style>
     .hero-center{
@@ -134,7 +121,7 @@
         <a href="tools.html">Tools</a>
         <a href="setup-room.html">Setup Room</a>
         <a href="community.html">Community</a>
-        <a href="login.html">Login</a>
+        <a href="login.js">Login</a>
       </div>
     </nav>
 
@@ -153,7 +140,7 @@
         </p>
 
         <div class="hero-buttons">
-          <a href="login.html" class="btn primary" id="startBtn">Jetzt starten</a>
+         <a href="#" class="btn primary" id="startButton">Jetzt starten</a>
           <a href="#zugang" class="btn secondary">Mehr erfahren</a>
         </div>
 
