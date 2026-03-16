@@ -153,7 +153,7 @@
         </p>
 
         <div class="hero-buttons">
-          <a href="course.html" class="btn primary">Jetzt starten</a>
+          <a href="login.html" class="btn primary" id="startBtn">Jetzt starten</a>
           <a href="#zugang" class="btn secondary">Mehr erfahren</a>
         </div>
 
@@ -244,5 +244,20 @@
     </div>
 
   </div>
+  <script>
+  const startBtn = document.getElementById("startBtn");
+
+  if (window.bullprosperityAccess && startBtn) {
+    const role = window.bullprosperityAccess.role;
+
+    if (role === "admin" || role === "premium") {
+      startBtn.href = "hub.html";
+      startBtn.textContent = "Zum Mitgliederbereich";
+    } else {
+      startBtn.href = "login.html";
+      startBtn.textContent = "Jetzt starten";
+    }
+  }
+</script>
 </body>
 </html>
