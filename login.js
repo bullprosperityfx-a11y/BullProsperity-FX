@@ -1,27 +1,59 @@
 document.addEventListener("DOMContentLoaded", async () => {
   const startButton = document.getElementById("startButton");
-  if (!startButton) return;
+  const memberButtons = document.querySelectorAll("[data-member-link]");
+  const loginButtons = document.querySelectorAll("[data-login-link]");
+  const authStatus = document.getElementById("authStatus");
 
-  const WHOP_LOGIN_URL = "https://whop.com/bullprosperity-fx/bullprosperity-fx/";
+  const WHOP_CHECKOUT_URL = "https://whop.com/bullprosperity-fx/bullprosperity-fx/";
 
-  try {
-    const res = await fetch("/api/access", {
-      credentials: "include",
-      cache: "no-store"
-    });
+  async function getAccess() {
+    try {
+      const res = await fetch("/api/access", {
+        credentials: "include",
+        cache: "no-store"
+      });
 
-    const data = await res.json();
-    const hasAccess = data && (data.role === "admin" || data.role === "premium");
-
-    if (hasAccess) {
-      startButton.href = "hub.html";
-      startButton.textContent = "Zum Mitgliederbereich";
-    } else {
-      startButton.href = WHOP_LOGIN_URL;
-      startButton.textContent = "Jetzt starten";
+      if (!res.ok) throw new Error("Access failed");
+      return await res.json();
+    } catch (err) {
+      return null;
     }
-  } catch (err) {
-    startButton.href = WHOP_LOGIN_URL;
-    startButton.textContent = "Jetzt starten";
+  }
+
+  function hasAccess(data) {
+    return data && (data.role === "admin" || data.role === "premium");
+  }
+
+  const data = await getAccess();
+  const premium = hasAccess(data);
+  const isProtected = document.body.dataset.protected === "true";
+  const redirectMode = document.body.dataset.redirectMode || "locked";
+
+  if (isProtected && !premium) {
+    if (redirectMode === "checkout") {
+      window.location.href = WHOP_CHECKOUT_URL;
+    } else {
+      window.location.href = "locked.html";
+    }
+    return;
+  }
+
+  if (startButton) {
+    startButton.href = premium ? "hub.html" : WHOP_CHECKOUT_URL;
+    startButton.textContent = premium ? "Zum Mitgliederbereich" : "Jetzt starten";
+  }
+
+  memberButtons.forEach((btn) => {
+    btn.href = premium ? "hub.html" : WHOP_CHECKOUT_URL;
+  });
+
+  loginButtons.forEach((btn) => {
+    btn.href = WHOP_CHECKOUT_URL;
+  });
+
+  if (authStatus) {
+    authStatus.textContent = premium
+      ? "Premium Zugang erkannt."
+      : "Kein aktiver Premium-Zugang erkannt.";
   }
 });
