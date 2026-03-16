@@ -1,71 +1,141 @@
-
 <!DOCTYPE html>
 <html lang="de">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BullProsperity | Entry Models</title>
-<link rel="stylesheet" href="theme.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BullProsperity | Entry Modelle</title>
+  <link rel="stylesheet" href="theme.css" />
+
+  <script>
+    (async () => {
+      try {
+        const res = await fetch("/api/access", { credentials: "include" });
+        const data = await res.json();
+        if (data.role !== "admin" && data.role !== "premium") {
+          window.location.href = "locked.html";
+        }
+      } catch (err) {
+        window.location.href = "locked.html";
+      }
+    })();
+  </script>
+
+  <style>
+    .chart-placeholder{
+      border:1px solid var(--line);
+      border-radius:22px;
+      min-height:420px;
+      background:
+        radial-gradient(circle at center, rgba(255,255,255,0.03), rgba(255,255,255,0.01)),
+        #0c0c0c;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      text-align:center;
+      color:#d4d4d4;
+      padding:24px;
+      line-height:1.7;
+    }
+  </style>
 </head>
-
 <body>
-<div class="page">
+  <div class="page">
 
-<nav class="navbar">
-<a href="index.html" class="logo">BullProsperity</a>
-<div class="nav-links">
-<a href="index.html">Home</a>
-<a href="hub.html">Hub</a>
-<a href="course.html">Course</a>
-<a href="tools.html">Tools</a>
-<a href="setup-room.html">Setup Room</a>
-<a href="community.html">Community</a>
-</div>
-</nav>
+    <nav class="navbar">
+      <a href="index.html" class="logo">BullProsperity</a>
+      <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="hub.html">Hub</a>
+        <a href="course.html">Course</a>
+        <a href="tools.html">Tools</a>
+        <a href="setup-room.html" class="active">Setup Room</a>
+        <a href="community.html">Community</a>
+        <a href="login.html">Login</a>
+      </div>
+    </nav>
 
-<section class="hero-shell">
-<div class="badge">BullProsperity</div>
-<h1 class="hero-title">Entry Models</h1>
-<p class="hero-text">
-Dieser Bereich gehört zur BullProsperity Plattform. Die Seite nutzt dein zentrales Theme,
-damit alle Bereiche visuell einheitlich bleiben.
-</p>
+    <section class="hero-shell">
+      <div class="badge">Entry Kategorie</div>
+      <h1 class="hero-title">BullProsperity <span class="gold">Entry Modelle</span></h1>
+      <p class="hero-text">
+        Hier geht es um die präzise Ausführung deiner Setups: Higher Timeframe Bias,
+        Confirmation, BOS, CHoCH, FVG, Orderblock und das Zusammenspiel aus Struktur,
+        Liquidität und Timing.
+      </p>
+      <div class="hero-buttons">
+        <a href="setup-room.html" class="btn primary">Zurück zum Setup Room</a>
+        <a href="course.html" class="btn secondary">Zum Kurs</a>
+      </div>
+    </section>
 
-<div class="hero-buttons">
-<a href="hub.html" class="btn primary">Zum Hub</a>
-<a href="course.html" class="btn secondary">Zum Kurs</a>
-</div>
-</section>
+    <section class="section">
+      <h2 class="section-heading">So sieht ein sauberer Entry aus</h2>
+      <p class="section-subtext">
+        Hier kannst du später echte Entry-Beispiele und Markups einsetzen.
+      </p>
 
-<section class="section">
-<h2 class="section-heading">Inhalt</h2>
-<p class="section-subtext">
-Hier kannst du später Inhalte, Videos oder Charts einfügen.
-</p>
+      <div class="grid-2">
+        <div class="section-card">
+          <div class="chart-placeholder">
+            Hier kommt später dein Entry-Chart rein.<br><br>
+            Beispiel:<br>
+            HTF Bias → Sweep → BOS → FVG Retest → Entry
+          </div>
+        </div>
 
-<div class="grid-2">
+        <div class="section-card">
+          <div class="badge">Entry Check</div>
+          <div class="list-box">
+            <div class="list-item">Ist der Higher Timeframe Bias klar?</div>
+            <div class="list-item">Wurde vorher relevante Liquidität abgeholt?</div>
+            <div class="list-item">Gibt es Confirmation durch BOS oder CHoCH?</div>
+            <div class="list-item">Liegt der Entry in einer sinnvollen Zone?</div>
+            <div class="list-item">Passt das Risiko zum Setup und zur Session?</div>
+          </div>
+        </div>
+      </div>
+    </section>
 
-<div class="section-card">
-<div class="badge">Bereich</div>
-<h3>Entry Models</h3>
-<p>Hier kommt dein Content rein.</p>
-<a href="#" class="card-link">Mehr anzeigen</a>
-</div>
+    <section class="section">
+      <h2 class="section-heading">Entry Beispiele</h2>
+      <p class="section-subtext">
+        Diese Karten kannst du später mit Beispielseiten oder Videos verknüpfen.
+      </p>
 
-<div class="section-card">
-<div class="badge">Information</div>
-<h3>BullProsperity</h3>
-<p>Diese Seite ist Teil deiner Education Plattform.</p>
-<a href="#" class="card-link">Details</a>
-</div>
+      <div class="grid-3">
+        <div class="example-card">
+          <div>
+            <div class="badge">Confirmation</div>
+            <h3>BOS Entry Modell</h3>
+            <p>Nach dem Sweep entsteht ein klarer BOS und der Retest liefert den Entry.</p>
+          </div>
+          <a href="#" class="example-link">Beispiel öffnen</a>
+        </div>
 
-</div>
-</section>
+        <div class="example-card">
+          <div>
+            <div class="badge">Reversal</div>
+            <h3>CHoCH Entry Modell</h3>
+            <p>Der Markt dreht nach Liquidität und zeigt den ersten Character Change.</p>
+          </div>
+          <a href="#" class="example-link">Beispiel öffnen</a>
+        </div>
 
-<div class="footer-note">
-BullProsperity dient ausschließlich Bildungszwecken und stellt keine Finanzberatung dar.
-</div>
+        <div class="example-card">
+          <div>
+            <div class="badge">Precision</div>
+            <h3>FVG + Orderblock</h3>
+            <p>Kombination aus Fair Value Gap und Orderblock für einen präzisen Entry.</p>
+          </div>
+          <a href="#" class="example-link">Beispiel öffnen</a>
+        </div>
+      </div>
+    </section>
 
-</div>
+    <div class="footer-note">
+      BullProsperity dient ausschließlich Bildungszwecken und stellt keine Finanzberatung dar.
+    </div>
+
+  </div>
 </body>
 </html>
