@@ -1,1 +1,317 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BullProsperity | TradingView Bereich</title>
+  <link rel="stylesheet" href="theme.css" />
 
+  <script>
+    (async () => {
+      try {
+        const res = await fetch("/api/access", {
+          credentials: "include"
+        });
+        const data = await res.json();
+
+        if (data.role !== "admin" && data.role !== "premium") {
+          window.location.href = "locked.html";
+        }
+      } catch (err) {
+        window.location.href = "locked.html";
+      }
+    })();
+  </script>
+
+  <style>
+    .tv-layout{
+      display:grid;
+      grid-template-columns:1.1fr 0.9fr;
+      gap:24px;
+      align-items:start;
+    }
+
+    .tv-panel{
+      border:1px solid var(--line);
+      border-radius:28px;
+      background:linear-gradient(180deg, var(--panel), var(--panel-2));
+      box-shadow:0 0 0 1px rgba(255,255,255,0.02) inset;
+      padding:24px;
+    }
+
+    .tv-frame{
+      border:1px solid rgba(243,210,27,0.18);
+      border-radius:22px;
+      overflow:hidden;
+      background:#0c0c0c;
+      margin-top:18px;
+      min-height:620px;
+    }
+
+    .tv-frame iframe{
+      width:100%;
+      height:680px;
+      border:none;
+      display:block;
+      background:#0c0c0c;
+    }
+
+    .symbol-grid{
+      display:grid;
+      grid-template-columns:repeat(2,1fr);
+      gap:12px;
+      margin-top:18px;
+    }
+
+    .symbol-btn{
+      border:1px solid rgba(243,210,27,0.16);
+      background:rgba(255,255,255,0.03);
+      color:#fff;
+      border-radius:16px;
+      padding:14px 16px;
+      font-size:15px;
+      font-weight:800;
+      cursor:pointer;
+      transition:0.2s ease;
+      text-align:left;
+    }
+
+    .symbol-btn:hover{
+      transform:translateY(-1px);
+      border-color:rgba(243,210,27,0.42);
+      color:var(--gold);
+    }
+
+    .symbol-btn.active{
+      background:rgba(243,210,27,0.10);
+      border-color:rgba(243,210,27,0.42);
+      color:var(--gold);
+      box-shadow:0 0 14px rgba(243,210,27,0.10);
+    }
+
+    .helper-text{
+      color:#d8d8d8;
+      line-height:1.7;
+      font-size:15px;
+    }
+
+    .quick-box{
+      margin-top:18px;
+      border:1px solid rgba(243,210,27,0.14);
+      border-radius:20px;
+      background:rgba(255,255,255,0.02);
+      padding:18px;
+    }
+
+    .quick-title{
+      color:var(--gold);
+      font-size:18px;
+      font-weight:900;
+      margin-bottom:10px;
+    }
+
+    .quick-sub{
+      color:#e6e6e6;
+      font-size:14px;
+      line-height:1.7;
+    }
+
+    .watchlist{
+      display:grid;
+      gap:12px;
+      margin-top:18px;
+    }
+
+    .watch-item{
+      border:1px solid rgba(243,210,27,0.12);
+      border-radius:16px;
+      background:rgba(255,255,255,0.02);
+      padding:14px 16px;
+    }
+
+    .watch-item .name{
+      color:#fff;
+      font-size:15px;
+      font-weight:900;
+      margin-bottom:6px;
+    }
+
+    .watch-item .desc{
+      color:#d6d6d6;
+      font-size:14px;
+      line-height:1.6;
+    }
+
+    .note-box{
+      margin-top:18px;
+      width:100%;
+      min-height:180px;
+      border-radius:18px;
+      border:1px solid rgba(243,210,27,0.16);
+      background:rgba(255,255,255,0.03);
+      color:#fff;
+      padding:16px;
+      resize:vertical;
+      outline:none;
+      font-size:15px;
+    }
+
+    @media(max-width:1100px){
+      .tv-layout{
+        grid-template-columns:1fr;
+      }
+    }
+
+    @media(max-width:760px){
+      .symbol-grid{
+        grid-template-columns:1fr;
+      }
+
+      .tv-frame{
+        min-height:420px;
+      }
+
+      .tv-frame iframe{
+        height:460px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+
+    <nav class="navbar">
+      <a href="index.html" class="logo">BullProsperity</a>
+
+      <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="hub.html">Hub</a>
+        <a href="course.html">Course</a>
+        <a href="tools.html" class="active">Tools</a>
+        <a href="setup-room.html">Setup Room</a>
+        <a href="community.html">Community</a>
+        <a href="login.html">Login</a>
+      </div>
+    </nav>
+
+    <section class="hero-shell">
+      <div class="badge">Charts</div>
+
+      <h1 class="hero-title">
+        BullProsperity
+        <span class="gold">TradingView Bereich</span>
+      </h1>
+
+      <p class="hero-text">
+        Analysiere deine Märkte direkt innerhalb deiner Plattform. Wechsle schnell zwischen
+        Forex, Gold und Indizes und halte deine Beobachtungen direkt daneben fest.
+      </p>
+
+      <div class="hero-buttons">
+        <a href="tools.html" class="btn primary">Zurück zu den Tools</a>
+        <a href="#chartbereich" class="btn secondary">Zum Chart</a>
+      </div>
+    </section>
+
+    <section id="chartbereich" class="tv-layout">
+
+      <div class="tv-panel">
+        <div class="badge">Live Chart</div>
+        <h2 class="section-heading" style="font-size:36px; margin-bottom:10px;">Chart Analyse</h2>
+        <p class="section-subtext" style="margin-bottom:0;">
+          Nutze diesen Bereich für Marktstruktur, Liquidität, Sessions und deine tägliche Vorbereitung.
+        </p>
+
+        <div class="tv-frame">
+          <iframe
+            id="tvFrame"
+            src="https://www.tradingview.com/widgetembed/?symbol=FX%3AEURUSD&interval=60&theme=dark&style=1&locale=de_DE&toolbarbg=0C0C0C&enable_publishing=false&hide_side_toolbar=false&allow_symbol_change=true"
+            allowfullscreen>
+          </iframe>
+        </div>
+      </div>
+
+      <div class="tv-panel">
+        <div class="badge">Schnellzugriff</div>
+        <h2 class="section-heading" style="font-size:36px; margin-bottom:10px;">Märkte wechseln</h2>
+        <p class="helper-text">
+          Öffne mit einem Klick deine wichtigsten Märkte und bleibe direkt in deinem BullProsperity Workflow.
+        </p>
+
+        <div class="symbol-grid">
+          <button class="symbol-btn active" data-symbol="FX:EURUSD">EURUSD</button>
+          <button class="symbol-btn" data-symbol="FX:GBPUSD">GBPUSD</button>
+          <button class="symbol-btn" data-symbol="FX:USDJPY">USDJPY</button>
+          <button class="symbol-btn" data-symbol="OANDA:XAUUSD">XAUUSD</button>
+          <button class="symbol-btn" data-symbol="CAPITALCOM:US100">NAS100</button>
+          <button class="symbol-btn" data-symbol="CAPITALCOM:US30">US30</button>
+        </div>
+
+        <div class="quick-box">
+          <div class="quick-title">BullProsperity Hinweis</div>
+          <div class="quick-sub">
+            Nutze den Chart nicht nur zum Anschauen. Markiere deine Struktur, prüfe Liquidität,
+            warte auf Confirmation und notiere dir anschließend deine Gedanken sauber im Journal.
+          </div>
+        </div>
+
+        <div class="watchlist">
+          <div class="watch-item">
+            <div class="name">Forex Fokus</div>
+            <div class="desc">EURUSD, GBPUSD und USDJPY eignen sich stark für Struktur, Sessions und Liquiditätskonzepte.</div>
+          </div>
+
+          <div class="watch-item">
+            <div class="name">Gold Fokus</div>
+            <div class="desc">XAUUSD bewegt sich oft dynamisch und eignet sich gut für Reaktionszonen, Sweeps und starke Impulse.</div>
+          </div>
+
+          <div class="watch-item">
+            <div class="name">Index Fokus</div>
+            <div class="desc">NAS100 und US30 sind interessant für schnelle Moves, Session Plays und klare Momentum-Bewegungen.</div>
+          </div>
+        </div>
+
+        <textarea id="chartNotes" class="note-box" placeholder="Deine Chart-Beobachtungen, Bias, Zonen oder Session-Notizen..."></textarea>
+      </div>
+
+    </section>
+
+    <div class="footer-note">
+      BullProsperity dient ausschließlich Bildungszwecken und stellt keine Finanzberatung dar.
+    </div>
+
+  </div>
+
+  <script>
+    const buttons = document.querySelectorAll(".symbol-btn");
+    const tvFrame = document.getElementById("tvFrame");
+    const chartNotes = document.getElementById("chartNotes");
+    const notesKey = "bullprosperity_chart_notes";
+
+    function updateChart(symbol) {
+      const encoded = encodeURIComponent(symbol);
+      tvFrame.src = `https://www.tradingview.com/widgetembed/?symbol=${encoded}&interval=60&theme=dark&style=1&locale=de_DE&toolbarbg=0C0C0C&enable_publishing=false&hide_side_toolbar=false&allow_symbol_change=true`;
+    }
+
+    buttons.forEach(button => {
+      button.addEventListener("click", () => {
+        buttons.forEach(btn => btn.classList.remove("active"));
+        button.classList.add("active");
+
+        const symbol = button.getAttribute("data-symbol");
+        updateChart(symbol);
+      });
+    });
+
+    const savedNotes = localStorage.getItem(notesKey);
+    if (savedNotes) {
+      chartNotes.value = savedNotes;
+    }
+
+    chartNotes.addEventListener("input", () => {
+      localStorage.setItem(notesKey, chartNotes.value);
+    });
+  </script>
+</body>
+</html>
