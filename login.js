@@ -6,5 +6,3 @@ document.addEventListener("DOMContentLoaded", () => {
     startButton.textContent = "Jetzt starten";
   }
 });
-
- 
