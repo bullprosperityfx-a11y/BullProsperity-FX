@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   const memberButtons = document.querySelectorAll("[data-member-link]");
   const loginButtons = document.querySelectorAll("[data-login-link]");
 
-  const WHOP_LOGIN_URL = "https://whop.com/bullprosperity-fx/bullprosperity-fx/";
+  const WHOP_LOGIN_URL = "https://google.com";
 
   async function getAccess() {
     try {
