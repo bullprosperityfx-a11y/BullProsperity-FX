@@ -2,7 +2,7 @@ const BullProsperityAuth = (() => {
   const ACCESS_ENDPOINT = "/api/access";
 
   // HIER DEINEN ECHTEN WHOP LINK EINTRAGEN
-  const WHOP_LOGIN_URL = "https://whop.com/joined/bullprosperity-fx/products/bullprosperity-fx/";
+  const WHOP_LOGIN_URL = "https://whop.com/bullprosperity-fx/bullprosperity-fx/";
 
   function hasPremiumAccess(data) {
     return !!data && (data.role === "admin" || data.role === "premium");
