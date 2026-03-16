@@ -1,1 +1,427 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BullProsperity | Setup Austausch</title>
+  <link rel="stylesheet" href="theme.css" />
 
+  <script>
+    (async () => {
+      try {
+        const res = await fetch("/api/access", { credentials: "include" });
+        const data = await res.json();
+
+        if (data.role !== "admin" && data.role !== "premium") {
+          window.location.href = "locked.html";
+        }
+      } catch (err) {
+        window.location.href = "locked.html";
+      }
+    })();
+  </script>
+
+  <style>
+    .community-layout{
+      display:grid;
+      grid-template-columns:1.05fr 0.95fr;
+      gap:24px;
+      align-items:start;
+    }
+
+    .community-panel{
+      border:1px solid var(--line);
+      border-radius:28px;
+      background:linear-gradient(180deg, var(--panel), var(--panel-2));
+      box-shadow:0 0 0 1px rgba(255,255,255,0.02) inset;
+      padding:24px;
+    }
+
+    .form-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:16px;
+      margin-top:18px;
+    }
+
+    .field{
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+    }
+
+    .field.full{
+      grid-column:1 / -1;
+    }
+
+    .field label{
+      color:#f1f1f1;
+      font-size:14px;
+      font-weight:800;
+    }
+
+    .field input,
+    .field textarea,
+    .field select{
+      width:100%;
+      border-radius:16px;
+      border:1px solid rgba(243,210,27,0.18);
+      background:rgba(255,255,255,0.03);
+      color:#fff;
+      padding:14px 16px;
+      font-size:15px;
+      outline:none;
+    }
+
+    .field textarea{
+      min-height:140px;
+      resize:vertical;
+    }
+
+    .field input:focus,
+    .field textarea:focus,
+    .field select:focus{
+      border-color:rgba(243,210,27,0.48);
+      box-shadow:0 0 0 3px rgba(243,210,27,0.08);
+    }
+
+    .actions{
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+      margin-top:20px;
+    }
+
+    .action-btn{
+      border:none;
+      cursor:pointer;
+    }
+
+    .post-list{
+      display:grid;
+      gap:14px;
+      margin-top:18px;
+    }
+
+    .post-card{
+      border:1px solid rgba(243,210,27,0.14);
+      border-radius:22px;
+      background:rgba(255,255,255,0.02);
+      padding:18px;
+    }
+
+    .post-top{
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      flex-wrap:wrap;
+      margin-bottom:12px;
+    }
+
+    .post-title{
+      color:var(--gold);
+      font-size:20px;
+      font-weight:900;
+      line-height:1.2;
+    }
+
+    .post-badge{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding:8px 14px;
+      border-radius:999px;
+      border:1px solid var(--gold-soft);
+      color:var(--gold);
+      background:rgba(243,210,27,0.06);
+      font-size:12px;
+      font-weight:800;
+    }
+
+    .post-meta{
+      color:#bdbdbd;
+      font-size:14px;
+      margin-bottom:12px;
+    }
+
+    .post-text{
+      color:#ededed;
+      line-height:1.7;
+      font-size:15px;
+      white-space:pre-wrap;
+      margin-bottom:14px;
+    }
+
+    .post-actions{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
+    .small-btn{
+      border:none;
+      cursor:pointer;
+      padding:10px 14px;
+      border-radius:12px;
+      font-weight:800;
+      font-size:14px;
+    }
+
+    .small-btn.secondary{
+      background:rgba(255,255,255,0.03);
+      color:#fff;
+      border:1px solid rgba(255,255,255,0.14);
+    }
+
+    .empty-state{
+      border:1px dashed rgba(243,210,27,0.18);
+      border-radius:20px;
+      padding:24px;
+      text-align:center;
+      color:#bdbdbd;
+      line-height:1.7;
+      margin-top:18px;
+      background:rgba(255,255,255,0.02);
+    }
+
+    .helper-list{
+      display:grid;
+      gap:12px;
+      margin-top:18px;
+    }
+
+    .helper-item{
+      border:1px solid rgba(243,210,27,0.12);
+      border-radius:16px;
+      background:rgba(255,255,255,0.02);
+      padding:14px 16px;
+      color:#efefef;
+      line-height:1.6;
+      font-size:14px;
+      font-weight:700;
+    }
+
+    @media(max-width:1100px){
+      .community-layout{
+        grid-template-columns:1fr;
+      }
+    }
+
+    @media(max-width:760px){
+      .form-grid{
+        grid-template-columns:1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+
+    <nav class="navbar">
+      <a href="index.html" class="logo">BullProsperity</a>
+      <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="hub.html">Hub</a>
+        <a href="course.html">Course</a>
+        <a href="tools.html">Tools</a>
+        <a href="setup-room.html">Setup Room</a>
+        <a href="community.html" class="active">Community</a>
+        <a href="login.html">Login</a>
+      </div>
+    </nav>
+
+    <section class="hero-shell">
+      <div class="badge">Setups</div>
+      <h1 class="hero-title">Setup <span class="gold">Austausch</span></h1>
+      <p class="hero-text">
+        Hier können Mitglieder ihre Setups, Gedanken zu Liquidität, Struktur und mögliche Ausführungen im Markt teilen.
+      </p>
+      <div class="hero-buttons">
+        <a href="community.html" class="btn primary">Zurück zur Community</a>
+        <a href="#setup-form" class="btn secondary">Setup posten</a>
+      </div>
+    </section>
+
+    <section class="community-layout">
+      <div class="community-panel" id="setup-form">
+        <div class="badge">Neuer Beitrag</div>
+        <h2 class="section-heading" style="font-size:36px; margin-bottom:10px;">Dein Setup teilen</h2>
+        <p class="section-subtext" style="margin-bottom:0;">
+          Teile Marktidee, Bias, Setup-Typ und deine Gedanken zur Ausführung.
+        </p>
+
+        <div class="form-grid">
+          <div class="field">
+            <label for="setupName">Titel</label>
+            <input type="text" id="setupName" placeholder="z. B. London Sweep auf EURUSD" />
+          </div>
+
+          <div class="field">
+            <label for="setupMarket">Markt</label>
+            <input type="text" id="setupMarket" placeholder="z. B. EURUSD / XAUUSD / NAS100" />
+          </div>
+
+          <div class="field">
+            <label for="setupBias">Bias</label>
+            <select id="setupBias">
+              <option value="">Bitte wählen</option>
+              <option value="Bullish">Bullish</option>
+              <option value="Bearish">Bearish</option>
+              <option value="Neutral">Neutral</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="setupType">Setup Typ</label>
+            <input type="text" id="setupType" placeholder="z. B. Liquidity Sweep + BOS" />
+          </div>
+
+          <div class="field full">
+            <label for="setupText">Beschreibung</label>
+            <textarea id="setupText" placeholder="Beschreibe dein Setup, deine Überlegung und warum du diesen Markt interessant findest..."></textarea>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button class="btn primary action-btn" id="saveSetupBtn">Setup speichern</button>
+          <button class="btn secondary action-btn" id="resetSetupBtn">Felder leeren</button>
+        </div>
+      </div>
+
+      <div class="community-panel">
+        <div class="badge">BullProsperity Fokus</div>
+        <h2 class="section-heading" style="font-size:36px; margin-bottom:10px;">Warum Setup Austausch?</h2>
+        <p class="section-subtext" style="margin-bottom:0;">
+          Austausch über Setups hilft Mitgliedern, Märkte aus mehreren Blickwinkeln zu sehen
+          und ihre Analysefähigkeiten deutlich schneller zu verbessern.
+        </p>
+
+        <div class="helper-list">
+          <div class="helper-item">Mehr Perspektiven auf denselben Markt.</div>
+          <div class="helper-item">Besseres Verständnis für Struktur und Liquidität.</div>
+          <div class="helper-item">Lernen durch reale Marktideen statt nur Theorie.</div>
+          <div class="helper-item">Community-Mehrwert für aktive Mitglieder.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="community-panel">
+        <div class="badge">Community Beiträge</div>
+        <h2 class="section-heading" style="font-size:36px; margin-bottom:10px;">Geteilte Setups</h2>
+        <p class="section-subtext" style="margin-bottom:0;">
+          Alle Einträge werden lokal im Browser gespeichert.
+        </p>
+
+        <div id="setupList" class="post-list"></div>
+        <div id="setupEmpty" class="empty-state">
+          Noch keine Setups geteilt.<br>
+          Erstelle oben deinen ersten Community-Post.
+        </div>
+      </div>
+    </section>
+
+    <div class="footer-note">
+      BullProsperity dient ausschließlich Bildungszwecken und stellt keine Finanzberatung dar.
+    </div>
+  </div>
+
+  <script>
+    const storageKey = "bullprosperity_setup_posts";
+
+    const setupName = document.getElementById("setupName");
+    const setupMarket = document.getElementById("setupMarket");
+    const setupBias = document.getElementById("setupBias");
+    const setupType = document.getElementById("setupType");
+    const setupText = document.getElementById("setupText");
+
+    const saveSetupBtn = document.getElementById("saveSetupBtn");
+    const resetSetupBtn = document.getElementById("resetSetupBtn");
+    const setupList = document.getElementById("setupList");
+    const setupEmpty = document.getElementById("setupEmpty");
+
+    function getPosts() {
+      const raw = localStorage.getItem(storageKey);
+      return raw ? JSON.parse(raw) : [];
+    }
+
+    function savePosts(posts) {
+      localStorage.setItem(storageKey, JSON.stringify(posts));
+    }
+
+    function resetForm() {
+      setupName.value = "";
+      setupMarket.value = "";
+      setupBias.value = "";
+      setupType.value = "";
+      setupText.value = "";
+    }
+
+    function renderPosts() {
+      const posts = getPosts();
+      setupList.innerHTML = "";
+
+      if (posts.length === 0) {
+        setupEmpty.style.display = "block";
+        return;
+      }
+
+      setupEmpty.style.display = "none";
+
+      posts.forEach((post, index) => {
+        const card = document.createElement("div");
+        card.className = "post-card";
+
+        card.innerHTML = `
+          <div class="post-top">
+            <div class="post-title">${post.title}</div>
+            <div class="post-badge">${post.bias || "Kein Bias"}</div>
+          </div>
+          <div class="post-meta">${post.market || "-"} • ${post.type || "-"} • ${post.date}</div>
+          <div class="post-text">${post.text}</div>
+          <div class="post-actions">
+            <button class="small-btn secondary" onclick="deleteSetupPost(${index})">Beitrag löschen</button>
+          </div>
+        `;
+
+        setupList.appendChild(card);
+      });
+    }
+
+    saveSetupBtn.addEventListener("click", () => {
+      if (!setupName.value.trim() || !setupText.value.trim()) {
+        alert("Bitte mindestens Titel und Beschreibung ausfüllen.");
+        return;
+      }
+
+      const posts = getPosts();
+
+      posts.unshift({
+        title: setupName.value.trim(),
+        market: setupMarket.value.trim(),
+        bias: setupBias.value,
+        type: setupType.value.trim(),
+        text: setupText.value.trim(),
+        date: new Date().toLocaleDateString("de-DE")
+      });
+
+      savePosts(posts);
+      renderPosts();
+      resetForm();
+    });
+
+    resetSetupBtn.addEventListener("click", resetForm);
+
+    function deleteSetupPost(index) {
+      const posts = getPosts();
+      posts.splice(index, 1);
+      savePosts(posts);
+      renderPosts();
+    }
+
+    window.deleteSetupPost = deleteSetupPost;
+
+    renderPosts();
+  </script>
+</body>
+</html>
