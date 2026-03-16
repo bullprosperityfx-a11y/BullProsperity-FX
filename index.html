@@ -3,402 +3,172 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>BullProsperity | Trading Education</title>
+  <title>BullProsperity | Home</title>
+  <link rel="stylesheet" href="theme.css" />
+
+  <script>
+    (async () => {
+      try {
+        const res = await fetch("/api/access", {
+          credentials: "include"
+        });
+        const data = await res.json();
+
+        window.bullprosperityAccess = data;
+      } catch (err) {
+        window.bullprosperityAccess = null;
+      }
+    })();
+  </script>
 
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
+    .hero-center{
+      text-align:center;
+      max-width:1100px;
+      margin:0 auto;
     }
 
-    :root {
-      --bg: #070707;
-      --panel: rgba(13, 13, 13, 0.94);
-      --panel-2: rgba(18, 18, 18, 0.92);
-      --gold: #ffd700;
-      --gold-soft: #ffe45e;
-      --white: #ffffff;
-      --text: #e7e7e7;
-      --line: rgba(255, 215, 0, 0.16);
-      --line-soft: rgba(255, 255, 255, 0.08);
+    .hero-center .badge{
+      margin-left:auto;
+      margin-right:auto;
     }
 
-    body {
-      font-family: Arial, Helvetica, sans-serif;
-      background:
-        radial-gradient(circle at top, rgba(255, 215, 0, 0.07), transparent 35%),
-        linear-gradient(135deg, #050505, #090909 58%, #101010);
-      color: var(--white);
-      min-height: 100vh;
-      overflow-x: hidden;
+    .hero-center .hero-title{
+      max-width:none;
+      margin-left:auto;
+      margin-right:auto;
     }
 
-    .chart-bg {
-      position: fixed;
-      inset: 0;
-      z-index: 0;
-      pointer-events: none;
-      opacity: 0.22;
+    .hero-center .hero-text{
+      max-width:900px;
+      margin-left:auto;
+      margin-right:auto;
     }
 
-    .chart-bg svg {
-      width: 100%;
-      height: 100%;
-      display: block;
+    .hero-center .hero-buttons{
+      justify-content:center;
     }
 
-    .line-main {
-      fill: none;
-      stroke: rgba(255, 215, 0, 0.62);
-      stroke-width: 3.5;
+    .feature-grid{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:18px;
+      margin-top:26px;
     }
 
-    .line-alt {
-      fill: none;
-      stroke: rgba(255, 255, 255, 0.12);
-      stroke-width: 2.2;
+    .feature-card{
+      border:1px solid var(--line);
+      border-radius:24px;
+      background:linear-gradient(180deg, rgba(28,28,28,0.88), rgba(14,14,14,0.94));
+      box-shadow:0 0 0 1px rgba(255,255,255,0.02) inset;
+      padding:26px 20px;
+      text-align:center;
     }
 
-    .wick-gold {
-      stroke: rgba(255, 215, 0, 0.4);
-      stroke-width: 2.2;
+    .feature-card h3{
+      color:var(--gold);
+      font-size:22px;
+      font-weight:900;
+      margin-bottom:8px;
     }
 
-    .wick-white {
-      stroke: rgba(255, 255, 255, 0.16);
-      stroke-width: 2;
+    .feature-card p{
+      color:#efefef;
+      font-size:15px;
+      line-height:1.6;
+      font-weight:700;
     }
 
-    .body-gold {
-      fill: rgba(255, 215, 0, 0.16);
-      stroke: rgba(255, 215, 0, 0.34);
-      stroke-width: 1.4;
+    .access-grid{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:18px;
+      margin-top:20px;
     }
 
-    .body-white {
-      fill: rgba(255, 255, 255, 0.05);
-      stroke: rgba(255, 255, 255, 0.14);
-      stroke-width: 1.2;
+    .access-card{
+      border:1px solid var(--line);
+      border-radius:24px;
+      background:linear-gradient(180deg, rgba(28,28,28,0.88), rgba(14,14,14,0.94));
+      box-shadow:0 0 0 1px rgba(255,255,255,0.02) inset;
+      padding:24px;
     }
 
-    .page-shell {
-      position: relative;
-      z-index: 1;
-      width: min(1320px, calc(100% - 36px));
-      margin: 18px auto;
-      border: 2px solid rgba(255, 255, 255, 0.3);
-      border-radius: 16px;
-      padding: 22px 26px 34px;
-      background: rgba(0, 0, 0, 0.08);
-      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.02);
+    .access-card h3{
+      font-size:22px;
+      line-height:1.15;
+      color:var(--gold);
+      margin-bottom:10px;
+      font-weight:900;
     }
 
-    .topbar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 26px;
+    .access-card p{
+      color:#efefef;
+      font-size:15px;
+      line-height:1.6;
+      margin-bottom:18px;
     }
 
-    .logo {
-      color: var(--gold);
-      font-weight: 800;
-      font-size: 2.1rem;
-      letter-spacing: -0.03em;
-      text-shadow: 0 0 15px rgba(255, 215, 0, 0.18);
+    .access-card .card-link{
+      margin-top:0;
     }
 
-    nav {
-      display: flex;
-      gap: 26px;
-      align-items: center;
-    }
-
-    nav a {
-      color: #ffffff;
-      text-decoration: none;
-      font-size: 0.95rem;
-      font-weight: 700;
-      transition: 0.2s ease;
-    }
-
-    nav a:hover {
-      color: var(--gold);
-    }
-
-    .hero-wrap {
-      width: min(1120px, 100%);
-      margin: 0 auto;
-      border: 1px solid rgba(255, 215, 0, 0.12);
-      border-radius: 28px;
-      background:
-        radial-gradient(circle at top left, rgba(255, 215, 0, 0.1), transparent 28%),
-        linear-gradient(180deg, rgba(16,16,16,0.96), rgba(11,11,11,0.95));
-      padding: 34px 34px 26px;
-      position: relative;
-      overflow: hidden;
-      box-shadow:
-        0 0 0 1px rgba(255, 255, 255, 0.03),
-        0 20px 40px rgba(0,0,0,0.24);
-    }
-
-    .hero-badge {
-      display: inline-block;
-      margin: 0 auto 18px;
-      padding: 8px 16px;
-      border-radius: 999px;
-      border: 1px solid rgba(255, 215, 0, 0.32);
-      color: var(--gold-soft);
-      background: rgba(255, 215, 0, 0.07);
-      font-size: 13px;
-      font-weight: 700;
-    }
-
-    .hero-center {
-      text-align: center;
-    }
-
-    .hero-title {
-      font-size: clamp(2.9rem, 5vw, 5.6rem);
-      line-height: 0.95;
-      font-weight: 900;
-      letter-spacing: -0.04em;
-      margin-bottom: 18px;
-    }
-
-    .hero-title .white {
-      color: var(--white);
-    }
-
-    .hero-title .gold {
-      color: var(--gold);
-      text-shadow: 0 0 18px rgba(255, 215, 0, 0.14);
-    }
-
-    .hero-text {
-      max-width: 900px;
-      margin: 0 auto;
-      font-size: 0.98rem;
-      line-height: 1.65;
-      color: #ededed;
-    }
-
-    .btn-row {
-      display: flex;
-      justify-content: center;
-      gap: 14px;
-      flex-wrap: wrap;
-      margin-top: 26px;
-    }
-
-    .btn {
-      min-width: 155px;
-      display: inline-flex;
-      justify-content: center;
-      align-items: center;
-      padding: 14px 20px;
-      border-radius: 16px;
-      font-weight: 800;
-      text-decoration: none;
-      transition: 0.2s ease;
-      font-size: 0.95rem;
-    }
-
-    .btn-gold {
-      color: #111111;
-      background: linear-gradient(135deg, #ffe15b, #f0b90b);
-      box-shadow: 0 6px 16px rgba(255, 215, 0, 0.14);
-    }
-
-    .btn-gold:hover {
-      transform: translateY(-1px);
-    }
-
-    .btn-outline {
-      color: #ffffff;
-      border: 1px solid rgba(255, 215, 0, 0.28);
-      background: rgba(255,255,255,0.02);
-    }
-
-    .btn-outline:hover {
-      color: var(--gold);
-      background: rgba(255,255,255,0.04);
-    }
-
-    .mini-grid {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 16px;
-      margin-top: 26px;
-    }
-
-    .mini-card {
-      background: rgba(255,255,255,0.03);
-      border: 1px solid rgba(255, 215, 0, 0.1);
-      border-radius: 18px;
-      padding: 18px 16px;
-      text-align: center;
-      min-height: 112px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-    }
-
-    .mini-card h3 {
-      color: var(--gold);
-      font-size: 2rem;
-      line-height: 1;
-      margin-bottom: 8px;
-      font-weight: 900;
-      letter-spacing: -0.03em;
-    }
-
-    .mini-card p {
-      color: #f2f2f2;
-      font-size: 0.92rem;
-      line-height: 1.45;
-      font-weight: 600;
-    }
-
-    .info-block {
-      width: min(960px, 100%);
-      margin: 34px auto 0;
-      text-align: center;
-      padding: 8px 10px 0;
-    }
-
-    .info-block h2 {
-      color: var(--gold);
-      font-size: clamp(2.1rem, 3.4vw, 3.4rem);
-      line-height: 1.05;
-      margin-bottom: 12px;
-      letter-spacing: -0.03em;
-      font-weight: 900;
-    }
-
-    .info-block p {
-      color: #ededed;
-      line-height: 1.7;
-      font-size: 1rem;
-      max-width: 820px;
-      margin: 0 auto;
-      font-weight: 600;
-    }
-
-    @media (max-width: 1000px) {
-      .mini-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .page-shell {
-        width: min(100% - 20px, 1320px);
-        padding: 18px 14px 28px;
-      }
-
-      .hero-wrap {
-        padding: 24px 18px 18px;
-      }
-
-      .logo {
-        font-size: 1.6rem;
-      }
-
-      nav {
-        gap: 14px;
-      }
-
-      nav a {
-        font-size: 0.88rem;
+    @media(max-width:1200px){
+      .feature-grid,
+      .access-grid{
+        grid-template-columns:1fr;
       }
     }
   </style>
 </head>
 <body>
-  <div class="chart-bg">
-    <svg viewBox="0 0 1600 900" preserveAspectRatio="none">
-      <path class="line-alt" d="M0,645 C130,620 190,565 320,548 C435,532 520,564 635,485 C760,398 825,435 935,342 C1045,248 1135,280 1255,198 C1360,126 1465,142 1600,128" />
-      <path class="line-main" d="M0,730 C120,708 220,650 335,618 C455,585 545,534 670,448 C790,365 890,390 1008,298 C1110,220 1205,210 1325,154 C1430,105 1515,105 1600,88" />
+  <div class="page">
 
-      <line class="wick-gold" x1="112" y1="770" x2="112" y2="694"></line>
-      <rect class="body-gold" x="101" y="722" width="22" height="34" rx="4"></rect>
+    <nav class="navbar">
+      <a href="index.html" class="logo">BullProsperity</a>
 
-      <line class="wick-white" x1="220" y1="688" x2="220" y2="615"></line>
-      <rect class="body-white" x="209" y="640" width="22" height="31" rx="4"></rect>
+      <div class="nav-links">
+        <a href="index.html" class="active">Home</a>
+        <a href="hub.html">Hub</a>
+        <a href="course.html">Course</a>
+        <a href="tools.html">Tools</a>
+        <a href="setup-room.html">Setup Room</a>
+        <a href="community.html">Community</a>
+        <a href="login.html">Login</a>
+      </div>
+    </nav>
 
-      <line class="wick-gold" x1="332" y1="650" x2="332" y2="582"></line>
-      <rect class="body-gold" x="321" y="604" width="22" height="30" rx="4"></rect>
-
-      <line class="wick-white" x1="478" y1="585" x2="478" y2="515"></line>
-      <rect class="body-white" x="467" y="536" width="22" height="33" rx="4"></rect>
-
-      <line class="wick-gold" x1="622" y1="515" x2="622" y2="440"></line>
-      <rect class="body-gold" x="611" y="460" width="22" height="36" rx="4"></rect>
-
-      <line class="wick-white" x1="770" y1="432" x2="770" y2="360"></line>
-      <rect class="body-white" x="759" y="382" width="22" height="32" rx="4"></rect>
-
-      <line class="wick-gold" x1="915" y1="355" x2="915" y2="286"></line>
-      <rect class="body-gold" x="904" y="304" width="22" height="35" rx="4"></rect>
-
-      <line class="wick-white" x1="1060" y1="285" x2="1060" y2="222"></line>
-      <rect class="body-white" x="1049" y="238" width="22" height="28" rx="4"></rect>
-
-      <line class="wick-gold" x1="1212" y1="220" x2="1212" y2="160"></line>
-      <rect class="body-gold" x="1201" y="174" width="22" height="30" rx="4"></rect>
-
-      <line class="wick-white" x1="1390" y1="170" x2="1390" y2="108"></line>
-      <rect class="body-white" x="1379" y="124" width="22" height="26" rx="4"></rect>
-
-      <line class="wick-gold" x1="1496" y1="135" x2="1496" y2="84"></line>
-      <rect class="body-gold" x="1485" y="95" width="22" height="24" rx="4"></rect>
-    </svg>
-  </div>
-
-  <div class="page-shell">
-    <div class="topbar">
-      <div class="logo">BullProsperity</div>
-
-      <nav>
-        <a href="/index.html">Home</a>
-        <a href="/hub.html">Hub</a>
-        <a href="/course.html">Course</a>
-        <a href="/tools.html">Tools</a>
-        <a href="/api/whop/login">Login</a>
-      </nav>
-    </div>
-
-    <section class="hero-wrap">
+    <section class="hero-shell">
       <div class="hero-center">
-        <div class="hero-badge">Pro Trading Education</div>
+        <div class="badge">Pro Trading Education</div>
 
-        <div class="hero-title">
-          <span class="white">Build Wealth With</span><br>
+        <h1 class="hero-title">
+          Build Wealth With
           <span class="gold">BullProsperity</span>
-        </div>
+        </h1>
 
         <p class="hero-text">
-          Lerne Marktstruktur, Entries, Risikomanagement und Trading-Psychologie auf einer
-          Plattform, die elegant, modern und wie eine echte Premium-Brand aufgebaut ist.
+          Lerne Marktstruktur, Entries, Risikomanagement und Trading-Psychologie auf einer Plattform,
+          die elegant, modern und wie eine echte Premium-Brand aufgebaut ist.
         </p>
 
-        <div class="btn-row">
-          <a href="/api/whop/login" class="btn btn-gold">Jetzt starten</a>
-          <a href="/hub.html" class="btn btn-outline">Mehr erfahren</a>
+        <div class="hero-buttons">
+          <a href="course.html" class="btn primary">Jetzt starten</a>
+          <a href="#zugang" class="btn secondary">Mehr erfahren</a>
         </div>
 
-        <div class="mini-grid">
-          <div class="mini-card">
+        <div class="feature-grid">
+          <div class="feature-card">
             <h3>Kurs</h3>
             <p>Strukturierte Lektionen, Module und professioneller Lernaufbau.</p>
           </div>
 
-          <div class="mini-card">
+          <div class="feature-card">
             <h3>Tools</h3>
             <p>Lot Size Rechner, Journal, Checklisten und TradingView Integration.</p>
           </div>
 
-          <div class="mini-card">
+          <div class="feature-card">
             <h3>Premium</h3>
             <p>Setup Room, Strategy Material und exklusive Mitgliederbereiche.</p>
           </div>
@@ -406,13 +176,73 @@
       </div>
     </section>
 
-    <section class="info-block">
-      <h2>Dein Zugang bei BullProsperity</h2>
-      <p>
-        Eine moderne Trading Education Plattform mit Kursbereich, Tools, exklusiven Setups und
-        strukturierten Inhalten für ambitionierte Trader.
+    <section id="zugang" class="section">
+      <h2 class="section-heading" style="text-align:center;">Dein Zugang bei BullProsperity</h2>
+      <p class="section-subtext" style="text-align:center; max-width:980px; margin-left:auto; margin-right:auto;">
+        Eine moderne Trading Education Plattform mit Kursbereich, Tools, exklusiven Setups
+        und strukturierten Mitgliederbereichen.
       </p>
+
+      <div class="access-grid">
+        <div class="access-card">
+          <h3>Course Bereich</h3>
+          <p>
+            Arbeite dich strukturiert durch alle Module – von den Grundlagen bis zur
+            BullProsperity SMC Strategie.
+          </p>
+          <a href="course.html" class="card-link">Kurs öffnen</a>
+        </div>
+
+        <div class="access-card">
+          <h3>Tools Bereich</h3>
+          <p>
+            Nutze Lot Size Rechner, Journal, Checkliste und TradingView für eine
+            saubere und professionelle Umsetzung.
+          </p>
+          <a href="tools.html" class="card-link">Tools öffnen</a>
+        </div>
+
+        <div class="access-card">
+          <h3>Premium Bereiche</h3>
+          <p>
+            Greife auf Setup Room, Community und strategische Praxisbereiche zu,
+            um Theorie mit realer Anwendung zu verbinden.
+          </p>
+          <a href="hub.html" class="card-link">Zum Hub</a>
+        </div>
+      </div>
     </section>
+
+    <section class="section">
+      <div class="grid-2">
+        <div class="section-card">
+          <div class="badge">BullProsperity Fokus</div>
+          <h2 class="section-heading" style="font-size:36px; margin-bottom:10px;">
+            Warum diese Plattform?
+          </h2>
+          <p class="section-subtext" style="margin-bottom:0;">
+            BullProsperity verbindet Education, Struktur, Praxis und Community in einer Oberfläche,
+            die nicht nur gut aussieht, sondern logisch aufgebaut ist und Mitglieder durch einen
+            echten Lernprozess führt.
+          </p>
+        </div>
+
+        <div class="section-card">
+          <div class="badge">Dein Vorteil</div>
+          <div class="list-box">
+            <div class="list-item">Klare Module statt Informationschaos.</div>
+            <div class="list-item">Tools für Risiko, Journal und Umsetzung.</div>
+            <div class="list-item">Praxisbereiche für Setups und Marktideen.</div>
+            <div class="list-item">Premium Aufbau wie eine moderne Education Plattform.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="footer-note">
+      BullProsperity dient ausschließlich Bildungs- und Informationszwecken und stellt keine Finanzberatung dar.
+    </div>
+
   </div>
 </body>
 </html>
