@@ -1,1 +1,356 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BullProsperity | Motivation & Disziplin</title>
+  <link rel="stylesheet" href="theme.css" />
 
+  <script>
+    (async () => {
+      try {
+        const res = await fetch("/api/access", { credentials: "include" });
+        const data = await res.json();
+
+        if (data.role !== "admin" && data.role !== "premium") {
+          window.location.href = "locked.html";
+        }
+      } catch (err) {
+        window.location.href = "locked.html";
+      }
+    })();
+  </script>
+
+  <style>
+    .mind-layout{
+      display:grid;
+      grid-template-columns:1.05fr 0.95fr;
+      gap:24px;
+      align-items:start;
+    }
+
+    .mind-panel{
+      border:1px solid var(--line);
+      border-radius:28px;
+      background:linear-gradient(180deg, var(--panel), var(--panel-2));
+      box-shadow:0 0 0 1px rgba(255,255,255,0.02) inset;
+      padding:24px;
+    }
+
+    .field{
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+      margin-top:18px;
+    }
+
+    .field label{
+      color:#f1f1f1;
+      font-size:14px;
+      font-weight:800;
+    }
+
+    .field input,
+    .field textarea,
+    .field select{
+      width:100%;
+      border-radius:16px;
+      border:1px solid rgba(243,210,27,0.18);
+      background:rgba(255,255,255,0.03);
+      color:#fff;
+      padding:14px 16px;
+      font-size:15px;
+      outline:none;
+    }
+
+    .field textarea{
+      min-height:140px;
+      resize:vertical;
+    }
+
+    .field input:focus,
+    .field textarea:focus,
+    .field select:focus{
+      border-color:rgba(243,210,27,0.48);
+      box-shadow:0 0 0 3px rgba(243,210,27,0.08);
+    }
+
+    .actions{
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+      margin-top:20px;
+    }
+
+    .action-btn{
+      border:none;
+      cursor:pointer;
+    }
+
+    .entry-list{
+      display:grid;
+      gap:14px;
+      margin-top:18px;
+    }
+
+    .entry-card{
+      border:1px solid rgba(243,210,27,0.14);
+      border-radius:22px;
+      background:rgba(255,255,255,0.02);
+      padding:18px;
+    }
+
+    .entry-title{
+      color:var(--gold);
+      font-size:20px;
+      font-weight:900;
+      margin-bottom:8px;
+    }
+
+    .entry-meta{
+      color:#bdbdbd;
+      font-size:14px;
+      margin-bottom:12px;
+    }
+
+    .entry-text{
+      color:#ededed;
+      line-height:1.7;
+      font-size:15px;
+      white-space:pre-wrap;
+      margin-bottom:14px;
+    }
+
+    .small-btn{
+      border:none;
+      cursor:pointer;
+      padding:10px 14px;
+      border-radius:12px;
+      font-weight:800;
+      font-size:14px;
+      background:rgba(255,255,255,0.03);
+      color:#fff;
+      border:1px solid rgba(255,255,255,0.14);
+    }
+
+    .helper-list{
+      display:grid;
+      gap:12px;
+      margin-top:18px;
+    }
+
+    .helper-item{
+      border:1px solid rgba(243,210,27,0.12);
+      border-radius:16px;
+      background:rgba(255,255,255,0.02);
+      padding:14px 16px;
+      color:#efefef;
+      line-height:1.6;
+      font-size:14px;
+      font-weight:700;
+    }
+
+    .empty-state{
+      border:1px dashed rgba(243,210,27,0.18);
+      border-radius:20px;
+      padding:24px;
+      text-align:center;
+      color:#bdbdbd;
+      line-height:1.7;
+      margin-top:18px;
+      background:rgba(255,255,255,0.02);
+    }
+
+    @media(max-width:1100px){
+      .mind-layout{
+        grid-template-columns:1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+
+    <nav class="navbar">
+      <a href="index.html" class="logo">BullProsperity</a>
+      <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="hub.html">Hub</a>
+        <a href="course.html">Course</a>
+        <a href="tools.html">Tools</a>
+        <a href="setup-room.html">Setup Room</a>
+        <a href="community.html" class="active">Community</a>
+        <a href="login.html">Login</a>
+      </div>
+    </nav>
+
+    <section class="hero-shell">
+      <div class="badge">Mindset</div>
+      <h1 class="hero-title">Motivation & <span class="gold">Disziplin</span></h1>
+      <p class="hero-text">
+        Austausch über Psychologie, Routinen, Rückschläge und alles, was langfristig starke Trader formt.
+      </p>
+      <div class="hero-buttons">
+        <a href="community.html" class="btn primary">Zurück zur Community</a>
+        <a href="#mind-form" class="btn secondary">Beitrag schreiben</a>
+      </div>
+    </section>
+
+    <section class="mind-layout">
+      <div class="mind-panel" id="mind-form">
+        <div class="badge">Neuer Mindset Beitrag</div>
+        <h2 class="section-heading" style="font-size:36px; margin-bottom:10px;">Gedanken teilen</h2>
+        <p class="section-subtext" style="margin-bottom:0;">
+          Teile deine Erfahrungen zu Motivation, Disziplin, Rückschlägen oder Routinen.
+        </p>
+
+        <div class="field">
+          <label for="mindTitle">Titel</label>
+          <input type="text" id="mindTitle" placeholder="z. B. Wie ich nach Verlusten wieder Fokus gefunden habe" />
+        </div>
+
+        <div class="field">
+          <label for="mindCategory">Kategorie</label>
+          <select id="mindCategory">
+            <option value="">Bitte wählen</option>
+            <option value="Motivation">Motivation</option>
+            <option value="Disziplin">Disziplin</option>
+            <option value="Routine">Routine</option>
+            <option value="Rückschlag">Rückschlag</option>
+            <option value="Mindset">Mindset</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="mindText">Beitrag</label>
+          <textarea id="mindText" placeholder="Was hast du gelernt? Was hat dir geholfen? Was würdest du anderen mitgeben?"></textarea>
+        </div>
+
+        <div class="actions">
+          <button class="btn primary action-btn" id="saveMindBtn">Beitrag speichern</button>
+          <button class="btn secondary action-btn" id="resetMindBtn">Felder leeren</button>
+        </div>
+      </div>
+
+      <div class="mind-panel">
+        <div class="badge">BullProsperity Fokus</div>
+        <h2 class="section-heading" style="font-size:36px; margin-bottom:10px;">Warum dieser Bereich?</h2>
+        <p class="section-subtext" style="margin-bottom:0;">
+          Trading wird nicht nur durch Chartwissen entschieden. Motivation, Disziplin und mentale Stabilität
+          sind oft der Unterschied zwischen Chaos und Konstanz.
+        </p>
+
+        <div class="helper-list">
+          <div class="helper-item">Disziplin hält dich im Plan, auch wenn Emotionen stark sind.</div>
+          <div class="helper-item">Motivation hilft zu starten, Routine hilft dranzubleiben.</div>
+          <div class="helper-item">Rückschläge sind nur dann wertvoll, wenn du daraus lernst.</div>
+          <div class="helper-item">Mentale Klarheit ist ein Teil professioneller Ausführung.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="mind-panel">
+        <div class="badge">Community Beiträge</div>
+        <h2 class="section-heading" style="font-size:36px; margin-bottom:10px;">Mindset Austausch</h2>
+        <div id="mindList" class="entry-list"></div>
+        <div id="mindEmpty" class="empty-state">
+          Noch keine Mindset-Beiträge vorhanden.<br>
+          Erstelle oben den ersten Beitrag.
+        </div>
+      </div>
+    </section>
+
+    <div class="footer-note">
+      BullProsperity dient ausschließlich Bildungszwecken und stellt keine Finanzberatung dar.
+    </div>
+  </div>
+
+  <script>
+    const storageKey = "bullprosperity_mind_posts";
+
+    const mindTitle = document.getElementById("mindTitle");
+    const mindCategory = document.getElementById("mindCategory");
+    const mindText = document.getElementById("mindText");
+
+    const saveMindBtn = document.getElementById("saveMindBtn");
+    const resetMindBtn = document.getElementById("resetMindBtn");
+    const mindList = document.getElementById("mindList");
+    const mindEmpty = document.getElementById("mindEmpty");
+
+    function getPosts() {
+      const raw = localStorage.getItem(storageKey);
+      return raw ? JSON.parse(raw) : [];
+    }
+
+    function savePosts(posts) {
+      localStorage.setItem(storageKey, JSON.stringify(posts));
+    }
+
+    function resetForm() {
+      mindTitle.value = "";
+      mindCategory.value = "";
+      mindText.value = "";
+    }
+
+    function renderPosts() {
+      const posts = getPosts();
+      mindList.innerHTML = "";
+
+      if (posts.length === 0) {
+        mindEmpty.style.display = "block";
+        return;
+      }
+
+      mindEmpty.style.display = "none";
+
+      posts.forEach((post, index) => {
+        const card = document.createElement("div");
+        card.className = "entry-card";
+
+        card.innerHTML = `
+          <div class="entry-title">${post.title}</div>
+          <div class="entry-meta">${post.category || "Allgemein"} • ${post.date}</div>
+          <div class="entry-text">${post.text}</div>
+          <button class="small-btn" onclick="deleteMindPost(${index})">Beitrag löschen</button>
+        `;
+
+        mindList.appendChild(card);
+      });
+    }
+
+    saveMindBtn.addEventListener("click", () => {
+      if (!mindTitle.value.trim() || !mindText.value.trim()) {
+        alert("Bitte mindestens Titel und Beitrag ausfüllen.");
+        return;
+      }
+
+      const posts = getPosts();
+
+      posts.unshift({
+        title: mindTitle.value.trim(),
+        category: mindCategory.value,
+        text: mindText.value.trim(),
+        date: new Date().toLocaleDateString("de-DE")
+      });
+
+      savePosts(posts);
+      renderPosts();
+      resetForm();
+    });
+
+    resetMindBtn.addEventListener("click", resetForm);
+
+    function deleteMindPost(index) {
+      const posts = getPosts();
+      posts.splice(index, 1);
+      savePosts(posts);
+      renderPosts();
+    }
+
+    window.deleteMindPost = deleteMindPost;
+
+    renderPosts();
+  </script>
+</body>
+</html>
