@@ -1,40 +1,59 @@
-const crypto = require("crypto");
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BullProsperity Login</title>
+<link rel="stylesheet" href="theme.css">
+</head>
 
-function base64url(buffer) {
-  return buffer
-    .toString("base64")
-    .replace(/\+/g, "-")
-    .replace(/\//g, "_")
-    .replace(/=+$/, "");
-}
+<body>
 
-module.exports = async function handler(req, res) {
-  const clientId = process.env.WHOP_CLIENT_ID;
-  const redirectUri = process.env.WHOP_REDIRECT_URI;
+<div class="page">
 
-  const codeVerifier = base64url(crypto.randomBytes(32));
-  const codeChallenge = base64url(
-    crypto.createHash("sha256").update(codeVerifier).digest()
-  );
-  const state = base64url(crypto.randomBytes(16));
-  const nonce = base64url(crypto.randomBytes(16));
+<nav class="navbar">
+<a href="index.html" class="logo">BullProsperity</a>
 
-  res.setHeader("Set-Cookie", [
-    `whop_verifier=${codeVerifier}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=600`,
-    `whop_state=${state}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=600`,
-    `whop_nonce=${nonce}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=600`
-  ]);
+<div class="nav-links">
+<a href="index.html">Home</a>
+<a href="course.html">Course</a>
+<a href="tools.html">Tools</a>
+<a href="hub.html">Hub</a>
+</div>
+</nav>
 
-  const params = new URLSearchParams({
-    response_type: "code",
-    client_id: clientId,
-    redirect_uri: redirectUri,
-    scope: "openid profile email",
-    state,
-    nonce,
-    code_challenge: codeChallenge,
-    code_challenge_method: "S256"
-  });
+<section class="hero-shell" style="text-align:center">
 
-  return res.redirect(`https://api.whop.com/oauth/authorize?${params.toString()}`);
-};
+<div class="badge">Mitglieder Zugang</div>
+
+<h1 class="hero-title">
+BullProsperity
+<span class="gold">Login</span>
+</h1>
+
+<p class="hero-text">
+Logge dich über Whop ein um Zugriff auf die Mitgliederbereiche zu erhalten.
+</p>
+
+<div class="hero-buttons">
+
+<a href="https://whop.com" class="btn primary">
+Login über Whop
+</a>
+
+<a href="index.html" class="btn secondary">
+Zurück zur Startseite
+</a>
+
+</div>
+
+</section>
+
+<div class="footer-note">
+BullProsperity dient ausschließlich Bildungszwecken und stellt keine Finanzberatung dar.
+</div>
+
+</div>
+
+</body>
+</html>
