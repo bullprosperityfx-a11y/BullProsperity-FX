@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>BullProsperity | Home</title>
   <link rel="stylesheet" href="theme.css" />
-  <script src="login.js" defer></script>
+  <script src="/login.js" defer></script>
 
   <style>
     .hero-center{
@@ -99,10 +99,48 @@
       margin-top:0;
     }
 
+    .auth-box{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      padding:8px 14px;
+      border-radius:999px;
+      background:rgba(255,255,255,0.04);
+      border:1px solid rgba(255,255,255,0.06);
+      font-size:13px;
+      font-weight:700;
+      white-space:nowrap;
+    }
+
+    .status-dot{
+      width:10px;
+      height:10px;
+      border-radius:50%;
+      background:#999;
+    }
+
+    .status-premium{
+      background:#00d26a;
+    }
+
+    .status-admin{
+      background:#ffd700;
+    }
+
+    .status-locked{
+      background:#ff4d4d;
+    }
+
     @media(max-width:1200px){
       .feature-grid,
       .access-grid{
         grid-template-columns:1fr;
+      }
+    }
+
+    @media(max-width:860px){
+      .auth-box{
+        margin-top:10px;
       }
     }
   </style>
@@ -120,7 +158,12 @@
         <a href="tools.html">Tools</a>
         <a href="setup-room.html">Setup Room</a>
         <a href="community.html">Community</a>
-        <a href="login.js">Login</a>
+        <a href="locked.html">Login</a>
+      </div>
+
+      <div class="auth-box">
+        <span class="status-dot"></span>
+        <span id="authStatus">Status wird geprüft...</span>
       </div>
     </nav>
 
@@ -139,7 +182,7 @@
         </p>
 
         <div class="hero-buttons">
-        <a href="#" class="btn primary" id="startButton">Jetzt starten</a>
+          <a href="#" class="btn primary" id="startButton">Jetzt starten</a>
           <a href="#zugang" class="btn secondary">Mehr erfahren</a>
         </div>
 
@@ -230,20 +273,5 @@
     </div>
 
   </div>
-  <script>
-  const startBtn = document.getElementById("startBtn");
-
-  if (window.bullprosperityAccess && startBtn) {
-    const role = window.bullprosperityAccess.role;
-
-    if (role === "admin" || role === "premium") {
-      startBtn.href = "hub.html";
-      startBtn.textContent = "Zum Mitgliederbereich";
-    } else {
-      startBtn.href = "login.html";
-      startBtn.textContent = "Jetzt starten";
-    }
-  }
-</script>
 </body>
 </html>
