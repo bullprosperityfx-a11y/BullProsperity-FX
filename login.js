@@ -3,12 +3,9 @@ document.addEventListener("DOMContentLoaded", async () => {
   const memberButtons = document.querySelectorAll("[data-member-link]");
   const loginButtons = document.querySelectorAll("[data-login-link]");
   const authStatus = document.getElementById("authStatus");
+  const authDot = document.querySelector(".status-dot");
 
-  // LOGIN / SESSION AUFBAU
-  const WHOP_LOGIN_URL = "https://whop.com/login";
-
-  // PRODUKT / CHECKOUT
-  const WHOP_CHECKOUT_URL = "https://whop.com/bullprosperity-fx/bullprosperity-fx/";
+  const WHOP_URL = "https://whop.com/bullprosperity-fx/bullprosperity-fx/";
 
   async function getAccess() {
     try {
@@ -30,37 +27,42 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   const data = await getAccess();
   const premium = hasAccess(data);
+
   const isProtected = document.body.dataset.protected === "true";
   const redirectMode = document.body.dataset.redirectMode || "locked";
 
   if (isProtected && !premium) {
     if (redirectMode === "checkout") {
-      window.location.href = WHOP_CHECKOUT_URL;
+      window.location.href = WHOP_URL;
     } else {
       window.location.href = "locked.html";
     }
     return;
   }
 
-  // LANDING PAGE BUTTON
   if (startButton) {
-    startButton.href = premium ? "hub.html" : WHOP_CHECKOUT_URL;
+    startButton.href = premium ? "hub.html" : WHOP_URL;
     startButton.textContent = premium ? "Zum Mitgliederbereich" : "Jetzt starten";
   }
 
-  // BUTTONS DIE DIREKT ZUM MITGLIEDERBEREICH SOLLEN
   memberButtons.forEach((btn) => {
-    btn.href = premium ? "hub.html" : WHOP_CHECKOUT_URL;
+    btn.href = premium ? "hub.html" : WHOP_URL;
   });
 
-  // LOGIN BUTTONS = NUR EINLOGGEN
   loginButtons.forEach((btn) => {
-    btn.href = WHOP_LOGIN_URL;
+    btn.href = WHOP_URL;
   });
 
   if (authStatus) {
-    authStatus.textContent = premium
-      ? "Aktive Membership erkannt."
-      : "Keine aktive Membership erkannt.";
+    if (premium && data.role === "admin") {
+      authStatus.textContent = "Admin Zugang aktiv";
+      if (authDot) authDot.classList.add("status-admin");
+    } else if (premium) {
+      authStatus.textContent = "Premium aktiv";
+      if (authDot) authDot.classList.add("status-premium");
+    } else {
+      authStatus.textContent = "Kein Zugang";
+      if (authDot) authDot.classList.add("status-locked");
+    }
   }
 });
