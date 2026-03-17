@@ -12,6 +12,12 @@ export default async function handler(req, res) {
     const clientSecret = process.env.WHOP_CLIENT_SECRET;
     const redirectUri = process.env.WHOP_REDIRECT_URI;
 
+    if (!clientId || !clientSecret || !redirectUri) {
+      return res.status(500).json({
+        error: "Missing required Whop environment variables"
+      });
+    }
+
     const cookie = req.headers.cookie || "";
 
     const verifierMatch = cookie.match(/whop_verifier=([^;]+)/);
@@ -109,15 +115,15 @@ export default async function handler(req, res) {
       role = "admin";
     } else if (activeMemberships.length > 0) {
       role = "premium";
-    } else {
-      role = "guest";
     }
 
+    const secure = process.env.NODE_ENV === "production";
+
     res.setHeader("Set-Cookie", [
-      `bp_role=${encodeURIComponent(role)}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=86400`,
-      `bp_email=${encodeURIComponent(email)}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=86400`,
-      `whop_verifier=; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=0`,
-      `whop_state=; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=0`
+      `bp_role=${encodeURIComponent(role)}; Path=/; HttpOnly; ${secure ? "Secure; " : ""}SameSite=Lax; Max-Age=86400`,
+      `bp_email=${encodeURIComponent(email)}; Path=/; HttpOnly; ${secure ? "Secure; " : ""}SameSite=Lax; Max-Age=86400`,
+      `whop_verifier=; Path=/; HttpOnly; ${secure ? "Secure; " : ""}SameSite=Lax; Max-Age=0`,
+      `whop_state=; Path=/; HttpOnly; ${secure ? "Secure; " : ""}SameSite=Lax; Max-Age=0`
     ]);
 
     return res.redirect("/index.html");
