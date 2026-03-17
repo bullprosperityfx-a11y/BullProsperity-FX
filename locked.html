@@ -3,49 +3,225 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>BullProsperity | Zugang gesperrt</title>
+  <title>BullProsperity | Home</title>
   <link rel="stylesheet" href="theme.css" />
-  <script src="/login.js" defer></script>
+  <script src="login.js" defer></script>
+
+  <style>
+    .hero-center{
+      text-align:center;
+      max-width:1100px;
+      margin:0 auto;
+    }
+
+    .hero-center .badge{
+      margin-left:auto;
+      margin-right:auto;
+    }
+
+    .hero-center .hero-title{
+      max-width:none;
+      margin-left:auto;
+      margin-right:auto;
+    }
+
+    .hero-center .hero-text{
+      max-width:900px;
+      margin-left:auto;
+      margin-right:auto;
+    }
+
+    .hero-center .hero-buttons{
+      justify-content:center;
+    }
+
+    .feature-grid{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:18px;
+      margin-top:26px;
+    }
+
+    .feature-card{
+      border:1px solid var(--line);
+      border-radius:24px;
+      background:linear-gradient(180deg, rgba(28,28,28,0.88), rgba(14,14,14,0.94));
+      box-shadow:0 0 0 1px rgba(255,255,255,0.02) inset;
+      padding:26px 20px;
+      text-align:center;
+    }
+
+    .feature-card h3{
+      color:var(--gold);
+      font-size:22px;
+      font-weight:900;
+      margin-bottom:8px;
+    }
+
+    .feature-card p{
+      color:#efefef;
+      font-size:15px;
+      line-height:1.6;
+      font-weight:700;
+    }
+
+    .access-grid{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:18px;
+      margin-top:20px;
+    }
+
+    .access-card{
+      border:1px solid var(--line);
+      border-radius:24px;
+      background:linear-gradient(180deg, rgba(28,28,28,0.88), rgba(14,14,14,0.94));
+      box-shadow:0 0 0 1px rgba(255,255,255,0.02) inset;
+      padding:24px;
+    }
+
+    .access-card h3{
+      font-size:22px;
+      line-height:1.15;
+      color:var(--gold);
+      margin-bottom:10px;
+      font-weight:900;
+    }
+
+    .access-card p{
+      color:#efefef;
+      font-size:15px;
+      line-height:1.6;
+      margin-bottom:18px;
+    }
+
+    .access-card .card-link{
+      margin-top:0;
+    }
+
+    @media(max-width:1200px){
+      .feature-grid,
+      .access-grid{
+        grid-template-columns:1fr;
+      }
+    }
+  </style>
 </head>
 <body>
-
   <div class="page">
 
     <nav class="navbar">
       <a href="index.html" class="logo">BullProsperity</a>
 
       <div class="nav-links">
-        <a href="index.html">Home</a>
+        <a href="index.html" class="active">Home</a>
         <a href="hub.html">Hub</a>
         <a href="course.html">Course</a>
         <a href="tools.html">Tools</a>
         <a href="setup-room.html">Setup Room</a>
         <a href="community.html">Community</a>
-      </div>
-
-      <div class="auth-box">
-        <span class="status-dot"></span>
-        <span id="authStatus">Status wird geprüft...</span>
+        <a href="login.js">Login</a>
       </div>
     </nav>
 
-    <section class="hero-shell" style="max-width:900px; margin:60px auto; text-align:center;">
-      <div class="badge">Mitgliederbereich</div>
+    <section class="hero-shell">
+      <div class="hero-center">
+        <div class="badge">Pro Trading Education</div>
 
-      <h1 class="hero-title">
-        Zugang <span class="gold">gesperrt</span>
-      </h1>
+        <h1 class="hero-title">
+          Build Wealth With
+          <span class="gold">BullProsperity</span>
+        </h1>
 
-      <p class="hero-text" style="margin-left:auto; margin-right:auto;">
-        Dieser Bereich ist nur für Mitglieder mit aktiver BullProsperity Membership verfügbar.
-        Logge dich mit Whop ein oder werde Mitglied, um Zugriff auf Hub, Course, Tools,
-        Setup Room und Community zu erhalten.
+        <p class="hero-text">
+          Lerne Marktstruktur, Entries, Risikomanagement und Trading-Psychologie auf einer Plattform,
+          die elegant, modern und wie eine echte Premium-Brand aufgebaut ist.
+        </p>
+
+        <div class="hero-buttons">
+        <a href="#" class="btn primary" id="startButton">Jetzt starten</a>
+          <a href="#zugang" class="btn secondary">Mehr erfahren</a>
+        </div>
+
+        <div class="feature-grid">
+          <div class="feature-card">
+            <h3>Kurs</h3>
+            <p>Strukturierte Lektionen, Module und professioneller Lernaufbau.</p>
+          </div>
+
+          <div class="feature-card">
+            <h3>Tools</h3>
+            <p>Lot Size Rechner, Journal, Checklisten und TradingView Integration.</p>
+          </div>
+
+          <div class="feature-card">
+            <h3>Premium</h3>
+            <p>Setup Room, Strategy Material und exklusive Mitgliederbereiche.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="zugang" class="section">
+      <h2 class="section-heading" style="text-align:center;">Dein Zugang bei BullProsperity</h2>
+      <p class="section-subtext" style="text-align:center; max-width:980px; margin-left:auto; margin-right:auto;">
+        Eine moderne Trading Education Plattform mit Kursbereich, Tools, exklusiven Setups
+        und strukturierten Mitgliederbereichen.
       </p>
 
-      <div class="hero-buttons" style="justify-content:center;">
-        <a href="#" class="btn primary" data-login-link>Login mit Whop</a>
-        <a href="#" class="btn secondary" data-member-link>Mitglied werden</a>
-        <a href="index.html" class="btn secondary">Zurück zur Landing Page</a>
+      <div class="access-grid">
+        <div class="access-card">
+          <h3>Course Bereich</h3>
+          <p>
+            Arbeite dich strukturiert durch alle Module – von den Grundlagen bis zur
+            BullProsperity SMC Strategie.
+          </p>
+          <a href="course.html" class="card-link">Kurs öffnen</a>
+        </div>
+
+        <div class="access-card">
+          <h3>Tools Bereich</h3>
+          <p>
+            Nutze Lot Size Rechner, Journal, Checkliste und TradingView für eine
+            saubere und professionelle Umsetzung.
+          </p>
+          <a href="tools.html" class="card-link">Tools öffnen</a>
+        </div>
+
+        <div class="access-card">
+          <h3>Premium Bereiche</h3>
+          <p>
+            Greife auf Setup Room, Community und strategische Praxisbereiche zu,
+            um Theorie mit realer Anwendung zu verbinden.
+          </p>
+          <a href="hub.html" class="card-link">Zum Hub</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="grid-2">
+        <div class="section-card">
+          <div class="badge">BullProsperity Fokus</div>
+          <h2 class="section-heading" style="font-size:36px; margin-bottom:10px;">
+            Warum diese Plattform?
+          </h2>
+          <p class="section-subtext" style="margin-bottom:0;">
+            BullProsperity verbindet Education, Struktur, Praxis und Community in einer Oberfläche,
+            die nicht nur gut aussieht, sondern logisch aufgebaut ist und Mitglieder durch einen
+            echten Lernprozess führt.
+          </p>
+        </div>
+
+        <div class="section-card">
+          <div class="badge">Dein Vorteil</div>
+          <div class="list-box">
+            <div class="list-item">Klare Module statt Informationschaos.</div>
+            <div class="list-item">Tools für Risiko, Journal und Umsetzung.</div>
+            <div class="list-item">Praxisbereiche für Setups und Marktideen.</div>
+            <div class="list-item">Premium Aufbau wie eine moderne Education Plattform.</div>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -54,6 +230,20 @@
     </div>
 
   </div>
+  <script>
+  const startBtn = document.getElementById("startBtn");
 
+  if (window.bullprosperityAccess && startBtn) {
+    const role = window.bullprosperityAccess.role;
+
+    if (role === "admin" || role === "premium") {
+      startBtn.href = "hub.html";
+      startBtn.textContent = "Zum Mitgliederbereich";
+    } else {
+      startBtn.href = "login.html";
+      startBtn.textContent = "Jetzt starten";
+    }
+  }
+</script>
 </body>
 </html>
