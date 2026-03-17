@@ -5,7 +5,11 @@ document.addEventListener("DOMContentLoaded", async () => {
   const authStatus = document.getElementById("authStatus");
   const authDot = document.querySelector(".status-dot");
 
-  const WHOP_URL = "https://whop.com/bullprosperity-fx/bullprosperity-fx/";
+  // Nur Login / Session aufbauen
+  const WHOP_LOGIN_URL = "https://whop.com/login";
+
+  // Produkt / Checkout
+  const WHOP_CHECKOUT_URL = "https://whop.com/bullprosperity-fx/bullprosperity-fx/";
 
   async function getAccess() {
     try {
@@ -22,35 +26,33 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   function hasAccess(data) {
-    return data && (data.role === "admin" || data.role === "premium");
+    return !!data && (data.role === "admin" || data.role === "premium");
   }
 
   const data = await getAccess();
   const premium = hasAccess(data);
-
   const isProtected = document.body.dataset.protected === "true";
-  const redirectMode = document.body.dataset.redirectMode || "locked";
 
+  // Geschützte Seiten immer erst auf locked.html
   if (isProtected && !premium) {
-    if (redirectMode === "checkout") {
-      window.location.href = WHOP_URL;
-    } else {
-      window.location.href = "locked.html";
-    }
+    window.location.href = "locked.html";
     return;
   }
 
+  // Landing Page Hauptbutton
   if (startButton) {
-    startButton.href = premium ? "hub.html" : WHOP_URL;
+    startButton.href = premium ? "hub.html" : WHOP_CHECKOUT_URL;
     startButton.textContent = premium ? "Zum Mitgliederbereich" : "Jetzt starten";
   }
 
+  // Buttons: Mitglied werden -> Produkt
   memberButtons.forEach((btn) => {
-    btn.href = premium ? "hub.html" : WHOP_URL;
+    btn.href = premium ? "hub.html" : WHOP_CHECKOUT_URL;
   });
 
+  // Buttons: Login mit Whop -> nur Login
   loginButtons.forEach((btn) => {
-    btn.href = WHOP_URL;
+    btn.href = WHOP_LOGIN_URL;
   });
 
   if (authStatus) {
