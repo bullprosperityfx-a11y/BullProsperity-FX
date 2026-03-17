@@ -18,6 +18,7 @@
       border:1px solid rgba(255,255,255,0.06);
       font-size:13px;
       font-weight:700;
+      white-space:nowrap;
     }
 
     .status-dot{
@@ -27,12 +28,22 @@
       background:#999;
     }
 
-    .status-premium{ background:#00d26a; }
-    .status-admin{ background:#ffd700; }
-    .status-locked{ background:#ff4d4d; }
+    .status-premium{
+      background:#00d26a;
+    }
+
+    .status-admin{
+      background:#ffd700;
+    }
+
+    .status-locked{
+      background:#ff4d4d;
+    }
 
     @media(max-width:860px){
-      .auth-box{ margin-top:10px; }
+      .auth-box{
+        margin-top:10px;
+      }
     }
   </style>
 </head>
@@ -52,7 +63,7 @@
       </div>
 
       <div class="auth-box">
-        <span class="status-dot"></span>
+        <span class="status-dot" id="statusDot"></span>
         <span id="authStatus">Status wird geprüft...</span>
       </div>
     </nav>
