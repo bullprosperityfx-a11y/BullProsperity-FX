@@ -18,6 +18,7 @@
       border:1px solid rgba(255,255,255,0.06);
       font-size:13px;
       font-weight:700;
+      white-space:nowrap;
     }
 
     .status-dot{
@@ -36,6 +37,7 @@
     }
   </style>
 </head>
+
 <body data-protected="true">
   <div class="page">
 
@@ -52,45 +54,75 @@
       </div>
 
       <div class="auth-box">
-        <span class="status-dot"></span>
+        <span class="status-dot" id="statusDot"></span>
         <span id="authStatus">Status wird geprüft...</span>
       </div>
     </nav>
 
     <section class="hero-shell">
       <div class="badge">BullProsperity</div>
-      <h1 class="hero-title">Hub</h1>
+
+      <h1 class="hero-title">
+        Dein <span class="gold">Mitgliederbereich</span>
+      </h1>
+
       <p class="hero-text">
-        Dieser Bereich gehört zur BullProsperity Plattform. Die Seite nutzt dein zentrales Theme,
-        damit alle Bereiche visuell einheitlich bleiben.
+        Willkommen im BullProsperity Hub. Hier hast du Zugriff auf alle exklusiven Inhalte,
+        Tools, Setups und strategischen Bereiche deiner Trading Education.
       </p>
 
       <div class="hero-buttons">
-        <a href="hub.html" class="btn primary">Zum Hub</a>
-        <a href="course.html" class="btn secondary">Zum Kurs</a>
+        <a href="course.html" class="btn primary">Zum Kurs</a>
+        <a href="setup-room.html" class="btn secondary">Setup Room</a>
       </div>
     </section>
 
     <section class="section">
-      <h2 class="section-heading">Inhalt</h2>
+      <h2 class="section-heading">Dein Zugang</h2>
+
       <p class="section-subtext">
-        Hier kannst du später Inhalte, Videos oder Charts einfügen.
+        Nutze die verschiedenen Bereiche, um Theorie, Praxis und Umsetzung miteinander zu verbinden.
       </p>
 
       <div class="grid-2">
+
         <div class="section-card">
-          <div class="badge">Bereich</div>
-          <h3>Hub</h3>
-          <p>Hier kommt dein Content rein.</p>
-          <a href="setup-room.html" class="card-link">Mehr anzeigen</a>
+          <div class="badge">Course</div>
+          <h3>Kursbereich</h3>
+          <p>
+            Arbeite dich strukturiert durch alle Module und entwickle ein klares Verständnis
+            für Marktstruktur, Entries und Strategie.
+          </p>
+          <a href="course.html" class="card-link">Zum Kurs</a>
         </div>
 
         <div class="section-card">
-          <div class="badge">Information</div>
-          <h3>BullProsperity</h3>
-          <p>Diese Seite ist Teil deiner Education Plattform.</p>
-          <a href="community.html" class="card-link">Details</a>
+          <div class="badge">Setup Room</div>
+          <h3>Setups & Analyse</h3>
+          <p>
+            Analysiere reale Setups, Marktbewegungen und Strategien, um Theorie in Praxis umzusetzen.
+          </p>
+          <a href="setup-room.html" class="card-link">Setup Room öffnen</a>
         </div>
+
+        <div class="section-card">
+          <div class="badge">Tools</div>
+          <h3>Trading Tools</h3>
+          <p>
+            Nutze Lot Size Rechner, Journal und Checklisten für professionelles Trading.
+          </p>
+          <a href="tools.html" class="card-link">Tools öffnen</a>
+        </div>
+
+        <div class="section-card">
+          <div class="badge">Community</div>
+          <h3>Community Bereich</h3>
+          <p>
+            Tausche dich aus, lerne von anderen und entwickle dich gemeinsam weiter.
+          </p>
+          <a href="community.html" class="card-link">Community öffnen</a>
+        </div>
+
       </div>
     </section>
 
