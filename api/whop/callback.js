@@ -120,7 +120,7 @@ export default async function handler(req, res) {
       `whop_state=; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=0`
     ]);
 
-    return res.redirect("/hub.html");
+    return res.redirect("/index.html");
   } catch (error) {
     return res.status(500).json({
       error: "OAuth callback failed",
