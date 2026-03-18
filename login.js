@@ -3,10 +3,10 @@ document.addEventListener("DOMContentLoaded", async () => {
   const memberButtons = document.querySelectorAll("[data-member-link]");
   const loginButtons = document.querySelectorAll("[data-login-link]");
   const authStatus = document.getElementById("authStatus");
-  const authDot = document.getElementById("statusDot") || document.querySelector(".status-dot");
+  const authDot =
+    document.getElementById("statusDot") || document.querySelector(".status-dot");
 
-  const WHOP_LOGIN_URL = "/api/whop/login";
-  const WHOP_CHECKOUT_URL = "https://whop.com/bullprosperity-fx/bullprosperity-fx/";
+  const WHOP_URL = "https://whop.com/bullprosperity-fx/bullprosperity-fx/";
 
   async function getAccess() {
     try {
@@ -36,16 +36,16 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   if (startButton) {
-    startButton.href = premium ? "hub.html" : WHOP_CHECKOUT_URL;
+    startButton.href = premium ? "hub.html" : WHOP_URL;
     startButton.textContent = premium ? "Zum Mitgliederbereich" : "Jetzt starten";
   }
 
   memberButtons.forEach((btn) => {
-    btn.href = premium ? "hub.html" : WHOP_CHECKOUT_URL;
+    btn.href = premium ? "hub.html" : WHOP_URL;
   });
 
   loginButtons.forEach((btn) => {
-    btn.href = WHOP_LOGIN_URL;
+    btn.href = WHOP_URL;
   });
 
   if (authStatus) {
