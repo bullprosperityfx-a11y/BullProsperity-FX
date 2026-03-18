@@ -1,22 +1,18 @@
 export default async function handler(req, res) {
   try {
-    const { code, state } = req.query;
+    const { code, state, error, error_description } = req.query;
 
     if (!code) {
       return res.status(400).json({
-        error: "Missing OAuth code"
+        error: "Missing OAuth code",
+        query: req.query,
+        hint: "Whop did not return code/state to the callback."
       });
     }
 
     const clientId = process.env.WHOP_CLIENT_ID;
     const clientSecret = process.env.WHOP_CLIENT_SECRET;
     const redirectUri = process.env.WHOP_REDIRECT_URI;
-
-    if (!clientId || !clientSecret || !redirectUri) {
-      return res.status(500).json({
-        error: "Missing required Whop environment variables"
-      });
-    }
 
     const cookie = req.headers.cookie || "";
 
@@ -34,7 +30,9 @@ export default async function handler(req, res) {
 
     if (!state || !storedState || state !== storedState) {
       return res.status(400).json({
-        error: "Invalid OAuth state"
+        error: "Invalid OAuth state",
+        returnedState: state || null,
+        storedState: storedState || null
       });
     }
 
@@ -105,12 +103,9 @@ export default async function handler(req, res) {
       return status === "active" || status === "trialing";
     });
 
-    const adminEmails = [
-      "bullprosperityfx@gmail.com"
-    ].map((e) => e.toLowerCase());
+    const adminEmails = ["bullprosperityfx@gmail.com"].map((e) => e.toLowerCase());
 
     let role = "guest";
-
     if (adminEmails.includes(email)) {
       role = "admin";
     } else if (activeMemberships.length > 0) {
