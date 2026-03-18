@@ -5,14 +5,9 @@ export default async function handler(req, res) {
     const clientId = process.env.WHOP_CLIENT_ID;
     const redirectUri = process.env.WHOP_REDIRECT_URI;
 
-    if (!clientId || !redirectUri) {
-      return res.status(500).json({
-        error: "Missing required Whop environment variables"
-      });
-    }
-
     const state = crypto.randomBytes(16).toString("hex");
     const verifier = crypto.randomBytes(32).toString("hex");
+    const nonce = crypto.randomBytes(16).toString("hex");
 
     const challenge = crypto
       .createHash("sha256")
@@ -23,8 +18,9 @@ export default async function handler(req, res) {
       response_type: "code",
       client_id: clientId,
       redirect_uri: redirectUri,
-      scope: "profile email",
+      scope: "openid profile email",
       state,
+      nonce, // 🔥 DAS IST DER FIX
       code_challenge: challenge,
       code_challenge_method: "S256"
     });
@@ -32,14 +28,14 @@ export default async function handler(req, res) {
     const secure = process.env.NODE_ENV === "production";
 
     res.setHeader("Set-Cookie", [
-      `whop_verifier=${encodeURIComponent(verifier)}; Path=/; HttpOnly; ${secure ? "Secure; " : ""}SameSite=Lax; Max-Age=600`,
-      `whop_state=${encodeURIComponent(state)}; Path=/; HttpOnly; ${secure ? "Secure; " : ""}SameSite=Lax; Max-Age=600`
+      `whop_verifier=${verifier}; Path=/; HttpOnly; ${secure ? "Secure;" : ""} SameSite=Lax`,
+      `whop_state=${state}; Path=/; HttpOnly; ${secure ? "Secure;" : ""} SameSite=Lax`
     ]);
 
     return res.redirect(`https://api.whop.com/oauth/authorize?${params.toString()}`);
   } catch (error) {
     return res.status(500).json({
-      error: "Whop login failed",
+      error: "Login failed",
       message: error.message
     });
   }
