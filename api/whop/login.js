@@ -19,15 +19,15 @@ export default async function handler(req, res) {
       .update(verifier)
       .digest("base64url");
 
-    const authUrl =
-      `https://api.whop.com/oauth/authorize` +
-      `?client_id=${encodeURIComponent(clientId)}` +
-      `&redirect_uri=${encodeURIComponent(redirectUri)}` +
-      `&response_type=code` +
-      `&scope=identify` +
-      `&state=${encodeURIComponent(state)}` +
-      `&code_challenge=${encodeURIComponent(challenge)}` +
-      `&code_challenge_method=S256`;
+    const params = new URLSearchParams({
+      response_type: "code",
+      client_id: clientId,
+      redirect_uri: redirectUri,
+      scope: "openid profile email",
+      state,
+      code_challenge: challenge,
+      code_challenge_method: "S256"
+    });
 
     const secure = process.env.NODE_ENV === "production";
 
@@ -36,7 +36,7 @@ export default async function handler(req, res) {
       `whop_state=${encodeURIComponent(state)}; Path=/; HttpOnly; ${secure ? "Secure; " : ""}SameSite=Lax; Max-Age=600`
     ]);
 
-    return res.redirect(authUrl);
+    return res.redirect(`https://api.whop.com/oauth/authorize?${params.toString()}`);
   } catch (error) {
     return res.status(500).json({
       error: "Whop login failed",
