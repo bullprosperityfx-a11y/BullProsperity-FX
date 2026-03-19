@@ -27,37 +27,56 @@
   </script>
 
   <style>
-    .lt-grid{
+    .lt-shell{
       display:grid;
-      grid-template-columns:1.1fr .9fr;
       gap:22px;
       margin-top:24px;
     }
 
-    .lt-grid-2{
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:22px;
-      margin-top:22px;
-    }
-
-    .lt-card{
+    .lt-hero-card,
+    .lt-card,
+    .lt-feature-card,
+    .lt-market-card,
+    .lt-journal-card,
+    .lt-summary-card{
       background:#0c0c0c;
       border:1px solid var(--line);
-      border-radius:22px;
-      padding:22px;
+      border-radius:24px;
+      padding:24px;
+    }
+
+    .lt-hero-card{
+      position:relative;
+      overflow:hidden;
+    }
+
+    .lt-hero-card::before{
+      content:"";
+      position:absolute;
+      inset:auto -120px -120px auto;
+      width:280px;
+      height:280px;
+      background:radial-gradient(circle, rgba(255,215,0,.14), transparent 70%);
+      pointer-events:none;
+    }
+
+    .lt-top-grid{
+      display:grid;
+      grid-template-columns:1.1fr .9fr;
+      gap:22px;
     }
 
     .lt-title{
-      font-size:32px;
+      margin:10px 0 8px;
+      font-size:36px;
+      line-height:1.08;
       color:#fff;
-      margin:10px 0 10px;
     }
 
     .lt-subtitle{
-      font-size:24px;
-      color:#fff;
       margin:10px 0 0;
+      font-size:28px;
+      color:#fff;
     }
 
     .lt-text{
@@ -66,11 +85,16 @@
       margin:0;
     }
 
+    .lt-highlight{
+      color:#ffd700;
+      font-weight:800;
+    }
+
     .lt-stats{
       display:grid;
-      grid-template-columns:repeat(3,1fr);
+      grid-template-columns:repeat(4,1fr);
       gap:14px;
-      margin-top:18px;
+      margin-top:20px;
     }
 
     .lt-stat{
@@ -81,7 +105,7 @@
     }
 
     .lt-stat-label{
-      color:rgba(255,255,255,.58);
+      color:rgba(255,255,255,.56);
       font-size:12px;
       text-transform:uppercase;
       letter-spacing:.08em;
@@ -91,16 +115,58 @@
     .lt-stat-value{
       color:#ffd700;
       font-size:26px;
-      font-weight:800;
+      font-weight:900;
     }
 
-    .lt-list{
-      margin-top:16px;
+    .lt-stat-sub{
+      margin-top:6px;
+      color:rgba(255,255,255,.55);
+      font-size:12px;
+    }
+
+    .lt-hero-actions{
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+      margin-top:22px;
+    }
+
+    .lt-btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+      border-radius:14px;
+      padding:12px 16px;
+      text-decoration:none;
+      cursor:pointer;
+      font-weight:800;
+      border:none;
+    }
+
+    .lt-btn.primary{
+      background:#ffd700;
+      color:#111;
+    }
+
+    .lt-btn.secondary{
+      background:#111;
+      color:#fff;
+      border:1px solid #252525;
+    }
+
+    .lt-btn.secondary:hover{
+      border-color:#ffd700;
+      color:#ffd700;
+    }
+
+    .lt-checklist{
       display:grid;
       gap:12px;
+      margin-top:18px;
     }
 
-    .lt-item{
+    .lt-check-item{
       background:#111;
       border:1px solid #252525;
       border-radius:16px;
@@ -109,56 +175,154 @@
       line-height:1.55;
     }
 
-    .lt-item strong{
+    .lt-check-item strong{
       color:#ffd700;
     }
 
-    .lt-watch{
+    .lt-feature-grid{
       display:grid;
-      gap:10px;
-      margin-top:14px;
+      grid-template-columns:repeat(4,1fr);
+      gap:16px;
     }
 
-    .lt-watch-item{
+    .lt-feature-card{
+      padding:20px;
+    }
+
+    .lt-feature-card h3{
+      margin:10px 0 8px;
+      color:#fff;
+      font-size:20px;
+    }
+
+    .lt-feature-card p{
+      margin:0;
+      color:rgba(255,255,255,.68);
+      line-height:1.6;
+    }
+
+    .lt-market-layout{
+      display:grid;
+      grid-template-columns:300px minmax(0,1fr);
+      gap:18px;
+      margin-top:18px;
+    }
+
+    .lt-side-tabs{
       display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap:12px;
+      gap:8px;
+      flex-wrap:wrap;
+      margin-bottom:14px;
+    }
+
+    .lt-tab{
       background:#111;
+      color:#fff;
       border:1px solid #252525;
-      border-radius:16px;
-      padding:14px 16px;
-      color:#fff;
-    }
-
-    .lt-watch-item strong{
-      color:#ffd700;
-      display:block;
-      font-size:15px;
-    }
-
-    .lt-watch-item span{
-      color:rgba(255,255,255,.58);
-      font-size:12px;
-    }
-
-    .lt-watch-item button{
-      background:transparent;
-      border:1px solid #333;
-      color:#fff;
       border-radius:999px;
       padding:8px 12px;
       cursor:pointer;
+      font-size:12px;
+      font-weight:700;
     }
 
-    .lt-watch-item button:hover,
-    .lt-watch-item button.active{
+    .lt-tab.active,
+    .lt-tab:hover{
       border-color:#ffd700;
       color:#ffd700;
     }
 
+    .lt-market-list{
+      display:grid;
+      gap:10px;
+      max-height:620px;
+      overflow:auto;
+      padding-right:4px;
+    }
+
+    .lt-market-item{
+      width:100%;
+      text-align:left;
+      background:#111;
+      border:1px solid #252525;
+      border-radius:16px;
+      padding:14px 14px;
+      color:#fff;
+      cursor:pointer;
+    }
+
+    .lt-market-item.active,
+    .lt-market-item:hover{
+      border-color:#ffd700;
+      box-shadow:0 0 0 1px rgba(255,215,0,.1) inset;
+    }
+
+    .lt-market-item strong{
+      display:block;
+      color:#ffd700;
+      font-size:15px;
+      margin-bottom:4px;
+    }
+
+    .lt-market-item span{
+      display:block;
+      color:rgba(255,255,255,.68);
+      font-size:12px;
+      line-height:1.45;
+    }
+
+    .lt-chart-panel{
+      min-width:0;
+    }
+
+    .lt-market-header{
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap:12px;
+      flex-wrap:wrap;
+      margin-bottom:14px;
+    }
+
+    .lt-market-kicker{
+      color:rgba(255,255,255,.56);
+      font-size:12px;
+      text-transform:uppercase;
+      letter-spacing:.08em;
+    }
+
+    .lt-market-name{
+      margin-top:6px;
+      font-size:28px;
+      font-weight:900;
+      color:#ffd700;
+    }
+
+    .lt-market-desc{
+      margin-top:6px;
+      color:rgba(255,255,255,.68);
+      max-width:720px;
+      line-height:1.6;
+    }
+
+    .lt-tags{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+    }
+
+    .lt-tags span{
+      border:1px solid rgba(255,215,0,.24);
+      background:rgba(255,215,0,.06);
+      color:#ffd700;
+      padding:7px 10px;
+      border-radius:999px;
+      font-size:12px;
+      font-weight:700;
+    }
+
     .lt-chart-wrap{
-      margin-top:18px;
+      margin-top:12px;
       border:1px solid #252525;
       border-radius:18px;
       overflow:hidden;
@@ -167,14 +331,41 @@
 
     #lt_chart_container{
       width:100%;
-      height:500px;
+      height:560px;
+    }
+
+    .lt-mini-info{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:12px;
+      margin-top:14px;
+    }
+
+    .lt-mini-card{
+      background:#111;
+      border:1px solid #252525;
+      border-radius:16px;
+      padding:14px;
+      color:#fff;
+    }
+
+    .lt-mini-card strong{
+      display:block;
+      color:#ffd700;
+      margin-bottom:6px;
+    }
+
+    .lt-grid-2{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:22px;
     }
 
     .lt-form-grid{
       display:grid;
       grid-template-columns:1fr 1fr;
       gap:12px;
-      margin-top:16px;
+      margin-top:18px;
     }
 
     .lt-input,
@@ -190,48 +381,39 @@
     }
 
     .lt-textarea{
-      margin-top:12px;
-      resize:vertical;
       min-height:130px;
-    }
-
-    .lt-btn{
+      resize:vertical;
       margin-top:12px;
-      background:#ffd700;
-      color:#111;
-      border:none;
-      border-radius:14px;
-      padding:12px 16px;
-      font-weight:800;
-      cursor:pointer;
-    }
-
-    .lt-btn.secondary{
-      background:#111;
-      color:#fff;
-      border:1px solid #252525;
     }
 
     .lt-btn-row{
       display:flex;
       gap:10px;
       flex-wrap:wrap;
+      margin-top:12px;
     }
 
-    .lt-portfolio-list,
-    .lt-journal-list{
-      margin-top:16px;
+    .lt-list{
       display:grid;
       gap:10px;
+      margin-top:16px;
     }
 
-    .lt-portfolio-entry,
-    .lt-journal-entry{
+    .lt-list-item,
+    .lt-entry,
+    .lt-result-card{
       background:#111;
       border:1px solid #252525;
-      border-radius:14px;
-      padding:14px;
+      border-radius:16px;
+      padding:14px 16px;
       color:#fff;
+      line-height:1.55;
+    }
+
+    .lt-list-item strong,
+    .lt-entry strong,
+    .lt-result-card strong{
+      color:#ffd700;
     }
 
     .lt-entry-top{
@@ -243,11 +425,7 @@
       margin-bottom:8px;
     }
 
-    .lt-entry-top strong{
-      color:#ffd700;
-    }
-
-    .lt-entry-top small{
+    .lt-entry small{
       color:rgba(255,255,255,.55);
     }
 
@@ -267,51 +445,46 @@
     }
 
     .lt-result{
-      margin-top:16px;
       display:grid;
       gap:10px;
-    }
-
-    .lt-result-card{
-      background:#111;
-      border:1px solid #252525;
-      border-radius:16px;
-      padding:14px 16px;
-      color:#fff;
+      margin-top:16px;
     }
 
     .lt-note{
       margin-top:12px;
-      color:rgba(255,255,255,.58);
+      color:rgba(255,255,255,.56);
       font-size:13px;
-      line-height:1.6;
+      line-height:1.65;
     }
 
     .lt-allocation{
       display:grid;
       gap:10px;
-      margin-top:14px;
+      margin-top:16px;
     }
 
     .lt-allocation-row{
       background:#111;
       border:1px solid #252525;
-      border-radius:14px;
-      padding:12px 14px;
-      color:#fff;
+      border-radius:16px;
+      padding:14px;
       display:flex;
-      justify-content:space-between;
-      gap:12px;
       align-items:center;
+      gap:12px;
+      color:#fff;
+    }
+
+    .lt-allocation-row strong{
+      min-width:120px;
+      color:#ffd700;
     }
 
     .lt-progress{
-      width:120px;
+      flex:1;
       height:8px;
       border-radius:999px;
       background:#1d1d1d;
       overflow:hidden;
-      margin-left:auto;
     }
 
     .lt-progress span{
@@ -320,21 +493,38 @@
       background:#ffd700;
     }
 
-    @media(max-width:1050px){
-      .lt-grid,
-      .lt-grid-2{
+    .lt-bottom-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:22px;
+    }
+
+    @media(max-width:1150px){
+      .lt-top-grid,
+      .lt-grid-2,
+      .lt-bottom-grid,
+      .lt-feature-grid{
+        grid-template-columns:1fr 1fr;
+      }
+
+      .lt-market-layout{
         grid-template-columns:1fr;
       }
     }
 
     @media(max-width:860px){
+      .lt-top-grid,
+      .lt-grid-2,
+      .lt-bottom-grid,
+      .lt-feature-grid,
       .lt-form-grid,
-      .lt-stats{
+      .lt-stats,
+      .lt-mini-info{
         grid-template-columns:1fr;
       }
 
       #lt_chart_container{
-        height:420px;
+        height:430px;
       }
     }
   </style>
@@ -355,239 +545,300 @@
     </nav>
 
     <section class="hero-shell">
-      <div class="badge">Longterm Pro</div>
-      <h1 class="hero-title">BullProsperity <span class="gold">Longterm Investment</span></h1>
+      <div class="badge">BullProsperity Longterm</div>
+      <h1 class="hero-title">Langfristiger <span class="gold">Vermögensaufbau</span> im BullProsperity Stil</h1>
       <p class="hero-text">
-        Ergänze dein aktives Trading mit einem langfristigen System für Struktur,
-        Ruhe und nachhaltigen Vermögensaufbau.
+        Eine eigene Premium-Unterseite für Investments, Portfolio-Struktur, DCA,
+        Marktbeobachtung und langfristiges Denken — passend zu deiner Plattform.
       </p>
       <div class="hero-buttons">
-        <a href="#dashboard" class="btn primary">Bereich öffnen</a>
+        <a href="#lt-dashboard" class="btn primary">Longterm öffnen</a>
         <a href="hub.html" class="btn secondary">Zurück zum Hub</a>
       </div>
     </section>
 
-    <section id="dashboard" class="lt-grid">
-      <div class="lt-card">
-        <div class="badge">Dashboard</div>
-        <h2 class="lt-title">Dein Longterm Fokus</h2>
-        <p class="lt-text">
-          Dieser Bereich hilft dir dabei, nicht nur auf kurzfristige Marktbewegungen
-          zu reagieren, sondern langfristig mit Plan zu denken und zu handeln.
-        </p>
+    <div class="lt-shell">
 
-        <div class="lt-stats">
-          <div class="lt-stat">
-            <div class="lt-stat-label">Modus</div>
-            <div class="lt-stat-value">Longterm</div>
-          </div>
+      <section id="lt-dashboard" class="lt-top-grid">
+        <div class="lt-hero-card">
+          <div class="badge">Longterm Dashboard</div>
+          <h2 class="lt-title">Baue mit <span class="lt-highlight">Struktur statt Hektik</span></h2>
+          <p class="lt-text">
+            Dieser Bereich ergänzt dein aktives Trading um ein zweites System:
+            ETFs, Cryptos, Indices, bekannte Aktien und Rohstoffe — auf einer
+            eigenen BullProsperity-Unterseite mit klarer Struktur und vielen Features.
+          </p>
 
-          <div class="lt-stat">
-            <div class="lt-stat-label">Fokus</div>
-            <div class="lt-stat-value">DCA</div>
-          </div>
-
-          <div class="lt-stat">
-            <div class="lt-stat-label">Ziel</div>
-            <div class="lt-stat-value">Aufbau</div>
-          </div>
-        </div>
-
-        <div class="lt-list">
-          <div class="lt-item"><strong>Zeithorizont:</strong> Denke in Jahren, nicht in Tagen.</div>
-          <div class="lt-item"><strong>Struktur:</strong> Nutze einen klaren Aufbauplan statt impulsiver Entscheidungen.</div>
-          <div class="lt-item"><strong>Geduld:</strong> Nicht jede Marktbewegung braucht eine Reaktion.</div>
-          <div class="lt-item"><strong>Kombination:</strong> Trading für Aktivität, Longterm für Stabilität.</div>
-        </div>
-      </div>
-
-      <div class="lt-card">
-        <div class="badge">Watchlist</div>
-        <h2 class="lt-title">Longterm Märkte</h2>
-        <p class="lt-text">
-          Nutze diese Märkte als Übersicht für langfristige Beobachtung und Fokus.
-        </p>
-
-        <div class="lt-watch">
-          <div class="lt-watch-item">
-            <div>
-              <strong>BTCUSD</strong>
-              <span>Bitcoin</span>
+          <div class="lt-stats">
+            <div class="lt-stat">
+              <div class="lt-stat-label">Bereiche</div>
+              <div class="lt-stat-value">5</div>
+              <div class="lt-stat-sub">ETFs · Cryptos · Indices · Aktien · Rohstoffe</div>
             </div>
-            <button data-symbol="BITSTAMP:BTCUSD" data-label="BTCUSD" class="lt-market-btn active">Öffnen</button>
-          </div>
-
-          <div class="lt-watch-item">
-            <div>
-              <strong>XAUUSD</strong>
-              <span>Gold</span>
+            <div class="lt-stat">
+              <div class="lt-stat-label">Modus</div>
+              <div class="lt-stat-value">Pro</div>
+              <div class="lt-stat-sub">Langfristiger Fokus</div>
             </div>
-            <button data-symbol="OANDA:XAUUSD" data-label="XAUUSD" class="lt-market-btn">Öffnen</button>
-          </div>
-
-          <div class="lt-watch-item">
-            <div>
-              <strong>SPXUSD</strong>
-              <span>S&amp;P 500</span>
+            <div class="lt-stat">
+              <div class="lt-stat-label">Prinzip</div>
+              <div class="lt-stat-value">DCA</div>
+              <div class="lt-stat-sub">Wiederholbarer Aufbau</div>
             </div>
-            <button data-symbol="SP:SPX" data-label="SPXUSD" class="lt-market-btn">Öffnen</button>
-          </div>
-
-          <div class="lt-watch-item">
-            <div>
-              <strong>NASDAQ</strong>
-              <span>Technologie Index</span>
+            <div class="lt-stat">
+              <div class="lt-stat-label">Denke in</div>
+              <div class="lt-stat-value">Jahren</div>
+              <div class="lt-stat-sub">nicht in Tagen</div>
             </div>
-            <button data-symbol="NASDAQ:NDX" data-label="NASDAQ" class="lt-market-btn">Öffnen</button>
+          </div>
+
+          <div class="lt-hero-actions">
+            <a href="#lt-markets" class="lt-btn primary">Märkte analysieren</a>
+            <a href="#lt-portfolio" class="lt-btn secondary">Portfolio öffnen</a>
           </div>
         </div>
 
-        <div class="lt-chart-wrap">
-          <div id="lt_chart_container"></div>
-        </div>
+        <div class="lt-card">
+          <div class="badge">BullProsperity Prinzipien</div>
+          <h2 class="lt-subtitle">So nutzt du Longterm richtig</h2>
 
-        <div class="lt-note">
-          Beobachte große Strukturen, nicht jede kleine Bewegung. Longterm heißt:
-          Kontext vor Aktion.
-        </div>
-      </div>
-    </section>
-
-    <section class="lt-grid-2">
-      <div class="lt-card">
-        <div class="badge">Portfolio Tracker</div>
-        <h2 class="lt-title">Deine Portfolio Übersicht</h2>
-        <p class="lt-text">
-          Halte fest, welche Assets du langfristig aufbauen willst und in welchem Umfang.
-        </p>
-
-        <div class="lt-form-grid">
-          <input id="ltAsset" class="lt-input" type="text" placeholder="Asset, z. B. BTC">
-          <input id="ltAmount" class="lt-input" type="number" placeholder="Betrag in €">
-          <select id="ltCategory" class="lt-select">
-            <option value="Crypto">Crypto</option>
-            <option value="Metals">Metals</option>
-            <option value="Index">Index</option>
-            <option value="Other">Other</option>
-          </select>
-          <input id="ltPlan" class="lt-input" type="text" placeholder="Plan, z. B. monatlich">
-        </div>
-
-        <div class="lt-btn-row">
-          <button id="addPortfolioBtn" class="lt-btn">Asset hinzufügen</button>
-          <button id="clearPortfolioBtn" class="lt-btn secondary">Portfolio leeren</button>
-        </div>
-
-        <div id="portfolioList" class="lt-portfolio-list"></div>
-      </div>
-
-      <div class="lt-card">
-        <div class="badge">DCA Rechner</div>
-        <h2 class="lt-title">Regelmäßiger Aufbau</h2>
-        <p class="lt-text">
-          Berechne, wie viel Kapital du über einen Zeitraum bei konstantem Aufbau investierst.
-        </p>
-
-        <div class="lt-form-grid">
-          <input id="dcaAmount" class="lt-input" type="number" placeholder="Monatlicher Betrag in €">
-          <input id="dcaYears" class="lt-input" type="number" placeholder="Jahre">
-          <input id="dcaReturn" class="lt-input" type="number" placeholder="Optionale Rendite p.a. in %" step="0.1">
-          <input id="dcaGoal" class="lt-input" type="text" placeholder="Ziel, z. B. Vermögensaufbau">
-        </div>
-
-        <button id="calcDcaBtn" class="lt-btn">DCA berechnen</button>
-
-        <div id="dcaResult" class="lt-result"></div>
-
-        <div class="lt-note">
-          Die Berechnung dient zur Orientierung und zu Bildungszwecken.
-          Sie ist keine Garantie für zukünftige Ergebnisse.
-        </div>
-      </div>
-    </section>
-
-    <section class="lt-grid-2">
-      <div class="lt-card">
-        <div class="badge">Strategie</div>
-        <h2 class="lt-title">BullProsperity Longterm Prinzipien</h2>
-
-        <div class="lt-list">
-          <div class="lt-item"><strong>1. Qualität vor Hype:</strong> Beobachte starke, nachvollziehbare Märkte statt jeder Story hinterherzulaufen.</div>
-          <div class="lt-item"><strong>2. Plan vor Emotion:</strong> Lege fest, wie du einsteigst, nicht erst im Stressmoment.</div>
-          <div class="lt-item"><strong>3. Wiederholbarkeit:</strong> Ein System ist nur dann stark, wenn du es konstant anwenden kannst.</div>
-          <div class="lt-item"><strong>4. Kapital schützen:</strong> Langfristiger Aufbau beginnt mit sauberem Umgang mit Geld.</div>
-        </div>
-      </div>
-
-      <div class="lt-card">
-        <div class="badge">Allocation</div>
-        <h2 class="lt-title">Beispielhafte Verteilung</h2>
-        <p class="lt-text">
-          Eine einfache visuelle Orientierung für Longterm-Denken. Passe jede Struktur
-          an dein eigenes Ziel und deine eigene Risikobereitschaft an.
-        </p>
-
-        <div class="lt-allocation">
-          <div class="lt-allocation-row">
-            <strong>Core Assets</strong>
-            <div class="lt-progress"><span style="width:50%"></span></div>
-            <span>50%</span>
-          </div>
-
-          <div class="lt-allocation-row">
-            <strong>Growth Assets</strong>
-            <div class="lt-progress"><span style="width:30%"></span></div>
-            <span>30%</span>
-          </div>
-
-          <div class="lt-allocation-row">
-            <strong>Safety / Reserve</strong>
-            <div class="lt-progress"><span style="width:20%"></span></div>
-            <span>20%</span>
+          <div class="lt-checklist">
+            <div class="lt-check-item"><strong>1. Qualität vor Hype:</strong> Wähle starke Märkte und bekannte Unternehmen statt blind jeder Story zu folgen.</div>
+            <div class="lt-check-item"><strong>2. Plan vor Emotion:</strong> Lege fest, wie du aufbaust, bevor Volatilität oder Euphorie dich beeinflussen.</div>
+            <div class="lt-check-item"><strong>3. Wiederholbarkeit:</strong> Ein gutes System ist nur dann stark, wenn du es konstant anwenden kannst.</div>
+            <div class="lt-check-item"><strong>4. Kombination:</strong> Trading für aktive Chancen, Longterm für ruhigen Vermögensaufbau.</div>
           </div>
         </div>
+      </section>
 
-        <div class="lt-note">
-          Diese Darstellung ist nur ein Beispiel für Struktur und keine persönliche Empfehlung.
+      <section class="lt-feature-grid">
+        <div class="lt-feature-card">
+          <div class="badge">Feature</div>
+          <h3>Pro Watchlist</h3>
+          <p>Sortierte Marktübersicht mit ETFs, Cryptos, Indices, berühmten Aktien und Rohstoffen.</p>
         </div>
-      </div>
-    </section>
+        <div class="lt-feature-card">
+          <div class="badge">Feature</div>
+          <h3>Portfolio Tracker</h3>
+          <p>Dokumentiere deine Longterm-Positionen, Kategorien und deinen geplanten Aufbau.</p>
+        </div>
+        <div class="lt-feature-card">
+          <div class="badge">Feature</div>
+          <h3>DCA Rechner</h3>
+          <p>Rechne aus, wie sich regelmäßiger Aufbau über Monate und Jahre entwickeln kann.</p>
+        </div>
+        <div class="lt-feature-card">
+          <div class="badge">Feature</div>
+          <h3>Investment Journal</h3>
+          <p>Halte Thesen, Zeithorizonte und Gründe für einzelne Longterm-Ideen sauber fest.</p>
+        </div>
+      </section>
 
-    <section class="lt-grid-2">
-      <div class="lt-card">
-        <div class="badge">Quick Journal</div>
-        <h2 class="lt-title">Investment Notizen</h2>
+      <section id="lt-markets" class="lt-market-card">
+        <div class="badge">Market Center</div>
+        <h2 class="lt-subtitle">Longterm Pro Watchlist</h2>
         <p class="lt-text">
-          Halte fest, warum ein Asset für dich relevant ist und welche langfristige These dahintersteht.
+          Wähle Kategorien und beobachte hochwertige Longterm-Märkte direkt in deinem BullProsperity Bereich.
         </p>
 
-        <div class="lt-form-grid">
-          <input id="journalAsset" class="lt-input" type="text" placeholder="Asset">
-          <input id="journalHorizon" class="lt-input" type="text" placeholder="Horizont, z. B. 5 Jahre">
+        <div class="lt-market-layout">
+          <div>
+            <div class="lt-side-tabs">
+              <button class="lt-tab active" data-category="all">Alle</button>
+              <button class="lt-tab" data-category="etfs">ETFs</button>
+              <button class="lt-tab" data-category="cryptos">Cryptos</button>
+              <button class="lt-tab" data-category="indices">Indices</button>
+              <button class="lt-tab" data-category="stocks">Aktien</button>
+              <button class="lt-tab" data-category="commodities">Rohstoffe</button>
+            </div>
+
+            <div id="ltMarketList" class="lt-market-list"></div>
+          </div>
+
+          <div class="lt-chart-panel">
+            <div class="lt-market-header">
+              <div>
+                <div class="lt-market-kicker" id="ltActiveCategory">Kategorie</div>
+                <div class="lt-market-name" id="ltActiveName">SPY</div>
+                <div class="lt-market-desc" id="ltActiveDesc">
+                  Breiter ETF auf den US-Markt und klassischer Longterm-Baustein.
+                </div>
+              </div>
+
+              <div class="lt-tags">
+                <span id="ltTagOne">Core</span>
+                <span id="ltTagTwo">Longterm</span>
+                <span id="ltTagThree">BullProsperity</span>
+              </div>
+            </div>
+
+            <div class="lt-chart-wrap">
+              <div id="lt_chart_container"></div>
+            </div>
+
+            <div class="lt-mini-info">
+              <div class="lt-mini-card">
+                <strong>Warum relevant</strong>
+                <div id="ltWhyText">Breite Marktteilnahme mit ruhigerem Profil als Einzelaktien.</div>
+              </div>
+              <div class="lt-mini-card">
+                <strong>Fokus</strong>
+                <div id="ltFocusText">Strukturierter, langfristiger Aufbau.</div>
+              </div>
+              <div class="lt-mini-card">
+                <strong>Rolle im System</strong>
+                <div id="ltRoleText">Starker Basisbaustein für ein Longterm-Denken.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="lt-grid-2">
+        <div id="lt-portfolio" class="lt-card">
+          <div class="badge">Portfolio Tracker</div>
+          <h2 class="lt-subtitle">Deine Longterm Übersicht</h2>
+          <p class="lt-text">
+            Trage ein, welche Assets du beobachtest oder aufbauen willst, inklusive Kategorie und Plan.
+          </p>
+
+          <div class="lt-form-grid">
+            <input id="ltAsset" class="lt-input" type="text" placeholder="Asset, z. B. NVIDIA">
+            <input id="ltAmount" class="lt-input" type="number" placeholder="Betrag in €">
+            <select id="ltCategory" class="lt-select">
+              <option value="ETFs">ETFs</option>
+              <option value="Cryptos">Cryptos</option>
+              <option value="Indices">Indices</option>
+              <option value="Aktien">Aktien</option>
+              <option value="Rohstoffe">Rohstoffe</option>
+            </select>
+            <input id="ltPlan" class="lt-input" type="text" placeholder="Plan, z. B. monatlich aufbauen">
+          </div>
+
+          <div class="lt-btn-row">
+            <button id="addPortfolioBtn" class="lt-btn primary">Asset hinzufügen</button>
+            <button id="clearPortfolioBtn" class="lt-btn secondary">Portfolio leeren</button>
+          </div>
+
+          <div id="portfolioList" class="lt-list"></div>
         </div>
 
-        <textarea id="journalNote" class="lt-textarea" placeholder="Warum passt dieses Asset in deine Longterm Strategie?"></textarea>
+        <div class="lt-card">
+          <div class="badge">DCA Rechner</div>
+          <h2 class="lt-subtitle">Langfristiger Aufbau mit System</h2>
+          <p class="lt-text">
+            Berechne deinen regelmäßigen Aufbau und simuliere optional eine jährliche Rendite.
+          </p>
 
-        <button id="saveJournalBtn" class="lt-btn">Notiz speichern</button>
+          <div class="lt-form-grid">
+            <input id="dcaAmount" class="lt-input" type="number" placeholder="Monatlicher Betrag in €">
+            <input id="dcaYears" class="lt-input" type="number" placeholder="Jahre">
+            <input id="dcaReturn" class="lt-input" type="number" step="0.1" placeholder="Optionale Rendite p.a. in %">
+            <input id="dcaGoal" class="lt-input" type="text" placeholder="Ziel, z. B. Kapitalaufbau">
+          </div>
 
-        <div id="journalList" class="lt-journal-list"></div>
-      </div>
+          <button id="calcDcaBtn" class="lt-btn primary">DCA berechnen</button>
 
-      <div class="lt-card">
-        <div class="badge">Longterm Workflow</div>
-        <h2 class="lt-title">So nutzt du diesen Bereich</h2>
+          <div id="dcaResult" class="lt-result"></div>
 
-        <div class="lt-list">
-          <div class="lt-item"><strong>1. Markt beobachten:</strong> Nutze die Watchlist und analysiere langfristige Struktur.</div>
-          <div class="lt-item"><strong>2. Aufbau planen:</strong> Definiere, wie viel Kapital du regelmäßig investieren willst.</div>
-          <div class="lt-item"><strong>3. Portfolio dokumentieren:</strong> Halte Assets und Gedanken nachvollziehbar fest.</div>
-          <div class="lt-item"><strong>4. Geduldig bleiben:</strong> Longterm bedeutet, nicht jeden Tag etwas verändern zu müssen.</div>
+          <div class="lt-note">
+            Die Berechnung dient ausschließlich Bildungszwecken und ist keine Garantie für zukünftige Ergebnisse.
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <div class="footer-note">
-      BullProsperity dient ausschließlich Bildungszwecken und stellt keine Finanzberatung dar.
+      <section class="lt-bottom-grid">
+        <div class="lt-summary-card">
+          <div class="badge">Allocation Idee</div>
+          <h2 class="lt-subtitle">Beispielhafte Longterm Struktur</h2>
+          <p class="lt-text">
+            Eine einfache Orientierung, wie verschiedene Bereiche innerhalb eines Longterm-Ansatzes gedacht werden können.
+          </p>
+
+          <div class="lt-allocation">
+            <div class="lt-allocation-row">
+              <strong>ETFs</strong>
+              <div class="lt-progress"><span style="width:35%"></span></div>
+              <span>35%</span>
+            </div>
+            <div class="lt-allocation-row">
+              <strong>Aktien</strong>
+              <div class="lt-progress"><span style="width:25%"></span></div>
+              <span>25%</span>
+            </div>
+            <div class="lt-allocation-row">
+              <strong>Cryptos</strong>
+              <div class="lt-progress"><span style="width:15%"></span></div>
+              <span>15%</span>
+            </div>
+            <div class="lt-allocation-row">
+              <strong>Indices</strong>
+              <div class="lt-progress"><span style="width:15%"></span></div>
+              <span>15%</span>
+            </div>
+            <div class="lt-allocation-row">
+              <strong>Rohstoffe</strong>
+              <div class="lt-progress"><span style="width:10%"></span></div>
+              <span>10%</span>
+            </div>
+          </div>
+
+          <div class="lt-note">
+            Diese Struktur ist nur ein Beispiel und keine persönliche Empfehlung.
+          </div>
+        </div>
+
+        <div class="lt-journal-card">
+          <div class="badge">Investment Journal</div>
+          <h2 class="lt-subtitle">Deine Longterm These</h2>
+          <p class="lt-text">
+            Halte fest, warum ein Markt für dich interessant ist, welchen Horizont du siehst und was deine Idee trägt.
+          </p>
+
+          <div class="lt-form-grid">
+            <input id="journalAsset" class="lt-input" type="text" placeholder="Asset">
+            <input id="journalHorizon" class="lt-input" type="text" placeholder="Horizont, z. B. 5 Jahre">
+          </div>
+
+          <textarea id="journalNote" class="lt-textarea" placeholder="Warum passt dieses Asset in deine Longterm Strategie?"></textarea>
+
+          <button id="saveJournalBtn" class="lt-btn primary">Notiz speichern</button>
+
+          <div id="journalList" class="lt-list"></div>
+        </div>
+      </section>
+
+      <section class="lt-grid-2">
+        <div class="lt-card">
+          <div class="badge">Asset Klassen</div>
+          <h2 class="lt-subtitle">Was du hier findest</h2>
+
+          <div class="lt-list">
+            <div class="lt-list-item"><strong>ETFs:</strong> Breite Marktteilnahme mit starkem Longterm-Charakter.</div>
+            <div class="lt-list-item"><strong>Cryptos:</strong> Höhere Dynamik und Wachstumsfantasie, aber auch mehr Volatilität.</div>
+            <div class="lt-list-item"><strong>Indices:</strong> Orientierung an übergeordneten Marktbewegungen und Makro-Struktur.</div>
+            <div class="lt-list-item"><strong>Aktien:</strong> Bekannte Qualitäts- und Wachstumsunternehmen wie NVIDIA, Apple oder Microsoft.</div>
+            <div class="lt-list-item"><strong>Rohstoffe:</strong> Sachwerte wie Gold oder Öl als Diversifikations-Bausteine.</div>
+          </div>
+        </div>
+
+        <div class="lt-card">
+          <div class="badge">BullProsperity Workflow</div>
+          <h2 class="lt-subtitle">So setzt du es um</h2>
+
+          <div class="lt-list">
+            <div class="lt-list-item"><strong>1.</strong> Markt auswählen und langfristig einordnen.</div>
+            <div class="lt-list-item"><strong>2.</strong> Kategorie verstehen: ETF, Aktie, Crypto, Index oder Rohstoff.</div>
+            <div class="lt-list-item"><strong>3.</strong> Aufbauplan definieren statt impulsiv reagieren.</div>
+            <div class="lt-list-item"><strong>4.</strong> Portfolio und These sauber dokumentieren.</div>
+            <div class="lt-list-item"><strong>5.</strong> Geduldig bleiben und das System wiederholen.</div>
+          </div>
+        </div>
+      </section>
+
+      <div class="footer-note">
+        BullProsperity dient ausschließlich Bildungszwecken und stellt keine Finanzberatung dar.
+      </div>
     </div>
   </div>
 
@@ -596,17 +847,252 @@
   <script>
     const portfolioKey = "bp_longterm_portfolio";
     const journalKey = "bp_longterm_journal";
-    let longtermWidget;
-    let activeLongtermSymbol = localStorage.getItem("bp_longterm_symbol") || "BITSTAMP:BTCUSD";
-    let activeLongtermLabel = localStorage.getItem("bp_longterm_label") || "BTCUSD";
+    const activeCategoryKey = "bp_longterm_active_category";
+    const activeSymbolKey = "bp_longterm_symbol";
+    const activeLabelKey = "bp_longterm_label";
 
-    function setActiveMarketButtons(symbol) {
-      document.querySelectorAll(".lt-market-btn").forEach(btn => {
-        btn.classList.toggle("active", btn.dataset.symbol === symbol);
+    const longtermMarkets = [
+      {
+        category: "etfs",
+        label: "SPY",
+        display: "SPY",
+        symbol: "AMEX:SPY",
+        title: "SPY",
+        subtitle: "S&P 500 ETF",
+        desc: "Breiter ETF auf den US-Markt und klassischer Longterm-Baustein für ruhigen, strukturierten Aufbau.",
+        why: "Breite Diversifikation über große US-Unternehmen.",
+        focus: "Basisbaustein für viele Longterm-Strategien.",
+        role: "Core-ETF für ein stabiles Fundament.",
+        tags: ["ETF", "Core", "Longterm"]
+      },
+      {
+        category: "etfs",
+        label: "QQQ",
+        display: "QQQ",
+        symbol: "NASDAQ:QQQ",
+        title: "QQQ",
+        subtitle: "Nasdaq-100 ETF",
+        desc: "Starker Technologie-Fokus mit vielen bekannten Wachstumsunternehmen.",
+        why: "Beliebter ETF für Tech-Exposure.",
+        focus: "Wachstum und Innovation.",
+        role: "Growth-Baustein für technologieorientierte Anleger.",
+        tags: ["ETF", "Tech", "Growth"]
+      },
+
+      {
+        category: "cryptos",
+        label: "BTCUSD",
+        display: "Bitcoin",
+        symbol: "BITSTAMP:BTCUSD",
+        title: "Bitcoin",
+        subtitle: "Digitale Leitwährung",
+        desc: "Bitcoin gilt als führender Krypto-Markt und wird oft als langfristiger High-Conviction-Baustein betrachtet.",
+        why: "Starker Fokus im Krypto-Bereich.",
+        focus: "Langfristige Marktführerschaft.",
+        role: "Wachstumsbaustein mit hoher Volatilität.",
+        tags: ["Crypto", "High Conviction", "Longterm"]
+      },
+      {
+        category: "cryptos",
+        label: "ETHUSD",
+        display: "Ethereum",
+        symbol: "BITSTAMP:ETHUSD",
+        title: "Ethereum",
+        subtitle: "Smart Contract Netzwerk",
+        desc: "Ethereum ist ein führender Markt für Smart Contracts und viele Anwendungen im Krypto-Sektor.",
+        why: "Relevanter Infrastruktur-Markt im Crypto-Bereich.",
+        focus: "Technologie und Netzwerk-Nutzung.",
+        role: "Wachstumsbaustein im Krypto-Segment.",
+        tags: ["Crypto", "Technology", "Growth"]
+      },
+
+      {
+        category: "indices",
+        label: "SPX",
+        display: "S&P 500",
+        symbol: "SP:SPX",
+        title: "S&P 500",
+        subtitle: "US Leitindex",
+        desc: "Der S&P 500 ist einer der wichtigsten Aktienindizes und zeigt die Entwicklung vieler großer US-Unternehmen.",
+        why: "Makro-Benchmark für den US-Aktienmarkt.",
+        focus: "Breite Marktstruktur und Gesamtmarkt.",
+        role: "Orientierung für ETF- und Aktien-Denken.",
+        tags: ["Index", "Benchmark", "US Market"]
+      },
+      {
+        category: "indices",
+        label: "NASDAQ",
+        display: "NASDAQ",
+        symbol: "NASDAQ:NDX",
+        title: "NASDAQ",
+        subtitle: "Technologie Index",
+        desc: "Technologie- und wachstumsstarker Index mit vielen bekannten Namen.",
+        why: "Zeigt die Dynamik im Tech-Sektor.",
+        focus: "Wachstumsorientierte Marktstruktur.",
+        role: "Makro-Baustein für Growth-Denken.",
+        tags: ["Index", "Tech", "Growth"]
+      },
+
+      {
+        category: "stocks",
+        label: "NVDA",
+        display: "NVIDIA",
+        symbol: "NASDAQ:NVDA",
+        title: "NVIDIA",
+        subtitle: "AI & Tech Wachstum",
+        desc: "NVIDIA ist eines der bekanntesten Technologieunternehmen mit starkem Bezug zu AI, Chips und Wachstum.",
+        why: "Beliebte Wachstumsaktie mit hoher Aufmerksamkeit.",
+        focus: "AI, Rechenleistung und Zukunftstechnologien.",
+        role: "Growth-Aktie mit starkem Momentum.",
+        tags: ["Aktie", "AI", "Growth"]
+      },
+      {
+        category: "stocks",
+        label: "AAPL",
+        display: "Apple",
+        symbol: "NASDAQ:AAPL",
+        title: "Apple",
+        subtitle: "Stabiles Tech Unternehmen",
+        desc: "Apple ist eines der bekanntesten Großunternehmen und für viele Anleger ein Longterm-Klassiker.",
+        why: "Starker Markenwert und stabile Marktstellung.",
+        focus: "Qualität und Beständigkeit.",
+        role: "Core-Aktie im Tech-Sektor.",
+        tags: ["Aktie", "Quality", "Core"]
+      },
+      {
+        category: "stocks",
+        label: "MSFT",
+        display: "Microsoft",
+        symbol: "NASDAQ:MSFT",
+        title: "Microsoft",
+        subtitle: "Software & Cloud Stärke",
+        desc: "Microsoft ist ein führendes Unternehmen im Bereich Software, Cloud und Produktivitätslösungen.",
+        why: "Stabiles Big-Tech-Profil mit Wachstumskomponente.",
+        focus: "Software, Cloud und Ökosystem.",
+        role: "Qualitätsaktie im Longterm-Bereich.",
+        tags: ["Aktie", "Cloud", "Quality"]
+      },
+      {
+        category: "stocks",
+        label: "AMZN",
+        display: "Amazon",
+        symbol: "NASDAQ:AMZN",
+        title: "Amazon",
+        subtitle: "E-Commerce & Cloud",
+        desc: "Amazon verbindet starke Marktstellung im Handel mit Relevanz im Cloud-Geschäft.",
+        why: "Wichtiger Name für digitales Wachstum.",
+        focus: "Commerce, Plattform, Cloud.",
+        role: "Growth-Aktie mit breitem Einfluss.",
+        tags: ["Aktie", "Platform", "Growth"]
+      },
+      {
+        category: "stocks",
+        label: "TSLA",
+        display: "Tesla",
+        symbol: "NASDAQ:TSLA",
+        title: "Tesla",
+        subtitle: "Innovation & Wachstum",
+        desc: "Tesla wird oft als innovationsgetriebene Aktie mit hoher Aufmerksamkeit und Dynamik betrachtet.",
+        why: "Starker Fokus auf Innovation und Zukunftsthemen.",
+        focus: "EV, Technologie und Wachstum.",
+        role: "Dynamische Wachstumsaktie.",
+        tags: ["Aktie", "Innovation", "Volatility"]
+      },
+      {
+        category: "stocks",
+        label: "META",
+        display: "Meta",
+        symbol: "NASDAQ:META",
+        title: "Meta",
+        subtitle: "Plattform & Digitalökonomie",
+        desc: "Meta gehört zu den großen Plattformunternehmen und ist für viele Anleger ein bedeutender Tech-Name.",
+        why: "Große Relevanz in digitaler Aufmerksamkeit und Plattformmodellen.",
+        focus: "Plattform, Werbung, Digitalökonomie.",
+        role: "Tech-Aktie mit Plattformstärke.",
+        tags: ["Aktie", "Platform", "Big Tech"]
+      },
+
+      {
+        category: "commodities",
+        label: "XAUUSD",
+        display: "Gold",
+        symbol: "OANDA:XAUUSD",
+        title: "Gold",
+        subtitle: "Stabiler Sachwert",
+        desc: "Gold wird häufig als klassischer Rohstoff und Stabilitätsbaustein im Gesamtportfolio betrachtet.",
+        why: "Beliebter Sachwert für Diversifikation.",
+        focus: "Sicherheit und Werterhalt.",
+        role: "Rohstoff-Baustein mit defensiver Rolle.",
+        tags: ["Rohstoff", "Safety", "Diversification"]
+      },
+      {
+        category: "commodities",
+        label: "USOIL",
+        display: "Öl",
+        symbol: "TVC:USOIL",
+        title: "Öl",
+        subtitle: "Globaler Rohstoff",
+        desc: "Öl ist ein zentraler Rohstoff mit starker wirtschaftlicher und geopolitischer Relevanz.",
+        why: "Makro- und Rohstoffrelevanz im globalen Kontext.",
+        focus: "Wirtschaft, Energie, Zyklik.",
+        role: "Rohstoff-Fokus im Makro-Bereich.",
+        tags: ["Rohstoff", "Energy", "Macro"]
+      }
+    ];
+
+    let activeCategory = localStorage.getItem(activeCategoryKey) || "all";
+    let activeSymbol = localStorage.getItem(activeSymbolKey) || "AMEX:SPY";
+    let activeLabel = localStorage.getItem(activeLabelKey) || "SPY";
+    let longtermWidget;
+
+    function getActiveMarket() {
+      return longtermMarkets.find(m => m.symbol === activeSymbol) || longtermMarkets[0];
+    }
+
+    function renderMarketList() {
+      const list = document.getElementById("ltMarketList");
+      if (!list) return;
+
+      const filtered = activeCategory === "all"
+        ? longtermMarkets
+        : longtermMarkets.filter(m => m.category === activeCategory);
+
+      list.innerHTML = "";
+
+      filtered.forEach(market => {
+        const btn = document.createElement("button");
+        btn.className = "lt-market-item" + (market.symbol === activeSymbol ? " active" : "");
+        btn.innerHTML = `
+          <strong>${market.display}</strong>
+          <span>${market.subtitle}</span>
+        `;
+        btn.addEventListener("click", () => {
+          loadLongtermChart(market.symbol, market.label);
+        });
+        list.appendChild(btn);
       });
     }
 
+    function updateActiveTabs() {
+      document.querySelectorAll(".lt-tab").forEach(tab => {
+        tab.classList.toggle("active", tab.dataset.category === activeCategory);
+      });
+    }
+
+    function updateMarketInfo(market) {
+      document.getElementById("ltActiveCategory").textContent = market.category.toUpperCase();
+      document.getElementById("ltActiveName").textContent = market.title;
+      document.getElementById("ltActiveDesc").textContent = market.desc;
+      document.getElementById("ltWhyText").textContent = market.why;
+      document.getElementById("ltFocusText").textContent = market.focus;
+      document.getElementById("ltRoleText").textContent = market.role;
+      document.getElementById("ltTagOne").textContent = market.tags[0] || "Longterm";
+      document.getElementById("ltTagTwo").textContent = market.tags[1] || "BullProsperity";
+      document.getElementById("ltTagThree").textContent = market.tags[2] || "Pro";
+    }
+
     function loadLongtermChart(symbol, label) {
+      const market = longtermMarkets.find(m => m.symbol === symbol) || longtermMarkets[0];
       const container = document.getElementById("lt_chart_container");
       if (!container) return;
 
@@ -615,7 +1101,7 @@
       longtermWidget = new TradingView.widget({
         container_id: "lt_chart_container",
         width: "100%",
-        height: 500,
+        height: 560,
         symbol: symbol,
         interval: "1D",
         timezone: "Europe/Berlin",
@@ -634,18 +1120,26 @@
         ]
       });
 
-      activeLongtermSymbol = symbol;
-      activeLongtermLabel = label;
-      localStorage.setItem("bp_longterm_symbol", symbol);
-      localStorage.setItem("bp_longterm_label", label);
-      setActiveMarketButtons(symbol);
+      activeSymbol = symbol;
+      activeLabel = label;
+      localStorage.setItem(activeSymbolKey, symbol);
+      localStorage.setItem(activeLabelKey, label);
+
+      updateMarketInfo(market);
+      renderMarketList();
     }
 
-    document.querySelectorAll(".lt-market-btn").forEach(btn => {
-      btn.addEventListener("click", () => {
-        loadLongtermChart(btn.dataset.symbol, btn.dataset.label);
+    document.querySelectorAll(".lt-tab").forEach(tab => {
+      tab.addEventListener("click", () => {
+        activeCategory = tab.dataset.category;
+        localStorage.setItem(activeCategoryKey, activeCategory);
+        updateActiveTabs();
+        renderMarketList();
       });
     });
+
+    const portfolioKey = "bp_longterm_portfolio";
+    const journalKey = "bp_longterm_journal";
 
     function renderPortfolio() {
       const list = document.getElementById("portfolioList");
@@ -655,22 +1149,18 @@
       list.innerHTML = "";
 
       if (!data.length) {
-        list.innerHTML = `
-          <div class="lt-portfolio-entry">
-            Noch kein Portfolio eingetragen.
-          </div>
-        `;
+        list.innerHTML = `<div class="lt-entry">Noch kein Portfolio eingetragen.</div>`;
         return;
       }
 
       data.slice().reverse().forEach((item, index) => {
         const realIndex = data.length - 1 - index;
         const entry = document.createElement("div");
-        entry.className = "lt-portfolio-entry";
+        entry.className = "lt-entry";
         entry.innerHTML = `
           <div class="lt-entry-top">
             <div>
-              <strong>${item.asset}</strong>
+              <strong>${item.asset}</strong><br>
               <small>${item.category} · ${item.plan}</small>
             </div>
             <button class="lt-remove-btn" onclick="removePortfolioItem(${realIndex})">Entfernen</button>
@@ -688,84 +1178,60 @@
       renderPortfolio();
     };
 
-    const addPortfolioBtn = document.getElementById("addPortfolioBtn");
-    if (addPortfolioBtn) {
-      addPortfolioBtn.addEventListener("click", () => {
-        const asset = document.getElementById("ltAsset").value.trim();
-        const amount = document.getElementById("ltAmount").value.trim();
-        const category = document.getElementById("ltCategory").value;
-        const plan = document.getElementById("ltPlan").value.trim() || "kein Plan eingetragen";
+    document.getElementById("addPortfolioBtn")?.addEventListener("click", () => {
+      const asset = document.getElementById("ltAsset").value.trim();
+      const amount = document.getElementById("ltAmount").value.trim();
+      const category = document.getElementById("ltCategory").value;
+      const plan = document.getElementById("ltPlan").value.trim() || "kein Plan eingetragen";
 
-        if (!asset || !amount) {
-          alert("Bitte Asset und Betrag eintragen.");
-          return;
-        }
+      if (!asset || !amount) {
+        alert("Bitte Asset und Betrag eintragen.");
+        return;
+      }
 
-        const data = JSON.parse(localStorage.getItem(portfolioKey) || "[]");
-        data.push({
-          asset,
-          amount,
-          category,
-          plan
-        });
+      const data = JSON.parse(localStorage.getItem(portfolioKey) || "[]");
+      data.push({ asset, amount, category, plan });
+      localStorage.setItem(portfolioKey, JSON.stringify(data));
 
-        localStorage.setItem(portfolioKey, JSON.stringify(data));
+      document.getElementById("ltAsset").value = "";
+      document.getElementById("ltAmount").value = "";
+      document.getElementById("ltPlan").value = "";
 
-        document.getElementById("ltAsset").value = "";
-        document.getElementById("ltAmount").value = "";
-        document.getElementById("ltPlan").value = "";
+      renderPortfolio();
+    });
 
-        renderPortfolio();
-      });
-    }
+    document.getElementById("clearPortfolioBtn")?.addEventListener("click", () => {
+      localStorage.removeItem(portfolioKey);
+      renderPortfolio();
+    });
 
-    const clearPortfolioBtn = document.getElementById("clearPortfolioBtn");
-    if (clearPortfolioBtn) {
-      clearPortfolioBtn.addEventListener("click", () => {
-        localStorage.removeItem(portfolioKey);
-        renderPortfolio();
-      });
-    }
+    document.getElementById("calcDcaBtn")?.addEventListener("click", () => {
+      const amount = parseFloat(document.getElementById("dcaAmount").value);
+      const years = parseFloat(document.getElementById("dcaYears").value);
+      const annualReturn = parseFloat(document.getElementById("dcaReturn").value || "0");
+      const goal = document.getElementById("dcaGoal").value.trim() || "Langfristiger Aufbau";
+      const result = document.getElementById("dcaResult");
 
-    const calcDcaBtn = document.getElementById("calcDcaBtn");
-    if (calcDcaBtn) {
-      calcDcaBtn.addEventListener("click", () => {
-        const amount = parseFloat(document.getElementById("dcaAmount").value);
-        const years = parseFloat(document.getElementById("dcaYears").value);
-        const annualReturn = parseFloat(document.getElementById("dcaReturn").value || "0");
-        const goal = document.getElementById("dcaGoal").value.trim() || "Langfristiger Aufbau";
+      if (!amount || !years) {
+        alert("Bitte monatlichen Betrag und Jahre eintragen.");
+        return;
+      }
 
-        const result = document.getElementById("dcaResult");
-        result.innerHTML = "";
+      const invested = amount * 12 * years;
+      const monthlyRate = annualReturn / 100 / 12;
+      const months = years * 12;
 
-        if (!amount || !years) {
-          alert("Bitte monatlichen Betrag und Jahre eintragen.");
-          return;
-        }
+      let futureValue = invested;
+      if (monthlyRate > 0) {
+        futureValue = amount * (((Math.pow(1 + monthlyRate, months) - 1) / monthlyRate) * (1 + monthlyRate));
+      }
 
-        const invested = amount * 12 * years;
-        const monthlyRate = annualReturn / 100 / 12;
-        const months = years * 12;
-
-        let futureValue = invested;
-
-        if (monthlyRate > 0) {
-          futureValue = amount * (((Math.pow(1 + monthlyRate, months) - 1) / monthlyRate) * (1 + monthlyRate));
-        }
-
-        result.innerHTML = `
-          <div class="lt-result-card">
-            <strong style="color:#ffd700;">Ziel:</strong> ${goal}
-          </div>
-          <div class="lt-result-card">
-            <strong style="color:#ffd700;">Gesamt investiert:</strong> ${invested.toFixed(2)}€
-          </div>
-          <div class="lt-result-card">
-            <strong style="color:#ffd700;">Optionaler Modellwert mit Rendite:</strong> ${futureValue.toFixed(2)}€
-          </div>
-        `;
-      });
-    }
+      result.innerHTML = `
+        <div class="lt-result-card"><strong>Ziel:</strong> ${goal}</div>
+        <div class="lt-result-card"><strong>Gesamt investiert:</strong> ${invested.toFixed(2)}€</div>
+        <div class="lt-result-card"><strong>Optionaler Modellwert mit Rendite:</strong> ${futureValue.toFixed(2)}€</div>
+      `;
+    });
 
     function renderJournal() {
       const list = document.getElementById("journalList");
@@ -775,22 +1241,18 @@
       list.innerHTML = "";
 
       if (!entries.length) {
-        list.innerHTML = `
-          <div class="lt-journal-entry">
-            Noch keine Investment Notizen gespeichert.
-          </div>
-        `;
+        list.innerHTML = `<div class="lt-entry">Noch keine Investment Notizen gespeichert.</div>`;
         return;
       }
 
       entries.slice().reverse().forEach((entry, index) => {
         const realIndex = entries.length - 1 - index;
         const item = document.createElement("div");
-        item.className = "lt-journal-entry";
+        item.className = "lt-entry";
         item.innerHTML = `
           <div class="lt-entry-top">
             <div>
-              <strong>${entry.asset}</strong>
+              <strong>${entry.asset}</strong><br>
               <small>${entry.horizon} · ${entry.date}</small>
             </div>
             <button class="lt-remove-btn" onclick="removeJournalItem(${realIndex})">Entfernen</button>
@@ -808,37 +1270,35 @@
       renderJournal();
     };
 
-    const saveJournalBtn = document.getElementById("saveJournalBtn");
-    if (saveJournalBtn) {
-      saveJournalBtn.addEventListener("click", () => {
-        const asset = document.getElementById("journalAsset").value.trim();
-        const horizon = document.getElementById("journalHorizon").value.trim() || "kein Horizont";
-        const note = document.getElementById("journalNote").value.trim();
+    document.getElementById("saveJournalBtn")?.addEventListener("click", () => {
+      const asset = document.getElementById("journalAsset").value.trim();
+      const horizon = document.getElementById("journalHorizon").value.trim() || "kein Horizont";
+      const note = document.getElementById("journalNote").value.trim();
 
-        if (!asset || !note) {
-          alert("Bitte Asset und Notiz eintragen.");
-          return;
-        }
+      if (!asset || !note) {
+        alert("Bitte Asset und Notiz eintragen.");
+        return;
+      }
 
-        const entries = JSON.parse(localStorage.getItem(journalKey) || "[]");
-        entries.push({
-          asset,
-          horizon,
-          note,
-          date: new Date().toLocaleString("de-DE")
-        });
-
-        localStorage.setItem(journalKey, JSON.stringify(entries));
-
-        document.getElementById("journalAsset").value = "";
-        document.getElementById("journalHorizon").value = "";
-        document.getElementById("journalNote").value = "";
-
-        renderJournal();
+      const entries = JSON.parse(localStorage.getItem(journalKey) || "[]");
+      entries.push({
+        asset,
+        horizon,
+        note,
+        date: new Date().toLocaleString("de-DE")
       });
-    }
+      localStorage.setItem(journalKey, JSON.stringify(entries));
 
-    loadLongtermChart(activeLongtermSymbol, activeLongtermLabel);
+      document.getElementById("journalAsset").value = "";
+      document.getElementById("journalHorizon").value = "";
+      document.getElementById("journalNote").value = "";
+
+      renderJournal();
+    });
+
+    updateActiveTabs();
+    renderMarketList();
+    loadLongtermChart(activeSymbol, activeLabel);
     renderPortfolio();
     renderJournal();
   </script>
