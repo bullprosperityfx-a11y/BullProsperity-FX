@@ -9,228 +9,365 @@
   <script src="longterm.js" defer></script>
 </head>
 <body>
-  <div class="longterm-page">
-    <div class="longterm-shell">
-      <header class="longterm-header">
-        <h1>Longterm Pro Watchlist</h1>
-        <p>
-          Wähle Kategorien und beobachte hochwertige Longterm-Märkte direkt
-          in deinem BullProsperity Bereich.
-        </p>
-      </header>
+  <div class="page">
+    <header class="header">
+      <h1 class="headline">Longterm Pro Watchlist</h1>
+      <p class="subheadline">
+        Wähle Kategorien und beobachte hochwertige ETFs, Aktien, Indizes, Rohstoffe,
+        Krypto und DAX-Assets direkt in deinem BullProsperity Bereich.
+      </p>
+    </header>
 
-      <section class="longterm-layout">
-        <aside class="sidebar-filters">
-          <button class="filter-pill active" data-symbol="SPY">Alle</button>
-          <button class="filter-pill" data-symbol="SPY">ETFs</button>
-          <button class="filter-pill" data-symbol="BTCUSDT">Crypto</button>
-          <button class="filter-pill" data-symbol="AAPL">Aktien</button>
-          <button class="filter-pill" data-symbol="MSFT">Tech</button>
-          <button class="filter-pill" data-symbol="QQQ">Wachstum</button>
-        </aside>
+    <section class="layout">
+      <aside class="sidebar">
+        <button class="filter-btn active" data-asset="SPY">Alle</button>
+        <button class="filter-btn" data-asset="SPY">ETFs</button>
+        <button class="filter-btn" data-asset="AAPL">Aktien</button>
+        <button class="filter-btn" data-asset="DAX">DAX</button>
+        <button class="filter-btn" data-asset="NDX">Indizes</button>
+        <button class="filter-btn" data-asset="GOLD">Rohstoffe</button>
+        <button class="filter-btn" data-asset="BTC">Crypto</button>
+      </aside>
 
-        <main class="main-content">
-          <div class="asset-top">
+      <main class="content">
+        <div class="asset-top">
+          <div>
+            <span class="mini-label">Kategorie</span>
+            <div class="asset-symbol" id="assetSymbol">SPY</div>
+            <p class="asset-description" id="assetDescription">
+              Breiter ETF auf den US-Markt und klassischer Longterm-Baustein.
+            </p>
+          </div>
+
+          <div class="asset-tags">
+            <span class="asset-tag" id="tagOne">Core</span>
+            <span class="asset-tag" id="tagTwo">ETF</span>
+            <span class="asset-tag" id="tagThree">Longterm</span>
+          </div>
+        </div>
+
+        <section class="chart-card">
+          <div class="chart-card-top">
             <div>
-              <span class="section-label">Kategorie</span>
-              <h2 id="assetSymbol">SPY</h2>
-              <p id="assetDescription">
-                Breiter ETF auf den US-Markt und klassischer Longterm-Baustein.
-              </p>
+              <div class="chart-title" id="chartTitle">SPY Performance</div>
+              <div class="chart-status" id="chartStatus">BullProsperity Longterm View</div>
             </div>
 
-            <div class="asset-tags">
-              <span id="tagOne">Core</span>
-              <span id="tagTwo">Longterm</span>
-              <span id="tagThree">BullProsperity</span>
+            <div class="time-buttons">
+              <button class="time-btn active" data-range="3M">3M</button>
+              <button class="time-btn" data-range="6M">6M</button>
+              <button class="time-btn" data-range="1Y">1Y</button>
+              <button class="time-btn" data-range="2Y">2Y</button>
             </div>
           </div>
 
-          <section class="chart-card">
-            <div class="chart-card-top">
-              <div>
-                <h3 id="chartHeadline">SPY Performance</h3>
-                <p id="liveStatus">Live-Daten werden geladen...</p>
-              </div>
+          <div class="chart-wrap">
+            <canvas id="longtermChart"></canvas>
+          </div>
 
-              <div class="timeframe-buttons">
-                <button class="time-btn active" data-range="3">3M</button>
-                <button class="time-btn" data-range="6">6M</button>
-                <button class="time-btn" data-range="12">1Y</button>
-                <button class="time-btn" data-range="24">2Y</button>
-              </div>
+          <div class="stats-grid">
+            <div class="stat-box">
+              <span>Aktueller Kurs</span>
+              <strong id="statPrice">613,42 €</strong>
+            </div>
+            <div class="stat-box">
+              <span>Veränderung</span>
+              <strong id="statChange" class="negative">-1,00 %</strong>
+            </div>
+            <div class="stat-box">
+              <span>Trend</span>
+              <strong id="statTrend">Bullish</strong>
+            </div>
+            <div class="stat-box">
+              <span>Strategie</span>
+              <strong id="statStrategy">Hold</strong>
+            </div>
+          </div>
+        </section>
+
+        <section class="dual-grid">
+          <div class="section-card">
+            <span class="mini-label">Longterm Thesis</span>
+            <h3>Investment Case</h3>
+            <p id="thesisText">
+              Solides Longterm-Asset mit breiter Marktbasis, hoher Relevanz und
+              starker Eignung als langfristiger Kernbaustein.
+            </p>
+          </div>
+
+          <div class="section-card">
+            <span class="mini-label">BullProsperity View</span>
+            <h3>Bias & Setup</h3>
+            <div class="bullet-list" id="biasList">
+              <div class="bullet-item">Makrostruktur bleibt konstruktiv.</div>
+              <div class="bullet-item">Pullbacks eher beobachten als jagen.</div>
+              <div class="bullet-item">Kein FOMO-Einstieg in überdehnte Stärke.</div>
+            </div>
+          </div>
+        </section>
+
+        <section class="metrics-section">
+          <div class="section-header">
+            <span class="mini-label">Key Data</span>
+            <h3>Wichtige Kennzahlen</h3>
+          </div>
+
+          <div class="metrics-grid">
+            <div class="metric-card">
+              <span>Entry Zone</span>
+              <strong id="entryZone">580 – 600</strong>
+            </div>
+            <div class="metric-card">
+              <span>Hold Zone</span>
+              <strong id="holdZone">600 – 640</strong>
+            </div>
+            <div class="metric-card">
+              <span>Risk Zone</span>
+              <strong id="riskZone">unter 560</strong>
+            </div>
+            <div class="metric-card">
+              <span>Conviction</span>
+              <strong id="convictionScore">8.8 / 10</strong>
+            </div>
+          </div>
+        </section>
+
+        <section class="watchlist-section">
+          <div class="section-header">
+            <span class="mini-label">ETF, Stocks, Indices, Commodities, Crypto</span>
+            <h3>Watchlist Einträge</h3>
+          </div>
+
+          <div class="watchlist-table">
+            <div class="watchlist-row watchlist-head">
+              <div>Asset</div>
+              <div>Kurs</div>
+              <div>Veränderung</div>
+              <div>Typ</div>
             </div>
 
-            <div class="chart-wrap">
-              <canvas id="longtermChart"></canvas>
-            </div>
-
-            <div class="stats-grid">
-              <div class="stat-box">
-                <span>Aktueller Kurs</span>
-                <strong id="statPrice">--</strong>
-              </div>
-
-              <div class="stat-box">
-                <span>Tagesänderung</span>
-                <strong id="statChange">--</strong>
-              </div>
-
-              <div class="stat-box">
-                <span>Trend</span>
-                <strong id="statTrend">--</strong>
-              </div>
-
-              <div class="stat-box">
-                <span>Strategie</span>
-                <strong id="statStrategy">Hold</strong>
-              </div>
-            </div>
-          </section>
-
-          <!-- Neue untere Datenbereiche -->
-          <section class="longterm-extra-grid">
-            <div class="info-card thesis-card">
-              <div class="card-head">
-                <span class="mini-label">Longterm Thesis</span>
-                <h3>Investment Case</h3>
-              </div>
-              <p id="thesisText">
-                Solides Asset mit starker Marktposition, langfristiger Relevanz und
-                Potenzial für nachhaltiges Wachstum über mehrere Marktzyklen.
-              </p>
-            </div>
-
-            <div class="info-card thesis-card">
-              <div class="card-head">
-                <span class="mini-label">BullProsperity View</span>
-                <h3>Bias & Setup</h3>
-              </div>
-              <div class="bullet-points" id="biasPoints">
-                <div class="bullet-row">Makrostruktur bleibt konstruktiv.</div>
-                <div class="bullet-row">Pullbacks eher als Beobachtungszonen sehen.</div>
-                <div class="bullet-row">Kein Chase bei überdehnten Bewegungen.</div>
-              </div>
-            </div>
-          </section>
-
-          <section class="metrics-section">
-            <div class="section-title-row">
-              <span class="mini-label">Key Data</span>
-              <h3>Wichtige Kennzahlen</h3>
-            </div>
-
-            <div class="metrics-grid">
-              <div class="metric-card">
-                <span>Entry Zone</span>
-                <strong id="entryZone">180 – 190</strong>
-              </div>
-              <div class="metric-card">
-                <span>Hold Zone</span>
-                <strong id="holdZone">190 – 220</strong>
-              </div>
-              <div class="metric-card">
-                <span>Risk Zone</span>
-                <strong id="riskZone">unter 175</strong>
-              </div>
-              <div class="metric-card">
-                <span>Conviction</span>
-                <strong id="convictionScore">8.4 / 10</strong>
-              </div>
-            </div>
-          </section>
-
-          <section class="watchlist-section">
-            <div class="section-title-row">
-              <span class="mini-label">Watchlist</span>
-              <h3>Weitere Longterm Ideen</h3>
-            </div>
-
-            <div class="watchlist-cards">
-              <article class="watch-card">
-                <div class="watch-card-top">
-                  <h4>MSFT</h4>
-                  <span>Cloud / AI</span>
+            <div class="watchlist-row">
+              <div class="asset-cell">
+                <div class="asset-icon">IT</div>
+                <div class="asset-text">
+                  <strong>S&amp;P 500 Information Tech USD</strong>
+                  <span>Technologie ETF</span>
                 </div>
-                <p>Stabiles Compounder-Profil mit starkem Cashflow und KI-Fantasie.</p>
-                <div class="watch-tags">
-                  <span>Tech</span>
-                  <span>Qualität</span>
-                  <span>Hold</span>
-                </div>
-              </article>
-
-              <article class="watch-card">
-                <div class="watch-card-top">
-                  <h4>QQQ</h4>
-                  <span>ETF</span>
-                </div>
-                <p>Wachstumsorientierte Alternative mit hoher Tech-Gewichtung.</p>
-                <div class="watch-tags">
-                  <span>ETF</span>
-                  <span>Growth</span>
-                  <span>Longterm</span>
-                </div>
-              </article>
-
-              <article class="watch-card">
-                <div class="watch-card-top">
-                  <h4>BTC</h4>
-                  <span>Digital Asset</span>
-                </div>
-                <p>Volatiler, aber langfristig relevanter Makro- und Momentum-Case.</p>
-                <div class="watch-tags">
-                  <span>Crypto</span>
-                  <span>High Beta</span>
-                  <span>Scale In</span>
-                </div>
-              </article>
-            </div>
-          </section>
-
-          <section class="analysis-grid">
-            <div class="info-card">
-              <div class="card-head">
-                <span class="mini-label">Catalysts</span>
-                <h3>Positive Treiber</h3>
               </div>
-              <div class="bullet-points" id="catalystPoints">
-                <div class="bullet-row">Starke Marktstellung im Kerngeschäft</div>
-                <div class="bullet-row">Langfristige Nachfrage bleibt intakt</div>
-                <div class="bullet-row">Gute Voraussetzungen für weiteres Wachstum</div>
+              <div class="price-cell">33,73 €</div>
+              <div class="change-cell negative">▼ 0,93 %</div>
+              <div><span class="type-badge">ETF</span></div>
+            </div>
+
+            <div class="watchlist-row">
+              <div class="asset-cell">
+                <div class="asset-icon">AI</div>
+                <div class="asset-text">
+                  <strong>AI &amp; Big Data USD (Acc)</strong>
+                  <span>Zukunft / KI ETF</span>
+                </div>
               </div>
+              <div class="price-cell">152,88 €</div>
+              <div class="change-cell negative">▼ 1,00 %</div>
+              <div><span class="type-badge">ETF</span></div>
             </div>
 
-            <div class="info-card">
-              <div class="card-head">
-                <span class="mini-label">Risks</span>
-                <h3>Risiken</h3>
+            <div class="watchlist-row">
+              <div class="asset-cell">
+                <div class="asset-icon">SP</div>
+                <div class="asset-text">
+                  <strong>Core S&amp;P 500 USD (Acc)</strong>
+                  <span>US Markt ETF</span>
+                </div>
               </div>
-              <div class="bullet-points" id="riskPoints">
-                <div class="bullet-row">Bewertung könnte zeitweise zu hoch sein</div>
-                <div class="bullet-row">Makro-Schwäche kann Druck erzeugen</div>
-                <div class="bullet-row">Kurzfristige Rücksetzer bleiben möglich</div>
+              <div class="price-cell">613,42 €</div>
+              <div class="change-cell negative">▼ 1,00 %</div>
+              <div><span class="type-badge">ETF</span></div>
+            </div>
+
+            <div class="watchlist-row">
+              <div class="asset-cell">
+                <div class="asset-icon">MW</div>
+                <div class="asset-text">
+                  <strong>Core MSCI World USD (Acc)</strong>
+                  <span>Welt ETF</span>
+                </div>
               </div>
-            </div>
-          </section>
-
-          <section class="notes-section">
-            <div class="section-title-row">
-              <span class="mini-label">Journal</span>
-              <h3>Longterm Notizen</h3>
+              <div class="price-cell">110,02 €</div>
+              <div class="change-cell negative">▼ 1,04 %</div>
+              <div><span class="type-badge">ETF</span></div>
             </div>
 
-            <div class="notes-card">
-              <p id="notesText">
-                Fokus auf saubere Entries, keine FOMO-Käufe in überdehnte Stärke.
-                Idealerweise in Pullbacks Staffeln und Thesis regelmäßig neu bewerten.
-              </p>
+            <div class="watchlist-row">
+              <div class="asset-cell">
+                <div class="asset-icon">NQ</div>
+                <div class="asset-text">
+                  <strong>NASDAQ100 USD (Acc)</strong>
+                  <span>Growth ETF</span>
+                </div>
+              </div>
+              <div class="price-cell">1.208,20 €</div>
+              <div class="change-cell negative">▼ 1,13 %</div>
+              <div><span class="type-badge">ETF</span></div>
             </div>
-          </section>
 
-        </main>
-      </section>
-    </div>
+            <div class="watchlist-row">
+              <div class="asset-cell">
+                <div class="asset-icon stock">NV</div>
+                <div class="asset-text">
+                  <strong>NVIDIA</strong>
+                  <span>AI / Halbleiter</span>
+                </div>
+              </div>
+              <div class="price-cell">154,30 €</div>
+              <div class="change-cell negative">▼ 1,82 %</div>
+              <div><span class="type-badge stock">Aktie</span></div>
+            </div>
+
+            <div class="watchlist-row">
+              <div class="asset-cell">
+                <div class="asset-icon stock">AP</div>
+                <div class="asset-text">
+                  <strong>Apple</strong>
+                  <span>Big Tech / Quality</span>
+                </div>
+              </div>
+              <div class="price-cell">214,15 €</div>
+              <div class="change-cell positive">▲ 0,64 %</div>
+              <div><span class="type-badge stock">Aktie</span></div>
+            </div>
+
+            <div class="watchlist-row">
+              <div class="asset-cell">
+                <div class="asset-icon index">DX</div>
+                <div class="asset-text">
+                  <strong>DAX</strong>
+                  <span>Deutscher Leitindex</span>
+                </div>
+              </div>
+              <div class="price-cell">18.942,00</div>
+              <div class="change-cell negative">▼ 0,41 %</div>
+              <div><span class="type-badge index">Index</span></div>
+            </div>
+
+            <div class="watchlist-row">
+              <div class="asset-cell">
+                <div class="asset-icon index">SPX</div>
+                <div class="asset-text">
+                  <strong>S&amp;P 500 Index</strong>
+                  <span>US Large Cap Index</span>
+                </div>
+              </div>
+              <div class="price-cell">5.212,00</div>
+              <div class="change-cell positive">▲ 0,21 %</div>
+              <div><span class="type-badge index">Index</span></div>
+            </div>
+
+            <div class="watchlist-row">
+              <div class="asset-cell">
+                <div class="asset-icon index">NDX</div>
+                <div class="asset-text">
+                  <strong>NASDAQ 100</strong>
+                  <span>US Tech Index</span>
+                </div>
+              </div>
+              <div class="price-cell">18.104,00</div>
+              <div class="change-cell positive">▲ 0,48 %</div>
+              <div><span class="type-badge index">Index</span></div>
+            </div>
+
+            <div class="watchlist-row">
+              <div class="asset-cell">
+                <div class="asset-icon commodity">AU</div>
+                <div class="asset-text">
+                  <strong>Gold</strong>
+                  <span>Rohstoff / Safe Haven</span>
+                </div>
+              </div>
+              <div class="price-cell">2.184,00 $</div>
+              <div class="change-cell positive">▲ 0,35 %</div>
+              <div><span class="type-badge commodity">Rohstoff</span></div>
+            </div>
+
+            <div class="watchlist-row">
+              <div class="asset-cell">
+                <div class="asset-icon commodity">WT</div>
+                <div class="asset-text">
+                  <strong>WTI Öl</strong>
+                  <span>Energie / Commodity</span>
+                </div>
+              </div>
+              <div class="price-cell">77,42 $</div>
+              <div class="change-cell negative">▼ 0,56 %</div>
+              <div><span class="type-badge commodity">Rohstoff</span></div>
+            </div>
+
+            <div class="watchlist-row">
+              <div class="asset-cell">
+                <div class="asset-icon crypto">₿</div>
+                <div class="asset-text">
+                  <strong>Bitcoin</strong>
+                  <span>Krypto / Makro Asset</span>
+                </div>
+              </div>
+              <div class="price-cell">76.200,00 $</div>
+              <div class="change-cell positive">▲ 1,12 %</div>
+              <div><span class="type-badge crypto">Crypto</span></div>
+            </div>
+
+            <div class="watchlist-row">
+              <div class="asset-cell">
+                <div class="asset-icon crypto">Ξ</div>
+                <div class="asset-text">
+                  <strong>Ethereum</strong>
+                  <span>Smart Contract Asset</span>
+                </div>
+              </div>
+              <div class="price-cell">3.980,00 $</div>
+              <div class="change-cell negative">▼ 0,27 %</div>
+              <div><span class="type-badge crypto">Crypto</span></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="analysis-grid">
+          <div class="section-card">
+            <span class="mini-label">Catalysts</span>
+            <h3>Positive Treiber</h3>
+            <div class="bullet-list" id="catalystList">
+              <div class="bullet-item">Stabile Grundnachfrage im jeweiligen Marktsegment.</div>
+              <div class="bullet-item">Langfristige Relevanz über mehrere Marktzyklen.</div>
+              <div class="bullet-item">Gute Chancen auf strukturelles Wachstum.</div>
+            </div>
+          </div>
+
+          <div class="section-card">
+            <span class="mini-label">Risks</span>
+            <h3>Risiken</h3>
+            <div class="bullet-list" id="riskList">
+              <div class="bullet-item">Kurzfristige Volatilität kann Einstiege unruhig machen.</div>
+              <div class="bullet-item">Makro-Unsicherheit kann Pullbacks auslösen.</div>
+              <div class="bullet-item">Überdehnte Bewegungen sollten nicht gechased werden.</div>
+            </div>
+          </div>
+        </section>
+
+        <section class="notes-section">
+          <div class="section-header">
+            <span class="mini-label">Journal</span>
+            <h3>Longterm Notizen</h3>
+          </div>
+
+          <div class="notes-card">
+            <p id="notesText">
+              Fokus auf saubere Longterm-Struktur, keine impulsiven FOMO-Käufe.
+              Pullbacks und Reakkumulationszonen sind im BullProsperity Stil oft
+              interessanter als das Hinterherlaufen starker Bewegungen.
+            </p>
+          </div>
+        </section>
+      </main>
+    </section>
   </div>
 </body>
 </html>
