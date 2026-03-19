@@ -6,21 +6,6 @@
   <title>BullProsperity | Tools</title>
   <link rel="stylesheet" href="theme.css">
 
-  <script>
-    (async () => {
-      try {
-        const res = await fetch("/api/access", { credentials: "include" });
-        const data = await res.json();
-
-        if (data.role !== "admin" && data.role !== "premium") {
-          window.location.href = "locked.html";
-        }
-      } catch (err) {
-        window.location.href = "locked.html";
-      }
-    })();
-  </script>
-
   <style>
     .chart-frame{
       border:1px solid var(--line);
@@ -239,6 +224,34 @@
       color:rgba(255,255,255,.55);
     }
 
+    .auth-badge{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:10px 14px;
+      border-radius:999px;
+      font-size:13px;
+      font-weight:700;
+      border:1px solid #252525;
+      background:#111;
+      color:#fff;
+      white-space:nowrap;
+    }
+
+    .auth-badge::before{
+      content:"";
+      width:10px;
+      height:10px;
+      border-radius:50%;
+      display:inline-block;
+      background:#666;
+    }
+
+    .auth-badge.status-admin::before{background:#ffd700;}
+    .auth-badge.status-premium::before{background:#22c55e;}
+    .auth-badge.status-longterm::before{background:#3b82f6;}
+    .auth-badge.status-locked::before{background:#ef4444;}
+
     @media(max-width:1100px){
       .bp-chart-layout{
         grid-template-columns:1fr;
@@ -272,7 +285,8 @@
         <a href="tools.html" class="active">Tools</a>
         <a href="setup-room.html">Setup Room</a>
         <a href="community.html">Community</a>
-        <a href="https://whop.com/bullprosperity-fx/bullprosperity-fx/">Login</a>
+        <a id="loginNavBtn" href="https://whop.com/bullprosperity-fx/bullprosperity-fx/">Login</a>
+        <div id="authBadge" class="auth-badge status-locked">Kein Zugang</div>
       </div>
     </nav>
 
@@ -497,6 +511,9 @@
   <script src="https://s3.tradingview.com/tv.js"></script>
 
   <script>
+    const authBadge = document.getElementById("authBadge");
+    const loginNavBtn = document.getElementById("loginNavBtn");
+
     let widget;
     let activeSymbol = localStorage.getItem("bp_active_symbol") || "FX:EURUSD";
     let activeLabel = localStorage.getItem("bp_active_label") || "EURUSD";
@@ -629,8 +646,42 @@
       });
     }
 
-    loadChart(activeSymbol, activeLabel);
-    renderJournal();
+    (async () => {
+      try {
+        const res = await fetch("/api/access", {
+          credentials: "include",
+          cache: "no-store"
+        });
+
+        if (!res.ok) {
+          window.location.href = "locked.html";
+          return;
+        }
+
+        const data = await res.json();
+        const role = data?.role || "guest";
+
+        if (role !== "admin" && role !== "premium") {
+          window.location.href = "locked.html";
+          return;
+        }
+
+        if (role === "admin") {
+          authBadge.textContent = "Admin Zugang aktiv";
+          authBadge.className = "auth-badge status-admin";
+        } else if (role === "premium") {
+          authBadge.textContent = "Premium aktiv";
+          authBadge.className = "auth-badge status-premium";
+        }
+
+        loginNavBtn.style.display = "none";
+
+        loadChart(activeSymbol, activeLabel);
+        renderJournal();
+      } catch (err) {
+        window.location.href = "locked.html";
+      }
+    })();
   </script>
 </body>
 </html>
