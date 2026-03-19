@@ -1,9 +1,6 @@
 export default async function handler(req, res) {
   try {
-    const {
-      code,
-      state
-    } = req.query;
+    const { code, state } = req.query;
 
     const cookie = req.headers.cookie || "";
 
@@ -15,7 +12,8 @@ export default async function handler(req, res) {
     const storedState = getCookie("whop_state");
     const verifier = getCookie("whop_verifier");
 
-    if (!code || !state || !storedState || !verifier || state !== storedState) {
+    // 🔒 Sicherheitscheck
+    if (!code || !state || state !== storedState || !verifier) {
       return res.redirect("/locked.html");
     }
 
@@ -23,6 +21,7 @@ export default async function handler(req, res) {
     const clientSecret = process.env.WHOP_CLIENT_SECRET;
     const redirectUri = process.env.WHOP_REDIRECT_URI;
 
+    // 🔁 Token holen
     const tokenRes = await fetch("https://api.whop.com/oauth/token", {
       method: "POST",
       headers: {
@@ -39,19 +38,14 @@ export default async function handler(req, res) {
     });
 
     if (!tokenRes.ok) {
-      const errText = await tokenRes.text();
-      console.error("Whop token exchange failed:", errText);
+      console.error(await tokenRes.text());
       return res.redirect("/locked.html");
     }
 
     const tokenData = await tokenRes.json();
     const accessToken = tokenData.access_token;
 
-    if (!accessToken) {
-      return res.redirect("/locked.html");
-    }
-
-    // Nutzerdaten laden
+    // 👤 User holen
     const userRes = await fetch("https://api.whop.com/api/v1/me", {
       headers: {
         Authorization: `Bearer ${accessToken}`
@@ -59,19 +53,17 @@ export default async function handler(req, res) {
     });
 
     if (!userRes.ok) {
-      const errText = await userRes.text();
-      console.error("Whop user fetch failed:", errText);
+      console.error(await userRes.text());
       return res.redirect("/locked.html");
     }
 
-    const userData = await userRes.json();
+    const user = await userRes.json();
 
-    // Passe das an deine echte Produkt-ID an
+    // 🔥 HIER PASSIERT DER MAGIC (KAUF CHECK)
     const productId = process.env.WHOP_PRODUCT_ID;
 
-    // Zugriff auf Produkt prüfen
-    const accessRes = await fetch(
-      `https://api.whop.com/api/v1/users/${userData.id}/access/${productId}`,
+    const accessCheck = await fetch(
+      `https://api.whop.com/api/v1/users/${user.id}/access/${productId}`,
       {
         headers: {
           Authorization: `Bearer ${accessToken}`
@@ -81,39 +73,41 @@ export default async function handler(req, res) {
 
     let role = "guest";
 
-    if (accessRes.ok) {
-      const accessData = await accessRes.json();
+    if (accessCheck.ok) {
+      const data = await accessCheck.json();
 
-      // robust: verschiedene mögliche Access-Antworten tolerieren
       const hasAccess =
-        accessData?.has_access === true ||
-        accessData?.access === true ||
-        accessData?.access_level === "full" ||
-        accessData?.status === "active";
+        data?.has_access === true ||
+        data?.access === true ||
+        data?.status === "active" ||
+        data?.access_level === "full";
 
       if (hasAccess) {
         role = "premium";
       }
     } else {
-      const errText = await accessRes.text();
-      console.error("Whop access check failed:", errText);
+      console.error("Access check failed:", await accessCheck.text());
     }
 
     const secure = process.env.NODE_ENV === "production";
 
-    const cookies = [
+    // 🍪 COOKIES SETZEN
+    res.setHeader("Set-Cookie", [
       `bp_role=${encodeURIComponent(role)}; Path=/; HttpOnly; ${secure ? "Secure;" : ""} SameSite=Lax`,
-      `bp_email=${encodeURIComponent(userData.email || "")}; Path=/; HttpOnly; ${secure ? "Secure;" : ""} SameSite=Lax`,
-      `whop_state=; Path=/; HttpOnly; Max-Age=0; ${secure ? "Secure;" : ""} SameSite=Lax`,
-      `whop_verifier=; Path=/; HttpOnly; Max-Age=0; ${secure ? "Secure;" : ""} SameSite=Lax`
-    ];
+      `bp_email=${encodeURIComponent(user.email || "")}; Path=/; HttpOnly; ${secure ? "Secure;" : ""} SameSite=Lax`,
+      `whop_state=; Path=/; Max-Age=0; HttpOnly; ${secure ? "Secure;" : ""} SameSite=Lax`,
+      `whop_verifier=; Path=/; Max-Age=0; HttpOnly; ${secure ? "Secure;" : ""} SameSite=Lax`
+    ]);
 
-    res.setHeader("Set-Cookie", cookies);
+    // 🚀 Weiterleitung
+    if (role === "premium") {
+      return res.redirect("/hub.html");
+    } else {
+      return res.redirect("/locked.html");
+    }
 
-    // gekauft = Hub, sonst locked
-    return res.redirect(role === "premium" ? "/hub.html" : "/locked.html");
-  } catch (error) {
-    console.error("Whop callback error:", error);
+  } catch (err) {
+    console.error("Callback Error:", err);
     return res.redirect("/locked.html");
   }
 }
