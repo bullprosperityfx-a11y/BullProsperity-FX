@@ -2,8 +2,8 @@ export default async function handler(req, res) {
   try {
     const cookie = req.headers.cookie || "";
 
-    const roleMatch = cookie.match(/bp_role=([^;]+)/);
-    const emailMatch = cookie.match(/bp_email=([^;]+)/);
+    const roleMatch = cookie.match(/(?:^|;\s*)bp_role=([^;]+)/);
+    const emailMatch = cookie.match(/(?:^|;\s*)bp_email=([^;]+)/);
 
     const role = roleMatch ? decodeURIComponent(roleMatch[1]) : "guest";
     const email = emailMatch ? decodeURIComponent(emailMatch[1]) : "";
