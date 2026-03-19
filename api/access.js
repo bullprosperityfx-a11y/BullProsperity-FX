@@ -2,34 +2,68 @@ export default async function handler(req, res) {
   try {
     const cookie = req.headers.cookie || "";
 
-    const roleMatch = cookie.match(/(?:^|;\s*)bp_role=([^;]+)/);
-    const emailMatch = cookie.match(/(?:^|;\s*)bp_email=([^;]+)/);
+    const getCookie = (name) => {
+      const match = cookie.match(new RegExp(`(?:^|;\\s*)${name}=([^;]+)`));
+      return match ? decodeURIComponent(match[1]) : "";
+    };
 
-    const role = roleMatch ? decodeURIComponent(roleMatch[1]) : "guest";
-    const email = emailMatch ? decodeURIComponent(emailMatch[1]) : "";
+    const role = getCookie("bp_role");
+    const email = getCookie("bp_email");
+
+    // Wenn kein Login vorhanden
+    if (!email) {
+      return res.status(200).json({
+        ok: true,
+        role: "guest"
+      });
+    }
+
+    // 🔥 HIER PASSIERT DER LIVE CHECK
+    const accessToken = getCookie("whop_access_token");
+
+    if (!accessToken) {
+      return res.status(200).json({
+        ok: true,
+        role: "guest"
+      });
+    }
+
+    const productId = process.env.WHOP_PRODUCT_ID;
+
+    const check = await fetch(
+      `https://api.whop.com/api/v1/me/access/${productId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        }
+      }
+    );
+
+    let finalRole = "guest";
+
+    if (check.ok) {
+      const data = await check.json();
+
+      if (
+        data?.has_access === true ||
+        data?.status === "active"
+      ) {
+        finalRole = "premium";
+      }
+    }
 
     return res.status(200).json({
       ok: true,
-      role,
-      email,
-      isAdmin: role === "admin",
-      isPremium: role === "admin" || role === "premium",
-      statusLabel:
-        role === "admin"
-          ? "Admin"
-          : role === "premium"
-          ? "Premium"
-          : "Gast"
+      role: finalRole,
+      email
     });
-  } catch (error) {
+
+  } catch (err) {
+    console.error(err);
+
     return res.status(200).json({
       ok: false,
-      role: "guest",
-      email: "",
-      isAdmin: false,
-      isPremium: false,
-      statusLabel: "Gast",
-      error: error.message
+      role: "guest"
     });
   }
 }
