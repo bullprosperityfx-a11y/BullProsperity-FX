@@ -7,8 +7,16 @@ export default async function handler(req, res) {
       return match ? decodeURIComponent(match[1]) : "";
     };
 
-    const role = getCookie("bp_role");
     const email = getCookie("bp_email");
+
+    // 🔥 ADMIN BYPASS (GANZ WICHTIG)
+    if (email === "DEINE_EMAIL@gmail.com") {
+      return res.status(200).json({
+        ok: true,
+        role: "admin",
+        email
+      });
+    }
 
     // Wenn kein Login vorhanden
     if (!email) {
@@ -18,7 +26,6 @@ export default async function handler(req, res) {
       });
     }
 
-    // 🔥 HIER PASSIERT DER LIVE CHECK
     const accessToken = getCookie("whop_access_token");
 
     if (!accessToken) {
