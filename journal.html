@@ -626,5 +626,25 @@
 
     renderTrades();
   </script>
+  <script>
+  document.addEventListener("DOMContentLoaded", async () => {
+    const loginBtn = document.getElementById("loginNavBtn");
+
+    try {
+      const res = await fetch("/api/access", {
+        credentials: "include"
+      });
+
+      const data = await res.json();
+
+      if (data.role === "admin" || data.role === "premium") {
+        if (loginBtn) loginBtn.style.display = "none";
+      }
+
+    } catch (err) {
+      console.log("Auth check failed");
+    }
+  });
+</script>
 </body>
 </html>
