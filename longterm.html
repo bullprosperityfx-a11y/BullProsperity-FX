@@ -1,169 +1,846 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BullProsperity | Longterm Pro</title>
-<link rel="stylesheet" href="theme.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BullProsperity | Longterm Pro</title>
+  <link rel="stylesheet" href="theme.css">
 
-<script>
-(async () => {
-  try {
-    const res = await fetch("/api/access",{credentials:"include"});
-    const data = await res.json();
+  <script>
+    (async () => {
+      try {
+        const res = await fetch("/api/access", { credentials: "include" });
+        const data = await res.json();
 
-    if(data.role !== "admin" && data.role !== "premium"){
-      window.location.href = "locked.html";
+        const hasAccess =
+          data.role === "admin" ||
+          data.role === "premium" ||
+          data.role === "longterm";
+
+        if (!hasAccess) {
+          window.location.href = "longterm-sales.html";
+        }
+      } catch (err) {
+        window.location.href = "longterm-sales.html";
+      }
+    })();
+  </script>
+
+  <style>
+    .lt-grid{
+      display:grid;
+      grid-template-columns:1.1fr .9fr;
+      gap:22px;
+      margin-top:24px;
     }
-  } catch(err){
-    window.location.href = "locked.html";
-  }
-})();
-</script>
 
-<style>
-.lt-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:22px;
-  margin-top:24px;
-}
+    .lt-grid-2{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:22px;
+      margin-top:22px;
+    }
 
-.lt-card{
-  background:#0c0c0c;
-  border:1px solid var(--line);
-  border-radius:22px;
-  padding:22px;
-}
+    .lt-card{
+      background:#0c0c0c;
+      border:1px solid var(--line);
+      border-radius:22px;
+      padding:22px;
+    }
 
-.lt-title{
-  font-size:28px;
-  color:#fff;
-}
+    .lt-title{
+      font-size:32px;
+      color:#fff;
+      margin:10px 0 10px;
+    }
 
-.lt-input{
-  width:100%;
-  margin-top:10px;
-  padding:12px;
-  background:#111;
-  border:1px solid #252525;
-  border-radius:12px;
-  color:#fff;
-}
+    .lt-subtitle{
+      font-size:24px;
+      color:#fff;
+      margin:10px 0 0;
+    }
 
-.lt-btn{
-  margin-top:10px;
-  width:100%;
-  padding:12px;
-  background:#ffd700;
-  border:none;
-  border-radius:12px;
-  font-weight:800;
-}
+    .lt-text{
+      color:rgba(255,255,255,.72);
+      line-height:1.7;
+      margin:0;
+    }
 
-.lt-list{
-  margin-top:15px;
-  display:grid;
-  gap:10px;
-}
+    .lt-stats{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:14px;
+      margin-top:18px;
+    }
 
-.lt-item{
-  background:#111;
-  padding:12px;
-  border-radius:12px;
-}
+    .lt-stat{
+      background:#111;
+      border:1px solid #252525;
+      border-radius:18px;
+      padding:16px;
+    }
 
-.lt-chart{
-  margin-top:20px;
-  border-radius:18px;
-  overflow:hidden;
-}
-</style>
+    .lt-stat-label{
+      color:rgba(255,255,255,.58);
+      font-size:12px;
+      text-transform:uppercase;
+      letter-spacing:.08em;
+      margin-bottom:8px;
+    }
+
+    .lt-stat-value{
+      color:#ffd700;
+      font-size:26px;
+      font-weight:800;
+    }
+
+    .lt-list{
+      margin-top:16px;
+      display:grid;
+      gap:12px;
+    }
+
+    .lt-item{
+      background:#111;
+      border:1px solid #252525;
+      border-radius:16px;
+      padding:14px 16px;
+      color:#fff;
+      line-height:1.55;
+    }
+
+    .lt-item strong{
+      color:#ffd700;
+    }
+
+    .lt-watch{
+      display:grid;
+      gap:10px;
+      margin-top:14px;
+    }
+
+    .lt-watch-item{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      background:#111;
+      border:1px solid #252525;
+      border-radius:16px;
+      padding:14px 16px;
+      color:#fff;
+    }
+
+    .lt-watch-item strong{
+      color:#ffd700;
+      display:block;
+      font-size:15px;
+    }
+
+    .lt-watch-item span{
+      color:rgba(255,255,255,.58);
+      font-size:12px;
+    }
+
+    .lt-watch-item button{
+      background:transparent;
+      border:1px solid #333;
+      color:#fff;
+      border-radius:999px;
+      padding:8px 12px;
+      cursor:pointer;
+    }
+
+    .lt-watch-item button:hover,
+    .lt-watch-item button.active{
+      border-color:#ffd700;
+      color:#ffd700;
+    }
+
+    .lt-chart-wrap{
+      margin-top:18px;
+      border:1px solid #252525;
+      border-radius:18px;
+      overflow:hidden;
+      background:#0b0b0b;
+    }
+
+    #lt_chart_container{
+      width:100%;
+      height:500px;
+    }
+
+    .lt-form-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:12px;
+      margin-top:16px;
+    }
+
+    .lt-input,
+    .lt-select,
+    .lt-textarea{
+      width:100%;
+      background:#111;
+      color:#fff;
+      border:1px solid #252525;
+      border-radius:14px;
+      padding:12px 14px;
+      box-sizing:border-box;
+    }
+
+    .lt-textarea{
+      margin-top:12px;
+      resize:vertical;
+      min-height:130px;
+    }
+
+    .lt-btn{
+      margin-top:12px;
+      background:#ffd700;
+      color:#111;
+      border:none;
+      border-radius:14px;
+      padding:12px 16px;
+      font-weight:800;
+      cursor:pointer;
+    }
+
+    .lt-btn.secondary{
+      background:#111;
+      color:#fff;
+      border:1px solid #252525;
+    }
+
+    .lt-btn-row{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
+    .lt-portfolio-list,
+    .lt-journal-list{
+      margin-top:16px;
+      display:grid;
+      gap:10px;
+    }
+
+    .lt-portfolio-entry,
+    .lt-journal-entry{
+      background:#111;
+      border:1px solid #252525;
+      border-radius:14px;
+      padding:14px;
+      color:#fff;
+    }
+
+    .lt-entry-top{
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap:12px;
+      flex-wrap:wrap;
+      margin-bottom:8px;
+    }
+
+    .lt-entry-top strong{
+      color:#ffd700;
+    }
+
+    .lt-entry-top small{
+      color:rgba(255,255,255,.55);
+    }
+
+    .lt-remove-btn{
+      background:transparent;
+      border:1px solid #333;
+      color:#fff;
+      border-radius:999px;
+      padding:6px 10px;
+      cursor:pointer;
+      font-size:12px;
+    }
+
+    .lt-remove-btn:hover{
+      border-color:#ffd700;
+      color:#ffd700;
+    }
+
+    .lt-result{
+      margin-top:16px;
+      display:grid;
+      gap:10px;
+    }
+
+    .lt-result-card{
+      background:#111;
+      border:1px solid #252525;
+      border-radius:16px;
+      padding:14px 16px;
+      color:#fff;
+    }
+
+    .lt-note{
+      margin-top:12px;
+      color:rgba(255,255,255,.58);
+      font-size:13px;
+      line-height:1.6;
+    }
+
+    .lt-allocation{
+      display:grid;
+      gap:10px;
+      margin-top:14px;
+    }
+
+    .lt-allocation-row{
+      background:#111;
+      border:1px solid #252525;
+      border-radius:14px;
+      padding:12px 14px;
+      color:#fff;
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      align-items:center;
+    }
+
+    .lt-progress{
+      width:120px;
+      height:8px;
+      border-radius:999px;
+      background:#1d1d1d;
+      overflow:hidden;
+      margin-left:auto;
+    }
+
+    .lt-progress span{
+      display:block;
+      height:100%;
+      background:#ffd700;
+    }
+
+    @media(max-width:1050px){
+      .lt-grid,
+      .lt-grid-2{
+        grid-template-columns:1fr;
+      }
+    }
+
+    @media(max-width:860px){
+      .lt-form-grid,
+      .lt-stats{
+        grid-template-columns:1fr;
+      }
+
+      #lt_chart_container{
+        height:420px;
+      }
+    }
+  </style>
 </head>
-
 <body data-protected="true">
-<div class="page">
+  <div class="page">
 
-<nav class="navbar">
-  <a href="hub.html" class="logo">BullProsperity</a>
-</nav>
+    <nav class="navbar">
+      <a href="index.html" class="logo">BullProsperity</a>
+      <div class="nav-links">
+        <a href="hub.html">Hub</a>
+        <a href="course.html">Course</a>
+        <a href="tools.html">Tools</a>
+        <a href="longterm.html" class="active">Longterm</a>
+        <a href="community.html">Community</a>
+        <a href="https://whop.com/bullprosperity-fx/bullprosperity-fx/">Login</a>
+      </div>
+    </nav>
 
-<section class="hero-shell">
-  <div class="badge">Longterm Pro</div>
-  <h1 class="hero-title">Vermögensaufbau <span class="gold">System</span></h1>
-</section>
+    <section class="hero-shell">
+      <div class="badge">Longterm Pro</div>
+      <h1 class="hero-title">BullProsperity <span class="gold">Longterm Investment</span></h1>
+      <p class="hero-text">
+        Ergänze dein aktives Trading mit einem langfristigen System für Struktur,
+        Ruhe und nachhaltigen Vermögensaufbau.
+      </p>
+      <div class="hero-buttons">
+        <a href="#dashboard" class="btn primary">Bereich öffnen</a>
+        <a href="hub.html" class="btn secondary">Zurück zum Hub</a>
+      </div>
+    </section>
 
-<section class="lt-grid">
+    <section id="dashboard" class="lt-grid">
+      <div class="lt-card">
+        <div class="badge">Dashboard</div>
+        <h2 class="lt-title">Dein Longterm Fokus</h2>
+        <p class="lt-text">
+          Dieser Bereich hilft dir dabei, nicht nur auf kurzfristige Marktbewegungen
+          zu reagieren, sondern langfristig mit Plan zu denken und zu handeln.
+        </p>
 
-<!-- PORTFOLIO -->
-<div class="lt-card">
-  <h2 class="lt-title">Portfolio Tracker</h2>
+        <div class="lt-stats">
+          <div class="lt-stat">
+            <div class="lt-stat-label">Modus</div>
+            <div class="lt-stat-value">Longterm</div>
+          </div>
 
-  <input id="asset" class="lt-input" placeholder="Asset (BTC, Gold...)">
-  <input id="amount" class="lt-input" placeholder="Betrag €">
-  <button class="lt-btn" id="addAsset">Hinzufügen</button>
+          <div class="lt-stat">
+            <div class="lt-stat-label">Fokus</div>
+            <div class="lt-stat-value">DCA</div>
+          </div>
 
-  <div id="portfolioList" class="lt-list"></div>
-</div>
+          <div class="lt-stat">
+            <div class="lt-stat-label">Ziel</div>
+            <div class="lt-stat-value">Aufbau</div>
+          </div>
+        </div>
 
-<!-- DCA -->
-<div class="lt-card">
-  <h2 class="lt-title">DCA Rechner</h2>
+        <div class="lt-list">
+          <div class="lt-item"><strong>Zeithorizont:</strong> Denke in Jahren, nicht in Tagen.</div>
+          <div class="lt-item"><strong>Struktur:</strong> Nutze einen klaren Aufbauplan statt impulsiver Entscheidungen.</div>
+          <div class="lt-item"><strong>Geduld:</strong> Nicht jede Marktbewegung braucht eine Reaktion.</div>
+          <div class="lt-item"><strong>Kombination:</strong> Trading für Aktivität, Longterm für Stabilität.</div>
+        </div>
+      </div>
 
-  <input id="dcaAmount" class="lt-input" placeholder="Monatlicher Betrag €">
-  <input id="dcaYears" class="lt-input" placeholder="Jahre">
+      <div class="lt-card">
+        <div class="badge">Watchlist</div>
+        <h2 class="lt-title">Longterm Märkte</h2>
+        <p class="lt-text">
+          Nutze diese Märkte als Übersicht für langfristige Beobachtung und Fokus.
+        </p>
 
-  <button class="lt-btn" id="calcDCA">Berechnen</button>
+        <div class="lt-watch">
+          <div class="lt-watch-item">
+            <div>
+              <strong>BTCUSD</strong>
+              <span>Bitcoin</span>
+            </div>
+            <button data-symbol="BITSTAMP:BTCUSD" data-label="BTCUSD" class="lt-market-btn active">Öffnen</button>
+          </div>
 
-  <div id="dcaResult" class="lt-list"></div>
-</div>
+          <div class="lt-watch-item">
+            <div>
+              <strong>XAUUSD</strong>
+              <span>Gold</span>
+            </div>
+            <button data-symbol="OANDA:XAUUSD" data-label="XAUUSD" class="lt-market-btn">Öffnen</button>
+          </div>
 
-<!-- WATCHLIST -->
-<div class="lt-card">
-  <h2 class="lt-title">Longterm Watchlist</h2>
+          <div class="lt-watch-item">
+            <div>
+              <strong>SPXUSD</strong>
+              <span>S&amp;P 500</span>
+            </div>
+            <button data-symbol="SP:SPX" data-label="SPXUSD" class="lt-market-btn">Öffnen</button>
+          </div>
 
-  <div class="lt-list">
-    <div class="lt-item">Bitcoin</div>
-    <div class="lt-item">Gold</div>
-    <div class="lt-item">S&P500</div>
-    <div class="lt-item">Nasdaq</div>
+          <div class="lt-watch-item">
+            <div>
+              <strong>NASDAQ</strong>
+              <span>Technologie Index</span>
+            </div>
+            <button data-symbol="NASDAQ:NDX" data-label="NASDAQ" class="lt-market-btn">Öffnen</button>
+          </div>
+        </div>
+
+        <div class="lt-chart-wrap">
+          <div id="lt_chart_container"></div>
+        </div>
+
+        <div class="lt-note">
+          Beobachte große Strukturen, nicht jede kleine Bewegung. Longterm heißt:
+          Kontext vor Aktion.
+        </div>
+      </div>
+    </section>
+
+    <section class="lt-grid-2">
+      <div class="lt-card">
+        <div class="badge">Portfolio Tracker</div>
+        <h2 class="lt-title">Deine Portfolio Übersicht</h2>
+        <p class="lt-text">
+          Halte fest, welche Assets du langfristig aufbauen willst und in welchem Umfang.
+        </p>
+
+        <div class="lt-form-grid">
+          <input id="ltAsset" class="lt-input" type="text" placeholder="Asset, z. B. BTC">
+          <input id="ltAmount" class="lt-input" type="number" placeholder="Betrag in €">
+          <select id="ltCategory" class="lt-select">
+            <option value="Crypto">Crypto</option>
+            <option value="Metals">Metals</option>
+            <option value="Index">Index</option>
+            <option value="Other">Other</option>
+          </select>
+          <input id="ltPlan" class="lt-input" type="text" placeholder="Plan, z. B. monatlich">
+        </div>
+
+        <div class="lt-btn-row">
+          <button id="addPortfolioBtn" class="lt-btn">Asset hinzufügen</button>
+          <button id="clearPortfolioBtn" class="lt-btn secondary">Portfolio leeren</button>
+        </div>
+
+        <div id="portfolioList" class="lt-portfolio-list"></div>
+      </div>
+
+      <div class="lt-card">
+        <div class="badge">DCA Rechner</div>
+        <h2 class="lt-title">Regelmäßiger Aufbau</h2>
+        <p class="lt-text">
+          Berechne, wie viel Kapital du über einen Zeitraum bei konstantem Aufbau investierst.
+        </p>
+
+        <div class="lt-form-grid">
+          <input id="dcaAmount" class="lt-input" type="number" placeholder="Monatlicher Betrag in €">
+          <input id="dcaYears" class="lt-input" type="number" placeholder="Jahre">
+          <input id="dcaReturn" class="lt-input" type="number" placeholder="Optionale Rendite p.a. in %" step="0.1">
+          <input id="dcaGoal" class="lt-input" type="text" placeholder="Ziel, z. B. Vermögensaufbau">
+        </div>
+
+        <button id="calcDcaBtn" class="lt-btn">DCA berechnen</button>
+
+        <div id="dcaResult" class="lt-result"></div>
+
+        <div class="lt-note">
+          Die Berechnung dient zur Orientierung und zu Bildungszwecken.
+          Sie ist keine Garantie für zukünftige Ergebnisse.
+        </div>
+      </div>
+    </section>
+
+    <section class="lt-grid-2">
+      <div class="lt-card">
+        <div class="badge">Strategie</div>
+        <h2 class="lt-title">BullProsperity Longterm Prinzipien</h2>
+
+        <div class="lt-list">
+          <div class="lt-item"><strong>1. Qualität vor Hype:</strong> Beobachte starke, nachvollziehbare Märkte statt jeder Story hinterherzulaufen.</div>
+          <div class="lt-item"><strong>2. Plan vor Emotion:</strong> Lege fest, wie du einsteigst, nicht erst im Stressmoment.</div>
+          <div class="lt-item"><strong>3. Wiederholbarkeit:</strong> Ein System ist nur dann stark, wenn du es konstant anwenden kannst.</div>
+          <div class="lt-item"><strong>4. Kapital schützen:</strong> Langfristiger Aufbau beginnt mit sauberem Umgang mit Geld.</div>
+        </div>
+      </div>
+
+      <div class="lt-card">
+        <div class="badge">Allocation</div>
+        <h2 class="lt-title">Beispielhafte Verteilung</h2>
+        <p class="lt-text">
+          Eine einfache visuelle Orientierung für Longterm-Denken. Passe jede Struktur
+          an dein eigenes Ziel und deine eigene Risikobereitschaft an.
+        </p>
+
+        <div class="lt-allocation">
+          <div class="lt-allocation-row">
+            <strong>Core Assets</strong>
+            <div class="lt-progress"><span style="width:50%"></span></div>
+            <span>50%</span>
+          </div>
+
+          <div class="lt-allocation-row">
+            <strong>Growth Assets</strong>
+            <div class="lt-progress"><span style="width:30%"></span></div>
+            <span>30%</span>
+          </div>
+
+          <div class="lt-allocation-row">
+            <strong>Safety / Reserve</strong>
+            <div class="lt-progress"><span style="width:20%"></span></div>
+            <span>20%</span>
+          </div>
+        </div>
+
+        <div class="lt-note">
+          Diese Darstellung ist nur ein Beispiel für Struktur und keine persönliche Empfehlung.
+        </div>
+      </div>
+    </section>
+
+    <section class="lt-grid-2">
+      <div class="lt-card">
+        <div class="badge">Quick Journal</div>
+        <h2 class="lt-title">Investment Notizen</h2>
+        <p class="lt-text">
+          Halte fest, warum ein Asset für dich relevant ist und welche langfristige These dahintersteht.
+        </p>
+
+        <div class="lt-form-grid">
+          <input id="journalAsset" class="lt-input" type="text" placeholder="Asset">
+          <input id="journalHorizon" class="lt-input" type="text" placeholder="Horizont, z. B. 5 Jahre">
+        </div>
+
+        <textarea id="journalNote" class="lt-textarea" placeholder="Warum passt dieses Asset in deine Longterm Strategie?"></textarea>
+
+        <button id="saveJournalBtn" class="lt-btn">Notiz speichern</button>
+
+        <div id="journalList" class="lt-journal-list"></div>
+      </div>
+
+      <div class="lt-card">
+        <div class="badge">Longterm Workflow</div>
+        <h2 class="lt-title">So nutzt du diesen Bereich</h2>
+
+        <div class="lt-list">
+          <div class="lt-item"><strong>1. Markt beobachten:</strong> Nutze die Watchlist und analysiere langfristige Struktur.</div>
+          <div class="lt-item"><strong>2. Aufbau planen:</strong> Definiere, wie viel Kapital du regelmäßig investieren willst.</div>
+          <div class="lt-item"><strong>3. Portfolio dokumentieren:</strong> Halte Assets und Gedanken nachvollziehbar fest.</div>
+          <div class="lt-item"><strong>4. Geduldig bleiben:</strong> Longterm bedeutet, nicht jeden Tag etwas verändern zu müssen.</div>
+        </div>
+      </div>
+    </section>
+
+    <div class="footer-note">
+      BullProsperity dient ausschließlich Bildungszwecken und stellt keine Finanzberatung dar.
+    </div>
   </div>
-</div>
 
-<!-- CHART -->
-<div class="lt-card">
-  <h2 class="lt-title">Marktübersicht</h2>
+  <script src="https://s3.tradingview.com/tv.js"></script>
 
-  <div class="lt-chart">
-    <iframe src="https://www.tradingview.com/widgetembed/?symbol=SP%3ASPX&interval=1D&theme=dark"></iframe>
-  </div>
-</div>
+  <script>
+    const portfolioKey = "bp_longterm_portfolio";
+    const journalKey = "bp_longterm_journal";
+    let longtermWidget;
+    let activeLongtermSymbol = localStorage.getItem("bp_longterm_symbol") || "BITSTAMP:BTCUSD";
+    let activeLongtermLabel = localStorage.getItem("bp_longterm_label") || "BTCUSD";
 
-</section>
+    function setActiveMarketButtons(symbol) {
+      document.querySelectorAll(".lt-market-btn").forEach(btn => {
+        btn.classList.toggle("active", btn.dataset.symbol === symbol);
+      });
+    }
 
-</div>
+    function loadLongtermChart(symbol, label) {
+      const container = document.getElementById("lt_chart_container");
+      if (!container) return;
 
-<script>
-// Portfolio
-document.getElementById("addAsset").onclick = ()=>{
-  const asset = document.getElementById("asset").value;
-  const amount = document.getElementById("amount").value;
+      container.innerHTML = "";
 
-  const list = document.getElementById("portfolioList");
-  list.innerHTML += `<div class="lt-item">${asset} - ${amount}€</div>`;
-};
+      longtermWidget = new TradingView.widget({
+        container_id: "lt_chart_container",
+        width: "100%",
+        height: 500,
+        symbol: symbol,
+        interval: "1D",
+        timezone: "Europe/Berlin",
+        theme: "dark",
+        style: "1",
+        locale: "de",
+        allow_symbol_change: true,
+        withdateranges: true,
+        hide_side_toolbar: false,
+        details: true,
+        hotlist: true,
+        calendar: true,
+        studies: [
+          "Volume@tv-basicstudies",
+          "MACD@tv-basicstudies"
+        ]
+      });
 
-// DCA
-document.getElementById("calcDCA").onclick = ()=>{
-  const amount = parseFloat(document.getElementById("dcaAmount").value);
-  const years = parseFloat(document.getElementById("dcaYears").value);
+      activeLongtermSymbol = symbol;
+      activeLongtermLabel = label;
+      localStorage.setItem("bp_longterm_symbol", symbol);
+      localStorage.setItem("bp_longterm_label", label);
+      setActiveMarketButtons(symbol);
+    }
 
-  const result = amount * 12 * years;
+    document.querySelectorAll(".lt-market-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        loadLongtermChart(btn.dataset.symbol, btn.dataset.label);
+      });
+    });
 
-  document.getElementById("dcaResult").innerHTML =
-    `<div class="lt-item">Gesamt investiert: ${result}€</div>`;
-};
-</script>
+    function renderPortfolio() {
+      const list = document.getElementById("portfolioList");
+      if (!list) return;
 
+      const data = JSON.parse(localStorage.getItem(portfolioKey) || "[]");
+      list.innerHTML = "";
+
+      if (!data.length) {
+        list.innerHTML = `
+          <div class="lt-portfolio-entry">
+            Noch kein Portfolio eingetragen.
+          </div>
+        `;
+        return;
+      }
+
+      data.slice().reverse().forEach((item, index) => {
+        const realIndex = data.length - 1 - index;
+        const entry = document.createElement("div");
+        entry.className = "lt-portfolio-entry";
+        entry.innerHTML = `
+          <div class="lt-entry-top">
+            <div>
+              <strong>${item.asset}</strong>
+              <small>${item.category} · ${item.plan}</small>
+            </div>
+            <button class="lt-remove-btn" onclick="removePortfolioItem(${realIndex})">Entfernen</button>
+          </div>
+          <div>Betrag: ${item.amount}€</div>
+        `;
+        list.appendChild(entry);
+      });
+    }
+
+    window.removePortfolioItem = function(index) {
+      const data = JSON.parse(localStorage.getItem(portfolioKey) || "[]");
+      data.splice(index, 1);
+      localStorage.setItem(portfolioKey, JSON.stringify(data));
+      renderPortfolio();
+    };
+
+    const addPortfolioBtn = document.getElementById("addPortfolioBtn");
+    if (addPortfolioBtn) {
+      addPortfolioBtn.addEventListener("click", () => {
+        const asset = document.getElementById("ltAsset").value.trim();
+        const amount = document.getElementById("ltAmount").value.trim();
+        const category = document.getElementById("ltCategory").value;
+        const plan = document.getElementById("ltPlan").value.trim() || "kein Plan eingetragen";
+
+        if (!asset || !amount) {
+          alert("Bitte Asset und Betrag eintragen.");
+          return;
+        }
+
+        const data = JSON.parse(localStorage.getItem(portfolioKey) || "[]");
+        data.push({
+          asset,
+          amount,
+          category,
+          plan
+        });
+
+        localStorage.setItem(portfolioKey, JSON.stringify(data));
+
+        document.getElementById("ltAsset").value = "";
+        document.getElementById("ltAmount").value = "";
+        document.getElementById("ltPlan").value = "";
+
+        renderPortfolio();
+      });
+    }
+
+    const clearPortfolioBtn = document.getElementById("clearPortfolioBtn");
+    if (clearPortfolioBtn) {
+      clearPortfolioBtn.addEventListener("click", () => {
+        localStorage.removeItem(portfolioKey);
+        renderPortfolio();
+      });
+    }
+
+    const calcDcaBtn = document.getElementById("calcDcaBtn");
+    if (calcDcaBtn) {
+      calcDcaBtn.addEventListener("click", () => {
+        const amount = parseFloat(document.getElementById("dcaAmount").value);
+        const years = parseFloat(document.getElementById("dcaYears").value);
+        const annualReturn = parseFloat(document.getElementById("dcaReturn").value || "0");
+        const goal = document.getElementById("dcaGoal").value.trim() || "Langfristiger Aufbau";
+
+        const result = document.getElementById("dcaResult");
+        result.innerHTML = "";
+
+        if (!amount || !years) {
+          alert("Bitte monatlichen Betrag und Jahre eintragen.");
+          return;
+        }
+
+        const invested = amount * 12 * years;
+        const monthlyRate = annualReturn / 100 / 12;
+        const months = years * 12;
+
+        let futureValue = invested;
+
+        if (monthlyRate > 0) {
+          futureValue = amount * (((Math.pow(1 + monthlyRate, months) - 1) / monthlyRate) * (1 + monthlyRate));
+        }
+
+        result.innerHTML = `
+          <div class="lt-result-card">
+            <strong style="color:#ffd700;">Ziel:</strong> ${goal}
+          </div>
+          <div class="lt-result-card">
+            <strong style="color:#ffd700;">Gesamt investiert:</strong> ${invested.toFixed(2)}€
+          </div>
+          <div class="lt-result-card">
+            <strong style="color:#ffd700;">Optionaler Modellwert mit Rendite:</strong> ${futureValue.toFixed(2)}€
+          </div>
+        `;
+      });
+    }
+
+    function renderJournal() {
+      const list = document.getElementById("journalList");
+      if (!list) return;
+
+      const entries = JSON.parse(localStorage.getItem(journalKey) || "[]");
+      list.innerHTML = "";
+
+      if (!entries.length) {
+        list.innerHTML = `
+          <div class="lt-journal-entry">
+            Noch keine Investment Notizen gespeichert.
+          </div>
+        `;
+        return;
+      }
+
+      entries.slice().reverse().forEach((entry, index) => {
+        const realIndex = entries.length - 1 - index;
+        const item = document.createElement("div");
+        item.className = "lt-journal-entry";
+        item.innerHTML = `
+          <div class="lt-entry-top">
+            <div>
+              <strong>${entry.asset}</strong>
+              <small>${entry.horizon} · ${entry.date}</small>
+            </div>
+            <button class="lt-remove-btn" onclick="removeJournalItem(${realIndex})">Entfernen</button>
+          </div>
+          <div>${entry.note}</div>
+        `;
+        list.appendChild(item);
+      });
+    }
+
+    window.removeJournalItem = function(index) {
+      const entries = JSON.parse(localStorage.getItem(journalKey) || "[]");
+      entries.splice(index, 1);
+      localStorage.setItem(journalKey, JSON.stringify(entries));
+      renderJournal();
+    };
+
+    const saveJournalBtn = document.getElementById("saveJournalBtn");
+    if (saveJournalBtn) {
+      saveJournalBtn.addEventListener("click", () => {
+        const asset = document.getElementById("journalAsset").value.trim();
+        const horizon = document.getElementById("journalHorizon").value.trim() || "kein Horizont";
+        const note = document.getElementById("journalNote").value.trim();
+
+        if (!asset || !note) {
+          alert("Bitte Asset und Notiz eintragen.");
+          return;
+        }
+
+        const entries = JSON.parse(localStorage.getItem(journalKey) || "[]");
+        entries.push({
+          asset,
+          horizon,
+          note,
+          date: new Date().toLocaleString("de-DE")
+        });
+
+        localStorage.setItem(journalKey, JSON.stringify(entries));
+
+        document.getElementById("journalAsset").value = "";
+        document.getElementById("journalHorizon").value = "";
+        document.getElementById("journalNote").value = "";
+
+        renderJournal();
+      });
+    }
+
+    loadLongtermChart(activeLongtermSymbol, activeLongtermLabel);
+    renderPortfolio();
+    renderJournal();
+  </script>
 </body>
 </html>
