@@ -4,7 +4,27 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>BullProsperity | Hub</title>
-  <link rel="stylesheet" href="theme.css">
+  <link rel="stylesheet" href="theme.css" />
+
+<script>
+  (async () => {
+    try {
+      const res = await fetch("/api/access", {
+        credentials: "include",
+        cache: "no-store"
+      });
+
+      const data = await res.json();
+
+      if (data.role !== "admin" && data.role !== "premium") {
+        window.location.href = "locked.html";
+      }
+
+    } catch (err) {
+      window.location.href = "locked.html";
+    }
+  })();
+</script>
 
   <style>
     .auth-badge{
