@@ -12,16 +12,11 @@ export default async function handler(req, res) {
     const storedState = getCookie("whop_state");
     const verifier = getCookie("whop_verifier");
 
-    // 🔒 Sicherheitscheck
-    if (!code || !state || state !== storedState || !verifier) {
+    if (!code || !state || state !== storedState) {
       return res.redirect("/locked.html");
     }
 
-    const clientId = process.env.WHOP_CLIENT_ID;
-    const clientSecret = process.env.WHOP_CLIENT_SECRET;
-    const redirectUri = process.env.WHOP_REDIRECT_URI;
-
-    // 🔁 Token holen
+    // 🔥 TOKEN HOLEN
     const tokenRes = await fetch("https://api.whop.com/oauth/token", {
       method: "POST",
       headers: {
@@ -29,86 +24,46 @@ export default async function handler(req, res) {
       },
       body: new URLSearchParams({
         grant_type: "authorization_code",
-        client_id: clientId,
-        client_secret: clientSecret,
+        client_id: process.env.WHOP_CLIENT_ID,
+        client_secret: process.env.WHOP_CLIENT_SECRET,
+        redirect_uri: process.env.WHOP_REDIRECT_URI,
         code,
-        redirect_uri: redirectUri,
         code_verifier: verifier
       })
     });
 
-    if (!tokenRes.ok) {
-      console.error(await tokenRes.text());
+    const tokenData = await tokenRes.json();
+
+    const accessToken = tokenData.access_token;
+
+    if (!accessToken) {
       return res.redirect("/locked.html");
     }
 
-    const tokenData = await tokenRes.json();
-    const accessToken = tokenData.access_token;
-
-    // 👤 User holen
+    // 🔥 USER INFO HOLEN
     const userRes = await fetch("https://api.whop.com/api/v1/me", {
       headers: {
         Authorization: `Bearer ${accessToken}`
       }
     });
 
-    if (!userRes.ok) {
-      console.error(await userRes.text());
-      return res.redirect("/locked.html");
-    }
-
-    const user = await userRes.json();
-
-    // 🔥 HIER PASSIERT DER MAGIC (KAUF CHECK)
-    const productId = process.env.WHOP_PRODUCT_ID;
-
-    const accessCheck = await fetch(
-      `https://api.whop.com/api/v1/users/${user.id}/access/${productId}`,
-      {
-        headers: {
-          Authorization: `Bearer ${accessToken}`
-        }
-      }
-    );
-
-    let role = "guest";
-
-    if (accessCheck.ok) {
-      const data = await accessCheck.json();
-
-      const hasAccess =
-        data?.has_access === true ||
-        data?.access === true ||
-        data?.status === "active" ||
-        data?.access_level === "full";
-
-      if (hasAccess) {
-        role = "premium";
-      }
-    } else {
-      console.error("Access check failed:", await accessCheck.text());
-    }
+    const userData = await userRes.json();
+    const email = userData.email || "";
 
     const secure = process.env.NODE_ENV === "production";
 
-    // 🍪 COOKIES SETZEN
+    // 🔥 COOKIES SETZEN
     res.setHeader("Set-Cookie", [
-      `bp_role=${encodeURIComponent(role)}; Path=/; HttpOnly; ${secure ? "Secure;" : ""} SameSite=Lax`,
-      `bp_email=${encodeURIComponent(user.email || "")}; Path=/; HttpOnly; ${secure ? "Secure;" : ""} SameSite=Lax`,
+      `bp_email=${encodeURIComponent(email)}; Path=/; HttpOnly; ${secure ? "Secure;" : ""} SameSite=Lax`,
       `whop_access_token=${accessToken}; Path=/; HttpOnly; ${secure ? "Secure;" : ""} SameSite=Lax`,
-      `whop_state=; Path=/; Max-Age=0; HttpOnly; ${secure ? "Secure;" : ""} SameSite=Lax`,
-      `whop_verifier=; Path=/; Max-Age=0; HttpOnly; ${secure ? "Secure;" : ""} SameSite=Lax`
+      `whop_state=; Path=/; Max-Age=0`,
+      `whop_verifier=; Path=/; Max-Age=0`
     ]);
 
-    // 🚀 Weiterleitung
-    if (role === "premium") {
-      return res.redirect("/hub.html");
-    } else {
-      return res.redirect("/locked.html");
-    }
+    return res.redirect("/hub.html");
 
   } catch (err) {
-    console.error("Callback Error:", err);
+    console.error(err);
     return res.redirect("/locked.html");
   }
 }
