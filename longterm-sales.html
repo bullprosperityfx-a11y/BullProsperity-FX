@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BullProsperity | Longterm Investment</title>
+  <link rel="stylesheet" href="theme.css">
+
+  <style>
+    .sales-hero{
+      text-align:center;
+      padding:84px 20px 56px;
+    }
+
+    .sales-title{
+      font-size:52px;
+      line-height:1.05;
+      color:#fff;
+      margin:16px auto 0;
+      max-width:900px;
+    }
+
+    .sales-sub{
+      color:rgba(255,255,255,.72);
+      max-width:760px;
+      margin:22px auto 0;
+      line-height:1.7;
+      font-size:18px;
+    }
+
+    .sales-cta-row{
+      display:flex;
+      gap:14px;
+      justify-content:center;
+      flex-wrap:wrap;
+      margin-top:28px;
+    }
+
+    .sales-btn{
+      display:inline-block;
+      padding:15px 24px;
+      background:#ffd700;
+      color:#111;
+      text-decoration:none;
+      border-radius:14px;
+      font-weight:800;
+      border:1px solid #ffd700;
+    }
+
+    .sales-btn.secondary{
+      background:transparent;
+      color:#fff;
+      border:1px solid rgba(255,255,255,.14);
+    }
+
+    .sales-proof{
+      margin-top:22px;
+      color:rgba(255,255,255,.56);
+      font-size:14px;
+    }
+
+    .sales-section{
+      margin-top:34px;
+    }
+
+    .sales-card,
+    .sales-panel,
+    .sales-faq-item{
+      background:#0c0c0c;
+      border:1px solid var(--line);
+      border-radius:22px;
+    }
+
+    .sales-grid-3{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:18px;
+      margin-top:22px;
+    }
+
+    .sales-grid-2{
+      display:grid;
+      grid-template-columns:repeat(2,1fr);
+      gap:18px;
+      margin-top:22px;
+    }
+
+    .sales-card{
+      padding:22px;
+    }
+
+    .sales-card h3{
+      margin:10px 0 10px;
+      color:#fff;
+      font-size:24px;
+    }
+
+    .sales-card p{
+      margin:0;
+      color:rgba(255,255,255,.7);
+      line-height:1.65;
+    }
+
+    .sales-panel{
+      padding:26px;
+    }
+
+    .sales-panel h2{
+      margin:10px 0 10px;
+      color:#fff;
+      font-size:36px;
+    }
+
+    .sales-panel p{
+      margin:0;
+      color:rgba(255,255,255,.72);
+      line-height:1.7;
+    }
+
+    .sales-list{
+      display:grid;
+      gap:12px;
+      margin-top:18px;
+    }
+
+    .sales-list-item{
+      background:#111;
+      border:1px solid #252525;
+      border-radius:16px;
+      padding:15px 16px;
+      color:#fff;
+      line-height:1.55;
+    }
+
+    .sales-list-item strong{
+      color:#ffd700;
+    }
+
+    .pricing-wrap{
+      display:grid;
+      grid-template-columns:1.2fr .8fr;
+      gap:18px;
+      margin-top:22px;
+    }
+
+    .pricing-card{
+      background:#0c0c0c;
+      border:1px solid var(--line);
+      border-radius:22px;
+      padding:26px;
+    }
+
+    .pricing-price{
+      font-size:48px;
+      color:#ffd700;
+      font-weight:900;
+      margin:10px 0 0;
+    }
+
+    .pricing-note{
+      color:rgba(255,255,255,.58);
+      margin-top:8px;
+    }
+
+    .pricing-points{
+      display:grid;
+      gap:12px;
+      margin-top:20px;
+    }
+
+    .pricing-point{
+      background:#111;
+      border:1px solid #252525;
+      border-radius:14px;
+      padding:14px 15px;
+      color:#fff;
+    }
+
+    .sales-faq{
+      display:grid;
+      gap:14px;
+      margin-top:22px;
+    }
+
+    .sales-faq-item{
+      padding:18px 20px;
+    }
+
+    .sales-faq-item h3{
+      margin:0 0 8px;
+      color:#fff;
+      font-size:19px;
+    }
+
+    .sales-faq-item p{
+      margin:0;
+      color:rgba(255,255,255,.7);
+      line-height:1.65;
+    }
+
+    .sales-final{
+      text-align:center;
+      padding:30px 20px 10px;
+    }
+
+    .sales-final h2{
+      font-size:42px;
+      color:#fff;
+      margin:0;
+    }
+
+    .sales-final p{
+      max-width:760px;
+      margin:16px auto 0;
+      color:rgba(255,255,255,.7);
+      line-height:1.7;
+    }
+
+    @media(max-width:980px){
+      .sales-grid-3,
+      .sales-grid-2,
+      .pricing-wrap{
+        grid-template-columns:1fr;
+      }
+
+      .sales-title{
+        font-size:40px;
+      }
+
+      .sales-panel h2,
+      .sales-final h2{
+        font-size:32px;
+      }
+
+      .pricing-price{
+        font-size:40px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+
+    <nav class="navbar">
+      <a href="index.html" class="logo">BullProsperity</a>
+      <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="hub.html">Hub</a>
+        <a href="course.html">Course</a>
+        <a href="tools.html">Tools</a>
+        <a href="longterm-sales.html" class="active">Longterm</a>
+        <a href="https://whop.com/bullprosperity-fx/bullprosperity-fx/">Login</a>
+      </div>
+    </nav>
+
+    <section class="sales-hero">
+      <div class="badge">Longterm Investment</div>
+      <h1 class="sales-title">
+        Baue Vermögen mit <span class="gold">Struktur statt Stress</span>
+      </h1>
+      <p class="sales-sub">
+        Das Longterm Modul von BullProsperity zeigt dir, wie du neben Trading
+        einen klaren Investment-Ansatz aufbaust — mit langfristiger Denkweise,
+        Portfolio-Struktur und einem ruhigen System statt emotionalem Aktionismus.
+      </p>
+
+      <div class="sales-cta-row">
+        <a href="https://whop.com/bullprosperity-fx/longterm" class="sales-btn">
+          Jetzt Zugang sichern
+        </a>
+        <a href="#pricing" class="sales-btn secondary">
+          Mehr erfahren
+        </a>
+      </div>
+
+      <div class="sales-proof">
+        Educational content only · keine Finanzberatung · Fokus auf Struktur, Disziplin und langfristiges Denken
+      </div>
+    </section>
+
+    <section class="sales-section">
+      <div class="sales-grid-3">
+        <div class="sales-card">
+          <div class="badge">Problem</div>
+          <h3>Zu kurzfristig gedacht</h3>
+          <p>
+            Viele fokussieren sich nur auf schnelle Trades und vergessen dabei,
+            langfristig Vermögen mit System aufzubauen.
+          </p>
+        </div>
+
+        <div class="sales-card">
+          <div class="badge">Lösung</div>
+          <h3>Klare Investment-Struktur</h3>
+          <p>
+            Du lernst, wie du starke Assets, Zeithorizonte und einen sauberen
+            Aufbauplan kombinierst, ohne dich von jeder Marktbewegung treiben zu lassen.
+          </p>
+        </div>
+
+        <div class="sales-card">
+          <div class="badge">Ziel</div>
+          <h3>Ruhe + Wachstum</h3>
+          <p>
+            Das Ziel ist kein hektisches Handeln, sondern ein professioneller,
+            nachvollziehbarer Weg zum langfristigen Kapitalaufbau.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="sales-section">
+      <div class="sales-panel">
+        <div class="badge">Was enthalten ist</div>
+        <h2>Das bekommst du im Longterm Modul</h2>
+        <p>
+          Das Modul ist dafür gebaut, dein kurzfristiges Trading-Denken um eine
+          zweite, langfristige Ebene zu ergänzen.
+        </p>
+
+        <div class="sales-list">
+          <div class="sales-list-item">
+            <strong>Longterm Dashboard:</strong> Ein eigener Bereich im BullProsperity Design,
+            damit sich das Modul wie ein Premium-Teil deiner Plattform anfühlt.
+          </div>
+          <div class="sales-list-item">
+            <strong>Portfolio Tracker:</strong> Halte fest, welche Assets du beobachtest
+            und wie du deinen Aufbau strukturierst.
+          </div>
+          <div class="sales-list-item">
+            <strong>DCA Rechner:</strong> Verstehe, wie regelmäßiger Positionsaufbau
+            über Monate und Jahre wirkt.
+          </div>
+          <div class="sales-list-item">
+            <strong>Marktübersicht:</strong> Fokus auf starke Longterm-Märkte wie
+            Bitcoin, Gold, S&amp;P 500 und Nasdaq.
+          </div>
+          <div class="sales-list-item">
+            <strong>Strategischer Denkansatz:</strong> Nicht blind kaufen,
+            sondern mit Plan, Geduld und klarer Erwartungshaltung.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="sales-section">
+      <div class="sales-grid-2">
+        <div class="sales-panel">
+          <div class="badge">Für wen das ist</div>
+          <h2>Passt zu dir, wenn du …</h2>
+
+          <div class="sales-list">
+            <div class="sales-list-item">… neben Trading auch langfristig Vermögen aufbauen willst.</div>
+            <div class="sales-list-item">… weniger emotional und strukturierter mit Kapital umgehen willst.</div>
+            <div class="sales-list-item">… ein zweites System neben kurzfristigen Setups haben willst.</div>
+            <div class="sales-list-item">… nicht nur aktiv traden, sondern nachhaltig aufbauen willst.</div>
+          </div>
+        </div>
+
+        <div class="sales-panel">
+          <div class="badge">Für wen eher nicht</div>
+          <h2>Nicht ideal, wenn du …</h2>
+
+          <div class="sales-list">
+            <div class="sales-list-item">… nur auf schnelle Ergebnisse ohne Geduld aus bist.</div>
+            <div class="sales-list-item">… kein Interesse an Struktur oder Wiederholbarkeit hast.</div>
+            <div class="sales-list-item">… ausschließlich kurzfristige Action suchst.</div>
+            <div class="sales-list-item">… keine Bereitschaft hast, langfristig zu denken.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="sales-section" id="pricing">
+      <div class="pricing-wrap">
+        <div class="pricing-card">
+          <div class="badge">Investment in dich</div>
+          <h2 style="color:#fff;font-size:36px;margin:10px 0 0;">Longterm Investment Modul</h2>
+          <div class="pricing-price">Premium Access</div>
+          <div class="pricing-note">
+            Schalte das Modul frei und integriere langfristigen Vermögensaufbau direkt in dein BullProsperity System.
+          </div>
+
+          <div class="pricing-points">
+            <div class="pricing-point">Eigener Longterm Bereich innerhalb deiner Plattform</div>
+            <div class="pricing-point">Portfolio Tracker + DCA Rechner</div>
+            <div class="pricing-point">Langfristige Marktstruktur und Asset-Fokus</div>
+            <div class="pricing-point">Ideal als Ergänzung zum aktiven Trading</div>
+          </div>
+        </div>
+
+        <div class="pricing-card">
+          <div class="badge">Jetzt starten</div>
+          <h2 style="color:#fff;font-size:30px;margin:10px 0 0;">Bereit für den nächsten Schritt?</h2>
+          <p style="margin-top:12px;color:rgba(255,255,255,.72);line-height:1.7;">
+            Wenn du BullProsperity nicht nur als Trading-Plattform, sondern als
+            echtes System für Wachstum nutzen willst, ist Longterm der logische nächste Schritt.
+          </p>
+
+          <div style="margin-top:24px;">
+            <a href="https://whop.com/bullprosperity-fx/longterm" class="sales-btn" style="width:100%;text-align:center;box-sizing:border-box;">
+              Jetzt freischalten
+            </a>
+          </div>
+
+          <div class="pricing-note" style="margin-top:14px;">
+            Zugang erfolgt über Whop. Danach kannst du das Modul direkt im Hub öffnen.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="sales-section">
+      <div class="sales-panel">
+        <div class="badge">FAQ</div>
+        <h2>Häufige Fragen</h2>
+
+        <div class="sales-faq">
+          <div class="sales-faq-item">
+            <h3>Ist das statt Trading gedacht?</h3>
+            <p>
+              Nein. Das Modul ist als Ergänzung gedacht. Trading und langfristiger
+              Vermögensaufbau können zusammen ein deutlich stabileres Gesamtbild ergeben.
+            </p>
+          </div>
+
+          <div class="sales-faq-item">
+            <h3>Brauche ich Vorkenntnisse?</h3>
+            <p>
+              Nicht unbedingt. Das Modul ist so gedacht, dass auch Anfänger eine klare,
+              verständliche Struktur bekommen und nicht planlos vorgehen.
+            </p>
+          </div>
+
+          <div class="sales-faq-item">
+            <h3>Ist das Finanzberatung?</h3>
+            <p>
+              Nein. BullProsperity dient ausschließlich Bildungszwecken. Das Modul
+              vermittelt Denkweisen, Struktur und Systeme — keine persönliche Finanzberatung.
+            </p>
+          </div>
+
+          <div class="sales-faq-item">
+            <h3>Wie bekomme ich Zugriff?</h3>
+            <p>
+              Über den Freischaltungslink. Nach erfolgreichem Zugang kannst du das
+              Longterm Modul direkt über deinen Hub aufrufen.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="sales-final">
+      <div class="badge">BullProsperity Longterm</div>
+      <h2>Weniger Hektik. Mehr Struktur. Mehr Perspektive.</h2>
+      <p>
+        Ergänze dein Trading um ein System, das auf Ruhe, Geduld und langfristigem Denken basiert.
+        Wenn du BullProsperity ganzheitlich nutzen willst, ist das der nächste sinnvolle Schritt.
+      </p>
+
+      <div class="sales-cta-row" style="margin-top:26px;">
+        <a href="https://whop.com/bullprosperity-fx/longterm" class="sales-btn">
+          Jetzt Zugang sichern
+        </a>
+      </div>
+    </section>
+
+    <div class="footer-note">
+      BullProsperity dient ausschließlich Bildungszwecken und stellt keine Finanzberatung dar.
+    </div>
+  </div>
+</body>
+</html>
