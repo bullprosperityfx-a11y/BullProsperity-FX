@@ -1,51 +1,419 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>BullProsperity | Hub</title>
-  <link rel="stylesheet" href="theme.css" />
-  <script src="/login.js" defer></script>
+  <link rel="stylesheet" href="theme.css">
+
+  <script>
+    (async () => {
+      try {
+        const res = await fetch("/api/access", { credentials: "include" });
+        const data = await res.json();
+
+        if (data.role !== "admin" && data.role !== "premium") {
+          window.location.href = "locked.html";
+        }
+      } catch (err) {
+        window.location.href = "locked.html";
+      }
+    })();
+  </script>
 
   <style>
-    .auth-box{
+    .hub-shell{
+      display:grid;
+      gap:22px;
+      margin-top:24px;
+    }
+
+    .hub-top-grid,
+    .hub-mid-grid,
+    .hub-bottom-grid{
+      display:grid;
+      grid-template-columns:1.15fr .85fr;
+      gap:22px;
+    }
+
+    .hub-card,
+    .hub-hero-card,
+    .hub-link-card,
+    .hub-note-card,
+    .hub-longterm-card{
+      background:#0c0c0c;
+      border:1px solid var(--line);
+      border-radius:24px;
+      padding:24px;
+    }
+
+    .hub-hero-card{
+      position:relative;
+      overflow:hidden;
+    }
+
+    .hub-hero-card::before{
+      content:"";
+      position:absolute;
+      right:-90px;
+      bottom:-90px;
+      width:250px;
+      height:250px;
+      background:radial-gradient(circle, rgba(255,215,0,.14), transparent 70%);
+      pointer-events:none;
+    }
+
+    .hub-title{
+      margin:10px 0 10px;
+      font-size:36px;
+      line-height:1.06;
+      color:#fff;
+    }
+
+    .hub-subtitle{
+      margin:10px 0 0;
+      font-size:28px;
+      color:#fff;
+    }
+
+    .hub-text{
+      color:rgba(255,255,255,.72);
+      line-height:1.7;
+      margin:0;
+    }
+
+    .hub-highlight{
+      color:#ffd700;
+      font-weight:900;
+    }
+
+    .hub-stats{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:14px;
+      margin-top:20px;
+    }
+
+    .hub-stat{
+      background:#111;
+      border:1px solid #252525;
+      border-radius:18px;
+      padding:16px;
+    }
+
+    .hub-stat-label{
+      color:rgba(255,255,255,.56);
+      font-size:12px;
+      text-transform:uppercase;
+      letter-spacing:.08em;
+      margin-bottom:8px;
+    }
+
+    .hub-stat-value{
+      color:#ffd700;
+      font-size:26px;
+      font-weight:900;
+    }
+
+    .hub-stat-sub{
+      margin-top:6px;
+      color:rgba(255,255,255,.55);
+      font-size:12px;
+    }
+
+    .hub-actions{
       display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+      margin-top:22px;
+    }
+
+    .hub-btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      text-decoration:none;
+      padding:12px 16px;
+      border-radius:14px;
+      font-weight:800;
+      border:1px solid transparent;
+      cursor:pointer;
+    }
+
+    .hub-btn.primary{
+      background:#ffd700;
+      color:#111;
+    }
+
+    .hub-btn.secondary{
+      background:#111;
+      color:#fff;
+      border-color:#252525;
+    }
+
+    .hub-btn.secondary:hover{
+      border-color:#ffd700;
+      color:#ffd700;
+    }
+
+    .hub-checklist{
+      display:grid;
+      gap:12px;
+      margin-top:18px;
+    }
+
+    .hub-check-item{
+      background:#111;
+      border:1px solid #252525;
+      border-radius:16px;
+      padding:14px 16px;
+      color:#fff;
+      line-height:1.55;
+    }
+
+    .hub-check-item strong{
+      color:#ffd700;
+    }
+
+    .hub-links-grid{
+      display:grid;
+      grid-template-columns:repeat(2,1fr);
+      gap:16px;
+    }
+
+    .hub-link-card{
+      text-decoration:none;
+      color:#fff;
+      transition:.2s ease;
+      display:block;
+    }
+
+    .hub-link-card:hover{
+      border-color:#ffd700;
+      transform:translateY(-2px);
+    }
+
+    .hub-link-card h3{
+      margin:10px 0 8px;
+      font-size:24px;
+      color:#fff;
+    }
+
+    .hub-link-card p{
+      margin:0;
+      color:rgba(255,255,255,.68);
+      line-height:1.6;
+    }
+
+    .hub-link-meta{
+      display:flex;
+      justify-content:space-between;
       align-items:center;
       gap:10px;
-      padding:8px 14px;
-      border-radius:999px;
-      background:rgba(255,255,255,0.04);
-      border:1px solid rgba(255,255,255,0.06);
+      margin-top:18px;
+      color:#ffd700;
       font-size:13px;
       font-weight:700;
-      white-space:nowrap;
     }
 
-    .status-dot{
-      width:10px;
-      height:10px;
+    .hub-watchlist{
+      display:grid;
+      gap:10px;
+      margin-top:16px;
+    }
+
+    .hub-watch-item{
+      background:#111;
+      border:1px solid #252525;
+      border-radius:16px;
+      padding:14px 16px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      color:#fff;
+    }
+
+    .hub-watch-item strong{
+      display:block;
+      color:#ffd700;
+      font-size:15px;
+    }
+
+    .hub-watch-item span{
+      color:rgba(255,255,255,.58);
+      font-size:12px;
+    }
+
+    .hub-watch-item a{
+      text-decoration:none;
+      border:1px solid #333;
+      color:#fff;
+      padding:8px 12px;
+      border-radius:999px;
+      font-size:12px;
+      font-weight:700;
+    }
+
+    .hub-watch-item a:hover{
+      border-color:#ffd700;
+      color:#ffd700;
+    }
+
+    .hub-flow{
+      display:grid;
+      gap:12px;
+      margin-top:16px;
+    }
+
+    .hub-flow-item{
+      background:#111;
+      border:1px solid #252525;
+      border-radius:16px;
+      padding:14px;
+      display:flex;
+      gap:14px;
+      align-items:flex-start;
+    }
+
+    .hub-flow-num{
+      width:34px;
+      height:34px;
+      min-width:34px;
       border-radius:50%;
-      background:#999;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background:#17130a;
+      border:1px solid rgba(255,215,0,.2);
+      color:#ffd700;
+      font-weight:900;
     }
 
-    .status-premium{ background:#00d26a; }
-    .status-admin{ background:#ffd700; }
-    .status-locked{ background:#ff4d4d; }
+    .hub-flow-item strong{
+      display:block;
+      color:#fff;
+      margin-bottom:4px;
+    }
 
-    @media(max-width:860px){
-      .auth-box{
-        margin-top:10px;
+    .hub-flow-item p{
+      margin:0;
+      color:rgba(255,255,255,.68);
+      line-height:1.55;
+    }
+
+    .hub-note-card textarea{
+      width:100%;
+      min-height:180px;
+      margin-top:16px;
+      background:#111;
+      color:#fff;
+      border:1px solid #252525;
+      border-radius:16px;
+      padding:14px;
+      box-sizing:border-box;
+      resize:vertical;
+    }
+
+    .hub-note-status{
+      margin-top:10px;
+      color:rgba(255,255,255,.58);
+      font-size:13px;
+    }
+
+    .hub-longterm-card{
+      position:relative;
+      overflow:hidden;
+    }
+
+    .hub-longterm-card::before{
+      content:"";
+      position:absolute;
+      right:-100px;
+      bottom:-100px;
+      width:260px;
+      height:260px;
+      background:radial-gradient(circle, rgba(255,215,0,.16), transparent 70%);
+      pointer-events:none;
+    }
+
+    .hub-longterm-grid{
+      display:grid;
+      grid-template-columns:1.1fr .9fr;
+      gap:20px;
+      margin-top:18px;
+    }
+
+    .hub-longterm-list{
+      display:grid;
+      gap:12px;
+      margin-top:16px;
+    }
+
+    .hub-longterm-item{
+      background:#111;
+      border:1px solid #252525;
+      border-radius:16px;
+      padding:14px 16px;
+      color:#fff;
+      line-height:1.55;
+    }
+
+    .hub-longterm-item strong{
+      color:#ffd700;
+    }
+
+    .hub-badges{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      margin-top:16px;
+    }
+
+    .hub-badges span{
+      border:1px solid rgba(255,215,0,.24);
+      background:rgba(255,215,0,.06);
+      color:#ffd700;
+      padding:7px 10px;
+      border-radius:999px;
+      font-size:12px;
+      font-weight:700;
+    }
+
+    @media(max-width:1100px){
+      .hub-top-grid,
+      .hub-mid-grid,
+      .hub-bottom-grid,
+      .hub-longterm-grid{
+        grid-template-columns:1fr;
+      }
+
+      .hub-stats{
+        grid-template-columns:1fr 1fr;
+      }
+    }
+
+    @media(max-width:760px){
+      .hub-links-grid,
+      .hub-stats{
+        grid-template-columns:1fr;
+      }
+
+      .hub-title{
+        font-size:30px;
+      }
+
+      .hub-subtitle{
+        font-size:24px;
       }
     }
   </style>
 </head>
-
 <body data-protected="true">
   <div class="page">
 
     <nav class="navbar">
       <a href="index.html" class="logo">BullProsperity</a>
-
       <div class="nav-links">
         <a href="index.html">Home</a>
         <a href="hub.html" class="active">Hub</a>
@@ -53,83 +421,331 @@
         <a href="tools.html">Tools</a>
         <a href="setup-room.html">Setup Room</a>
         <a href="community.html">Community</a>
-      </div>
-
-      <div class="auth-box">
-        <span class="status-dot" id="statusDot"></span>
-        <span id="authStatus">Status wird geprüft...</span>
+        <a href="https://whop.com/bullprosperity-fx/bullprosperity-fx/">Login</a>
       </div>
     </nav>
 
     <section class="hero-shell">
-      <div class="badge">BullProsperity</div>
-
-      <h1 class="hero-title">
-        Dein <span class="gold">Mitgliederbereich</span>
-      </h1>
-
+      <div class="badge">Members Hub</div>
+      <h1 class="hero-title">BullProsperity <span class="gold">Hub</span></h1>
       <p class="hero-text">
-        Willkommen im BullProsperity Hub. Hier hast du Zugriff auf alle exklusiven Inhalte,
-        Tools, Setups und strategischen Bereiche deiner Trading Education.
+        Dein zentraler Mitgliederbereich für Kurs, Tools, Setup Room, Community
+        und langfristigen Vermögensaufbau.
       </p>
-
       <div class="hero-buttons">
-        <a href="course.html" class="btn primary">Zum Kurs</a>
-        <a href="setup-room.html" class="btn secondary">Setup Room</a>
+        <a href="#hub-dashboard" class="btn primary">Hub öffnen</a>
+        <a href="tools.html" class="btn secondary">Zu den Tools</a>
       </div>
     </section>
 
-    <section class="section">
-      <h2 class="section-heading">Dein Zugang</h2>
+    <div class="hub-shell">
 
-      <p class="section-subtext">
-        Nutze die verschiedenen Bereiche, um Theorie, Praxis und Umsetzung miteinander zu verbinden.
-      </p>
-
-      <div class="grid-2">
-        <div class="section-card">
-          <div class="badge">Course</div>
-          <h3>Kursbereich</h3>
-          <p>
-            Arbeite dich strukturiert durch alle Module und entwickle ein klares Verständnis
-            für Marktstruktur, Entries und Strategie.
+      <section id="hub-dashboard" class="hub-top-grid">
+        <div class="hub-hero-card">
+          <div class="badge">Dashboard</div>
+          <h2 class="hub-title">
+            Dein <span class="hub-highlight">BullProsperity System</span> an einem Ort
+          </h2>
+          <p class="hub-text">
+            Nutze den Hub als Zentrale für deinen Workflow:
+            Kurs lernen, Charts analysieren, Setups prüfen, Risiko berechnen,
+            Trades dokumentieren und Longterm-Struktur aufbauen.
           </p>
-          <a href="course.html" class="card-link">Zum Kurs</a>
+
+          <div class="hub-stats">
+            <div class="hub-stat">
+              <div class="hub-stat-label">Status</div>
+              <div class="hub-stat-value">Premium</div>
+              <div class="hub-stat-sub">Mitgliederbereich aktiv</div>
+            </div>
+            <div class="hub-stat">
+              <div class="hub-stat-label">Module</div>
+              <div class="hub-stat-value">5+</div>
+              <div class="hub-stat-sub">Kurs, Tools, Community, Setups, Longterm</div>
+            </div>
+            <div class="hub-stat">
+              <div class="hub-stat-label">Fokus</div>
+              <div class="hub-stat-value">SMC</div>
+              <div class="hub-stat-sub">Strukturierter Trading-Ansatz</div>
+            </div>
+            <div class="hub-stat">
+              <div class="hub-stat-label">Extra</div>
+              <div class="hub-stat-value">Pro</div>
+              <div class="hub-stat-sub">Longterm Investment Erweiterung</div>
+            </div>
+          </div>
+
+          <div class="hub-actions">
+            <a href="course.html" class="hub-btn primary">Zum Kurs</a>
+            <a href="tools.html" class="hub-btn secondary">Tools öffnen</a>
+          </div>
         </div>
 
-        <div class="section-card">
-          <div class="badge">Setup Room</div>
-          <h3>Setups & Analyse</h3>
-          <p>
-            Analysiere reale Setups, Marktbewegungen und Strategien, um Theorie in Praxis umzusetzen.
-          </p>
-          <a href="setup-room.html" class="card-link">Setup Room öffnen</a>
+        <div class="hub-card">
+          <div class="badge">BullProsperity Workflow</div>
+          <h2 class="hub-subtitle">So nutzt du den Hub richtig</h2>
+
+          <div class="hub-checklist">
+            <div class="hub-check-item"><strong>1. Analyse:</strong> Starte mit Marktstruktur, Liquidity, BOS, CHoCH und Fokusmärkten.</div>
+            <div class="hub-check-item"><strong>2. Setup:</strong> Prüfe, ob dein Trade wirklich in deinen Plan und deinen Kontext passt.</div>
+            <div class="hub-check-item"><strong>3. Risiko:</strong> Arbeite sauber mit Positionsgröße und kontrollierter Exponierung.</div>
+            <div class="hub-check-item"><strong>4. Dokumentation:</strong> Halte fest, was funktioniert — damit du systematisch besser wirst.</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="hub-mid-grid">
+        <div class="hub-card">
+          <div class="badge">Schnellzugriffe</div>
+          <h2 class="hub-subtitle">Deine wichtigsten Bereiche</h2>
+
+          <div class="hub-links-grid" style="margin-top:18px;">
+            <a href="course.html" class="hub-link-card">
+              <div class="badge">Course</div>
+              <h3>Kursbereich</h3>
+              <p>Lerne die Inhalte strukturiert und arbeite deine Module Schritt für Schritt durch.</p>
+              <div class="hub-link-meta">
+                <span>Weiter öffnen</span>
+                <span>→</span>
+              </div>
+            </a>
+
+            <a href="tools.html" class="hub-link-card">
+              <div class="badge">Tools</div>
+              <h3>Trading Tools</h3>
+              <p>Greife auf Watchlist, Chart Analyse, Quick Journal und weitere Trading-Tools zu.</p>
+              <div class="hub-link-meta">
+                <span>Weiter öffnen</span>
+                <span>→</span>
+              </div>
+            </a>
+
+            <a href="setup-room.html" class="hub-link-card">
+              <div class="badge">Setup Room</div>
+              <h3>Setups & Ideen</h3>
+              <p>Nutze strukturierte Marktideen und beobachte Setups im BullProsperity Stil.</p>
+              <div class="hub-link-meta">
+                <span>Weiter öffnen</span>
+                <span>→</span>
+              </div>
+            </a>
+
+            <a href="community.html" class="hub-link-card">
+              <div class="badge">Community</div>
+              <h3>Austausch & Netzwerk</h3>
+              <p>Bleibe verbunden, tausche Ideen aus und stärke dein System durch Wiederholung.</p>
+              <div class="hub-link-meta">
+                <span>Weiter öffnen</span>
+                <span>→</span>
+              </div>
+            </a>
+          </div>
         </div>
 
-        <div class="section-card">
-          <div class="badge">Tools</div>
-          <h3>Trading Tools</h3>
-          <p>
-            Nutze Lot Size Rechner, Journal und Checklisten für professionelles Trading.
-          </p>
-          <a href="tools.html" class="card-link">Tools öffnen</a>
+        <div class="hub-card">
+          <div class="badge">Fokusmärkte</div>
+          <h2 class="hub-subtitle">Schneller Zugriff auf Märkte</h2>
+
+          <div class="hub-watchlist">
+            <div class="hub-watch-item">
+              <div>
+                <strong>EURUSD</strong>
+                <span>Forex</span>
+              </div>
+              <a href="tools.html#charts">Öffnen</a>
+            </div>
+
+            <div class="hub-watch-item">
+              <div>
+                <strong>XAUUSD</strong>
+                <span>Gold</span>
+              </div>
+              <a href="tools.html#charts">Öffnen</a>
+            </div>
+
+            <div class="hub-watch-item">
+              <div>
+                <strong>NASDAQ</strong>
+                <span>Index</span>
+              </div>
+              <a href="tools.html#charts">Öffnen</a>
+            </div>
+
+            <div class="hub-watch-item">
+              <div>
+                <strong>US30</strong>
+                <span>Dow Jones</span>
+              </div>
+              <a href="tools.html#charts">Öffnen</a>
+            </div>
+
+            <div class="hub-watch-item">
+              <div>
+                <strong>BTCUSD</strong>
+                <span>Crypto</span>
+              </div>
+              <a href="tools.html#charts">Öffnen</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="hub-bottom-grid">
+        <div class="hub-card">
+          <div class="badge">Tagesstruktur</div>
+          <h2 class="hub-subtitle">Dein täglicher BullProsperity Ablauf</h2>
+
+          <div class="hub-flow">
+            <div class="hub-flow-item">
+              <div class="hub-flow-num">1</div>
+              <div>
+                <strong>Chart Analyse</strong>
+                <p>Beginne mit Struktur, höheren Timeframes und deinem Markt-Kontext.</p>
+              </div>
+            </div>
+
+            <div class="hub-flow-item">
+              <div class="hub-flow-num">2</div>
+              <div>
+                <strong>Setup filtern</strong>
+                <p>Nimm nur Trades, die sauber in deinen Plan und in deine Regeln passen.</p>
+              </div>
+            </div>
+
+            <div class="hub-flow-item">
+              <div class="hub-flow-num">3</div>
+              <div>
+                <strong>Risiko berechnen</strong>
+                <p>Nutze Lot Size, Regeln und Disziplin, statt impulsiv zu handeln.</p>
+              </div>
+            </div>
+
+            <div class="hub-flow-item">
+              <div class="hub-flow-num">4</div>
+              <div>
+                <strong>Trade dokumentieren</strong>
+                <p>Halte Bias, Ausführung und Gedanken fest, um langfristig besser zu werden.</p>
+              </div>
+            </div>
+          </div>
         </div>
 
-        <div class="section-card">
-          <div class="badge">Community</div>
-          <h3>Community Bereich</h3>
-          <p>
-            Tausche dich aus, lerne von anderen und entwickle dich gemeinsam weiter.
+        <div class="hub-note-card">
+          <div class="badge">Quick Notes</div>
+          <h2 class="hub-subtitle">Deine Tagesnotizen</h2>
+          <p class="hub-text">
+            Nutze diesen Bereich für Bias, wichtige Levels, Session-Ideen oder kurze Erinnerungen.
           </p>
-          <a href="community.html" class="card-link">Community öffnen</a>
+
+          <textarea id="hubNotes" placeholder="Schreibe hier deinen Tagesbias, wichtige Levels oder Erinnerungen für deine Session..."></textarea>
+          <div class="hub-actions" style="margin-top:12px;">
+            <button id="saveHubNotes" class="hub-btn primary" type="button">Notizen speichern</button>
+          </div>
+          <div id="hubNoteStatus" class="hub-note-status">Noch keine Notizen gespeichert.</div>
         </div>
+      </section>
+
+      <section class="hub-longterm-card">
+        <div class="badge">BullProsperity Longterm</div>
+        <h2 class="hub-title">Langfristiger <span class="hub-highlight">Vermögensaufbau</span></h2>
+        <p class="hub-text" id="longtermText">
+          Eigene Premium-Unterseite mit ETFs, Cryptos, Indices, bekannten Aktien, Rohstoffen,
+          Portfolio Tracker, DCA Rechner und Investment Journal.
+        </p>
+
+        <div class="hub-longterm-grid">
+          <div>
+            <div class="hub-badges">
+              <span>ETFs</span>
+              <span>Cryptos</span>
+              <span>Indices</span>
+              <span>Aktien</span>
+              <span>Rohstoffe</span>
+            </div>
+
+            <div class="hub-longterm-list">
+              <div class="hub-longterm-item"><strong>Pro Watchlist:</strong> Kategorisierte Marktübersicht mit bekannten Märkten und Unternehmen.</div>
+              <div class="hub-longterm-item"><strong>Portfolio Tracker:</strong> Dokumentiere deine Longterm-Ideen, Kategorien und Pläne.</div>
+              <div class="hub-longterm-item"><strong>DCA Rechner:</strong> Simuliere regelmäßigen Aufbau über Monate und Jahre.</div>
+              <div class="hub-longterm-item"><strong>Investment Journal:</strong> Halte deine langfristigen Thesen sauber fest.</div>
+            </div>
+          </div>
+
+          <div>
+            <div class="hub-card" style="padding:20px;background:#111;border-color:#252525;">
+              <div class="badge">Premium Modul</div>
+              <h2 class="hub-subtitle" style="font-size:26px;">Longterm Pro Bereich</h2>
+              <p class="hub-text" style="margin-top:10px;">
+                Öffne direkt die Longterm-Unterseite oder erfahre mehr über das Premium-Modul.
+              </p>
+
+              <div class="hub-actions">
+                <a id="longtermBtn" class="hub-btn primary">Longterm wird geladen...</a>
+                <a href="longterm-sales.html" class="hub-btn secondary">Mehr erfahren</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div class="footer-note">
+        BullProsperity dient ausschließlich Bildungszwecken und stellt keine Finanzberatung dar.
       </div>
-    </section>
-
-    <div class="footer-note">
-      BullProsperity dient ausschließlich Bildungs- und Informationszwecken und stellt keine Finanzberatung dar.
     </div>
-
   </div>
+
+  <script>
+    const hubNotes = document.getElementById("hubNotes");
+    const hubNoteStatus = document.getElementById("hubNoteStatus");
+    const saveHubNotes = document.getElementById("saveHubNotes");
+
+    const savedHubNotes = localStorage.getItem("bp_hub_notes");
+    if (savedHubNotes && hubNotes) {
+      hubNotes.value = savedHubNotes;
+      hubNoteStatus.textContent = "Gespeichert im Browser.";
+    }
+
+    if (saveHubNotes) {
+      saveHubNotes.addEventListener("click", () => {
+        const value = hubNotes.value.trim();
+        localStorage.setItem("bp_hub_notes", value);
+        hubNoteStatus.textContent = value
+          ? "Notizen erfolgreich gespeichert."
+          : "Leere Notiz gespeichert.";
+      });
+    }
+
+    (async () => {
+      const btn = document.getElementById("longtermBtn");
+      const text = document.getElementById("longtermText");
+
+      if (!btn || !text) return;
+
+      const WHOP_UPSELL = "longterm-sales.html";
+
+      try {
+        const res = await fetch("/api/access", { credentials: "include" });
+        const data = await res.json();
+
+        const hasAccess =
+          data.role === "admin" ||
+          data.role === "longterm" ||
+          data.role === "premium";
+
+        if (hasAccess) {
+          btn.href = "longterm.html";
+          btn.textContent = "Longterm Bereich öffnen";
+          text.textContent = "Du hast Zugriff auf die Longterm Pro Unterseite mit Watchlist, DCA Rechner, Portfolio Tracker und Investment Journal.";
+        } else {
+          btn.href = WHOP_UPSELL;
+          btn.textContent = "Longterm freischalten 🔒";
+          text.textContent = "Entdecke die Longterm Pro Unterseite im BullProsperity Design mit vielen Features für strukturierten Vermögensaufbau.";
+        }
+      } catch (err) {
+        btn.href = WHOP_UPSELL;
+        btn.textContent = "Longterm freischalten 🔒";
+      }
+    })();
+  </script>
 </body>
 </html>
