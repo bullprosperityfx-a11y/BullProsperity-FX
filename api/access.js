@@ -10,7 +10,7 @@ export default async function handler(req, res) {
     const email = getCookie("bp_email");
 
     // 🔥 ADMIN BYPASS (GANZ WICHTIG)
-    if (email === "DEINE_EMAIL@gmail.com") {
+    if (email === "bullprosperityfx@gmail.com") {
       return res.status(200).json({
         ok: true,
         role: "admin",
