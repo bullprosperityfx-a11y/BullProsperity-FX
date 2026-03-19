@@ -6,22 +6,52 @@
   <title>BullProsperity | Hub</title>
   <link rel="stylesheet" href="theme.css">
 
-  <script>
-    (async () => {
-      try {
-        const res = await fetch("/api/access", { credentials: "include" });
-        const data = await res.json();
-
-        if (data.role !== "admin" && data.role !== "premium") {
-          window.location.href = "locked.html";
-        }
-      } catch (err) {
-        window.location.href = "locked.html";
-      }
-    })();
-  </script>
+  <script src="/Login.js" defer></script>
 
   <style>
+    body{
+      visibility:hidden;
+    }
+
+    .auth-badge{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:10px 14px;
+      border-radius:999px;
+      font-size:13px;
+      font-weight:700;
+      border:1px solid #252525;
+      background:#111;
+      color:#fff;
+      white-space:nowrap;
+    }
+
+    .auth-badge::before{
+      content:"";
+      width:10px;
+      height:10px;
+      border-radius:50%;
+      display:inline-block;
+      background:#666;
+    }
+
+    .auth-badge.status-admin::before{
+      background:#ffd700;
+    }
+
+    .auth-badge.status-premium::before{
+      background:#22c55e;
+    }
+
+    .auth-badge.status-longterm::before{
+      background:#3b82f6;
+    }
+
+    .auth-badge.status-locked::before{
+      background:#ef4444;
+    }
+
     .hub-shell{
       display:grid;
       gap:22px;
@@ -409,7 +439,7 @@
     }
   </style>
 </head>
-<body data-protected="true">
+<body data-protected="true" data-page="main">
   <div class="page">
 
     <nav class="navbar">
@@ -421,7 +451,8 @@
         <a href="tools.html">Tools</a>
         <a href="setup-room.html">Setup Room</a>
         <a href="community.html">Community</a>
-        <a href="https://whop.com/bullprosperity-fx/bullprosperity-fx/">Login</a>
+        <a data-login-link href="#">Login</a>
+        <div id="authBadge" class="auth-badge status-locked">Kein Zugang</div>
       </div>
     </nav>
 
@@ -434,7 +465,7 @@
       </p>
       <div class="hero-buttons">
         <a href="#hub-dashboard" class="btn primary">Hub öffnen</a>
-        <a href="tools.html" class="btn secondary">Zu den Tools</a>
+        <a data-member-link data-target="tools" class="btn secondary" href="#">Zu den Tools</a>
       </div>
     </section>
 
@@ -476,8 +507,8 @@
           </div>
 
           <div class="hub-actions">
-            <a href="course.html" class="hub-btn primary">Zum Kurs</a>
-            <a href="tools.html" class="hub-btn secondary">Tools öffnen</a>
+            <a data-member-link data-target="course" class="hub-btn primary" href="#">Zum Kurs</a>
+            <a data-member-link data-target="tools" class="hub-btn secondary" href="#">Tools öffnen</a>
           </div>
         </div>
 
@@ -500,7 +531,7 @@
           <h2 class="hub-subtitle">Deine wichtigsten Bereiche</h2>
 
           <div class="hub-links-grid" style="margin-top:18px;">
-            <a href="course.html" class="hub-link-card">
+            <a data-member-link data-target="course" href="#" class="hub-link-card">
               <div class="badge">Course</div>
               <h3>Kursbereich</h3>
               <p>Lerne die Inhalte strukturiert und arbeite deine Module Schritt für Schritt durch.</p>
@@ -510,7 +541,7 @@
               </div>
             </a>
 
-            <a href="tools.html" class="hub-link-card">
+            <a data-member-link data-target="tools" href="#" class="hub-link-card">
               <div class="badge">Tools</div>
               <h3>Trading Tools</h3>
               <p>Greife auf Watchlist, Chart Analyse, Quick Journal und weitere Trading-Tools zu.</p>
@@ -520,7 +551,7 @@
               </div>
             </a>
 
-            <a href="setup-room.html" class="hub-link-card">
+            <a data-member-link data-target="setup-room" href="#" class="hub-link-card">
               <div class="badge">Setup Room</div>
               <h3>Setups & Ideen</h3>
               <p>Nutze strukturierte Marktideen und beobachte Setups im BullProsperity Stil.</p>
@@ -530,7 +561,7 @@
               </div>
             </a>
 
-            <a href="community.html" class="hub-link-card">
+            <a data-member-link data-target="community" href="#" class="hub-link-card">
               <div class="badge">Community</div>
               <h3>Austausch & Netzwerk</h3>
               <p>Bleibe verbunden, tausche Ideen aus und stärke dein System durch Wiederholung.</p>
@@ -680,7 +711,7 @@
               </p>
 
               <div class="hub-actions">
-                <a id="longtermBtn" class="hub-btn primary">Longterm wird geladen...</a>
+                <a data-member-link data-target="longterm" id="longtermBtn" class="hub-btn primary" href="#">Longterm wird geladen...</a>
                 <a href="longterm-sales.html" class="hub-btn secondary">Mehr erfahren</a>
               </div>
             </div>
@@ -714,38 +745,6 @@
           : "Leere Notiz gespeichert.";
       });
     }
-
-    (async () => {
-      const btn = document.getElementById("longtermBtn");
-      const text = document.getElementById("longtermText");
-
-      if (!btn || !text) return;
-
-      const WHOP_UPSELL = "longterm-sales.html";
-
-      try {
-        const res = await fetch("/api/access", { credentials: "include" });
-        const data = await res.json();
-
-        const hasAccess =
-          data.role === "admin" ||
-          data.role === "longterm" ||
-          data.role === "premium";
-
-        if (hasAccess) {
-          btn.href = "longterm.html";
-          btn.textContent = "Longterm Bereich öffnen";
-          text.textContent = "Du hast Zugriff auf die Longterm Pro Unterseite mit Watchlist, DCA Rechner, Portfolio Tracker und Investment Journal.";
-        } else {
-          btn.href = WHOP_UPSELL;
-          btn.textContent = "Longterm freischalten 🔒";
-          text.textContent = "Entdecke die Longterm Pro Unterseite im BullProsperity Design mit vielen Features für strukturierten Vermögensaufbau.";
-        }
-      } catch (err) {
-        btn.href = WHOP_UPSELL;
-        btn.textContent = "Longterm freischalten 🔒";
-      }
-    })();
   </script>
 </body>
 </html>
