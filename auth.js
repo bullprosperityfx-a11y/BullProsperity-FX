@@ -32,11 +32,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         authBadge.textContent = "Admin Zugang aktiv";
         authBadge.className = "auth-badge status-admin";
       }
-
-      if (loginNavBtn) {
-        loginNavBtn.style.display = "none";
-      }
-
+      if (loginNavBtn) loginNavBtn.style.display = "none";
       return;
     }
 
@@ -45,11 +41,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         authBadge.textContent = "Premium aktiv";
         authBadge.className = "auth-badge status-premium";
       }
-
-      if (loginNavBtn) {
-        loginNavBtn.style.display = "none";
-      }
-
+      if (loginNavBtn) loginNavBtn.style.display = "none";
       return;
     }
 
