@@ -182,7 +182,7 @@
         </p>
 
         <div class="hero-buttons">
-          <a href="#" class="btn primary" id="startButton">Jetzt starten</a>
+          <a href="#" class="btn primary smart-btn" data-target="hub.html">Jetzt starten</a>
           <a href="#zugang" class="btn secondary">Mehr erfahren</a>
         </div>
 
@@ -273,5 +273,45 @@
     </div>
 
   </div>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const buttons = document.querySelectorAll(".smart-btn");
+
+  buttons.forEach(btn => {
+    btn.addEventListener("click", async (e) => {
+      e.preventDefault();
+
+      const target = btn.getAttribute("data-target") || "hub.html";
+
+      try {
+        const res = await fetch("/api/access", {
+          credentials: "include",
+          cache: "no-store"
+        });
+
+        const data = await res.json();
+
+        // 🔴 NICHT eingeloggt
+        if (!data || !data.role) {
+          window.location.href = "/api/whop/login";
+          return;
+        }
+
+        // 🟡 eingeloggt aber KEIN Premium
+        if (data.role !== "admin" && data.role !== "premium") {
+          window.location.href = "/locked.html";
+          return;
+        }
+
+        // 🟢 Premium oder Admin
+        window.location.href = target;
+
+      } catch {
+        window.location.href = "/api/whop/login";
+      }
+    });
+  });
+});
+</script>
 </body>
 </html>
