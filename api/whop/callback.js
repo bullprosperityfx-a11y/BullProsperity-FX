@@ -95,6 +95,7 @@ export default async function handler(req, res) {
     res.setHeader("Set-Cookie", [
       `bp_role=${encodeURIComponent(role)}; Path=/; HttpOnly; ${secure ? "Secure;" : ""} SameSite=Lax`,
       `bp_email=${encodeURIComponent(user.email || "")}; Path=/; HttpOnly; ${secure ? "Secure;" : ""} SameSite=Lax`,
+      `whop_access_token=${accessToken}; Path=/; HttpOnly; ${secure ? "Secure;" : ""} SameSite=Lax`,
       `whop_state=; Path=/; Max-Age=0; HttpOnly; ${secure ? "Secure;" : ""} SameSite=Lax`,
       `whop_verifier=; Path=/; Max-Age=0; HttpOnly; ${secure ? "Secure;" : ""} SameSite=Lax`
     ]);
