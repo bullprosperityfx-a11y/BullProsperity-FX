@@ -7,10 +7,15 @@ export default async function handler(req, res) {
       return match ? decodeURIComponent(match[1]) : "";
     };
 
-    const email = getCookie("bp_email");
+    const normalizeEmail = (value) => (value || "").trim().toLowerCase();
 
-    // 🔥 ADMIN BYPASS (GANZ WICHTIG)
-    if (email === "bullprosperityfx@gmail.com") {
+    const adminEmail = "bullprosperityfx@gmail.com";
+
+    let email = normalizeEmail(getCookie("bp_email"));
+    const accessToken = getCookie("whop_access_token");
+
+    // 1) Direkter Admin-Bypass über Cookie
+    if (email === adminEmail) {
       return res.status(200).json({
         ok: true,
         role: "admin",
@@ -18,7 +23,43 @@ export default async function handler(req, res) {
       });
     }
 
-    // Wenn kein Login vorhanden
+    // 2) Falls kein Email-Cookie da ist, aber Token existiert:
+    //    User direkt über Whop laden und Email prüfen
+    if (accessToken) {
+      try {
+        const meRes = await fetch("https://api.whop.com/api/v1/me", {
+          headers: {
+            Authorization: `Bearer ${accessToken}`
+          }
+        });
+
+        if (meRes.ok) {
+          const meData = await meRes.json();
+
+          const whopEmail = normalizeEmail(
+            meData?.email ||
+            meData?.user?.email ||
+            meData?.data?.email
+          );
+
+          if (whopEmail) {
+            email = whopEmail;
+          }
+
+          if (email === adminEmail) {
+            return res.status(200).json({
+              ok: true,
+              role: "admin",
+              email
+            });
+          }
+        }
+      } catch (meErr) {
+        console.error("WHOP /me failed:", meErr);
+      }
+    }
+
+    // 3) Wenn immer noch kein Login vorhanden
     if (!email) {
       return res.status(200).json({
         ok: true,
@@ -26,36 +67,35 @@ export default async function handler(req, res) {
       });
     }
 
-    const accessToken = getCookie("whop_access_token");
-
+    // 4) Ohne Token kein Membership-Check möglich
     if (!accessToken) {
       return res.status(200).json({
         ok: true,
-        role: "guest"
+        role: "guest",
+        email
       });
     }
 
     const productId = process.env.WHOP_PRODUCT_ID;
 
-    const check = await fetch(
-      `https://api.whop.com/api/v1/me/access/${productId}`,
-      {
-        headers: {
-          Authorization: `Bearer ${accessToken}`
-        }
-      }
-    );
-
     let finalRole = "guest";
 
-    if (check.ok) {
-      const data = await check.json();
+    if (productId) {
+      const check = await fetch(
+        `https://api.whop.com/api/v1/me/access/${productId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`
+          }
+        }
+      );
 
-      if (
-        data?.has_access === true ||
-        data?.status === "active"
-      ) {
-        finalRole = "premium";
+      if (check.ok) {
+        const data = await check.json();
+
+        if (data?.has_access === true || data?.status === "active") {
+          finalRole = "premium";
+        }
       }
     }
 
@@ -66,7 +106,7 @@ export default async function handler(req, res) {
     });
 
   } catch (err) {
-    console.error(err);
+    console.error("ACCESS API ERROR:", err);
 
     return res.status(200).json({
       ok: false,
