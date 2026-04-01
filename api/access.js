@@ -59,23 +59,17 @@ export default async function handler(req, res) {
       }
     }
 
-    // 3) Wenn immer noch kein Login vorhanden
-    if (!email) {
-      return res.status(200).json({
-        ok: true,
-        role: "guest"
-      });
-    }
-
-    // 4) Ohne Token kein Membership-Check möglich
-    if (!accessToken) {
-      return res.status(200).json({
-        ok: true,
-        role: "guest",
-        email
-      });
-    }
-
+    // 🔥 ADMIN CHECK (ULTRA SAFE FIX)
+if (
+  email === "bullprosperityfx@gmail.com" ||
+  getCookie("bp_email") === "bullprosperityfx@gmail.com"
+) {
+  return res.status(200).json({
+    ok: true,
+    role: "admin",
+    email: email || "bullprosperityfx@gmail.com"
+  });
+}
     const productId = process.env.WHOP_PRODUCT_ID;
 
     let finalRole = "guest";
