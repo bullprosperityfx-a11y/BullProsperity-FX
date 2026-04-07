@@ -30,9 +30,9 @@ export default async function handler(req, res) {
 
     // 🔥 COOKIE SETZEN
     res.setHeader("Set-Cookie", [
-      `whop_access_token=${accessToken}; Path=/; HttpOnly; Secure; SameSite=Lax`,
-      `bp_role=premium; Path=/; Secure; SameSite=Lax`
-    ]);
+  `whop_access_token=${accessToken}; Path=/; HttpOnly; Secure; SameSite=None`,
+  `bp_email=${email}; Path=/; Secure; SameSite=None`
+]);
 
     // 🔥 HIER ENTSCHEIDEND
     return res.redirect("/hub.html");
