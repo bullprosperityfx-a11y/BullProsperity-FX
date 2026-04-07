@@ -18,7 +18,7 @@ export default async function handler(req, res) {
       response_type: "code",
       client_id: clientId,
       redirect_uri: redirectUri,
-      scope: "openid profile email",
+      scope: "user.profile.read",
       state,
       nonce, // 🔥 DAS IST DER FIX
       code_challenge: challenge,
@@ -32,7 +32,7 @@ export default async function handler(req, res) {
       `whop_state=${state}; Path=/; HttpOnly; ${secure ? "Secure;" : ""} SameSite=Lax`
     ]);
 
-    return res.redirect(`https://api.whop.com/oauth/authorize?${params.toString()}`);
+    return res.redirect(`https://whop.com/oauth/authorize?${params.toString()}`);
   } catch (error) {
     return res.status(500).json({
       error: "Login failed",
