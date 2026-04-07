@@ -6,6 +6,7 @@ export default async function handler(req, res) {
       return res.redirect("/?error=no_code");
     }
 
+    // 🔥 TOKEN HOLEN
     const tokenRes = await fetch("https://api.whop.com/oauth/token", {
       method: "POST",
       headers: {
@@ -28,16 +29,32 @@ export default async function handler(req, res) {
 
     const accessToken = tokenData.access_token;
 
-    // 🔥 COOKIE SETZEN
-    res.setHeader("Set-Cookie", [
-  `whop_access_token=${accessToken}; Path=/; HttpOnly; Secure; SameSite=None`,
-  `bp_email=${email}; Path=/; Secure; SameSite=None`
-]);
+    // 🔥 USER DATEN HOLEN (WICHTIG!!!)
+    const meRes = await fetch("https://api.whop.com/api/v1/me", {
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      }
+    });
 
-    // 🔥 HIER ENTSCHEIDEND
+    const meData = await meRes.json();
+
+    const email =
+      meData?.email ||
+      meData?.user?.email ||
+      meData?.data?.email ||
+      "";
+
+    // 🔥 COOKIES SETZEN
+    res.setHeader("Set-Cookie", [
+      `whop_access_token=${accessToken}; Path=/; HttpOnly; Secure; SameSite=None`,
+      `bp_email=${encodeURIComponent(email)}; Path=/; Secure; SameSite=None`
+    ]);
+
+    // 🔥 REDIRECT
     return res.redirect("/hub.html");
 
   } catch (err) {
+    console.error("CALLBACK ERROR:", err);
     return res.redirect("/?error=callback_failed");
   }
 }
