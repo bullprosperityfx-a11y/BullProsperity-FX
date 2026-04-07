@@ -1,39 +1,60 @@
-import crypto from "crypto";
-
 export default async function handler(req, res) {
   try {
-    const clientId = process.env.WHOP_CLIENT_ID;
-    const redirectUri = process.env.WHOP_REDIRECT_URI;
+    const { code } = req.query;
 
-    // 🔥 PKCE erzeugen
-    const codeVerifier = crypto.randomBytes(32).toString("base64url");
+    if (!code) {
+      return res.redirect("/?error=no_code");
+    }
 
-    const challenge = crypto
-      .createHash("sha256")
-      .update(codeVerifier)
-      .digest("base64url");
-
-    const state = crypto.randomBytes(16).toString("hex");
-
-    // 🔥 Cookies setzen (WICHTIG)
-    res.setHeader("Set-Cookie", [
-      `whop_verifier=${codeVerifier}; Path=/; HttpOnly; Secure; SameSite=None`,
-      `whop_state=${state}; Path=/; HttpOnly; Secure; SameSite=None`
-    ]);
-
-    const params = new URLSearchParams({
-      response_type: "code",
-      client_id: clientId,
-      redirect_uri: redirectUri,
-      scope: "user.profile.read",
-      state: state,
-      code_challenge: challenge,
-      code_challenge_method: "S256"
+    // 🔥 TOKEN HOLEN
+    const tokenRes = await fetch("https://api.whop.com/oauth/token", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded"
+      },
+      body: new URLSearchParams({
+        grant_type: "authorization_code",
+        code,
+        client_id: process.env.WHOP_CLIENT_ID,
+        client_secret: process.env.WHOP_CLIENT_SECRET,
+        redirect_uri: process.env.WHOP_REDIRECT_URI
+      })
     });
 
-    return res.redirect(`https://whop.com/oauth/authorize?${params.toString()}`);
+    const tokenData = await tokenRes.json();
+
+    if (!tokenData.access_token) {
+      return res.redirect("/?error=no_token");
+    }
+
+    const accessToken = tokenData.access_token;
+
+    // 🔥 USER DATEN HOLEN (WICHTIG!!!)
+    const meRes = await fetch("https://api.whop.com/api/v1/me", {
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      }
+    });
+
+    const meData = await meRes.json();
+
+    const email =
+      meData?.email ||
+      meData?.user?.email ||
+      meData?.data?.email ||
+      "";
+
+    // 🔥 COOKIES SETZEN
+    res.setHeader("Set-Cookie", [
+      `whop_access_token=${accessToken}; Path=/; HttpOnly; Secure; SameSite=None`,
+      `bp_email=${encodeURIComponent(email)}; Path=/; Secure; SameSite=None`
+    ]);
+
+    // 🔥 REDIRECT
+    return res.redirect("/hub.html");
 
   } catch (err) {
-    return res.status(500).json({ error: "login_failed" });
+    console.error("CALLBACK ERROR:", err);
+    return res.redirect("/?error=callback_failed");
   }
 }
