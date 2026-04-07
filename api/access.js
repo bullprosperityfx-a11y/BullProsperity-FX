@@ -1,11 +1,5 @@
 export default async function handler(req, res) {
   try {
-    const { code } = req.query;
-
-    if (!code) {
-      return res.redirect("/?error=no_code");
-    }
-
     const cookie = req.headers.cookie || "";
 
     const getCookie = (name) => {
@@ -13,58 +7,74 @@ export default async function handler(req, res) {
       return match ? decodeURIComponent(match[1]) : "";
     };
 
-    // 🔥 DAS FEHLT BEI DIR
-    const codeVerifier = getCookie("whop_verifier");
+    const normalizeEmail = (value) => (value || "").trim().toLowerCase();
 
-    // 🔥 TOKEN HOLEN
-    const tokenRes = await fetch("https://api.whop.com/oauth/token", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded"
-      },
-      body: new URLSearchParams({
-        grant_type: "authorization_code",
-        code,
-        client_id: process.env.WHOP_CLIENT_ID,
-        client_secret: process.env.WHOP_CLIENT_SECRET,
-        redirect_uri: process.env.WHOP_REDIRECT_URI,
-        code_verifier: codeVerifier // 🔥 HIER IST DER FIX
-      })
-    });
+    const adminEmail = "bullprosperityfx@gmail.com";
 
-    const tokenData = await tokenRes.json();
+    let email = normalizeEmail(getCookie("bp_email"));
+    const accessToken = getCookie("whop_access_token");
 
-    if (!tokenData.access_token) {
-      return res.redirect("/?error=no_token");
+    // 🔥 ADMIN BYPASS
+    if (email === adminEmail) {
+      return res.status(200).json({
+        ok: true,
+        role: "admin",
+        email
+      });
     }
 
-    const accessToken = tokenData.access_token;
+    // ❌ nicht eingeloggt
+    if (!email) {
+      return res.status(200).json({
+        ok: true,
+        role: "guest"
+      });
+    }
 
-    // 🔥 USER DATEN
-    const meRes = await fetch("https://api.whop.com/api/v1/me", {
-      headers: {
-        Authorization: `Bearer ${accessToken}`
+    // ❌ kein token
+    if (!accessToken) {
+      return res.status(200).json({
+        ok: true,
+        role: "guest",
+        email
+      });
+    }
+
+    const productId = process.env.WHOP_PRODUCT_ID;
+
+    let role = "guest";
+
+    if (productId) {
+      const check = await fetch(
+        `https://api.whop.com/api/v1/me/access/${productId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`
+          }
+        }
+      );
+
+      if (check.ok) {
+        const data = await check.json();
+
+        if (data?.has_access === true || data?.status === "active") {
+          role = "premium";
+        }
       }
+    }
+
+    return res.status(200).json({
+      ok: true,
+      role,
+      email
     });
 
-    const meData = await meRes.json();
-
-    const email =
-      meData?.email ||
-      meData?.user?.email ||
-      meData?.data?.email ||
-      "";
-
-    // 🍪 COOKIES
-    res.setHeader("Set-Cookie", [
-      `whop_access_token=${accessToken}; Path=/; HttpOnly; Secure; SameSite=None`,
-      `bp_email=${encodeURIComponent(email)}; Path=/; Secure; SameSite=None`
-    ]);
-
-    return res.redirect("/hub.html");
-
   } catch (err) {
-    console.error("CALLBACK ERROR:", err);
-    return res.redirect("/?error=callback_failed");
+    console.error("ACCESS ERROR:", err);
+
+    return res.status(200).json({
+      ok: false,
+      role: "guest"
+    });
   }
 }
