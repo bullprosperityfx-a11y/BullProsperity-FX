@@ -276,45 +276,42 @@
 <script>
 document.addEventListener("DOMContentLoaded", () => {
 
-  const buttons = document.querySelectorAll(".smart-btn");
+  const startBtn = document.querySelector(".smart-btn");
 
-  buttons.forEach(btn => {
-    btn.addEventListener("click", async (e) => {
-      e.preventDefault();
+  if (!startBtn) return;
 
-      const target = btn.getAttribute("data-target") || "hub.html";
+  startBtn.addEventListener("click", async (e) => {
+    e.preventDefault();
 
-      try {
-        const res = await fetch("/api/access", {
-          credentials: "include",
-          cache: "no-store"
-        });
+    try {
+      const res = await fetch("/api/access", {
+        credentials: "include"
+      });
 
-        const data = await res.json();
-        console.log("ACCESS:", data);
+      const data = await res.json();
+      console.log("ACCESS:", data);
 
-        // 🔴 NICHT eingeloggt
-        if (!data || data.role === "guest") {
-          window.location.href = "/api/whop/login";
-          return;
-        }
-
-        // 🟡 eingeloggt aber kein Premium
-        if (data.role !== "admin" && data.role !== "premium") {
-          window.location.href = "/locked.html";
-          return;
-        }
-
-        // 🟢 Admin oder Premium
-        window.location.href = target;
-
-      } catch (err) {
-        console.log("ERROR:", err);
-
-        // 🔥 Fallback
+      // 🔴 NICHT eingeloggt
+      if (!data || data.role === "guest") {
         window.location.href = "/api/whop/login";
+        return;
       }
-    });
+
+      // 🟡 eingeloggt aber KEIN Premium
+      if (data.role !== "admin" && data.role !== "premium") {
+        window.location.href = "/locked.html";
+        return;
+      }
+
+      // 🟢 Admin / Premium
+      window.location.href = "/hub.html";
+
+    } catch (err) {
+      console.log("ERROR:", err);
+
+      // 🔥 FALLBACK → immer weiter
+      window.location.href = "/hub.html";
+    }
   });
 
 });
