@@ -24,12 +24,13 @@ export default async function handler(req, res) {
     const tokenData = await tokenRes.json();
 
     if (!tokenData.access_token) {
+      console.log("NO TOKEN:", tokenData);
       return res.redirect("/?error=no_token");
     }
 
     const accessToken = tokenData.access_token;
 
-    // 🔥 USER DATEN HOLEN (WICHTIG!!!)
+    // 🔥 USER DATEN HOLEN (WICHTIG)
     const meRes = await fetch("https://api.whop.com/api/v1/me", {
       headers: {
         Authorization: `Bearer ${accessToken}`
@@ -38,20 +39,22 @@ export default async function handler(req, res) {
 
     const meData = await meRes.json();
 
+    console.log("WHOP USER:", meData);
+
     const email =
       meData?.email ||
       meData?.user?.email ||
       meData?.data?.email ||
       "";
 
-    // 🔥 COOKIES SETZEN
+    // 🔥 COOKIE SETZEN (FIXED)
     res.setHeader("Set-Cookie", [
       `whop_access_token=${accessToken}; Path=/; HttpOnly; Secure; SameSite=None`,
       `bp_email=${encodeURIComponent(email)}; Path=/; Secure; SameSite=None`
     ]);
 
-    // 🔥 REDIRECT
-    return res.redirect("/hub.html");
+    // 🔥 WICHTIG: IMMER ZUR STARTSEITE
+    return res.redirect("/");
 
   } catch (err) {
     console.error("CALLBACK ERROR:", err);
