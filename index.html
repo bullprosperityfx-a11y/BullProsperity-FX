@@ -275,6 +275,7 @@
   </div>
 <script>
 document.addEventListener("DOMContentLoaded", () => {
+
   const buttons = document.querySelectorAll(".smart-btn");
 
   buttons.forEach(btn => {
@@ -290,27 +291,32 @@ document.addEventListener("DOMContentLoaded", () => {
         });
 
         const data = await res.json();
+        console.log("ACCESS:", data);
 
         // 🔴 NICHT eingeloggt
-        if (!data || !data.role) {
+        if (!data || data.role === "guest") {
           window.location.href = "/api/whop/login";
           return;
         }
 
-        // 🟡 eingeloggt aber KEIN Premium
+        // 🟡 eingeloggt aber kein Premium
         if (data.role !== "admin" && data.role !== "premium") {
           window.location.href = "/locked.html";
           return;
         }
 
-        // 🟢 Premium oder Admin
+        // 🟢 Admin oder Premium
         window.location.href = target;
 
-      } catch {
+      } catch (err) {
+        console.log("ERROR:", err);
+
+        // 🔥 Fallback
         window.location.href = "/api/whop/login";
       }
     });
   });
+
 });
 </script>
 </body>
