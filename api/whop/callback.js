@@ -65,9 +65,9 @@ export default async function handler(req, res) {
 
     // 🔥 COOKIE FIX (GANZ WICHTIG)
     res.setHeader("Set-Cookie", [
-      `whop_access_token=${accessToken}; Path=/; HttpOnly; SameSite=Lax`,
-      `bp_email=${encodeURIComponent(email)}; Path=/; SameSite=Lax`
-    ]);
+  `whop_access_token=${accessToken}; Path=/; HttpOnly; Secure; SameSite=None`,
+  `bp_email=${encodeURIComponent(email)}; Path=/; Secure; SameSite=None`
+]);
 
     return res.redirect("/");
 
