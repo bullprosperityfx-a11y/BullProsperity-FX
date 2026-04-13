@@ -1,6 +1,6 @@
 export default async function handler(req, res) {
   try {
-    const { code } = req.query;
+    const { code, state } = req.query;
 
     if (!code) {
       return res.redirect("/?error=no_code");
@@ -13,10 +13,15 @@ export default async function handler(req, res) {
       return match ? decodeURIComponent(match[1]) : "";
     };
 
+    const storedState = getCookie("whop_state");
     const codeVerifier = getCookie("whop_verifier");
 
+    if (!storedState || !state || storedState !== state) {
+      return res.redirect("/?error=invalid_state");
+    }
+
     if (!codeVerifier) {
-      return res.redirect("/api/whop/login");
+      return res.redirect("/?error=no_verifier");
     }
 
     const tokenRes = await fetch("https://api.whop.com/oauth/token", {
@@ -37,6 +42,7 @@ export default async function handler(req, res) {
     const tokenData = await tokenRes.json();
 
     if (!tokenData.access_token) {
+      console.error("NO TOKEN:", tokenData);
       return res.redirect("/?error=no_token");
     }
 
@@ -57,8 +63,10 @@ export default async function handler(req, res) {
       "";
 
     res.setHeader("Set-Cookie", [
-      `whop_access_token=${accessToken}; Path=/; HttpOnly; Secure; SameSite=None`,
-      `bp_email=${encodeURIComponent(email)}; Path=/; Secure; SameSite=None`
+      `whop_access_token=${encodeURIComponent(accessToken)}; Path=/; HttpOnly; Secure; SameSite=Lax`,
+      `bp_email=${encodeURIComponent(email)}; Path=/; Secure; SameSite=Lax`,
+      `whop_state=; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=0`,
+      `whop_verifier=; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=0`
     ]);
 
     return res.redirect("/");
