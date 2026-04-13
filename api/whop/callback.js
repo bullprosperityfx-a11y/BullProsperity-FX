@@ -1,6 +1,6 @@
 export default async function handler(req, res) {
   try {
-    const { code } = req.query;
+    const { code, state } = req.query;
 
     if (!code) {
       return res.redirect("/?error=no_code");
@@ -13,14 +13,15 @@ export default async function handler(req, res) {
       return match ? decodeURIComponent(match[1]) : "";
     };
 
-    const codeVerifier = getCookie("whop_verifier");
+    const verifier = getCookie("whop_verifier");
+    const savedState = getCookie("whop_state");
 
-    if (!codeVerifier) {
-      console.log("NO VERIFIER");
-      return res.redirect("/api/whop/login");
+    // 🔴 STATE CHECK (wichtig!)
+    if (state !== savedState) {
+      return res.redirect("/?error=state_invalid");
     }
 
-    // 🔥 TOKEN HOLEN
+    // 🔥 TOKEN
     const tokenRes = await fetch("https://api.whop.com/oauth/token", {
       method: "POST",
       headers: {
@@ -32,13 +33,11 @@ export default async function handler(req, res) {
         client_id: process.env.WHOP_CLIENT_ID,
         client_secret: process.env.WHOP_CLIENT_SECRET,
         redirect_uri: process.env.WHOP_REDIRECT_URI,
-        code_verifier: codeVerifier
+        code_verifier: verifier
       })
     });
 
     const tokenData = await tokenRes.json();
-
-    console.log("TOKEN:", tokenData);
 
     if (!tokenData.access_token) {
       return res.redirect("/?error=no_token");
@@ -46,7 +45,7 @@ export default async function handler(req, res) {
 
     const accessToken = tokenData.access_token;
 
-    // 🔥 USER DATEN HOLEN
+    // 👤 USER
     const meRes = await fetch("https://api.whop.com/api/v1/me", {
       headers: {
         Authorization: `Bearer ${accessToken}`
@@ -55,24 +54,22 @@ export default async function handler(req, res) {
 
     const meData = await meRes.json();
 
-    console.log("USER:", meData);
-
     const email =
       meData?.email ||
       meData?.user?.email ||
       meData?.data?.email ||
       "";
 
-    // 🔥 COOKIE FIX (GANZ WICHTIG)
+    // 🍪 FINAL COOKIES
     res.setHeader("Set-Cookie", [
-  `whop_access_token=${accessToken}; Path=/; HttpOnly; Secure; SameSite=None`,
-  `bp_email=${encodeURIComponent(email)}; Path=/; Secure; SameSite=None`
-]);
+      `whop_access_token=${accessToken}; Path=/; HttpOnly; Secure; SameSite=None`,
+      `bp_email=${encodeURIComponent(email)}; Path=/; Secure; SameSite=None`
+    ]);
 
-    return res.redirect("/");
+    return res.redirect("/hub.html");
 
   } catch (err) {
-    console.error("CALLBACK ERROR:", err);
+    console.error(err);
     return res.redirect("/?error=callback_failed");
   }
 }
