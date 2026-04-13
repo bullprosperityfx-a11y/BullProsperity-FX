@@ -1,6 +1,6 @@
 export default async function handler(req, res) {
   try {
-    const { code, state } = req.query;
+    const { code } = req.query;
 
     if (!code) {
       return res.redirect("/?error=no_code");
@@ -13,17 +13,14 @@ export default async function handler(req, res) {
       return match ? decodeURIComponent(match[1]) : "";
     };
 
-    const storedState = getCookie("whop_state");
     const codeVerifier = getCookie("whop_verifier");
 
-    if (!storedState || !state || storedState !== state) {
-      return res.redirect("/?error=invalid_state");
-    }
-
     if (!codeVerifier) {
-      return res.redirect("/?error=no_verifier");
+      console.log("NO VERIFIER");
+      return res.redirect("/api/whop/login");
     }
 
+    // 🔥 TOKEN HOLEN
     const tokenRes = await fetch("https://api.whop.com/oauth/token", {
       method: "POST",
       headers: {
@@ -41,13 +38,15 @@ export default async function handler(req, res) {
 
     const tokenData = await tokenRes.json();
 
+    console.log("TOKEN:", tokenData);
+
     if (!tokenData.access_token) {
-      console.error("NO TOKEN:", tokenData);
       return res.redirect("/?error=no_token");
     }
 
     const accessToken = tokenData.access_token;
 
+    // 🔥 USER DATEN HOLEN
     const meRes = await fetch("https://api.whop.com/api/v1/me", {
       headers: {
         Authorization: `Bearer ${accessToken}`
@@ -56,17 +55,18 @@ export default async function handler(req, res) {
 
     const meData = await meRes.json();
 
+    console.log("USER:", meData);
+
     const email =
       meData?.email ||
       meData?.user?.email ||
       meData?.data?.email ||
       "";
 
+    // 🔥 COOKIE FIX (GANZ WICHTIG)
     res.setHeader("Set-Cookie", [
-      `whop_access_token=${encodeURIComponent(accessToken)}; Path=/; HttpOnly; Secure; SameSite=Lax`,
-      `bp_email=${encodeURIComponent(email)}; Path=/; Secure; SameSite=Lax`,
-      `whop_state=; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=0`,
-      `whop_verifier=; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=0`
+      `whop_access_token=${accessToken}; Path=/; HttpOnly; SameSite=Lax`,
+      `bp_email=${encodeURIComponent(email)}; Path=/; SameSite=Lax`
     ]);
 
     return res.redirect("/");
