@@ -9,13 +9,22 @@ export default async function handler(req, res) {
 
     const normalizeEmail = (value) => (value || "").trim().toLowerCase();
 
-    const adminEmail = "bullprosperityfx@gmail.com";
+    const ADMIN_EMAILS = [
+      "bullprosperityfx@gmail.com"
+    ];
 
-    let email = normalizeEmail(getCookie("bp_email"));
+    const email = normalizeEmail(getCookie("bp_email"));
     const accessToken = getCookie("whop_access_token");
 
-    // 🔥 ADMIN BYPASS
-    if (email === adminEmail) {
+    if (!email || !accessToken) {
+      return res.status(200).json({
+        ok: true,
+        role: "guest",
+        email: email || ""
+      });
+    }
+
+    if (ADMIN_EMAILS.includes(email)) {
       return res.status(200).json({
         ok: true,
         role: "admin",
@@ -23,43 +32,29 @@ export default async function handler(req, res) {
       });
     }
 
-    // ❌ nicht eingeloggt
-    if (!email) {
-      return res.status(200).json({
-        ok: true,
-        role: "guest"
-      });
-    }
-
-    // ❌ kein token
-    if (!accessToken) {
-      return res.status(200).json({
-        ok: true,
-        role: "guest",
-        email
-      });
-    }
-
     const productId = process.env.WHOP_PRODUCT_ID;
-
     let role = "guest";
 
     if (productId) {
-      const check = await fetch(
-        `https://api.whop.com/api/v1/me/access/${productId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`
+      try {
+        const check = await fetch(
+          `https://api.whop.com/api/v1/me/access/${productId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${accessToken}`
+            }
+          }
+        );
+
+        if (check.ok) {
+          const data = await check.json();
+
+          if (data?.has_access === true || data?.status === "active") {
+            role = "premium";
           }
         }
-      );
-
-      if (check.ok) {
-        const data = await check.json();
-
-        if (data?.has_access === true || data?.status === "active") {
-          role = "premium";
-        }
+      } catch (e) {
+        console.error("WHOP ACCESS CHECK ERROR:", e);
       }
     }
 
@@ -70,11 +65,12 @@ export default async function handler(req, res) {
     });
 
   } catch (err) {
-    console.error("ACCESS ERROR:", err);
+    console.error("ACCESS API ERROR:", err);
 
     return res.status(200).json({
       ok: false,
-      role: "guest"
+      role: "guest",
+      email: ""
     });
   }
 }
