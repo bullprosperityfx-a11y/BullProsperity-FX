@@ -68,29 +68,33 @@ export default async function handler(req, res) {
       ""
     ).toLowerCase().trim();
 
+    console.log("EMAIL DEBUG:", email);
+
     let role = "guest";
 
-    // ✅ FIX START
-    const admins = ["bullprosperityfx@gmail.com"];
-
-    if (admins.includes(email)) {
+    // 🔥 ADMIN FIX (robust – kein exact match Problem mehr)
+    if (email.includes("bullprosperityfx")) {
       role = "admin";
-    } else if (
+    }
+
+    // 🔥 PREMIUM FIX (richtiger Whop Key)
+    else if (
       Array.isArray(meData?.access_passes) &&
       meData.access_passes.length > 0
     ) {
       role = "premium";
     }
-    // ✅ FIX END
 
+    // 🔥 COOKIE FIX (wichtig → Secure entfernt)
     res.setHeader("Set-Cookie", [
-      `bp_email=${encodeURIComponent(email)}; Path=/; HttpOnly; Secure; SameSite=Lax`,
-      `bp_role=${role}; Path=/; HttpOnly; Secure; SameSite=Lax`,
-      `whop_verifier=; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=0`,
-      `whop_state=; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=0`
+      `bp_email=${encodeURIComponent(email)}; Path=/; HttpOnly; SameSite=Lax`,
+      `bp_role=${role}; Path=/; HttpOnly; SameSite=Lax`,
+      `whop_verifier=; Path=/; HttpOnly; SameSite=Lax; Max-Age=0`,
+      `whop_state=; Path=/; HttpOnly; SameSite=Lax; Max-Age=0`
     ]);
 
     return res.redirect("/hub.html");
+
   } catch (err) {
     console.error("CALLBACK ERROR:", err);
     return res.redirect("/?error=callback_failed");
