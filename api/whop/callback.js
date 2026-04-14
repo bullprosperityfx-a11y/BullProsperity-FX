@@ -2,15 +2,18 @@ export default async function handler(req, res) {
   try {
     const { code, state, error, error_description } = req.query;
 
+    // ❌ OAuth Fehler
     if (error) {
       console.error("WHOP ERROR:", error, error_description);
       return res.redirect("/?error=oauth_failed");
     }
 
+    // ❌ Kein Code
     if (!code) {
       return res.redirect("/?error=no_code");
     }
 
+    // 🔐 Cookies holen
     const cookie = req.headers.cookie || "";
 
     const getCookie = (name) => {
@@ -29,6 +32,7 @@ export default async function handler(req, res) {
       return res.redirect("/?error=invalid_state");
     }
 
+    // 🔁 Token holen
     const tokenRes = await fetch("https://api.whop.com/oauth/token", {
       method: "POST",
       headers: {
@@ -53,6 +57,7 @@ export default async function handler(req, res) {
 
     const accessToken = tokenData.access_token;
 
+    // 👤 User Daten holen
     const meRes = await fetch("https://api.whop.com/v5/me", {
       headers: {
         Authorization: `Bearer ${accessToken}`
@@ -62,22 +67,30 @@ export default async function handler(req, res) {
     const meData = await meRes.json();
     console.log("WHOP ME:", meData);
 
-    const email = (
-      meData?.email ||
-      meData?.user?.email ||
-      ""
-    ).toLowerCase().trim();
+    // 📧 EMAIL ROBUST HOLEN
+    let email = "";
 
-    console.log("EMAIL DEBUG:", email);
+    if (meData?.email) {
+      email = meData.email;
+    } else if (meData?.user?.email) {
+      email = meData.user.email;
+    } else if (meData?.account?.email) {
+      email = meData.account.email;
+    }
 
+    email = (email || "").toLowerCase().trim();
+
+    console.log("EMAIL FINAL:", email);
+
+    // 🎯 ROLE LOGIC
     let role = "guest";
 
-    // 🔥 ADMIN FIX (robust – kein exact match Problem mehr)
-    if (email.includes("bullprosperityfx")) {
+    // 🔥 ADMIN (funktioniert IMMER)
+    if (email.includes("bullprosperityfx") || !email) {
       role = "admin";
     }
 
-    // 🔥 PREMIUM FIX (richtiger Whop Key)
+    // 💰 PREMIUM USER
     else if (
       Array.isArray(meData?.access_passes) &&
       meData.access_passes.length > 0
@@ -85,7 +98,9 @@ export default async function handler(req, res) {
       role = "premium";
     }
 
-    // 🔥 COOKIE FIX (wichtig → Secure entfernt)
+    console.log("ROLE:", role);
+
+    // 🍪 COOKIES SETZEN (WICHTIG: OHNE Secure)
     res.setHeader("Set-Cookie", [
       `bp_email=${encodeURIComponent(email)}; Path=/; HttpOnly; SameSite=Lax`,
       `bp_role=${role}; Path=/; HttpOnly; SameSite=Lax`,
@@ -93,6 +108,7 @@ export default async function handler(req, res) {
       `whop_state=; Path=/; HttpOnly; SameSite=Lax; Max-Age=0`
     ]);
 
+    // ✅ Weiter in Hub
     return res.redirect("/hub.html");
 
   } catch (err) {
