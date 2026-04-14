@@ -1,15 +1,7 @@
 export default function handler(req, res) {
-  const clientId = process.env.WHOP_CLIENT_ID;
-  const redirectUri = process.env.WHOP_REDIRECT_URI;
-
-  const url =
-    "https://api.whop.com/oauth/authorize?" +
-    new URLSearchParams({
-      response_type: "code",
-      client_id: clientId,
-      redirect_uri: redirectUri,
-      scope: "openid email"
-    }).toString();
+  const url = "https://api.whop.com/oauth/authorize?response_type=code"
+    + "&client_id=" + process.env.WHOP_CLIENT_ID
+    + "&redirect_uri=" + process.env.WHOP_REDIRECT_URI;
 
   res.redirect(url);
 }
