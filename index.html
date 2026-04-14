@@ -48,9 +48,8 @@
           die elegant, modern und wie eine echte Premium-Brand aufgebaut ist.
         </p>
 
-        <!-- 🔥 WICHTIG: SMART BUTTON -->
         <div class="hero-buttons">
-          <a href="#" class="btn primary smart-btn">Jetzt starten</a>
+          <a href="/api/whop/login" class="btn primary">Jetzt starten</a>
           <a href="#zugang" class="btn secondary">Mehr erfahren</a>
         </div>
 
@@ -91,49 +90,5 @@
     </div>
 
   </div>
-
-  <!-- 🔥 LOGIN FLOW SCRIPT -->
-  <script>
-    document.addEventListener("DOMContentLoaded", () => {
-
-      const btn = document.querySelector(".smart-btn");
-
-      btn.addEventListener("click", async (e) => {
-        e.preventDefault();
-
-        try {
-          const res = await fetch("/api/access", {
-            credentials: "include"
-          });
-
-          const data = await res.json();
-          console.log("ACCESS:", data);
-
-          // ❌ Nicht eingeloggt
-          if (!data || data.role === "guest") {
-            window.location.href = "/api/whop/login";
-            return;
-          }
-
-          // ❌ Kein Premium
-          if (data.role !== "admin" && data.role !== "premium") {
-            window.location.href = "/locked.html";
-            return;
-          }
-
-          // ✅ Admin / Premium
-          window.location.href = "/hub.html";
-
-        } catch (err) {
-          console.log("ERROR:", err);
-
-          // fallback
-          window.location.href = "/api/whop/login";
-        }
-      });
-
-    });
-  </script>
-
 </body>
 </html>
