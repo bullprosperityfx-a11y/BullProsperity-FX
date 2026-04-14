@@ -14,21 +14,21 @@ export default async function handler(req, res) {
       body: new URLSearchParams({
         grant_type: "authorization_code",
         code,
-        redirect_uri: process.env.WHOP_REDIRECT_URI,
         client_id: process.env.WHOP_CLIENT_ID,
-        client_secret: process.env.WHOP_CLIENT_SECRET
+        client_secret: process.env.WHOP_CLIENT_SECRET,
+        redirect_uri: process.env.WHOP_REDIRECT_URI
       })
     });
 
     const tokenData = await tokenRes.json();
 
     if (!tokenData.access_token) {
-      console.error("TOKEN ERROR:", tokenData);
       return res.redirect("/");
     }
 
     const accessToken = tokenData.access_token;
 
+    // 👉 DIESE URL HAT BEI DIR FUNKTIONIERT
     const meRes = await fetch("https://api.whop.com/v5/me", {
       headers: {
         Authorization: `Bearer ${accessToken}`
@@ -36,17 +36,14 @@ export default async function handler(req, res) {
     });
 
     const meData = await meRes.json();
-    console.log("WHOP ME:", meData);
 
-    const email = (meData?.email || meData?.user?.email || "").toLowerCase().trim();
+    const email =
+      meData?.email ||
+      meData?.user?.email ||
+      "";
 
-    let role = "guest";
-
-    if (email === "bullprosperityfx@gmail.com") {
-      role = "admin";
-    } else if (Array.isArray(meData?.memberships) && meData.memberships.length > 0) {
-      role = "premium";
-    }
+    // 👉 HIER WAR DEIN "PREMIUM" LOGIC
+    let role = "premium";
 
     res.setHeader("Set-Cookie", [
       `bp_email=${encodeURIComponent(email)}; Path=/; HttpOnly; SameSite=Lax`,
@@ -54,8 +51,9 @@ export default async function handler(req, res) {
     ]);
 
     return res.redirect("/hub.html");
+
   } catch (err) {
-    console.error("CALLBACK ERROR:", err);
+    console.error(err);
     return res.redirect("/");
   }
 }
