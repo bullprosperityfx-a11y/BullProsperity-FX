@@ -1,8 +1,8 @@
 export default function handler(req, res) {
   const clientId = process.env.WHOP_CLIENT_ID;
-  const redirectUri = process.env.WHOP_REDIRECT_URI;
 
-  const state = Math.random().toString(36).substring(2);
+  const redirectUri =
+    "https://bull-prosperity-fx.vercel.app/api/whop/callback";
 
   const url =
     "https://api.whop.com/oauth/authorize?" +
@@ -10,9 +10,8 @@ export default function handler(req, res) {
       response_type: "code",
       client_id: clientId,
       redirect_uri: redirectUri,
-      scope: "openid email",
-      state: state
+      scope: "openid email"
     }).toString();
 
-  return res.redirect(url);
+  res.redirect(url);
 }
