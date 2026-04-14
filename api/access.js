@@ -7,8 +7,8 @@ export default function handler(req, res) {
       .find((c) => c.startsWith(name + "="))
       ?.split("=")[1];
 
-  const email = getCookie("bp_email") || "";
-  const role = getCookie("bp_role") || "guest";
+  const email = decodeURIComponent(getCookie("bp_email") || "");
+  const role = decodeURIComponent(getCookie("bp_role") || "guest");
 
   return res.json({
     ok: true,
