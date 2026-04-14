@@ -70,11 +70,18 @@ export default async function handler(req, res) {
 
     let role = "guest";
 
-    if (email === "bullprosperityfx@gmail.com") {
+    // ✅ FIX START
+    const admins = ["bullprosperityfx@gmail.com"];
+
+    if (admins.includes(email)) {
       role = "admin";
-    } else if (Array.isArray(meData?.memberships) && meData.memberships.length > 0) {
+    } else if (
+      Array.isArray(meData?.access_passes) &&
+      meData.access_passes.length > 0
+    ) {
       role = "premium";
     }
+    // ✅ FIX END
 
     res.setHeader("Set-Cookie", [
       `bp_email=${encodeURIComponent(email)}; Path=/; HttpOnly; Secure; SameSite=Lax`,
