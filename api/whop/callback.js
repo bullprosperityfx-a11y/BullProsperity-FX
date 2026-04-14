@@ -43,28 +43,28 @@ export default async function handler(req, res) {
 
     const email = meData?.email || "";
 
-    // 🔥 ROLE SYSTEM (FINAL)
+    // 🔥 ROLE SYSTEM
     let role = "guest";
 
-    // 👉 ADMIN (DU)
+    // 👉 ADMIN (DEINE EMAIL EINTRAGEN!)
     if (email === "bullprosperityfx@gmail.com") {
       role = "admin";
     }
 
-    // 👉 PREMIUM (nur wenn Membership vorhanden)
+    // 👉 PREMIUM USER (nur bei Membership)
     else if (meData?.memberships && meData.memberships.length > 0) {
       role = "premium";
     }
 
-    // 👉 sonst bleibt guest
+    // 🔥 COOKIE FIX (HIER IST DER WICHTIGE TEIL)
+    const isProd = process.env.NODE_ENV === "production";
 
-    // 🔥 COOKIES SETZEN (WICHTIG!)
     res.setHeader("Set-Cookie", [
-      `bp_email=${email}; Path=/; HttpOnly; Secure; SameSite=None`,
-      `bp_role=${role}; Path=/; HttpOnly; Secure; SameSite=None`
+      `bp_email=${email}; Path=/; HttpOnly; ${isProd ? "Secure;" : ""} SameSite=Lax`,
+      `bp_role=${role}; Path=/; HttpOnly; ${isProd ? "Secure;" : ""} SameSite=Lax`
     ]);
 
-    // 🔥 REDIRECT ZUR STARTSEITE
+    // 🔥 ZURÜCK ZUR STARTSEITE
     return res.redirect("/");
 
   } catch (err) {
