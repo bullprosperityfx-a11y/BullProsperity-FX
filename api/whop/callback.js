@@ -41,7 +41,7 @@ export default async function handler(req, res) {
     const accessToken = tokenData.access_token;
 
     // 🔥 USER DATA
-    const meRes = await fetch("https://api.whop.com/api/v1/me", {
+    const meRes = await fetch("https://api.whop.com/v5/me", {
       headers: {
         Authorization: `Bearer ${accessToken}`
       }
