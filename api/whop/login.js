@@ -1,3 +1,5 @@
+import crypto from "crypto";
+
 export default function handler(req, res) {
   try {
     const clientId = process.env.WHOP_CLIENT_ID;
@@ -7,15 +9,40 @@ export default function handler(req, res) {
       return res.status(500).send("ENV FEHLT");
     }
 
+    const codeVerifier = crypto.randomBytes(32).toString("hex");
+
+    const codeChallenge = crypto
+      .createHash("sha256")
+      .update(codeVerifier)
+      .digest("base64")
+      .replace(/\+/g, "-")
+      .replace(/\//g, "_")
+      .replace(/=+$/, "");
+
+    const state = crypto.randomBytes(16).toString("hex");
+    const nonce = crypto.randomBytes(16).toString("hex");
+
+    res.setHeader("Set-Cookie", [
+      `whop_verifier=${codeVerifier}; Path=/; HttpOnly; Secure; SameSite=Lax`,
+      `whop_state=${state}; Path=/; HttpOnly; Secure; SameSite=Lax`
+    ]);
+
     const url =
-      "https://api.whop.com/oauth/authorize" +
-      "?response_type=code" +
-      "&client_id=" + encodeURIComponent(clientId) +
-      "&redirect_uri=" + encodeURIComponent(redirectUri);
+      "https://api.whop.com/oauth/authorize?" +
+      new URLSearchParams({
+        response_type: "code",
+        client_id: clientId,
+        redirect_uri: redirectUri,
+        scope: "openid email",
+        state,
+        nonce,
+        code_challenge: codeChallenge,
+        code_challenge_method: "S256"
+      }).toString();
 
     return res.redirect(url);
-
   } catch (err) {
-    return res.status(500).send("ERROR: " + err.message);
+    console.error("LOGIN ERROR:", err);
+    return res.status(500).send("LOGIN CRASH: " + err.message);
   }
 }
