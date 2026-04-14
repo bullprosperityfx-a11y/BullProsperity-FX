@@ -2,152 +2,17 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>BullProsperity | Home</title>
+
   <link rel="stylesheet" href="theme.css" />
   <script src="/login.js" defer></script>
-
-  <style>
-    .hero-center{
-      text-align:center;
-      max-width:1100px;
-      margin:0 auto;
-    }
-
-    .hero-center .badge{
-      margin-left:auto;
-      margin-right:auto;
-    }
-
-    .hero-center .hero-title{
-      max-width:none;
-      margin-left:auto;
-      margin-right:auto;
-    }
-
-    .hero-center .hero-text{
-      max-width:900px;
-      margin-left:auto;
-      margin-right:auto;
-    }
-
-    .hero-center .hero-buttons{
-      justify-content:center;
-    }
-
-    .feature-grid{
-      display:grid;
-      grid-template-columns:repeat(3,1fr);
-      gap:18px;
-      margin-top:26px;
-    }
-
-    .feature-card{
-      border:1px solid var(--line);
-      border-radius:24px;
-      background:linear-gradient(180deg, rgba(28,28,28,0.88), rgba(14,14,14,0.94));
-      box-shadow:0 0 0 1px rgba(255,255,255,0.02) inset;
-      padding:26px 20px;
-      text-align:center;
-    }
-
-    .feature-card h3{
-      color:var(--gold);
-      font-size:22px;
-      font-weight:900;
-      margin-bottom:8px;
-    }
-
-    .feature-card p{
-      color:#efefef;
-      font-size:15px;
-      line-height:1.6;
-      font-weight:700;
-    }
-
-    .access-grid{
-      display:grid;
-      grid-template-columns:repeat(3,1fr);
-      gap:18px;
-      margin-top:20px;
-    }
-
-    .access-card{
-      border:1px solid var(--line);
-      border-radius:24px;
-      background:linear-gradient(180deg, rgba(28,28,28,0.88), rgba(14,14,14,0.94));
-      box-shadow:0 0 0 1px rgba(255,255,255,0.02) inset;
-      padding:24px;
-    }
-
-    .access-card h3{
-      font-size:22px;
-      line-height:1.15;
-      color:var(--gold);
-      margin-bottom:10px;
-      font-weight:900;
-    }
-
-    .access-card p{
-      color:#efefef;
-      font-size:15px;
-      line-height:1.6;
-      margin-bottom:18px;
-    }
-
-    .access-card .card-link{
-      margin-top:0;
-    }
-
-    .auth-box{
-      display:flex;
-      align-items:center;
-      gap:10px;
-      padding:8px 14px;
-      border-radius:999px;
-      background:rgba(255,255,255,0.04);
-      border:1px solid rgba(255,255,255,0.06);
-      font-size:13px;
-      font-weight:700;
-      white-space:nowrap;
-    }
-
-    .status-dot{
-      width:10px;
-      height:10px;
-      border-radius:50%;
-      background:#999;
-    }
-
-    .status-premium{
-      background:#00d26a;
-    }
-
-    .status-admin{
-      background:#ffd700;
-    }
-
-    .status-locked{
-      background:#ff4d4d;
-    }
-
-    @media(max-width:1200px){
-      .feature-grid,
-      .access-grid{
-        grid-template-columns:1fr;
-      }
-    }
-
-    @media(max-width:860px){
-      .auth-box{
-        margin-top:10px;
-      }
-    }
-  </style>
 </head>
+
 <body>
   <div class="page">
 
+    <!-- NAVBAR -->
     <nav class="navbar">
       <a href="index.html" class="logo">BullProsperity</a>
 
@@ -167,8 +32,10 @@
       </div>
     </nav>
 
+    <!-- HERO -->
     <section class="hero-shell">
       <div class="hero-center">
+
         <div class="badge">Pro Trading Education</div>
 
         <h1 class="hero-title">
@@ -181,140 +48,92 @@
           die elegant, modern und wie eine echte Premium-Brand aufgebaut ist.
         </p>
 
+        <!-- 🔥 WICHTIG: SMART BUTTON -->
         <div class="hero-buttons">
-         <a href="hub.html" class="btn primary">Jetzt starten</a>
+          <a href="#" class="btn primary smart-btn">Jetzt starten</a>
           <a href="#zugang" class="btn secondary">Mehr erfahren</a>
         </div>
 
-        <div class="feature-grid">
-          <div class="feature-card">
-            <h3>Kurs</h3>
-            <p>Strukturierte Lektionen, Module und professioneller Lernaufbau.</p>
-          </div>
-
-          <div class="feature-card">
-            <h3>Tools</h3>
-            <p>Lot Size Rechner, Journal, Checklisten und TradingView Integration.</p>
-          </div>
-
-          <div class="feature-card">
-            <h3>Premium</h3>
-            <p>Setup Room, Strategy Material und exklusive Mitgliederbereiche.</p>
-          </div>
-        </div>
       </div>
     </section>
 
+    <!-- ZUGANG -->
     <section id="zugang" class="section">
-      <h2 class="section-heading" style="text-align:center;">Dein Zugang bei BullProsperity</h2>
-      <p class="section-subtext" style="text-align:center; max-width:980px; margin-left:auto; margin-right:auto;">
-        Eine moderne Trading Education Plattform mit Kursbereich, Tools, exklusiven Setups
-        und strukturierten Mitgliederbereichen.
-      </p>
+      <h2 class="section-heading" style="text-align:center;">
+        Dein Zugang bei BullProsperity
+      </h2>
 
       <div class="access-grid">
+
         <div class="access-card">
           <h3>Course Bereich</h3>
-          <p>
-            Arbeite dich strukturiert durch alle Module – von den Grundlagen bis zur
-            BullProsperity SMC Strategie.
-          </p>
+          <p>Strukturierter Lernaufbau von Basics bis SMC Strategie.</p>
           <a href="course.html" class="card-link">Kurs öffnen</a>
         </div>
 
         <div class="access-card">
           <h3>Tools Bereich</h3>
-          <p>
-            Nutze Lot Size Rechner, Journal, Checkliste und TradingView für eine
-            saubere und professionelle Umsetzung.
-          </p>
+          <p>Lot Size Rechner, Journal & TradingView Integration.</p>
           <a href="tools.html" class="card-link">Tools öffnen</a>
         </div>
 
         <div class="access-card">
           <h3>Premium Bereiche</h3>
-          <p>
-            Greife auf Setup Room, Community und strategische Praxisbereiche zu,
-            um Theorie mit realer Anwendung zu verbinden.
-          </p>
+          <p>Setup Room, Community & echte Marktumsetzung.</p>
           <a href="hub.html" class="card-link">Zum Hub</a>
         </div>
-      </div>
-    </section>
 
-    <section class="section">
-      <div class="grid-2">
-        <div class="section-card">
-          <div class="badge">BullProsperity Fokus</div>
-          <h2 class="section-heading" style="font-size:36px; margin-bottom:10px;">
-            Warum diese Plattform?
-          </h2>
-          <p class="section-subtext" style="margin-bottom:0;">
-            BullProsperity verbindet Education, Struktur, Praxis und Community in einer Oberfläche,
-            die nicht nur gut aussieht, sondern logisch aufgebaut ist und Mitglieder durch einen
-            echten Lernprozess führt.
-          </p>
-        </div>
-
-        <div class="section-card">
-          <div class="badge">Dein Vorteil</div>
-          <div class="list-box">
-            <div class="list-item">Klare Module statt Informationschaos.</div>
-            <div class="list-item">Tools für Risiko, Journal und Umsetzung.</div>
-            <div class="list-item">Praxisbereiche für Setups und Marktideen.</div>
-            <div class="list-item">Premium Aufbau wie eine moderne Education Plattform.</div>
-          </div>
-        </div>
       </div>
     </section>
 
     <div class="footer-note">
-      BullProsperity dient ausschließlich Bildungs- und Informationszwecken und stellt keine Finanzberatung dar.
+      BullProsperity dient ausschließlich Bildungszwecken und stellt keine Finanzberatung dar.
     </div>
 
   </div>
-<script>
-document.addEventListener("DOMContentLoaded", () => {
 
-  const startBtn = document.querySelector(".smart-btn");
+  <!-- 🔥 LOGIN FLOW SCRIPT -->
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
 
-  if (!startBtn) return;
+      const btn = document.querySelector(".smart-btn");
 
-  startBtn.addEventListener("click", async (e) => {
-    e.preventDefault();
+      btn.addEventListener("click", async (e) => {
+        e.preventDefault();
 
-    try {
-      const res = await fetch("/api/access", {
-        credentials: "include"
+        try {
+          const res = await fetch("/api/access", {
+            credentials: "include"
+          });
+
+          const data = await res.json();
+          console.log("ACCESS:", data);
+
+          // ❌ Nicht eingeloggt
+          if (!data || data.role === "guest") {
+            window.location.href = "/api/whop/login";
+            return;
+          }
+
+          // ❌ Kein Premium
+          if (data.role !== "admin" && data.role !== "premium") {
+            window.location.href = "/locked.html";
+            return;
+          }
+
+          // ✅ Admin / Premium
+          window.location.href = "/hub.html";
+
+        } catch (err) {
+          console.log("ERROR:", err);
+
+          // fallback
+          window.location.href = "/api/whop/login";
+        }
       });
 
-      const data = await res.json();
-      console.log("ACCESS:", data);
+    });
+  </script>
 
-      // 🔴 NICHT eingeloggt
-      if (!data || data.role === "guest") {
-        window.location.href = "/api/whop/login";
-        return;
-      }
-
-      // 🟡 eingeloggt aber KEIN Premium
-      if (data.role !== "admin" && data.role !== "premium") {
-        window.location.href = "/locked.html";
-        return;
-      }
-
-      // 🟢 Admin / Premium
-      window.location.href = "/hub.html";
-
-    } catch (err) {
-      console.log("ERROR:", err);
-
-      // 🔥 FALLBACK → immer weiter
-      window.location.href = "/hub.html";
-    }
-  });
-
-});
-</script>
 </body>
 </html>
