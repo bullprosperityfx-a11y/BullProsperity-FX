@@ -1,6 +1,8 @@
 export default function handler(req, res) {
   const clientId = process.env.WHOP_CLIENT_ID;
-  const redirectUri = process.env.WHOP_REDIRECT_URI;
+
+  const redirectUri =
+    "https://bull-prosperity-fx.vercel.app/api/whop/callback";
 
   const url =
     "https://api.whop.com/oauth/authorize?" +
