@@ -15,22 +15,17 @@ export default async function handler(req, res) {
 
     const digest = await crypto.subtle.digest("SHA-256", data);
 
-    const codeChallenge = btoa(
-      String.fromCharCode(...new Uint8Array(digest))
-    )
+    const codeChallenge = Buffer.from(digest)
+      .toString("base64")
       .replace(/\+/g, "-")
       .replace(/\//g, "_")
       .replace(/=+$/, "");
 
     const state = randomString();
 
-    // 🔥 DAS FEHLTE
-    const nonce = randomString();
-
     res.setHeader("Set-Cookie", [
       `whop_verifier=${codeVerifier}; Path=/; HttpOnly; Secure; SameSite=None`,
-      `whop_state=${state}; Path=/; HttpOnly; Secure; SameSite=None`,
-      `whop_nonce=${nonce}; Path=/; HttpOnly; Secure; SameSite=None`
+      `whop_state=${state}; Path=/; HttpOnly; Secure; SameSite=None`
     ]);
 
     const url =
@@ -41,7 +36,6 @@ export default async function handler(req, res) {
         redirect_uri: redirectUri,
         scope: "openid email",
         state: state,
-        nonce: nonce, // 🔥 DAS IST DER FIX
         code_challenge: codeChallenge,
         code_challenge_method: "S256"
       }).toString();
