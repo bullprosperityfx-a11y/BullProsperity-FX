@@ -1,17 +1,9 @@
 export default async function handler(req, res) {
   try {
-    const { code, error, error_description, state } = req.query;
-
-    // 🔥 echten OAuth-Fehler sichtbar machen
-    if (error) {
-      const msg = encodeURIComponent(
-        `${error}${error_description ? `: ${error_description}` : ""}`
-      );
-      return res.redirect(`/?oauth_error=${msg}`);
-    }
+    const { code } = req.query;
 
     if (!code) {
-      return res.redirect("/?oauth_error=no_code_returned");
+      return res.redirect("/?error=no_code");
     }
 
     const cookie = req.headers.cookie || "";
@@ -21,17 +13,9 @@ export default async function handler(req, res) {
       return match ? decodeURIComponent(match[1]) : "";
     };
 
-    const verifier = getCookie("whop_verifier");
-    const savedState = getCookie("whop_state");
+    const codeVerifier = getCookie("whop_verifier");
 
-    if (!verifier) {
-      return res.redirect("/?oauth_error=no_verifier_cookie");
-    }
-
-    if (savedState && state && savedState !== state) {
-      return res.redirect("/?oauth_error=invalid_state");
-    }
-
+    // 🔥 TOKEN
     const tokenRes = await fetch("https://api.whop.com/oauth/token", {
       method: "POST",
       headers: {
@@ -43,22 +27,20 @@ export default async function handler(req, res) {
         client_id: process.env.WHOP_CLIENT_ID,
         client_secret: process.env.WHOP_CLIENT_SECRET,
         redirect_uri: process.env.WHOP_REDIRECT_URI,
-        code_verifier: verifier
+        code_verifier: codeVerifier
       })
     });
 
     const tokenData = await tokenRes.json();
 
     if (!tokenData.access_token) {
-      return res.redirect(
-        `/?oauth_error=${encodeURIComponent(
-          tokenData.error || "no_token"
-        )}`
-      );
+      console.log("TOKEN ERROR:", tokenData);
+      return res.redirect("/?error=no_token");
     }
 
     const accessToken = tokenData.access_token;
 
+    // 🔥 USER DATA
     const meRes = await fetch("https://api.whop.com/api/v1/me", {
       headers: {
         Authorization: `Bearer ${accessToken}`
@@ -67,22 +49,35 @@ export default async function handler(req, res) {
 
     const meData = await meRes.json();
 
-    const email =
-      meData?.email ||
-      meData?.user?.email ||
-      meData?.data?.email ||
-      "";
+    console.log("WHOP ME:", JSON.stringify(meData, null, 2));
 
+    // 🔥 FIX: EMAIL RICHTIG AUSLESEN
+    let email = "";
+
+    if (meData?.email) email = meData.email;
+    else if (meData?.user?.email) email = meData.user.email;
+    else if (meData?.data?.user?.email) email = meData.data.user.email;
+
+    // 🔥 FALLBACK (WICHTIG!)
+    if (!email && meData?.id_token) {
+      const payload = JSON.parse(
+        Buffer.from(meData.id_token.split(".")[1], "base64").toString()
+      );
+      email = payload.email || "";
+    }
+
+    console.log("FINAL EMAIL:", email);
+
+    // 🍪 COOKIE
     res.setHeader("Set-Cookie", [
-      `whop_access_token=${encodeURIComponent(accessToken)}; Path=/; HttpOnly; Secure; SameSite=None`,
-      `bp_email=${encodeURIComponent(email)}; Path=/; Secure; SameSite=None`,
-      `whop_verifier=; Path=/; HttpOnly; Secure; SameSite=None; Max-Age=0`,
-      `whop_state=; Path=/; HttpOnly; Secure; SameSite=None; Max-Age=0`
+      `whop_access_token=${accessToken}; Path=/; HttpOnly; Secure; SameSite=None`,
+      `bp_email=${encodeURIComponent(email)}; Path=/; Secure; SameSite=None`
     ]);
 
-    return res.redirect("/");
+    return res.redirect("/hub.html");
+
   } catch (err) {
     console.error("CALLBACK ERROR:", err);
-    return res.redirect("/?oauth_error=callback_failed");
+    return res.redirect("/?error=callback_failed");
   }
 }
