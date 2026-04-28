@@ -2,72 +2,33 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>BullProsperity | Lesson</title>
-  <link rel="stylesheet" href="theme.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>BullProsperity | Lesson 1</title>
+
+  <link rel="stylesheet" href="theme.css"/>
   <script src="/login.js" defer></script>
 
+  <!-- ACCESS CHECK -->
   <script>
     (async () => {
       try {
-        const res = await fetch("/api/access", {
-          credentials: "include"
-        });
+        const res = await fetch("/api/access", { credentials: "include" });
         const data = await res.json();
 
         if (data.role !== "admin" && data.role !== "premium") {
           window.location.href = "locked.html";
         }
-      } catch (err) {
+      } catch {
         window.location.href = "locked.html";
       }
     })();
   </script>
-
-  <style>
-    .lesson-video-wrap{
-      border:1px solid var(--line);
-      border-radius:22px;
-      overflow:hidden;
-      background:#0c0c0c;
-      max-width:900px;
-      margin:18px auto 0;
-      position:relative;
-      padding-top:56.25%;
-    }
-
-    .lesson-video-wrap iframe{
-      position:absolute;
-      top:0;
-      left:0;
-      width:100%;
-      height:100%;
-      border:none;
-    }
-
-    .video-placeholder{
-      display:flex;
-      flex-direction:column;
-      align-items:center;
-      justify-content:center;
-      height:420px;
-      color:#999;
-      font-size:17px;
-      text-align:center;
-      background:#0c0c0c;
-      gap:10px;
-      padding:24px;
-    }
-
-    .video-placeholder .icon{
-      font-size:30px;
-    }
-  </style>
 </head>
 
 <body data-protected="true">
 <div class="page">
 
+  <!-- NAV -->
   <nav class="navbar">
     <a href="index.html" class="logo">BullProsperity | Course</a>
 
@@ -82,57 +43,123 @@
     </div>
   </nav>
 
-  <section class="lesson-main">
+  <!-- MAIN -->
+  <section class="lesson-layout">
 
-    <div class="lesson-main-card">
+    <!-- SIDEBAR -->
+    <aside class="lesson-sidebar">
 
-      <h2 id="lessonTitle">Lesson Titel</h2>
-      <p id="lessonDescription">Lesson Beschreibung</p>
+      <div class="lesson-subtitle">Education Platform.</div>
 
-      <!-- VIDEO -->
-      <div class="lesson-video-wrap" id="videoArea"></div>
+      <div class="progress-head">
+        <span>Gesamtfortschritt</span>
+        <span>3%</span>
+      </div>
+
+      <div class="progress-bar">
+        <div class="progress-fill" style="width:3%"></div>
+      </div>
+
+      <!-- MODULE LIST -->
+      <div class="lesson-scroll">
+
+        <div class="module">
+          <div class="module-header">
+            <div class="module-title">Modul 1 — Einführung</div>
+            <div class="module-count">4 Lektionen</div>
+          </div>
+
+          <a href="lesson1.html" class="lesson active">Lesson 1 — Willkommen</a>
+          <a href="lesson2.html" class="lesson">Lesson 2 — Plattform nutzen</a>
+          <a href="lesson3.html" class="lesson">Lesson 3 — Risiko Hinweis</a>
+          <a href="lesson4.html" class="lesson">Lesson 4 — Warum Trader scheitern</a>
+        </div>
+
+      </div>
+    </aside>
+
+    <!-- CONTENT -->
+    <div class="lesson-main">
+
+      <div class="lesson-main-card">
+
+        <!-- TOP BUTTONS -->
+        <div class="button-row" style="justify-content:flex-end; margin-bottom:18px;">
+          <a href="course.html" class="btn secondary">Zurück zum Kurs</a>
+          <a href="lesson2.html" class="btn primary">Nächste Lektion</a>
+        </div>
+
+        <div class="badge">Pflichtlektion • Lesson 1</div>
+
+        <h2 class="section-heading" style="font-size:36px;">
+          Willkommen bei BullProsperity
+        </h2>
+
+        <p class="section-subtext">
+          In dieser ersten Lektion bekommst du einen klaren Überblick über BullProsperity,
+          den Aufbau der Education und wie du diese Plattform richtig nutzt, um echten Fortschritt zu machen.
+        </p>
+
+        <!-- VIDEO (GLEICHES DESIGN WIE ALLE LESSONS) -->
+        <div class="lesson-video-wrap">
+          <iframe
+            src="https://player.vimeo.com/video/1187000803?badge=0&autopause=0"
+            allow="autoplay; fullscreen; picture-in-picture"
+            allowfullscreen>
+          </iframe>
+        </div>
+
+      </div>
+
+      <!-- GRID -->
+      <div class="grid-2">
+
+        <div class="section-card">
+          <div class="badge">Was du lernst</div>
+
+          <div class="list-box">
+            <div class="list-item">Wie BullProsperity aufgebaut ist</div>
+            <div class="list-item">Wie du den Kurs strukturiert nutzt</div>
+            <div class="list-item">Warum Wiederholung entscheidend ist</div>
+            <div class="list-item">Wie du Theorie in Praxis umsetzt</div>
+          </div>
+        </div>
+
+        <div class="section-card">
+          <div class="badge">Lesson Fokus</div>
+
+          <h2 class="section-heading" style="font-size:28px;">
+            Dein Start auf der Plattform
+          </h2>
+
+          <p class="section-subtext">
+            Diese Lektion gibt dir die Grundlage, damit du nicht nur Inhalte konsumierst,
+            sondern BullProsperity strategisch nutzt und echte Fortschritte machst.
+          </p>
+        </div>
+
+      </div>
+
+      <!-- NOTES -->
+      <div class="section-card">
+        <div class="badge">Deine Notizen</div>
+
+        <textarea class="notes-box" placeholder="Schreibe hier deine Notizen..."></textarea>
+
+        <div class="lesson-nav">
+          <a href="course.html" class="btn secondary">Zurück</a>
+          <a href="lesson2.html" class="btn primary">Weiter zu Lesson 2</a>
+        </div>
+      </div>
 
     </div>
 
   </section>
 
+  <div class="footer-note">
+    BullProsperity dient ausschließlich Bildungs- und Informationszwecken und stellt keine Finanzberatung dar.
+  </div>
+
 </div>
-
-<script>
-const lessons = {
-  6: {
-    title: "Warum Retail Trader verlieren",
-    description: "Diese Lektion zeigt dir die typischen Fehler der meisten Trader.",
-    videoId: "1187000803"
-  }
-};
-
-const match = window.location.pathname.match(/lesson(\d+)\.html/i);
-const lessonNumber = match ? parseInt(match[1], 10) : 6;
-const lesson = lessons[lessonNumber] || lessons[6];
-
-document.getElementById("lessonTitle").textContent = lesson.title;
-document.getElementById("lessonDescription").textContent = lesson.description;
-
-const videoArea = document.getElementById("videoArea");
-
-if (lesson.videoId) {
-  videoArea.innerHTML = `
-    <iframe
-      src="https://player.vimeo.com/video/${lesson.videoId}?badge=0&autopause=0"
-      allow="autoplay; fullscreen; picture-in-picture"
-      allowfullscreen>
-    </iframe>
-  `;
-} else {
-  videoArea.innerHTML = `
-    <div class="video-placeholder">
-      <div class="icon">🎬</div>
-      <div>Video wird bald freigeschaltet</div>
-    </div>
-  `;
-}
-</script>
-
 </body>
 </html>
