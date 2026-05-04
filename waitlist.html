@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>BullProsperity | Private Waitlist</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Inter, Arial, sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at top, rgba(212,175,55,0.18), transparent 35%),
+        linear-gradient(135deg, #050505, #0d0d0d 45%, #020202);
+      color: #fff;
+      overflow-x: hidden;
+    }
+
+    .page {
+      min-height: 100vh;
+    }
+
+    .navbar {
+      padding: 24px 7%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      color: #d4af37;
+      font-size: 22px;
+      font-weight: 900;
+      letter-spacing: 0.5px;
+      text-decoration: none;
+    }
+
+    .nav-btn {
+      text-decoration: none;
+      color: #111;
+      background: linear-gradient(135deg, #f7d46b, #b8860b);
+      padding: 12px 22px;
+      border-radius: 999px;
+      font-weight: 900;
+      box-shadow: 0 0 25px rgba(212,175,55,0.25);
+    }
+
+    .hero {
+      min-height: calc(100vh - 90px);
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 50px;
+      align-items: center;
+      padding: 50px 7% 90px;
+    }
+
+    .badge {
+      display: inline-flex;
+      padding: 10px 16px;
+      border-radius: 999px;
+      color: #d4af37;
+      background: rgba(212,175,55,0.08);
+      border: 1px solid rgba(212,175,55,0.3);
+      font-size: 13px;
+      font-weight: 800;
+      margin-bottom: 24px;
+    }
+
+    h1 {
+      font-size: clamp(42px, 7vw, 82px);
+      line-height: 0.95;
+      letter-spacing: -2px;
+      margin-bottom: 24px;
+    }
+
+    h1 span {
+      color: #d4af37;
+    }
+
+    .subtitle {
+      max-width: 650px;
+      color: #cfcfcf;
+      font-size: 18px;
+      line-height: 1.7;
+      margin-bottom: 34px;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 34px;
+    }
+
+    .primary-btn,
+    .secondary-btn {
+      padding: 15px 26px;
+      border-radius: 999px;
+      text-decoration: none;
+      font-weight: 900;
+      font-size: 15px;
+      cursor: pointer;
+    }
+
+    .primary-btn {
+      background: linear-gradient(135deg, #f7d46b, #b8860b);
+      color: #111;
+      box-shadow: 0 0 35px rgba(212,175,55,0.32);
+    }
+
+    .secondary-btn {
+      color: #fff;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.14);
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      max-width: 650px;
+    }
+
+    .stat {
+      padding: 18px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.045);
+      border: 1px solid rgba(255,255,255,0.09);
+    }
+
+    .stat strong {
+      display: block;
+      color: #d4af37;
+      font-size: 22px;
+      margin-bottom: 6px;
+    }
+
+    .stat small {
+      color: #aaa;
+    }
+
+    .waitlist-card {
+      border-radius: 30px;
+      padding: 34px;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.09), rgba(255,255,255,0.03)),
+        #080808;
+      border: 1px solid rgba(212,175,55,0.22);
+      box-shadow: 0 30px 80px rgba(0,0,0,0.65);
+    }
+
+    .video-box {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      border-radius: 22px;
+      background:
+        linear-gradient(135deg, rgba(212,175,55,0.2), rgba(255,255,255,0.04));
+      border: 1px solid rgba(212,175,55,0.25);
+      margin-bottom: 28px;
+      display: grid;
+      place-items: center;
+      color: #d4af37;
+      font-size: 44px;
+    }
+
+    .waitlist-card h2 {
+      font-size: 30px;
+      margin-bottom: 12px;
+    }
+
+    .waitlist-card p {
+      color: #bdbdbd;
+      line-height: 1.7;
+      margin-bottom: 24px;
+    }
+
+    form {
+      display: grid;
+      gap: 14px;
+    }
+
+    input,
+    textarea,
+    select {
+      width: 100%;
+      padding: 15px 16px;
+      border-radius: 14px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.12);
+      color: #fff;
+      outline: none;
+      font-size: 15px;
+    }
+
+    input::placeholder,
+    textarea::placeholder {
+      color: #858585;
+    }
+
+    textarea {
+      min-height: 110px;
+      resize: vertical;
+    }
+
+    select {
+      color: #aaa;
+    }
+
+    option {
+      background: #080808;
+      color: #fff;
+    }
+
+    .submit-btn {
+      margin-top: 8px;
+      padding: 16px;
+      border-radius: 16px;
+      border: none;
+      cursor: pointer;
+      background: linear-gradient(135deg, #f7d46b, #b8860b);
+      color: #111;
+      font-weight: 900;
+      font-size: 16px;
+    }
+
+    .submit-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .success {
+      display: none;
+      margin-top: 18px;
+      padding: 15px;
+      border-radius: 14px;
+      background: rgba(47, 255, 123, 0.08);
+      border: 1px solid rgba(47, 255, 123, 0.25);
+      color: #8dffb2;
+      font-weight: 800;
+      line-height: 1.5;
+    }
+
+    .error {
+      display: none;
+      margin-top: 18px;
+      padding: 15px;
+      border-radius: 14px;
+      background: rgba(255, 80, 80, 0.08);
+      border: 1px solid rgba(255, 80, 80, 0.25);
+      color: #ff9b9b;
+      font-weight: 800;
+      line-height: 1.5;
+    }
+
+    .section {
+      padding: 90px 7%;
+    }
+
+    .section-title {
+      text-align: center;
+      max-width: 800px;
+      margin: 0 auto 50px;
+    }
+
+    .section-title h2 {
+      font-size: clamp(32px, 5vw, 54px);
+      margin-bottom: 16px;
+    }
+
+    .section-title span {
+      color: #d4af37;
+    }
+
+    .section-title p {
+      color: #bdbdbd;
+      line-height: 1.7;
+    }
+
+    .features {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 18px;
+    }
+
+    .feature {
+      padding: 28px;
+      border-radius: 24px;
+      background: rgba(255,255,255,0.045);
+      border: 1px solid rgba(255,255,255,0.09);
+    }
+
+    .feature h3 {
+      color: #d4af37;
+      margin-bottom: 12px;
+      font-size: 18px;
+    }
+
+    .feature p {
+      color: #aaa;
+      line-height: 1.6;
+      font-size: 14px;
+    }
+
+    .quote {
+      margin-top: 70px;
+      padding: 42px;
+      border-radius: 30px;
+      background: linear-gradient(135deg, rgba(212,175,55,0.16), rgba(255,255,255,0.04));
+      border: 1px solid rgba(212,175,55,0.2);
+      text-align: center;
+    }
+
+    .quote h2 {
+      font-size: clamp(28px, 4vw, 48px);
+      margin-bottom: 16px;
+    }
+
+    .quote p {
+      color: #cfcfcf;
+      line-height: 1.7;
+    }
+
+    footer {
+      padding: 35px 7%;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      color: #888;
+      font-size: 13px;
+      text-align: center;
+      line-height: 1.6;
+    }
+
+    @media (max-width: 980px) {
+      .hero {
+        grid-template-columns: 1fr;
+      }
+
+      .features {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .stats {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .navbar {
+        padding: 20px;
+      }
+
+      .hero,
+      .section {
+        padding-left: 20px;
+        padding-right: 20px;
+      }
+
+      .features {
+        grid-template-columns: 1fr;
+      }
+
+      .waitlist-card {
+        padding: 24px;
+      }
+
+      .nav-btn {
+        display: none;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="page">
+
+    <nav class="navbar">
+      <a href="index.html" class="logo">BullProsperity</a>
+      <a href="#waitlist" class="nav-btn">Join Waitlist</a>
+    </nav>
+
+    <main class="hero">
+      <section>
+        <div class="badge">Private Trading Education Platform</div>
+
+        <h1>
+          Build Wealth <br>
+          <span>Within.</span>
+        </h1>
+
+        <p class="subtitle">
+          BullProsperity ist eine private Education Platform für Menschen,
+          die Trading strukturiert lernen möchten — mit Fokus auf Forex,
+          Crypto, Indizes, Rohstoffe, Smart Money Concepts und langfristiges Wachstum.
+        </p>
+
+        <div class="hero-actions">
+          <a href="#waitlist" class="primary-btn">Private Waitlist beitreten</a>
+          <a href="#benefits" class="secondary-btn">Mehr erfahren</a>
+        </div>
+
+        <div class="stats">
+          <div class="stat">
+            <strong>Private</strong>
+            <small>Kein öffentlicher Massen-Zugang</small>
+          </div>
+          <div class="stat">
+            <strong>SMC</strong>
+            <small>Strategie, Struktur & Marktverständnis</small>
+          </div>
+          <div class="stat">
+            <strong>Growth</strong>
+            <small>Trading, Mindset & Community</small>
+          </div>
+        </div>
+      </section>
+
+      <section class="waitlist-card" id="waitlist">
+        <div class="video-box">▶</div>
+
+        <h2>Bewirb dich für Early Access</h2>
+        <p>
+          Trage dich in die private Waitlist ein. Die ersten Mitglieder bekommen
+          bevorzugten Zugang, bevor BullProsperity offiziell öffnet.
+        </p>
+
+        <form id="waitlistForm">
+          <input type="text" id="name" name="name" placeholder="Dein Name" required />
+          <input type="email" id="email" name="email" placeholder="Deine E-Mail" required />
+
+          <select id="experience" name="experience" required>
+            <option value="">Trading Erfahrung auswählen</option>
+            <option value="Anfänger">Anfänger</option>
+            <option value="Fortgeschritten">Fortgeschritten</option>
+            <option value="Schon aktiv am Markt">Schon aktiv am Markt</option>
+          </select>
+
+          <textarea id="reason" name="reason" placeholder="Warum möchtest du BullProsperity beitreten?" required></textarea>
+
+          <button class="submit-btn" id="submitBtn" type="submit">Secure My Spot</button>
+
+          <div class="success" id="successMessage">
+            ✅ Deine Waitlist-Anfrage wurde erfolgreich gesendet. Be blessed.
+          </div>
+
+          <div class="error" id="errorMessage">
+            Es gab einen Fehler. Bitte versuche es später erneut.
+          </div>
+        </form>
+      </section>
+    </main>
+
+    <section class="section" id="benefits">
+      <div class="section-title">
+        <h2>Warum <span>BullProsperity?</span></h2>
+        <p>
+          Viele joinen wegen Trading — aber bleiben wegen Struktur, Disziplin,
+          Community und einem klaren Prozess.
+        </p>
+      </div>
+
+      <div class="features">
+        <div class="feature">
+          <h3>Marktanalysen</h3>
+          <p>Strukturierte Vorbereitung für Forex, Crypto, Indizes und Rohstoffe.</p>
+        </div>
+
+        <div class="feature">
+          <h3>SMC Education</h3>
+          <p>Smart Money Concepts verständlich erklärt: Liquidity, BOS, CHoCH, FVG und Orderblocks.</p>
+        </div>
+
+        <div class="feature">
+          <h3>Community</h3>
+          <p>Austausch, Motivation, Disziplin und gemeinsames Wachstum innerhalb einer privaten Gruppe.</p>
+        </div>
+
+        <div class="feature">
+          <h3>1:1 Support</h3>
+          <p>Persönliche Unterstützung, bessere Routine und klarere Entscheidungen im Lernprozess.</p>
+        </div>
+      </div>
+
+      <div class="quote">
+        <h2>Not everyone needs access. The right people do.</h2>
+        <p>
+          BullProsperity ist nicht für Menschen, die schnelle Ergebnisse ohne Arbeit suchen.
+          Es ist für Menschen, die Trading ernst nehmen und bereit sind, sich strukturiert weiterzuentwickeln.
+        </p>
+      </div>
+    </section>
+
+    <footer>
+      BullProsperity dient ausschließlich Bildungszwecken.
+      Keine Finanzberatung, keine Anlageberatung und keine Garantie auf Gewinne.
+      Trading ist mit Risiko verbunden.
+    </footer>
+  </div>
+
+  <script>
+    const form = document.getElementById("waitlistForm");
+    const submitBtn = document.getElementById("submitBtn");
+    const successMessage = document.getElementById("successMessage");
+    const errorMessage = document.getElementById("errorMessage");
+
+    form.addEventListener("submit", async function (e) {
+      e.preventDefault();
+
+      successMessage.style.display = "none";
+      errorMessage.style.display = "none";
+      submitBtn.disabled = true;
+      submitBtn.textContent = "Wird gesendet...";
+
+      const data = {
+        name: document.getElementById("name").value.trim(),
+        email: document.getElementById("email").value.trim(),
+        experience: document.getElementById("experience").value,
+        reason: document.getElementById("reason").value.trim()
+      };
+
+      try {
+        const res = await fetch("/api/waitlist", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(data)
+        });
+
+        const result = await res.json();
+
+        if (!res.ok) {
+          errorMessage.textContent = result.error || "Es gab einen Fehler. Bitte versuche es erneut.";
+          errorMessage.style.display = "block";
+          return;
+        }
+
+        successMessage.style.display = "block";
+        form.reset();
+
+      } catch (error) {
+        errorMessage.textContent = "Serverfehler. Bitte versuche es später erneut.";
+        errorMessage.style.display = "block";
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = "Secure My Spot";
+      }
+    });
+  </script>
+</body>
+</html>
