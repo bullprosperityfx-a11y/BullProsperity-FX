@@ -56,6 +56,10 @@
       color: #d8d8d8;
     }
 
+    .nav-links a:hover {
+      color: #ffd700;
+    }
+
     .status {
       padding: 10px 16px;
       border-radius: 999px;
@@ -138,6 +142,7 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
+      cursor: pointer;
     }
 
     .btn-primary {
@@ -201,44 +206,18 @@
     }
 
     input,
-select,
-textarea {
-  width: 100%;
-  padding: 15px 18px;
-  border-radius: 16px;
-  border: 1px solid rgba(212,175,55,0.22);
-  background: rgba(255,255,255,0.055);
-  color: #fff;
-  outline: none;
-  font-size: 14px;
-  font-weight: 700;
-}
-
-select {
-  height: 58px;
-  appearance: none;
-  -webkit-appearance: none;
-  color: #fff;
-  cursor: pointer;
-  background:
-    linear-gradient(45deg, transparent 50%, #d4af37 50%),
-    linear-gradient(135deg, #d4af37 50%, transparent 50%),
-    rgba(255,255,255,0.055);
-  background-position:
-    calc(100% - 22px) 50%,
-    calc(100% - 15px) 50%,
-    0 0;
-  background-size:
-    7px 7px,
-    7px 7px,
-    100% 100%;
-  background-repeat: no-repeat;
-}
-
-option {
-  background: #080808;
-  color: #fff;
-}
+    select,
+    textarea {
+      width: 100%;
+      padding: 15px 18px;
+      border-radius: 16px;
+      border: 1px solid rgba(212,175,55,0.22);
+      background: rgba(255,255,255,0.055);
+      color: #fff;
+      outline: none;
+      font-size: 14px;
+      font-weight: 700;
+    }
 
     input::placeholder,
     textarea::placeholder {
@@ -246,7 +225,24 @@ option {
     }
 
     select {
-      color: #aaa;
+      height: 58px;
+      appearance: none;
+      -webkit-appearance: none;
+      color: #fff;
+      cursor: pointer;
+      background:
+        linear-gradient(45deg, transparent 50%, #d4af37 50%),
+        linear-gradient(135deg, #d4af37 50%, transparent 50%),
+        rgba(255,255,255,0.055);
+      background-position:
+        calc(100% - 22px) 50%,
+        calc(100% - 15px) 50%,
+        0 0;
+      background-size:
+        7px 7px,
+        7px 7px,
+        100% 100%;
+      background-repeat: no-repeat;
     }
 
     option {
@@ -268,6 +264,11 @@ option {
       color: #111;
       font-weight: 900;
       font-size: 15px;
+    }
+
+    .submit:disabled {
+      opacity: 0.65;
+      cursor: not-allowed;
     }
 
     .success,
@@ -416,18 +417,16 @@ option {
 <body>
 
   <nav class="navbar">
-    <a href="index.html" class="logo">BullProsperity</a>
+    <a href="/" class="logo">BullProsperity</a>
 
     <div class="nav-links">
-      <a href="index.html">Home</a>
-      <a href="hub.html">Hub</a>
-      <a href="course.html">Course</a>
-      <a href="tools.html">Tools</a>
-      <a href="setup-room.html">Setup Room</a>
-      <a href="community.html">Community</a>
-      <a href="javascript:void(0)" onclick="document.getElementById('waitlist').scrollIntoView({ behavior: 'smooth' });" class="btn-primary">
-  Waitlist beitreten
-</a>
+      <a href="/">Home</a>
+      <a href="/hub">Hub</a>
+      <a href="/course">Course</a>
+      <a href="/tools">Tools</a>
+      <a href="/setup-room">Setup Room</a>
+      <a href="/community">Community</a>
+      <a href="/waitlist" class="status">Join Waitlist</a>
     </div>
   </nav>
 
@@ -450,8 +449,8 @@ option {
           </p>
 
           <div class="actions">
-            <a href="/waitlist" class="btn-primary">Waitlist beitreten</a>
-            <a href="/waitlist" class="btn-secondary">Mehr erfahren</a>
+            <a href="javascript:void(0)" onclick="scrollToWaitlist()" class="btn-primary">Waitlist beitreten</a>
+            <a href="javascript:void(0)" onclick="scrollToDetails()" class="btn-secondary">Mehr erfahren</a>
           </div>
         </div>
 
@@ -506,7 +505,7 @@ option {
           <button class="submit" id="submitBtn" type="submit">Secure My Spot</button>
 
           <div class="success" id="successMessage">
-            ✅ Deine Waitlist-Anfrage wurde erfolgreich gesendet. Be blessed.
+            ✅ Deine Waitlist-Anfrage wurde erfolgreich gesendet. Du wirst weitergeleitet.
           </div>
 
           <div class="error" id="errorMessage">
@@ -548,6 +547,20 @@ option {
   </main>
 
   <script>
+    function scrollToWaitlist() {
+      document.getElementById("waitlist").scrollIntoView({ behavior: "smooth" });
+      history.replaceState(null, "", "/waitlist");
+    }
+
+    function scrollToDetails() {
+      document.getElementById("details").scrollIntoView({ behavior: "smooth" });
+      history.replaceState(null, "", "/waitlist");
+    }
+
+    if (window.location.hash) {
+      history.replaceState(null, "", window.location.pathname);
+    }
+
     const form = document.getElementById("waitlistForm");
     const submitBtn = document.getElementById("submitBtn");
     const successMessage = document.getElementById("successMessage");
@@ -582,19 +595,24 @@ option {
         if (!response.ok) {
           errorMessage.textContent = result.error || "Es gab einen Fehler. Bitte versuche es erneut.";
           errorMessage.style.display = "block";
+          submitBtn.disabled = false;
+          submitBtn.textContent = "Secure My Spot";
           return;
         }
 
         successMessage.style.display = "block";
         form.reset();
 
+        setTimeout(function () {
+          window.location.href = "/thank-you";
+        }, 1200);
+
       } catch (error) {
         errorMessage.textContent = "Serverfehler. Bitte versuche es später erneut.";
         errorMessage.style.display = "block";
+        submitBtn.disabled = false;
+        submitBtn.textContent = "Secure My Spot";
       }
-
-      submitBtn.disabled = false;
-      submitBtn.textContent = "Secure My Spot";
     });
   </script>
 
