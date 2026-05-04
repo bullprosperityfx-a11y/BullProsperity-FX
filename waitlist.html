@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
   <title>BullProsperity | Waitlist</title>
 
   <style>
@@ -10,243 +11,212 @@
       margin: 0;
       padding: 0;
       box-sizing: border-box;
-      font-family: Arial, sans-serif;
+      font-family: Inter, Arial, sans-serif;
     }
 
     body {
-      background: #050505;
-      color: #ffffff;
       min-height: 100vh;
+      background:
+        radial-gradient(circle at top right, rgba(212,175,55,0.12), transparent 30%),
+        linear-gradient(180deg, #050505 0%, #080808 55%, #020202 100%);
+      color: #fff;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
     }
 
     .navbar {
-      height: 76px;
-      padding: 0 7%;
+      width: 100%;
+      padding: 26px 5%;
       display: flex;
       align-items: center;
       justify-content: space-between;
+      background: rgba(5,5,5,0.78);
       border-bottom: 1px solid rgba(255,255,255,0.08);
-      background: #070707;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      backdrop-filter: blur(16px);
     }
 
     .logo {
       color: #d4af37;
       font-size: 22px;
       font-weight: 900;
-      text-decoration: none;
     }
 
-    .nav-btn {
-      color: #d4af37;
-      text-decoration: none;
-      border: 1px solid rgba(212,175,55,0.35);
-      padding: 11px 18px;
-      border-radius: 999px;
+    .nav-links {
+      display: flex;
+      gap: 28px;
+      align-items: center;
+      font-size: 14px;
       font-weight: 800;
-      background: rgba(212,175,55,0.08);
+      color: #d8d8d8;
     }
 
-    .page {
-      display: grid;
-      grid-template-columns: 260px 1fr;
-      min-height: calc(100vh - 76px);
-    }
-
-    .sidebar {
-      border-right: 1px solid rgba(255,255,255,0.08);
-      padding: 28px 20px;
-      background: #080808;
-    }
-
-    .side-title {
-      color: #777;
-      font-size: 12px;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-      margin-bottom: 16px;
-    }
-
-    .side-card {
-      padding: 18px;
-      border-radius: 18px;
-      background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(255,255,255,0.08);
-      margin-bottom: 14px;
-    }
-
-    .side-card strong {
-      display: block;
+    .status {
+      padding: 10px 16px;
+      border-radius: 999px;
+      border: 1px solid rgba(212,175,55,0.35);
       color: #d4af37;
-      margin-bottom: 8px;
-    }
-
-    .side-card p {
-      color: #aaa;
+      background: rgba(212,175,55,0.08);
       font-size: 13px;
-      line-height: 1.6;
+      font-weight: 900;
     }
 
     .main {
-      padding: 44px 7%;
-      background:
-        radial-gradient(circle at top right, rgba(212,175,55,0.10), transparent 35%),
-        linear-gradient(180deg, #050505, #080808);
+      width: 90%;
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 42px 0 70px;
     }
 
-    .grid {
+    .hero {
+      border: 1px solid rgba(212,175,55,0.28);
+      border-radius: 30px;
+      padding: 42px;
+      background:
+        radial-gradient(circle at top right, rgba(212,175,55,0.12), transparent 35%),
+        linear-gradient(180deg, rgba(255,255,255,0.055), rgba(255,255,255,0.018));
+      box-shadow: 0 25px 80px rgba(0,0,0,0.55);
+      margin-bottom: 28px;
+    }
+
+    .hero-grid {
       display: grid;
       grid-template-columns: 1.05fr 0.95fr;
-      gap: 28px;
-      align-items: stretch;
-    }
-
-    .hero-card,
-    .form-card,
-    .feature,
-    .notice {
-      background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(255,255,255,0.09);
-      border-radius: 26px;
-      box-shadow: 0 25px 70px rgba(0,0,0,0.45);
-    }
-
-    .hero-card {
-      padding: 42px;
+      gap: 34px;
+      align-items: center;
     }
 
     .badge {
       display: inline-block;
-      color: #d4af37;
-      border: 1px solid rgba(212,175,55,0.35);
-      background: rgba(212,175,55,0.08);
-      padding: 9px 14px;
+      padding: 9px 15px;
       border-radius: 999px;
+      border: 1px solid rgba(212,175,55,0.4);
+      color: #d4af37;
+      background: rgba(212,175,55,0.08);
       font-size: 12px;
       font-weight: 900;
-      margin-bottom: 24px;
+      margin-bottom: 22px;
     }
 
     h1 {
-      font-size: clamp(42px, 6vw, 74px);
+      font-size: clamp(38px, 6vw, 72px);
       line-height: 0.95;
       letter-spacing: -2px;
-      margin-bottom: 24px;
+      margin-bottom: 22px;
     }
 
     h1 span {
-      color: #d4af37;
+      color: #ffd700;
     }
 
-    .hero-text {
-      color: #cfcfcf;
+    .hero p {
+      max-width: 760px;
+      color: #d6d6d6;
       line-height: 1.75;
-      font-size: 17px;
-      margin-bottom: 30px;
-      max-width: 660px;
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 28px;
     }
 
     .actions {
       display: flex;
       gap: 14px;
       flex-wrap: wrap;
-      margin-bottom: 32px;
     }
 
-    .primary,
-    .secondary {
+    .btn-primary,
+    .btn-secondary {
       padding: 14px 22px;
-      border-radius: 14px;
-      font-weight: 900;
-      text-decoration: none;
+      border-radius: 999px;
       font-size: 14px;
+      font-weight: 900;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
     }
 
-    .primary {
-      background: linear-gradient(135deg, #e6c65b, #9b7313);
+    .btn-primary {
+      background: linear-gradient(135deg, #ffe66d, #c99412);
       color: #111;
+      box-shadow: 0 0 25px rgba(212,175,55,0.24);
     }
 
-    .secondary {
+    .btn-secondary {
+      border: 1px solid rgba(212,175,55,0.35);
+      background: rgba(255,255,255,0.035);
       color: #fff;
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.10);
-    }
-
-    .mini-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 14px;
-    }
-
-    .mini-box {
-      padding: 18px;
-      border-radius: 18px;
-      background: rgba(0,0,0,0.25);
-      border: 1px solid rgba(255,255,255,0.08);
-    }
-
-    .mini-box strong {
-      display: block;
-      color: #d4af37;
-      margin-bottom: 6px;
-    }
-
-    .mini-box small {
-      color: #999;
-      line-height: 1.4;
-    }
-
-    .form-card {
-      padding: 28px;
     }
 
     .video-box {
       width: 100%;
       aspect-ratio: 16 / 9;
-      border-radius: 22px;
-      background: #0d0d0d;
-      border: 1px solid rgba(212,175,55,0.25);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #d4af37;
-      font-size: 38px;
-      margin-bottom: 24px;
+      border-radius: 24px;
+      border: 1px solid rgba(212,175,55,0.35);
+      background:
+        radial-gradient(circle at center, rgba(212,175,55,0.14), transparent 42%),
+        #080808;
+      display: grid;
+      place-items: center;
+      color: #ffd700;
+      font-size: 52px;
+      box-shadow: inset 0 0 40px rgba(212,175,55,0.05);
     }
 
-    .form-card h2 {
-      font-size: 28px;
-      margin-bottom: 10px;
+    .content-grid {
+      display: grid;
+      grid-template-columns: 0.9fr 1.1fr;
+      gap: 28px;
+      align-items: start;
     }
 
-    .form-card p {
-      color: #aaa;
-      font-size: 14px;
-      line-height: 1.6;
+    .panel {
+      border-radius: 26px;
+      border: 1px solid rgba(212,175,55,0.22);
+      background: rgba(255,255,255,0.035);
+      padding: 28px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.35);
+    }
+
+    .panel h2 {
+      color: #ffd700;
+      font-size: 30px;
+      margin-bottom: 12px;
+    }
+
+    .panel p {
+      color: #cfcfcf;
+      line-height: 1.7;
+      font-size: 15px;
       margin-bottom: 22px;
     }
 
     form {
       display: grid;
-      gap: 13px;
+      gap: 14px;
     }
 
     input,
     select,
     textarea {
       width: 100%;
-      padding: 15px;
-      border-radius: 14px;
+      padding: 15px 16px;
+      border-radius: 16px;
       border: 1px solid rgba(255,255,255,0.12);
       background: rgba(255,255,255,0.055);
       color: #fff;
       outline: none;
       font-size: 14px;
+      font-weight: 700;
     }
 
     input::placeholder,
     textarea::placeholder {
-      color: #777;
+      color: #8c8c8c;
     }
 
     select {
@@ -259,16 +229,16 @@
     }
 
     textarea {
-      min-height: 110px;
+      min-height: 120px;
       resize: vertical;
     }
 
     .submit {
-      padding: 15px;
-      border-radius: 14px;
+      padding: 16px;
+      border-radius: 16px;
       border: none;
       cursor: pointer;
-      background: linear-gradient(135deg, #e6c65b, #9b7313);
+      background: linear-gradient(135deg, #ffe66d, #c99412);
       color: #111;
       font-weight: 900;
       font-size: 15px;
@@ -285,35 +255,74 @@
     }
 
     .success {
-      background: rgba(47,255,123,0.08);
-      border: 1px solid rgba(47,255,123,0.25);
+      background: rgba(47,255,123,0.09);
+      border: 1px solid rgba(47,255,123,0.28);
       color: #8dffb2;
     }
 
     .error {
-      background: rgba(255,80,80,0.08);
-      border: 1px solid rgba(255,80,80,0.25);
+      background: rgba(255,80,80,0.09);
+      border: 1px solid rgba(255,80,80,0.28);
       color: #ff9b9b;
     }
 
-    .features {
-      margin-top: 28px;
+    .info-box {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 16px;
+      gap: 18px;
     }
 
-    .feature {
+    .module-card {
+      border-radius: 22px;
+      border: 1px solid rgba(212,175,55,0.18);
+      background: rgba(255,255,255,0.035);
       padding: 24px;
     }
 
-    .feature h3 {
-      color: #d4af37;
-      margin-bottom: 10px;
-      font-size: 17px;
+    .module-card .tag {
+      display: inline-block;
+      color: #ffd700;
+      border: 1px solid rgba(212,175,55,0.35);
+      background: rgba(212,175,55,0.08);
+      padding: 7px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 900;
+      margin-bottom: 16px;
     }
 
-    .feature p {
+    .module-card h3 {
+      font-size: 24px;
+      color: #ffd700;
+      margin-bottom: 10px;
+    }
+
+    .module-card p {
+      color: #cfcfcf;
+      font-size: 15px;
+      line-height: 1.7;
+    }
+
+    .benefits {
+      margin-top: 28px;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 18px;
+    }
+
+    .benefit {
+      padding: 22px;
+      border-radius: 22px;
+      border: 1px solid rgba(212,175,55,0.18);
+      background: rgba(255,255,255,0.035);
+    }
+
+    .benefit h3 {
+      color: #ffd700;
+      font-size: 17px;
+      margin-bottom: 10px;
+    }
+
+    .benefit p {
       color: #aaa;
       font-size: 14px;
       line-height: 1.6;
@@ -322,60 +331,57 @@
     .notice {
       margin-top: 28px;
       padding: 22px;
+      border-radius: 22px;
+      border: 1px solid rgba(212,175,55,0.18);
+      background: rgba(212,175,55,0.055);
       color: #cfcfcf;
-      font-size: 14px;
       line-height: 1.7;
+      font-size: 14px;
     }
 
     .notice strong {
-      color: #d4af37;
+      color: #ffd700;
     }
 
-    footer {
-      margin-top: 28px;
-      color: #777;
-      font-size: 13px;
-    }
-
-    @media (max-width: 1100px) {
-      .page {
+    @media (max-width: 1000px) {
+      .hero-grid,
+      .content-grid {
         grid-template-columns: 1fr;
       }
 
-      .sidebar {
-        display: none;
-      }
-
-      .grid {
-        grid-template-columns: 1fr;
-      }
-
-      .features {
+      .benefits {
         grid-template-columns: 1fr 1fr;
+      }
+
+      .nav-links a:not(.status) {
+        display: none;
       }
     }
 
     @media (max-width: 650px) {
       .navbar {
-        padding: 0 20px;
+        padding: 20px;
       }
 
       .main {
-        padding: 28px 20px;
+        width: 92%;
+        padding-top: 28px;
       }
 
-      .hero-card,
-      .form-card {
+      .hero {
+        padding: 26px;
+      }
+
+      .panel {
         padding: 24px;
       }
 
-      .mini-grid,
-      .features {
+      .benefits {
         grid-template-columns: 1fr;
       }
 
-      .nav-btn {
-        display: none;
+      h1 {
+        letter-spacing: -1px;
       }
     }
   </style>
@@ -385,149 +391,141 @@
 
   <nav class="navbar">
     <a href="index.html" class="logo">BullProsperity</a>
-    <a href="#waitlist" class="nav-btn">Join Waitlist</a>
+
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="hub.html">Hub</a>
+      <a href="course.html">Course</a>
+      <a href="tools.html">Tools</a>
+      <a href="setup-room.html">Setup Room</a>
+      <a href="community.html">Community</a>
+      <a href="#waitlist" class="status">Join Waitlist</a>
+    </div>
   </nav>
 
-  <div class="page">
+  <main class="main">
 
-    <aside class="sidebar">
-      <div class="side-title">Private Access</div>
-
-      <div class="side-card">
-        <strong>Early Access</strong>
-        <p>Werde Teil der privaten Waitlist, bevor BullProsperity offiziell öffnet.</p>
-      </div>
-
-      <div class="side-card">
-        <strong>Education First</strong>
-        <p>Fokus auf Struktur, Marktverständnis, Disziplin und langfristiges Wachstum.</p>
-      </div>
-
-      <div class="side-card">
-        <strong>Limited Entry</strong>
-        <p>Kein öffentlicher Massen-Zugang. Qualität vor Quantität.</p>
-      </div>
-    </aside>
-
-    <main class="main">
-
-      <div class="grid">
-
-        <section class="hero-card">
-          <div class="badge">PRIVATE TRADING EDUCATION PLATFORM</div>
+    <section class="hero">
+      <div class="hero-grid">
+        <div>
+          <div class="badge">Education Platform</div>
 
           <h1>
-            Build Wealth <br>
-            <span>Within.</span>
+            Private Zugangsliste<br>
+            für <span>BullProsperity.</span>
           </h1>
 
-          <p class="hero-text">
-            BullProsperity ist eine private Education Platform für Menschen,
-            die Trading strukturiert lernen möchten — mit Fokus auf Forex,
-            Crypto, Indizes, Rohstoffe, Smart Money Concepts und langfristiges Wachstum.
+          <p>
+            Trage dich in die private Waitlist ein und sichere dir die Chance auf bevorzugten Early Access,
+            bevor BullProsperity offiziell öffnet. Fokus: Struktur, Trading Education,
+            Smart Money Concepts, Community und langfristiges Wachstum.
           </p>
 
           <div class="actions">
-            <a href="#waitlist" class="primary">Private Waitlist beitreten</a>
-            <a href="#benefits" class="secondary">Mehr erfahren</a>
+            <a href="#waitlist" class="btn-primary">Waitlist beitreten</a>
+            <a href="#details" class="btn-secondary">Mehr erfahren</a>
           </div>
+        </div>
 
-          <div class="mini-grid">
-            <div class="mini-box">
-              <strong>Private</strong>
-              <small>Kein öffentlicher Massen-Zugang</small>
-            </div>
+        <div class="video-box">
+          ▶
+        </div>
+      </div>
+    </section>
 
-            <div class="mini-box">
-              <strong>SMC</strong>
-              <small>Smart Money Concepts & Struktur</small>
-            </div>
+    <section class="content-grid" id="details">
 
-            <div class="mini-box">
-              <strong>Growth</strong>
-              <small>Trading, Mindset & Community</small>
-            </div>
-          </div>
-        </section>
-
-        <section class="form-card" id="waitlist">
-          <div class="video-box">▶</div>
-
-          <h2>Bewirb dich für Early Access</h2>
+      <div class="info-box">
+        <div class="module-card">
+          <span class="tag">Private Access</span>
+          <h3>Early Access</h3>
           <p>
-            Trage dich in die private Waitlist ein. Die ersten Mitglieder erhalten bevorzugten Zugang,
-            bevor BullProsperity offiziell öffnet.
+            Die Waitlist ist für Menschen, die BullProsperity ernsthaft nutzen möchten.
+            Die ersten ausgewählten Mitglieder erhalten bevorzugten Zugang.
           </p>
+        </div>
 
-          <form id="waitlistForm">
-            <input type="text" id="name" placeholder="Dein Name" required>
-            <input type="email" id="email" placeholder="Deine E-Mail" required>
-
-            <select id="experience" required>
-              <option value="">Trading Erfahrung auswählen</option>
-              <option value="Anfänger">Anfänger</option>
-              <option value="Fortgeschritten">Fortgeschritten</option>
-              <option value="Schon aktiv am Markt">Schon aktiv am Markt</option>
-            </select>
-
-            <textarea id="reason" placeholder="Warum möchtest du BullProsperity beitreten?" required></textarea>
-
-            <button class="submit" id="submitBtn" type="submit">Secure My Spot</button>
-
-            <div class="success" id="successMessage">
-              ✅ Deine Waitlist-Anfrage wurde erfolgreich gesendet. Be blessed.
-            </div>
-
-            <div class="error" id="errorMessage">
-              Es gab einen Fehler. Bitte versuche es später erneut.
-            </div>
-          </form>
-        </section>
-
+        <div class="module-card">
+          <span class="tag">Education First</span>
+          <h3>Keine Massen-Plattform</h3>
+          <p>
+            BullProsperity ist auf Qualität, Struktur und Community ausgelegt.
+            Der Zugang soll bewusst exklusiv und kontrolliert bleiben.
+          </p>
+        </div>
       </div>
 
-      <section class="features" id="benefits">
-        <div class="feature">
-          <h3>Marktanalysen</h3>
-          <p>Strukturierte Vorbereitung für Forex, Crypto, Indizes und Rohstoffe.</p>
-        </div>
+      <div class="panel" id="waitlist">
+        <h2>Bewirb dich für Early Access</h2>
+        <p>
+          Fülle das Formular aus. Wir speichern deine Anfrage und melden uns,
+          sobald der nächste Zugang geöffnet wird.
+        </p>
 
-        <div class="feature">
-          <h3>SMC Education</h3>
-          <p>Liquidity, BOS, CHoCH, FVG, Orderblocks und klare Marktstruktur.</p>
-        </div>
+        <form id="waitlistForm">
+          <input type="text" id="name" placeholder="Dein Name" required />
+          <input type="email" id="email" placeholder="Deine E-Mail" required />
 
-        <div class="feature">
-          <h3>Community</h3>
-          <p>Austausch, Motivation, Disziplin und gemeinsames Wachstum.</p>
-        </div>
+          <select id="experience" required>
+            <option value="">Trading Erfahrung auswählen</option>
+            <option value="Anfänger">Anfänger</option>
+            <option value="Fortgeschritten">Fortgeschritten</option>
+            <option value="Schon aktiv am Markt">Schon aktiv am Markt</option>
+          </select>
 
-        <div class="feature">
-          <h3>1:1 Support</h3>
-          <p>Persönliche Unterstützung für Routine, Struktur und Verständnis.</p>
-        </div>
-      </section>
+          <textarea id="reason" placeholder="Warum möchtest du BullProsperity beitreten?" required></textarea>
 
-      <div class="notice">
-        <strong>Wichtiger Hinweis:</strong>
-        BullProsperity dient ausschließlich Bildungszwecken. Keine Finanzberatung,
-        keine Anlageberatung und keine Garantie auf Gewinne. Trading ist mit Risiko verbunden.
+          <button class="submit" id="submitBtn" type="submit">Secure My Spot</button>
+
+          <div class="success" id="successMessage">
+            ✅ Deine Waitlist-Anfrage wurde erfolgreich gesendet. Be blessed.
+          </div>
+
+          <div class="error" id="errorMessage">
+            Es gab einen Fehler. Bitte versuche es später erneut.
+          </div>
+        </form>
       </div>
 
-      <footer>
-        © BullProsperity — Private Trading Education Platform.
-      </footer>
+    </section>
 
-    </main>
-  </div>
+    <section class="benefits">
+      <div class="benefit">
+        <h3>Marktanalysen</h3>
+        <p>Strukturierte Vorbereitung für Forex, Crypto, Indizes und Rohstoffe.</p>
+      </div>
+
+      <div class="benefit">
+        <h3>SMC Education</h3>
+        <p>Liquidity, BOS, CHoCH, FVG, Orderblocks und klare Marktstruktur.</p>
+      </div>
+
+      <div class="benefit">
+        <h3>Community</h3>
+        <p>Austausch, Motivation, Disziplin und gemeinsames Wachstum.</p>
+      </div>
+
+      <div class="benefit">
+        <h3>1:1 Support</h3>
+        <p>Persönliche Unterstützung für Routine, Struktur und Verständnis.</p>
+      </div>
+    </section>
+
+    <div class="notice">
+      <strong>Wichtiger Hinweis:</strong>
+      BullProsperity dient ausschließlich Bildungszwecken. Keine Finanzberatung,
+      keine Anlageberatung und keine Garantie auf Gewinne. Trading ist mit Risiko verbunden.
+    </div>
+
+  </main>
 
   <script>
-    var form = document.getElementById("waitlistForm");
-    var submitBtn = document.getElementById("submitBtn");
-    var successMessage = document.getElementById("successMessage");
-    var errorMessage = document.getElementById("errorMessage");
+    const form = document.getElementById("waitlistForm");
+    const submitBtn = document.getElementById("submitBtn");
+    const successMessage = document.getElementById("successMessage");
+    const errorMessage = document.getElementById("errorMessage");
 
-    form.addEventListener("submit", async function(event) {
+    form.addEventListener("submit", async function (event) {
       event.preventDefault();
 
       successMessage.style.display = "none";
@@ -535,7 +533,7 @@
       submitBtn.disabled = true;
       submitBtn.textContent = "Wird gesendet...";
 
-      var data = {
+      const data = {
         name: document.getElementById("name").value.trim(),
         email: document.getElementById("email").value.trim(),
         experience: document.getElementById("experience").value,
@@ -543,7 +541,7 @@
       };
 
       try {
-        var response = await fetch("/api/waitlist", {
+        const response = await fetch("/api/waitlist", {
           method: "POST",
           headers: {
             "Content-Type": "application/json"
@@ -551,7 +549,7 @@
           body: JSON.stringify(data)
         });
 
-        var result = await response.json();
+        const result = await response.json();
 
         if (!response.ok) {
           errorMessage.textContent = result.error || "Es gab einen Fehler. Bitte versuche es erneut.";
