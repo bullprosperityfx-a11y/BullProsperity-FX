@@ -26,7 +26,7 @@ export default async function handler(req, res) {
       },
       body: JSON.stringify({
         from: "onboarding@resend.dev",
-        to: [adminEmail],
+        to: ["bullprosperityfx@gmail.com"],
         subject: "Neue Waitlist Anfrage",
         html: `
           <h2>Neue Waitlist Anfrage</h2>
