@@ -201,18 +201,44 @@
     }
 
     input,
-    select,
-    textarea {
-      width: 100%;
-      padding: 15px 16px;
-      border-radius: 16px;
-      border: 1px solid rgba(255,255,255,0.12);
-      background: rgba(255,255,255,0.055);
-      color: #fff;
-      outline: none;
-      font-size: 14px;
-      font-weight: 700;
-    }
+select,
+textarea {
+  width: 100%;
+  padding: 15px 18px;
+  border-radius: 16px;
+  border: 1px solid rgba(212,175,55,0.22);
+  background: rgba(255,255,255,0.055);
+  color: #fff;
+  outline: none;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+select {
+  height: 58px;
+  appearance: none;
+  -webkit-appearance: none;
+  color: #fff;
+  cursor: pointer;
+  background:
+    linear-gradient(45deg, transparent 50%, #d4af37 50%),
+    linear-gradient(135deg, #d4af37 50%, transparent 50%),
+    rgba(255,255,255,0.055);
+  background-position:
+    calc(100% - 22px) 50%,
+    calc(100% - 15px) 50%,
+    0 0;
+  background-size:
+    7px 7px,
+    7px 7px,
+    100% 100%;
+  background-repeat: no-repeat;
+}
+
+option {
+  background: #080808;
+  color: #fff;
+}
 
     input::placeholder,
     textarea::placeholder {
