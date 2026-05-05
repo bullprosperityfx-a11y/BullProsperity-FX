@@ -199,10 +199,10 @@
 
     <section class="mind-layout">
       <div class="mind-panel" id="mind-form">
-        <div class="badge">Neuer Mindset Beitrag</div>
+        <div class="badge">Anonymer Mindset Beitrag</div>
         <h2 class="section-heading" style="font-size:36px; margin-bottom:10px;">Gedanken teilen</h2>
         <p class="section-subtext" style="margin-bottom:0;">
-          Teile deine Erfahrungen zu Motivation, Disziplin, Rückschlägen oder Routinen.
+          Dein Beitrag wird anonym an BullProsperity gesendet und zusätzlich lokal auf deinem Gerät gespeichert.
         </p>
 
         <div class="field">
@@ -228,7 +228,7 @@
         </div>
 
         <div class="actions">
-          <button class="btn primary action-btn" id="saveMindBtn">Beitrag speichern</button>
+          <button class="btn primary action-btn" id="saveMindBtn">Anonym senden & speichern</button>
           <button class="btn secondary action-btn" id="resetMindBtn">Felder leeren</button>
         </div>
       </div>
@@ -252,8 +252,11 @@
 
     <section class="section">
       <div class="mind-panel">
-        <div class="badge">Community Beiträge</div>
-        <h2 class="section-heading" style="font-size:36px; margin-bottom:10px;">Mindset Austausch</h2>
+        <div class="badge">Lokale Beiträge</div>
+        <h2 class="section-heading" style="font-size:36px; margin-bottom:10px;">Meine Mindset Beiträge</h2>
+        <p class="section-subtext" style="margin-bottom:0;">
+          Diese Beiträge sind nur lokal auf deinem Gerät gespeichert.
+        </p>
         <div id="mindList" class="entry-list"></div>
         <div id="mindEmpty" class="empty-state">
           Noch keine Mindset-Beiträge vorhanden.<br>
@@ -320,24 +323,47 @@
       });
     }
 
-    saveMindBtn.addEventListener("click", () => {
+    saveMindBtn.addEventListener("click", async () => {
       if (!mindTitle.value.trim() || !mindText.value.trim()) {
         alert("Bitte mindestens Titel und Beitrag ausfüllen.");
         return;
       }
 
-      const posts = getPosts();
-
-      posts.unshift({
+      const post = {
         title: mindTitle.value.trim(),
-        category: mindCategory.value,
+        category: mindCategory.value || "Allgemein",
         text: mindText.value.trim(),
-        date: new Date().toLocaleDateString("de-DE")
-      });
+        date: new Date().toLocaleString("de-DE")
+      };
 
+      const posts = getPosts();
+      posts.unshift(post);
       savePosts(posts);
       renderPosts();
-      resetForm();
+
+      try {
+        const res = await fetch("/api/send-mindset", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          credentials: "include",
+          body: JSON.stringify(post)
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) {
+          alert(data.error || "Beitrag lokal gespeichert, aber nicht an Discord gesendet.");
+          return;
+        }
+
+        alert("Beitrag wurde anonym gesendet und lokal gespeichert.");
+        resetForm();
+
+      } catch (err) {
+        alert("Beitrag lokal gespeichert, aber Discord Fehler.");
+      }
     });
 
     resetMindBtn.addEventListener("click", resetForm);
