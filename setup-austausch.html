@@ -1,101 +1,399 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>BullProsperity | Setup Austausch</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BullProsperity | Setup Austausch</title>
 
-<script>
-(async () => {
-  try {
-    const res = await fetch("/api/access", { credentials: "include", cache: "no-store" });
-    const data = await res.json();
+  <script>
+    (async () => {
+      try {
+        const res = await fetch("/api/access", {
+          credentials: "include",
+          cache: "no-store"
+        });
 
-    if (data.role !== "admin" && data.role !== "premium") {
-      window.location.href = "locked.html";
+        const data = await res.json();
+
+        if (data.role !== "admin" && data.role !== "premium") {
+          window.location.href = "locked.html";
+        }
+      } catch {
+        window.location.href = "locked.html";
+      }
+    })();
+  </script>
+
+  <style>
+    * {
+      box-sizing: border-box;
     }
-  } catch {
-    window.location.href = "locked.html";
-  }
-})();
-</script>
 
-<style>
-body {
-  background: #0a0a0a;
-  color: white;
-  font-family: Arial, sans-serif;
-  padding: 20px;
-}
+    body {
+      margin: 0;
+      font-family: Inter, Arial, sans-serif;
+      background:
+        radial-gradient(circle at top right, rgba(255, 215, 0, 0.12), transparent 35%),
+        radial-gradient(circle at top left, rgba(255, 215, 0, 0.06), transparent 30%),
+        #050505;
+      color: #fff;
+    }
 
-input, select, textarea {
-  width: 100%;
-  padding: 12px;
-  margin: 8px 0;
-  background: #111;
-  border: 1px solid #333;
-  color: white;
-  border-radius: 8px;
-}
+    .page {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 28px 0 60px;
+    }
 
-button {
-  background: gold;
-  color: black;
-  padding: 12px 18px;
-  border: none;
-  cursor: pointer;
-  margin-top: 10px;
-  border-radius: 8px;
-  font-weight: bold;
-}
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 32px;
+    }
 
-.setup-card {
-  border: 1px solid #333;
-  padding: 15px;
-  margin-top: 15px;
-  border-radius: 12px;
-  background: #111;
-}
+    .logo {
+      color: #ffd700;
+      font-weight: 800;
+      font-size: 20px;
+      text-decoration: none;
+    }
 
-.setup-card img {
-  max-width: 100%;
-  margin-top: 10px;
-  border-radius: 10px;
-}
-</style>
+    .nav-links {
+      display: flex;
+      gap: 24px;
+    }
+
+    .nav-links a {
+      color: #fff3a0;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .hero {
+      border: 1px solid rgba(255, 215, 0, 0.22);
+      background:
+        linear-gradient(135deg, rgba(255, 215, 0, 0.12), rgba(255, 215, 0, 0.03)),
+        rgba(18, 18, 18, 0.92);
+      border-radius: 26px;
+      padding: 36px;
+      box-shadow: 0 0 40px rgba(255, 215, 0, 0.08);
+      margin-bottom: 24px;
+    }
+
+    .badge {
+      display: inline-flex;
+      padding: 8px 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 215, 0, 0.35);
+      color: #ffd700;
+      background: rgba(255, 215, 0, 0.08);
+      font-size: 13px;
+      font-weight: 800;
+      margin-bottom: 16px;
+    }
+
+    .hero h1 {
+      margin: 0;
+      font-size: clamp(40px, 6vw, 62px);
+      line-height: 1;
+      letter-spacing: -2px;
+    }
+
+    .hero h1 span {
+      color: #ffd700;
+      text-shadow: 0 0 22px rgba(255, 215, 0, 0.35);
+    }
+
+    .hero p {
+      margin: 16px 0 24px;
+      color: #f7eab0;
+      font-weight: 700;
+      max-width: 900px;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 14px 22px;
+      border-radius: 999px;
+      text-decoration: none;
+      font-weight: 800;
+      border: 1px solid rgba(255, 215, 0, 0.35);
+      cursor: pointer;
+    }
+
+    .btn-primary {
+      background: #ffd700;
+      color: #090909;
+      box-shadow: 0 0 24px rgba(255, 215, 0, 0.28);
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.04);
+      color: #fff3a0;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 22px;
+      margin-top: 22px;
+    }
+
+    .card {
+      border: 1px solid rgba(255, 215, 0, 0.22);
+      background:
+        linear-gradient(135deg, rgba(255, 215, 0, 0.08), rgba(255, 215, 0, 0.02)),
+        rgba(16, 16, 16, 0.94);
+      border-radius: 24px;
+      padding: 26px;
+      box-shadow: inset 0 0 24px rgba(255, 215, 0, 0.03);
+    }
+
+    .card h2 {
+      margin: 10px 0 8px;
+      font-size: 34px;
+      color: #ffd700;
+      letter-spacing: -1px;
+    }
+
+    .card p {
+      color: #f5e7a6;
+      font-weight: 700;
+    }
+
+    label {
+      display: block;
+      margin-top: 14px;
+      margin-bottom: 7px;
+      color: #fff2a8;
+      font-size: 14px;
+      font-weight: 800;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      border: 1px solid rgba(255, 215, 0, 0.22);
+      background: rgba(255, 255, 255, 0.045);
+      color: #fff;
+      border-radius: 12px;
+      padding: 14px;
+      outline: none;
+      font-weight: 700;
+    }
+
+    textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+
+    input::placeholder,
+    textarea::placeholder {
+      color: rgba(255, 240, 170, 0.55);
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .focus-list {
+      display: grid;
+      gap: 14px;
+      margin-top: 18px;
+    }
+
+    .focus-item {
+      border: 1px solid rgba(255, 215, 0, 0.18);
+      background: rgba(255, 255, 255, 0.035);
+      border-radius: 14px;
+      padding: 15px;
+      color: #f8eaae;
+      font-weight: 800;
+    }
+
+    .saved {
+      margin-top: 24px;
+    }
+
+    .setup-card {
+      border: 1px solid rgba(255, 215, 0, 0.22);
+      background: rgba(255, 255, 255, 0.04);
+      border-radius: 18px;
+      padding: 18px;
+      margin-top: 14px;
+    }
+
+    .setup-card h3 {
+      margin: 0 0 8px;
+      color: #ffd700;
+    }
+
+    .setup-card p {
+      margin: 6px 0;
+      color: #f7eab0;
+      font-weight: 700;
+    }
+
+    .setup-card img {
+      max-width: 100%;
+      border-radius: 14px;
+      margin-top: 12px;
+      border: 1px solid rgba(255, 215, 0, 0.18);
+    }
+
+    .small-btn {
+      margin-top: 12px;
+      margin-right: 8px;
+      border-radius: 999px;
+      padding: 10px 15px;
+      border: 1px solid rgba(255, 215, 0, 0.3);
+      background: #ffd700;
+      color: #080808;
+      font-weight: 900;
+      cursor: pointer;
+    }
+
+    .small-btn.dark {
+      background: transparent;
+      color: #fff3a0;
+    }
+
+    @media (max-width: 850px) {
+      .grid,
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+
+      .nav-links {
+        gap: 12px;
+        font-size: 12px;
+        flex-wrap: wrap;
+      }
+
+      .hero {
+        padding: 26px;
+      }
+    }
+  </style>
 </head>
 
 <body>
+  <div class="page">
 
-<h1>Setup Austausch</h1>
-<p>Teile dein Setup mit BullProsperity. Screenshot optional.</p>
+    <nav class="navbar">
+      <a href="index.html" class="logo">BullProsperity</a>
 
-<form id="setupForm">
-  <input id="name" placeholder="Name" />
-  <input id="email" placeholder="Email" />
+      <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="hub.html">Hub</a>
+        <a href="course.html">Course</a>
+        <a href="tools.html">Tools</a>
+        <a href="setup-room.html">Setup Room</a>
+        <a href="community.html">Community</a>
+      </div>
+    </nav>
 
-  <input id="title" placeholder="Setup Titel" required />
-  <input id="market" placeholder="Markt z. B. XAUUSD, EURUSD, NAS100" required />
+    <section class="hero">
+      <div class="badge">Setups</div>
+      <h1>Setup <span>Austausch</span></h1>
+      <p>
+        Hier können Mitglieder ihre Setups, Gedanken zu Liquidität, Struktur und mögliche Ausführungen im Markt teilen.
+      </p>
 
-  <select id="bias" required>
-    <option value="">Bias wählen</option>
-    <option>Bullish</option>
-    <option>Bearish</option>
-    <option>Neutral</option>
-  </select>
+      <div class="hero-actions">
+        <a href="community.html" class="btn btn-primary">Zurück zur Community</a>
+        <a href="#setupForm" class="btn btn-secondary">Setup posten</a>
+      </div>
+    </section>
 
-  <input id="setupType" placeholder="Setup Typ z. B. Liquidity Sweep + BOS" required />
+    <div class="grid">
 
-  <textarea id="description" placeholder="Beschreibung..." required></textarea>
+      <section class="card">
+        <div class="badge">Neuer Beitrag</div>
+        <h2>Dein Setup teilen</h2>
+        <p>Teile Marktlage, Bias, Setup-Typ und deine Gedanken zur Ausführung.</p>
 
-  <label>TradingView Screenshot hochladen:</label>
-  <input id="screenshot" type="file" accept="image/png,image/jpeg,image/webp" />
+        <form id="setupForm">
+          <div class="form-row">
+            <div>
+              <label>Name</label>
+              <input id="name" placeholder="Dein Name" />
+            </div>
 
-  <button type="submit">Setup posten</button>
-</form>
+            <div>
+              <label>Email</label>
+              <input id="email" placeholder="Deine Email" />
+            </div>
+          </div>
 
-<h2>Meine gespeicherten Setups</h2>
-<div id="savedSetups"></div>
+          <label>Titel</label>
+          <input id="title" placeholder="z. B. London Sweep auf EURUSD" required />
+
+          <label>Markt</label>
+          <input id="market" placeholder="z. B. EURUSD / XAUUSD / NAS100" required />
+
+          <div class="form-row">
+            <div>
+              <label>Bias</label>
+              <select id="bias" required>
+                <option value="">Bitte wählen</option>
+                <option>Bullish</option>
+                <option>Bearish</option>
+                <option>Neutral</option>
+              </select>
+            </div>
+
+            <div>
+              <label>Setup Typ</label>
+              <input id="setupType" placeholder="z. B. Liquidity Sweep + BOS" required />
+            </div>
+          </div>
+
+          <label>Beschreibung</label>
+          <textarea id="description" placeholder="Beschreibe dein Setup, Entry-Idee, SL, TP, Liquidität, Struktur..." required></textarea>
+
+          <label>TradingView Screenshot hochladen</label>
+          <input id="screenshot" type="file" accept="image/png,image/jpeg,image/webp" />
+
+          <button class="btn btn-primary" type="submit">Setup posten</button>
+        </form>
+      </section>
+
+      <aside class="card">
+        <div class="badge">BullProsperity Fokus</div>
+        <h2>Warum Setup Austausch?</h2>
+        <p>
+          Austausch über Setups hilft Mitgliedern, Märkte aus mehreren Blickwinkeln zu sehen und ihre Analysefähigkeiten deutlich schneller zu verbessern.
+        </p>
+
+        <div class="focus-list">
+          <div class="focus-item">Mehr Perspektiven auf denselben Markt.</div>
+          <div class="focus-item">Besseres Verständnis für Struktur und Liquidität.</div>
+          <div class="focus-item">Lernen durch reale Marktsituationen statt nur Theorie.</div>
+        </div>
+      </aside>
+
+    </div>
+
+    <section class="card saved">
+      <div class="badge">Lokale Speicherung</div>
+      <h2>Meine gespeicherten Setups</h2>
+      <p>Diese Setups werden zusätzlich auf deinem Gerät gespeichert und können als Datei heruntergeladen werden.</p>
+      <div id="savedSetups"></div>
+    </section>
+
+  </div>
 
 <script>
 const form = document.getElementById("setupForm");
@@ -109,11 +407,22 @@ function saveSetups(data) {
   localStorage.setItem("bp_setups", JSON.stringify(data));
 }
 
-function render() {
+function fileToBase64(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+
+function renderSetups() {
   const setups = getSetups();
 
+  if (!box) return;
+
   if (setups.length === 0) {
-    box.innerHTML = "Keine Setups gespeichert.";
+    box.innerHTML = "<p>Keine Setups gespeichert.</p>";
     return;
   }
 
@@ -122,12 +431,12 @@ function render() {
       <h3>${s.title}</h3>
       <p><strong>Markt:</strong> ${s.market}</p>
       <p><strong>Bias:</strong> ${s.bias}</p>
-      <p><strong>Setup:</strong> ${s.setupType}</p>
+      <p><strong>Setup Typ:</strong> ${s.setupType}</p>
       <p>${s.description}</p>
       ${s.image ? `<img src="${s.image}" alt="Setup Screenshot">` : ""}
 
-      <button onclick="downloadSetup(${i})">Download</button>
-      <button onclick="deleteSetup(${i})">Löschen</button>
+      <button class="small-btn" onclick="downloadSetup(${i})">Download</button>
+      <button class="small-btn dark" onclick="deleteSetup(${i})">Löschen</button>
     </div>
   `).join("");
 }
@@ -141,7 +450,7 @@ BullProsperity Setup
 Titel: ${s.title}
 Markt: ${s.market}
 Bias: ${s.bias}
-Setup: ${s.setupType}
+Setup Typ: ${s.setupType}
 
 Beschreibung:
 ${s.description}
@@ -164,16 +473,7 @@ function deleteSetup(i) {
   const data = getSetups();
   data.splice(i, 1);
   saveSetups(data);
-  render();
-}
-
-function fileToBase64(file) {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => resolve(reader.result);
-    reader.onerror = reject;
-    reader.readAsDataURL(file);
-  });
+  renderSetups();
 }
 
 form.addEventListener("submit", async (e) => {
@@ -207,7 +507,7 @@ form.addEventListener("submit", async (e) => {
   const data = getSetups();
   data.unshift(setup);
   saveSetups(data);
-  render();
+  renderSetups();
 
   try {
     const res = await fetch("/api/send-setup", {
@@ -234,7 +534,7 @@ form.addEventListener("submit", async (e) => {
   }
 });
 
-render();
+renderSetups();
 </script>
 
 </body>
