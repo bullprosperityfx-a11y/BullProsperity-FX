@@ -6,13 +6,12 @@
   <title>BullProsperity | Trading Journal</title>
   <link rel="stylesheet" href="theme.css" />
   <script src="/login.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
   <script>
     (async () => {
       try {
-        const res = await fetch("/api/access", {
-          credentials: "include"
-        });
+        const res = await fetch("/api/access", { credentials: "include" });
         const data = await res.json();
 
         if (data.role !== "admin" && data.role !== "premium") {
@@ -125,7 +124,7 @@
       color:var(--gold);
       font-size:28px;
       font-weight:900;
-      line-height:1;
+      line-height:1.1;
     }
 
     .helper-text{
@@ -174,6 +173,12 @@
       background:rgba(243,210,27,0.06);
       font-size:12px;
       font-weight:800;
+    }
+
+    .entry-badge.loss{
+      border-color:rgba(255,60,60,0.45);
+      color:#ff5c5c;
+      background:rgba(255,60,60,0.08);
     }
 
     .entry-grid{
@@ -250,6 +255,111 @@
       background:rgba(255,255,255,0.02);
     }
 
+    .calendar-head{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      margin-top:18px;
+    }
+
+    .calendar-title{
+      color:var(--gold);
+      font-weight:900;
+      font-size:20px;
+    }
+
+    .calendar-grid{
+      display:grid;
+      grid-template-columns:repeat(7, 1fr);
+      gap:8px;
+      margin-top:14px;
+    }
+
+    .calendar-day-name{
+      color:#bdbdbd;
+      font-size:12px;
+      font-weight:800;
+      text-align:center;
+      padding:8px 0;
+    }
+
+    .calendar-day{
+      min-height:72px;
+      border:1px solid rgba(255,255,255,0.08);
+      border-radius:14px;
+      background:rgba(255,255,255,0.02);
+      padding:8px;
+      position:relative;
+      cursor:pointer;
+    }
+
+    .calendar-day.empty{
+      opacity:0.25;
+      cursor:default;
+    }
+
+    .calendar-day .num{
+      color:#fff;
+      font-size:13px;
+      font-weight:900;
+    }
+
+    .calendar-day.win{
+      border-color:rgba(243,210,27,0.55);
+      background:rgba(243,210,27,0.10);
+    }
+
+    .calendar-day.loss{
+      border-color:rgba(255,60,60,0.55);
+      background:rgba(255,60,60,0.10);
+    }
+
+    .calendar-day.mixed{
+      border-color:rgba(170,110,255,0.55);
+      background:rgba(170,110,255,0.10);
+    }
+
+    .news-dot{
+      width:8px;
+      height:8px;
+      border-radius:50%;
+      background:#4da3ff;
+      position:absolute;
+      right:8px;
+      top:10px;
+      box-shadow:0 0 10px rgba(77,163,255,0.65);
+    }
+
+    .trade-count-dot{
+      position:absolute;
+      left:8px;
+      bottom:8px;
+      color:#fff;
+      font-size:11px;
+      font-weight:800;
+      opacity:0.8;
+    }
+
+    .news-box{
+      border:1px solid rgba(77,163,255,0.24);
+      border-radius:18px;
+      background:rgba(77,163,255,0.06);
+      padding:16px;
+      margin-top:18px;
+      color:#e8f2ff;
+      line-height:1.6;
+      font-size:14px;
+    }
+
+    .news-event{
+      border:1px solid rgba(255,255,255,0.10);
+      border-radius:14px;
+      background:rgba(255,255,255,0.03);
+      padding:12px;
+      margin-top:10px;
+    }
+
     @media(max-width:1100px){
       .journal-layout{
         grid-template-columns:1fr;
@@ -262,9 +372,15 @@
       .entry-grid{
         grid-template-columns:1fr;
       }
+
+      .calendar-day{
+        min-height:58px;
+        padding:6px;
+      }
     }
   </style>
 </head>
+
 <body>
   <div class="page">
 
@@ -291,9 +407,7 @@
       </h1>
 
       <p class="hero-text">
-        Dokumentiere deine Trades, Gedanken, Fehler und Erkenntnisse an einem Ort.
-        So erkennst du Muster, verbesserst deine Entscheidungen und entwickelst dich
-        systematisch weiter.
+        Dokumentiere Trades, Kontostand, News-Tage, Emotionen und Learnings in einem sauberen BullProsperity Journal.
       </p>
 
       <div class="hero-buttons">
@@ -308,7 +422,7 @@
         <div class="badge">Neuer Eintrag</div>
         <h2 class="section-heading" style="font-size:36px; margin-bottom:10px;">Trade dokumentieren</h2>
         <p class="section-subtext" style="margin-bottom:0;">
-          Halte jeden Trade sauber fest, damit du nicht nur tradest, sondern auch daraus lernst.
+          Halte jeden Trade sauber fest. Gewinne und Verluste werden automatisch in deinen Kontostand eingerechnet.
         </p>
 
         <div class="form-grid">
@@ -343,6 +457,21 @@
           </div>
 
           <div class="field">
+            <label for="tradeResult">Trade Ergebnis</label>
+            <select id="tradeResult">
+              <option value="">Bitte wählen</option>
+              <option value="Gewinn">Gewinn</option>
+              <option value="Verlust">Verlust</option>
+              <option value="Break Even">Break Even</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="profitLoss">Gewinn / Verlust in €</label>
+            <input type="number" id="profitLoss" placeholder="z. B. 50 oder -30" />
+          </div>
+
+          <div class="field">
             <label for="entryPrice">Entry</label>
             <input type="text" id="entryPrice" placeholder="z. B. 1.08450" />
           </div>
@@ -358,7 +487,7 @@
           </div>
 
           <div class="field">
-            <label for="rr">RR / Ergebnis</label>
+            <label for="rr">RR / R-Multiple</label>
             <input type="text" id="rr" placeholder="z. B. 1:3 / +2R / -1R" />
           </div>
 
@@ -370,6 +499,20 @@
           <div class="field full">
             <label for="emotion">Emotion / Zustand</label>
             <input type="text" id="emotion" placeholder="z. B. ruhig, fokussiert / ungeduldig / unsicher" />
+          </div>
+
+          <div class="field">
+            <label for="manualNews">News-Tag?</label>
+            <select id="manualNews">
+              <option value="">Automatisch prüfen</option>
+              <option value="Ja">Ja</option>
+              <option value="Nein">Nein</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="newsNote">News Notiz</label>
+            <input type="text" id="newsNote" placeholder="z. B. CPI, NFP, FOMC..." />
           </div>
 
           <div class="field full">
@@ -385,41 +528,90 @@
       </div>
 
       <div class="journal-panel">
-        <div class="badge">Übersicht</div>
+        <div class="badge">Konto & Statistik</div>
         <h2 class="section-heading" style="font-size:36px; margin-bottom:10px;">Journal Statistik</h2>
         <p class="helper-text">
-          Nutze dein Journal nicht nur zum Speichern, sondern zum Verstehen. Je sauberer du dokumentierst,
-          desto schneller erkennst du Muster in deinem Verhalten und in deiner Ausführung.
+          Gib einmal deinen Start-Kontostand ein. Danach rechnet dein Journal automatisch Gewinn, Verlust,
+          Kontostand und Performance.
         </p>
 
+        <div class="form-grid">
+          <div class="field full">
+            <label for="startBalance">Start-Kontostand in €</label>
+            <input type="number" id="startBalance" placeholder="z. B. 1000" />
+          </div>
+        </div>
+
+        <div class="journal-actions">
+          <button class="btn primary action-btn" id="saveBalanceBtn">Kontostand speichern</button>
+          <button class="btn secondary action-btn" id="resetBalanceBtn">Zurücksetzen</button>
+        </div>
+
         <div class="stats-grid">
+          <div class="stat-card">
+            <div class="label">Start-Konto</div>
+            <div class="value" id="startBalanceDisplay">0 €</div>
+          </div>
+
+          <div class="stat-card">
+            <div class="label">Aktueller Kontostand</div>
+            <div class="value" id="currentBalanceDisplay">0 €</div>
+          </div>
+
+          <div class="stat-card">
+            <div class="label">Performance</div>
+            <div class="value" id="performanceDisplay">0%</div>
+          </div>
+
           <div class="stat-card">
             <div class="label">Gespeicherte Trades</div>
             <div class="value" id="tradeCount">0</div>
           </div>
 
           <div class="stat-card">
+            <div class="label">Gewinn-Trades</div>
+            <div class="value" id="winCount">0</div>
+          </div>
+
+          <div class="stat-card">
+            <div class="label">Verlust-Trades</div>
+            <div class="value" id="lossCount">0</div>
+          </div>
+
+          <div class="stat-card">
+            <div class="label">News-Trades</div>
+            <div class="value" id="newsTradeCount">0</div>
+          </div>
+
+          <div class="stat-card">
             <div class="label">Letzter Markt</div>
             <div class="value" id="lastMarket" style="font-size:20px;">-</div>
           </div>
-
-          <div class="stat-card">
-            <div class="label">Letzte Richtung</div>
-            <div class="value" id="lastDirection" style="font-size:20px;">-</div>
-          </div>
-
-          <div class="stat-card">
-            <div class="label">Letztes Ergebnis</div>
-            <div class="value" id="lastResult" style="font-size:20px;">-</div>
-          </div>
-        </div>
-
-        <div class="disclaimer-box" style="margin-top:18px;">
-          Tipp: Ein starkes Journal dokumentiert nicht nur Zahlen, sondern vor allem Muster, Emotionen,
-          Disziplin und Entscheidungsqualität. Genau dort liegt oft der größte Hebel für bessere Performance.
         </div>
       </div>
 
+    </section>
+
+    <section class="section">
+      <div class="journal-panel">
+        <div class="badge">Kalender</div>
+        <h2 class="section-heading" style="font-size:36px; margin-bottom:10px;">Trade & News Kalender</h2>
+        <p class="section-subtext" style="margin-bottom:0;">
+          Gold = Gewinn-Tag, Rot = Verlust-Tag, Blau = Wirtschaftskalender-News.
+        </p>
+
+        <div class="calendar-head">
+          <button class="small-btn secondary" id="prevMonthBtn">← Monat</button>
+          <div class="calendar-title" id="calendarTitle">-</div>
+          <button class="small-btn secondary" id="nextMonthBtn">Monat →</button>
+        </div>
+
+        <div class="calendar-grid" id="calendarGrid"></div>
+
+        <div class="news-box" id="selectedDayBox">
+          Wähle einen Tag im Kalender aus, um Trades und News zu sehen.
+        </div>
+      </div>
     </section>
 
     <section class="section">
@@ -445,206 +637,485 @@
 
   </div>
 
-  <script>
-    const storageKey = "bullprosperity_trading_journal";
+<script>
+const storageKey = "bullprosperity_trading_journal";
+const balanceKey = "bullprosperity_start_balance";
 
-    const tradeDate = document.getElementById("tradeDate");
-    const market = document.getElementById("market");
-    const direction = document.getElementById("direction");
-    const session = document.getElementById("session");
-    const entryPrice = document.getElementById("entryPrice");
-    const stopLoss = document.getElementById("stopLoss");
-    const takeProfit = document.getElementById("takeProfit");
-    const rr = document.getElementById("rr");
-    const setupType = document.getElementById("setupType");
-    const emotion = document.getElementById("emotion");
-    const notes = document.getElementById("notes");
+const tradeDate = document.getElementById("tradeDate");
+const market = document.getElementById("market");
+const direction = document.getElementById("direction");
+const session = document.getElementById("session");
+const tradeResult = document.getElementById("tradeResult");
+const profitLoss = document.getElementById("profitLoss");
+const entryPrice = document.getElementById("entryPrice");
+const stopLoss = document.getElementById("stopLoss");
+const takeProfit = document.getElementById("takeProfit");
+const rr = document.getElementById("rr");
+const setupType = document.getElementById("setupType");
+const emotion = document.getElementById("emotion");
+const manualNews = document.getElementById("manualNews");
+const newsNote = document.getElementById("newsNote");
+const notes = document.getElementById("notes");
 
-    const saveTradeBtn = document.getElementById("saveTradeBtn");
-    const resetFormBtn = document.getElementById("resetFormBtn");
+const saveTradeBtn = document.getElementById("saveTradeBtn");
+const resetFormBtn = document.getElementById("resetFormBtn");
+const startBalance = document.getElementById("startBalance");
+const saveBalanceBtn = document.getElementById("saveBalanceBtn");
+const resetBalanceBtn = document.getElementById("resetBalanceBtn");
 
-    const journalList = document.getElementById("journalList");
-    const emptyState = document.getElementById("emptyState");
+const journalList = document.getElementById("journalList");
+const emptyState = document.getElementById("emptyState");
 
-    const tradeCount = document.getElementById("tradeCount");
-    const lastMarket = document.getElementById("lastMarket");
-    const lastDirection = document.getElementById("lastDirection");
-    const lastResult = document.getElementById("lastResult");
+const tradeCount = document.getElementById("tradeCount");
+const winCount = document.getElementById("winCount");
+const lossCount = document.getElementById("lossCount");
+const newsTradeCount = document.getElementById("newsTradeCount");
+const lastMarket = document.getElementById("lastMarket");
+const startBalanceDisplay = document.getElementById("startBalanceDisplay");
+const currentBalanceDisplay = document.getElementById("currentBalanceDisplay");
+const performanceDisplay = document.getElementById("performanceDisplay");
 
-    function getTrades() {
-      const raw = localStorage.getItem(storageKey);
-      return raw ? JSON.parse(raw) : [];
-    }
+const calendarGrid = document.getElementById("calendarGrid");
+const calendarTitle = document.getElementById("calendarTitle");
+const selectedDayBox = document.getElementById("selectedDayBox");
+const prevMonthBtn = document.getElementById("prevMonthBtn");
+const nextMonthBtn = document.getElementById("nextMonthBtn");
 
-    function saveTrades(trades) {
-      localStorage.setItem(storageKey, JSON.stringify(trades));
-    }
+let calendarDate = new Date();
+let economicEvents = [];
 
-    function resetForm() {
-      tradeDate.value = "";
-      market.value = "";
-      direction.value = "";
-      session.value = "";
-      entryPrice.value = "";
-      stopLoss.value = "";
-      takeProfit.value = "";
-      rr.value = "";
-      setupType.value = "";
-      emotion.value = "";
-      notes.value = "";
-    }
+function getTrades() {
+  const raw = localStorage.getItem(storageKey);
+  return raw ? JSON.parse(raw) : [];
+}
 
-    function renderStats(trades) {
-      tradeCount.textContent = trades.length;
+function saveTrades(trades) {
+  localStorage.setItem(storageKey, JSON.stringify(trades));
+}
 
-      if (trades.length === 0) {
-        lastMarket.textContent = "-";
-        lastDirection.textContent = "-";
-        lastResult.textContent = "-";
-        return;
-      }
+function getStartBalance() {
+  return Number(localStorage.getItem(balanceKey) || 0);
+}
 
-      const latest = trades[0];
-      lastMarket.textContent = latest.market || "-";
-      lastDirection.textContent = latest.direction || "-";
-      lastResult.textContent = latest.rr || "-";
-    }
+function formatMoney(value) {
+  return new Intl.NumberFormat("de-DE", {
+    style: "currency",
+    currency: "EUR"
+  }).format(Number(value || 0));
+}
 
-    function renderTrades() {
-      const trades = getTrades();
-      journalList.innerHTML = "";
+function resetForm() {
+  tradeDate.value = "";
+  market.value = "";
+  direction.value = "";
+  session.value = "";
+  tradeResult.value = "";
+  profitLoss.value = "";
+  entryPrice.value = "";
+  stopLoss.value = "";
+  takeProfit.value = "";
+  rr.value = "";
+  setupType.value = "";
+  emotion.value = "";
+  manualNews.value = "";
+  newsNote.value = "";
+  notes.value = "";
+}
 
-      renderStats(trades);
+function normalizeDate(value) {
+  if (!value) return "";
+  return value.split("T")[0];
+}
 
-      if (trades.length === 0) {
-        emptyState.style.display = "block";
-        return;
-      }
+function getEventsForDate(dateStr) {
+  return economicEvents.filter(event => normalizeDate(event.date) === dateStr);
+}
 
-      emptyState.style.display = "none";
+function hasNewsForDate(dateStr) {
+  return getEventsForDate(dateStr).length > 0;
+}
 
-      trades.forEach((trade, index) => {
-        const card = document.createElement("div");
-        card.className = "entry-card";
+async function loadEconomicEvents() {
+  try {
+    const year = calendarDate.getFullYear();
+    const month = calendarDate.getMonth();
+    const from = new Date(year, month, 1).toISOString().split("T")[0];
+    const to = new Date(year, month + 1, 0).toISOString().split("T")[0];
 
-        card.innerHTML = `
-          <div class="entry-top">
-            <div>
-              <div class="entry-title">${trade.market || "Unbekannter Markt"}</div>
-              <div style="color:#bdbdbd; font-size:14px; margin-top:6px;">${trade.date || "Kein Datum"} • ${trade.session || "Keine Session"}</div>
-            </div>
-            <div class="entry-badge">${trade.direction || "Keine Richtung"}</div>
-          </div>
-
-          <div class="entry-grid">
-            <div class="entry-item">
-              <div class="k">Entry</div>
-              <div class="v">${trade.entry || "-"}</div>
-            </div>
-
-            <div class="entry-item">
-              <div class="k">Stop Loss</div>
-              <div class="v">${trade.stopLoss || "-"}</div>
-            </div>
-
-            <div class="entry-item">
-              <div class="k">Take Profit</div>
-              <div class="v">${trade.takeProfit || "-"}</div>
-            </div>
-
-            <div class="entry-item">
-              <div class="k">RR / Ergebnis</div>
-              <div class="v">${trade.rr || "-"}</div>
-            </div>
-
-            <div class="entry-item">
-              <div class="k">Setup</div>
-              <div class="v">${trade.setupType || "-"}</div>
-            </div>
-
-            <div class="entry-item">
-              <div class="k">Emotion</div>
-              <div class="v">${trade.emotion || "-"}</div>
-            </div>
-          </div>
-
-          <div class="entry-notes">${trade.notes || "Keine Notizen vorhanden."}</div>
-
-          <div class="entry-actions">
-            <button class="small-btn secondary" onclick="deleteTrade(${index})">Eintrag löschen</button>
-          </div>
-        `;
-
-        journalList.appendChild(card);
-      });
-    }
-
-    function validateForm() {
-      return market.value.trim() !== "" && direction.value.trim() !== "";
-    }
-
-    saveTradeBtn.addEventListener("click", () => {
-      if (!validateForm()) {
-        alert("Bitte mindestens Markt und Richtung ausfüllen.");
-        return;
-      }
-
-      const trades = getTrades();
-
-      const newTrade = {
-        date: tradeDate.value,
-        market: market.value.trim(),
-        direction: direction.value,
-        session: session.value,
-        entry: entryPrice.value.trim(),
-        stopLoss: stopLoss.value.trim(),
-        takeProfit: takeProfit.value.trim(),
-        rr: rr.value.trim(),
-        setupType: setupType.value.trim(),
-        emotion: emotion.value.trim(),
-        notes: notes.value.trim()
-      };
-
-      trades.unshift(newTrade);
-      saveTrades(trades);
-      renderTrades();
-      resetForm();
+    const res = await fetch(`/api/economic-calendar?from=${from}&to=${to}`, {
+      credentials: "include"
     });
 
-    resetFormBtn.addEventListener("click", () => {
-      resetForm();
-    });
+    const data = await res.json();
+    economicEvents = data.events || [];
+  } catch {
+    economicEvents = [];
+  }
+}
 
-    function deleteTrade(index) {
-      const trades = getTrades();
-      trades.splice(index, 1);
-      saveTrades(trades);
-      renderTrades();
-    }
+function renderStats(trades) {
+  const start = getStartBalance();
+  const pnl = trades.reduce((sum, trade) => sum + Number(trade.profitLoss || 0), 0);
+  const current = start + pnl;
+  const performance = start > 0 ? ((current - start) / start) * 100 : 0;
 
-    window.deleteTrade = deleteTrade;
+  const wins = trades.filter(t => t.result === "Gewinn").length;
+  const losses = trades.filter(t => t.result === "Verlust").length;
+  const newsTrades = trades.filter(t => t.newsDay === "Ja").length;
 
-    renderTrades();
-  </script>
-  <script>
-  document.addEventListener("DOMContentLoaded", async () => {
-    const loginBtn = document.getElementById("loginNavBtn");
+  startBalanceDisplay.textContent = formatMoney(start);
+  currentBalanceDisplay.textContent = formatMoney(current);
+  performanceDisplay.textContent = performance.toFixed(2) + "%";
+  tradeCount.textContent = trades.length;
+  winCount.textContent = wins;
+  lossCount.textContent = losses;
+  newsTradeCount.textContent = newsTrades;
+  lastMarket.textContent = trades[0]?.market || "-";
+}
 
-    try {
-      const res = await fetch("/api/access", {
-        credentials: "include"
-      });
+function renderTrades() {
+  const trades = getTrades();
+  journalList.innerHTML = "";
 
-      const data = await res.json();
+  renderStats(trades);
 
-      if (data.role === "admin" || data.role === "premium") {
-        if (loginBtn) loginBtn.style.display = "none";
-      }
+  if (trades.length === 0) {
+    emptyState.style.display = "block";
+    return;
+  }
 
-    } catch (err) {
-      console.log("Auth check failed");
-    }
+  emptyState.style.display = "none";
+
+  trades.forEach((trade, index) => {
+    const card = document.createElement("div");
+    card.className = "entry-card";
+
+    const badgeClass = trade.result === "Verlust" ? "entry-badge loss" : "entry-badge";
+
+    card.innerHTML = `
+      <div class="entry-top">
+        <div>
+          <div class="entry-title">${trade.market || "Unbekannter Markt"}</div>
+          <div style="color:#bdbdbd; font-size:14px; margin-top:6px;">
+            ${trade.date || "Kein Datum"} • ${trade.session || "Keine Session"}
+          </div>
+        </div>
+        <div class="${badgeClass}">${trade.result || "Kein Ergebnis"}</div>
+      </div>
+
+      <div class="entry-grid">
+        <div class="entry-item"><div class="k">Richtung</div><div class="v">${trade.direction || "-"}</div></div>
+        <div class="entry-item"><div class="k">P/L</div><div class="v">${formatMoney(trade.profitLoss)}</div></div>
+        <div class="entry-item"><div class="k">Entry</div><div class="v">${trade.entry || "-"}</div></div>
+        <div class="entry-item"><div class="k">Stop Loss</div><div class="v">${trade.stopLoss || "-"}</div></div>
+        <div class="entry-item"><div class="k">Take Profit</div><div class="v">${trade.takeProfit || "-"}</div></div>
+        <div class="entry-item"><div class="k">RR</div><div class="v">${trade.rr || "-"}</div></div>
+        <div class="entry-item"><div class="k">News-Tag</div><div class="v">${trade.newsDay || "Nein"}</div></div>
+        <div class="entry-item"><div class="k">News Notiz</div><div class="v">${trade.newsNote || "-"}</div></div>
+        <div class="entry-item"><div class="k">Setup</div><div class="v">${trade.setupType || "-"}</div></div>
+        <div class="entry-item"><div class="k">Emotion</div><div class="v">${trade.emotion || "-"}</div></div>
+      </div>
+
+      <div class="entry-notes">${trade.notes || "Keine Notizen vorhanden."}</div>
+
+      <div class="entry-actions">
+        <button class="small-btn primary" onclick="downloadTradePDF(${index})">PDF herunterladen</button>
+        <button class="small-btn secondary" onclick="deleteTrade(${index})">Eintrag löschen</button>
+      </div>
+    `;
+
+    journalList.appendChild(card);
   });
+}
+
+function renderCalendar() {
+  const trades = getTrades();
+  calendarGrid.innerHTML = "";
+
+  const year = calendarDate.getFullYear();
+  const month = calendarDate.getMonth();
+
+  const monthName = calendarDate.toLocaleDateString("de-DE", {
+    month: "long",
+    year: "numeric"
+  });
+
+  calendarTitle.textContent = monthName;
+
+  const dayNames = ["Mo", "Di", "Mi", "Do", "Fr", "Sa", "So"];
+
+  dayNames.forEach(day => {
+    const el = document.createElement("div");
+    el.className = "calendar-day-name";
+    el.textContent = day;
+    calendarGrid.appendChild(el);
+  });
+
+  const firstDay = new Date(year, month, 1);
+  const lastDay = new Date(year, month + 1, 0);
+  const firstWeekday = (firstDay.getDay() + 6) % 7;
+
+  for (let i = 0; i < firstWeekday; i++) {
+    const empty = document.createElement("div");
+    empty.className = "calendar-day empty";
+    calendarGrid.appendChild(empty);
+  }
+
+  for (let day = 1; day <= lastDay.getDate(); day++) {
+    const dateObj = new Date(year, month, day);
+    const dateStr = dateObj.toISOString().split("T")[0];
+
+    const dayTrades = trades.filter(t => t.date === dateStr);
+    const dayEvents = getEventsForDate(dateStr);
+
+    const hasWin = dayTrades.some(t => t.result === "Gewinn");
+    const hasLoss = dayTrades.some(t => t.result === "Verlust");
+
+    const el = document.createElement("div");
+    el.className = "calendar-day";
+
+    if (hasWin && hasLoss) el.classList.add("mixed");
+    else if (hasWin) el.classList.add("win");
+    else if (hasLoss) el.classList.add("loss");
+
+    el.innerHTML = `
+      <div class="num">${day}</div>
+      ${dayEvents.length > 0 ? `<div class="news-dot"></div>` : ""}
+      ${dayTrades.length > 0 ? `<div class="trade-count-dot">${dayTrades.length} Trade(s)</div>` : ""}
+    `;
+
+    el.addEventListener("click", () => showDayDetails(dateStr));
+
+    calendarGrid.appendChild(el);
+  }
+}
+
+function showDayDetails(dateStr) {
+  const trades = getTrades().filter(t => t.date === dateStr);
+  const events = getEventsForDate(dateStr);
+
+  let html = `<strong>${dateStr}</strong><br><br>`;
+
+  if (trades.length > 0) {
+    html += `<strong>Trades:</strong>`;
+    trades.forEach(t => {
+      html += `
+        <div class="news-event">
+          ${t.market || "-"} • ${t.result || "-"} • ${formatMoney(t.profitLoss)}<br>
+          ${t.setupType || ""}
+        </div>
+      `;
+    });
+  } else {
+    html += `Keine Trades an diesem Tag.<br>`;
+  }
+
+  if (events.length > 0) {
+    html += `<br><strong>Wirtschaftskalender:</strong>`;
+    events.slice(0, 8).forEach(e => {
+      html += `
+        <div class="news-event">
+          ${e.time || ""} ${e.country || ""} ${e.event || "News"}<br>
+          Impact: ${e.impact || "-"} • Forecast: ${e.estimate || "-"} • Previous: ${e.previous || "-"}
+        </div>
+      `;
+    });
+  } else {
+    html += `<br><br>Keine News von Finnhub für diesen Tag gefunden.`;
+  }
+
+  selectedDayBox.innerHTML = html;
+}
+
+function validateForm() {
+  return market.value.trim() !== "" && direction.value.trim() !== "";
+}
+
+saveTradeBtn.addEventListener("click", () => {
+  if (!validateForm()) {
+    alert("Bitte mindestens Markt und Richtung ausfüllen.");
+    return;
+  }
+
+  const selectedDate = tradeDate.value || new Date().toISOString().split("T")[0];
+  const autoNews = hasNewsForDate(selectedDate) ? "Ja" : "Nein";
+  const finalNews = manualNews.value || autoNews;
+
+  const amount = Number(profitLoss.value || 0);
+  let finalResult = tradeResult.value;
+
+  if (!finalResult) {
+    if (amount > 0) finalResult = "Gewinn";
+    else if (amount < 0) finalResult = "Verlust";
+    else finalResult = "Break Even";
+  }
+
+  const trades = getTrades();
+
+  const newTrade = {
+    date: selectedDate,
+    market: market.value.trim(),
+    direction: direction.value,
+    session: session.value,
+    result: finalResult,
+    profitLoss: amount,
+    entry: entryPrice.value.trim(),
+    stopLoss: stopLoss.value.trim(),
+    takeProfit: takeProfit.value.trim(),
+    rr: rr.value.trim(),
+    setupType: setupType.value.trim(),
+    emotion: emotion.value.trim(),
+    newsDay: finalNews,
+    newsNote: newsNote.value.trim(),
+    notes: notes.value.trim()
+  };
+
+  trades.unshift(newTrade);
+  saveTrades(trades);
+  renderTrades();
+  renderCalendar();
+  resetForm();
+});
+
+resetFormBtn.addEventListener("click", resetForm);
+
+saveBalanceBtn.addEventListener("click", () => {
+  localStorage.setItem(balanceKey, Number(startBalance.value || 0));
+  renderTrades();
+});
+
+resetBalanceBtn.addEventListener("click", () => {
+  localStorage.removeItem(balanceKey);
+  startBalance.value = "";
+  renderTrades();
+});
+
+function deleteTrade(index) {
+  const trades = getTrades();
+  trades.splice(index, 1);
+  saveTrades(trades);
+  renderTrades();
+  renderCalendar();
+}
+
+async function downloadTradePDF(index) {
+  const trade = getTrades()[index];
+
+  if (!window.jspdf) {
+    alert("PDF Tool konnte nicht geladen werden.");
+    return;
+  }
+
+  const { jsPDF } = window.jspdf;
+  const pdf = new jsPDF("p", "mm", "a4");
+
+  pdf.setFillColor(5, 5, 5);
+  pdf.rect(0, 0, 210, 297, "F");
+
+  pdf.setDrawColor(243, 210, 27);
+  pdf.roundedRect(10, 10, 190, 277, 6, 6);
+
+  pdf.setFillColor(14, 14, 14);
+  pdf.roundedRect(15, 15, 180, 267, 5, 5, "F");
+
+  pdf.setFont("helvetica", "bold");
+  pdf.setFontSize(22);
+  pdf.setTextColor(243, 210, 27);
+  pdf.text("BullProsperity", 18, 29);
+
+  pdf.setFontSize(10);
+  pdf.setTextColor(170, 170, 170);
+  pdf.text("Trading Journal Dokumentation", 18, 36);
+
+  pdf.setFontSize(25);
+  pdf.setTextColor(245, 245, 245);
+  pdf.text("Trade Journal", 18, 54);
+
+  pdf.setDrawColor(243, 210, 27);
+  pdf.line(18, 60, 192, 60);
+
+  let y = 74;
+
+  function addInfo(label, value) {
+    pdf.setFont("helvetica", "bold");
+    pdf.setFontSize(10);
+    pdf.setTextColor(243, 210, 27);
+    pdf.text(label, 18, y);
+
+    pdf.setFont("helvetica", "normal");
+    pdf.setFontSize(12);
+    pdf.setTextColor(245, 245, 245);
+
+    const lines = pdf.splitTextToSize(String(value || "-"), 172);
+    pdf.text(lines, 18, y + 7);
+
+    y += 14 + lines.length * 5;
+  }
+
+  addInfo("Datum", trade.date);
+  addInfo("Markt", trade.market);
+  addInfo("Richtung", trade.direction);
+  addInfo("Session", trade.session);
+  addInfo("Ergebnis", trade.result);
+  addInfo("Gewinn / Verlust", formatMoney(trade.profitLoss));
+  addInfo("Entry", trade.entry);
+  addInfo("Stop Loss", trade.stopLoss);
+  addInfo("Take Profit", trade.takeProfit);
+  addInfo("RR", trade.rr);
+  addInfo("Setup", trade.setupType);
+  addInfo("Emotion", trade.emotion);
+  addInfo("News-Tag", trade.newsDay);
+  addInfo("News Notiz", trade.newsNote);
+  addInfo("Learnings", trade.notes);
+
+  pdf.setFontSize(8);
+  pdf.setTextColor(130, 130, 130);
+  pdf.text(
+    "BullProsperity dient ausschließlich Bildungszwecken und stellt keine Finanzberatung dar.",
+    18,
+    275
+  );
+
+  const cleanTitle = (trade.market || "Trade")
+    .replace(/[^\wäöüÄÖÜß-]+/g, "-")
+    .replace(/-+/g, "-");
+
+  pdf.save("BullProsperity-Journal-" + cleanTitle + ".pdf");
+}
+
+prevMonthBtn.addEventListener("click", async () => {
+  calendarDate.setMonth(calendarDate.getMonth() - 1);
+  await loadEconomicEvents();
+  renderCalendar();
+});
+
+nextMonthBtn.addEventListener("click", async () => {
+  calendarDate.setMonth(calendarDate.getMonth() + 1);
+  await loadEconomicEvents();
+  renderCalendar();
+});
+
+window.deleteTrade = deleteTrade;
+window.downloadTradePDF = downloadTradePDF;
+
+document.addEventListener("DOMContentLoaded", async () => {
+  const loginBtn = document.getElementById("loginNavBtn");
+
+  try {
+    const res = await fetch("/api/access", { credentials: "include" });
+    const data = await res.json();
+
+    if (data.role === "admin" || data.role === "premium") {
+      if (loginBtn) loginBtn.style.display = "none";
+    }
+  } catch {}
+
+  startBalance.value = getStartBalance() || "";
+  await loadEconomicEvents();
+  renderTrades();
+  renderCalendar();
+});
 </script>
+
 </body>
 </html>
