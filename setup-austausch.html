@@ -1,3 +1,7 @@
+<!-- setup-austausch.html -->
+<!-- Dark Luxury Version: weniger Gelb, mehr Schwarz/Gold -->
+<!-- Deinen /api/send-setup.js Code kannst du so lassen -->
+
 <!DOCTYPE html>
 <html lang="de">
 <head>
@@ -33,10 +37,10 @@
       margin: 0;
       font-family: Inter, Arial, sans-serif;
       background:
-        radial-gradient(circle at top right, rgba(255, 215, 0, 0.12), transparent 35%),
-        radial-gradient(circle at top left, rgba(255, 215, 0, 0.06), transparent 30%),
+        radial-gradient(circle at top right, rgba(255, 215, 0, 0.05), transparent 40%),
+        radial-gradient(circle at top left, rgba(255, 215, 0, 0.03), transparent 40%),
         #050505;
-      color: #fff;
+      color: #ffffff;
     }
 
     .page {
@@ -62,6 +66,7 @@
     .nav-links {
       display: flex;
       gap: 24px;
+      flex-wrap: wrap;
     }
 
     .nav-links a {
@@ -72,13 +77,11 @@
     }
 
     .hero {
-      border: 1px solid rgba(255, 215, 0, 0.22);
-      background:
-        linear-gradient(135deg, rgba(255, 215, 0, 0.12), rgba(255, 215, 0, 0.03)),
-        rgba(18, 18, 18, 0.92);
+      border: 1px solid rgba(255, 215, 0, 0.16);
+      background: rgba(15, 15, 15, 0.94);
       border-radius: 26px;
       padding: 36px;
-      box-shadow: 0 0 40px rgba(255, 215, 0, 0.08);
+      box-shadow: 0 0 28px rgba(0, 0, 0, 0.7);
       margin-bottom: 24px;
     }
 
@@ -86,9 +89,9 @@
       display: inline-flex;
       padding: 8px 14px;
       border-radius: 999px;
-      border: 1px solid rgba(255, 215, 0, 0.35);
+      border: 1px solid rgba(255, 215, 0, 0.25);
       color: #ffd700;
-      background: rgba(255, 215, 0, 0.08);
+      background: rgba(255, 215, 0, 0.04);
       font-size: 13px;
       font-weight: 800;
       margin-bottom: 16px;
@@ -103,7 +106,7 @@
 
     .hero h1 span {
       color: #ffd700;
-      text-shadow: 0 0 22px rgba(255, 215, 0, 0.35);
+      text-shadow: 0 0 14px rgba(255, 215, 0, 0.22);
     }
 
     .hero p {
@@ -127,18 +130,18 @@
       border-radius: 999px;
       text-decoration: none;
       font-weight: 800;
-      border: 1px solid rgba(255, 215, 0, 0.35);
+      border: 1px solid rgba(255, 215, 0, 0.26);
       cursor: pointer;
     }
 
     .btn-primary {
       background: #ffd700;
       color: #090909;
-      box-shadow: 0 0 24px rgba(255, 215, 0, 0.28);
+      box-shadow: 0 0 14px rgba(255, 215, 0, 0.18);
     }
 
     .btn-secondary {
-      background: rgba(255, 255, 255, 0.04);
+      background: rgba(255, 255, 255, 0.025);
       color: #fff3a0;
     }
 
@@ -150,13 +153,11 @@
     }
 
     .card {
-      border: 1px solid rgba(255, 215, 0, 0.22);
-      background:
-        linear-gradient(135deg, rgba(255, 215, 0, 0.08), rgba(255, 215, 0, 0.02)),
-        rgba(16, 16, 16, 0.94);
+      border: 1px solid rgba(255, 215, 0, 0.15);
+      background: rgba(13, 13, 13, 0.96);
       border-radius: 24px;
       padding: 26px;
-      box-shadow: inset 0 0 24px rgba(255, 215, 0, 0.03);
+      box-shadow: 0 0 22px rgba(0, 0, 0, 0.55);
     }
 
     .card h2 {
@@ -164,6 +165,7 @@
       font-size: 34px;
       color: #ffd700;
       letter-spacing: -1px;
+      text-shadow: 0 0 10px rgba(255, 215, 0, 0.12);
     }
 
     .card p {
@@ -180,11 +182,13 @@
       font-weight: 800;
     }
 
-    input, select, textarea {
+    input,
+    select,
+    textarea {
       width: 100%;
-      border: 1px solid rgba(255, 215, 0, 0.22);
-      background: rgba(255, 255, 255, 0.045);
-      color: #fff;
+      border: 1px solid rgba(255, 215, 0, 0.16);
+      background: rgba(255, 255, 255, 0.02);
+      color: #ffffff;
       border-radius: 12px;
       padding: 14px;
       outline: none;
@@ -198,7 +202,14 @@
 
     input::placeholder,
     textarea::placeholder {
-      color: rgba(255, 240, 170, 0.55);
+      color: rgba(255, 240, 170, 0.45);
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      border-color: rgba(255, 215, 0, 0.36);
+      box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.05);
     }
 
     .form-row {
@@ -214,8 +225,8 @@
     }
 
     .focus-item {
-      border: 1px solid rgba(255, 215, 0, 0.18);
-      background: rgba(255, 255, 255, 0.035);
+      border: 1px solid rgba(255, 215, 0, 0.14);
+      background: rgba(255, 255, 255, 0.02);
       border-radius: 14px;
       padding: 15px;
       color: #f8eaae;
@@ -227,8 +238,8 @@
     }
 
     .setup-card {
-      border: 1px solid rgba(255, 215, 0, 0.22);
-      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 215, 0, 0.14);
+      background: rgba(255, 255, 255, 0.025);
       border-radius: 18px;
       padding: 18px;
       margin-top: 14px;
@@ -249,7 +260,7 @@
       max-width: 100%;
       border-radius: 14px;
       margin-top: 12px;
-      border: 1px solid rgba(255, 215, 0, 0.18);
+      border: 1px solid rgba(255, 215, 0, 0.14);
     }
 
     .small-btn {
@@ -257,7 +268,7 @@
       margin-right: 8px;
       border-radius: 999px;
       padding: 10px 15px;
-      border: 1px solid rgba(255, 215, 0, 0.3);
+      border: 1px solid rgba(255, 215, 0, 0.25);
       background: #ffd700;
       color: #080808;
       font-weight: 900;
@@ -273,12 +284,6 @@
       .grid,
       .form-row {
         grid-template-columns: 1fr;
-      }
-
-      .nav-links {
-        gap: 12px;
-        font-size: 12px;
-        flex-wrap: wrap;
       }
 
       .hero {
