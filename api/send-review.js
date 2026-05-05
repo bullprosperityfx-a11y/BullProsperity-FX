@@ -33,75 +33,101 @@ export default async function handler(req, res) {
       return res.status(500).json({ error: "Discord Results Webhook fehlt." });
     }
 
-    const formData = new FormData();
-
-    const embeds = [
-      {
-        title: "📈 Neues Trade Review",
-        color: 15979035,
-        fields: [
-          { name: "👤 Name", value: name || "Nicht angegeben", inline: true },
-          { name: "📊 Markt", value: market || "-", inline: true },
-          { name: "🏁 Ergebnis", value: result || "-", inline: true },
-          { name: "📌 Titel", value: title, inline: false },
-          {
-            name: "📝 Review / Erkenntnis",
-            value: text.length > 1000 ? text.slice(0, 1000) + "..." : text,
-            inline: false
-          },
-          { name: "🕒 Datum", value: date || new Date().toLocaleString("de-DE"), inline: false }
-        ],
-        footer: {
-          text: "BullProsperity Trade Review"
+    async function sendJson(payload) {
+      const response = await fetch(webhookUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
         },
-        timestamp: new Date().toISOString()
-      }
-    ];
+        body: JSON.stringify(payload)
+      });
 
-    function addImage(dataUrl, fileName, embedTitle) {
-      if (!dataUrl || !dataUrl.startsWith("data:image/")) return false;
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error("DISCORD JSON ERROR:", errorText);
+        throw new Error("Discord JSON Fehler");
+      }
+    }
+
+    async function sendImage(dataUrl, titleText, fileName) {
+      if (!dataUrl || !dataUrl.startsWith("data:image/")) return;
 
       const match = dataUrl.match(/^data:(image\/\w+);base64,(.+)$/);
-      if (!match) return false;
+
+      if (!match) return;
 
       const mimeType = match[1];
       const base64Data = match[2];
       const buffer = Buffer.from(base64Data, "base64");
 
+      const formData = new FormData();
+
+      formData.append("payload_json", JSON.stringify({
+        embeds: [
+          {
+            title: titleText,
+            color: 15979035,
+            image: {
+              url: `attachment://${fileName}`
+            }
+          }
+        ]
+      }));
+
       formData.append(
-        "files[]",
+        "file",
         new Blob([buffer], { type: mimeType }),
         fileName
       );
 
-      embeds.push({
-        title: embedTitle,
-        color: 15979035,
-        image: {
-          url: `attachment://${fileName}`
-        }
+      const response = await fetch(webhookUrl, {
+        method: "POST",
+        body: formData
       });
 
-      return true;
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error("DISCORD IMAGE ERROR:", errorText);
+        throw new Error("Discord Bild Fehler");
+      }
     }
 
-    addImage(tradingViewImage, "tradingview-screenshot.png", "📊 TradingView Screenshot");
-    addImage(metaTraderImage, "metatrader-screenshot.png", "📱 MetaTrader Screenshot");
-
-    formData.append("payload_json", JSON.stringify({
-      embeds
-    }));
-
-    const discordRes = await fetch(webhookUrl, {
-      method: "POST",
-      body: formData
+    await sendJson({
+      embeds: [
+        {
+          title: "📈 Neues Trade Review",
+          color: 15979035,
+          fields: [
+            { name: "👤 Name", value: name || "Nicht angegeben", inline: true },
+            { name: "📊 Markt", value: market || "-", inline: true },
+            { name: "🏁 Ergebnis", value: result || "-", inline: true },
+            { name: "📌 Titel", value: title, inline: false },
+            {
+              name: "📝 Review / Erkenntnis",
+              value: text.length > 1000 ? text.slice(0, 1000) + "..." : text,
+              inline: false
+            },
+            { name: "🕒 Datum", value: date || new Date().toLocaleString("de-DE"), inline: false }
+          ],
+          footer: {
+            text: "BullProsperity Trade Review"
+          },
+          timestamp: new Date().toISOString()
+        }
+      ]
     });
 
-    if (!discordRes.ok) {
-      const errorText = await discordRes.text();
-      console.error("DISCORD ERROR:", errorText);
-      return res.status(500).json({ error: "Discord Fehler." });
-    }
+    await sendImage(
+      tradingViewImage,
+      "📊 TradingView Screenshot",
+      "tradingview-screenshot.png"
+    );
+
+    await sendImage(
+      metaTraderImage,
+      "📱 MetaTrader Screenshot",
+      "metatrader-screenshot.png"
+    );
 
     return res.status(200).json({ success: true });
 
