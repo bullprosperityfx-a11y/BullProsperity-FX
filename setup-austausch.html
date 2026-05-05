@@ -6,6 +6,7 @@
   <title>BullProsperity | Setup Austausch</title>
   <link rel="stylesheet" href="theme.css" />
   <script src="/login.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
   <script>
     (async () => {
@@ -67,13 +68,6 @@
     .field textarea {
       min-height: 140px;
       resize: vertical;
-    }
-
-    .field input:focus,
-    .field textarea:focus,
-    .field select:focus {
-      border-color: rgba(243,210,27,0.48);
-      box-shadow: 0 0 0 3px rgba(243,210,27,0.08);
     }
 
     .field-row {
@@ -163,6 +157,7 @@
       color: #fff;
       border: 1px solid rgba(255,255,255,0.14);
       margin-right: 8px;
+      margin-top: 8px;
     }
 
     .empty-state {
@@ -299,7 +294,7 @@
         <div class="badge">Lokale Speicherung</div>
         <h2 class="section-heading" style="font-size:36px; margin-bottom:10px;">Meine gespeicherten Setups</h2>
         <p class="section-subtext" style="margin-bottom:0;">
-          Diese Setups werden zusätzlich auf deinem Gerät gespeichert und können als Datei heruntergeladen werden.
+          Diese Setups werden zusätzlich auf deinem Gerät gespeichert und können als BullProsperity PDF heruntergeladen werden.
         </p>
 
         <div id="savedSetups" class="setup-list"></div>
@@ -369,7 +364,7 @@ function renderSetups() {
       </div>
       <div class="setup-text">${setup.description}</div>
       ${setup.image ? `<img class="setup-img" src="${setup.image}" alt="Setup Screenshot">` : ""}
-      <button class="small-btn" onclick="downloadSetup(${index})">Download</button>
+      <button class="small-btn" onclick="downloadSetup(${index})">PDF herunterladen</button>
       <button class="small-btn" onclick="deleteSetup(${index})">Setup löschen</button>
     `;
 
@@ -377,39 +372,156 @@ function renderSetups() {
   });
 }
 
-function downloadSetup(index) {
-  const setup = getSetups()[index];
-
-  const text = `
-BullProsperity Setup
-
-Titel: ${setup.title}
-Markt: ${setup.market}
-Bias: ${setup.bias}
-Setup Typ: ${setup.setupType}
-
-Beschreibung:
-${setup.description}
-
-Datum: ${setup.date}
-`;
-
-  const blob = new Blob([text], { type: "text/plain" });
-  const url = URL.createObjectURL(blob);
-
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = setup.title.replaceAll(" ", "-") + ".txt";
-  a.click();
-
-  URL.revokeObjectURL(url);
-}
-
 function deleteSetup(index) {
   const setups = getSetups();
   setups.splice(index, 1);
   saveSetups(setups);
   renderSetups();
+}
+
+async function downloadSetup(index) {
+  const setup = getSetups()[index];
+
+  if (!window.jspdf) {
+    alert("PDF Tool konnte nicht geladen werden.");
+    return;
+  }
+
+  const { jsPDF } = window.jspdf;
+  const pdf = new jsPDF("p", "mm", "a4");
+
+  const pageWidth = 210;
+  const pageHeight = 297;
+  const gold = [243, 210, 27];
+  const white = [245, 245, 245];
+  const muted = [170, 170, 170];
+  const dark = [5, 5, 5];
+  const panel = [14, 14, 14];
+
+  function paintBackground() {
+    pdf.setFillColor(...dark);
+    pdf.rect(0, 0, pageWidth, pageHeight, "F");
+
+    pdf.setDrawColor(...gold);
+    pdf.setLineWidth(0.35);
+    pdf.roundedRect(10, 10, 190, 277, 6, 6);
+
+    pdf.setFillColor(...panel);
+    pdf.roundedRect(15, 15, 180, 267, 5, 5, "F");
+  }
+
+  function addFooter() {
+    pdf.setFont("helvetica", "normal");
+    pdf.setFontSize(8);
+    pdf.setTextColor(130, 130, 130);
+    pdf.text(
+      "BullProsperity dient ausschließlich Bildungszwecken und stellt keine Finanzberatung dar.",
+      18,
+      275
+    );
+  }
+
+  function addHeader() {
+    pdf.setFont("helvetica", "bold");
+    pdf.setFontSize(22);
+    pdf.setTextColor(...gold);
+    pdf.text("BullProsperity", 18, 29);
+
+    pdf.setFont("helvetica", "normal");
+    pdf.setFontSize(10);
+    pdf.setTextColor(...muted);
+    pdf.text("Trading Education Platform", 18, 36);
+
+    pdf.setFont("helvetica", "bold");
+    pdf.setFontSize(25);
+    pdf.setTextColor(...white);
+    pdf.text("Setup Austausch", 18, 54);
+
+    pdf.setDrawColor(...gold);
+    pdf.setLineWidth(0.25);
+    pdf.line(18, 60, 192, 60);
+  }
+
+  paintBackground();
+  addHeader();
+
+  let y = 74;
+
+  function addInfo(label, value) {
+    if (y > 245) {
+      addFooter();
+      pdf.addPage();
+      paintBackground();
+      addHeader();
+      y = 74;
+    }
+
+    pdf.setFont("helvetica", "bold");
+    pdf.setFontSize(10);
+    pdf.setTextColor(...gold);
+    pdf.text(label, 18, y);
+
+    pdf.setFont("helvetica", "normal");
+    pdf.setFontSize(12);
+    pdf.setTextColor(...white);
+
+    const lines = pdf.splitTextToSize(value || "-", 172);
+    pdf.text(lines, 18, y + 7);
+
+    y += 14 + (lines.length * 5);
+  }
+
+  addInfo("Name", setup.name || "Nicht angegeben");
+  addInfo("Email", setup.email || "Nicht angegeben");
+  addInfo("Titel", setup.title);
+  addInfo("Markt", setup.market);
+  addInfo("Bias", setup.bias);
+  addInfo("Setup Typ", setup.setupType);
+  addInfo("Datum", setup.date);
+
+  addInfo("Beschreibung", setup.description);
+
+  if (setup.image) {
+    if (y > 165) {
+      addFooter();
+      pdf.addPage();
+      paintBackground();
+      addHeader();
+      y = 74;
+    }
+
+    pdf.setFont("helvetica", "bold");
+    pdf.setFontSize(12);
+    pdf.setTextColor(...gold);
+    pdf.text("TradingView Screenshot", 18, y);
+
+    y += 8;
+
+    try {
+      const props = pdf.getImageProperties(setup.image);
+      const imgWidth = 174;
+      let imgHeight = (props.height * imgWidth) / props.width;
+
+      if (imgHeight > 105) {
+        imgHeight = 105;
+      }
+
+      pdf.addImage(setup.image, props.fileType || "JPEG", 18, y, imgWidth, imgHeight);
+      y += imgHeight + 10;
+    } catch (err) {
+      pdf.setTextColor(...white);
+      pdf.setFontSize(11);
+      pdf.text("Screenshot konnte nicht eingebunden werden.", 18, y);
+    }
+  }
+
+  addFooter();
+
+  const cleanTitle = (setup.title || "Setup")
+    .replace(/[^\wäöüÄÖÜß-]+/g, "-")
+    .replace(/-+/g, "-");
+
+  pdf.save("BullProsperity-Setup-" + cleanTitle + ".pdf");
 }
 
 form.addEventListener("submit", async (e) => {
