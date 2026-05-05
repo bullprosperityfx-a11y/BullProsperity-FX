@@ -1,7 +1,7 @@
 export const config = {
   api: {
     bodyParser: {
-      sizeLimit: "6mb"
+      sizeLimit: "8mb"
     }
   }
 };
@@ -33,38 +33,36 @@ export default async function handler(req, res) {
       return res.status(500).json({ error: "Discord Results Webhook fehlt." });
     }
 
-    const embed = {
-      title: "📈 Neues Trade Review",
-      color: 15979035,
-      fields: [
-        { name: "👤 Name", value: name || "Nicht angegeben", inline: true },
-        { name: "📊 Markt", value: market || "-", inline: true },
-        { name: "🏁 Ergebnis", value: result || "-", inline: true },
-        { name: "📌 Titel", value: title, inline: false },
-        {
-          name: "📝 Review / Erkenntnis",
-          value: text.length > 1000 ? text.slice(0, 1000) + "..." : text,
-          inline: false
-        },
-        { name: "🕒 Datum", value: date || new Date().toLocaleString("de-DE"), inline: false }
-      ],
-      footer: {
-        text: "BullProsperity Trade Review"
-      },
-      timestamp: new Date().toISOString()
-    };
-
     const formData = new FormData();
 
-    formData.append("payload_json", JSON.stringify({
-      embeds: [embed]
-    }));
+    const embeds = [
+      {
+        title: "📈 Neues Trade Review",
+        color: 15979035,
+        fields: [
+          { name: "👤 Name", value: name || "Nicht angegeben", inline: true },
+          { name: "📊 Markt", value: market || "-", inline: true },
+          { name: "🏁 Ergebnis", value: result || "-", inline: true },
+          { name: "📌 Titel", value: title, inline: false },
+          {
+            name: "📝 Review / Erkenntnis",
+            value: text.length > 1000 ? text.slice(0, 1000) + "..." : text,
+            inline: false
+          },
+          { name: "🕒 Datum", value: date || new Date().toLocaleString("de-DE"), inline: false }
+        ],
+        footer: {
+          text: "BullProsperity Trade Review"
+        },
+        timestamp: new Date().toISOString()
+      }
+    ];
 
-    function appendImage(dataUrl, fileName) {
-      if (!dataUrl || !dataUrl.startsWith("data:image/")) return;
+    function addImage(dataUrl, fileName, embedTitle) {
+      if (!dataUrl || !dataUrl.startsWith("data:image/")) return false;
 
       const match = dataUrl.match(/^data:(image\/\w+);base64,(.+)$/);
-      if (!match) return;
+      if (!match) return false;
 
       const mimeType = match[1];
       const base64Data = match[2];
@@ -75,10 +73,24 @@ export default async function handler(req, res) {
         new Blob([buffer], { type: mimeType }),
         fileName
       );
+
+      embeds.push({
+        title: embedTitle,
+        color: 15979035,
+        image: {
+          url: `attachment://${fileName}`
+        }
+      });
+
+      return true;
     }
 
-    appendImage(tradingViewImage, "tradingview-screenshot.png");
-    appendImage(metaTraderImage, "metatrader-screenshot.png");
+    addImage(tradingViewImage, "tradingview-screenshot.png", "📊 TradingView Screenshot");
+    addImage(metaTraderImage, "metatrader-screenshot.png", "📱 MetaTrader Screenshot");
+
+    formData.append("payload_json", JSON.stringify({
+      embeds
+    }));
 
     const discordRes = await fetch(webhookUrl, {
       method: "POST",
@@ -86,6 +98,8 @@ export default async function handler(req, res) {
     });
 
     if (!discordRes.ok) {
+      const errorText = await discordRes.text();
+      console.error("DISCORD ERROR:", errorText);
       return res.status(500).json({ error: "Discord Fehler." });
     }
 
