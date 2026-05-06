@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BullProsperity | Partner Broker</title>
+  <link rel="stylesheet" href="theme.css" />
+  <script src="/login.js" defer></script>
+
+  <script>
+    (async () => {
+      try {
+        const res = await fetch("/api/access", {
+          credentials: "include",
+          cache: "no-store"
+        });
+
+        const data = await res.json();
+
+        if (data.role !== "admin" && data.role !== "premium") {
+          window.location.href = "locked.html";
+        }
+      } catch {
+        window.location.href = "locked.html";
+      }
+    })();
+  </script>
+
+  <style>
+    .broker-layout{
+      display:grid;
+      grid-template-columns:1.05fr .95fr;
+      gap:24px;
+      align-items:start;
+    }
+
+    .broker-panel{
+      border:1px solid var(--line);
+      border-radius:28px;
+      background:linear-gradient(180deg, var(--panel), var(--panel-2));
+      box-shadow:0 0 0 1px rgba(255,255,255,0.02) inset;
+      padding:26px;
+    }
+
+    .broker-grid{
+      display:grid;
+      grid-template-columns:repeat(2,1fr);
+      gap:16px;
+      margin-top:20px;
+    }
+
+    .broker-item{
+      border:1px solid rgba(243,210,27,0.14);
+      border-radius:18px;
+      background:rgba(255,255,255,0.025);
+      padding:18px;
+    }
+
+    .broker-item h3{
+      color:var(--gold);
+      margin:0 0 8px;
+      font-size:20px;
+    }
+
+    .broker-item p{
+      color:#d8d8d8;
+      line-height:1.6;
+      margin:0;
+      font-size:14px;
+      font-weight:700;
+    }
+
+    .broker-steps{
+      display:grid;
+      gap:14px;
+      margin-top:20px;
+    }
+
+    .broker-step{
+      display:flex;
+      gap:14px;
+      align-items:flex-start;
+      border:1px solid rgba(243,210,27,0.12);
+      border-radius:18px;
+      background:rgba(255,255,255,0.025);
+      padding:16px;
+    }
+
+    .broker-step-num{
+      width:34px;
+      height:34px;
+      min-width:34px;
+      border-radius:50%;
+      background:rgba(243,210,27,0.10);
+      border:1px solid rgba(243,210,27,0.25);
+      color:var(--gold);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-weight:900;
+    }
+
+    .broker-step strong{
+      display:block;
+      color:#fff;
+      margin-bottom:5px;
+    }
+
+    .broker-step p{
+      margin:0;
+      color:#cfcfcf;
+      line-height:1.6;
+      font-size:14px;
+    }
+
+    .broker-cta{
+      margin-top:22px;
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+    }
+
+    .broker-note{
+      margin-top:18px;
+      border:1px solid rgba(255,255,255,0.10);
+      border-radius:18px;
+      background:rgba(255,255,255,0.025);
+      padding:16px;
+      color:#bdbdbd;
+      line-height:1.7;
+      font-size:13px;
+      font-weight:700;
+    }
+
+    @media(max-width:1100px){
+      .broker-layout{
+        grid-template-columns:1fr;
+      }
+    }
+
+    @media(max-width:760px){
+      .broker-grid{
+        grid-template-columns:1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="page">
+
+    <nav class="navbar">
+      <a href="index.html" class="logo">BullProsperity</a>
+      <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="hub.html">Hub</a>
+        <a href="course.html">Course</a>
+        <a href="tools.html">Tools</a>
+        <a href="setup-room.html">Setup Room</a>
+        <a href="community.html">Community</a>
+        <a id="loginNavBtn" href="/api/whop/login">Login</a>
+      </div>
+    </nav>
+
+    <section class="hero-shell">
+      <div class="badge">Trading Infrastruktur</div>
+      <h1 class="hero-title">BullProsperity <span class="gold">Partner Broker</span></h1>
+      <p class="hero-text">
+        Richte deine Trading-Umgebung sauber ein: Broker, MT5, Fokusmärkte und Workflow an einem Ort.
+      </p>
+      <div class="hero-buttons">
+        <a href="DEIN_QUOMARKETS_AFFILIATE_LINK" target="_blank" class="btn primary">Konto eröffnen</a>
+        <a href="#broker-setup" class="btn secondary">Setup ansehen</a>
+      </div>
+    </section>
+
+    <section class="broker-layout">
+
+      <div class="broker-panel">
+        <div class="badge">QuoMarkets</div>
+        <h2 class="section-heading" style="font-size:36px; margin-bottom:10px;">Broker Setup für Mitglieder</h2>
+        <p class="section-subtext" style="margin-bottom:0;">
+          QuoMarkets bietet MT5-Zugang und Märkte wie Forex, Metals, Indices, Commodities, Crypto und Shares an. 
+          Genau diese Infrastruktur passt gut zu einem strukturierten BullProsperity Workflow. 
+        </p>
+
+        <div class="broker-grid">
+          <div class="broker-item">
+            <h3>MT5 Zugang</h3>
+            <p>Nutze MetaTrader 5 für Charting, Orderausführung und technische Analyse.</p>
+          </div>
+
+          <div class="broker-item">
+            <h3>Fokusmärkte</h3>
+            <p>Forex, Gold, Indices, Commodities, Crypto und Shares sind über MT5 verfügbar.</p>
+          </div>
+
+          <div class="broker-item">
+            <h3>Workflow</h3>
+            <p>Analyse im Hub, Entry im Chart, Trade im Journal dokumentieren.</p>
+          </div>
+
+          <div class="broker-item">
+            <h3>Struktur</h3>
+            <p>Saubere Kontoverbindung, klare Plattform und bessere Übersicht für deine Trading-Routine.</p>
+          </div>
+        </div>
+
+        <div class="broker-cta">
+          <a href="https://my.quomarkets.com/register?regnew=2770" target="_blank" class="btn primary">QuoMarkets Konto eröffnen</a>
+          <a href="tools.html" class="btn secondary">Zurück zu den Tools</a>
+        </div>
+      </div>
+
+      <div class="broker-panel" id="broker-setup">
+        <div class="badge">Setup Anleitung</div>
+        <h2 class="section-heading" style="font-size:36px; margin-bottom:10px;">So richtest du es ein</h2>
+
+        <div class="broker-steps">
+          <div class="broker-step">
+            <div class="broker-step-num">1</div>
+            <div>
+              <strong>Konto eröffnen</strong>
+              <p>Öffne dein Konto über den BullProsperity Partnerlink.</p>
+            </div>
+          </div>
+
+          <div class="broker-step">
+            <div class="broker-step-num">2</div>
+            <div>
+              <strong>Verifizierung abschließen</strong>
+              <p>Folge den Schritten im Mitgliederbereich des Brokers und vervollständige deine Daten.</p>
+            </div>
+          </div>
+
+          <div class="broker-step">
+            <div class="broker-step-num">3</div>
+            <div>
+              <strong>MT5 verbinden</strong>
+              <p>Nutze deine Login-Daten für MetaTrader 5 und wähle den passenden QuoMarkets Server.</p>
+            </div>
+          </div>
+
+          <div class="broker-step">
+            <div class="broker-step-num">4</div>
+            <div>
+              <strong>Trading Journal nutzen</strong>
+              <p>Dokumentiere deine Trades direkt im BullProsperity Journal und halte dein Risiko sauber fest.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="broker-note">
+          Hinweis: Der Broker-Link kann ein Partnerlink sein. BullProsperity kann dadurch eine Provision erhalten.
+          Trading beinhaltet Risiken. BullProsperity dient ausschließlich Bildungszwecken.
+        </div>
+      </div>
+
+    </section>
+
+    <div class="footer-note">
+      BullProsperity dient ausschließlich Bildungszwecken und stellt keine Finanzberatung dar.
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", async () => {
+      const loginBtn = document.getElementById("loginNavBtn");
+
+      try {
+        const res = await fetch("/api/access", {
+          credentials: "include",
+          cache: "no-store"
+        });
+
+        const data = await res.json();
+
+        if (data.role === "admin" || data.role === "premium") {
+          if (loginBtn) loginBtn.style.display = "none";
+        }
+      } catch {}
+    });
+  </script>
+</body>
+</html>
