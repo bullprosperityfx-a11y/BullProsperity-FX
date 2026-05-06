@@ -3,371 +3,316 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>BullProsperity | Longterm</title>
-  <link rel="stylesheet" href="longterm.css" />
+  <title>BullProsperity | Longterm Pro</title>
+  <link rel="stylesheet" href="theme.css" />
+  <script src="/login.js" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="longterm.js" defer></script>
+
+  <script>
+    (async () => {
+      try {
+        const res = await fetch("/api/access", { credentials: "include", cache: "no-store" });
+        const data = await res.json();
+
+        if (data.role !== "admin" && data.role !== "premium") {
+          window.location.href = "locked.html";
+        }
+      } catch {
+        window.location.href = "locked.html";
+      }
+    })();
+  </script>
+
+  <style>
+    .lt-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:24px;align-items:start}
+    .lt-panel{border:1px solid var(--line);border-radius:30px;background:linear-gradient(180deg,var(--panel),var(--panel-2));padding:26px;box-shadow:0 0 0 1px rgba(255,255,255,.02) inset}
+    .lt-hero-card{position:relative;overflow:hidden;border:1px solid var(--line);border-radius:32px;background:radial-gradient(circle at 80% 20%,rgba(243,210,27,.14),transparent 35%),linear-gradient(180deg,var(--panel),var(--panel-2));padding:34px}
+    .lt-video-grid,.lt-market-grid,.lt-broker-grid,.lt-stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:20px}
+    .lt-video,.lt-card,.lt-stat{border:1px solid rgba(243,210,27,.14);border-radius:22px;background:rgba(255,255,255,.025);padding:18px}
+    .lt-video{min-height:170px;display:flex;align-items:center;justify-content:center;text-align:center;color:#bdbdbd;font-weight:800}
+    .lt-card h3,.lt-stat .value{color:var(--gold);margin:0 0 8px;font-size:22px}
+    .lt-card p,.lt-stat .label{color:#d6d6d6;line-height:1.6;margin:0;font-size:14px;font-weight:700}
+    .lt-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:18px}
+    .lt-form{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:18px}
+    .lt-field{display:flex;flex-direction:column;gap:8px}
+    .lt-field label{color:#f1f1f1;font-size:14px;font-weight:800}
+    .lt-field input{width:100%;border-radius:16px;border:1px solid rgba(243,210,27,.18);background:rgba(255,255,255,.03);color:#fff;padding:14px 16px;font-size:15px;outline:none}
+    .result-box{margin-top:18px;border:1px solid rgba(243,210,27,.18);border-radius:22px;background:rgba(243,210,27,.05);padding:18px}
+    .result-big{color:var(--gold);font-size:34px;font-weight:950;margin-top:6px}
+    .allocation-row{display:grid;grid-template-columns:1fr 90px;gap:12px;align-items:center;margin-top:12px}
+    .allocation-row span{color:#fff;font-weight:800}
+    .market-list{display:grid;gap:10px;margin-top:14px}
+    .market-item{display:flex;justify-content:space-between;gap:12px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.025);border-radius:16px;padding:12px 14px}
+    .market-item strong{color:#fff}
+    .market-item span{color:var(--gold);font-weight:800}
+    .mini-note{margin-top:18px;color:#9f9f9f;font-size:12px;line-height:1.7}
+    @media(max-width:1100px){.lt-grid,.lt-video-grid,.lt-market-grid,.lt-broker-grid,.lt-stat-grid{grid-template-columns:1fr}.lt-form{grid-template-columns:1fr}}
+  </style>
 </head>
+
 <body>
   <div class="page">
-    <header class="header">
-      <h1 class="headline">Longterm Pro Watchlist</h1>
-      <p class="subheadline">
-        Wähle Kategorien und beobachte hochwertige ETFs, Aktien, Indizes, Rohstoffe,
-        Krypto und DAX-Assets direkt in deinem BullProsperity Bereich.
+    <nav class="navbar">
+      <a href="index.html" class="logo">BullProsperity</a>
+      <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="hub.html">Hub</a>
+        <a href="course.html">Course</a>
+        <a href="tools.html">Tools</a>
+        <a href="setup-room.html">Setup Room</a>
+        <a href="community.html">Community</a>
+        <a id="loginNavBtn" href="/api/whop/login">Login</a>
+      </div>
+    </nav>
+
+    <section class="lt-hero-card">
+      <div class="badge">Longterm Pro</div>
+      <h1 class="hero-title">BullProsperity <span class="gold">Wealth System</span></h1>
+      <p class="hero-text">
+        Strukturiere deinen langfristigen Vermögensaufbau mit ETFs, Aktien, Crypto und Rohstoffen.
+        Plane deine Allocation, berechne Zinseszins und nutze passende Plattformen für deine Investment-Infrastruktur.
       </p>
-    </header>
+      <div class="hero-buttons">
+        <a href="#compound" class="btn primary">Compound Rechner</a>
+        <a href="#broker" class="btn secondary">Broker & Plattformen</a>
+      </div>
+    </section>
 
-    <section class="layout">
-      <aside class="sidebar">
-        <button class="filter-btn active" data-asset="SPY">Alle</button>
-        <button class="filter-btn" data-asset="SPY">ETFs</button>
-        <button class="filter-btn" data-asset="AAPL">Aktien</button>
-        <button class="filter-btn" data-asset="DAX">DAX</button>
-        <button class="filter-btn" data-asset="NDX">Indizes</button>
-        <button class="filter-btn" data-asset="GOLD">Rohstoffe</button>
-        <button class="filter-btn" data-asset="BTC">Crypto</button>
-      </aside>
+    <section class="section">
+      <div class="lt-video-grid">
+        <div class="lt-video">🎬 Video 1<br>Warum langfristig investieren?</div>
+        <div class="lt-video">🎬 Video 2<br>ETFs, Aktien, Crypto & Rohstoffe</div>
+        <div class="lt-video">🎬 Video 3<br>Portfolio Aufbau & Disziplin</div>
+      </div>
+    </section>
 
-      <main class="content">
-        <div class="asset-top">
-          <div>
-            <span class="mini-label">Kategorie</span>
-            <div class="asset-symbol" id="assetSymbol">SPY</div>
-            <p class="asset-description" id="assetDescription">
-              Breiter ETF auf den US-Markt und klassischer Longterm-Baustein.
-            </p>
+    <section class="lt-grid">
+      <div class="lt-panel">
+        <div class="badge">Portfolio Allocation</div>
+        <h2 class="section-heading" style="font-size:36px;margin-bottom:10px;">Investment Aufteilung</h2>
+        <p class="section-subtext" style="margin-bottom:0;">Passe die Gewichtung an und baue deine eigene Longterm Struktur.</p>
+
+        <div class="allocation-row"><span>ETFs</span><input id="etfAlloc" type="number" value="40"></div>
+        <div class="allocation-row"><span>Aktien</span><input id="stockAlloc" type="number" value="25"></div>
+        <div class="allocation-row"><span>Crypto</span><input id="cryptoAlloc" type="number" value="20"></div>
+        <div class="allocation-row"><span>Rohstoffe</span><input id="commodityAlloc" type="number" value="15"></div>
+
+        <div class="lt-actions">
+          <button class="btn primary" id="updateAllocationBtn">Diagramm aktualisieren</button>
+        </div>
+      </div>
+
+      <div class="lt-panel">
+        <div class="badge">Diagramm</div>
+        <canvas id="allocationChart" style="max-height:360px;"></canvas>
+      </div>
+    </section>
+
+    <section class="section" id="compound">
+      <div class="lt-panel">
+        <div class="badge">Compound Rechner</div>
+        <h2 class="section-heading" style="font-size:36px;margin-bottom:10px;">Zinseszins berechnen</h2>
+        <p class="section-subtext" style="margin-bottom:0;">Simuliere, wie sich Startkapital, monatliche Sparrate und Rendite über Jahre entwickeln können.</p>
+
+        <div class="lt-form">
+          <div class="lt-field"><label>Startkapital €</label><input id="startCapital" type="number" value="1000"></div>
+          <div class="lt-field"><label>Monatliche Sparrate €</label><input id="monthlyRate" type="number" value="250"></div>
+          <div class="lt-field"><label>Jahre</label><input id="years" type="number" value="15"></div>
+          <div class="lt-field"><label>Erwartete Rendite % p.a.</label><input id="returnRate" type="number" value="7"></div>
+        </div>
+
+        <div class="lt-actions">
+          <button class="btn primary" id="calcCompoundBtn">Berechnen</button>
+        </div>
+
+        <div class="result-box">
+          <div class="badge">Ergebnis</div>
+          <div class="result-big" id="compoundResult">0 €</div>
+          <p class="section-subtext" id="compoundText" style="margin:8px 0 0;">Berechnung erscheint hier.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="broker">
+      <div class="lt-panel">
+        <div class="badge">Investment Infrastruktur</div>
+        <h2 class="section-heading" style="font-size:36px;margin-bottom:10px;">Plattformen & Kontoeröffnung</h2>
+        <p class="section-subtext" style="margin-bottom:0;">Wähle je nach Anlageklasse die passende Plattform für deinen langfristigen Aufbau.</p>
+
+        <div class="lt-broker-grid">
+          <div class="lt-card">
+            <h3>ETFs & Aktien</h3>
+            <p>Für Sparpläne, Einzelaktien und langfristige Portfolio-Struktur.</p>
+            <div class="lt-actions">
+              <a href="https://refnocode.trade.re/mgjhkl96" target="_blank" class="btn primary">Trade Republic</a>
+              <a href="https://de.scalable.capital/einladung/bnrfbr" target="_blank" class="btn secondary">Scalable</a>
+            </div>
           </div>
 
-          <div class="asset-tags">
-            <span class="asset-tag" id="tagOne">Core</span>
-            <span class="asset-tag" id="tagTwo">ETF</span>
-            <span class="asset-tag" id="tagThree">Longterm</span>
+          <div class="lt-card">
+            <h3>Crypto</h3>
+            <p>Für Bitcoin, Ethereum und langfristige Crypto-Positionen.</p>
+            <div class="lt-actions">
+              <a href="https://crypto.com/app/8b84znu244" target="_blank" class="btn primary">Crypto.com</a>
+            </div>
+          </div>
+
+          <div class="lt-card">
+            <h3>Rohstoffe & Edelmetalle</h3>
+            <p>Für Gold, Silber, Commodity ETFs oder physische Edelmetalle.</p>
+            <div class="lt-actions">
+              <a href="ROHSTOFF_LINK" target="_blank" class="btn primary">Rohstoffe öffnen</a>
+              <a href="broker.html" class="btn secondary">Broker Setup</a>
+            </div>
           </div>
         </div>
 
-        <section class="chart-card">
-          <div class="chart-card-top">
-            <div>
-              <div class="chart-title" id="chartTitle">SPY Performance</div>
-              <div class="chart-status" id="chartStatus">BullProsperity Longterm View</div>
-            </div>
-
-            <div class="time-buttons">
-              <button class="time-btn active" data-range="3M">3M</button>
-              <button class="time-btn" data-range="6M">6M</button>
-              <button class="time-btn" data-range="1Y">1Y</button>
-              <button class="time-btn" data-range="2Y">2Y</button>
-            </div>
-          </div>
-
-          <div class="chart-wrap">
-            <canvas id="longtermChart"></canvas>
-          </div>
-
-          <div class="stats-grid">
-            <div class="stat-box">
-              <span>Aktueller Kurs</span>
-              <strong id="statPrice">613,42 €</strong>
-            </div>
-            <div class="stat-box">
-              <span>Veränderung</span>
-              <strong id="statChange" class="negative">-1,00 %</strong>
-            </div>
-            <div class="stat-box">
-              <span>Trend</span>
-              <strong id="statTrend">Bullish</strong>
-            </div>
-            <div class="stat-box">
-              <span>Strategie</span>
-              <strong id="statStrategy">Hold</strong>
-            </div>
-          </div>
-        </section>
-
-        <section class="dual-grid">
-          <div class="section-card">
-            <span class="mini-label">Longterm Thesis</span>
-            <h3>Investment Case</h3>
-            <p id="thesisText">
-              Solides Longterm-Asset mit breiter Marktbasis, hoher Relevanz und
-              starker Eignung als langfristiger Kernbaustein.
-            </p>
-          </div>
-
-          <div class="section-card">
-            <span class="mini-label">BullProsperity View</span>
-            <h3>Bias & Setup</h3>
-            <div class="bullet-list" id="biasList">
-              <div class="bullet-item">Makrostruktur bleibt konstruktiv.</div>
-              <div class="bullet-item">Pullbacks eher beobachten als jagen.</div>
-              <div class="bullet-item">Kein FOMO-Einstieg in überdehnte Stärke.</div>
-            </div>
-          </div>
-        </section>
-
-        <section class="metrics-section">
-          <div class="section-header">
-            <span class="mini-label">Key Data</span>
-            <h3>Wichtige Kennzahlen</h3>
-          </div>
-
-          <div class="metrics-grid">
-            <div class="metric-card">
-              <span>Entry Zone</span>
-              <strong id="entryZone">580 – 600</strong>
-            </div>
-            <div class="metric-card">
-              <span>Hold Zone</span>
-              <strong id="holdZone">600 – 640</strong>
-            </div>
-            <div class="metric-card">
-              <span>Risk Zone</span>
-              <strong id="riskZone">unter 560</strong>
-            </div>
-            <div class="metric-card">
-              <span>Conviction</span>
-              <strong id="convictionScore">8.8 / 10</strong>
-            </div>
-          </div>
-        </section>
-
-        <section class="watchlist-section">
-          <div class="section-header">
-            <span class="mini-label">ETF, Stocks, Indices, Commodities, Crypto</span>
-            <h3>Watchlist Einträge</h3>
-          </div>
-
-          <div class="watchlist-table">
-            <div class="watchlist-row watchlist-head">
-              <div>Asset</div>
-              <div>Kurs</div>
-              <div>Veränderung</div>
-              <div>Typ</div>
-            </div>
-
-            <div class="watchlist-row">
-              <div class="asset-cell">
-                <div class="asset-icon">IT</div>
-                <div class="asset-text">
-                  <strong>S&amp;P 500 Information Tech USD</strong>
-                  <span>Technologie ETF</span>
-                </div>
-              </div>
-              <div class="price-cell">33,73 €</div>
-              <div class="change-cell negative">▼ 0,93 %</div>
-              <div><span class="type-badge">ETF</span></div>
-            </div>
-
-            <div class="watchlist-row">
-              <div class="asset-cell">
-                <div class="asset-icon">AI</div>
-                <div class="asset-text">
-                  <strong>AI &amp; Big Data USD (Acc)</strong>
-                  <span>Zukunft / KI ETF</span>
-                </div>
-              </div>
-              <div class="price-cell">152,88 €</div>
-              <div class="change-cell negative">▼ 1,00 %</div>
-              <div><span class="type-badge">ETF</span></div>
-            </div>
-
-            <div class="watchlist-row">
-              <div class="asset-cell">
-                <div class="asset-icon">SP</div>
-                <div class="asset-text">
-                  <strong>Core S&amp;P 500 USD (Acc)</strong>
-                  <span>US Markt ETF</span>
-                </div>
-              </div>
-              <div class="price-cell">613,42 €</div>
-              <div class="change-cell negative">▼ 1,00 %</div>
-              <div><span class="type-badge">ETF</span></div>
-            </div>
-
-            <div class="watchlist-row">
-              <div class="asset-cell">
-                <div class="asset-icon">MW</div>
-                <div class="asset-text">
-                  <strong>Core MSCI World USD (Acc)</strong>
-                  <span>Welt ETF</span>
-                </div>
-              </div>
-              <div class="price-cell">110,02 €</div>
-              <div class="change-cell negative">▼ 1,04 %</div>
-              <div><span class="type-badge">ETF</span></div>
-            </div>
-
-            <div class="watchlist-row">
-              <div class="asset-cell">
-                <div class="asset-icon">NQ</div>
-                <div class="asset-text">
-                  <strong>NASDAQ100 USD (Acc)</strong>
-                  <span>Growth ETF</span>
-                </div>
-              </div>
-              <div class="price-cell">1.208,20 €</div>
-              <div class="change-cell negative">▼ 1,13 %</div>
-              <div><span class="type-badge">ETF</span></div>
-            </div>
-
-            <div class="watchlist-row">
-              <div class="asset-cell">
-                <div class="asset-icon stock">NV</div>
-                <div class="asset-text">
-                  <strong>NVIDIA</strong>
-                  <span>AI / Halbleiter</span>
-                </div>
-              </div>
-              <div class="price-cell">154,30 €</div>
-              <div class="change-cell negative">▼ 1,82 %</div>
-              <div><span class="type-badge stock">Aktie</span></div>
-            </div>
-
-            <div class="watchlist-row">
-              <div class="asset-cell">
-                <div class="asset-icon stock">AP</div>
-                <div class="asset-text">
-                  <strong>Apple</strong>
-                  <span>Big Tech / Quality</span>
-                </div>
-              </div>
-              <div class="price-cell">214,15 €</div>
-              <div class="change-cell positive">▲ 0,64 %</div>
-              <div><span class="type-badge stock">Aktie</span></div>
-            </div>
-
-            <div class="watchlist-row">
-              <div class="asset-cell">
-                <div class="asset-icon index">DX</div>
-                <div class="asset-text">
-                  <strong>DAX</strong>
-                  <span>Deutscher Leitindex</span>
-                </div>
-              </div>
-              <div class="price-cell">18.942,00</div>
-              <div class="change-cell negative">▼ 0,41 %</div>
-              <div><span class="type-badge index">Index</span></div>
-            </div>
-
-            <div class="watchlist-row">
-              <div class="asset-cell">
-                <div class="asset-icon index">SPX</div>
-                <div class="asset-text">
-                  <strong>S&amp;P 500 Index</strong>
-                  <span>US Large Cap Index</span>
-                </div>
-              </div>
-              <div class="price-cell">5.212,00</div>
-              <div class="change-cell positive">▲ 0,21 %</div>
-              <div><span class="type-badge index">Index</span></div>
-            </div>
-
-            <div class="watchlist-row">
-              <div class="asset-cell">
-                <div class="asset-icon index">NDX</div>
-                <div class="asset-text">
-                  <strong>NASDAQ 100</strong>
-                  <span>US Tech Index</span>
-                </div>
-              </div>
-              <div class="price-cell">18.104,00</div>
-              <div class="change-cell positive">▲ 0,48 %</div>
-              <div><span class="type-badge index">Index</span></div>
-            </div>
-
-            <div class="watchlist-row">
-              <div class="asset-cell">
-                <div class="asset-icon commodity">AU</div>
-                <div class="asset-text">
-                  <strong>Gold</strong>
-                  <span>Rohstoff / Safe Haven</span>
-                </div>
-              </div>
-              <div class="price-cell">2.184,00 $</div>
-              <div class="change-cell positive">▲ 0,35 %</div>
-              <div><span class="type-badge commodity">Rohstoff</span></div>
-            </div>
-
-            <div class="watchlist-row">
-              <div class="asset-cell">
-                <div class="asset-icon commodity">WT</div>
-                <div class="asset-text">
-                  <strong>WTI Öl</strong>
-                  <span>Energie / Commodity</span>
-                </div>
-              </div>
-              <div class="price-cell">77,42 $</div>
-              <div class="change-cell negative">▼ 0,56 %</div>
-              <div><span class="type-badge commodity">Rohstoff</span></div>
-            </div>
-
-            <div class="watchlist-row">
-              <div class="asset-cell">
-                <div class="asset-icon crypto">₿</div>
-                <div class="asset-text">
-                  <strong>Bitcoin</strong>
-                  <span>Krypto / Makro Asset</span>
-                </div>
-              </div>
-              <div class="price-cell">76.200,00 $</div>
-              <div class="change-cell positive">▲ 1,12 %</div>
-              <div><span class="type-badge crypto">Crypto</span></div>
-            </div>
-
-            <div class="watchlist-row">
-              <div class="asset-cell">
-                <div class="asset-icon crypto">Ξ</div>
-                <div class="asset-text">
-                  <strong>Ethereum</strong>
-                  <span>Smart Contract Asset</span>
-                </div>
-              </div>
-              <div class="price-cell">3.980,00 $</div>
-              <div class="change-cell negative">▼ 0,27 %</div>
-              <div><span class="type-badge crypto">Crypto</span></div>
-            </div>
-          </div>
-        </section>
-
-        <section class="analysis-grid">
-          <div class="section-card">
-            <span class="mini-label">Catalysts</span>
-            <h3>Positive Treiber</h3>
-            <div class="bullet-list" id="catalystList">
-              <div class="bullet-item">Stabile Grundnachfrage im jeweiligen Marktsegment.</div>
-              <div class="bullet-item">Langfristige Relevanz über mehrere Marktzyklen.</div>
-              <div class="bullet-item">Gute Chancen auf strukturelles Wachstum.</div>
-            </div>
-          </div>
-
-          <div class="section-card">
-            <span class="mini-label">Risks</span>
-            <h3>Risiken</h3>
-            <div class="bullet-list" id="riskList">
-              <div class="bullet-item">Kurzfristige Volatilität kann Einstiege unruhig machen.</div>
-              <div class="bullet-item">Makro-Unsicherheit kann Pullbacks auslösen.</div>
-              <div class="bullet-item">Überdehnte Bewegungen sollten nicht gechased werden.</div>
-            </div>
-          </div>
-        </section>
-
-        <section class="notes-section">
-          <div class="section-header">
-            <span class="mini-label">Journal</span>
-            <h3>Longterm Notizen</h3>
-          </div>
-
-          <div class="notes-card">
-            <p id="notesText">
-              Fokus auf saubere Longterm-Struktur, keine impulsiven FOMO-Käufe.
-              Pullbacks und Reakkumulationszonen sind im BullProsperity Stil oft
-              interessanter als das Hinterherlaufen starker Bewegungen.
-            </p>
-          </div>
-        </section>
-      </main>
+        <div class="mini-note">
+          Hinweis: Links können Partnerlinks sein. BullProsperity dient Bildungszwecken. Investments und Trading beinhalten Risiken.
+        </div>
+      </div>
     </section>
+
+    <section class="section">
+      <div class="lt-market-grid">
+        <div class="lt-card">
+          <h3>ETFs</h3>
+          <div class="market-list">
+            <div class="market-item"><strong>MSCI World</strong><span>Core</span></div>
+            <div class="market-item"><strong>S&P 500</strong><span>USA</span></div>
+            <div class="market-item"><strong>NASDAQ 100</strong><span>Tech</span></div>
+            <div class="market-item"><strong>Emerging Markets</strong><span>Growth</span></div>
+          </div>
+        </div>
+
+        <div class="lt-card">
+          <h3>Aktien</h3>
+          <div class="market-list">
+            <div class="market-item"><strong>NVIDIA</strong><span>AI</span></div>
+            <div class="market-item"><strong>Apple</strong><span>Quality</span></div>
+            <div class="market-item"><strong>Microsoft</strong><span>Software</span></div>
+            <div class="market-item"><strong>Tesla</strong><span>Growth</span></div>
+          </div>
+        </div>
+
+        <div class="lt-card">
+          <h3>Crypto</h3>
+          <div class="market-list">
+            <div class="market-item"><strong>Bitcoin</strong><span>BTC</span></div>
+            <div class="market-item"><strong>Ethereum</strong><span>ETH</span></div>
+            <div class="market-item"><strong>Solana</strong><span>SOL</span></div>
+            <div class="market-item"><strong>Crypto Basket</strong><span>DCA</span></div>
+          </div>
+        </div>
+
+        <div class="lt-card">
+          <h3>Rohstoffe</h3>
+          <div class="market-list">
+            <div class="market-item"><strong>Gold</strong><span>Schutz</span></div>
+            <div class="market-item"><strong>Silber</strong><span>Metall</span></div>
+            <div class="market-item"><strong>Uranium</strong><span>Energy</span></div>
+            <div class="market-item"><strong>Commodity ETFs</strong><span>Basket</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="footer-note">
+      BullProsperity dient ausschließlich Bildungszwecken und stellt keine Finanzberatung dar.
+    </div>
   </div>
+
+<script>
+  const etfAlloc = document.getElementById("etfAlloc");
+  const stockAlloc = document.getElementById("stockAlloc");
+  const cryptoAlloc = document.getElementById("cryptoAlloc");
+  const commodityAlloc = document.getElementById("commodityAlloc");
+  const updateAllocationBtn = document.getElementById("updateAllocationBtn");
+
+  const startCapital = document.getElementById("startCapital");
+  const monthlyRate = document.getElementById("monthlyRate");
+  const years = document.getElementById("years");
+  const returnRate = document.getElementById("returnRate");
+  const calcCompoundBtn = document.getElementById("calcCompoundBtn");
+  const compoundResult = document.getElementById("compoundResult");
+  const compoundText = document.getElementById("compoundText");
+
+  function money(v){
+    return new Intl.NumberFormat("de-DE",{style:"currency",currency:"EUR"}).format(Number(v || 0));
+  }
+
+  const chartCtx = document.getElementById("allocationChart");
+  let allocationChart = new Chart(chartCtx, {
+    type: "doughnut",
+    data: {
+      labels: ["ETFs", "Aktien", "Crypto", "Rohstoffe"],
+      datasets: [{
+        data: [40,25,20,15],
+        borderWidth: 1
+      }]
+    },
+    options: {
+      plugins: {
+        legend: {
+          labels: { color: "#ffffff", font: { weight: "bold" } }
+        }
+      }
+    }
+  });
+
+  function updateChart(){
+    allocationChart.data.datasets[0].data = [
+      Number(etfAlloc.value || 0),
+      Number(stockAlloc.value || 0),
+      Number(cryptoAlloc.value || 0),
+      Number(commodityAlloc.value || 0)
+    ];
+    allocationChart.update();
+  }
+
+  function calculateCompound(){
+    const start = Number(startCapital.value || 0);
+    const monthly = Number(monthlyRate.value || 0);
+    const y = Number(years.value || 0);
+    const rate = Number(returnRate.value || 0) / 100 / 12;
+    const months = y * 12;
+
+    let value = start;
+
+    for(let i = 0; i < months; i++){
+      value = value * (1 + rate) + monthly;
+    }
+
+    const invested = start + monthly * months;
+    const gain = value - invested;
+
+    compoundResult.textContent = money(value);
+    compoundText.textContent = `Eingezahlt: ${money(invested)} • Möglicher Zuwachs: ${money(gain)}`;
+  }
+
+  updateAllocationBtn.addEventListener("click", updateChart);
+  calcCompoundBtn.addEventListener("click", calculateCompound);
+
+  [etfAlloc, stockAlloc, cryptoAlloc, commodityAlloc].forEach(el => {
+    el.addEventListener("input", updateChart);
+  });
+
+  [startCapital, monthlyRate, years, returnRate].forEach(el => {
+    el.addEventListener("input", calculateCompound);
+  });
+
+  calculateCompound();
+
+  document.addEventListener("DOMContentLoaded", async () => {
+    const loginBtn = document.getElementById("loginNavBtn");
+    try {
+      const res = await fetch("/api/access", { credentials: "include" });
+      const data = await res.json();
+      if (data.role === "admin" || data.role === "premium") {
+        if (loginBtn) loginBtn.style.display = "none";
+      }
+    } catch {}
+  });
+</script>
 </body>
 </html>
