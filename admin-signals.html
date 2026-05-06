@@ -447,7 +447,7 @@ sendSignalBtn.addEventListener("click", async () => {
       imageBase64
     };
 
-    const res = await fetch("/api/send-signal", {
+    const res = await fetch("/api/send-signals", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
