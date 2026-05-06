@@ -181,6 +181,12 @@
       background:rgba(255,60,60,0.08);
     }
 
+    .entry-badge.be{
+      border-color:rgba(210,210,210,0.35);
+      color:#e5e5e5;
+      background:rgba(255,255,255,0.06);
+    }
+
     .entry-grid{
       display:grid;
       grid-template-columns:1fr 1fr;
@@ -261,84 +267,253 @@
       align-items:center;
       gap:12px;
       margin-top:18px;
+      flex-wrap:wrap;
+    }
+
+    .calendar-title-wrap{
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+      align-items:center;
     }
 
     .calendar-title{
       color:var(--gold);
       font-weight:900;
-      font-size:20px;
+      font-size:22px;
+      text-transform:capitalize;
     }
 
-    .calendar-grid{
-      display:grid;
-      grid-template-columns:repeat(7, 1fr);
-      gap:8px;
-      margin-top:14px;
+    .month-pnl{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding:7px 12px;
+      border-radius:999px;
+      border:1px solid rgba(243,210,27,0.18);
+      background:rgba(243,210,27,0.08);
+      color:var(--gold);
+      font-weight:900;
+      font-size:13px;
     }
 
-    .calendar-day-name{
+    .calendar-legend{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:16px;
       color:#bdbdbd;
       font-size:12px;
       font-weight:800;
+    }
+
+    .legend-item{
+      display:inline-flex;
+      align-items:center;
+      gap:7px;
+      padding:8px 10px;
+      border-radius:999px;
+      background:rgba(255,255,255,0.03);
+      border:1px solid rgba(255,255,255,0.08);
+    }
+
+    .legend-dot{
+      width:9px;
+      height:9px;
+      border-radius:50%;
+      display:inline-block;
+    }
+
+    .legend-dot.gold{background:var(--gold);}
+    .legend-dot.red{background:#ff4d4d;}
+    .legend-dot.silver{background:#c9c9c9;}
+    .legend-dot.blue{background:#4da3ff;}
+
+    .calendar-shell{
+      margin-top:16px;
+      overflow-x:auto;
+      padding-bottom:4px;
+    }
+
+    .calendar-grid{
+      min-width:960px;
+      display:grid;
+      grid-template-columns:repeat(7, minmax(110px, 1fr)) 132px;
+      gap:8px;
+    }
+
+    .calendar-day-name,
+    .calendar-week-head{
+      color:#bdbdbd;
+      font-size:12px;
+      font-weight:900;
       text-align:center;
       padding:8px 0;
     }
 
     .calendar-day{
-      min-height:72px;
+      min-height:112px;
       border:1px solid rgba(255,255,255,0.08);
-      border-radius:14px;
+      border-radius:16px;
       background:rgba(255,255,255,0.02);
-      padding:8px;
+      padding:10px;
       position:relative;
       cursor:pointer;
+      transition:0.2s ease;
+      overflow:hidden;
+    }
+
+    .calendar-day:hover{
+      transform:translateY(-2px);
+      border-color:rgba(243,210,27,0.32);
     }
 
     .calendar-day.empty{
-      opacity:0.25;
+      opacity:0.18;
       cursor:default;
+    }
+
+    .calendar-day.empty:hover{
+      transform:none;
+      border-color:rgba(255,255,255,0.08);
     }
 
     .calendar-day .num{
       color:#fff;
       font-size:13px;
       font-weight:900;
+      position:relative;
+      z-index:2;
+    }
+
+    .day-center{
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      text-align:center;
+      height:72px;
+      gap:5px;
+      position:relative;
+      z-index:2;
+    }
+
+    .day-pnl{
+      font-size:18px;
+      font-weight:950;
+      line-height:1;
+    }
+
+    .day-meta{
+      font-size:11px;
+      color:#d4d4d4;
+      font-weight:800;
+      line-height:1.25;
+    }
+
+    .day-rate{
+      font-size:11px;
+      color:#a9a9a9;
+      font-weight:800;
     }
 
     .calendar-day.win{
-      border-color:rgba(243,210,27,0.55);
-      background:rgba(243,210,27,0.10);
+      border-color:rgba(243,210,27,0.60);
+      background:linear-gradient(180deg, rgba(243,210,27,0.16), rgba(243,210,27,0.045));
+      box-shadow:0 0 22px rgba(243,210,27,0.08) inset;
+    }
+
+    .calendar-day.win .day-pnl{
+      color:var(--gold);
     }
 
     .calendar-day.loss{
-      border-color:rgba(255,60,60,0.55);
-      background:rgba(255,60,60,0.10);
+      border-color:rgba(255,60,60,0.58);
+      background:linear-gradient(180deg, rgba(255,60,60,0.16), rgba(255,60,60,0.045));
+      box-shadow:0 0 22px rgba(255,60,60,0.07) inset;
+    }
+
+    .calendar-day.loss .day-pnl{
+      color:#ff5c5c;
+    }
+
+    .calendar-day.be{
+      border-color:rgba(210,210,210,0.30);
+      background:linear-gradient(180deg, rgba(255,255,255,0.09), rgba(255,255,255,0.025));
+    }
+
+    .calendar-day.be .day-pnl{
+      color:#e5e5e5;
     }
 
     .calendar-day.mixed{
       border-color:rgba(170,110,255,0.55);
-      background:rgba(170,110,255,0.10);
+      background:linear-gradient(180deg, rgba(170,110,255,0.14), rgba(170,110,255,0.04));
+    }
+
+    .calendar-day.mixed .day-pnl{
+      color:#c7a7ff;
     }
 
     .news-dot{
-      width:8px;
-      height:8px;
+      width:9px;
+      height:9px;
       border-radius:50%;
       background:#4da3ff;
       position:absolute;
-      right:8px;
+      right:9px;
       top:10px;
-      box-shadow:0 0 10px rgba(77,163,255,0.65);
+      box-shadow:0 0 12px rgba(77,163,255,0.85);
+      z-index:3;
     }
 
-    .trade-count-dot{
+    .news-label{
       position:absolute;
-      left:8px;
+      right:8px;
       bottom:8px;
-      color:#fff;
-      font-size:11px;
+      color:#9ccfff;
+      font-size:10px;
+      font-weight:900;
+      z-index:3;
+    }
+
+    .week-summary{
+      min-height:112px;
+      border:1px solid rgba(243,210,27,0.12);
+      border-radius:16px;
+      background:rgba(255,255,255,0.025);
+      padding:12px;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      gap:6px;
+    }
+
+    .week-summary .week-label{
+      color:#bdbdbd;
+      font-size:12px;
       font-weight:800;
-      opacity:0.8;
+    }
+
+    .week-summary .week-pnl{
+      color:var(--gold);
+      font-size:20px;
+      font-weight:950;
+      line-height:1;
+    }
+
+    .week-summary.loss .week-pnl{
+      color:#ff5c5c;
+    }
+
+    .week-summary.be .week-pnl{
+      color:#e5e5e5;
+    }
+
+    .week-summary .week-meta{
+      color:#bdbdbd;
+      font-size:12px;
+      font-weight:800;
     }
 
     .news-box{
@@ -360,6 +535,16 @@
       margin-top:10px;
     }
 
+    .news-event.high{
+      border-color:rgba(255,60,60,0.35);
+      background:rgba(255,60,60,0.07);
+    }
+
+    .news-event.medium{
+      border-color:rgba(243,210,27,0.30);
+      background:rgba(243,210,27,0.06);
+    }
+
     @media(max-width:1100px){
       .journal-layout{
         grid-template-columns:1fr;
@@ -373,9 +558,14 @@
         grid-template-columns:1fr;
       }
 
-      .calendar-day{
-        min-height:58px;
-        padding:6px;
+      .calendar-grid{
+        min-width:860px;
+        grid-template-columns:repeat(7, 104px) 120px;
+      }
+
+      .calendar-day,
+      .week-summary{
+        min-height:100px;
       }
     }
   </style>
@@ -597,16 +787,30 @@
         <div class="badge">Kalender</div>
         <h2 class="section-heading" style="font-size:36px; margin-bottom:10px;">Trade & News Kalender</h2>
         <p class="section-subtext" style="margin-bottom:0;">
-          Gold = Gewinn-Tag, Rot = Verlust-Tag, Blau = Wirtschaftskalender-News.
+          Gold = Gewinn, Rot = Verlust, Silber = Break Even, Blau = Wirtschaftskalender-News.
         </p>
 
         <div class="calendar-head">
           <button class="small-btn secondary" id="prevMonthBtn">← Monat</button>
-          <div class="calendar-title" id="calendarTitle">-</div>
+
+          <div class="calendar-title-wrap">
+            <div class="calendar-title" id="calendarTitle">-</div>
+            <div class="month-pnl" id="monthPnl">0 €</div>
+          </div>
+
           <button class="small-btn secondary" id="nextMonthBtn">Monat →</button>
         </div>
 
-        <div class="calendar-grid" id="calendarGrid"></div>
+        <div class="calendar-legend">
+          <div class="legend-item"><span class="legend-dot gold"></span> Gewinn</div>
+          <div class="legend-item"><span class="legend-dot red"></span> Verlust</div>
+          <div class="legend-item"><span class="legend-dot silver"></span> Break Even</div>
+          <div class="legend-item"><span class="legend-dot blue"></span> News</div>
+        </div>
+
+        <div class="calendar-shell">
+          <div class="calendar-grid" id="calendarGrid"></div>
+        </div>
 
         <div class="news-box" id="selectedDayBox">
           Wähle einen Tag im Kalender aus, um Trades und News zu sehen.
@@ -680,6 +884,7 @@ const calendarTitle = document.getElementById("calendarTitle");
 const selectedDayBox = document.getElementById("selectedDayBox");
 const prevMonthBtn = document.getElementById("prevMonthBtn");
 const nextMonthBtn = document.getElementById("nextMonthBtn");
+const monthPnl = document.getElementById("monthPnl");
 
 let calendarDate = new Date();
 let economicEvents = [];
@@ -700,8 +905,37 @@ function getStartBalance() {
 function formatMoney(value) {
   return new Intl.NumberFormat("de-DE", {
     style: "currency",
-    currency: "EUR"
+    currency: "EUR",
+    maximumFractionDigits: 2
   }).format(Number(value || 0));
+}
+
+function formatCompactMoney(value) {
+  const num = Number(value || 0);
+  const sign = num > 0 ? "+" : num < 0 ? "-" : "";
+  const abs = Math.abs(num);
+
+  if (abs >= 1000) {
+    return sign + (abs / 1000).toFixed(abs >= 10000 ? 0 : 1).replace(".", ",") + "K €";
+  }
+
+  return sign + abs.toFixed(0) + " €";
+}
+
+function escapeHTML(value) {
+  return String(value || "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
+
+function formatDateLocal(date) {
+  const y = date.getFullYear();
+  const m = String(date.getMonth() + 1).padStart(2, "0");
+  const d = String(date.getDate()).padStart(2, "0");
+  return `${y}-${m}-${d}`;
 }
 
 function resetForm() {
@@ -724,7 +958,16 @@ function resetForm() {
 
 function normalizeDate(value) {
   if (!value) return "";
-  return value.split("T")[0];
+
+  if (typeof value === "string") {
+    return value.split(" ")[0].split("T")[0];
+  }
+
+  try {
+    return formatDateLocal(new Date(value));
+  } catch {
+    return "";
+  }
 }
 
 function getEventsForDate(dateStr) {
@@ -739,16 +982,22 @@ async function loadEconomicEvents() {
   try {
     const year = calendarDate.getFullYear();
     const month = calendarDate.getMonth();
-    const from = new Date(year, month, 1).toISOString().split("T")[0];
-    const to = new Date(year, month + 1, 0).toISOString().split("T")[0];
+
+    const fromDate = new Date(year, month - 1, 1);
+    const toDate = new Date(year, month + 2, 0);
+
+    const from = formatDateLocal(fromDate);
+    const to = formatDateLocal(toDate);
 
     const res = await fetch(`/api/economic-calendar?from=${from}&to=${to}`, {
-      credentials: "include"
+      credentials: "include",
+      cache: "no-store"
     });
 
     const data = await res.json();
     economicEvents = data.events || [];
-  } catch {
+  } catch (err) {
+    console.error("News konnten nicht geladen werden:", err);
     economicEvents = [];
   }
 }
@@ -790,33 +1039,35 @@ function renderTrades() {
     const card = document.createElement("div");
     card.className = "entry-card";
 
-    const badgeClass = trade.result === "Verlust" ? "entry-badge loss" : "entry-badge";
+    let badgeClass = "entry-badge";
+    if (trade.result === "Verlust") badgeClass = "entry-badge loss";
+    if (trade.result === "Break Even") badgeClass = "entry-badge be";
 
     card.innerHTML = `
       <div class="entry-top">
         <div>
-          <div class="entry-title">${trade.market || "Unbekannter Markt"}</div>
+          <div class="entry-title">${escapeHTML(trade.market || "Unbekannter Markt")}</div>
           <div style="color:#bdbdbd; font-size:14px; margin-top:6px;">
-            ${trade.date || "Kein Datum"} • ${trade.session || "Keine Session"}
+            ${escapeHTML(trade.date || "Kein Datum")} • ${escapeHTML(trade.session || "Keine Session")}
           </div>
         </div>
-        <div class="${badgeClass}">${trade.result || "Kein Ergebnis"}</div>
+        <div class="${badgeClass}">${escapeHTML(trade.result || "Kein Ergebnis")}</div>
       </div>
 
       <div class="entry-grid">
-        <div class="entry-item"><div class="k">Richtung</div><div class="v">${trade.direction || "-"}</div></div>
+        <div class="entry-item"><div class="k">Richtung</div><div class="v">${escapeHTML(trade.direction || "-")}</div></div>
         <div class="entry-item"><div class="k">P/L</div><div class="v">${formatMoney(trade.profitLoss)}</div></div>
-        <div class="entry-item"><div class="k">Entry</div><div class="v">${trade.entry || "-"}</div></div>
-        <div class="entry-item"><div class="k">Stop Loss</div><div class="v">${trade.stopLoss || "-"}</div></div>
-        <div class="entry-item"><div class="k">Take Profit</div><div class="v">${trade.takeProfit || "-"}</div></div>
-        <div class="entry-item"><div class="k">RR</div><div class="v">${trade.rr || "-"}</div></div>
-        <div class="entry-item"><div class="k">News-Tag</div><div class="v">${trade.newsDay || "Nein"}</div></div>
-        <div class="entry-item"><div class="k">News Notiz</div><div class="v">${trade.newsNote || "-"}</div></div>
-        <div class="entry-item"><div class="k">Setup</div><div class="v">${trade.setupType || "-"}</div></div>
-        <div class="entry-item"><div class="k">Emotion</div><div class="v">${trade.emotion || "-"}</div></div>
+        <div class="entry-item"><div class="k">Entry</div><div class="v">${escapeHTML(trade.entry || "-")}</div></div>
+        <div class="entry-item"><div class="k">Stop Loss</div><div class="v">${escapeHTML(trade.stopLoss || "-")}</div></div>
+        <div class="entry-item"><div class="k">Take Profit</div><div class="v">${escapeHTML(trade.takeProfit || "-")}</div></div>
+        <div class="entry-item"><div class="k">RR</div><div class="v">${escapeHTML(trade.rr || "-")}</div></div>
+        <div class="entry-item"><div class="k">News-Tag</div><div class="v">${escapeHTML(trade.newsDay || "Nein")}</div></div>
+        <div class="entry-item"><div class="k">News Notiz</div><div class="v">${escapeHTML(trade.newsNote || "-")}</div></div>
+        <div class="entry-item"><div class="k">Setup</div><div class="v">${escapeHTML(trade.setupType || "-")}</div></div>
+        <div class="entry-item"><div class="k">Emotion</div><div class="v">${escapeHTML(trade.emotion || "-")}</div></div>
       </div>
 
-      <div class="entry-notes">${trade.notes || "Keine Notizen vorhanden."}</div>
+      <div class="entry-notes">${escapeHTML(trade.notes || "Keine Notizen vorhanden.")}</div>
 
       <div class="entry-actions">
         <button class="small-btn primary" onclick="downloadTradePDF(${index})">PDF herunterladen</button>
@@ -826,6 +1077,25 @@ function renderTrades() {
 
     journalList.appendChild(card);
   });
+}
+
+function getDayStats(trades) {
+  const total = trades.length;
+  const pnl = trades.reduce((sum, t) => sum + Number(t.profitLoss || 0), 0);
+  const wins = trades.filter(t => t.result === "Gewinn").length;
+  const losses = trades.filter(t => t.result === "Verlust").length;
+  const breakEvens = trades.filter(t => t.result === "Break Even").length;
+  const winrate = total > 0 ? Math.round((wins / total) * 100) : 0;
+
+  return { total, pnl, wins, losses, breakEvens, winrate };
+}
+
+function getDayClass(stats) {
+  if (stats.total === 0) return "";
+  if (stats.wins > 0 && stats.losses > 0) return "mixed";
+  if (stats.pnl > 0 || stats.wins > 0) return "win";
+  if (stats.pnl < 0 || stats.losses > 0) return "loss";
+  return "be";
 }
 
 function renderCalendar() {
@@ -842,6 +1112,16 @@ function renderCalendar() {
 
   calendarTitle.textContent = monthName;
 
+  const monthTrades = trades.filter(t => {
+    if (!t.date) return false;
+    const d = new Date(t.date + "T00:00:00");
+    return d.getFullYear() === year && d.getMonth() === month;
+  });
+
+  const monthTotalPnl = monthTrades.reduce((sum, t) => sum + Number(t.profitLoss || 0), 0);
+  monthPnl.textContent = formatMoney(monthTotalPnl);
+  monthPnl.style.color = monthTotalPnl < 0 ? "#ff5c5c" : "var(--gold)";
+
   const dayNames = ["Mo", "Di", "Mi", "Do", "Fr", "Sa", "So"];
 
   dayNames.forEach(day => {
@@ -851,43 +1131,94 @@ function renderCalendar() {
     calendarGrid.appendChild(el);
   });
 
+  const weekHead = document.createElement("div");
+  weekHead.className = "calendar-week-head";
+  weekHead.textContent = "Woche";
+  calendarGrid.appendChild(weekHead);
+
   const firstDay = new Date(year, month, 1);
   const lastDay = new Date(year, month + 1, 0);
-  const firstWeekday = (firstDay.getDay() + 6) % 7;
 
-  for (let i = 0; i < firstWeekday; i++) {
-    const empty = document.createElement("div");
-    empty.className = "calendar-day empty";
-    calendarGrid.appendChild(empty);
-  }
+  const start = new Date(firstDay);
+  start.setDate(firstDay.getDate() - ((firstDay.getDay() + 6) % 7));
 
-  for (let day = 1; day <= lastDay.getDate(); day++) {
-    const dateObj = new Date(year, month, day);
-    const dateStr = dateObj.toISOString().split("T")[0];
+  const end = new Date(lastDay);
+  end.setDate(lastDay.getDate() + (6 - ((lastDay.getDay() + 6) % 7)));
 
-    const dayTrades = trades.filter(t => t.date === dateStr);
-    const dayEvents = getEventsForDate(dateStr);
+  let current = new Date(start);
+  let weekNumber = 1;
 
-    const hasWin = dayTrades.some(t => t.result === "Gewinn");
-    const hasLoss = dayTrades.some(t => t.result === "Verlust");
+  while (current <= end) {
+    const weekDates = [];
 
-    const el = document.createElement("div");
-    el.className = "calendar-day";
+    for (let i = 0; i < 7; i++) {
+      const dateObj = new Date(current);
+      const dateStr = formatDateLocal(dateObj);
+      const isCurrentMonth = dateObj.getMonth() === month;
 
-    if (hasWin && hasLoss) el.classList.add("mixed");
-    else if (hasWin) el.classList.add("win");
-    else if (hasLoss) el.classList.add("loss");
+      const dayTrades = trades.filter(t => t.date === dateStr);
+      const dayEvents = getEventsForDate(dateStr);
+      const stats = getDayStats(dayTrades);
+      const dayClass = getDayClass(stats);
 
-    el.innerHTML = `
-      <div class="num">${day}</div>
-      ${dayEvents.length > 0 ? `<div class="news-dot"></div>` : ""}
-      ${dayTrades.length > 0 ? `<div class="trade-count-dot">${dayTrades.length} Trade(s)</div>` : ""}
+      const el = document.createElement("div");
+      el.className = "calendar-day" + (!isCurrentMonth ? " empty" : "") + (dayClass ? " " + dayClass : "");
+
+      if (isCurrentMonth) {
+        el.innerHTML = `
+          <div class="num">${dateObj.getDate()}</div>
+          ${dayEvents.length > 0 ? `<div class="news-dot"></div><div class="news-label">NEWS</div>` : ""}
+          ${
+            stats.total > 0
+              ? `
+                <div class="day-center">
+                  <div class="day-pnl">${formatCompactMoney(stats.pnl)}</div>
+                  <div class="day-meta">${stats.total} ${stats.total === 1 ? "Trade" : "Trades"}</div>
+                  <div class="day-rate">${stats.winrate}% Win</div>
+                </div>
+              `
+              : ""
+          }
+        `;
+
+        el.addEventListener("click", () => showDayDetails(dateStr));
+      } else {
+        el.innerHTML = `<div class="num">${dateObj.getDate()}</div>`;
+      }
+
+      calendarGrid.appendChild(el);
+      weekDates.push(dateStr);
+      current.setDate(current.getDate() + 1);
+    }
+
+    const weekTrades = trades.filter(t => weekDates.includes(t.date));
+    const weekStats = getDayStats(weekTrades);
+
+    const weekBox = document.createElement("div");
+    weekBox.className = "week-summary";
+
+    if (weekStats.pnl < 0) weekBox.classList.add("loss");
+    if (weekStats.total > 0 && weekStats.pnl === 0) weekBox.classList.add("be");
+
+    weekBox.innerHTML = `
+      <div class="week-label">Woche ${weekNumber}</div>
+      <div class="week-pnl">${formatCompactMoney(weekStats.pnl)}</div>
+      <div class="week-meta">${weekStats.total} ${weekStats.total === 1 ? "Trade" : "Trades"}</div>
+      <div class="week-meta">${weekStats.total ? weekStats.winrate + "% Win" : "0 Tage"}</div>
     `;
 
-    el.addEventListener("click", () => showDayDetails(dateStr));
-
-    calendarGrid.appendChild(el);
+    calendarGrid.appendChild(weekBox);
+    weekNumber++;
   }
+}
+
+function impactClass(impact) {
+  const value = String(impact || "").toLowerCase();
+
+  if (value.includes("high") || value.includes("3")) return "high";
+  if (value.includes("medium") || value.includes("2")) return "medium";
+
+  return "";
 }
 
 function showDayDetails(dateStr) {
@@ -897,12 +1228,25 @@ function showDayDetails(dateStr) {
   let html = `<strong>${dateStr}</strong><br><br>`;
 
   if (trades.length > 0) {
-    html += `<strong>Trades:</strong>`;
+    const stats = getDayStats(trades);
+
+    html += `
+      <strong>Tagesübersicht:</strong>
+      <div class="news-event">
+        P/L: ${formatMoney(stats.pnl)}<br>
+        Trades: ${stats.total}<br>
+        Winrate: ${stats.winrate}%
+      </div>
+      <br><strong>Trades:</strong>
+    `;
+
     trades.forEach(t => {
       html += `
         <div class="news-event">
-          ${t.market || "-"} • ${t.result || "-"} • ${formatMoney(t.profitLoss)}<br>
-          ${t.setupType || ""}
+          ${escapeHTML(t.market || "-")} • ${escapeHTML(t.result || "-")} • ${formatMoney(t.profitLoss)}<br>
+          Richtung: ${escapeHTML(t.direction || "-")} • Session: ${escapeHTML(t.session || "-")}<br>
+          Setup: ${escapeHTML(t.setupType || "-")}<br>
+          Notiz: ${escapeHTML(t.notes || "-")}
         </div>
       `;
     });
@@ -912,11 +1256,15 @@ function showDayDetails(dateStr) {
 
   if (events.length > 0) {
     html += `<br><strong>Wirtschaftskalender:</strong>`;
-    events.slice(0, 8).forEach(e => {
+
+    events.slice(0, 12).forEach(e => {
+      const cls = impactClass(e.impact);
+
       html += `
-        <div class="news-event">
-          ${e.time || ""} ${e.country || ""} ${e.event || "News"}<br>
-          Impact: ${e.impact || "-"} • Forecast: ${e.estimate || "-"} • Previous: ${e.previous || "-"}
+        <div class="news-event ${cls}">
+          <strong>${escapeHTML(e.time || "")} ${escapeHTML(e.country || "")} ${escapeHTML(e.event || "News")}</strong><br>
+          Impact: ${escapeHTML(e.impact || "-")}<br>
+          Actual: ${escapeHTML(e.actual || "-")} • Forecast: ${escapeHTML(e.estimate || "-")} • Previous: ${escapeHTML(e.previous || "-")}
         </div>
       `;
     });
@@ -937,7 +1285,7 @@ saveTradeBtn.addEventListener("click", () => {
     return;
   }
 
-  const selectedDate = tradeDate.value || new Date().toISOString().split("T")[0];
+  const selectedDate = tradeDate.value || formatDateLocal(new Date());
   const autoNews = hasNewsForDate(selectedDate) ? "Ja" : "Nein";
   const finalNews = manualNews.value || autoNews;
 
