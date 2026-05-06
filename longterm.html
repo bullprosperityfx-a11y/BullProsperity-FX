@@ -11,7 +11,11 @@
   <script>
     (async () => {
       try {
-        const res = await fetch("/api/access", { credentials: "include", cache: "no-store" });
+        const res = await fetch("/api/access", {
+          credentials: "include",
+          cache: "no-store"
+        });
+
         const data = await res.json();
 
         if (data.role !== "admin" && data.role !== "premium") {
@@ -24,34 +28,304 @@
   </script>
 
   <style>
-    .lt-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:24px;align-items:start}
-    .lt-panel{border:1px solid var(--line);border-radius:30px;background:linear-gradient(180deg,var(--panel),var(--panel-2));padding:26px;box-shadow:0 0 0 1px rgba(255,255,255,.02) inset}
-    .lt-hero-card{position:relative;overflow:hidden;border:1px solid var(--line);border-radius:32px;background:radial-gradient(circle at 80% 20%,rgba(243,210,27,.14),transparent 35%),linear-gradient(180deg,var(--panel),var(--panel-2));padding:34px}
-    .lt-video-grid,.lt-market-grid,.lt-broker-grid,.lt-stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:20px}
-    .lt-video,.lt-card,.lt-stat{border:1px solid rgba(243,210,27,.14);border-radius:22px;background:rgba(255,255,255,.025);padding:18px}
-    .lt-video{min-height:170px;display:flex;align-items:center;justify-content:center;text-align:center;color:#bdbdbd;font-weight:800}
-    .lt-card h3,.lt-stat .value{color:var(--gold);margin:0 0 8px;font-size:22px}
-    .lt-card p,.lt-stat .label{color:#d6d6d6;line-height:1.6;margin:0;font-size:14px;font-weight:700}
-    .lt-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:18px}
-    .lt-form{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:18px}
-    .lt-field{display:flex;flex-direction:column;gap:8px}
-    .lt-field label{color:#f1f1f1;font-size:14px;font-weight:800}
-    .lt-field input{width:100%;border-radius:16px;border:1px solid rgba(243,210,27,.18);background:rgba(255,255,255,.03);color:#fff;padding:14px 16px;font-size:15px;outline:none}
-    .result-box{margin-top:18px;border:1px solid rgba(243,210,27,.18);border-radius:22px;background:rgba(243,210,27,.05);padding:18px}
-    .result-big{color:var(--gold);font-size:34px;font-weight:950;margin-top:6px}
-    .allocation-row{display:grid;grid-template-columns:1fr 90px;gap:12px;align-items:center;margin-top:12px}
-    .allocation-row span{color:#fff;font-weight:800}
-    .market-list{display:grid;gap:10px;margin-top:14px}
-    .market-item{display:flex;justify-content:space-between;gap:12px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.025);border-radius:16px;padding:12px 14px}
-    .market-item strong{color:#fff}
-    .market-item span{color:var(--gold);font-weight:800}
-    .mini-note{margin-top:18px;color:#9f9f9f;font-size:12px;line-height:1.7}
-    @media(max-width:1100px){.lt-grid,.lt-video-grid,.lt-market-grid,.lt-broker-grid,.lt-stat-grid{grid-template-columns:1fr}.lt-form{grid-template-columns:1fr}}
+    .lt-grid{
+      display:grid;
+      grid-template-columns:1.05fr .95fr;
+      gap:24px;
+      align-items:start;
+    }
+
+    .lt-panel{
+      border:1px solid var(--line);
+      border-radius:30px;
+      background:linear-gradient(180deg,var(--panel),var(--panel-2));
+      padding:26px;
+      box-shadow:0 0 0 1px rgba(255,255,255,.02) inset;
+    }
+
+    .lt-hero-card{
+      position:relative;
+      overflow:hidden;
+      border:1px solid var(--line);
+      border-radius:32px;
+      background:
+        radial-gradient(circle at 80% 20%,rgba(243,210,27,.14),transparent 35%),
+        linear-gradient(180deg,var(--panel),var(--panel-2));
+      padding:34px;
+    }
+
+    .lt-video-grid,
+    .lt-market-grid,
+    .lt-broker-grid{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:16px;
+      margin-top:20px;
+    }
+
+    .lt-video,
+    .lt-card{
+      border:1px solid rgba(243,210,27,.14);
+      border-radius:22px;
+      background:rgba(255,255,255,.025);
+      padding:18px;
+    }
+
+    .lt-video{
+      min-height:170px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      text-align:center;
+      color:#bdbdbd;
+      font-weight:800;
+      line-height:1.6;
+    }
+
+    .lt-card h3{
+      color:var(--gold);
+      margin:0 0 8px;
+      font-size:22px;
+    }
+
+    .lt-card p{
+      color:#d6d6d6;
+      line-height:1.6;
+      margin:0;
+      font-size:14px;
+      font-weight:700;
+    }
+
+    .lt-actions{
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+      margin-top:18px;
+    }
+
+    .allocation-card{
+      position:relative;
+      overflow:hidden;
+    }
+
+    .allocation-card::before{
+      content:"";
+      position:absolute;
+      right:-120px;
+      top:-120px;
+      width:260px;
+      height:260px;
+      background:radial-gradient(circle, rgba(243,210,27,.14), transparent 70%);
+      pointer-events:none;
+    }
+
+    .allocation-premium{
+      display:grid;
+      gap:14px;
+      margin-top:22px;
+      position:relative;
+      z-index:2;
+    }
+
+    .allocation-row{
+      display:grid;
+      grid-template-columns:1fr 110px;
+      gap:14px;
+      align-items:center;
+      border:1px solid rgba(243,210,27,.14);
+      background:linear-gradient(180deg, rgba(255,255,255,.035), rgba(255,255,255,.015));
+      border-radius:18px;
+      padding:14px 16px;
+    }
+
+    .allocation-left{
+      display:flex;
+      flex-direction:column;
+      gap:4px;
+    }
+
+    .allocation-left strong{
+      color:#fff;
+      font-size:15px;
+      font-weight:900;
+    }
+
+    .allocation-left span{
+      color:#9f9f9f;
+      font-size:12px;
+      font-weight:700;
+      line-height:1.4;
+    }
+
+    .allocation-row input{
+      width:100%;
+      border:none;
+      outline:none;
+      border-radius:14px;
+      background:rgba(0,0,0,.35);
+      border:1px solid rgba(243,210,27,.20);
+      color:var(--gold);
+      padding:13px 12px;
+      font-size:18px;
+      font-weight:950;
+      text-align:center;
+    }
+
+    .allocation-row input:focus{
+      border-color:rgba(243,210,27,.65);
+      box-shadow:0 0 0 3px rgba(243,210,27,.10);
+    }
+
+    .chart-card{
+      position:relative;
+      min-height:430px;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      overflow:hidden;
+    }
+
+    .chart-glow{
+      position:absolute;
+      width:320px;
+      height:320px;
+      background:radial-gradient(circle, rgba(243,210,27,.16), transparent 68%);
+      filter:blur(2px);
+      pointer-events:none;
+    }
+
+    .chart-wrap{
+      position:relative;
+      z-index:2;
+      width:min(360px, 100%);
+      margin:0 auto;
+    }
+
+    .allocation-total{
+      margin-top:18px;
+      display:inline-flex;
+      padding:10px 16px;
+      border-radius:999px;
+      border:1px solid rgba(243,210,27,.22);
+      background:rgba(243,210,27,.06);
+      color:var(--gold);
+      font-weight:900;
+      font-size:14px;
+      position:relative;
+      z-index:2;
+    }
+
+    .lt-form{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:14px;
+      margin-top:18px;
+    }
+
+    .lt-field{
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+    }
+
+    .lt-field label{
+      color:#f1f1f1;
+      font-size:14px;
+      font-weight:800;
+    }
+
+    .lt-field input{
+      width:100%;
+      border-radius:16px;
+      border:1px solid rgba(243,210,27,.18);
+      background:rgba(255,255,255,.03);
+      color:#fff;
+      padding:14px 16px;
+      font-size:15px;
+      outline:none;
+    }
+
+    .lt-field input:focus{
+      border-color:rgba(243,210,27,.48);
+      box-shadow:0 0 0 3px rgba(243,210,27,.08);
+    }
+
+    .result-box{
+      margin-top:18px;
+      border:1px solid rgba(243,210,27,.18);
+      border-radius:22px;
+      background:rgba(243,210,27,.05);
+      padding:18px;
+    }
+
+    .result-big{
+      color:var(--gold);
+      font-size:34px;
+      font-weight:950;
+      margin-top:6px;
+    }
+
+    .market-list{
+      display:grid;
+      gap:10px;
+      margin-top:14px;
+    }
+
+    .market-item{
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      border:1px solid rgba(255,255,255,.08);
+      background:rgba(255,255,255,.025);
+      border-radius:16px;
+      padding:12px 14px;
+    }
+
+    .market-item strong{
+      color:#fff;
+    }
+
+    .market-item span{
+      color:var(--gold);
+      font-weight:800;
+    }
+
+    .mini-note{
+      margin-top:18px;
+      color:#9f9f9f;
+      font-size:12px;
+      line-height:1.7;
+    }
+
+    @media(max-width:1100px){
+      .lt-grid,
+      .lt-video-grid,
+      .lt-market-grid,
+      .lt-broker-grid{
+        grid-template-columns:1fr;
+      }
+
+      .lt-form{
+        grid-template-columns:1fr;
+      }
+    }
+
+    @media(max-width:760px){
+      .allocation-row{
+        grid-template-columns:1fr;
+      }
+
+      .chart-card{
+        min-height:360px;
+      }
+    }
   </style>
 </head>
 
 <body>
   <div class="page">
+
     <nav class="navbar">
       <a href="index.html" class="logo">BullProsperity</a>
       <div class="nav-links">
@@ -87,24 +361,60 @@
     </section>
 
     <section class="lt-grid">
-      <div class="lt-panel">
+      <div class="lt-panel allocation-card">
         <div class="badge">Portfolio Allocation</div>
         <h2 class="section-heading" style="font-size:36px;margin-bottom:10px;">Investment Aufteilung</h2>
-        <p class="section-subtext" style="margin-bottom:0;">Passe die Gewichtung an und baue deine eigene Longterm Struktur.</p>
+        <p class="section-subtext" style="margin-bottom:0;">
+          Passe deine Gewichtung an und baue eine saubere Longterm Struktur.
+        </p>
 
-        <div class="allocation-row"><span>ETFs</span><input id="etfAlloc" type="number" value="40"></div>
-        <div class="allocation-row"><span>Aktien</span><input id="stockAlloc" type="number" value="25"></div>
-        <div class="allocation-row"><span>Crypto</span><input id="cryptoAlloc" type="number" value="20"></div>
-        <div class="allocation-row"><span>Rohstoffe</span><input id="commodityAlloc" type="number" value="15"></div>
+        <div class="allocation-premium">
+          <div class="allocation-row">
+            <div class="allocation-left">
+              <strong>ETFs</strong>
+              <span>Core Portfolio / langfristige Stabilität</span>
+            </div>
+            <input id="etfAlloc" type="number" value="40">
+          </div>
+
+          <div class="allocation-row">
+            <div class="allocation-left">
+              <strong>Aktien</strong>
+              <span>Einzelwerte / Quality & Growth</span>
+            </div>
+            <input id="stockAlloc" type="number" value="25">
+          </div>
+
+          <div class="allocation-row">
+            <div class="allocation-left">
+              <strong>Crypto</strong>
+              <span>BTC, ETH & digitale Assets</span>
+            </div>
+            <input id="cryptoAlloc" type="number" value="20">
+          </div>
+
+          <div class="allocation-row">
+            <div class="allocation-left">
+              <strong>Rohstoffe</strong>
+              <span>Gold, Silber & Commodity Exposure</span>
+            </div>
+            <input id="commodityAlloc" type="number" value="15">
+          </div>
+        </div>
 
         <div class="lt-actions">
           <button class="btn primary" id="updateAllocationBtn">Diagramm aktualisieren</button>
         </div>
       </div>
 
-      <div class="lt-panel">
+      <div class="lt-panel chart-card">
+        <div class="chart-glow"></div>
         <div class="badge">Diagramm</div>
-        <canvas id="allocationChart" style="max-height:360px;"></canvas>
+        <h2 class="section-heading" style="font-size:32px;margin-bottom:14px;">Portfolio Übersicht</h2>
+        <div class="chart-wrap">
+          <canvas id="allocationChart"></canvas>
+        </div>
+        <div class="allocation-total" id="allocationTotal">Gesamt: 100%</div>
       </div>
     </section>
 
@@ -112,13 +422,30 @@
       <div class="lt-panel">
         <div class="badge">Compound Rechner</div>
         <h2 class="section-heading" style="font-size:36px;margin-bottom:10px;">Zinseszins berechnen</h2>
-        <p class="section-subtext" style="margin-bottom:0;">Simuliere, wie sich Startkapital, monatliche Sparrate und Rendite über Jahre entwickeln können.</p>
+        <p class="section-subtext" style="margin-bottom:0;">
+          Simuliere, wie sich Startkapital, monatliche Sparrate und Rendite über Jahre entwickeln können.
+        </p>
 
         <div class="lt-form">
-          <div class="lt-field"><label>Startkapital €</label><input id="startCapital" type="number" value="1000"></div>
-          <div class="lt-field"><label>Monatliche Sparrate €</label><input id="monthlyRate" type="number" value="250"></div>
-          <div class="lt-field"><label>Jahre</label><input id="years" type="number" value="15"></div>
-          <div class="lt-field"><label>Erwartete Rendite % p.a.</label><input id="returnRate" type="number" value="7"></div>
+          <div class="lt-field">
+            <label>Startkapital €</label>
+            <input id="startCapital" type="number" value="1000">
+          </div>
+
+          <div class="lt-field">
+            <label>Monatliche Sparrate €</label>
+            <input id="monthlyRate" type="number" value="250">
+          </div>
+
+          <div class="lt-field">
+            <label>Jahre</label>
+            <input id="years" type="number" value="15">
+          </div>
+
+          <div class="lt-field">
+            <label>Erwartete Rendite % p.a.</label>
+            <input id="returnRate" type="number" value="7">
+          </div>
         </div>
 
         <div class="lt-actions">
@@ -137,7 +464,9 @@
       <div class="lt-panel">
         <div class="badge">Investment Infrastruktur</div>
         <h2 class="section-heading" style="font-size:36px;margin-bottom:10px;">Plattformen & Kontoeröffnung</h2>
-        <p class="section-subtext" style="margin-bottom:0;">Wähle je nach Anlageklasse die passende Plattform für deinen langfristigen Aufbau.</p>
+        <p class="section-subtext" style="margin-bottom:0;">
+          Wähle je nach Anlageklasse die passende Plattform für deinen langfristigen Aufbau.
+        </p>
 
         <div class="lt-broker-grid">
           <div class="lt-card">
@@ -161,14 +490,13 @@
             <h3>Rohstoffe & Edelmetalle</h3>
             <p>Für Gold, Silber, Commodity ETFs oder physische Edelmetalle.</p>
             <div class="lt-actions">
-              <a href="ROHSTOFF_LINK" target="_blank" class="btn primary">Rohstoffe öffnen</a>
               <a href="broker.html" class="btn secondary">Broker Setup</a>
             </div>
           </div>
         </div>
 
         <div class="mini-note">
-          Hinweis: Links können Partnerlinks sein. BullProsperity dient Bildungszwecken. Investments und Trading beinhalten Risiken.
+          Hinweis: BullProsperity dient Bildungszwecken. Investments und Trading beinhalten Risiken.
         </div>
       </div>
     </section>
@@ -228,6 +556,7 @@
   const cryptoAlloc = document.getElementById("cryptoAlloc");
   const commodityAlloc = document.getElementById("commodityAlloc");
   const updateAllocationBtn = document.getElementById("updateAllocationBtn");
+  const allocationTotal = document.getElementById("allocationTotal");
 
   const startCapital = document.getElementById("startCapital");
   const monthlyRate = document.getElementById("monthlyRate");
@@ -238,36 +567,65 @@
   const compoundText = document.getElementById("compoundText");
 
   function money(v){
-    return new Intl.NumberFormat("de-DE",{style:"currency",currency:"EUR"}).format(Number(v || 0));
+    return new Intl.NumberFormat("de-DE", {
+      style:"currency",
+      currency:"EUR"
+    }).format(Number(v || 0));
   }
 
   const chartCtx = document.getElementById("allocationChart");
+
   let allocationChart = new Chart(chartCtx, {
     type: "doughnut",
     data: {
       labels: ["ETFs", "Aktien", "Crypto", "Rohstoffe"],
       datasets: [{
         data: [40,25,20,15],
-        borderWidth: 1
+        borderWidth: 2,
+        borderColor: "#0b0b0b"
       }]
     },
     options: {
+      cutout: "68%",
       plugins: {
         legend: {
-          labels: { color: "#ffffff", font: { weight: "bold" } }
+          position: "bottom",
+          labels: {
+            color: "#ffffff",
+            usePointStyle: true,
+            pointStyle: "circle",
+            padding: 18,
+            font: {
+              weight: "bold",
+              size: 13
+            }
+          }
         }
       }
     }
   });
 
   function updateChart(){
-    allocationChart.data.datasets[0].data = [
-      Number(etfAlloc.value || 0),
-      Number(stockAlloc.value || 0),
-      Number(cryptoAlloc.value || 0),
-      Number(commodityAlloc.value || 0)
-    ];
+    const etf = Number(etfAlloc.value || 0);
+    const stocks = Number(stockAlloc.value || 0);
+    const crypto = Number(cryptoAlloc.value || 0);
+    const commodities = Number(commodityAlloc.value || 0);
+    const total = etf + stocks + crypto + commodities;
+
+    allocationChart.data.datasets[0].data = [etf, stocks, crypto, commodities];
     allocationChart.update();
+
+    allocationTotal.textContent = "Gesamt: " + total + "%";
+
+    if (total === 100) {
+      allocationTotal.style.color = "var(--gold)";
+      allocationTotal.style.borderColor = "rgba(243,210,27,.28)";
+      allocationTotal.style.background = "rgba(243,210,27,.06)";
+    } else {
+      allocationTotal.style.color = "#ff5c5c";
+      allocationTotal.style.borderColor = "rgba(255,60,60,.35)";
+      allocationTotal.style.background = "rgba(255,60,60,.06)";
+    }
   }
 
   function calculateCompound(){
@@ -301,13 +659,20 @@
     el.addEventListener("input", calculateCompound);
   });
 
+  updateChart();
   calculateCompound();
 
   document.addEventListener("DOMContentLoaded", async () => {
     const loginBtn = document.getElementById("loginNavBtn");
+
     try {
-      const res = await fetch("/api/access", { credentials: "include" });
+      const res = await fetch("/api/access", {
+        credentials: "include",
+        cache: "no-store"
+      });
+
       const data = await res.json();
+
       if (data.role === "admin" || data.role === "premium") {
         if (loginBtn) loginBtn.style.display = "none";
       }
