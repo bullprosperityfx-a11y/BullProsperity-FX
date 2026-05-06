@@ -50,21 +50,10 @@
       background:#666;
     }
 
-    .auth-badge.status-admin::before{
-      background:#ffd700;
-    }
-
-    .auth-badge.status-premium::before{
-      background:#22c55e;
-    }
-
-    .auth-badge.status-longterm::before{
-      background:#3b82f6;
-    }
-
-    .auth-badge.status-locked::before{
-      background:#ef4444;
-    }
+    .auth-badge.status-admin::before{background:#ffd700;}
+    .auth-badge.status-premium::before{background:#22c55e;}
+    .auth-badge.status-longterm::before{background:#3b82f6;}
+    .auth-badge.status-locked::before{background:#ef4444;}
 
     .hub-shell{
       display:grid;
@@ -260,6 +249,11 @@
       font-weight:700;
     }
 
+    .admin-glow{
+      border-color:rgba(255,215,0,.28);
+      background:linear-gradient(180deg, rgba(255,215,0,.08), #0c0c0c);
+    }
+
     .hub-watchlist{
       display:grid;
       gap:10px;
@@ -453,6 +447,7 @@
     }
   </style>
 </head>
+
 <body>
   <div class="page">
 
@@ -480,6 +475,7 @@
       <div class="hero-buttons">
         <a href="#hub-dashboard" class="btn primary">Hub öffnen</a>
         <a href="tools.html" class="btn secondary">Zu den Tools</a>
+        <a id="adminSignalsHeroBtn" href="/admin-signals" class="btn primary" style="display:none;">Admin Signals</a>
       </div>
     </section>
 
@@ -500,7 +496,7 @@
           <div class="hub-stats">
             <div class="hub-stat">
               <div class="hub-stat-label">Status</div>
-              <div class="hub-stat-value">Premium</div>
+              <div class="hub-stat-value" id="statusValue">Premium</div>
               <div class="hub-stat-sub">Mitgliederbereich aktiv</div>
             </div>
             <div class="hub-stat">
@@ -523,6 +519,7 @@
           <div class="hub-actions">
             <a href="course.html" class="hub-btn primary">Zum Kurs</a>
             <a href="tools.html" class="hub-btn secondary">Tools öffnen</a>
+            <a id="adminSignalsTopBtn" href="/admin-signals" class="hub-btn primary" style="display:none;">Admin Signals</a>
           </div>
         </div>
 
@@ -584,6 +581,16 @@
                 <span>→</span>
               </div>
             </a>
+
+            <a id="adminSignalsCard" href="/admin-signals" class="hub-link-card admin-glow" style="display:none;">
+              <div class="badge">Admin</div>
+              <h3>Admin Signals</h3>
+              <p>Erstelle professionelle BullProsperity Signale mit Bild, Analyse-Link, Entry, SL, TPs und automatischer Pip-Berechnung.</p>
+              <div class="hub-link-meta">
+                <span>Signal Panel öffnen</span>
+                <span>→</span>
+              </div>
+            </a>
           </div>
         </div>
 
@@ -593,42 +600,27 @@
 
           <div class="hub-watchlist">
             <div class="hub-watch-item">
-              <div>
-                <strong>EURUSD</strong>
-                <span>Forex</span>
-              </div>
+              <div><strong>EURUSD</strong><span>Forex</span></div>
               <a href="tools.html#charts">Öffnen</a>
             </div>
 
             <div class="hub-watch-item">
-              <div>
-                <strong>XAUUSD</strong>
-                <span>Gold</span>
-              </div>
+              <div><strong>XAUUSD</strong><span>Gold</span></div>
               <a href="tools.html#charts">Öffnen</a>
             </div>
 
             <div class="hub-watch-item">
-              <div>
-                <strong>NASDAQ</strong>
-                <span>Index</span>
-              </div>
+              <div><strong>NASDAQ</strong><span>Index</span></div>
               <a href="tools.html#charts">Öffnen</a>
             </div>
 
             <div class="hub-watch-item">
-              <div>
-                <strong>US30</strong>
-                <span>Dow Jones</span>
-              </div>
+              <div><strong>US30</strong><span>Dow Jones</span></div>
               <a href="tools.html#charts">Öffnen</a>
             </div>
 
             <div class="hub-watch-item">
-              <div>
-                <strong>BTCUSD</strong>
-                <span>Crypto</span>
-              </div>
+              <div><strong>BTCUSD</strong><span>Crypto</span></div>
               <a href="tools.html#charts">Öffnen</a>
             </div>
           </div>
@@ -747,6 +739,10 @@
     const loginNavBtn = document.getElementById("loginNavBtn");
     const longtermBtn = document.getElementById("longtermBtn");
     const longtermText = document.getElementById("longtermText");
+    const adminSignalsCard = document.getElementById("adminSignalsCard");
+    const adminSignalsTopBtn = document.getElementById("adminSignalsTopBtn");
+    const adminSignalsHeroBtn = document.getElementById("adminSignalsHeroBtn");
+    const statusValue = document.getElementById("statusValue");
 
     const savedHubNotes = localStorage.getItem("bp_hub_notes");
     if (savedHubNotes && hubNotes) {
@@ -787,9 +783,18 @@
         if (role === "admin") {
           authBadge.textContent = "Admin Zugang aktiv";
           authBadge.className = "auth-badge status-admin";
+
+          if (statusValue) statusValue.textContent = "Admin";
+
+          if (adminSignalsCard) adminSignalsCard.style.display = "block";
+          if (adminSignalsTopBtn) adminSignalsTopBtn.style.display = "inline-flex";
+          if (adminSignalsHeroBtn) adminSignalsHeroBtn.style.display = "inline-flex";
+
         } else if (role === "premium") {
           authBadge.textContent = "Premium aktiv";
           authBadge.className = "auth-badge status-premium";
+
+          if (statusValue) statusValue.textContent = "Premium";
         }
 
         loginNavBtn.style.display = "none";
