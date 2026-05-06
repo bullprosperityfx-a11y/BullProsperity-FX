@@ -14,44 +14,186 @@
         const data = await res.json();
 
         if (data.role !== "admin" && data.role !== "premium") {
-          window.location.href = "locked.html";
+          window.location.href = "/locked";
         }
       } catch (err) {
-        window.location.href = "locked.html";
+        window.location.href = "/locked";
       }
     })();
   </script>
 
   <style>
-    .lesson-layout{display:grid;grid-template-columns:430px 1fr;gap:24px;align-items:start;}
-    .lesson-sidebar,.lesson-main-card{border:1px solid var(--line);border-radius:28px;background:linear-gradient(180deg, var(--panel), var(--panel-2));box-shadow:0 0 0 1px rgba(255,255,255,0.02) inset;}
-    .lesson-sidebar{padding:22px;position:sticky;top:20px;max-height:calc(100vh - 40px);overflow:hidden;}
-    .lesson-scroll{height:calc(100vh - 140px);overflow-y:auto;padding-right:8px;}
-    .lesson-scroll::-webkit-scrollbar{width:8px;}
-    .lesson-scroll::-webkit-scrollbar-thumb{background:var(--gold);border-radius:999px;}
-    .lesson-scroll::-webkit-scrollbar-track{background:rgba(255,255,255,0.06);border-radius:999px;}
-    .lesson-subtitle{color:var(--subtle);font-size:15px;margin-bottom:16px;}
-    .progress-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;font-weight:800;font-size:16px;}
-    .progress-bar{width:100%;height:16px;background:#2b2b2b;border-radius:999px;overflow:hidden;border:1px solid rgba(255,255,255,0.08);margin-bottom:22px;}
-    .progress-fill{height:100%;background:linear-gradient(90deg,var(--gold),#ffea61);border-radius:999px;box-shadow:0 0 20px rgba(243,210,27,0.22);width:0%;}
-    .lesson-main{display:grid;gap:24px;}
-    .lesson-main-card{padding:24px;}
-    .lesson-video-wrap{border:1px solid var(--line);border-radius:22px;overflow:hidden;background:#0c0c0c;max-width:900px;margin:18px auto 0;}
-    .lesson-video-wrap iframe{width:100%;height:420px;border:none;display:block;background:#0c0c0c;}
-    .video-placeholder{display:flex;flex-direction:column;align-items:center;justify-content:center;height:420px;color:#999;font-size:17px;text-align:center;border-radius:20px;background:#0c0c0c;border:1px solid rgba(255,255,255,0.05);gap:10px;padding:24px;}
-    .video-placeholder .icon{font-size:30px;opacity:0.7;}
-    .video-placeholder .sub{font-size:14px;opacity:0.6;}
-    .notes-box{width:100%;min-height:220px;border-radius:18px;border:1px solid var(--line);background:rgba(255,255,255,0.02);color:#fff;padding:16px;resize:vertical;outline:none;font-size:15px;}
-    .lesson-nav{display:flex;gap:14px;flex-wrap:wrap;margin-top:18px;}
+    .lesson-layout{
+      display:grid;
+      grid-template-columns:430px 1fr;
+      gap:24px;
+      align-items:start;
+    }
+
+    .lesson-sidebar,
+    .lesson-main-card{
+      border:1px solid var(--line);
+      border-radius:28px;
+      background:linear-gradient(180deg, var(--panel), var(--panel-2));
+      box-shadow:0 0 0 1px rgba(255,255,255,0.02) inset;
+    }
+
+    .lesson-sidebar{
+      padding:22px;
+      position:sticky;
+      top:20px;
+      max-height:calc(100vh - 40px);
+      overflow:hidden;
+    }
+
+    .lesson-scroll{
+      height:calc(100vh - 140px);
+      overflow-y:auto;
+      padding-right:8px;
+    }
+
+    .lesson-scroll::-webkit-scrollbar{
+      width:8px;
+    }
+
+    .lesson-scroll::-webkit-scrollbar-thumb{
+      background:var(--gold);
+      border-radius:999px;
+    }
+
+    .lesson-scroll::-webkit-scrollbar-track{
+      background:rgba(255,255,255,0.06);
+      border-radius:999px;
+    }
+
+    .lesson-subtitle{
+      color:var(--subtle);
+      font-size:15px;
+      margin-bottom:16px;
+    }
+
+    .progress-head{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      margin-bottom:12px;
+      font-weight:800;
+      font-size:16px;
+    }
+
+    .progress-bar{
+      width:100%;
+      height:16px;
+      background:#2b2b2b;
+      border-radius:999px;
+      overflow:hidden;
+      border:1px solid rgba(255,255,255,0.08);
+      margin-bottom:22px;
+    }
+
+    .progress-fill{
+      height:100%;
+      background:linear-gradient(90deg,var(--gold),#ffea61);
+      border-radius:999px;
+      box-shadow:0 0 20px rgba(243,210,27,0.22);
+      width:0%;
+    }
+
+    .lesson-main{
+      display:grid;
+      gap:24px;
+    }
+
+    .lesson-main-card{
+      padding:24px;
+    }
+
+    .lesson-video-wrap{
+      border:1px solid var(--line);
+      border-radius:22px;
+      overflow:hidden;
+      background:#0c0c0c;
+      max-width:900px;
+      margin:18px auto 0;
+    }
+
+    .lesson-video-wrap iframe{
+      width:100%;
+      height:420px;
+      border:none;
+      display:block;
+      background:#0c0c0c;
+    }
+
+    .video-placeholder{
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      height:420px;
+      color:#999;
+      font-size:17px;
+      text-align:center;
+      border-radius:20px;
+      background:#0c0c0c;
+      border:1px solid rgba(255,255,255,0.05);
+      gap:10px;
+      padding:24px;
+    }
+
+    .video-placeholder .icon{
+      font-size:30px;
+      opacity:0.7;
+    }
+
+    .video-placeholder .sub{
+      font-size:14px;
+      opacity:0.6;
+    }
+
+    .notes-box{
+      width:100%;
+      min-height:220px;
+      border-radius:18px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,0.02);
+      color:#fff;
+      padding:16px;
+      resize:vertical;
+      outline:none;
+      font-size:15px;
+    }
+
+    .lesson-nav{
+      display:flex;
+      gap:14px;
+      flex-wrap:wrap;
+      margin-top:18px;
+    }
 
     @media(max-width:1200px){
-      .lesson-layout{grid-template-columns:1fr;}
-      .lesson-sidebar{position:relative;top:0;max-height:none;}
-      .lesson-scroll{height:auto;overflow:visible;padding-right:0;}
+      .lesson-layout{
+        grid-template-columns:1fr;
+      }
+
+      .lesson-sidebar{
+        position:relative;
+        top:0;
+        max-height:none;
+      }
+
+      .lesson-scroll{
+        height:auto;
+        overflow:visible;
+        padding-right:0;
+      }
     }
 
     @media(max-width:860px){
-      .lesson-video-wrap iframe,.video-placeholder{height:280px;}
+      .lesson-video-wrap iframe,
+      .video-placeholder{
+        height:280px;
+      }
     }
   </style>
 </head>
@@ -60,14 +202,15 @@
   <div class="page">
 
     <nav class="navbar">
-      <a href="index.html" class="logo">BullProsperity | Course</a>
+      <a href="/course" class="logo">BullProsperity | Course</a>
+
       <div class="nav-links">
-        <a href="index.html">Home</a>
-        <a href="hub.html">Hub</a>
-        <a href="course.html" class="active">Course</a>
-        <a href="tools.html">Tools</a>
-        <a href="setup-room.html">Setup Room</a>
-        <a href="community.html">Community</a>
+        <a href="/index">Home</a>
+        <a href="/hub">Hub</a>
+        <a href="/course" class="active">Course</a>
+        <a href="/tools">Tools</a>
+        <a href="/setup-room">Setup Room</a>
+        <a href="/community">Community</a>
         <a id="loginNavBtn" href="/api/whop/login">Login</a>
       </div>
     </nav>
@@ -93,13 +236,19 @@
 
         <div class="lesson-main-card">
           <div class="button-row" style="justify-content:flex-end; margin-bottom:18px;">
-            <a href="course.html" class="btn secondary" id="backTopBtn">Zurück zum Kurs</a>
-            <a href="#" class="btn primary" id="nextTopBtn">Nächste Lektion</a>
+            <a href="/course" class="btn secondary" id="backTopBtn">Zurück zum Kurs</a>
+            <a href="/lesson2" class="btn primary" id="nextTopBtn">Nächste Lektion</a>
           </div>
 
           <div class="badge" id="lessonBadge">Pflichtlektion</div>
-          <h2 class="section-heading" style="font-size:36px; margin-bottom:10px;" id="lessonTitle">Lesson Titel</h2>
-          <p class="section-subtext" style="margin-bottom:16px;" id="lessonDescription">Lesson Beschreibung</p>
+
+          <h2 class="section-heading" style="font-size:36px; margin-bottom:10px;" id="lessonTitle">
+            Lesson Titel
+          </h2>
+
+          <p class="section-subtext" style="margin-bottom:16px;" id="lessonDescription">
+            Lesson Beschreibung
+          </p>
 
           <div class="lesson-video-wrap" id="videoArea"></div>
         </div>
@@ -112,8 +261,12 @@
 
           <div class="section-card">
             <div class="badge">Lesson Fokus</div>
-            <h2 class="section-heading" style="font-size:32px; margin-bottom:10px;" id="focusTitle">Fokus</h2>
-            <p class="section-subtext" style="margin-bottom:0;" id="focusText">Fokus Text</p>
+            <h2 class="section-heading" style="font-size:32px; margin-bottom:10px;" id="focusTitle">
+              Fokus
+            </h2>
+            <p class="section-subtext" style="margin-bottom:0;" id="focusText">
+              Fokus Text
+            </p>
           </div>
         </div>
 
@@ -122,12 +275,13 @@
           <textarea id="lessonNotes" class="notes-box" placeholder="Schreibe hier deine Notizen..."></textarea>
 
           <div class="lesson-nav">
-            <a href="#" class="btn secondary" id="prevBottomBtn">Zurück</a>
-            <a href="#" class="btn primary" id="nextBottomBtn">Weiter</a>
+            <a href="/course" class="btn secondary" id="prevBottomBtn">Zurück</a>
+            <a href="/lesson2" class="btn primary" id="nextBottomBtn">Weiter</a>
           </div>
         </div>
 
       </div>
+
     </section>
 
     <div class="footer-note">
@@ -137,111 +291,161 @@
   </div>
 
 <script>
+const totalLessons = 33;
+
 const lessons = {
   1: {
     module: "Modul 1 — Einführung",
     title: "Willkommen bei BullProsperity",
     description: "In dieser ersten Lektion bekommst du einen klaren Überblick über BullProsperity, den Aufbau der Education und was dich auf deinem Lernweg erwartet.",
-    points: ["Wie BullProsperity aufgebaut ist","Was dich in den Modulen erwartet","Wie du die Plattform am besten nutzt","Warum Struktur für deinen Fortschritt entscheidend ist"],
+    points: [
+      "Wie BullProsperity aufgebaut ist",
+      "Was dich in den Modulen erwartet",
+      "Wie du die Plattform am besten nutzt",
+      "Warum Struktur für deinen Fortschritt entscheidend ist"
+    ],
     focusTitle: "Logischer Start",
     focusText: "Diese erste Lektion setzt die Grundlage für alles Weitere. Mitglieder sollen zuerst verstehen, wie BullProsperity aufgebaut ist, bevor sie tiefer in Trading und Strategie einsteigen.",
     videoId: null
   },
+
   2: {
     module: "Modul 1 — Einführung",
     title: "Wie du diese Plattform richtig nutzt",
     description: "Diese Lektion zeigt dir, wie du den Kurs sinnvoll durcharbeitest, Notizen nutzt und Schritt für Schritt den größten Mehrwert aus der Plattform holst.",
-    points: ["Wie du die Module in der richtigen Reihenfolge nutzt","Warum Wiederholung wichtig ist","Wie du Notizen und Tools sinnvoll einsetzt","Wie du Theorie in Praxis umsetzt"],
+    points: [
+      "Wie du die Module in der richtigen Reihenfolge nutzt",
+      "Warum Wiederholung wichtig ist",
+      "Wie du Notizen und Tools sinnvoll einsetzt",
+      "Wie du Theorie in Praxis umsetzt"
+    ],
     focusTitle: "Plattform richtig nutzen",
     focusText: "Wenn du die Plattform strukturiert nutzt, lernst du schneller, behältst mehr Überblick und kannst dein Wissen sauber in die Praxis übertragen.",
     videoId: null
   },
+
   3: {
     module: "Modul 1 — Einführung",
     title: "Risikoaufklärung & wichtiger Hinweis",
     description: "Bevor du tiefer in Trading einsteigst, musst du verstehen, welche Risiken es gibt und warum BullProsperity ausschließlich zu Bildungszwecken dient.",
-    points: ["Warum Trading immer Risiko beinhaltet","Warum Education keine Finanzberatung ist","Wie du Verantwortung für dein Handeln übernimmst","Warum Risikoverständnis die Grundlage ist"],
+    points: [
+      "Warum Trading immer Risiko beinhaltet",
+      "Warum Education keine Finanzberatung ist",
+      "Wie du Verantwortung für dein Handeln übernimmst",
+      "Warum Risikoverständnis die Grundlage ist"
+    ],
     focusTitle: "Verantwortung im Trading",
     focusText: "Diese Lektion sorgt dafür, dass Mitglieder von Anfang an mit einem klaren Verständnis für Risiko, Eigenverantwortung und sauberes Handeln starten.",
     videoId: null
   },
+
   4: {
     module: "Modul 2 — Trading Grundlagen",
     title: "Was ist Trading wirklich",
     description: "Hier bekommst du ein realistisches Verständnis davon, was Trading wirklich ist und wie du es professionell statt emotional betrachten solltest.",
-    points: ["Was Trading im Kern bedeutet","Warum Trading kein schnelles Geld ist","Unterschied zwischen Hobby und professionellem Ansatz","Welche Denkweise du brauchst"],
+    points: [
+      "Was Trading im Kern bedeutet",
+      "Warum Trading kein schnelles Geld ist",
+      "Unterschied zwischen Hobby und professionellem Ansatz",
+      "Welche Denkweise du brauchst"
+    ],
     focusTitle: "Realistisches Trading-Verständnis",
     focusText: "Diese Lektion sorgt dafür, dass Trading nicht als Glücksspiel oder Hype-Thema verstanden wird, sondern als strukturierter Prozess.",
     videoId: null
   },
+
   5: {
     module: "Modul 2 — Trading Grundlagen",
     title: "Warum Retail Trader verlieren",
     description: "Diese Lektion zeigt dir, warum die meisten Retail Trader immer wieder dieselben Fehler machen und wie der Markt oft gegen schwache Teilnehmer arbeitet.",
-    points: ["Wie Retail Trader typischerweise denken","Warum der Markt Stopps jagt","Fehler bei Einstieg, Risiko und Geduld","Warum Smart Money anders handelt"],
+    points: [
+      "Wie Retail Trader typischerweise denken",
+      "Warum der Markt Stopps jagt",
+      "Fehler bei Einstieg, Risiko und Geduld",
+      "Warum Smart Money anders handelt"
+    ],
     focusTitle: "Retail Denkweise verstehen",
     focusText: "Wenn du verstehst, warum Retail Trader verlieren, verstehst du automatisch, warum Struktur, Geduld und Smart Money Logik so wichtig sind.",
     videoId: "1173678522"
   },
+
   6: {
     module: "Modul 2 — Trading Grundlagen",
     title: "Die wichtigsten Märkte erklärt",
     description: "In dieser Lektion lernst du die wichtigsten Märkte kennen und verstehst, worin sich Forex, Indizes, Gold und andere Märkte unterscheiden.",
-    points: ["Überblick über Forex, Indizes und Gold","Welche Märkte für Anfänger sinnvoll sind","Wie sich Märkte unterschiedlich bewegen","Warum Marktverständnis wichtig ist"],
+    points: [
+      "Überblick über Forex, Indizes und Gold",
+      "Welche Märkte für Anfänger sinnvoll sind",
+      "Wie sich Märkte unterschiedlich bewegen",
+      "Warum Marktverständnis wichtig ist"
+    ],
     focusTitle: "Märkte richtig einordnen",
     focusText: "Wer die Unterschiede der Märkte versteht, kann sich sauberer spezialisieren und gezielter lernen.",
     videoId: null
   },
+
   7: {
     module: "Modul 2 — Trading Grundlagen",
     title: "Was du zum Traden brauchst",
     description: "Hier geht es um die praktischen Grundlagen: Broker, Charting, Notizen, Routine und die Tools, die du für einen sauberen Start benötigst.",
-    points: ["Welche Grundausstattung sinnvoll ist","Warum Charts und Tools wichtig sind","Welche Rolle Broker und Plattformen spielen","Wie du dich sauber organisierst"],
+    points: [
+      "Welche Grundausstattung sinnvoll ist",
+      "Warum Charts und Tools wichtig sind",
+      "Welche Rolle Broker und Plattformen spielen",
+      "Wie du dich sauber organisierst"
+    ],
     focusTitle: "Saubere Grundausstattung",
     focusText: "Diese Lektion hilft dabei, unnötiges Chaos zu vermeiden und direkt mit einer sinnvollen Grundstruktur zu arbeiten.",
     videoId: null
   }
 };
 
-const additionalLessons = [
-  ["Grundlagen der Chartanalyse","Chartanalyse ist die Basis, um Preisbewegungen sauber zu verstehen.","Charts als Sprache des Marktes"],
-  ["Marktstruktur verstehen","Hier lernst du, warum Marktstruktur die Grundlage jeder professionellen Analyse ist.","Struktur vor Setup"],
-  ["Trend, Range und Impuls","Du lernst, wie sich Märkte in Trend-, Range- und Impulsphasen bewegen.","Marktphasen erkennen"],
-  ["Support & Resistance","Diese Lektion zeigt dir, wie Unterstützungs- und Widerstandszonen gelesen werden.","Zonen richtig lesen"],
-  ["Liquidity Grundlagen","Hier lernst du die Grundlagen von Liquidität kennen.","Liquidität als Schlüsselkonzept"],
-  ["Warum Märkte Liquidität suchen","Diese Lektion erklärt dir, warum Märkte oft bestimmte Preisbereiche anlaufen.","Marktziele verstehen"],
-  ["Marktbewegungen verstehen","Hier lernst du, wie Preis sich im Markt bewegt.","Preislogik erkennen"],
-  ["Institutionelle Marktteilnehmer","Diese Lektion zeigt dir, warum institutionelle Marktteilnehmer anders handeln.","Institutionelles Denken"],
-  ["Timing & Trading Sessions","In dieser Lektion geht es um Sessions, Tageszeiten und gutes Timing.","Timing schlägt Zufall"],
-  ["Entries verstehen","Hier geht es darum, wann ein Entry wirklich Sinn macht.","Qualität vor Aktion"],
-  ["Confirmation Signale","Diese Lektion zeigt dir, woran du erkennst, ob ein Setup Bestätigung hat.","Bestätigung richtig lesen"],
-  ["Beispielanalysen","Hier verbindest du Konzepte mit praktischen Beispielen.","Praxis verbindet Theorie"],
-  ["Risk Management Grundlagen","Du lernst, warum Risiko-Kontrolle langfristig wichtiger ist als einzelne Gewinne.","Kapital schützen"],
-  ["Positionsgröße berechnen","Hier lernst du, wie du deine Positionsgröße sauber planst.","Saubere Positionsplanung"],
-  ["Risk-Reward Verhältnis","Diese Lektion zeigt dir, warum CRV eine wichtige Rolle spielt.","Chance und Risiko abwägen"],
-  ["Drawdown Kontrolle","Hier lernst du, wie du Verlustphasen kontrollierst.","Verlustphasen beherrschen"],
-  ["Trading Psychologie","Diese Lektion zeigt dir, wie stark dein Kopf dein Trading beeinflusst.","Mentale Stärke aufbauen"],
-  ["Emotionen im Trading","Hier geht es um Angst, Gier, Ungeduld und emotionale Kontrolle.","Emotionale Kontrolle"],
-  ["Disziplin entwickeln","Diese Lektion zeigt dir, wie Disziplin entsteht.","Standards einhalten"],
-  ["Tagesablauf eines Traders","Hier lernst du, wie ein sinnvoller Tagesablauf aussehen kann.","Routine bringt Stabilität"],
-  ["Trading Journal","Diese Lektion zeigt dir, warum Journaling einer der stärksten Hebel ist.","Aus Fehlern lernen"],
-  ["Kontinuierliche Verbesserung","Hier lernst du, wie du dauerhaft besser wirst.","Stetig besser werden"],
-  ["Das BullProsperity Marktmodell","Diese Lektion führt dich in das zentrale BullProsperity Marktmodell ein.","Das Herzstück der Strategie"],
-  ["Institutionelle Preiszonen","In dieser Lektion geht es um wichtige Preiszonen.","Zonen mit Bedeutung"],
-  ["Das BullProsperity Entry Modell","Hier setzt du die BullProsperity Strategie in ein klares Entry-Modell um.","Strategie in Ausführung bringen"],
-  ["Live Setup Beispiele","Diese letzte Lektion verbindet die Strategie mit konkreten Marktbeispielen.","Abschluss mit Praxisbezug"]
+const quickLessons = [
+  ["Grundlagen der Chartanalyse", "In dieser Lektion lernst du, wie Charts gelesen werden und warum Preisbewegung die Grundlage jeder weiteren Analyse ist.", "Charts als Sprache des Marktes"],
+  ["Marktstruktur verstehen", "Hier lernst du, warum Marktstruktur die Grundlage jeder professionellen Analyse ist und wie du den Markt logisch liest.", "Struktur vor Setup"],
+  ["Trend, Range und Impuls", "In dieser Lektion lernst du, wie sich Märkte in Trend-, Range- und Impulsphasen bewegen und wie du diese Zustände erkennst.", "Marktphasen erkennen"],
+  ["Support & Resistance", "Diese Lektion zeigt dir, wie Unterstützungs- und Widerstandszonen im Chart gelesen werden und wo ihre Grenzen liegen.", "Zonen richtig lesen"],
+
+  ["Liquidity Grundlagen", "Hier lernst du die Grundlagen von Liquidität kennen und warum Märkte häufig gezielt bestimmte Bereiche anlaufen.", "Liquidität als Schlüsselkonzept"],
+  ["Warum Märkte Liquidität suchen", "Diese Lektion erklärt dir, warum Märkte oft scheinbar zufällig in bestimmte Bereiche laufen und dort reagieren.", "Marktziele verstehen"],
+  ["Marktbewegungen verstehen", "Hier lernst du, wie Preis sich im Markt bewegt und warum bestimmte Bewegungen bewusst und nicht zufällig wirken.", "Preislogik erkennen"],
+  ["Institutionelle Marktteilnehmer", "Diese Lektion zeigt dir, warum institutionelle Marktteilnehmer anders handeln als Retail Trader und wie sich das im Markt widerspiegelt.", "Institutionelles Denken"],
+
+  ["Timing & Trading Sessions", "In dieser Lektion geht es um Sessions, Tageszeiten und darum, warum Timing für die Qualität eines Setups entscheidend ist.", "Timing schlägt Zufall"],
+  ["Entries verstehen", "Hier geht es darum, wann ein Entry wirklich Sinn macht und welche Faktoren vorher erfüllt sein sollten.", "Qualität vor Aktion"],
+  ["Confirmation Signale", "Diese Lektion zeigt dir, woran du erkennst, ob ein Setup Bestätigung hat oder ob du zu früh im Markt bist.", "Bestätigung richtig lesen"],
+  ["Beispielanalysen", "Hier verbindest du die vorherigen Konzepte mit praktischen Beispielen und realitätsnahen Chart-Situationen.", "Praxis verbindet Theorie"],
+
+  ["Risk Management Grundlagen", "In dieser Lektion lernst du, warum Risiko-Kontrolle langfristig wichtiger ist als einzelne Gewinne.", "Kapital schützen"],
+  ["Positionsgröße berechnen", "Hier lernst du, wie du deine Positionsgröße sauber anhand von Risiko und Stop-Loss planst.", "Saubere Positionsplanung"],
+  ["Risk-Reward Verhältnis", "Diese Lektion zeigt dir, warum CRV eine wichtige Rolle spielt und wie du Chancen und Risiko besser einordnest.", "Chance und Risiko abwägen"],
+  ["Drawdown Kontrolle", "Hier lernst du, wie du Verlustphasen kontrollierst und warum Drawdown-Management ein Zeichen von Professionalität ist.", "Verlustphasen beherrschen"],
+
+  ["Trading Psychologie", "Diese Lektion zeigt dir, wie stark dein Kopf dein Trading beeinflusst und warum Psychologie ein Schlüsselfaktor ist.", "Mentale Stärke aufbauen"],
+  ["Emotionen im Trading", "Hier geht es um Angst, Gier, Ungeduld und darum, wie Emotionen deine Ausführung zerstören können.", "Emotionale Kontrolle"],
+  ["Disziplin entwickeln", "Diese Lektion zeigt dir, wie Disziplin entsteht und warum sie im Trading wichtiger ist als Motivation.", "Standards einhalten"],
+  ["Tagesablauf eines Traders", "Hier lernst du, wie ein sinnvoller Tagesablauf für Trader aussehen kann und warum Routine so entscheidend ist.", "Routine bringt Stabilität"],
+  ["Trading Journal", "Diese Lektion zeigt dir, warum Journaling einer der stärksten Hebel für langfristige Verbesserung ist.", "Aus Fehlern lernen"],
+  ["Kontinuierliche Verbesserung", "Hier lernst du, wie du dauerhaft besser wirst und warum kleine Verbesserungen mit der Zeit einen riesigen Unterschied machen.", "Stetig besser werden"],
+
+  ["Das BullProsperity Marktmodell", "Diese Lektion führt dich in das zentrale BullProsperity Marktmodell ein und verbindet die bisherigen Grundlagen zu einer klaren Strategie.", "Das Herzstück der Strategie"],
+  ["Institutionelle Preiszonen", "In dieser Lektion geht es um Preiszonen, aus denen institutionelle Reaktionen wahrscheinlicher werden.", "Zonen mit Bedeutung"],
+  ["Das BullProsperity Entry Modell", "Hier setzt du die BullProsperity Strategie in ein klares Entry-Modell um und verbindest Struktur, Timing und Bestätigung.", "Strategie in Ausführung bringen"],
+  ["Live Setup Beispiele", "Diese letzte Lektion verbindet die Strategie mit konkreten Marktbeispielen und macht die Umsetzung greifbar.", "Abschluss mit Praxisbezug"]
 ];
 
-additionalLessons.forEach((item, i) => {
-  const num = i + 8;
-  lessons[num] = {
+quickLessons.forEach((item, index) => {
+  const lessonNumber = index + 8;
+
+  lessons[lessonNumber] = {
     module:
-      num <= 11 ? "Modul 3 — Chartanalyse" :
-      num <= 15 ? "Modul 4 — Liquidität & Marktbewegung" :
-      num <= 19 ? "Modul 5 — Entry Verständnis" :
-      num <= 23 ? "Modul 6 — Risk Management" :
-      num <= 29 ? "Modul 7 — Psychologie & Routine" :
+      lessonNumber <= 11 ? "Modul 3 — Chartanalyse" :
+      lessonNumber <= 15 ? "Modul 4 — Liquidität & Marktbewegung" :
+      lessonNumber <= 19 ? "Modul 5 — Entry Verständnis" :
+      lessonNumber <= 23 ? "Modul 6 — Risk Management" :
+      lessonNumber <= 29 ? "Modul 7 — Psychologie & Routine" :
       "Modul 8 — BullProsperity SMC Strategie",
+
     title: item[0],
     description: item[1],
     points: [
@@ -340,8 +544,7 @@ const sidebarModulesData = [
   }
 ];
 
-const totalLessons = 33;
-const match = window.location.pathname.match(/lesson(\d+)\.html/i);
+const match = window.location.pathname.match(/lesson(\d+)/i);
 const lessonNumber = match ? parseInt(match[1], 10) : 1;
 const lesson = lessons[lessonNumber] || lessons[1];
 
@@ -361,6 +564,7 @@ lesson.points.forEach(point => {
 });
 
 const sidebar = document.getElementById("sidebarModules");
+
 sidebarModulesData.forEach(module => {
   const moduleDiv = document.createElement("div");
   moduleDiv.className = "module";
@@ -376,7 +580,7 @@ sidebarModulesData.forEach(module => {
 
   module.lessons.forEach(([num, title]) => {
     const a = document.createElement("a");
-    a.href = `lesson${num}.html`;
+    a.href = `/lesson${num}`;
     a.className = "lesson" + (num === lessonNumber ? " active" : "");
     a.textContent = `Lesson ${num} — ${title}`;
     moduleDiv.appendChild(a);
@@ -389,10 +593,10 @@ const progress = Math.round((lessonNumber / totalLessons) * 100);
 document.getElementById("progressText").textContent = `${progress}%`;
 document.getElementById("progressFill").style.width = `${progress}%`;
 
-const prevLink = lessonNumber > 1 ? `lesson${lessonNumber - 1}.html` : "course.html";
-const nextLink = lessonNumber < totalLessons ? `lesson${lessonNumber + 1}.html` : "course.html";
+const prevLink = lessonNumber > 1 ? `/lesson${lessonNumber - 1}` : "/course";
+const nextLink = lessonNumber < totalLessons ? `/lesson${lessonNumber + 1}` : "/course";
 
-document.getElementById("backTopBtn").href = "course.html";
+document.getElementById("backTopBtn").href = "/course";
 document.getElementById("nextTopBtn").href = nextLink;
 document.getElementById("prevBottomBtn").href = prevLink;
 document.getElementById("nextBottomBtn").href = nextLink;
@@ -431,13 +635,29 @@ if (lesson.videoId) {
 }
 
 const notesBox = document.getElementById("lessonNotes");
-const storageKey = "bullprosperity_notes_" + window.location.pathname;
+const notesStorageKey = "bullprosperity_notes_" + lessonNumber;
 
-const savedNotes = localStorage.getItem(storageKey);
-if (savedNotes) notesBox.value = savedNotes;
+const savedNotes = localStorage.getItem(notesStorageKey);
+
+if (savedNotes) {
+  notesBox.value = savedNotes;
+}
 
 notesBox.addEventListener("input", () => {
-  localStorage.setItem(storageKey, notesBox.value);
+  localStorage.setItem(notesStorageKey, notesBox.value);
+});
+
+document.addEventListener("DOMContentLoaded", async () => {
+  const loginBtn = document.getElementById("loginNavBtn");
+
+  try {
+    const res = await fetch("/api/access", { credentials: "include" });
+    const data = await res.json();
+
+    if (data.role === "admin" || data.role === "premium") {
+      if (loginBtn) loginBtn.style.display = "none";
+    }
+  } catch (err) {}
 });
 </script>
 
