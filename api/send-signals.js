@@ -1,479 +1,145 @@
-<!DOCTYPE html>
-<html lang="de">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>BullProsperity | Admin Signals</title>
-  <link rel="stylesheet" href="theme.css" />
-  <script src="/login.js" defer></script>
-
-  <script>
-    (async () => {
-      try {
-        const res = await fetch("/api/access", {
-          credentials: "include",
-          cache: "no-store"
-        });
-
-        const data = await res.json();
-
-        if (data.role !== "admin") {
-          window.location.href = "locked.html";
-        }
-      } catch {
-        window.location.href = "locked.html";
-      }
-    })();
-  </script>
-
-  <style>
-    .signal-layout{
-      display:grid;
-      grid-template-columns:1.05fr 0.95fr;
-      gap:24px;
-      align-items:start;
+export const config = {
+  api: {
+    bodyParser: {
+      sizeLimit: "8mb"
     }
-
-    .signal-panel{
-      border:1px solid var(--line);
-      border-radius:28px;
-      background:linear-gradient(180deg, var(--panel), var(--panel-2));
-      box-shadow:0 0 0 1px rgba(255,255,255,0.02) inset;
-      padding:24px;
-    }
-
-    .form-grid{
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:16px;
-      margin-top:18px;
-    }
-
-    .field{
-      display:flex;
-      flex-direction:column;
-      gap:8px;
-    }
-
-    .field.full{
-      grid-column:1 / -1;
-    }
-
-    .field label{
-      color:#f1f1f1;
-      font-size:14px;
-      font-weight:800;
-    }
-
-    .field input,
-    .field select,
-    .field textarea{
-      width:100%;
-      border-radius:16px;
-      border:1px solid rgba(243,210,27,0.18);
-      background:rgba(255,255,255,0.03);
-      color:#fff;
-      padding:14px 16px;
-      font-size:15px;
-      outline:none;
-    }
-
-    .field textarea{
-      min-height:120px;
-      resize:vertical;
-    }
-
-    .field input:focus,
-    .field select:focus,
-    .field textarea:focus{
-      border-color:rgba(243,210,27,0.48);
-      box-shadow:0 0 0 3px rgba(243,210,27,0.08);
-    }
-
-    .signal-preview{
-      border:1px solid rgba(243,210,27,0.18);
-      border-radius:24px;
-      background:#0b0b0b;
-      padding:24px;
-      white-space:pre-wrap;
-      color:#fff;
-      font-size:20px;
-      line-height:1.55;
-      font-weight:800;
-    }
-
-    .signal-preview .gold{
-      color:var(--gold);
-    }
-
-    .signal-actions{
-      display:flex;
-      gap:12px;
-      flex-wrap:wrap;
-      margin-top:20px;
-    }
-
-    .admin-note{
-      border:1px solid rgba(243,210,27,0.14);
-      background:rgba(243,210,27,0.04);
-      border-radius:18px;
-      padding:16px;
-      color:#d8d8d8;
-      line-height:1.7;
-      margin-top:18px;
-      font-size:14px;
-      font-weight:700;
-    }
-
-    @media(max-width:1100px){
-      .signal-layout{
-        grid-template-columns:1fr;
-      }
-    }
-
-    @media(max-width:760px){
-      .form-grid{
-        grid-template-columns:1fr;
-      }
-    }
-  </style>
-</head>
-
-<body>
-  <div class="page">
-
-    <nav class="navbar">
-      <a href="index.html" class="logo">BullProsperity</a>
-
-      <div class="nav-links">
-        <a href="index.html">Home</a>
-        <a href="hub.html">Hub</a>
-        <a href="course.html">Course</a>
-        <a href="tools.html">Tools</a>
-        <a href="setup-room.html">Setup Room</a>
-        <a href="community.html">Community</a>
-        <a id="loginNavBtn" href="/api/whop/login">Login</a>
-      </div>
-    </nav>
-
-    <section class="hero-shell">
-      <div class="badge">Admin Bereich</div>
-      <h1 class="hero-title">BullProsperity <span class="gold">Signal Panel</span></h1>
-      <p class="hero-text">
-        Erstelle professionelle Trading Signale im BullProsperity Design und sende sie direkt in deinen Discord Signal Channel.
-      </p>
-      <div class="hero-buttons">
-        <a href="hub.html" class="btn secondary">Zurück zum Hub</a>
-        <a href="#signal-form" class="btn primary">Signal erstellen</a>
-      </div>
-    </section>
-
-    <section class="signal-layout">
-
-      <div class="signal-panel" id="signal-form">
-        <div class="badge">Neues Signal</div>
-        <h2 class="section-heading" style="font-size:36px; margin-bottom:10px;">Signal erstellen</h2>
-        <p class="section-subtext" style="margin-bottom:0;">
-          Eingaben ausfüllen, Vorschau prüfen und dann an Discord senden.
-        </p>
-
-        <div class="form-grid">
-
-          <div class="field">
-            <label for="pair">Markt / Pair</label>
-            <input id="pair" placeholder="z. B. XAUUSD, EURUSD, GBPJPY, NAS100" />
-          </div>
-
-          <div class="field">
-            <label for="signalType">Signal Typ</label>
-            <select id="signalType">
-              <option value="BUY">BUY</option>
-              <option value="SELL">SELL</option>
-              <option value="BUY LIMIT">BUY LIMIT</option>
-              <option value="SELL LIMIT">SELL LIMIT</option>
-              <option value="BUY STOP">BUY STOP</option>
-              <option value="SELL STOP">SELL STOP</option>
-            </select>
-          </div>
-
-          <div class="field">
-            <label for="entry">Entry</label>
-            <input id="entry" placeholder="z. B. 2351.50" />
-          </div>
-
-          <div class="field">
-            <label for="sl">Stop Loss</label>
-            <input id="sl" placeholder="z. B. 2354.50" />
-          </div>
-
-          <div class="field">
-            <label for="tp1">TP1</label>
-            <input id="tp1" placeholder="z. B. 2345.50" />
-          </div>
-
-          <div class="field">
-            <label for="tp2">TP2</label>
-            <input id="tp2" placeholder="z. B. 2341.50" />
-          </div>
-
-          <div class="field">
-            <label for="tp3">TP3</label>
-            <input id="tp3" placeholder="z. B. 2335.50" />
-          </div>
-
-          <div class="field">
-            <label for="tp4">TP4</label>
-            <input id="tp4" placeholder="z. B. 2321.50" />
-          </div>
-
-          <div class="field">
-            <label for="risk">Risk Level</label>
-            <select id="risk">
-              <option value="Low Risk">Low Risk</option>
-              <option value="Medium Risk">Medium Risk</option>
-              <option value="High Risk">High Risk</option>
-            </select>
-          </div>
-
-          <div class="field">
-            <label for="pipSize">Pip Größe</label>
-            <select id="pipSize">
-              <option value="auto">Automatisch</option>
-              <option value="0.0001">Forex normal: 0.0001</option>
-              <option value="0.01">JPY Pair: 0.01</option>
-              <option value="0.1">Gold XAUUSD: 0.1</option>
-              <option value="1">Index / Crypto: 1</option>
-            </select>
-          </div>
-
-          <div class="field full">
-            <label for="analysisLink">Analyse Link</label>
-            <input id="analysisLink" placeholder="TradingView Link, Screenshot Link oder Analyse Link" />
-          </div>
-
-          <div class="field full">
-            <label for="comment">Kommentar / Hinweis</label>
-            <textarea id="comment" placeholder="z. B. London Liquidity Sweep, Sell Limit aus Premium POI, bitte Risk Management beachten."></textarea>
-          </div>
-
-          <div class="field full">
-            <label for="signalImage">Chart Bild hochladen</label>
-            <input id="signalImage" type="file" accept="image/png,image/jpeg,image/webp" />
-          </div>
-        </div>
-
-        <div class="signal-actions">
-          <button class="btn secondary" id="previewBtn">Vorschau aktualisieren</button>
-          <button class="btn primary" id="sendSignalBtn">Signal an Discord senden</button>
-        </div>
-
-        <div class="admin-note">
-          Dieser Bereich ist nur für Admins. Premium Mitglieder und Gäste werden automatisch blockiert.
-        </div>
-      </div>
-
-      <div class="signal-panel">
-        <div class="badge">Discord Vorschau</div>
-        <h2 class="section-heading" style="font-size:36px; margin-bottom:10px;">Signal Preview</h2>
-        <div class="signal-preview" id="signalPreview">Signal Vorschau wird hier angezeigt.</div>
-      </div>
-
-    </section>
-
-    <div class="footer-note">
-      BullProsperity dient ausschließlich Bildungszwecken und stellt keine Finanzberatung dar.
-    </div>
-
-  </div>
-
-<script>
-const fields = {
-  pair: document.getElementById("pair"),
-  signalType: document.getElementById("signalType"),
-  entry: document.getElementById("entry"),
-  sl: document.getElementById("sl"),
-  tp1: document.getElementById("tp1"),
-  tp2: document.getElementById("tp2"),
-  tp3: document.getElementById("tp3"),
-  tp4: document.getElementById("tp4"),
-  risk: document.getElementById("risk"),
-  pipSize: document.getElementById("pipSize"),
-  analysisLink: document.getElementById("analysisLink"),
-  comment: document.getElementById("comment"),
-  image: document.getElementById("signalImage")
+  }
 };
 
-const preview = document.getElementById("signalPreview");
-const previewBtn = document.getElementById("previewBtn");
-const sendSignalBtn = document.getElementById("sendSignalBtn");
-
-function toNumber(value) {
-  return Number(String(value || "").replace(",", "."));
-}
-
-function getPipSize(pair) {
-  const manual = fields.pipSize.value;
-
-  if (manual !== "auto") {
-    return Number(manual);
+export default async function handler(req, res) {
+  if (req.method !== "POST") {
+    return res.status(405).json({ error: "Method not allowed" });
   }
-
-  const p = pair.toUpperCase();
-
-  if (p.includes("XAU")) return 0.1;
-  if (p.includes("JPY")) return 0.01;
-  if (p.includes("NAS") || p.includes("US30") || p.includes("SPX") || p.includes("DAX")) return 1;
-  if (p.includes("BTC") || p.includes("ETH")) return 1;
-
-  return 0.0001;
-}
-
-function formatPrice(value) {
-  if (!value) return "-";
-  return String(value).replace(".", ",");
-}
-
-function calcPips(entry, tp, pair) {
-  const e = toNumber(entry);
-  const t = toNumber(tp);
-
-  if (!e || !t) return "";
-
-  const pip = getPipSize(pair);
-  const pips = Math.abs((t - e) / pip);
-
-  return Math.round(pips);
-}
-
-function buildSignalText() {
-  const pair = fields.pair.value.trim().toUpperCase();
-  const type = fields.signalType.value;
-  const entry = fields.entry.value.trim();
-  const sl = fields.sl.value.trim();
-  const risk = fields.risk.value;
-  const comment = fields.comment.value.trim();
-  const analysisLink = fields.analysisLink.value.trim();
-
-  const tps = [
-    fields.tp1.value.trim(),
-    fields.tp2.value.trim(),
-    fields.tp3.value.trim(),
-    fields.tp4.value.trim()
-  ].filter(Boolean);
-
-  let text = `${pair || "PAIR"} ${type}\n\n`;
-
-  text += `ENTRY @ ${formatPrice(entry)} 🎯\n`;
-  text += `SL @ ${formatPrice(sl)} ❌\n\n`;
-
-  tps.forEach((tp, index) => {
-    const pips = calcPips(entry, tp, pair);
-    text += `TP${index + 1} @ ${formatPrice(tp)} 🎳 (${pips}+ pips)\n`;
-  });
-
-  text += `\n${risk}`;
-
-  if (comment) {
-    text += `\n\n📝 ${comment}`;
-  }
-
-  if (analysisLink) {
-    text += `\n\n🔗 Analyse ansehen:\n${analysisLink}`;
-  }
-
-  return text;
-}
-
-function updatePreview() {
-  preview.textContent = buildSignalText();
-}
-
-async function fileToBase64(file) {
-  return new Promise((resolve, reject) => {
-    if (!file) return resolve("");
-
-    const reader = new FileReader();
-
-    reader.onload = () => resolve(reader.result);
-    reader.onerror = reject;
-    reader.readAsDataURL(file);
-  });
-}
-
-previewBtn.addEventListener("click", updatePreview);
-
-Object.values(fields).forEach(field => {
-  if (field && field.addEventListener) {
-    field.addEventListener("input", updatePreview);
-    field.addEventListener("change", updatePreview);
-  }
-});
-
-sendSignalBtn.addEventListener("click", async () => {
-  const pair = fields.pair.value.trim();
-
-  if (!pair || !fields.entry.value.trim() || !fields.sl.value.trim()) {
-    alert("Bitte mindestens Pair, Entry und SL ausfüllen.");
-    return;
-  }
-
-  const file = fields.image.files[0];
-
-  if (file && file.size > 5000000) {
-    alert("Bild ist zu groß. Bitte maximal 5 MB hochladen.");
-    return;
-  }
-
-  sendSignalBtn.disabled = true;
-  sendSignalBtn.textContent = "Signal wird gesendet...";
 
   try {
-    const imageBase64 = await fileToBase64(file);
+    const webhookUrl = process.env.DISCORD_SIGNALS_WEBHOOK_URL;
 
-    const payload = {
-      pair: fields.pair.value.trim().toUpperCase(),
-      type: fields.signalType.value,
-      entry: fields.entry.value.trim(),
-      sl: fields.sl.value.trim(),
-      tp1: fields.tp1.value.trim(),
-      tp2: fields.tp2.value.trim(),
-      tp3: fields.tp3.value.trim(),
-      tp4: fields.tp4.value.trim(),
-      risk: fields.risk.value,
-      pipSize: getPipSize(fields.pair.value.trim()),
-      analysisLink: fields.analysisLink.value.trim(),
-      comment: fields.comment.value.trim(),
-      signalText: buildSignalText(),
+    if (!webhookUrl) {
+      return res.status(500).json({ error: "DISCORD_SIGNALS_WEBHOOK_URL fehlt." });
+    }
+
+    const {
+      pair,
+      type,
+      signalText,
+      analysisLink,
+      comment,
+      risk,
       imageBase64
+    } = req.body;
+
+    if (!pair || !type || !signalText) {
+      return res.status(400).json({ error: "Signal Daten fehlen." });
+    }
+
+    const embed = {
+      title: `📡 BullProsperity Signal | ${pair} ${type}`,
+      description: "```" + signalText.slice(0, 3900) + "```",
+      color: 15979035,
+      fields: [
+        {
+          name: "⚠️ Risk",
+          value: risk || "Nicht angegeben",
+          inline: true
+        },
+        {
+          name: "📌 Status",
+          value: "Education Signal",
+          inline: true
+        }
+      ],
+      footer: {
+        text: "BullProsperity FX • Education Platform"
+      },
+      timestamp: new Date().toISOString()
     };
 
-    const res = await fetch("/api/send-signal", {
+    if (analysisLink) {
+      embed.fields.push({
+        name: "🔗 Analyse / Bild Link",
+        value: analysisLink,
+        inline: false
+      });
+    }
+
+    if (comment) {
+      embed.fields.push({
+        name: "📝 Admin Kommentar",
+        value: comment.slice(0, 900),
+        inline: false
+      });
+    }
+
+    if (imageBase64 && imageBase64.startsWith("data:image/")) {
+      const match = imageBase64.match(/^data:(image\/\w+);base64,(.+)$/);
+
+      if (!match) {
+        return res.status(400).json({ error: "Bildformat ungültig." });
+      }
+
+      const mimeType = match[1];
+      const base64Data = match[2];
+      const buffer = Buffer.from(base64Data, "base64");
+
+      const extension =
+        mimeType.includes("png") ? "png" :
+        mimeType.includes("webp") ? "webp" :
+        "jpg";
+
+      const fileName = `bullprosperity-signal.${extension}`;
+
+      embed.image = {
+        url: `attachment://${fileName}`
+      };
+
+      const formData = new FormData();
+
+      formData.append("payload_json", JSON.stringify({
+        username: "BullProsperity Signals",
+        embeds: [embed]
+      }));
+
+      formData.append(
+        "file",
+        new Blob([buffer], { type: mimeType }),
+        fileName
+      );
+
+      const discordRes = await fetch(webhookUrl, {
+        method: "POST",
+        body: formData
+      });
+
+      if (!discordRes.ok) {
+        const errorText = await discordRes.text();
+        console.error("DISCORD SIGNAL IMAGE ERROR:", errorText);
+        return res.status(500).json({ error: "Discord Fehler beim Bild-Signal." });
+      }
+
+      return res.status(200).json({ success: true });
+    }
+
+    const discordRes = await fetch(webhookUrl, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
       },
-      credentials: "include",
-      body: JSON.stringify(payload)
+      body: JSON.stringify({
+        username: "BullProsperity Signals",
+        embeds: [embed]
+      })
     });
 
-    const data = await res.json();
-
-    if (!res.ok) {
-      alert(data.error || "Signal konnte nicht gesendet werden.");
-      return;
+    if (!discordRes.ok) {
+      const errorText = await discordRes.text();
+      console.error("DISCORD SIGNAL ERROR:", errorText);
+      return res.status(500).json({ error: "Discord Fehler." });
     }
 
-    alert("Signal wurde an Discord gesendet.");
-  } catch (err) {
-    alert("Fehler beim Senden.");
-  } finally {
-    sendSignalBtn.disabled = false;
-    sendSignalBtn.textContent = "Signal an Discord senden";
+    return res.status(200).json({ success: true });
+
+  } catch (error) {
+    console.error("SEND SIGNAL ERROR:", error);
+    return res.status(500).json({ error: "Serverfehler." });
   }
-});
-
-updatePreview();
-</script>
-
-</body>
-</html>
+}
