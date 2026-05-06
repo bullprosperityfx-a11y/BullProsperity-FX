@@ -577,16 +577,23 @@
 
   let allocationChart = new Chart(chartCtx, {
     type: "doughnut",
-    data: {
-      labels: ["ETFs", "Aktien", "Crypto", "Rohstoffe"],
-      datasets: [{
-        data: [40,25,20,15],
-        borderWidth: 2,
-        borderColor: "#0b0b0b"
-      }]
+    datasets: [{
+  data: [40,25,20,15],
+
+  backgroundColor: [
+    "#d4af37", // ETFs
+    "#3b82f6", // Aktien
+    "#8b5cf6", // Crypto
+    "#f97316"  // Rohstoffe
+  ],
+
+  borderWidth: 3,
+  borderColor: "#0b0b0b",
+  hoverOffset: 10
+}]
     },
     options: {
-      cutout: "68%",
+      cutout: "72%",
       plugins: {
         legend: {
           position: "bottom",
