@@ -464,4 +464,227 @@ body::after{
   .chart-frame iframe{
     height:420px;
   }
+  /* =========================
+   MOBILE OPTIMIZATION ONLY
+========================= */
+
+html,
+body{
+  width:100%;
+  max-width:100%;
+  overflow-x:hidden;
+}
+
+img,
+video,
+iframe{
+  max-width:100%;
+}
+
+.page{
+  width:100%;
+  overflow-x:hidden;
+}
+
+/* Admin / Dashboard mobile safety */
+.admin-layout,
+.overview-grid,
+.course-grid,
+.analytics-grid,
+.admin-stats,
+.system-grid,
+.quick-grid,
+.member-stats,
+.grid-2,
+.grid-3,
+.grid-4{
+  max-width:100%;
+}
+
+.admin-card,
+.admin-sidebar,
+.analytics-card,
+.member-card,
+.stat-box,
+.system-box,
+.quick-card,
+.activity-item,
+.feed-item,
+.ranking-item{
+  max-width:100%;
+  overflow-wrap:anywhere;
+}
+
+@media(max-width:900px){
+
+  .page{
+    padding:18px;
+  }
+
+  .navbar{
+    align-items:flex-start;
+    gap:14px;
+  }
+
+  .nav-links{
+    width:100%;
+    gap:12px;
+  }
+
+  .nav-links a{
+    font-size:14px;
+  }
+
+  .hero-shell{
+    padding:26px 22px;
+    border-radius:24px;
+  }
+
+  .hero-title{
+    font-size:clamp(34px,9vw,46px);
+    line-height:1.05;
+  }
+
+  .hero-text,
+  .section-subtext{
+    font-size:15px;
+    line-height:1.7;
+  }
+
+  .section-heading{
+    font-size:clamp(28px,7vw,38px);
+  }
+
+  .admin-layout,
+  .overview-grid{
+    grid-template-columns:1fr !important;
+  }
+
+  .admin-sidebar{
+    position:relative !important;
+    top:0 !important;
+    min-height:auto !important;
+  }
+
+  .analytics-grid,
+  .admin-stats,
+  .system-grid,
+  .course-grid,
+  .member-stats{
+    grid-template-columns:1fr 1fr !important;
+  }
+
+  .quick-grid,
+  .grid-2,
+  .grid-3,
+  .grid-4{
+    grid-template-columns:1fr !important;
+  }
+}
+
+@media(max-width:640px){
+
+  .page{
+    padding:14px;
+  }
+
+  .navbar{
+    padding:14px 0 18px;
+  }
+
+  .logo{
+    font-size:18px;
+  }
+
+  .nav-links{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+  }
+
+  .nav-links a,
+  .nav-links .auth-badge{
+    width:100%;
+    justify-content:center;
+    text-align:center;
+    padding:10px 12px;
+    border-radius:14px;
+    background:rgba(255,255,255,0.03);
+    border:1px solid rgba(255,255,255,0.08);
+  }
+
+  .hero-shell,
+  .section,
+  .admin-card,
+  .admin-sidebar,
+  .analytics-card,
+  .card,
+  .section-card,
+  .info-card,
+  .module,
+  .setup-card,
+  .example-card,
+  .tool-card,
+  .community-card{
+    padding:20px !important;
+    border-radius:22px;
+  }
+
+  .hero-title{
+    font-size:34px;
+    letter-spacing:-1px;
+  }
+
+  .section-heading{
+    font-size:28px;
+    letter-spacing:-0.8px;
+  }
+
+  .hero-buttons,
+  .button-row,
+  .card-buttons,
+  .top-actions{
+    width:100%;
+  }
+
+  .btn{
+    width:100%;
+  }
+
+  .analytics-grid,
+  .admin-stats,
+  .system-grid,
+  .course-grid,
+  .member-stats{
+    grid-template-columns:1fr !important;
+  }
+
+  .activity-item,
+  .feed-item,
+  .ranking-item,
+  .member-card{
+    grid-template-columns:1fr !important;
+    display:grid;
+    gap:12px;
+  }
+
+  .activity-time,
+  .feed-time{
+    margin-left:0 !important;
+    grid-column:auto !important;
+  }
+
+  .stat-value,
+  .analytics-value,
+  .system-value{
+    font-size:30px;
+  }
+
+  .chart-frame{
+    min-height:340px;
+  }
+
+  .chart-frame iframe{
+    height:360px;
+  }
 }
