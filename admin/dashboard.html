@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <title>BullProsperity | Admin Dashboard</title>
+  <title>BullProsperity | Founder Control Center</title>
 
   <link rel="stylesheet" href="/theme.css" />
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -24,7 +24,6 @@
         if (data.role !== "admin") {
           window.location.href = "/locked.html";
         }
-
       } catch {
         window.location.href = "/locked.html";
       }
@@ -40,11 +39,15 @@
       align-items:start;
     }
 
-    .admin-sidebar{
+    .admin-sidebar,
+    .admin-card{
       border:1px solid var(--line);
       border-radius:28px;
       background:linear-gradient(180deg,var(--panel),var(--panel-2));
       padding:24px;
+    }
+
+    .admin-sidebar{
       position:sticky;
       top:20px;
     }
@@ -52,13 +55,6 @@
     .admin-content{
       display:grid;
       gap:24px;
-    }
-
-    .admin-card{
-      border:1px solid var(--line);
-      border-radius:28px;
-      background:linear-gradient(180deg,var(--panel),var(--panel-2));
-      padding:24px;
     }
 
     .admin-nav{
@@ -82,7 +78,8 @@
       transition:.2s ease;
     }
 
-    .admin-link:hover{
+    .admin-link:hover,
+    .admin-link.active{
       border-color:#ffd700;
       color:#ffd700;
       transform:translateX(4px);
@@ -100,6 +97,33 @@
       border:1px solid #252525;
       border-radius:22px;
       padding:18px;
+      position:relative;
+      overflow:hidden;
+      min-height:128px;
+    }
+
+    .stat-box::after{
+      content:"";
+      position:absolute;
+      right:-40px;
+      top:-40px;
+      width:120px;
+      height:120px;
+      background:radial-gradient(circle,rgba(255,215,0,.10),transparent 70%);
+      pointer-events:none;
+    }
+
+    .stat-icon{
+      width:36px;
+      height:36px;
+      border-radius:50%;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background:rgba(255,215,0,.08);
+      border:1px solid rgba(255,215,0,.20);
+      color:#ffd700;
+      margin-bottom:12px;
     }
 
     .stat-label{
@@ -108,23 +132,66 @@
       text-transform:uppercase;
       margin-bottom:10px;
       letter-spacing:.08em;
+      font-weight:800;
     }
 
     .stat-value{
       color:#ffd700;
       font-size:34px;
       font-weight:950;
+      line-height:1.05;
+      word-break:break-word;
     }
 
     .stat-sub{
       margin-top:8px;
       color:#8f8f8f;
       font-size:12px;
+      line-height:1.5;
+    }
+
+    .overview-grid{
+      display:grid;
+      grid-template-columns:1.1fr .9fr;
+      gap:18px;
+    }
+
+    .system-grid{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:16px;
+      margin-top:20px;
+    }
+
+    .system-box{
+      background:#111;
+      border:1px solid rgba(255,215,0,.12);
+      border-radius:20px;
+      padding:18px;
+    }
+
+    .system-title{
+      color:#fff;
+      font-weight:950;
+      margin-bottom:8px;
+    }
+
+    .system-value{
+      color:#ffd700;
+      font-size:30px;
+      font-weight:950;
+    }
+
+    .system-sub{
+      color:#9f9f9f;
+      font-size:13px;
+      margin-top:8px;
+      line-height:1.5;
     }
 
     .activity-feed{
       display:grid;
-      gap:14px;
+      gap:12px;
       margin-top:20px;
     }
 
@@ -133,70 +200,138 @@
       border-radius:18px;
       padding:16px;
       background:rgba(255,255,255,.02);
+      display:grid;
+      grid-template-columns:auto 1fr auto;
+      gap:14px;
+      align-items:center;
+    }
+
+    .avatar{
+      width:38px;
+      height:38px;
+      border-radius:50%;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background:linear-gradient(135deg,rgba(255,215,0,.20),rgba(255,255,255,.06));
+      border:1px solid rgba(255,215,0,.22);
+      color:#ffd700;
+      font-weight:950;
+      font-size:13px;
+      text-transform:uppercase;
     }
 
     .activity-item strong{
-      color:#ffd700;
+      color:#fff;
       display:block;
-      margin-bottom:6px;
+      margin-bottom:5px;
+      font-weight:950;
     }
 
     .activity-item p{
       margin:0;
-      color:#d6d6d6;
-      line-height:1.6;
-    }
-
-    .signal-overview{
-      display:grid;
-      grid-template-columns:1fr 1fr 1fr;
-      gap:16px;
-      margin-top:20px;
-    }
-
-    .signal-box{
-      border-radius:20px;
-      padding:20px;
-      background:#111;
-      border:1px solid #252525;
-    }
-
-    .signal-box h3{
-      margin:0 0 10px;
-      color:#ffd700;
-      font-size:20px;
-    }
-
-    .signal-big{
-      color:#fff;
-      font-size:34px;
-      font-weight:950;
-    }
-
-    .signal-desc{
-      margin-top:8px;
-      color:#9f9f9f;
+      color:#a8a8a8;
       line-height:1.5;
       font-size:13px;
     }
 
+    .activity-time{
+      color:#ffd700;
+      font-size:13px;
+      font-weight:900;
+      white-space:nowrap;
+    }
+
+    .quick-grid{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:16px;
+      margin-top:20px;
+    }
+
+    .quick-card{
+      background:#111;
+      border:1px solid rgba(255,215,0,.12);
+      border-radius:20px;
+      padding:20px;
+      text-decoration:none;
+      transition:.2s ease;
+      display:block;
+    }
+
+    .quick-card:hover{
+      border-color:#ffd700;
+      transform:translateY(-2px);
+    }
+
+    .quick-card h3{
+      margin:0 0 8px;
+      color:#ffd700;
+      font-size:20px;
+    }
+
+    .quick-card p{
+      margin:0;
+      color:#a8a8a8;
+      line-height:1.5;
+      font-size:13px;
+    }
+
+    .status-pill{
+      display:inline-flex;
+      align-items:center;
+      gap:7px;
+      padding:8px 12px;
+      border-radius:999px;
+      color:#22c55e;
+      background:rgba(34,197,94,.08);
+      border:1px solid rgba(34,197,94,.25);
+      font-size:12px;
+      font-weight:900;
+      margin-top:12px;
+    }
+
+    .status-pill::before{
+      content:"";
+      width:8px;
+      height:8px;
+      border-radius:50%;
+      background:#22c55e;
+    }
+
     @media(max-width:1200px){
-      .admin-layout{
+      .admin-layout,
+      .overview-grid{
         grid-template-columns:1fr;
       }
 
-      .admin-stats{
+      .admin-sidebar{
+        position:relative;
+        top:0;
+      }
+
+      .admin-stats,
+      .system-grid{
         grid-template-columns:1fr 1fr;
       }
 
-      .signal-overview{
+      .quick-grid{
         grid-template-columns:1fr;
       }
     }
 
     @media(max-width:760px){
-      .admin-stats{
+      .admin-stats,
+      .system-grid{
         grid-template-columns:1fr;
+      }
+
+      .activity-item{
+        grid-template-columns:auto 1fr;
+      }
+
+      .activity-time{
+        grid-column:2;
       }
     }
   </style>
@@ -218,7 +353,7 @@
   </nav>
 
   <section class="hero-shell">
-    <div class="badge">Admin System</div>
+    <div class="badge">Founder Control Center</div>
 
     <h1 class="hero-title">
       BullProsperity
@@ -226,8 +361,7 @@
     </h1>
 
     <p class="hero-text">
-      Verwalte Mitglieder, Analytics, Signals,
-      Watchtime, Sessions und Systemaktivitäten.
+      Zentrale Übersicht über Mitglieder, Course Analytics, Watchtime, Setup Room, Security und Systemaktivität.
     </p>
   </section>
 
@@ -241,10 +375,11 @@
       </h2>
 
       <div class="admin-nav">
+        <a href="/admin/dashboard.html" class="admin-link active"><span>📊 Dashboard</span><span>→</span></a>
         <a href="/admin/members.html" class="admin-link"><span>👥 Mitglieder</span><span>→</span></a>
-        <a href="/admin/sr-analytics.html" class="admin-link"><span>🎳 SR Analytics</span><span>→</span></a>
         <a href="/admin/course-analytics.html" class="admin-link"><span>🎬 Course Analytics</span><span>→</span></a>
-        <a href="#" class="admin-link"><span>💰 Affiliate Stats</span><span>→</span></a>
+        <a href="/admin/sr-analytics.html" class="admin-link"><span>🎳 SR Analytics</span><span>→</span></a>
+        <a href="#" class="admin-link"><span>💰 Affiliate</span><span>→</span></a>
         <a href="/admin/security.html" class="admin-link"><span>🛡 Security</span><span>→</span></a>
       </div>
     </aside>
@@ -252,89 +387,139 @@
     <div class="admin-content">
 
       <div class="admin-card">
-        <div class="badge">Live Statistik</div>
+        <div class="badge">Live Übersicht</div>
 
         <h2 class="section-heading" style="font-size:38px;margin-bottom:10px;">
-          Plattform Übersicht
+          Plattform Snapshot
         </h2>
 
         <p class="section-subtext">
-          Live Überblick über Aktivität,
-          Mitglieder und BullProsperity Systeme.
+          Echtzeit Überblick über die wichtigsten BullProsperity Systeme.
         </p>
 
         <div class="admin-stats">
           <div class="stat-box">
-            <div class="stat-label">Aktive Mitglieder</div>
+            <div class="stat-icon">👥</div>
+            <div class="stat-label">Mitglieder</div>
             <div class="stat-value" id="activeMembers">0</div>
             <div class="stat-sub">Einzigartige User</div>
           </div>
 
           <div class="stat-box">
-            <div class="stat-label">Aktivitäten</div>
+            <div class="stat-icon">⚡</div>
+            <div class="stat-label">Gesamtaktivität</div>
             <div class="stat-value" id="totalActivities">0</div>
-            <div class="stat-sub">Gesamte Events</div>
+            <div class="stat-sub">Alle getrackten Events</div>
           </div>
 
           <div class="stat-box">
-            <div class="stat-label">Hub Öffnungen</div>
-            <div class="stat-value" id="hubOpens">0</div>
-            <div class="stat-sub">member_activity</div>
+            <div class="stat-icon">🎬</div>
+            <div class="stat-label">Watchtime</div>
+            <div class="stat-value" id="totalWatchtime">0m</div>
+            <div class="stat-sub">Gesamte Kurs-Watchtime</div>
           </div>
 
           <div class="stat-box">
+            <div class="stat-icon">🕘</div>
             <div class="stat-label">Letzte Aktivität</div>
             <div class="stat-value" id="lastActivity">-</div>
-            <div class="stat-sub">Neuester Eintrag</div>
+            <div class="stat-sub">Neuester Systemeintrag</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="overview-grid">
+        <div class="admin-card">
+          <div class="badge">System Snapshot</div>
+
+          <h2 class="section-heading" style="font-size:34px;margin-bottom:10px;">
+            BullProsperity Systeme
+          </h2>
+
+          <p class="section-subtext">
+            Kurzer Status über alle aktiven Plattformbereiche.
+          </p>
+
+          <div class="system-grid">
+            <div class="system-box">
+              <div class="system-title">Hub</div>
+              <div class="system-value" id="hubOpens">0</div>
+              <div class="system-sub">Hub Öffnungen</div>
+              <div class="status-pill">Aktiv</div>
+            </div>
+
+            <div class="system-box">
+              <div class="system-title">Course</div>
+              <div class="system-value" id="lessonOpens">0</div>
+              <div class="system-sub">Lesson Opens</div>
+              <div class="status-pill">Tracking</div>
+            </div>
+
+            <div class="system-box">
+              <div class="system-title">Setup Room</div>
+              <div class="system-value" id="srActions">0</div>
+              <div class="system-sub">SR Aktivitäten</div>
+              <div class="status-pill">Live</div>
+            </div>
+
+            <div class="system-box">
+              <div class="system-title">Security</div>
+              <div class="system-value">OK</div>
+              <div class="system-sub">Admin Schutz aktiv</div>
+              <div class="status-pill">Sicher</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="admin-card">
+          <div class="badge">Quick Access</div>
+
+          <h2 class="section-heading" style="font-size:34px;margin-bottom:10px;">
+            Schnellzugriff
+          </h2>
+
+          <p class="section-subtext">
+            Direkter Zugriff auf die wichtigsten Admin-Bereiche.
+          </p>
+
+          <div class="quick-grid">
+            <a href="/admin/members.html" class="quick-card">
+              <h3>👥 Mitglieder</h3>
+              <p>Online Status, letzte Aktivität und Nutzerübersicht.</p>
+            </a>
+
+            <a href="/admin/course-analytics.html" class="quick-card">
+              <h3>🎬 Course</h3>
+              <p>Watchtime, Top Lessons und Kurs-Engagement.</p>
+            </a>
+
+            <a href="/admin/sr-analytics.html" class="quick-card">
+              <h3>🎳 SR Analytics</h3>
+              <p>Setup Room Kategorien, Klicks und Aktivitätsfeed.</p>
+            </a>
           </div>
         </div>
       </div>
 
       <div class="admin-card">
-        <div class="badge">Signal Analytics</div>
+        <div class="badge">Live Feed</div>
 
         <h2 class="section-heading" style="font-size:36px;margin-bottom:10px;">
-          Signal Übersicht
+          Neueste Plattform Aktivität
         </h2>
 
-        <div class="signal-overview">
-          <div class="signal-box">
-            <h3>Winrate</h3>
-            <div class="signal-big">78%</div>
-            <div class="signal-desc">
-              Durchschnittliche Trefferquote der veröffentlichten Signals.
-            </div>
-          </div>
-
-          <div class="signal-box">
-            <h3>Durchschnitt</h3>
-            <div class="signal-big">+42</div>
-            <div class="signal-desc">
-              Durchschnittliche Pips pro Signal.
-            </div>
-          </div>
-
-          <div class="signal-box">
-            <h3>Top Markt</h3>
-            <div class="signal-big">XAUUSD</div>
-            <div class="signal-desc">
-              Höchste Aktivität & Engagement.
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="admin-card">
-        <div class="badge">Aktivität</div>
-
-        <h2 class="section-heading" style="font-size:36px;margin-bottom:10px;">
-          Live Activity Feed
-        </h2>
+        <p class="section-subtext">
+          Kombinierter Feed aus Hub, Course und Setup Room.
+        </p>
 
         <div class="activity-feed" id="activityFeed">
           <div class="activity-item">
-            <strong>Keine Daten geladen</strong>
-            <p>Öffne den Hub, damit Aktivitäten in Supabase gespeichert werden.</p>
+            <div class="avatar">BP</div>
+            <div>
+              <strong>Keine Daten geladen</strong>
+              <p>Aktivitäten erscheinen hier automatisch.</p>
+            </div>
+            <div class="activity-time">-</div>
           </div>
         </div>
       </div>
@@ -343,84 +528,187 @@
   </section>
 
   <div class="footer-note">
-    BullProsperity Admin System.
+    BullProsperity Founder Control Center.
   </div>
 </div>
 
 <script>
-(async () => {
-  try {
-    const { data, error } = await supabaseClient
-      .from("member_activity")
-      .select("*")
-      .order("created_at", { ascending: false })
-      .limit(50);
+function formatSeconds(seconds){
+  const total = Number(seconds || 0);
+  const h = Math.floor(total / 3600);
+  const m = Math.floor((total % 3600) / 60);
 
-    if (error) {
-      console.log("Admin Dashboard Supabase Fehler:", error);
-      return;
-    }
+  if(h > 0) return `${h}h ${m}m`;
+  return `${m}m`;
+}
 
-    const activities = data || [];
+function getInitials(email){
+  if(!email) return "BP";
 
-    const uniqueMembers = new Set(
-      activities
-        .map(item => item.email)
-        .filter(Boolean)
-    );
+  const name = email.split("@")[0] || email;
+  const parts = name
+    .replace(/[^a-zA-Z0-9._-]/g, "")
+    .split(/[._-]/)
+    .filter(Boolean);
 
-    const hubOpens = activities.filter(item => item.action === "hub_opened").length;
+  if(parts.length >= 2){
+    return (parts[0][0] + parts[1][0]).toUpperCase();
+  }
+
+  return name.slice(0,2).toUpperCase();
+}
+
+function formatDateTime(value){
+  if(!value) return "-";
+
+  return new Date(value).toLocaleString("de-DE", {
+    day:"2-digit",
+    month:"2-digit",
+    hour:"2-digit",
+    minute:"2-digit"
+  });
+}
+
+function formatTime(value){
+  if(!value) return "-";
+
+  return new Date(value).toLocaleTimeString("de-DE", {
+    hour:"2-digit",
+    minute:"2-digit"
+  });
+}
+
+async function loadFounderDashboard(){
+  try{
+    const [
+      memberResult,
+      lessonResult,
+      watchResult,
+      srResult
+    ] = await Promise.all([
+      supabaseClient.from("member_activity").select("*").order("created_at", { ascending:false }).limit(200),
+      supabaseClient.from("lesson_activity").select("*").order("created_at", { ascending:false }).limit(200),
+      supabaseClient.from("video_watchtime").select("*").order("created_at", { ascending:false }).limit(500),
+      supabaseClient.from("setup_room_activity").select("*").order("created_at", { ascending:false }).limit(200)
+    ]);
+
+    const memberActivity = memberResult.data || [];
+    const lessonActivity = lessonResult.data || [];
+    const watchtime = watchResult.data || [];
+    const srActivity = srResult.data || [];
+
+    const allEmails = [
+      ...memberActivity.map(x => x.email),
+      ...lessonActivity.map(x => x.email),
+      ...watchtime.map(x => x.email),
+      ...srActivity.map(x => x.email)
+    ].filter(Boolean);
+
+    const uniqueMembers = new Set(allEmails);
+
+    const hubOpens = memberActivity.filter(x => x.action === "hub_opened").length;
+    const lessonOpens = lessonActivity.length;
+    const srActions = srActivity.length;
+
+    const totalEvents =
+      memberActivity.length +
+      lessonActivity.length +
+      watchtime.length +
+      srActivity.length;
+
+    const latestByUserLesson = {};
+    watchtime.forEach(item => {
+      const key = `${item.email || "unknown"}_${item.lesson || "unknown"}`;
+      const existing = latestByUserLesson[key];
+
+      if(!existing || Number(item.current_seconds || 0) > Number(existing.current_seconds || 0)){
+        latestByUserLesson[key] = item;
+      }
+    });
+
+    const cleanWatchRows = Object.values(latestByUserLesson);
+
+    const totalWatchSeconds = cleanWatchRows.reduce((sum,item) => {
+      return sum + Number(item.current_seconds || 0);
+    }, 0);
 
     document.getElementById("activeMembers").textContent = uniqueMembers.size;
-    document.getElementById("totalActivities").textContent = activities.length;
+    document.getElementById("totalActivities").textContent = totalEvents;
+    document.getElementById("totalWatchtime").textContent = formatSeconds(totalWatchSeconds);
     document.getElementById("hubOpens").textContent = hubOpens;
+    document.getElementById("lessonOpens").textContent = lessonOpens;
+    document.getElementById("srActions").textContent = srActions;
 
-    if (activities[0]?.created_at) {
-      const date = new Date(activities[0].created_at);
-      document.getElementById("lastActivity").textContent =
-        date.toLocaleTimeString("de-DE", {
-          hour: "2-digit",
-          minute: "2-digit"
-        });
+    const combined = [
+      ...memberActivity.map(item => ({
+        email:item.email,
+        role:item.role,
+        label:"Hub",
+        title:item.action || "Hub Aktivität",
+        detail:item.page || "hub",
+        created_at:item.created_at
+      })),
+      ...lessonActivity.map(item => ({
+        email:item.email,
+        role:item.role,
+        label:"Course",
+        title:item.lesson || "Lesson",
+        detail:item.action || "lesson_opened",
+        created_at:item.created_at
+      })),
+      ...srActivity.map(item => ({
+        email:item.email,
+        role:item.role,
+        label:"Setup Room",
+        title:item.category || "Setup Room",
+        detail:item.action || "activity",
+        created_at:item.created_at
+      }))
+    ].filter(x => x.created_at)
+     .sort((a,b) => new Date(b.created_at) - new Date(a.created_at));
+
+    if(combined[0]?.created_at){
+      document.getElementById("lastActivity").textContent = formatTime(combined[0].created_at);
     }
 
     const feed = document.getElementById("activityFeed");
     feed.innerHTML = "";
 
-    if (!activities.length) {
+    if(!combined.length){
       feed.innerHTML = `
         <div class="activity-item">
-          <strong>Noch keine Aktivität</strong>
-          <p>Wenn ein Mitglied den Hub öffnet, erscheint hier der erste Eintrag.</p>
+          <div class="avatar">BP</div>
+          <div>
+            <strong>Noch keine Aktivität</strong>
+            <p>Neue Aktivitäten erscheinen automatisch.</p>
+          </div>
+          <div class="activity-time">-</div>
         </div>
       `;
       return;
     }
 
-    activities.slice(0, 10).forEach(item => {
-      const date = item.created_at
-        ? new Date(item.created_at).toLocaleString("de-DE", {
-            day: "2-digit",
-            month: "2-digit",
-            hour: "2-digit",
-            minute: "2-digit"
-          })
-        : "-";
+    combined.slice(0,12).forEach(item => {
+      const email = item.email || "Unknown User";
 
-      const div = document.createElement("div");
-      div.className = "activity-item";
-      div.innerHTML = `
-        <strong>${item.action || "Aktivität"} • ${item.role || "unknown"}</strong>
-        <p>${item.email || "Unbekannter User"} hat ${item.page || "eine Seite"} geöffnet. ${date}</p>
+      feed.innerHTML += `
+        <div class="activity-item">
+          <div class="avatar">${getInitials(email)}</div>
+          <div>
+            <strong>${item.label} • ${item.title}</strong>
+            <p>${email} • ${item.role || "unknown"} • ${item.detail || "-"}</p>
+          </div>
+          <div class="activity-time">${formatDateTime(item.created_at)}</div>
+        </div>
       `;
-
-      feed.appendChild(div);
     });
 
-  } catch (err) {
-    console.log("Admin Dashboard Fehler:", err);
+  } catch(err){
+    console.log("Founder Dashboard Fehler:", err);
   }
-})();
+}
+
+loadFounderDashboard();
 </script>
 
 </body>
