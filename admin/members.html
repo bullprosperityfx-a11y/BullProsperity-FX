@@ -110,7 +110,7 @@
       border-radius:20px;
       padding:18px;
       display:grid;
-      grid-template-columns:1.2fr .8fr .8fr .8fr;
+      grid-template-columns:1.2fr .7fr .8fr .8fr .8fr;
       gap:14px;
       align-items:center;
     }
@@ -125,9 +125,11 @@
       color:#9f9f9f;
       font-size:13px;
       margin-top:6px;
+      line-height:1.5;
     }
 
-    .member-badge{
+    .member-badge,
+    .online-badge{
       display:inline-flex;
       justify-content:center;
       align-items:center;
@@ -141,9 +143,50 @@
       width:max-content;
     }
 
+    .online-badge.online{
+      color:#22c55e;
+      border-color:rgba(34,197,94,.35);
+      background:rgba(34,197,94,.08);
+    }
+
+    .online-badge.offline{
+      color:#bdbdbd;
+      border-color:rgba(255,255,255,.14);
+      background:rgba(255,255,255,.03);
+    }
+
     .member-value{
       color:#fff;
       font-weight:900;
+    }
+
+    .member-stats{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:14px;
+      margin-top:22px;
+    }
+
+    .member-stat-box{
+      background:#111;
+      border:1px solid #252525;
+      border-radius:20px;
+      padding:18px;
+    }
+
+    .member-stat-label{
+      color:#8f8f8f;
+      font-size:12px;
+      text-transform:uppercase;
+      letter-spacing:.08em;
+      margin-bottom:8px;
+      font-weight:800;
+    }
+
+    .member-stat-value{
+      color:#ffd700;
+      font-size:32px;
+      font-weight:950;
     }
 
     .empty-state{
@@ -169,6 +212,10 @@
       .member-card{
         grid-template-columns:1fr;
       }
+
+      .member-stats{
+        grid-template-columns:1fr;
+      }
     }
   </style>
 </head>
@@ -188,7 +235,7 @@
       <div class="badge">Admin System</div>
       <h1 class="hero-title">Mitglieder <span class="gold">Verwaltung</span></h1>
       <p class="hero-text">
-        Sieh aktive Mitglieder, Rollen, letzte Aktivität und Plattform-Nutzung auf einen Blick.
+        Sieh aktive Mitglieder, Rollen, Online Status, letzte Aktivität und Plattform-Nutzung auf einen Blick.
       </p>
     </section>
 
@@ -203,8 +250,8 @@
         <div class="admin-nav">
           <a href="/admin/dashboard.html" class="admin-link"><span>📊 Dashboard</span><span>→</span></a>
           <a href="/admin/members.html" class="admin-link active"><span>👥 Mitglieder</span><span>→</span></a>
+          <a href="/admin/course-analytics.html" class="admin-link"><span>🎬 Course Analytics</span><span>→</span></a>
           <a href="/admin/dashboard.html" class="admin-link"><span>📡 Signals</span><span>→</span></a>
-          <a href="/admin/dashboard.html" class="admin-link"><span>🎬 Watchtime</span><span>→</span></a>
           <a href="/admin/dashboard.html" class="admin-link"><span>💰 Affiliate</span><span>→</span></a>
           <a href="/admin/dashboard.html" class="admin-link"><span>🛡 Security</span><span>→</span></a>
         </div>
@@ -217,11 +264,28 @@
         </h2>
 
         <p class="section-subtext">
-          Diese Daten kommen aus Supabase `member_activity`.
+          Online Status wird anhand der letzten Aktivität berechnet. Aktiv innerhalb der letzten 5 Minuten = Online.
         </p>
 
+        <div class="member-stats">
+          <div class="member-stat-box">
+            <div class="member-stat-label">Mitglieder</div>
+            <div class="member-stat-value" id="totalMembers">0</div>
+          </div>
+
+          <div class="member-stat-box">
+            <div class="member-stat-label">Gerade Online</div>
+            <div class="member-stat-value" id="onlineMembers">0</div>
+          </div>
+
+          <div class="member-stat-box">
+            <div class="member-stat-label">Letzte Aktivität</div>
+            <div class="member-stat-value" id="latestActivity">-</div>
+          </div>
+        </div>
+
         <div class="member-tools">
-          <input id="memberSearch" class="member-search" placeholder="Mitglied suchen nach E-Mail oder Rolle..." />
+          <input id="memberSearch" class="member-search" placeholder="Mitglied suchen nach E-Mail, Rolle oder letzter Seite..." />
           <button class="btn primary" id="reloadMembersBtn">Neu laden</button>
         </div>
 
@@ -245,6 +309,9 @@ const membersList = document.getElementById("membersList");
 const emptyState = document.getElementById("emptyState");
 const memberSearch = document.getElementById("memberSearch");
 const reloadMembersBtn = document.getElementById("reloadMembersBtn");
+const totalMembers = document.getElementById("totalMembers");
+const onlineMembers = document.getElementById("onlineMembers");
+const latestActivity = document.getElementById("latestActivity");
 
 let allMembers = [];
 
@@ -260,6 +327,25 @@ function formatDate(value) {
   });
 }
 
+function formatTimeOnly(value) {
+  if (!value) return "-";
+
+  return new Date(value).toLocaleTimeString("de-DE", {
+    hour: "2-digit",
+    minute: "2-digit"
+  });
+}
+
+function isOnline(lastActivity) {
+  if (!lastActivity) return false;
+
+  const now = new Date();
+  const last = new Date(lastActivity);
+  const diffMinutes = (now - last) / 1000 / 60;
+
+  return diffMinutes <= 5;
+}
+
 function buildMembersFromActivity(activity) {
   const map = {};
 
@@ -273,7 +359,8 @@ function buildMembersFromActivity(activity) {
         lastPage: item.page || "-",
         lastAction: item.action || "-",
         lastActivity: item.created_at,
-        count: 0
+        count: 0,
+        online: false
       };
     }
 
@@ -290,7 +377,12 @@ function buildMembersFromActivity(activity) {
     }
   });
 
-  return Object.values(map).sort((a,b) => new Date(b.lastActivity) - new Date(a.lastActivity));
+  const members = Object.values(map).map(member => {
+    member.online = isOnline(member.lastActivity);
+    return member;
+  });
+
+  return members.sort((a,b) => new Date(b.lastActivity) - new Date(a.lastActivity));
 }
 
 function renderMembers(list) {
@@ -307,6 +399,9 @@ function renderMembers(list) {
     const card = document.createElement("div");
     card.className = "member-card";
 
+    const onlineClass = member.online ? "online" : "offline";
+    const onlineText = member.online ? "Online" : "Offline";
+
     card.innerHTML = `
       <div>
         <div class="member-email">${member.email}</div>
@@ -315,6 +410,11 @@ function renderMembers(list) {
 
       <div>
         <div class="member-badge">${member.role}</div>
+      </div>
+
+      <div>
+        <div class="online-badge ${onlineClass}">${onlineText}</div>
+        <div class="member-meta">Status</div>
       </div>
 
       <div>
@@ -332,6 +432,17 @@ function renderMembers(list) {
   });
 }
 
+function renderStats(list) {
+  totalMembers.textContent = list.length;
+  onlineMembers.textContent = list.filter(member => member.online).length;
+
+  if (list[0]?.lastActivity) {
+    latestActivity.textContent = formatTimeOnly(list[0].lastActivity);
+  } else {
+    latestActivity.textContent = "-";
+  }
+}
+
 async function loadMembers() {
   try {
     const { data, error } = await supabaseClient
@@ -346,6 +457,7 @@ async function loadMembers() {
     }
 
     allMembers = buildMembersFromActivity(data || []);
+    renderStats(allMembers);
     renderMembers(allMembers);
 
   } catch (err) {
@@ -359,7 +471,8 @@ memberSearch.addEventListener("input", () => {
   const filtered = allMembers.filter(member =>
     member.email.toLowerCase().includes(q) ||
     member.role.toLowerCase().includes(q) ||
-    member.lastPage.toLowerCase().includes(q)
+    member.lastPage.toLowerCase().includes(q) ||
+    member.lastAction.toLowerCase().includes(q)
   );
 
   renderMembers(filtered);
