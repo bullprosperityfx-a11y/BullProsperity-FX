@@ -7,25 +7,78 @@
   <title>BullProsperity | Course Analytics</title>
 
   <link rel="stylesheet" href="/theme.css" />
-
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="/supabase.js"></script>
   <script src="/login.js" defer></script>
 
   <style>
+    .admin-layout{
+      display:grid;
+      grid-template-columns:320px 1fr;
+      gap:24px;
+      margin-top:24px;
+      align-items:start;
+    }
+
+    .admin-sidebar,
+    .analytics-card{
+      border:1px solid var(--line);
+      border-radius:28px;
+      background:linear-gradient(180deg,var(--panel),var(--panel-2));
+      padding:24px;
+    }
+
+    .admin-sidebar{
+      position:sticky;
+      top:20px;
+    }
+
+    .admin-nav{
+      display:grid;
+      gap:12px;
+      margin-top:20px;
+    }
+
+    .admin-link{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      padding:14px 16px;
+      border-radius:18px;
+      background:#111;
+      border:1px solid #252525;
+      color:#fff;
+      text-decoration:none;
+      font-weight:800;
+      transition:.2s ease;
+    }
+
+    .admin-link:hover,
+    .admin-link.active{
+      border-color:#ffd700;
+      color:#ffd700;
+      transform:translateX(4px);
+    }
+
+    .analytics-content{
+      display:grid;
+      gap:24px;
+    }
 
     .analytics-grid{
       display:grid;
       grid-template-columns:repeat(4,1fr);
-      gap:18px;
-      margin-top:24px;
+      gap:16px;
+      margin-top:20px;
     }
 
     .analytics-box{
       background:#111;
       border:1px solid #252525;
-      border-radius:24px;
-      padding:22px;
+      border-radius:22px;
+      padding:18px;
+      min-height:120px;
     }
 
     .analytics-label{
@@ -33,139 +86,307 @@
       font-size:12px;
       text-transform:uppercase;
       margin-bottom:10px;
+      letter-spacing:.08em;
+      font-weight:800;
     }
 
     .analytics-value{
       color:#ffd700;
-      font-size:38px;
-      font-weight:900;
+      font-size:32px;
+      font-weight:950;
+      line-height:1.05;
+      word-break:break-word;
     }
 
-    .feed{
-      margin-top:24px;
+    .analytics-sub{
+      margin-top:8px;
+      color:#8f8f8f;
+      font-size:12px;
+      line-height:1.5;
+    }
+
+    .course-grid{
       display:grid;
-      gap:16px;
+      grid-template-columns:1fr 1fr;
+      gap:18px;
+      margin-top:20px;
     }
 
+    .ranking-list,
+    .feed{
+      display:grid;
+      gap:12px;
+      margin-top:18px;
+    }
+
+    .ranking-item,
     .feed-item{
       background:#111;
-      border:1px solid #252525;
-      border-radius:20px;
-      padding:18px;
+      border:1px solid rgba(255,215,0,.12);
+      border-radius:18px;
+      padding:16px;
     }
 
-    .feed-item strong{
+    .ranking-item{
+      display:grid;
+      grid-template-columns:auto 1fr auto;
+      gap:14px;
+      align-items:center;
+    }
+
+    .rank-num{
+      width:34px;
+      height:34px;
+      border-radius:50%;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background:rgba(255,215,0,.08);
+      border:1px solid rgba(255,215,0,.22);
       color:#ffd700;
+      font-weight:950;
+    }
+
+    .ranking-title,
+    .feed-item strong{
+      color:#fff;
+      font-weight:950;
       display:block;
-      margin-bottom:6px;
+      margin-bottom:5px;
     }
 
+    .ranking-meta,
     .feed-item p{
-      color:#d6d6d6;
       margin:0;
+      color:#a8a8a8;
+      line-height:1.55;
+      font-size:13px;
     }
 
-    @media(max-width:1000px){
+    .ranking-count{
+      color:#ffd700;
+      font-weight:950;
+      font-size:18px;
+    }
+
+    .empty-state{
+      border:1px dashed rgba(255,215,0,.18);
+      border-radius:20px;
+      padding:24px;
+      text-align:center;
+      color:#bdbdbd;
+      background:rgba(255,255,255,.02);
+      margin-top:18px;
+    }
+
+    @media(max-width:1200px){
+      .admin-layout{
+        grid-template-columns:1fr;
+      }
+
+      .admin-sidebar{
+        position:relative;
+        top:0;
+      }
+
       .analytics-grid{
         grid-template-columns:1fr 1fr;
       }
-    }
 
-    @media(max-width:700px){
-      .analytics-grid{
+      .course-grid{
         grid-template-columns:1fr;
       }
     }
 
-  </style>
+    @media(max-width:760px){
+      .analytics-grid{
+        grid-template-columns:1fr;
+      }
 
+      .analytics-value{
+        font-size:28px;
+      }
+    }
+  </style>
 </head>
 
 <body>
-
 <div class="page">
 
-<nav class="navbar">
-  <a href="/admin/dashboard.html" class="logo">
-    BullProsperity | Analytics
-  </a>
+  <nav class="navbar">
+    <a href="/admin/dashboard.html" class="logo">BullProsperity | Analytics</a>
 
-  <div class="nav-links">
-    <a href="/admin/dashboard.html">Dashboard</a>
-    <a href="/admin/members.html">Mitglieder</a>
+    <div class="nav-links">
+      <a href="/hub.html">Hub</a>
+      <a href="/admin/dashboard.html">Dashboard</a>
+      <a href="/admin/members.html">Mitglieder</a>
+    </div>
+  </nav>
+
+  <section class="hero-shell">
+    <div class="badge">Course System</div>
+
+    <h1 class="hero-title">
+      Course <span class="gold">Analytics</span>
+    </h1>
+
+    <p class="hero-text">
+      Live Übersicht über Lesson Aktivität, Kurs Nutzung und Mitglieder Engagement.
+    </p>
+  </section>
+
+  <section class="admin-layout">
+
+    <aside class="admin-sidebar">
+      <div class="badge">Verwaltung</div>
+
+      <h2 class="section-heading" style="font-size:34px;margin-bottom:8px;">
+        Control Center
+      </h2>
+
+      <div class="admin-nav">
+        <a href="/admin/dashboard.html" class="admin-link">
+          <span>📊 Dashboard</span>
+          <span>→</span>
+        </a>
+
+        <a href="/admin/members.html" class="admin-link">
+          <span>👥 Mitglieder</span>
+          <span>→</span>
+        </a>
+
+        <a href="/admin/course-analytics.html" class="admin-link active">
+          <span>🎬 Course Analytics</span>
+          <span>→</span>
+        </a>
+
+        <a href="#" class="admin-link">
+          <span>📡 Signals</span>
+          <span>→</span>
+        </a>
+
+        <a href="#" class="admin-link">
+          <span>💰 Affiliate Stats</span>
+          <span>→</span>
+        </a>
+
+        <a href="#" class="admin-link">
+          <span>🛡 Security</span>
+          <span>→</span>
+        </a>
+      </div>
+    </aside>
+
+    <div class="analytics-content">
+
+      <div class="analytics-card">
+        <div class="badge">Live Statistik</div>
+
+        <h2 class="section-heading" style="font-size:38px;margin-bottom:10px;">
+          Course Übersicht
+        </h2>
+
+        <p class="section-subtext">
+          Sauberer Überblick über Lesson Opens, aktive Kursmitglieder und Top Inhalte.
+        </p>
+
+        <div class="analytics-grid">
+          <div class="analytics-box">
+            <div class="analytics-label">Lesson Opens</div>
+            <div class="analytics-value" id="totalLessons">0</div>
+            <div class="analytics-sub">Gesamte Lesson-Aufrufe</div>
+          </div>
+
+          <div class="analytics-box">
+            <div class="analytics-label">Aktive Mitglieder</div>
+            <div class="analytics-value" id="activeMembers">0</div>
+            <div class="analytics-sub">Einzigartige User</div>
+          </div>
+
+          <div class="analytics-box">
+            <div class="analytics-label">Top Lesson</div>
+            <div class="analytics-value" id="topLesson">-</div>
+            <div class="analytics-sub">Meistgeöffnete Lesson</div>
+          </div>
+
+          <div class="analytics-box">
+            <div class="analytics-label">Letzte Aktivität</div>
+            <div class="analytics-value" id="lastActivity">-</div>
+            <div class="analytics-sub">Neuester Lesson-Open</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="course-grid">
+
+        <div class="analytics-card">
+          <div class="badge">Ranking</div>
+
+          <h2 class="section-heading" style="font-size:32px;margin-bottom:10px;">
+            Top Lessons
+          </h2>
+
+          <p class="section-subtext">
+            Welche Inhalte aktuell am meisten geöffnet werden.
+          </p>
+
+          <div class="ranking-list" id="topLessonsList">
+            <div class="empty-state">Noch keine Lesson Daten geladen.</div>
+          </div>
+        </div>
+
+        <div class="analytics-card">
+          <div class="badge">Activity Feed</div>
+
+          <h2 class="section-heading" style="font-size:32px;margin-bottom:10px;">
+            Letzte Course Aktivität
+          </h2>
+
+          <p class="section-subtext">
+            Die neuesten Lesson Opens deiner Mitglieder.
+          </p>
+
+          <div class="feed" id="lessonFeed">
+            <div class="empty-state">Noch keine Aktivität vorhanden.</div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <div class="footer-note">
+    BullProsperity Admin System.
   </div>
-</nav>
-
-<section class="hero-shell">
-
-  <div class="badge">Course System</div>
-
-  <h1 class="hero-title">
-    Course
-    <span class="gold">Analytics</span>
-  </h1>
-
-  <p class="hero-text">
-    Live Übersicht über Lesson Aktivität,
-    Kurs Nutzung und Mitglieder Engagement.
-  </p>
-
-</section>
-
-<div class="analytics-grid">
-
-  <div class="analytics-box">
-    <div class="analytics-label">Lesson Opens</div>
-    <div class="analytics-value" id="totalLessons">0</div>
-  </div>
-
-  <div class="analytics-box">
-    <div class="analytics-label">Aktive Mitglieder</div>
-    <div class="analytics-value" id="activeMembers">0</div>
-  </div>
-
-  <div class="analytics-box">
-    <div class="analytics-label">Top Lesson</div>
-    <div class="analytics-value" id="topLesson">-</div>
-  </div>
-
-  <div class="analytics-box">
-    <div class="analytics-label">Letzte Aktivität</div>
-    <div class="analytics-value" id="lastActivity">-</div>
-  </div>
-
-</div>
-
-<div class="feed" id="lessonFeed"></div>
 
 </div>
 
 <script>
-
 async function loadCourseAnalytics(){
-
   const { data, error } = await supabaseClient
     .from("lesson_activity")
     .select("*")
     .order("created_at", { ascending:false });
 
   if(error){
-    console.log(error);
+    console.log("Course Analytics Fehler:", error);
     return;
   }
 
-  document.getElementById("totalLessons").textContent =
-    data.length;
+  const activities = data || [];
 
-  const uniqueMembers =
-    [...new Set(data.map(x => x.email))];
+  document.getElementById("totalLessons").textContent = activities.length;
 
-  document.getElementById("activeMembers").textContent =
-    uniqueMembers.length;
+  const uniqueMembers = [...new Set(
+    activities.map(x => x.email).filter(Boolean)
+  )];
 
-  if(data[0]){
+  document.getElementById("activeMembers").textContent = uniqueMembers.length;
+
+  if(activities[0]?.created_at){
     document.getElementById("lastActivity").textContent =
-      new Date(data[0].created_at).toLocaleTimeString("de-DE", {
+      new Date(activities[0].created_at).toLocaleTimeString("de-DE", {
         hour:"2-digit",
         minute:"2-digit"
       });
@@ -173,54 +394,65 @@ async function loadCourseAnalytics(){
 
   const lessonCount = {};
 
-  data.forEach(item => {
-
-    lessonCount[item.lesson] =
-      (lessonCount[item.lesson] || 0) + 1;
-
+  activities.forEach(item => {
+    const lesson = item.lesson || "Unbekannte Lesson";
+    lessonCount[lesson] = (lessonCount[lesson] || 0) + 1;
   });
 
-  let topLesson = "-";
-  let highest = 0;
-
-  Object.entries(lessonCount).forEach(([lesson,count]) => {
-
-    if(count > highest){
-      highest = count;
-      topLesson = lesson;
-    }
-
-  });
+  const sortedLessons = Object.entries(lessonCount)
+    .sort((a,b) => b[1] - a[1]);
 
   document.getElementById("topLesson").textContent =
-    topLesson;
+    sortedLessons[0]?.[0] || "-";
+
+  const topLessonsList = document.getElementById("topLessonsList");
+  topLessonsList.innerHTML = "";
+
+  if(!sortedLessons.length){
+    topLessonsList.innerHTML = `<div class="empty-state">Noch keine Lesson Daten vorhanden.</div>`;
+  } else {
+    sortedLessons.slice(0,8).forEach(([lesson,count], index) => {
+      topLessonsList.innerHTML += `
+        <div class="ranking-item">
+          <div class="rank-num">${index + 1}</div>
+          <div>
+            <div class="ranking-title">${lesson}</div>
+            <div class="ranking-meta">Lesson Aktivität</div>
+          </div>
+          <div class="ranking-count">${count}</div>
+        </div>
+      `;
+    });
+  }
 
   const feed = document.getElementById("lessonFeed");
-
   feed.innerHTML = "";
 
-  data.slice(0,15).forEach(item => {
+  if(!activities.length){
+    feed.innerHTML = `<div class="empty-state">Noch keine Aktivität vorhanden.</div>`;
+    return;
+  }
+
+  activities.slice(0,12).forEach(item => {
+    const date = item.created_at
+      ? new Date(item.created_at).toLocaleString("de-DE", {
+          day:"2-digit",
+          month:"2-digit",
+          hour:"2-digit",
+          minute:"2-digit"
+        })
+      : "-";
 
     feed.innerHTML += `
-
       <div class="feed-item">
-
-        <strong>${item.email}</strong>
-
-        <p>
-          Öffnete ${item.lesson}
-        </p>
-
+        <strong>${item.lesson || "Unbekannte Lesson"}</strong>
+        <p>${item.email || "Unbekannter User"} • ${item.role || "unknown"} • ${date}</p>
       </div>
-
     `;
-
   });
-
 }
 
 loadCourseAnalytics();
-
 </script>
 
 </body>
