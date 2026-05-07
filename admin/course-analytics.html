@@ -92,10 +92,16 @@
 
     .analytics-value{
       color:#ffd700;
-      font-size:32px;
+      font-size:26px;
       font-weight:950;
-      line-height:1.05;
+      line-height:1.1;
       word-break:break-word;
+      
+      display:-webkit-box;
+      -webkit-line-clamp:2;
+      -webkit-box-orient:vertical;
+      
+      overflow:hidden;
     }
 
     .analytics-sub{
@@ -103,6 +109,9 @@
       color:#8f8f8f;
       font-size:12px;
       line-height:1.5;
+    }
+    #topLesson{
+      font-size:22px;
     }
 
     .course-grid{
