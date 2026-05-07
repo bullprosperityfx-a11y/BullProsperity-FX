@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>BullProsperity | Hub</title>
   <link rel="stylesheet" href="theme.css" />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="/supabase.js"></script>
 
 <script>
   (async () => {
@@ -848,5 +850,34 @@
       }
     })();
   </script>
+  <script>
+(async () => {
+  try {
+
+    const res = await fetch("/api/access", {
+      credentials: "include",
+      cache: "no-store"
+    });
+
+    const data = await res.json();
+
+    if (!data.email) return;
+
+    await supabaseClient
+      .from("member_activity")
+      .insert({
+        email: data.email,
+        role: data.role || "guest",
+        action: "hub_opened",
+        page: "hub"
+      });
+
+    console.log("Activity gespeichert");
+
+  } catch(err) {
+    console.log("Supabase Fehler", err);
+  }
+})();
+</script>
 </body>
 </html>
