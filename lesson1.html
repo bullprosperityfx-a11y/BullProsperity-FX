@@ -662,39 +662,5 @@ document.addEventListener("DOMContentLoaded", async () => {
   } catch (err) {}
 });
 </script>
-<script src="/supabase.js"></script>
-
-<script>
-(async () => {
-
-  try {
-
-    const res = await fetch("/api/access", {
-      credentials: "include",
-      cache: "no-store"
-    });
-
-    const data = await res.json();
-
-    if (!data.email) return;
-
-    await supabaseClient
-      .from("lesson_activity")
-      .insert({
-        email: data.email,
-        role: data.role || "guest",
-        lesson: document.title,
-        lesson_url: window.location.pathname,
-        action: "lesson_opened"
-      });
-
-    console.log("Lesson gespeichert");
-
-  } catch(err) {
-    console.log("Lesson Fehler", err);
-  }
-
-})();
-</script>
 </body>
 </html>
