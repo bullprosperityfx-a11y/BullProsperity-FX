@@ -96,11 +96,9 @@
       font-weight:950;
       line-height:1.1;
       word-break:break-word;
-      
       display:-webkit-box;
       -webkit-line-clamp:2;
       -webkit-box-orient:vertical;
-      
       overflow:hidden;
     }
 
@@ -110,6 +108,7 @@
       font-size:12px;
       line-height:1.5;
     }
+
     #topLesson{
       font-size:22px;
     }
@@ -178,6 +177,22 @@
       font-size:18px;
     }
 
+    .progress-bar-admin{
+      width:100%;
+      height:8px;
+      border-radius:999px;
+      background:#252525;
+      overflow:hidden;
+      margin-top:10px;
+    }
+
+    .progress-fill-admin{
+      height:100%;
+      border-radius:999px;
+      background:linear-gradient(90deg,#ffd700,#fff1a8);
+      width:0%;
+    }
+
     .empty-state{
       border:1px dashed rgba(255,215,0,.18);
       border-radius:20px;
@@ -240,7 +255,7 @@
     </h1>
 
     <p class="hero-text">
-      Live Übersicht über Lesson Aktivität, Kurs Nutzung und Mitglieder Engagement.
+      Live Übersicht über Lesson Aktivität, Video Watchtime, Kurs Nutzung und Mitglieder Engagement.
     </p>
   </section>
 
@@ -296,7 +311,7 @@
         </h2>
 
         <p class="section-subtext">
-          Sauberer Überblick über Lesson Opens, aktive Kursmitglieder und Top Inhalte.
+          Sauberer Überblick über Lesson Opens, Watchtime, Fortschritt und aktive Kursmitglieder.
         </p>
 
         <div class="analytics-grid">
@@ -313,15 +328,39 @@
           </div>
 
           <div class="analytics-box">
+            <div class="analytics-label">Gesamt Watchtime</div>
+            <div class="analytics-value" id="totalWatchtime">0m</div>
+            <div class="analytics-sub">Geschaute Videodauer</div>
+          </div>
+
+          <div class="analytics-box">
+            <div class="analytics-label">Ø Fortschritt</div>
+            <div class="analytics-value" id="avgProgress">0%</div>
+            <div class="analytics-sub">Durchschnittlicher Videofortschritt</div>
+          </div>
+
+          <div class="analytics-box">
             <div class="analytics-label">Top Lesson</div>
             <div class="analytics-value" id="topLesson">-</div>
             <div class="analytics-sub">Meistgeöffnete Lesson</div>
           </div>
 
           <div class="analytics-box">
+            <div class="analytics-label">Top Watchtime</div>
+            <div class="analytics-value" id="topWatchLesson">-</div>
+            <div class="analytics-sub">Stärkstes Video Engagement</div>
+          </div>
+
+          <div class="analytics-box">
+            <div class="analytics-label">Watchtime Events</div>
+            <div class="analytics-value" id="watchEvents">0</div>
+            <div class="analytics-sub">Gespeicherte Video Updates</div>
+          </div>
+
+          <div class="analytics-box">
             <div class="analytics-label">Letzte Aktivität</div>
             <div class="analytics-value" id="lastActivity">-</div>
-            <div class="analytics-sub">Neuester Lesson-Open</div>
+            <div class="analytics-sub">Neuester Course Eintrag</div>
           </div>
         </div>
       </div>
@@ -345,6 +384,26 @@
         </div>
 
         <div class="analytics-card">
+          <div class="badge">Watchtime</div>
+
+          <h2 class="section-heading" style="font-size:32px;margin-bottom:10px;">
+            Video Engagement
+          </h2>
+
+          <p class="section-subtext">
+            Welche Videos die stärkste Watchtime und den höchsten Fortschritt haben.
+          </p>
+
+          <div class="ranking-list" id="watchtimeList">
+            <div class="empty-state">Noch keine Watchtime Daten geladen.</div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="course-grid">
+
+        <div class="analytics-card">
           <div class="badge">Activity Feed</div>
 
           <h2 class="section-heading" style="font-size:32px;margin-bottom:10px;">
@@ -360,6 +419,22 @@
           </div>
         </div>
 
+        <div class="analytics-card">
+          <div class="badge">Watchtime Feed</div>
+
+          <h2 class="section-heading" style="font-size:32px;margin-bottom:10px;">
+            Letzte Video Aktivität
+          </h2>
+
+          <p class="section-subtext">
+            Die neuesten gespeicherten Vimeo Watchtime Updates.
+          </p>
+
+          <div class="feed" id="watchtimeFeed">
+            <div class="empty-state">Noch keine Watchtime vorhanden.</div>
+          </div>
+        </div>
+
       </div>
 
     </div>
@@ -372,20 +447,40 @@
 </div>
 
 <script>
+function formatSeconds(seconds){
+  const total = Number(seconds || 0);
+  const h = Math.floor(total / 3600);
+  const m = Math.floor((total % 3600) / 60);
+
+  if(h > 0) return `${h}h ${m}m`;
+  return `${m}m`;
+}
+
 async function loadCourseAnalytics(){
-  const { data, error } = await supabaseClient
+  const { data: lessonData, error: lessonError } = await supabaseClient
     .from("lesson_activity")
     .select("*")
     .order("created_at", { ascending:false });
 
-  if(error){
-    console.log("Course Analytics Fehler:", error);
+  const { data: watchData, error: watchError } = await supabaseClient
+    .from("video_watchtime")
+    .select("*")
+    .order("created_at", { ascending:false });
+
+  if(lessonError){
+    console.log("Course Analytics Fehler:", lessonError);
     return;
   }
 
-  const activities = data || [];
+  if(watchError){
+    console.log("Watchtime Fehler:", watchError);
+  }
+
+  const activities = lessonData || [];
+  const watchtime = watchData || [];
 
   document.getElementById("totalLessons").textContent = activities.length;
+  document.getElementById("watchEvents").textContent = watchtime.length;
 
   const uniqueMembers = [...new Set(
     activities.map(x => x.email).filter(Boolean)
@@ -393,16 +488,20 @@ async function loadCourseAnalytics(){
 
   document.getElementById("activeMembers").textContent = uniqueMembers.length;
 
-  if(activities[0]?.created_at){
+  const latestDates = [
+    ...activities.map(x => x.created_at).filter(Boolean),
+    ...watchtime.map(x => x.created_at).filter(Boolean)
+  ].sort((a,b) => new Date(b) - new Date(a));
+
+  if(latestDates[0]){
     document.getElementById("lastActivity").textContent =
-      new Date(activities[0].created_at).toLocaleTimeString("de-DE", {
+      new Date(latestDates[0]).toLocaleTimeString("de-DE", {
         hour:"2-digit",
         minute:"2-digit"
       });
   }
 
   const lessonCount = {};
-
   activities.forEach(item => {
     const lesson = item.lesson || "Unbekannte Lesson";
     lessonCount[lesson] = (lessonCount[lesson] || 0) + 1;
@@ -426,9 +525,88 @@ async function loadCourseAnalytics(){
           <div class="rank-num">${index + 1}</div>
           <div>
             <div class="ranking-title">${lesson}</div>
-            <div class="ranking-meta">Lesson Aktivität</div>
+            <div class="ranking-meta">Lesson Opens</div>
           </div>
           <div class="ranking-count">${count}</div>
+        </div>
+      `;
+    });
+  }
+
+  const latestByUserLesson = {};
+  watchtime.forEach(item => {
+    const key = `${item.email || "unknown"}_${item.lesson || "unknown"}`;
+    const existing = latestByUserLesson[key];
+
+    if(!existing || Number(item.current_seconds || 0) > Number(existing.current_seconds || 0)){
+      latestByUserLesson[key] = item;
+    }
+  });
+
+  const cleanWatchRows = Object.values(latestByUserLesson);
+
+  const totalWatchSeconds = cleanWatchRows.reduce((sum,item) => {
+    return sum + Number(item.current_seconds || 0);
+  }, 0);
+
+  document.getElementById("totalWatchtime").textContent =
+    formatSeconds(totalWatchSeconds);
+
+  const avgProgress = cleanWatchRows.length
+    ? Math.round(
+        cleanWatchRows.reduce((sum,item) => sum + Number(item.progress_percent || 0), 0) / cleanWatchRows.length
+      )
+    : 0;
+
+  document.getElementById("avgProgress").textContent = `${avgProgress}%`;
+
+  const watchByLesson = {};
+
+  cleanWatchRows.forEach(item => {
+    const lesson = item.lesson || "Unbekannte Lesson";
+
+    if(!watchByLesson[lesson]){
+      watchByLesson[lesson] = {
+        lesson,
+        seconds:0,
+        progressTotal:0,
+        users:0
+      };
+    }
+
+    watchByLesson[lesson].seconds += Number(item.current_seconds || 0);
+    watchByLesson[lesson].progressTotal += Number(item.progress_percent || 0);
+    watchByLesson[lesson].users += 1;
+  });
+
+  const sortedWatchLessons = Object.values(watchByLesson)
+    .sort((a,b) => b.seconds - a.seconds);
+
+  document.getElementById("topWatchLesson").textContent =
+    sortedWatchLessons[0]?.lesson || "-";
+
+  const watchtimeList = document.getElementById("watchtimeList");
+  watchtimeList.innerHTML = "";
+
+  if(!sortedWatchLessons.length){
+    watchtimeList.innerHTML = `<div class="empty-state">Noch keine Watchtime Daten vorhanden.</div>`;
+  } else {
+    sortedWatchLessons.slice(0,8).forEach((item,index) => {
+      const avg = item.users
+        ? Math.round(item.progressTotal / item.users)
+        : 0;
+
+      watchtimeList.innerHTML += `
+        <div class="ranking-item">
+          <div class="rank-num">${index + 1}</div>
+          <div>
+            <div class="ranking-title">${item.lesson}</div>
+            <div class="ranking-meta">${formatSeconds(item.seconds)} Watchtime • Ø ${avg}% Fortschritt</div>
+            <div class="progress-bar-admin">
+              <div class="progress-fill-admin" style="width:${avg}%"></div>
+            </div>
+          </div>
+          <div class="ranking-count">${item.users}</div>
         </div>
       `;
     });
@@ -439,26 +617,50 @@ async function loadCourseAnalytics(){
 
   if(!activities.length){
     feed.innerHTML = `<div class="empty-state">Noch keine Aktivität vorhanden.</div>`;
-    return;
+  } else {
+    activities.slice(0,12).forEach(item => {
+      const date = item.created_at
+        ? new Date(item.created_at).toLocaleString("de-DE", {
+            day:"2-digit",
+            month:"2-digit",
+            hour:"2-digit",
+            minute:"2-digit"
+          })
+        : "-";
+
+      feed.innerHTML += `
+        <div class="feed-item">
+          <strong>${item.lesson || "Unbekannte Lesson"}</strong>
+          <p>${item.email || "Unbekannter User"} • ${item.role || "unknown"} • ${date}</p>
+        </div>
+      `;
+    });
   }
 
-  activities.slice(0,12).forEach(item => {
-    const date = item.created_at
-      ? new Date(item.created_at).toLocaleString("de-DE", {
-          day:"2-digit",
-          month:"2-digit",
-          hour:"2-digit",
-          minute:"2-digit"
-        })
-      : "-";
+  const watchFeed = document.getElementById("watchtimeFeed");
+  watchFeed.innerHTML = "";
 
-    feed.innerHTML += `
-      <div class="feed-item">
-        <strong>${item.lesson || "Unbekannte Lesson"}</strong>
-        <p>${item.email || "Unbekannter User"} • ${item.role || "unknown"} • ${date}</p>
-      </div>
-    `;
-  });
+  if(!watchtime.length){
+    watchFeed.innerHTML = `<div class="empty-state">Noch keine Watchtime vorhanden.</div>`;
+  } else {
+    watchtime.slice(0,12).forEach(item => {
+      const date = item.created_at
+        ? new Date(item.created_at).toLocaleString("de-DE", {
+            day:"2-digit",
+            month:"2-digit",
+            hour:"2-digit",
+            minute:"2-digit"
+          })
+        : "-";
+
+      watchFeed.innerHTML += `
+        <div class="feed-item">
+          <strong>${item.lesson || "Unbekannte Lesson"} • ${item.progress_percent || 0}%</strong>
+          <p>${item.email || "Unbekannter User"} • ${formatSeconds(item.current_seconds)} von ${formatSeconds(item.duration_seconds)} • ${date}</p>
+        </div>
+      `;
+    });
+  }
 }
 
 loadCourseAnalytics();
