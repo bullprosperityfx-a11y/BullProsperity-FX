@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+  <title>BullProsperity | Security</title>
+
+  <link rel="stylesheet" href="/theme.css" />
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="/supabase.js"></script>
+  <script src="/login.js" defer></script>
+
+  <script>
+    (async () => {
+      try{
+        const res = await fetch("/api/access", {
+          credentials:"include",
+          cache:"no-store"
+        });
+
+        const data = await res.json();
+
+        if(data.role !== "admin"){
+          window.location.href = "/locked.html";
+        }
+
+      } catch(err){
+        window.location.href = "/locked.html";
+      }
+    })();
+  </script>
+
+  <style>
+
+    .admin-layout{
+      display:grid;
+      grid-template-columns:320px 1fr;
+      gap:24px;
+      margin-top:24px;
+      align-items:start;
+    }
+
+    .admin-sidebar,
+    .analytics-card{
+      border:1px solid var(--line);
+      border-radius:28px;
+      background:linear-gradient(180deg,var(--panel),var(--panel-2));
+      padding:24px;
+    }
+
+    .admin-sidebar{
+      position:sticky;
+      top:20px;
+    }
+
+    .admin-nav{
+      display:grid;
+      gap:12px;
+      margin-top:20px;
+    }
+
+    .admin-link{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      padding:14px 16px;
+      border-radius:18px;
+      background:#111;
+      border:1px solid #252525;
+      color:#fff;
+      text-decoration:none;
+      font-weight:800;
+      transition:.2s ease;
+    }
+
+    .admin-link:hover,
+    .admin-link.active{
+      border-color:#ffd700;
+      color:#ffd700;
+      transform:translateX(4px);
+    }
+
+    .analytics-content{
+      display:grid;
+      gap:24px;
+    }
+
+    .analytics-grid{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:16px;
+      margin-top:20px;
+    }
+
+    .analytics-box{
+      background:#111;
+      border:1px solid #252525;
+      border-radius:22px;
+      padding:20px;
+      min-height:150px;
+      position:relative;
+      overflow:hidden;
+    }
+
+    .analytics-box::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:radial-gradient(circle at top right,
+      rgba(255,215,0,.08),
+      transparent 60%);
+      pointer-events:none;
+    }
+
+    .analytics-label{
+      color:#8f8f8f;
+      font-size:12px;
+      text-transform:uppercase;
+      margin-bottom:14px;
+      letter-spacing:.08em;
+      font-weight:800;
+    }
+
+    .analytics-value{
+      color:#ffd700;
+      font-size:42px;
+      font-weight:950;
+      line-height:1;
+    }
+
+    .analytics-sub{
+      margin-top:12px;
+      color:#8f8f8f;
+      font-size:13px;
+      line-height:1.5;
+    }
+
+    .analytics-live{
+      margin-top:16px;
+      color:#22c55e;
+      font-size:13px;
+      font-weight:900;
+    }
+
+    .security-grid{
+      display:grid;
+      grid-template-columns:1.2fr .8fr;
+      gap:18px;
+    }
+
+    .security-chart{
+      height:320px;
+      border-radius:22px;
+      background:#111;
+      border:1px solid rgba(255,215,0,.08);
+      position:relative;
+      overflow:hidden;
+    }
+
+    .chart-lines{
+      position:absolute;
+      inset:0;
+      padding:30px;
+    }
+
+    .chart-lines::before{
+      content:"";
+      position:absolute;
+      inset:30px;
+      background:
+      linear-gradient(to top,
+      rgba(255,255,255,.04) 1px,
+      transparent 1px);
+      background-size:100% 52px;
+    }
+
+    .chart-path{
+      position:absolute;
+      left:40px;
+      right:40px;
+      bottom:70px;
+      height:160px;
+      border-bottom:3px solid #ffd700;
+      border-left:3px solid transparent;
+      transform:skewY(-12deg);
+      border-radius:14px;
+      box-shadow:0 0 25px rgba(255,215,0,.25);
+    }
+
+    .security-feed{
+      display:grid;
+      gap:12px;
+      margin-top:18px;
+    }
+
+    .feed-item{
+      background:#111;
+      border:1px solid rgba(255,215,0,.12);
+      border-radius:18px;
+      padding:18px;
+      display:flex;
+      justify-content:space-between;
+      gap:16px;
+      align-items:center;
+    }
+
+    .feed-left{
+      display:flex;
+      gap:14px;
+      align-items:flex-start;
+    }
+
+    .feed-icon{
+      width:46px;
+      height:46px;
+      border-radius:50%;
+      background:rgba(255,215,0,.08);
+      border:1px solid rgba(255,215,0,.22);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      color:#ffd700;
+      font-size:14px;
+      font-weight:900;
+      flex-shrink:0;
+    }
+
+    .feed-title{
+      color:#fff;
+      font-weight:900;
+      margin-bottom:5px;
+    }
+
+    .feed-meta{
+      color:#9f9f9f;
+      font-size:13px;
+      line-height:1.5;
+    }
+
+    .feed-time{
+      color:#ffd700;
+      font-size:13px;
+      font-weight:800;
+      white-space:nowrap;
+    }
+
+    .security-status{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:16px;
+    }
+
+    .status-card{
+      background:#111;
+      border:1px solid rgba(255,215,0,.12);
+      border-radius:22px;
+      padding:22px;
+    }
+
+    .status-title{
+      color:#8f8f8f;
+      font-size:12px;
+      text-transform:uppercase;
+      font-weight:900;
+      margin-bottom:14px;
+    }
+
+    .status-value{
+      color:#22c55e;
+      font-size:34px;
+      font-weight:950;
+      margin-bottom:10px;
+    }
+
+    .status-sub{
+      color:#9f9f9f;
+      line-height:1.6;
+      font-size:13px;
+    }
+
+    @media(max-width:1200px){
+
+      .admin-layout{
+        grid-template-columns:1fr;
+      }
+
+      .admin-sidebar{
+        position:relative;
+        top:0;
+      }
+
+      .analytics-grid{
+        grid-template-columns:1fr 1fr;
+      }
+
+      .security-grid{
+        grid-template-columns:1fr;
+      }
+
+      .security-status{
+        grid-template-columns:1fr 1fr;
+      }
+
+    }
+
+    @media(max-width:760px){
+
+      .analytics-grid{
+        grid-template-columns:1fr;
+      }
+
+      .security-status{
+        grid-template-columns:1fr;
+      }
+
+    }
+
+  </style>
+
+</head>
+
+<body>
+
+<div class="page">
+
+  <nav class="navbar">
+
+    <a href="/admin/dashboard.html" class="logo">
+      BullProsperity | Security
+    </a>
+
+    <div class="nav-links">
+      <a href="/hub.html">Hub</a>
+      <a href="/admin/dashboard.html">Dashboard</a>
+      <a href="/admin/members.html">Mitglieder</a>
+    </div>
+
+  </nav>
+
+  <section class="hero-shell">
+
+    <div class="badge">
+      Security Center
+    </div>
+
+    <h1 class="hero-title">
+      Security <span class="gold">Übersicht</span>
+    </h1>
+
+    <p class="hero-text">
+      Überwachung, Schutz und Analyse aller sicherheitsrelevanten Aktivitäten.
+    </p>
+
+  </section>
+
+  <section class="admin-layout">
+
+    <aside class="admin-sidebar">
+
+      <div class="badge">
+        Verwaltung
+      </div>
+
+      <h2 class="section-heading"
+      style="font-size:34px;margin-bottom:8px;">
+        Control Center
+      </h2>
+
+      <div class="admin-nav">
+
+        <a href="/admin/dashboard.html"
+        class="admin-link">
+          <span>📊 Dashboard</span>
+          <span>→</span>
+        </a>
+
+        <a href="/admin/members.html"
+        class="admin-link">
+          <span>👥 Mitglieder</span>
+          <span>→</span>
+        </a>
+
+        <a href="/admin/course-analytics.html"
+        class="admin-link">
+          <span>🎬 Course Analytics</span>
+          <span>→</span>
+        </a>
+
+        <a href="/admin/sr-analytics.html"
+        class="admin-link">
+          <span>🎳 SR Analytics</span>
+          <span>→</span>
+        </a>
+
+        <a href="#"
+        class="admin-link">
+          <span>💰 Affiliate</span>
+          <span>→</span>
+        </a>
+
+        <a href="/admin/security.html"
+        class="admin-link active">
+          <span>🛡 Security</span>
+          <span>→</span>
+        </a>
+
+      </div>
+
+    </aside>
+
+    <div class="analytics-content">
+
+      <div class="analytics-card">
+
+        <div class="badge">
+          Live Security
+        </div>
+
+        <h2 class="section-heading"
+        style="font-size:38px;margin-bottom:10px;">
+          Security Status
+        </h2>
+
+        <p class="section-subtext">
+          Aktive Systemüberwachung und Schutzmaßnahmen.
+        </p>
+
+        <div class="analytics-grid">
+
+          <div class="analytics-box">
+            <div class="analytics-label">
+              Gesamt Logins
+            </div>
+
+            <div class="analytics-value">
+              128
+            </div>
+
+            <div class="analytics-sub">
+              Alle Login Events
+            </div>
+
+            <div class="analytics-live">
+              ↗ Live Tracking
+            </div>
+          </div>
+
+          <div class="analytics-box">
+            <div class="analytics-label">
+              Einzigartige Admins
+            </div>
+
+            <div class="analytics-value">
+              3
+            </div>
+
+            <div class="analytics-sub">
+              Admin Konten
+            </div>
+
+            <div class="analytics-live">
+              ↗ Sicher
+            </div>
+          </div>
+
+          <div class="analytics-box">
+            <div class="analytics-label">
+              Verdächtige Aktivitäten
+            </div>
+
+            <div class="analytics-value">
+              2
+            </div>
+
+            <div class="analytics-sub">
+              Erkanntes Risiko
+            </div>
+
+            <div class="analytics-live"
+            style="color:#ef4444;">
+              ↘ Warnung
+            </div>
+          </div>
+
+          <div class="analytics-box">
+            <div class="analytics-label">
+              Gesperrte Versuche
+            </div>
+
+            <div class="analytics-value">
+              7
+            </div>
+
+            <div class="analytics-sub">
+              Blockierte Zugriffe
+            </div>
+
+            <div class="analytics-live">
+              ↗ Schutz aktiv
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+      <div class="security-grid">
+
+        <div class="analytics-card">
+
+          <div class="badge">
+            Login Aktivität
+          </div>
+
+          <h2 class="section-heading"
+          style="font-size:32px;margin-bottom:10px;">
+            Login Tracking
+          </h2>
+
+          <p class="section-subtext">
+            Verlauf aller Login Aktivitäten.
+          </p>
+
+          <div class="security-chart">
+
+            <div class="chart-lines"></div>
+
+            <div class="chart-path"></div>
+
+          </div>
+
+        </div>
+
+        <div class="analytics-card">
+
+          <div class="badge">
+            Sicherheits Feed
+          </div>
+
+          <h2 class="section-heading"
+          style="font-size:32px;margin-bottom:10px;">
+            Live Feed
+          </h2>
+
+          <p class="section-subtext">
+            Relevante Security Events.
+          </p>
+
+          <div class="security-feed">
+
+            <div class="feed-item">
+
+              <div class="feed-left">
+
+                <div class="feed-icon">
+                  ✓
+                </div>
+
+                <div>
+                  <div class="feed-title">
+                    Erfolgreicher Login
+                  </div>
+
+                  <div class="feed-meta">
+                    admin@bullprosperity.local
+                  </div>
+                </div>
+
+              </div>
+
+              <div class="feed-time">
+                19:57
+              </div>
+
+            </div>
+
+            <div class="feed-item">
+
+              <div class="feed-left">
+
+                <div class="feed-icon">
+                  !
+                </div>
+
+                <div>
+                  <div class="feed-title">
+                    Verdächtiger Versuch
+                  </div>
+
+                  <div class="feed-meta">
+                    Unbekannte IP erkannt
+                  </div>
+                </div>
+
+              </div>
+
+              <div class="feed-time">
+                18:22
+              </div>
+
+            </div>
+
+            <div class="feed-item">
+
+              <div class="feed-left">
+
+                <div class="feed-icon">
+                  🔒
+                </div>
+
+                <div>
+                  <div class="feed-title">
+                    Zugriff blockiert
+                  </div>
+
+                  <div class="feed-meta">
+                    Zu viele Login Versuche
+                  </div>
+                </div>
+
+              </div>
+
+              <div class="feed-time">
+                17:48
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+      <div class="analytics-card">
+
+        <div class="badge">
+          Security Status
+        </div>
+
+        <h2 class="section-heading"
+        style="font-size:34px;margin-bottom:10px;">
+          Schutzsysteme
+        </h2>
+
+        <p class="section-subtext">
+          Status deiner aktiven Schutzmaßnahmen.
+        </p>
+
+        <div class="security-status">
+
+          <div class="status-card">
+
+            <div class="status-title">
+              Zugriffsschutz
+            </div>
+
+            <div class="status-value">
+              AKTIV
+            </div>
+
+            <div class="status-sub">
+              Alle Zugriffssysteme aktiv.
+            </div>
+
+          </div>
+
+          <div class="status-card">
+
+            <div class="status-title">
+              Session Sicherheit
+            </div>
+
+            <div class="status-value">
+              100%
+            </div>
+
+            <div class="status-sub">
+              Sessions geschützt.
+            </div>
+
+          </div>
+
+          <div class="status-card">
+
+            <div class="status-title">
+              Backup Status
+            </div>
+
+            <div class="status-value">
+              AKTUELL
+            </div>
+
+            <div class="status-sub">
+              Letztes Backup erfolgreich.
+            </div>
+
+          </div>
+
+          <div class="status-card">
+
+            <div class="status-title">
+              System Schutz
+            </div>
+
+            <div class="status-value">
+              STARK
+            </div>
+
+            <div class="status-sub">
+              Keine Schwachstellen erkannt.
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+  <div class="footer-note">
+    BullProsperity Security Center.
+  </div>
+
+</div>
+
+</body>
+</html>
