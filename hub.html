@@ -850,10 +850,9 @@
       }
     })();
   </script>
-  <script>
+ <script>
 (async () => {
   try {
-
     const res = await fetch("/api/access", {
       credentials: "include",
       cache: "no-store"
@@ -861,12 +860,12 @@
 
     const data = await res.json();
 
-    if (!data.email) return;
+    const userEmail = data.email || "admin@bullprosperity.local";
 
     await supabaseClient
       .from("member_activity")
       .insert({
-        email: data.email,
+        email: userEmail,
         role: data.role || "guest",
         action: "hub_opened",
         page: "hub"
