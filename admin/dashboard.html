@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>BullProsperity | Admin Dashboard</title>
+
+  <link rel="stylesheet" href="/theme.css" />
+  <script src="/login.js" defer></script>
+
+  <script>
+    (async () => {
+
+      try {
+
+        const res = await fetch("/api/access", {
+          credentials: "include",
+          cache: "no-store"
+        });
+
+        const data = await res.json();
+
+        // 🔥 NUR ADMIN
+        if (data.role !== "admin") {
+          window.location.href = "/locked.html";
+        }
+
+      } catch {
+        window.location.href = "/locked.html";
+      }
+
+    })();
+  </script>
+
+  <style>
+
+    .admin-layout{
+      display:grid;
+      grid-template-columns:320px 1fr;
+      gap:24px;
+      margin-top:24px;
+      align-items:start;
+    }
+
+    .admin-sidebar{
+      border:1px solid var(--line);
+      border-radius:28px;
+      background:linear-gradient(180deg,var(--panel),var(--panel-2));
+      padding:24px;
+      position:sticky;
+      top:20px;
+    }
+
+    .admin-content{
+      display:grid;
+      gap:24px;
+    }
+
+    .admin-card{
+      border:1px solid var(--line);
+      border-radius:28px;
+      background:linear-gradient(180deg,var(--panel),var(--panel-2));
+      padding:24px;
+    }
+
+    .admin-nav{
+      display:grid;
+      gap:12px;
+      margin-top:20px;
+    }
+
+    .admin-link{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+
+      padding:14px 16px;
+
+      border-radius:18px;
+
+      background:#111;
+
+      border:1px solid #252525;
+
+      color:#fff;
+
+      text-decoration:none;
+
+      font-weight:800;
+
+      transition:.2s ease;
+    }
+
+    .admin-link:hover{
+      border-color:#ffd700;
+      color:#ffd700;
+      transform:translateX(4px);
+    }
+
+    .admin-stats{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:16px;
+      margin-top:20px;
+    }
+
+    .stat-box{
+      background:#111;
+      border:1px solid #252525;
+      border-radius:22px;
+      padding:18px;
+    }
+
+    .stat-label{
+      color:#8f8f8f;
+      font-size:12px;
+      text-transform:uppercase;
+      margin-bottom:10px;
+      letter-spacing:.08em;
+    }
+
+    .stat-value{
+      color:#ffd700;
+      font-size:34px;
+      font-weight:950;
+    }
+
+    .stat-sub{
+      margin-top:8px;
+      color:#8f8f8f;
+      font-size:12px;
+    }
+
+    .activity-feed{
+      display:grid;
+      gap:14px;
+      margin-top:20px;
+    }
+
+    .activity-item{
+      border:1px solid rgba(255,215,0,.10);
+      border-radius:18px;
+      padding:16px;
+      background:rgba(255,255,255,.02);
+    }
+
+    .activity-item strong{
+      color:#ffd700;
+      display:block;
+      margin-bottom:6px;
+    }
+
+    .activity-item p{
+      margin:0;
+      color:#d6d6d6;
+      line-height:1.6;
+    }
+
+    .signal-overview{
+      display:grid;
+      grid-template-columns:1fr 1fr 1fr;
+      gap:16px;
+      margin-top:20px;
+    }
+
+    .signal-box{
+      border-radius:20px;
+      padding:20px;
+      background:#111;
+      border:1px solid #252525;
+    }
+
+    .signal-box h3{
+      margin:0 0 10px;
+      color:#ffd700;
+      font-size:20px;
+    }
+
+    .signal-big{
+      color:#fff;
+      font-size:34px;
+      font-weight:950;
+    }
+
+    .signal-desc{
+      margin-top:8px;
+      color:#9f9f9f;
+      line-height:1.5;
+      font-size:13px;
+    }
+
+    @media(max-width:1200px){
+
+      .admin-layout{
+        grid-template-columns:1fr;
+      }
+
+      .admin-stats{
+        grid-template-columns:1fr 1fr;
+      }
+
+      .signal-overview{
+        grid-template-columns:1fr;
+      }
+
+    }
+
+    @media(max-width:760px){
+
+      .admin-stats{
+        grid-template-columns:1fr;
+      }
+
+    }
+
+  </style>
+
+</head>
+
+<body>
+
+<div class="page">
+
+  <nav class="navbar">
+    <a href="/index.html" class="logo">BullProsperity | Admin</a>
+
+    <div class="nav-links">
+      <a href="/hub.html">Hub</a>
+      <a href="/course.html">Course</a>
+      <a href="/tools.html">Tools</a>
+      <a href="/community.html">Community</a>
+    </div>
+  </nav>
+
+  <section class="hero-shell">
+
+    <div class="badge">Admin System</div>
+
+    <h1 class="hero-title">
+      BullProsperity
+      <span class="gold">Admin Dashboard</span>
+    </h1>
+
+    <p class="hero-text">
+      Verwalte Mitglieder, Analytics, Signals,
+      Watchtime, Sessions und Systemaktivitäten.
+    </p>
+
+  </section>
+
+  <section class="admin-layout">
+
+    <aside class="admin-sidebar">
+
+      <div class="badge">Verwaltung</div>
+
+      <h2 class="section-heading" style="font-size:34px;margin-bottom:8px;">
+        Control Center
+      </h2>
+
+      <div class="admin-nav">
+
+        <a href="#" class="admin-link">
+          <span>📊 Analytics</span>
+          <span>→</span>
+        </a>
+
+        <a href="#" class="admin-link">
+          <span>👥 Mitglieder</span>
+          <span>→</span>
+        </a>
+
+        <a href="#" class="admin-link">
+          <span>📡 Signals</span>
+          <span>→</span>
+        </a>
+
+        <a href="#" class="admin-link">
+          <span>🎬 Video Watchtime</span>
+          <span>→</span>
+        </a>
+
+        <a href="#" class="admin-link">
+          <span>💰 Affiliate Stats</span>
+          <span>→</span>
+        </a>
+
+        <a href="#" class="admin-link">
+          <span>🛡 Security</span>
+          <span>→</span>
+        </a>
+
+      </div>
+
+    </aside>
+
+    <div class="admin-content">
+
+      <div class="admin-card">
+
+        <div class="badge">Live Statistik</div>
+
+        <h2 class="section-heading" style="font-size:38px;margin-bottom:10px;">
+          Plattform Übersicht
+        </h2>
+
+        <p class="section-subtext">
+          Live Überblick über Aktivität,
+          Mitglieder und BullProsperity Systeme.
+        </p>
+
+        <div class="admin-stats">
+
+          <div class="stat-box">
+            <div class="stat-label">Aktive Mitglieder</div>
+            <div class="stat-value">127</div>
+            <div class="stat-sub">Live Sessions</div>
+          </div>
+
+          <div class="stat-box">
+            <div class="stat-label">Watchtime</div>
+            <div class="stat-value">248h</div>
+            <div class="stat-sub">Letzte 7 Tage</div>
+          </div>
+
+          <div class="stat-box">
+            <div class="stat-label">Signals</div>
+            <div class="stat-value">38</div>
+            <div class="stat-sub">Diesen Monat</div>
+          </div>
+
+          <div class="stat-box">
+            <div class="stat-label">Affiliate Klicks</div>
+            <div class="stat-value">1.4K</div>
+            <div class="stat-sub">Broker Traffic</div>
+          </div>
+
+        </div>
+
+      </div>
+
+      <div class="admin-card">
+
+        <div class="badge">Signal Analytics</div>
+
+        <h2 class="section-heading" style="font-size:36px;margin-bottom:10px;">
+          Signal Übersicht
+        </h2>
+
+        <div class="signal-overview">
+
+          <div class="signal-box">
+            <h3>Winrate</h3>
+            <div class="signal-big">78%</div>
+            <div class="signal-desc">
+              Durchschnittliche Trefferquote der veröffentlichten Signals.
+            </div>
+          </div>
+
+          <div class="signal-box">
+            <h3>Durchschnitt</h3>
+            <div class="signal-big">+42</div>
+            <div class="signal-desc">
+              Durchschnittliche Pips pro Signal.
+            </div>
+          </div>
+
+          <div class="signal-box">
+            <h3>Top Markt</h3>
+            <div class="signal-big">XAUUSD</div>
+            <div class="signal-desc">
+              Höchste Aktivität & Engagement.
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+      <div class="admin-card">
+
+        <div class="badge">Aktivität</div>
+
+        <h2 class="section-heading" style="font-size:36px;margin-bottom:10px;">
+          Live Activity Feed
+        </h2>
+
+        <div class="activity-feed">
+
+          <div class="activity-item">
+            <strong>Lesson Aktivität</strong>
+            <p>User schaut aktuell „Marktstruktur verstehen“.</p>
+          </div>
+
+          <div class="activity-item">
+            <strong>Neues Mitglied</strong>
+            <p>Ein neues Premium Mitglied ist BullProsperity beigetreten.</p>
+          </div>
+
+          <div class="activity-item">
+            <strong>Signal geöffnet</strong>
+            <p>Signal „XAUUSD Buy“ wurde mehrfach geöffnet.</p>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+  <div class="footer-note">
+    BullProsperity Admin System.
+  </div>
+
+</div>
+
+</body>
+</html>
