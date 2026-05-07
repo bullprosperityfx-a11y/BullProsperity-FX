@@ -111,8 +111,8 @@
 
     #topLesson,
     #topWatchLesson{
-      font-size:22px;
-      
+      font-size:22px !important;
+      line-height:1.1;
     }
 
     .course-grid{
@@ -232,10 +232,12 @@
       .analytics-value{
         font-size:28px;
       }
+
       #topLesson,
       #topWatchLesson{
         font-size:22px !important;
         line-height:1.1;
+      }
     }
   </style>
 </head>
@@ -406,27 +408,25 @@
         </div>
 
       </div>
-<div class="analytics-card">
 
-  <div class="badge">Members</div>
+      <div class="analytics-card">
+        <div class="badge">Members</div>
 
-  <h2 class="section-heading" style="font-size:32px;margin-bottom:10px;">
-    Most Active Members
-  </h2>
+        <h2 class="section-heading" style="font-size:32px;margin-bottom:10px;">
+          Most Active Members
+        </h2>
 
-  <p class="section-subtext">
-    Mitglieder mit der höchsten Watchtime und Lesson Aktivität.
-  </p>
+        <p class="section-subtext">
+          Mitglieder mit der höchsten Watchtime und Lesson Aktivität.
+        </p>
 
-  <div class="ranking-list" id="memberRanking">
+        <div class="ranking-list" id="memberRanking">
+          <div class="empty-state">
+            Noch keine Mitglieder Daten vorhanden.
+          </div>
+        </div>
+      </div>
 
-    <div class="empty-state">
-      Noch keine Mitglieder Daten vorhanden.
-    </div>
-
-  </div>
-
-</div>
       <div class="course-grid">
 
         <div class="analytics-card">
@@ -638,6 +638,75 @@ async function loadCourseAnalytics(){
     });
   }
 
+  const memberRanking = document.getElementById("memberRanking");
+  const memberStats = {};
+
+  activities.forEach(item => {
+    const email = item.email || "Unknown User";
+
+    if(!memberStats[email]){
+      memberStats[email] = {
+        email,
+        opens:0,
+        watchSeconds:0,
+        progressTotal:0,
+        progressCount:0
+      };
+    }
+
+    memberStats[email].opens++;
+  });
+
+  cleanWatchRows.forEach(item => {
+    const email = item.email || "Unknown User";
+
+    if(!memberStats[email]){
+      memberStats[email] = {
+        email,
+        opens:0,
+        watchSeconds:0,
+        progressTotal:0,
+        progressCount:0
+      };
+    }
+
+    memberStats[email].watchSeconds += Number(item.current_seconds || 0);
+    memberStats[email].progressTotal += Number(item.progress_percent || 0);
+    memberStats[email].progressCount++;
+  });
+
+  const sortedMembers = Object.values(memberStats)
+    .sort((a,b) => {
+      if(b.watchSeconds !== a.watchSeconds) return b.watchSeconds - a.watchSeconds;
+      return b.opens - a.opens;
+    });
+
+  memberRanking.innerHTML = "";
+
+  if(!sortedMembers.length){
+    memberRanking.innerHTML = `<div class="empty-state">Noch keine Mitglieder Daten vorhanden.</div>`;
+  } else {
+    sortedMembers.slice(0,8).forEach((member,index) => {
+      const avgProgress = member.progressCount
+        ? Math.round(member.progressTotal / member.progressCount)
+        : 0;
+
+      memberRanking.innerHTML += `
+        <div class="ranking-item">
+          <div class="rank-num">${index + 1}</div>
+          <div>
+            <div class="ranking-title">${member.email}</div>
+            <div class="ranking-meta">${member.opens} Lesson Opens • ${formatSeconds(member.watchSeconds)} Watchtime • Ø ${avgProgress}% Fortschritt</div>
+            <div class="progress-bar-admin">
+              <div class="progress-fill-admin" style="width:${avgProgress}%"></div>
+            </div>
+          </div>
+          <div class="ranking-count">🔥</div>
+        </div>
+      `;
+    });
+  }
+
   const feed = document.getElementById("lessonFeed");
   feed.innerHTML = "";
 
@@ -688,77 +757,7 @@ async function loadCourseAnalytics(){
     });
   }
 }
-const memberRanking =
-  document.getElementById("memberRanking");
 
-if(memberRanking){
-
-  const memberStats = {};
-
-  activities.forEach(item => {
-
-    const email =
-      item.email || "Unknown";
-
-    if(!memberStats[email]){
-      memberStats[email] = {
-        opens:0
-      };
-    }
-
-    memberStats[email].opens++;
-
-  });
-
-  const sortedMembers =
-    Object.entries(memberStats)
-      .sort((a,b) => b[1].opens - a[1].opens);
-
-  memberRanking.innerHTML = "";
-
-  if(!sortedMembers.length){
-
-    memberRanking.innerHTML = `
-      <div class="empty-state">
-        Noch keine Mitglieder Daten vorhanden.
-      </div>
-    `;
-
-  } else {
-
-    sortedMembers.slice(0,5).forEach(([email,stats],index) => {
-
-      memberRanking.innerHTML += `
-      
-        <div class="ranking-item">
-
-          <div class="rank-num">
-            ${index + 1}
-          </div>
-
-          <div>
-            <div class="ranking-title">
-              ${email}
-            </div>
-
-            <div class="ranking-meta">
-              ${stats.opens} Lesson Opens
-            </div>
-          </div>
-
-          <div class="ranking-count">
-            🔥
-          </div>
-
-        </div>
-
-      `;
-
-    });
-
-  }
-
-}
 loadCourseAnalytics();
 </script>
 
