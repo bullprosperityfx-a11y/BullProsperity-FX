@@ -7,7 +7,6 @@
   <title>BullProsperity | SR Analytics</title>
 
   <link rel="stylesheet" href="/theme.css" />
-
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="/supabase.js"></script>
   <script src="/login.js" defer></script>
@@ -33,7 +32,6 @@
   </script>
 
   <style>
-
     .admin-layout{
       display:grid;
       grid-template-columns:320px 1fr;
@@ -100,7 +98,21 @@
       border:1px solid #252525;
       border-radius:22px;
       padding:18px;
-      min-height:120px;
+      min-height:130px;
+    }
+
+    .analytics-icon{
+      width:38px;
+      height:38px;
+      border-radius:50%;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      margin-bottom:14px;
+      color:#ffd700;
+      background:rgba(255,215,0,.08);
+      border:1px solid rgba(255,215,0,.18);
+      font-size:18px;
     }
 
     .analytics-label{
@@ -114,10 +126,14 @@
 
     .analytics-value{
       color:#ffd700;
-      font-size:28px;
+      font-size:32px;
       font-weight:950;
       line-height:1.1;
       word-break:break-word;
+    }
+
+    #topCategory{
+      font-size:24px;
     }
 
     .analytics-sub{
@@ -127,9 +143,19 @@
       line-height:1.5;
     }
 
+    .trend{
+      margin-top:12px;
+      display:inline-flex;
+      gap:6px;
+      align-items:center;
+      color:#22c55e;
+      font-size:12px;
+      font-weight:900;
+    }
+
     .course-grid{
       display:grid;
-      grid-template-columns:1fr 1fr;
+      grid-template-columns:1fr 1.45fr;
       gap:18px;
       margin-top:20px;
     }
@@ -189,6 +215,131 @@
       color:#ffd700;
       font-weight:950;
       font-size:18px;
+      white-space:nowrap;
+    }
+
+    .bar-row{
+      display:grid;
+      grid-template-columns:1fr auto;
+      gap:12px;
+      align-items:center;
+      margin-top:10px;
+    }
+
+    .bar-track{
+      width:100%;
+      height:8px;
+      border-radius:999px;
+      background:#252525;
+      overflow:hidden;
+    }
+
+    .bar-fill{
+      height:100%;
+      border-radius:999px;
+      background:linear-gradient(90deg,#ffd700,#fff1a8);
+      width:0%;
+    }
+
+    .feed-item{
+      display:grid;
+      grid-template-columns:auto 1fr auto;
+      gap:14px;
+      align-items:center;
+    }
+
+    .avatar{
+      width:38px;
+      height:38px;
+      border-radius:50%;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background:linear-gradient(135deg,rgba(255,215,0,.20),rgba(255,255,255,.06));
+      border:1px solid rgba(255,215,0,.22);
+      color:#ffd700;
+      font-weight:950;
+      font-size:13px;
+      text-transform:uppercase;
+      flex:0 0 auto;
+    }
+
+    .feed-center{
+      min-width:0;
+    }
+
+    .feed-line{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      align-items:center;
+      margin-top:4px;
+      color:#a8a8a8;
+      font-size:13px;
+    }
+
+    .feed-category{
+      color:#ffd700;
+      font-weight:900;
+    }
+
+    .feed-time{
+      color:#bdbdbd;
+      font-weight:800;
+      font-size:13px;
+      white-space:nowrap;
+    }
+
+    .bottom-stats{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:16px;
+      margin-top:20px;
+    }
+
+    .bottom-stat{
+      background:#111;
+      border:1px solid rgba(255,215,0,.12);
+      border-radius:20px;
+      padding:18px;
+      display:grid;
+      grid-template-columns:auto 1fr;
+      gap:14px;
+      align-items:center;
+    }
+
+    .bottom-icon{
+      width:44px;
+      height:44px;
+      border-radius:50%;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background:rgba(255,215,0,.08);
+      color:#ffd700;
+      border:1px solid rgba(255,215,0,.16);
+      font-size:20px;
+    }
+
+    .bottom-label{
+      color:#8f8f8f;
+      font-size:12px;
+      text-transform:uppercase;
+      letter-spacing:.08em;
+      font-weight:800;
+    }
+
+    .bottom-value{
+      color:#ffd700;
+      font-size:28px;
+      font-weight:950;
+      margin-top:4px;
+    }
+
+    .bottom-sub{
+      color:#8f8f8f;
+      font-size:12px;
+      margin-top:4px;
     }
 
     .empty-state{
@@ -202,7 +353,6 @@
     }
 
     @media(max-width:1200px){
-
       .admin-layout{
         grid-template-columns:1fr;
       }
@@ -220,26 +370,32 @@
         grid-template-columns:1fr;
       }
 
+      .bottom-stats{
+        grid-template-columns:1fr 1fr;
+      }
     }
 
     @media(max-width:760px){
-
-      .analytics-grid{
+      .analytics-grid,
+      .bottom-stats{
         grid-template-columns:1fr;
       }
 
+      .feed-item{
+        grid-template-columns:auto 1fr;
+      }
+
+      .feed-time{
+        grid-column:2;
+      }
     }
-
   </style>
-
 </head>
 
 <body>
-
 <div class="page">
 
   <nav class="navbar">
-
     <a href="/admin/dashboard.html" class="logo">
       BullProsperity | SR Analytics
     </a>
@@ -249,11 +405,9 @@
       <a href="/admin/dashboard.html">Dashboard</a>
       <a href="/admin/members.html">Mitglieder</a>
     </div>
-
   </nav>
 
   <section class="hero-shell">
-
     <div class="badge">Setup Room System</div>
 
     <h1 class="hero-title">
@@ -261,16 +415,13 @@
     </h1>
 
     <p class="hero-text">
-      Übersicht über Setup Room Aktivität,
-      Kategorien, Mitglieder Engagement und Setup Interaktionen.
+      Übersicht über Setup Room Aktivität, Kategorien, Mitglieder Engagement und Setup Interaktionen.
     </p>
-
   </section>
 
   <section class="admin-layout">
 
     <aside class="admin-sidebar">
-
       <div class="badge">Verwaltung</div>
 
       <h2 class="section-heading" style="font-size:34px;margin-bottom:8px;">
@@ -278,7 +429,6 @@
       </h2>
 
       <div class="admin-nav">
-
         <a href="/admin/dashboard.html" class="admin-link">
           <span>📊 Dashboard</span>
           <span>→</span>
@@ -308,15 +458,12 @@
           <span>🛡 Security</span>
           <span>→</span>
         </a>
-
       </div>
-
     </aside>
 
     <div class="analytics-content">
 
       <div class="analytics-card">
-
         <div class="badge">Live Statistik</div>
 
         <h2 class="section-heading" style="font-size:38px;margin-bottom:10px;">
@@ -324,48 +471,53 @@
         </h2>
 
         <p class="section-subtext">
-          Überblick über Setup Room Nutzung,
-          aktive Mitglieder und beliebteste Kategorien.
+          Überblick über Setup Room Nutzung, aktive Mitglieder und beliebteste Kategorien.
         </p>
 
         <div class="analytics-grid">
 
           <div class="analytics-box">
+            <div class="analytics-icon">〽️</div>
             <div class="analytics-label">Gesamt Aktivitäten</div>
             <div class="analytics-value" id="totalActions">0</div>
             <div class="analytics-sub">Alle Setup Room Events</div>
+            <div class="trend">↗ Live Tracking</div>
           </div>
 
           <div class="analytics-box">
+            <div class="analytics-icon">👥</div>
             <div class="analytics-label">Aktive Mitglieder</div>
             <div class="analytics-value" id="activeMembers">0</div>
             <div class="analytics-sub">Einzigartige Nutzer</div>
+            <div class="trend">↗ Member Engagement</div>
           </div>
 
           <div class="analytics-box">
+            <div class="analytics-icon">🏆</div>
             <div class="analytics-label">Top Kategorie</div>
             <div class="analytics-value" id="topCategory">-</div>
             <div class="analytics-sub">Beliebteste Kategorie</div>
+            <div class="trend">↗ Stärkster Bereich</div>
           </div>
 
           <div class="analytics-box">
+            <div class="analytics-icon">🕘</div>
             <div class="analytics-label">Letzte Aktivität</div>
             <div class="analytics-value" id="lastActivity">-</div>
             <div class="analytics-sub">Neuester Setup Room Event</div>
+            <div class="trend">LIVE</div>
           </div>
 
         </div>
-
       </div>
 
       <div class="course-grid">
 
         <div class="analytics-card">
-
-          <div class="badge">Kategorien</div>
+          <div class="badge">Top Kategorien</div>
 
           <h2 class="section-heading" style="font-size:32px;margin-bottom:10px;">
-            Top Kategorien
+            Kategorien Ranking
           </h2>
 
           <p class="section-subtext">
@@ -373,18 +525,14 @@
           </p>
 
           <div class="ranking-list" id="categoryList">
-
             <div class="empty-state">
               Noch keine Kategorien geladen.
             </div>
-
           </div>
-
         </div>
 
         <div class="analytics-card">
-
-          <div class="badge">Feed</div>
+          <div class="badge">Live Feed</div>
 
           <h2 class="section-heading" style="font-size:32px;margin-bottom:10px;">
             Letzte Setup Room Aktivität
@@ -395,19 +543,57 @@
           </p>
 
           <div class="feed" id="activityFeed">
-
             <div class="empty-state">
               Noch keine Aktivität vorhanden.
             </div>
-
           </div>
-
         </div>
 
       </div>
 
-    </div>
+      <div class="analytics-card">
+        <div class="bottom-stats">
 
+          <div class="bottom-stat">
+            <div class="bottom-icon">🖱️</div>
+            <div>
+              <div class="bottom-label">Klicks Heute</div>
+              <div class="bottom-value" id="clicksToday">0</div>
+              <div class="bottom-sub">Setup Room Interaktionen</div>
+            </div>
+          </div>
+
+          <div class="bottom-stat">
+            <div class="bottom-icon">👥</div>
+            <div>
+              <div class="bottom-label">Neue Mitglieder</div>
+              <div class="bottom-value" id="newMembers7">0</div>
+              <div class="bottom-sub">Aktiv in 7 Tagen</div>
+            </div>
+          </div>
+
+          <div class="bottom-stat">
+            <div class="bottom-icon">📈</div>
+            <div>
+              <div class="bottom-label">Aktivitätsrate</div>
+              <div class="bottom-value" id="activityRate">0%</div>
+              <div class="bottom-sub">Kategorie-Klicks Anteil</div>
+            </div>
+          </div>
+
+          <div class="bottom-stat">
+            <div class="bottom-icon">⏱️</div>
+            <div>
+              <div class="bottom-label">Ø Zeit</div>
+              <div class="bottom-value" id="avgTime">-</div>
+              <div class="bottom-sub">Zwischen Events</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
   </section>
 
   <div class="footer-note">
@@ -417,9 +603,58 @@
 </div>
 
 <script>
+function getInitials(email){
+  if(!email) return "U";
+
+  const name = email.split("@")[0] || email;
+  const parts = name
+    .replace(/[^a-zA-Z0-9._-]/g, "")
+    .split(/[._-]/)
+    .filter(Boolean);
+
+  if(parts.length >= 2){
+    return (parts[0][0] + parts[1][0]).toUpperCase();
+  }
+
+  return name.slice(0,2).toUpperCase();
+}
+
+function formatTime(value){
+  if(!value) return "-";
+
+  return new Date(value).toLocaleTimeString("de-DE", {
+    hour:"2-digit",
+    minute:"2-digit"
+  });
+}
+
+function formatDateTime(value){
+  if(!value) return "-";
+
+  return new Date(value).toLocaleString("de-DE", {
+    day:"2-digit",
+    month:"2-digit",
+    hour:"2-digit",
+    minute:"2-digit"
+  });
+}
+
+function sameDay(a,b){
+  return a.getFullYear() === b.getFullYear() &&
+    a.getMonth() === b.getMonth() &&
+    a.getDate() === b.getDate();
+}
+
+function formatDuration(minutes){
+  const total = Math.max(0, Math.round(minutes || 0));
+  const h = Math.floor(total / 60);
+  const m = total % 60;
+
+  if(h > 0) return `${h}:${String(m).padStart(2,"0")}`;
+  return `${m}m`;
+}
 
 async function loadSRAnalytics(){
-
   const { data, error } = await supabaseClient
     .from("setup_room_activity")
     .select("*")
@@ -431,149 +666,161 @@ async function loadSRAnalytics(){
   }
 
   const activity = data || [];
+  const now = new Date();
 
-  document.getElementById("totalActions").textContent =
-    activity.length;
+  document.getElementById("totalActions").textContent = activity.length;
 
   const uniqueMembers = [
-    ...new Set(
-      activity.map(x => x.email).filter(Boolean)
-    )
+    ...new Set(activity.map(x => x.email).filter(Boolean))
   ];
 
-  document.getElementById("activeMembers").textContent =
-    uniqueMembers.length;
+  document.getElementById("activeMembers").textContent = uniqueMembers.length;
 
   if(activity[0]?.created_at){
-
-    document.getElementById("lastActivity").textContent =
-      new Date(activity[0].created_at).toLocaleTimeString("de-DE", {
-        hour:"2-digit",
-        minute:"2-digit"
-      });
-
+    document.getElementById("lastActivity").textContent = formatTime(activity[0].created_at);
   }
 
   const categoryStats = {};
+  let categoryClicks = 0;
 
   activity.forEach(item => {
+    const category = item.category || "Unknown";
 
-    const category =
-      item.category || "Unknown";
+    categoryStats[category] = (categoryStats[category] || 0) + 1;
 
-    categoryStats[category] =
-      (categoryStats[category] || 0) + 1;
-
+    if(item.action === "category_clicked"){
+      categoryClicks++;
+    }
   });
 
-  const sortedCategories =
-    Object.entries(categoryStats)
-      .sort((a,b) => b[1] - a[1]);
+  const sortedCategories = Object.entries(categoryStats)
+    .sort((a,b) => b[1] - a[1]);
 
   document.getElementById("topCategory").textContent =
     sortedCategories[0]?.[0] || "-";
 
-  const categoryList =
-    document.getElementById("categoryList");
-
+  const categoryList = document.getElementById("categoryList");
   categoryList.innerHTML = "";
 
   if(!sortedCategories.length){
-
     categoryList.innerHTML = `
       <div class="empty-state">
         Noch keine Kategorien vorhanden.
       </div>
     `;
-
   } else {
+    const maxCount = sortedCategories[0]?.[1] || 1;
 
-    sortedCategories.slice(0,8).forEach(([category,count],index) => {
+    sortedCategories.slice(0,7).forEach(([category,count],index) => {
+      const percent = activity.length
+        ? Math.round((count / activity.length) * 100)
+        : 0;
+
+      const barWidth = Math.max(8, Math.round((count / maxCount) * 100));
 
       categoryList.innerHTML += `
-
         <div class="ranking-item">
-
-          <div class="rank-num">
-            ${index + 1}
-          </div>
+          <div class="rank-num">${index + 1}</div>
 
           <div>
-            <div class="ranking-title">
-              ${category}
-            </div>
+            <div class="ranking-title">${category}</div>
+            <div class="ranking-meta">${count} Events • ${percent}% Anteil</div>
 
-            <div class="ranking-meta">
-              Setup Room Aktivität
+            <div class="bar-row">
+              <div class="bar-track">
+                <div class="bar-fill" style="width:${barWidth}%"></div>
+              </div>
             </div>
           </div>
 
-          <div class="ranking-count">
-            ${count}
-          </div>
-
+          <div class="ranking-count">${count}</div>
         </div>
-
       `;
-
     });
-
   }
 
-  const feed =
-    document.getElementById("activityFeed");
-
+  const feed = document.getElementById("activityFeed");
   feed.innerHTML = "";
 
   if(!activity.length){
-
     feed.innerHTML = `
       <div class="empty-state">
         Noch keine Aktivität vorhanden.
       </div>
     `;
+  } else {
+    activity.slice(0,12).forEach(item => {
+      const email = item.email || "Unknown User";
 
-    return;
+      feed.innerHTML += `
+        <div class="feed-item">
+          <div class="avatar">${getInitials(email)}</div>
+
+          <div class="feed-center">
+            <strong>${email}</strong>
+            <div class="feed-line">
+              <span class="feed-category">${item.category || "Setup Room"}</span>
+              <span>•</span>
+              <span>${item.action || "activity"}</span>
+            </div>
+          </div>
+
+          <div class="feed-time">${formatTime(item.created_at)}</div>
+        </div>
+      `;
+    });
   }
 
-  activity.slice(0,12).forEach(item => {
+  const clicksToday = activity.filter(item =>
+    item.created_at &&
+    sameDay(new Date(item.created_at), now) &&
+    item.action === "category_clicked"
+  ).length;
 
-    const date =
-      item.created_at
-        ? new Date(item.created_at).toLocaleString("de-DE", {
-            day:"2-digit",
-            month:"2-digit",
-            hour:"2-digit",
-            minute:"2-digit"
-          })
-        : "-";
+  document.getElementById("clicksToday").textContent = clicksToday;
 
-    feed.innerHTML += `
+  const sevenDaysAgo = new Date();
+  sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
 
-      <div class="feed-item">
+  const members7 = [
+    ...new Set(
+      activity
+        .filter(item => item.created_at && new Date(item.created_at) >= sevenDaysAgo)
+        .map(item => item.email)
+        .filter(Boolean)
+    )
+  ];
 
-        <strong>
-          ${item.category || "Setup Room"}
-        </strong>
+  document.getElementById("newMembers7").textContent = members7.length;
 
-        <p>
-          ${item.email || "Unknown User"}
-          •
-          ${item.action || "activity"}
-          •
-          ${date}
-        </p>
+  const rate = activity.length
+    ? Math.round((categoryClicks / activity.length) * 100)
+    : 0;
 
-      </div>
+  document.getElementById("activityRate").textContent = `${rate}%`;
 
-    `;
+  const times = activity
+    .map(item => item.created_at ? new Date(item.created_at).getTime() : null)
+    .filter(Boolean)
+    .sort((a,b) => a - b);
 
-  });
+  let avgMinutes = 0;
 
+  if(times.length > 1){
+    const gaps = [];
+
+    for(let i = 1; i < times.length; i++){
+      gaps.push((times[i] - times[i - 1]) / 1000 / 60);
+    }
+
+    avgMinutes = gaps.reduce((sum,gap) => sum + gap, 0) / gaps.length;
+  }
+
+  document.getElementById("avgTime").textContent =
+    times.length > 1 ? formatDuration(avgMinutes) : "-";
 }
 
 loadSRAnalytics();
-
 </script>
 
 </body>
