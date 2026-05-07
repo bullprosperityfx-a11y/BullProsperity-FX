@@ -33,7 +33,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           (data.role === "admin" ? "status-admin" : "status-premium");
       }
 
-      startInactivityLogout();
+      startInactivityLogout(accessData);
     }
 
   } catch (err) {
@@ -44,14 +44,14 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   await trackLessonOpen(accessData);
+  setupVimeoWatchtimeTracking(accessData);
 });
 
 async function trackLessonOpen(accessData) {
   try {
     const path = window.location.pathname.toLowerCase();
 
-    const isLessonPage =
-      path.includes("lesson");
+    const isLessonPage = path.includes("lesson");
 
     if (!isLessonPage) return;
 
@@ -89,7 +89,110 @@ async function trackLessonOpen(accessData) {
   }
 }
 
-function startInactivityLogout() {
+function setupVimeoWatchtimeTracking(accessData) {
+  try {
+    const path = window.location.pathname.toLowerCase();
+    const isLessonPage = path.includes("lesson");
+
+    if (!isLessonPage) return;
+
+    if (!window.supabaseClient) {
+      console.log("Watchtime: Supabase Client nicht geladen");
+      return;
+    }
+
+    const vimeoIframes = document.querySelectorAll(
+      'iframe[src*="player.vimeo.com"]'
+    );
+
+    if (!vimeoIframes.length) {
+      console.log("Watchtime: Kein Vimeo Video gefunden");
+      return;
+    }
+
+    loadVimeoApi(() => {
+      vimeoIframes.forEach((iframe) => {
+        try {
+          const player = new Vimeo.Player(iframe);
+
+          let lastSavedSecond = 0;
+          let durationSeconds = 0;
+
+          const userEmail =
+            accessData?.email || "admin@bullprosperity.local";
+
+          const lessonTitle =
+            document.querySelector("h1")?.textContent?.trim() ||
+            document.title ||
+            "Unbekannte Lesson";
+
+          player.getDuration().then((duration) => {
+            durationSeconds = Math.floor(duration || 0);
+          });
+
+          player.on("timeupdate", async (event) => {
+            const currentSeconds = Math.floor(event.seconds || 0);
+
+            if (currentSeconds < 1) return;
+            if (currentSeconds - lastSavedSecond < 15) return;
+
+            lastSavedSecond = currentSeconds;
+
+            const progressPercent = durationSeconds > 0
+              ? Math.min(100, Math.floor((currentSeconds / durationSeconds) * 100))
+              : Math.floor(event.percent * 100 || 0);
+
+            const { error } = await supabaseClient
+              .from("video_watchtime")
+              .insert({
+                email: userEmail,
+                role: accessData?.role || "guest",
+                lesson: lessonTitle,
+                current_seconds: currentSeconds,
+                duration_seconds: durationSeconds,
+                progress_percent: progressPercent
+              });
+
+            if (error) {
+              console.log("Watchtime Fehler:", error);
+            } else {
+              console.log("Watchtime gespeichert:", progressPercent + "%");
+            }
+          });
+
+        } catch (err) {
+          console.log("Watchtime Vimeo Fehler:", err);
+        }
+      });
+    });
+
+  } catch (err) {
+    console.log("Watchtime System Fehler:", err);
+  }
+}
+
+function loadVimeoApi(callback) {
+  if (window.Vimeo && window.Vimeo.Player) {
+    callback();
+    return;
+  }
+
+  const existingScript = document.querySelector(
+    'script[src="https://player.vimeo.com/api/player.js"]'
+  );
+
+  if (existingScript) {
+    existingScript.addEventListener("load", callback);
+    return;
+  }
+
+  const script = document.createElement("script");
+  script.src = "https://player.vimeo.com/api/player.js";
+  script.onload = callback;
+  document.body.appendChild(script);
+}
+
+function startInactivityLogout(accessData) {
   const INACTIVITY_LIMIT = 45 * 60 * 1000;
   let inactivityTimer;
   let vimeoIsPlaying = false;
@@ -145,28 +248,7 @@ function startInactivityLogout() {
     });
   });
 
-  function loadVimeoApi(callback) {
-    if (window.Vimeo && window.Vimeo.Player) {
-      callback();
-      return;
-    }
-
-    const existingScript = document.querySelector(
-      'script[src="https://player.vimeo.com/api/player.js"]'
-    );
-
-    if (existingScript) {
-      existingScript.addEventListener("load", callback);
-      return;
-    }
-
-    const script = document.createElement("script");
-    script.src = "https://player.vimeo.com/api/player.js";
-    script.onload = callback;
-    document.body.appendChild(script);
-  }
-
-  function setupVimeoTracking() {
+  function setupVimeoInactivityTracking() {
     const vimeoIframes = document.querySelectorAll(
       'iframe[src*="player.vimeo.com"]'
     );
@@ -210,6 +292,6 @@ function startInactivityLogout() {
     });
   }
 
-  setupVimeoTracking();
+  setupVimeoInactivityTracking();
   resetTimer();
 }
