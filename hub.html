@@ -254,6 +254,11 @@
       background:linear-gradient(180deg, rgba(255,215,0,.08), #0c0c0c);
     }
 
+    .admin-glow:hover{
+      border-color:#ffd700;
+      box-shadow:0 0 28px rgba(255,215,0,.08);
+    }
+
     .hub-watchlist{
       display:grid;
       gap:10px;
@@ -476,6 +481,7 @@
         <a href="#hub-dashboard" class="btn primary">Hub öffnen</a>
         <a href="tools.html" class="btn secondary">Zu den Tools</a>
         <a id="adminSignalsHeroBtn" href="/admin-signals" class="btn primary" style="display:none;">Admin Signals</a>
+        <a id="adminDashboardHeroBtn" href="/admin/dashboard.html" class="btn secondary" style="display:none;">Admin Dashboard</a>
       </div>
     </section>
 
@@ -520,6 +526,7 @@
             <a href="course.html" class="hub-btn primary">Zum Kurs</a>
             <a href="tools.html" class="hub-btn secondary">Tools öffnen</a>
             <a id="adminSignalsTopBtn" href="/admin-signals" class="hub-btn primary" style="display:none;">Admin Signals</a>
+            <a id="adminDashboardTopBtn" href="/admin/dashboard.html" class="hub-btn secondary" style="display:none;">Admin Dashboard</a>
           </div>
         </div>
 
@@ -581,6 +588,7 @@
                 <span>→</span>
               </div>
             </a>
+
             <a href="broker" class="hub-link-card">
               <div class="badge">Broker</div>
               <h3>Trading Infrastruktur</h3>
@@ -597,6 +605,16 @@
               <p>Erstelle professionelle BullProsperity Signale mit Bild, Analyse-Link, Entry, SL, TPs und automatischer Pip-Berechnung.</p>
               <div class="hub-link-meta">
                 <span>Signal Panel öffnen</span>
+                <span>→</span>
+              </div>
+            </a>
+
+            <a id="adminDashboardCard" href="/admin/dashboard.html" class="hub-link-card admin-glow" style="display:none;">
+              <div class="badge">Admin Dashboard</div>
+              <h3>Control Center</h3>
+              <p>Mitglieder, Analytics, Watchtime, Sessions, Affiliate Daten, Security und Systemverwaltung.</p>
+              <div class="hub-link-meta">
+                <span>Dashboard öffnen</span>
                 <span>→</span>
               </div>
             </a>
@@ -751,6 +769,9 @@
     const adminSignalsCard = document.getElementById("adminSignalsCard");
     const adminSignalsTopBtn = document.getElementById("adminSignalsTopBtn");
     const adminSignalsHeroBtn = document.getElementById("adminSignalsHeroBtn");
+    const adminDashboardCard = document.getElementById("adminDashboardCard");
+    const adminDashboardTopBtn = document.getElementById("adminDashboardTopBtn");
+    const adminDashboardHeroBtn = document.getElementById("adminDashboardHeroBtn");
     const statusValue = document.getElementById("statusValue");
 
     const savedHubNotes = localStorage.getItem("bp_hub_notes");
@@ -798,6 +819,10 @@
           if (adminSignalsCard) adminSignalsCard.style.display = "block";
           if (adminSignalsTopBtn) adminSignalsTopBtn.style.display = "inline-flex";
           if (adminSignalsHeroBtn) adminSignalsHeroBtn.style.display = "inline-flex";
+
+          if (adminDashboardCard) adminDashboardCard.style.display = "block";
+          if (adminDashboardTopBtn) adminDashboardTopBtn.style.display = "inline-flex";
+          if (adminDashboardHeroBtn) adminDashboardHeroBtn.style.display = "inline-flex";
 
         } else if (role === "premium") {
           authBadge.textContent = "Premium aktiv";
