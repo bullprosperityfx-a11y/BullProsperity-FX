@@ -44,24 +44,23 @@
       border:1px solid var(--line);
       border-radius:28px;
       background:linear-gradient(180deg,var(--panel),var(--panel-2));
-      padding:28px;
+      padding:24px;
     }
 
     .admin-sidebar{
       position:sticky;
       top:20px;
-      min-height:calc(100vh - 120px);
     }
 
     .admin-content{
       display:grid;
-      gap:28px;
+      gap:24px;
     }
 
     .admin-nav{
       display:grid;
       gap:12px;
-      margin-top:24px;
+      margin-top:20px;
     }
 
     .admin-link{
@@ -69,15 +68,13 @@
       justify-content:space-between;
       align-items:center;
       gap:12px;
-      min-height:58px;
       padding:14px 16px;
       border-radius:18px;
       background:#111;
       border:1px solid #252525;
       color:#fff;
       text-decoration:none;
-      font-size:15px;
-      font-weight:850;
+      font-weight:800;
       transition:.2s ease;
     }
 
@@ -91,18 +88,18 @@
     .admin-stats{
       display:grid;
       grid-template-columns:repeat(4,1fr);
-      gap:18px;
-      margin-top:24px;
+      gap:16px;
+      margin-top:20px;
     }
 
     .stat-box{
       background:#111;
       border:1px solid #252525;
       border-radius:22px;
-      padding:22px;
+      padding:18px;
       position:relative;
       overflow:hidden;
-      min-height:140px;
+      min-height:128px;
     }
 
     .stat-box::after{
@@ -157,15 +154,13 @@
       display:grid;
       grid-template-columns:1.1fr .9fr;
       gap:18px;
-      align-items:stretch;
     }
 
     .system-grid{
       display:grid;
       grid-template-columns:repeat(4,1fr);
-      gap:18px;
+      gap:16px;
       margin-top:20px;
-      align-items:stretch;
     }
 
     .system-box{
@@ -173,10 +168,6 @@
       border:1px solid rgba(255,215,0,.12);
       border-radius:20px;
       padding:18px;
-      min-height:180px;
-      display:flex;
-      flex-direction:column;
-      justify-content:space-between;
     }
 
     .system-title{
@@ -200,15 +191,14 @@
 
     .activity-feed{
       display:grid;
-      gap:14px;
+      gap:12px;
       margin-top:20px;
     }
 
     .activity-item{
       border:1px solid rgba(255,215,0,.10);
       border-radius:18px;
-      padding:18px;
-      min-height:88px;
+      padding:16px;
       background:rgba(255,255,255,.02);
       display:grid;
       grid-template-columns:auto 1fr auto;
@@ -236,19 +226,18 @@
       display:block;
       margin-bottom:5px;
       font-weight:950;
-      font-size:15px;
     }
 
     .activity-item p{
       margin:0;
       color:#a8a8a8;
-      line-height:1.7;
+      line-height:1.5;
       font-size:13px;
     }
 
     .activity-time{
       color:#ffd700;
-      font-size:12px;
+      font-size:13px;
       font-weight:900;
       white-space:nowrap;
     }
@@ -256,9 +245,8 @@
     .quick-grid{
       display:grid;
       grid-template-columns:repeat(3,1fr);
-      gap:18px;
+      gap:16px;
       margin-top:20px;
-      align-items:stretch;
     }
 
     .quick-card{
@@ -268,10 +256,7 @@
       padding:20px;
       text-decoration:none;
       transition:.2s ease;
-      min-height:180px;
-      display:flex;
-      flex-direction:column;
-      justify-content:space-between;
+      display:block;
     }
 
     .quick-card:hover{
@@ -282,13 +267,13 @@
     .quick-card h3{
       margin:0 0 8px;
       color:#ffd700;
-      font-size:22px;
+      font-size:20px;
     }
 
     .quick-card p{
-      margin:10px 0 0;
+      margin:0;
       color:#a8a8a8;
-      line-height:1.7;
+      line-height:1.5;
       font-size:13px;
     }
 
@@ -304,7 +289,6 @@
       font-size:12px;
       font-weight:900;
       margin-top:12px;
-      width:max-content;
     }
 
     .status-pill::before{
@@ -313,14 +297,6 @@
       height:8px;
       border-radius:50%;
       background:#22c55e;
-    }
-
-    .section-subtext{
-      max-width:760px;
-    }
-
-    .hero-text{
-      max-width:900px;
     }
 
     @media(max-width:1200px){
@@ -332,7 +308,6 @@
       .admin-sidebar{
         position:relative;
         top:0;
-        min-height:auto;
       }
 
       .admin-stats,
@@ -359,6 +334,107 @@
         grid-column:2;
       }
     }
+    /* ---------- FEINSCHLIFF DASHBOARD ---------- */
+
+.admin-content{
+  display:grid;
+  gap:28px;
+}
+
+.admin-card{
+  padding:28px;
+}
+
+.admin-stats{
+  margin-top:24px;
+  gap:18px;
+}
+
+.stat-box{
+  min-height:140px;
+  padding:22px;
+}
+
+.overview-grid{
+  align-items:stretch;
+}
+
+.system-grid{
+  gap:18px;
+  align-items:stretch;
+}
+
+.system-box{
+  min-height:180px;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+}
+
+.quick-grid{
+  gap:18px;
+  align-items:stretch;
+}
+
+.quick-card{
+  min-height:180px;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+}
+
+.quick-card h3{
+  font-size:22px;
+}
+
+.quick-card p{
+  margin-top:10px;
+  line-height:1.7;
+}
+
+.activity-feed{
+  gap:14px;
+}
+
+.activity-item{
+  min-height:88px;
+  padding:18px;
+}
+
+.activity-item strong{
+  font-size:15px;
+}
+
+.activity-item p{
+  font-size:13px;
+  line-height:1.7;
+}
+
+.activity-time{
+  font-size:12px;
+}
+
+.admin-sidebar{
+  min-height:calc(100vh - 120px);
+}
+
+.admin-nav{
+  margin-top:24px;
+}
+
+.admin-link{
+  min-height:58px;
+  font-size:15px;
+  font-weight:850;
+}
+
+.section-subtext{
+  max-width:760px;
+}
+
+.hero-text{
+  max-width:900px;
+}
   </style>
 </head>
 
@@ -467,38 +543,30 @@
 
           <div class="system-grid">
             <div class="system-box">
-              <div>
-                <div class="system-title">Hub</div>
-                <div class="system-value" id="hubOpens">0</div>
-                <div class="system-sub">Hub Öffnungen</div>
-              </div>
+              <div class="system-title">Hub</div>
+              <div class="system-value" id="hubOpens">0</div>
+              <div class="system-sub">Hub Öffnungen</div>
               <div class="status-pill">Aktiv</div>
             </div>
 
             <div class="system-box">
-              <div>
-                <div class="system-title">Course</div>
-                <div class="system-value" id="lessonOpens">0</div>
-                <div class="system-sub">Lesson Opens</div>
-              </div>
+              <div class="system-title">Course</div>
+              <div class="system-value" id="lessonOpens">0</div>
+              <div class="system-sub">Lesson Opens</div>
               <div class="status-pill">Tracking</div>
             </div>
 
             <div class="system-box">
-              <div>
-                <div class="system-title">Setup Room</div>
-                <div class="system-value" id="srActions">0</div>
-                <div class="system-sub">SR Aktivitäten</div>
-              </div>
+              <div class="system-title">Setup Room</div>
+              <div class="system-value" id="srActions">0</div>
+              <div class="system-sub">SR Aktivitäten</div>
               <div class="status-pill">Live</div>
             </div>
 
             <div class="system-box">
-              <div>
-                <div class="system-title">Security</div>
-                <div class="system-value">OK</div>
-                <div class="system-sub">Admin Schutz aktiv</div>
-              </div>
+              <div class="system-title">Security</div>
+              <div class="system-value">OK</div>
+              <div class="system-sub">Admin Schutz aktiv</div>
               <div class="status-pill">Sicher</div>
             </div>
           </div>
@@ -517,24 +585,18 @@
 
           <div class="quick-grid">
             <a href="/admin/members.html" class="quick-card">
-              <div>
-                <h3>👥 Mitglieder</h3>
-                <p>Online Status, letzte Aktivität und Nutzerübersicht.</p>
-              </div>
+              <h3>👥 Mitglieder</h3>
+              <p>Online Status, letzte Aktivität und Nutzerübersicht.</p>
             </a>
 
             <a href="/admin/course-analytics.html" class="quick-card">
-              <div>
-                <h3>🎬 Course</h3>
-                <p>Watchtime, Top Lessons und Kurs-Engagement.</p>
-              </div>
+              <h3>🎬 Course</h3>
+              <p>Watchtime, Top Lessons und Kurs-Engagement.</p>
             </a>
 
             <a href="/admin/sr-analytics.html" class="quick-card">
-              <div>
-                <h3>🎳 SR Analytics</h3>
-                <p>Setup Room Kategorien, Klicks und Aktivitätsfeed.</p>
-              </div>
+              <h3>🎳 SR Analytics</h3>
+              <p>Setup Room Kategorien, Klicks und Aktivitätsfeed.</p>
             </a>
           </div>
         </div>
