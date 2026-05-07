@@ -7,13 +7,13 @@
   <title>BullProsperity | Admin Dashboard</title>
 
   <link rel="stylesheet" href="/theme.css" />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="/supabase.js"></script>
   <script src="/login.js" defer></script>
 
   <script>
     (async () => {
-
       try {
-
         const res = await fetch("/api/access", {
           credentials: "include",
           cache: "no-store"
@@ -21,7 +21,6 @@
 
         const data = await res.json();
 
-        // 🔥 NUR ADMIN
         if (data.role !== "admin") {
           window.location.href = "/locked.html";
         }
@@ -29,12 +28,10 @@
       } catch {
         window.location.href = "/locked.html";
       }
-
     })();
   </script>
 
   <style>
-
     .admin-layout{
       display:grid;
       grid-template-columns:320px 1fr;
@@ -75,21 +72,13 @@
       justify-content:space-between;
       align-items:center;
       gap:12px;
-
       padding:14px 16px;
-
       border-radius:18px;
-
       background:#111;
-
       border:1px solid #252525;
-
       color:#fff;
-
       text-decoration:none;
-
       font-weight:800;
-
       transition:.2s ease;
     }
 
@@ -192,7 +181,6 @@
     }
 
     @media(max-width:1200px){
-
       .admin-layout{
         grid-template-columns:1fr;
       }
@@ -204,19 +192,14 @@
       .signal-overview{
         grid-template-columns:1fr;
       }
-
     }
 
     @media(max-width:760px){
-
       .admin-stats{
         grid-template-columns:1fr;
       }
-
     }
-
   </style>
-
 </head>
 
 <body>
@@ -235,7 +218,6 @@
   </nav>
 
   <section class="hero-shell">
-
     <div class="badge">Admin System</div>
 
     <h1 class="hero-title">
@@ -247,13 +229,11 @@
       Verwalte Mitglieder, Analytics, Signals,
       Watchtime, Sessions und Systemaktivitäten.
     </p>
-
   </section>
 
   <section class="admin-layout">
 
     <aside class="admin-sidebar">
-
       <div class="badge">Verwaltung</div>
 
       <h2 class="section-heading" style="font-size:34px;margin-bottom:8px;">
@@ -261,45 +241,18 @@
       </h2>
 
       <div class="admin-nav">
-
-        <a href="#" class="admin-link">
-          <span>📊 Analytics</span>
-          <span>→</span>
-        </a>
-
-        <a href="#" class="admin-link">
-          <span>👥 Mitglieder</span>
-          <span>→</span>
-        </a>
-
-        <a href="#" class="admin-link">
-          <span>📡 Signals</span>
-          <span>→</span>
-        </a>
-
-        <a href="#" class="admin-link">
-          <span>🎬 Video Watchtime</span>
-          <span>→</span>
-        </a>
-
-        <a href="#" class="admin-link">
-          <span>💰 Affiliate Stats</span>
-          <span>→</span>
-        </a>
-
-        <a href="#" class="admin-link">
-          <span>🛡 Security</span>
-          <span>→</span>
-        </a>
-
+        <a href="#" class="admin-link"><span>📊 Analytics</span><span>→</span></a>
+        <a href="#" class="admin-link"><span>👥 Mitglieder</span><span>→</span></a>
+        <a href="#" class="admin-link"><span>📡 Signals</span><span>→</span></a>
+        <a href="#" class="admin-link"><span>🎬 Video Watchtime</span><span>→</span></a>
+        <a href="#" class="admin-link"><span>💰 Affiliate Stats</span><span>→</span></a>
+        <a href="#" class="admin-link"><span>🛡 Security</span><span>→</span></a>
       </div>
-
     </aside>
 
     <div class="admin-content">
 
       <div class="admin-card">
-
         <div class="badge">Live Statistik</div>
 
         <h2 class="section-heading" style="font-size:38px;margin-bottom:10px;">
@@ -312,37 +265,33 @@
         </p>
 
         <div class="admin-stats">
-
           <div class="stat-box">
             <div class="stat-label">Aktive Mitglieder</div>
-            <div class="stat-value">127</div>
-            <div class="stat-sub">Live Sessions</div>
+            <div class="stat-value" id="activeMembers">0</div>
+            <div class="stat-sub">Einzigartige User</div>
           </div>
 
           <div class="stat-box">
-            <div class="stat-label">Watchtime</div>
-            <div class="stat-value">248h</div>
-            <div class="stat-sub">Letzte 7 Tage</div>
+            <div class="stat-label">Aktivitäten</div>
+            <div class="stat-value" id="totalActivities">0</div>
+            <div class="stat-sub">Gesamte Events</div>
           </div>
 
           <div class="stat-box">
-            <div class="stat-label">Signals</div>
-            <div class="stat-value">38</div>
-            <div class="stat-sub">Diesen Monat</div>
+            <div class="stat-label">Hub Öffnungen</div>
+            <div class="stat-value" id="hubOpens">0</div>
+            <div class="stat-sub">member_activity</div>
           </div>
 
           <div class="stat-box">
-            <div class="stat-label">Affiliate Klicks</div>
-            <div class="stat-value">1.4K</div>
-            <div class="stat-sub">Broker Traffic</div>
+            <div class="stat-label">Letzte Aktivität</div>
+            <div class="stat-value" id="lastActivity">-</div>
+            <div class="stat-sub">Neuester Eintrag</div>
           </div>
-
         </div>
-
       </div>
 
       <div class="admin-card">
-
         <div class="badge">Signal Analytics</div>
 
         <h2 class="section-heading" style="font-size:36px;margin-bottom:10px;">
@@ -350,7 +299,6 @@
         </h2>
 
         <div class="signal-overview">
-
           <div class="signal-box">
             <h3>Winrate</h3>
             <div class="signal-big">78%</div>
@@ -374,49 +322,107 @@
               Höchste Aktivität & Engagement.
             </div>
           </div>
-
         </div>
-
       </div>
 
       <div class="admin-card">
-
         <div class="badge">Aktivität</div>
 
         <h2 class="section-heading" style="font-size:36px;margin-bottom:10px;">
           Live Activity Feed
         </h2>
 
-        <div class="activity-feed">
-
+        <div class="activity-feed" id="activityFeed">
           <div class="activity-item">
-            <strong>Lesson Aktivität</strong>
-            <p>User schaut aktuell „Marktstruktur verstehen“.</p>
+            <strong>Keine Daten geladen</strong>
+            <p>Öffne den Hub, damit Aktivitäten in Supabase gespeichert werden.</p>
           </div>
-
-          <div class="activity-item">
-            <strong>Neues Mitglied</strong>
-            <p>Ein neues Premium Mitglied ist BullProsperity beigetreten.</p>
-          </div>
-
-          <div class="activity-item">
-            <strong>Signal geöffnet</strong>
-            <p>Signal „XAUUSD Buy“ wurde mehrfach geöffnet.</p>
-          </div>
-
         </div>
-
       </div>
 
     </div>
-
   </section>
 
   <div class="footer-note">
     BullProsperity Admin System.
   </div>
-
 </div>
+
+<script>
+(async () => {
+  try {
+    const { data, error } = await supabaseClient
+      .from("member_activity")
+      .select("*")
+      .order("created_at", { ascending: false })
+      .limit(50);
+
+    if (error) {
+      console.log("Admin Dashboard Supabase Fehler:", error);
+      return;
+    }
+
+    const activities = data || [];
+
+    const uniqueMembers = new Set(
+      activities
+        .map(item => item.email)
+        .filter(Boolean)
+    );
+
+    const hubOpens = activities.filter(item => item.action === "hub_opened").length;
+
+    document.getElementById("activeMembers").textContent = uniqueMembers.size;
+    document.getElementById("totalActivities").textContent = activities.length;
+    document.getElementById("hubOpens").textContent = hubOpens;
+
+    if (activities[0]?.created_at) {
+      const date = new Date(activities[0].created_at);
+      document.getElementById("lastActivity").textContent =
+        date.toLocaleTimeString("de-DE", {
+          hour: "2-digit",
+          minute: "2-digit"
+        });
+    }
+
+    const feed = document.getElementById("activityFeed");
+    feed.innerHTML = "";
+
+    if (!activities.length) {
+      feed.innerHTML = `
+        <div class="activity-item">
+          <strong>Noch keine Aktivität</strong>
+          <p>Wenn ein Mitglied den Hub öffnet, erscheint hier der erste Eintrag.</p>
+        </div>
+      `;
+      return;
+    }
+
+    activities.slice(0, 10).forEach(item => {
+      const date = item.created_at
+        ? new Date(item.created_at).toLocaleString("de-DE", {
+            day: "2-digit",
+            month: "2-digit",
+            hour: "2-digit",
+            minute: "2-digit"
+          })
+        : "-";
+
+      const div = document.createElement("div");
+      div.className = "activity-item";
+      div.innerHTML = `
+        <strong>${item.action || "Aktivität"} • ${item.role || "unknown"}</strong>
+        <p>${item.email || "Unbekannter User"} hat ${item.page || "eine Seite"} geöffnet. ${date}</p>
+      `;
+
+      feed.appendChild(div);
+    });
+
+  } catch (err) {
+    console.log("Admin Dashboard Fehler:", err);
+  }
+})();
+</script>
 
 </body>
 </html>
