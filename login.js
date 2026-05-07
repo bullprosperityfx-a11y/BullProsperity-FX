@@ -3,6 +3,8 @@ document.addEventListener("DOMContentLoaded", async () => {
   const authStatus = document.getElementById("authStatus");
   const statusDot = document.getElementById("statusDot");
 
+  let accessData = null;
+
   try {
     const res = await fetch("/api/access", {
       credentials: "include",
@@ -10,6 +12,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
 
     const data = await res.json();
+    accessData = data;
 
     if (authStatus) authStatus.textContent = "Kein Zugang";
     if (statusDot) statusDot.className = "status-dot status-locked";
@@ -39,10 +42,55 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (authStatus) authStatus.textContent = "Fehler";
     if (statusDot) statusDot.className = "status-dot status-locked";
   }
+
+  await trackLessonOpen(accessData);
 });
 
+async function trackLessonOpen(accessData) {
+  try {
+    const path = window.location.pathname.toLowerCase();
+
+    const isLessonPage =
+      path.includes("lesson") && path.endsWith(".html");
+
+    if (!isLessonPage) return;
+
+    if (!window.supabaseClient) {
+      console.log("Supabase Client nicht geladen");
+      return;
+    }
+
+    const userEmail =
+      accessData?.email || "admin@bullprosperity.local";
+
+    const lessonTitle =
+      document.querySelector("h1")?.textContent?.trim() ||
+      document.title ||
+      "Unbekannte Lesson";
+
+    const { error } = await supabaseClient
+      .from("lesson_activity")
+      .insert({
+        email: userEmail,
+        role: accessData?.role || "guest",
+        lesson: lessonTitle,
+        lesson_url: window.location.pathname,
+        action: "lesson_opened"
+      });
+
+    if (error) {
+      console.log("Lesson Tracking Fehler:", error);
+    } else {
+      console.log("Lesson Tracking gespeichert");
+    }
+
+  } catch (err) {
+    console.log("Lesson Tracking System Fehler:", err);
+  }
+}
+
 function startInactivityLogout() {
-  const INACTIVITY_LIMIT = 45 * 60 * 1000; // 45 Minuten
+  const INACTIVITY_LIMIT = 45 * 60 * 1000;
   let inactivityTimer;
   let vimeoIsPlaying = false;
 
@@ -103,7 +151,9 @@ function startInactivityLogout() {
       return;
     }
 
-    const existingScript = document.querySelector('script[src="https://player.vimeo.com/api/player.js"]');
+    const existingScript = document.querySelector(
+      'script[src="https://player.vimeo.com/api/player.js"]'
+    );
 
     if (existingScript) {
       existingScript.addEventListener("load", callback);
@@ -117,7 +167,9 @@ function startInactivityLogout() {
   }
 
   function setupVimeoTracking() {
-    const vimeoIframes = document.querySelectorAll('iframe[src*="player.vimeo.com"]');
+    const vimeoIframes = document.querySelectorAll(
+      'iframe[src*="player.vimeo.com"]'
+    );
 
     if (!vimeoIframes.length) return;
 
@@ -159,6 +211,5 @@ function startInactivityLogout() {
   }
 
   setupVimeoTracking();
-
   resetTimer();
 }
