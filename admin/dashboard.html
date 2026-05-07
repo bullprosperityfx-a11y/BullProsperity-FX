@@ -195,17 +195,27 @@
       margin-top:20px;
     }
 
-    .activity-item{
-      border:1px solid rgba(255,215,0,.10);
-      border-radius:18px;
-      padding:16px;
-      background:rgba(255,255,255,.02);
-      display:grid;
-      grid-template-columns:auto 1fr auto;
-      gap:14px;
-      align-items:center;
-    }
+   .activity-item{
+  border:1px solid rgba(255,215,0,.10);
+  border-radius:18px;
+  padding:18px;
+  background:rgba(255,255,255,.02);
 
+  display:flex;
+  align-items:center;
+  gap:14px;
+
+  flex-wrap:wrap;
+}
+    .activity-item > div:nth-child(2){
+  flex:1;
+  min-width:240px;
+}
+
+.activity-time{
+  margin-left:auto;
+  white-space:nowrap;
+}
     .avatar{
       width:38px;
       height:38px;
@@ -243,11 +253,12 @@
     }
 
     .quick-grid{
-      display:grid;
-      grid-template-columns:repeat(3,1fr);
-      gap:16px;
-      margin-top:20px;
-    }
+  display:grid;
+  grid-template-columns:1fr;
+  gap:14px;
+  margin-top:20px;
+  align-items:stretch;
+}
 
     .quick-card{
       background:#111;
@@ -377,7 +388,7 @@
 }
 
 .quick-card{
-  min-height:180px;
+  min-height:110px;
   display:flex;
   flex-direction:column;
   justify-content:space-between;
