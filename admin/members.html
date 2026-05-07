@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>BullProsperity | Mitgliederverwaltung</title>
+
+  <link rel="stylesheet" href="/theme.css" />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="/supabase.js"></script>
+  <script src="/login.js" defer></script>
+
+  <script>
+    (async () => {
+      try {
+        const res = await fetch("/api/access", {
+          credentials: "include",
+          cache: "no-store"
+        });
+
+        const data = await res.json();
+
+        if (data.role !== "admin") {
+          window.location.href = "/locked.html";
+        }
+      } catch {
+        window.location.href = "/locked.html";
+      }
+    })();
+  </script>
+
+  <style>
+    .admin-layout{
+      display:grid;
+      grid-template-columns:320px 1fr;
+      gap:24px;
+      margin-top:24px;
+      align-items:start;
+    }
+
+    .admin-sidebar,
+    .admin-card{
+      border:1px solid var(--line);
+      border-radius:28px;
+      background:linear-gradient(180deg,var(--panel),var(--panel-2));
+      padding:24px;
+    }
+
+    .admin-sidebar{
+      position:sticky;
+      top:20px;
+    }
+
+    .admin-nav{
+      display:grid;
+      gap:12px;
+      margin-top:20px;
+    }
+
+    .admin-link{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      padding:14px 16px;
+      border-radius:18px;
+      background:#111;
+      border:1px solid #252525;
+      color:#fff;
+      text-decoration:none;
+      font-weight:800;
+      transition:.2s ease;
+    }
+
+    .admin-link:hover,
+    .admin-link.active{
+      border-color:#ffd700;
+      color:#ffd700;
+      transform:translateX(4px);
+    }
+
+    .member-tools{
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+      margin-top:20px;
+    }
+
+    .member-search{
+      flex:1;
+      min-width:260px;
+      border-radius:16px;
+      border:1px solid rgba(255,215,0,.18);
+      background:#111;
+      color:#fff;
+      padding:14px 16px;
+      outline:none;
+      font-weight:700;
+    }
+
+    .members-grid{
+      display:grid;
+      gap:14px;
+      margin-top:22px;
+    }
+
+    .member-card{
+      border:1px solid rgba(255,215,0,.12);
+      background:rgba(255,255,255,.02);
+      border-radius:20px;
+      padding:18px;
+      display:grid;
+      grid-template-columns:1.2fr .8fr .8fr .8fr;
+      gap:14px;
+      align-items:center;
+    }
+
+    .member-email{
+      color:#fff;
+      font-weight:900;
+      word-break:break-word;
+    }
+
+    .member-meta{
+      color:#9f9f9f;
+      font-size:13px;
+      margin-top:6px;
+    }
+
+    .member-badge{
+      display:inline-flex;
+      justify-content:center;
+      align-items:center;
+      padding:8px 12px;
+      border-radius:999px;
+      border:1px solid rgba(255,215,0,.22);
+      color:#ffd700;
+      background:rgba(255,215,0,.06);
+      font-size:12px;
+      font-weight:900;
+      width:max-content;
+    }
+
+    .member-value{
+      color:#fff;
+      font-weight:900;
+    }
+
+    .empty-state{
+      border:1px dashed rgba(255,215,0,.18);
+      border-radius:20px;
+      padding:24px;
+      text-align:center;
+      color:#bdbdbd;
+      margin-top:20px;
+      background:rgba(255,255,255,.02);
+    }
+
+    @media(max-width:1100px){
+      .admin-layout{
+        grid-template-columns:1fr;
+      }
+
+      .admin-sidebar{
+        position:relative;
+        top:0;
+      }
+
+      .member-card{
+        grid-template-columns:1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="page">
+
+    <nav class="navbar">
+      <a href="/index.html" class="logo">BullProsperity | Admin</a>
+      <div class="nav-links">
+        <a href="/hub.html">Hub</a>
+        <a href="/admin/dashboard.html">Dashboard</a>
+      </div>
+    </nav>
+
+    <section class="hero-shell">
+      <div class="badge">Admin System</div>
+      <h1 class="hero-title">Mitglieder <span class="gold">Verwaltung</span></h1>
+      <p class="hero-text">
+        Sieh aktive Mitglieder, Rollen, letzte Aktivität und Plattform-Nutzung auf einen Blick.
+      </p>
+    </section>
+
+    <section class="admin-layout">
+
+      <aside class="admin-sidebar">
+        <div class="badge">Verwaltung</div>
+        <h2 class="section-heading" style="font-size:34px;margin-bottom:8px;">
+          Control Center
+        </h2>
+
+        <div class="admin-nav">
+          <a href="/admin/dashboard.html" class="admin-link"><span>📊 Dashboard</span><span>→</span></a>
+          <a href="/admin/members.html" class="admin-link active"><span>👥 Mitglieder</span><span>→</span></a>
+          <a href="/admin/dashboard.html" class="admin-link"><span>📡 Signals</span><span>→</span></a>
+          <a href="/admin/dashboard.html" class="admin-link"><span>🎬 Watchtime</span><span>→</span></a>
+          <a href="/admin/dashboard.html" class="admin-link"><span>💰 Affiliate</span><span>→</span></a>
+          <a href="/admin/dashboard.html" class="admin-link"><span>🛡 Security</span><span>→</span></a>
+        </div>
+      </aside>
+
+      <div class="admin-card">
+        <div class="badge">Live Daten</div>
+        <h2 class="section-heading" style="font-size:38px;margin-bottom:10px;">
+          Mitglieder Übersicht
+        </h2>
+
+        <p class="section-subtext">
+          Diese Daten kommen aus Supabase `member_activity`.
+        </p>
+
+        <div class="member-tools">
+          <input id="memberSearch" class="member-search" placeholder="Mitglied suchen nach E-Mail oder Rolle..." />
+          <button class="btn primary" id="reloadMembersBtn">Neu laden</button>
+        </div>
+
+        <div id="membersList" class="members-grid"></div>
+
+        <div id="emptyState" class="empty-state" style="display:none;">
+          Noch keine Mitgliederaktivität vorhanden.
+        </div>
+      </div>
+
+    </section>
+
+    <div class="footer-note">
+      BullProsperity Admin System.
+    </div>
+
+  </div>
+
+<script>
+const membersList = document.getElementById("membersList");
+const emptyState = document.getElementById("emptyState");
+const memberSearch = document.getElementById("memberSearch");
+const reloadMembersBtn = document.getElementById("reloadMembersBtn");
+
+let allMembers = [];
+
+function formatDate(value) {
+  if (!value) return "-";
+
+  return new Date(value).toLocaleString("de-DE", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit"
+  });
+}
+
+function buildMembersFromActivity(activity) {
+  const map = {};
+
+  activity.forEach(item => {
+    const email = item.email || "unknown@bullprosperity.local";
+
+    if (!map[email]) {
+      map[email] = {
+        email,
+        role: item.role || "unknown",
+        lastPage: item.page || "-",
+        lastAction: item.action || "-",
+        lastActivity: item.created_at,
+        count: 0
+      };
+    }
+
+    map[email].count += 1;
+
+    if (
+      item.created_at &&
+      (!map[email].lastActivity || new Date(item.created_at) > new Date(map[email].lastActivity))
+    ) {
+      map[email].lastActivity = item.created_at;
+      map[email].lastPage = item.page || "-";
+      map[email].lastAction = item.action || "-";
+      map[email].role = item.role || map[email].role;
+    }
+  });
+
+  return Object.values(map).sort((a,b) => new Date(b.lastActivity) - new Date(a.lastActivity));
+}
+
+function renderMembers(list) {
+  membersList.innerHTML = "";
+
+  if (!list.length) {
+    emptyState.style.display = "block";
+    return;
+  }
+
+  emptyState.style.display = "none";
+
+  list.forEach(member => {
+    const card = document.createElement("div");
+    card.className = "member-card";
+
+    card.innerHTML = `
+      <div>
+        <div class="member-email">${member.email}</div>
+        <div class="member-meta">Letzte Aktion: ${member.lastAction}</div>
+      </div>
+
+      <div>
+        <div class="member-badge">${member.role}</div>
+      </div>
+
+      <div>
+        <div class="member-value">${formatDate(member.lastActivity)}</div>
+        <div class="member-meta">Letzte Aktivität</div>
+      </div>
+
+      <div>
+        <div class="member-value">${member.count}</div>
+        <div class="member-meta">Aktivitäten • letzte Seite: ${member.lastPage}</div>
+      </div>
+    `;
+
+    membersList.appendChild(card);
+  });
+}
+
+async function loadMembers() {
+  try {
+    const { data, error } = await supabaseClient
+      .from("member_activity")
+      .select("*")
+      .order("created_at", { ascending: false })
+      .limit(500);
+
+    if (error) {
+      console.log("Mitglieder Fehler:", error);
+      return;
+    }
+
+    allMembers = buildMembersFromActivity(data || []);
+    renderMembers(allMembers);
+
+  } catch (err) {
+    console.log("Mitglieder Dashboard Fehler:", err);
+  }
+}
+
+memberSearch.addEventListener("input", () => {
+  const q = memberSearch.value.toLowerCase().trim();
+
+  const filtered = allMembers.filter(member =>
+    member.email.toLowerCase().includes(q) ||
+    member.role.toLowerCase().includes(q) ||
+    member.lastPage.toLowerCase().includes(q)
+  );
+
+  renderMembers(filtered);
+});
+
+reloadMembersBtn.addEventListener("click", loadMembers);
+
+loadMembers();
+</script>
+
+</body>
+</html>
