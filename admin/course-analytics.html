@@ -688,7 +688,77 @@ async function loadCourseAnalytics(){
     });
   }
 }
+const memberRanking =
+  document.getElementById("memberRanking");
 
+if(memberRanking){
+
+  const memberStats = {};
+
+  activities.forEach(item => {
+
+    const email =
+      item.email || "Unknown";
+
+    if(!memberStats[email]){
+      memberStats[email] = {
+        opens:0
+      };
+    }
+
+    memberStats[email].opens++;
+
+  });
+
+  const sortedMembers =
+    Object.entries(memberStats)
+      .sort((a,b) => b[1].opens - a[1].opens);
+
+  memberRanking.innerHTML = "";
+
+  if(!sortedMembers.length){
+
+    memberRanking.innerHTML = `
+      <div class="empty-state">
+        Noch keine Mitglieder Daten vorhanden.
+      </div>
+    `;
+
+  } else {
+
+    sortedMembers.slice(0,5).forEach(([email,stats],index) => {
+
+      memberRanking.innerHTML += `
+      
+        <div class="ranking-item">
+
+          <div class="rank-num">
+            ${index + 1}
+          </div>
+
+          <div>
+            <div class="ranking-title">
+              ${email}
+            </div>
+
+            <div class="ranking-meta">
+              ${stats.opens} Lesson Opens
+            </div>
+          </div>
+
+          <div class="ranking-count">
+            🔥
+          </div>
+
+        </div>
+
+      `;
+
+    });
+
+  }
+
+}
 loadCourseAnalytics();
 </script>
 
