@@ -465,226 +465,86 @@ body::after{
     height:420px;
   }
   /* =========================
-   MOBILE OPTIMIZATION ONLY
+   BETTER MOBILE NAVIGATION
 ========================= */
 
-html,
-body{
-  width:100%;
-  max-width:100%;
-  overflow-x:hidden;
-}
-
-img,
-video,
-iframe{
-  max-width:100%;
-}
-
-.page{
-  width:100%;
-  overflow-x:hidden;
-}
-
-/* Admin / Dashboard mobile safety */
-.admin-layout,
-.overview-grid,
-.course-grid,
-.analytics-grid,
-.admin-stats,
-.system-grid,
-.quick-grid,
-.member-stats,
-.grid-2,
-.grid-3,
-.grid-4{
-  max-width:100%;
-}
-
-.admin-card,
-.admin-sidebar,
-.analytics-card,
-.member-card,
-.stat-box,
-.system-box,
-.quick-card,
-.activity-item,
-.feed-item,
-.ranking-item{
-  max-width:100%;
-  overflow-wrap:anywhere;
-}
-
-@media(max-width:900px){
-
-  .page{
-    padding:18px;
-  }
+@media(max-width:640px){
 
   .navbar{
-    align-items:flex-start;
-    gap:14px;
+    position:sticky;
+    top:0;
+    z-index:999;
+    background:rgba(5,5,5,.92);
+    backdrop-filter:blur(14px);
+    border-bottom:1px solid rgba(243,210,27,.14);
+    padding:14px 0;
+  }
+
+  .logo{
+    font-size:22px;
+    margin-bottom:8px;
   }
 
   .nav-links{
     width:100%;
-    gap:12px;
-  }
-
-  .nav-links a{
-    font-size:14px;
-  }
-
-  .hero-shell{
-    padding:26px 22px;
-    border-radius:24px;
-  }
-
-  .hero-title{
-    font-size:clamp(34px,9vw,46px);
-    line-height:1.05;
-  }
-
-  .hero-text,
-  .section-subtext{
-    font-size:15px;
-    line-height:1.7;
-  }
-
-  .section-heading{
-    font-size:clamp(28px,7vw,38px);
-  }
-
-  .admin-layout,
-  .overview-grid{
-    grid-template-columns:1fr !important;
-  }
-
-  .admin-sidebar{
-    position:relative !important;
-    top:0 !important;
-    min-height:auto !important;
-  }
-
-  .analytics-grid,
-  .admin-stats,
-  .system-grid,
-  .course-grid,
-  .member-stats{
-    grid-template-columns:1fr 1fr !important;
-  }
-
-  .quick-grid,
-  .grid-2,
-  .grid-3,
-  .grid-4{
-    grid-template-columns:1fr !important;
-  }
-}
-
-@media(max-width:640px){
-
-  .page{
-    padding:14px;
-  }
-
-  .navbar{
-    padding:14px 0 18px;
-  }
-
-  .logo{
-    font-size:18px;
-  }
-
-  .nav-links{
-    display:grid;
-    grid-template-columns:1fr 1fr;
+    display:flex;
+    overflow-x:auto;
+    flex-wrap:nowrap;
     gap:10px;
+    padding-bottom:8px;
+    scroll-snap-type:x mandatory;
+  }
+
+  .nav-links::-webkit-scrollbar{
+    display:none;
   }
 
   .nav-links a,
   .nav-links .auth-badge{
-    width:100%;
-    justify-content:center;
-    text-align:center;
-    padding:10px 12px;
-    border-radius:14px;
-    background:rgba(255,255,255,0.03);
-    border:1px solid rgba(255,255,255,0.08);
+    flex:0 0 auto;
+    scroll-snap-align:start;
+    min-width:max-content;
+    padding:12px 18px;
+    border-radius:999px;
+    background:rgba(255,255,255,.04);
+    border:1px solid rgba(243,210,27,.16);
+    font-size:14px;
+    font-weight:900;
   }
 
-  .hero-shell,
-  .section,
-  .admin-card,
-  .admin-sidebar,
-  .analytics-card,
-  .card,
-  .section-card,
-  .info-card,
-  .module,
-  .setup-card,
-  .example-card,
-  .tool-card,
-  .community-card{
-    padding:20px !important;
-    border-radius:22px;
-  }
-
-  .hero-title{
-    font-size:34px;
-    letter-spacing:-1px;
-  }
-
-  .section-heading{
-    font-size:28px;
-    letter-spacing:-0.8px;
+  .nav-links a.active{
+    background:rgba(243,210,27,.12);
+    border-color:rgba(243,210,27,.5);
+    color:var(--gold);
   }
 
   .hero-buttons,
-  .button-row,
-  .card-buttons,
-  .top-actions{
-    width:100%;
-  }
-
-  .btn{
-    width:100%;
-  }
-
-  .analytics-grid,
-  .admin-stats,
-  .system-grid,
-  .course-grid,
-  .member-stats{
-    grid-template-columns:1fr !important;
-  }
-
-  .activity-item,
-  .feed-item,
-  .ranking-item,
-  .member-card{
-    grid-template-columns:1fr !important;
+  .button-row{
     display:grid;
+    grid-template-columns:1fr;
     gap:12px;
   }
 
-  .activity-time,
-  .feed-time{
-    margin-left:0 !important;
-    grid-column:auto !important;
+  .btn,
+  .card-link,
+  .setup-link,
+  .example-link,
+  .community-link,
+  .tool-link{
+    width:100%;
+    min-height:54px;
+    border-radius:18px;
+    font-size:16px;
   }
 
-  .stat-value,
-  .analytics-value,
-  .system-value{
-    font-size:30px;
+  .lesson{
+    min-height:58px;
+    display:flex;
+    align-items:center;
+    border-radius:18px;
   }
 
-  .chart-frame{
-    min-height:340px;
-  }
-
-  .chart-frame iframe{
-    height:360px;
+  .hero-shell{
+    margin-top:10px;
   }
 }
