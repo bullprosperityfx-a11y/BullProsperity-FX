@@ -879,5 +879,33 @@
   }
 })();
 </script>
+  <script>
+(async () => {
+  console.log("1. Supabase Test startet");
+
+  console.log("2. supabaseClient:", window.supabaseClient);
+
+  const res = await fetch("/api/access", {
+    credentials: "include",
+    cache: "no-store"
+  });
+
+  const data = await res.json();
+  console.log("3. Access Daten:", data);
+
+  const { data: inserted, error } = await supabaseClient
+    .from("member_activity")
+    .insert({
+      email: data.email || "test@bullprosperity.com",
+      role: data.role || "test",
+      action: "hub_opened",
+      page: "hub"
+    })
+    .select();
+
+  console.log("4. Insert Ergebnis:", inserted);
+  console.log("5. Insert Fehler:", error);
+})();
+</script>
 </body>
 </html>
