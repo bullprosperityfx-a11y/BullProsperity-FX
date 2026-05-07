@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+  <title>BullProsperity | Course Analytics</title>
+
+  <link rel="stylesheet" href="/theme.css" />
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="/supabase.js"></script>
+  <script src="/login.js" defer></script>
+
+  <style>
+
+    .analytics-grid{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:18px;
+      margin-top:24px;
+    }
+
+    .analytics-box{
+      background:#111;
+      border:1px solid #252525;
+      border-radius:24px;
+      padding:22px;
+    }
+
+    .analytics-label{
+      color:#8f8f8f;
+      font-size:12px;
+      text-transform:uppercase;
+      margin-bottom:10px;
+    }
+
+    .analytics-value{
+      color:#ffd700;
+      font-size:38px;
+      font-weight:900;
+    }
+
+    .feed{
+      margin-top:24px;
+      display:grid;
+      gap:16px;
+    }
+
+    .feed-item{
+      background:#111;
+      border:1px solid #252525;
+      border-radius:20px;
+      padding:18px;
+    }
+
+    .feed-item strong{
+      color:#ffd700;
+      display:block;
+      margin-bottom:6px;
+    }
+
+    .feed-item p{
+      color:#d6d6d6;
+      margin:0;
+    }
+
+    @media(max-width:1000px){
+      .analytics-grid{
+        grid-template-columns:1fr 1fr;
+      }
+    }
+
+    @media(max-width:700px){
+      .analytics-grid{
+        grid-template-columns:1fr;
+      }
+    }
+
+  </style>
+
+</head>
+
+<body>
+
+<div class="page">
+
+<nav class="navbar">
+  <a href="/admin/dashboard.html" class="logo">
+    BullProsperity | Analytics
+  </a>
+
+  <div class="nav-links">
+    <a href="/admin/dashboard.html">Dashboard</a>
+    <a href="/admin/members.html">Mitglieder</a>
+  </div>
+</nav>
+
+<section class="hero-shell">
+
+  <div class="badge">Course System</div>
+
+  <h1 class="hero-title">
+    Course
+    <span class="gold">Analytics</span>
+  </h1>
+
+  <p class="hero-text">
+    Live Übersicht über Lesson Aktivität,
+    Kurs Nutzung und Mitglieder Engagement.
+  </p>
+
+</section>
+
+<div class="analytics-grid">
+
+  <div class="analytics-box">
+    <div class="analytics-label">Lesson Opens</div>
+    <div class="analytics-value" id="totalLessons">0</div>
+  </div>
+
+  <div class="analytics-box">
+    <div class="analytics-label">Aktive Mitglieder</div>
+    <div class="analytics-value" id="activeMembers">0</div>
+  </div>
+
+  <div class="analytics-box">
+    <div class="analytics-label">Top Lesson</div>
+    <div class="analytics-value" id="topLesson">-</div>
+  </div>
+
+  <div class="analytics-box">
+    <div class="analytics-label">Letzte Aktivität</div>
+    <div class="analytics-value" id="lastActivity">-</div>
+  </div>
+
+</div>
+
+<div class="feed" id="lessonFeed"></div>
+
+</div>
+
+<script>
+
+async function loadCourseAnalytics(){
+
+  const { data, error } = await supabaseClient
+    .from("lesson_activity")
+    .select("*")
+    .order("created_at", { ascending:false });
+
+  if(error){
+    console.log(error);
+    return;
+  }
+
+  document.getElementById("totalLessons").textContent =
+    data.length;
+
+  const uniqueMembers =
+    [...new Set(data.map(x => x.email))];
+
+  document.getElementById("activeMembers").textContent =
+    uniqueMembers.length;
+
+  if(data[0]){
+    document.getElementById("lastActivity").textContent =
+      new Date(data[0].created_at).toLocaleTimeString("de-DE", {
+        hour:"2-digit",
+        minute:"2-digit"
+      });
+  }
+
+  const lessonCount = {};
+
+  data.forEach(item => {
+
+    lessonCount[item.lesson] =
+      (lessonCount[item.lesson] || 0) + 1;
+
+  });
+
+  let topLesson = "-";
+  let highest = 0;
+
+  Object.entries(lessonCount).forEach(([lesson,count]) => {
+
+    if(count > highest){
+      highest = count;
+      topLesson = lesson;
+    }
+
+  });
+
+  document.getElementById("topLesson").textContent =
+    topLesson;
+
+  const feed = document.getElementById("lessonFeed");
+
+  feed.innerHTML = "";
+
+  data.slice(0,15).forEach(item => {
+
+    feed.innerHTML += `
+
+      <div class="feed-item">
+
+        <strong>${item.email}</strong>
+
+        <p>
+          Öffnete ${item.lesson}
+        </p>
+
+      </div>
+
+    `;
+
+  });
+
+}
+
+loadCourseAnalytics();
+
+</script>
+
+</body>
+</html>
