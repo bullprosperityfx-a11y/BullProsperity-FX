@@ -51,7 +51,7 @@ async function trackLessonOpen(accessData) {
     const path = window.location.pathname.toLowerCase();
 
     const isLessonPage =
-      path.includes("lesson") && path.endsWith(".html");
+      path.includes("lesson");
 
     if (!isLessonPage) return;
 
