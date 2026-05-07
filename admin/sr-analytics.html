@@ -1,1 +1,580 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
+  <title>BullProsperity | SR Analytics</title>
+
+  <link rel="stylesheet" href="/theme.css" />
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="/supabase.js"></script>
+  <script src="/login.js" defer></script>
+
+  <script>
+    (async () => {
+      try{
+        const res = await fetch("/api/access", {
+          credentials:"include",
+          cache:"no-store"
+        });
+
+        const data = await res.json();
+
+        if(data.role !== "admin"){
+          window.location.href = "/locked.html";
+        }
+
+      } catch(err){
+        window.location.href = "/locked.html";
+      }
+    })();
+  </script>
+
+  <style>
+
+    .admin-layout{
+      display:grid;
+      grid-template-columns:320px 1fr;
+      gap:24px;
+      margin-top:24px;
+      align-items:start;
+    }
+
+    .admin-sidebar,
+    .analytics-card{
+      border:1px solid var(--line);
+      border-radius:28px;
+      background:linear-gradient(180deg,var(--panel),var(--panel-2));
+      padding:24px;
+    }
+
+    .admin-sidebar{
+      position:sticky;
+      top:20px;
+    }
+
+    .admin-nav{
+      display:grid;
+      gap:12px;
+      margin-top:20px;
+    }
+
+    .admin-link{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      padding:14px 16px;
+      border-radius:18px;
+      background:#111;
+      border:1px solid #252525;
+      color:#fff;
+      text-decoration:none;
+      font-weight:800;
+      transition:.2s ease;
+    }
+
+    .admin-link:hover,
+    .admin-link.active{
+      border-color:#ffd700;
+      color:#ffd700;
+      transform:translateX(4px);
+    }
+
+    .analytics-content{
+      display:grid;
+      gap:24px;
+    }
+
+    .analytics-grid{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:16px;
+      margin-top:20px;
+    }
+
+    .analytics-box{
+      background:#111;
+      border:1px solid #252525;
+      border-radius:22px;
+      padding:18px;
+      min-height:120px;
+    }
+
+    .analytics-label{
+      color:#8f8f8f;
+      font-size:12px;
+      text-transform:uppercase;
+      margin-bottom:10px;
+      letter-spacing:.08em;
+      font-weight:800;
+    }
+
+    .analytics-value{
+      color:#ffd700;
+      font-size:28px;
+      font-weight:950;
+      line-height:1.1;
+      word-break:break-word;
+    }
+
+    .analytics-sub{
+      margin-top:8px;
+      color:#8f8f8f;
+      font-size:12px;
+      line-height:1.5;
+    }
+
+    .course-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:18px;
+      margin-top:20px;
+    }
+
+    .ranking-list,
+    .feed{
+      display:grid;
+      gap:12px;
+      margin-top:18px;
+    }
+
+    .ranking-item,
+    .feed-item{
+      background:#111;
+      border:1px solid rgba(255,215,0,.12);
+      border-radius:18px;
+      padding:16px;
+    }
+
+    .ranking-item{
+      display:grid;
+      grid-template-columns:auto 1fr auto;
+      gap:14px;
+      align-items:center;
+    }
+
+    .rank-num{
+      width:34px;
+      height:34px;
+      border-radius:50%;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background:rgba(255,215,0,.08);
+      border:1px solid rgba(255,215,0,.22);
+      color:#ffd700;
+      font-weight:950;
+    }
+
+    .ranking-title,
+    .feed-item strong{
+      color:#fff;
+      font-weight:950;
+      display:block;
+      margin-bottom:5px;
+    }
+
+    .ranking-meta,
+    .feed-item p{
+      margin:0;
+      color:#a8a8a8;
+      line-height:1.55;
+      font-size:13px;
+    }
+
+    .ranking-count{
+      color:#ffd700;
+      font-weight:950;
+      font-size:18px;
+    }
+
+    .empty-state{
+      border:1px dashed rgba(255,215,0,.18);
+      border-radius:20px;
+      padding:24px;
+      text-align:center;
+      color:#bdbdbd;
+      background:rgba(255,255,255,.02);
+      margin-top:18px;
+    }
+
+    @media(max-width:1200px){
+
+      .admin-layout{
+        grid-template-columns:1fr;
+      }
+
+      .admin-sidebar{
+        position:relative;
+        top:0;
+      }
+
+      .analytics-grid{
+        grid-template-columns:1fr 1fr;
+      }
+
+      .course-grid{
+        grid-template-columns:1fr;
+      }
+
+    }
+
+    @media(max-width:760px){
+
+      .analytics-grid{
+        grid-template-columns:1fr;
+      }
+
+    }
+
+  </style>
+
+</head>
+
+<body>
+
+<div class="page">
+
+  <nav class="navbar">
+
+    <a href="/admin/dashboard.html" class="logo">
+      BullProsperity | SR Analytics
+    </a>
+
+    <div class="nav-links">
+      <a href="/hub.html">Hub</a>
+      <a href="/admin/dashboard.html">Dashboard</a>
+      <a href="/admin/members.html">Mitglieder</a>
+    </div>
+
+  </nav>
+
+  <section class="hero-shell">
+
+    <div class="badge">Setup Room System</div>
+
+    <h1 class="hero-title">
+      SR <span class="gold">Analytics</span>
+    </h1>
+
+    <p class="hero-text">
+      Übersicht über Setup Room Aktivität,
+      Kategorien, Mitglieder Engagement und Setup Interaktionen.
+    </p>
+
+  </section>
+
+  <section class="admin-layout">
+
+    <aside class="admin-sidebar">
+
+      <div class="badge">Verwaltung</div>
+
+      <h2 class="section-heading" style="font-size:34px;margin-bottom:8px;">
+        Control Center
+      </h2>
+
+      <div class="admin-nav">
+
+        <a href="/admin/dashboard.html" class="admin-link">
+          <span>📊 Dashboard</span>
+          <span>→</span>
+        </a>
+
+        <a href="/admin/members.html" class="admin-link">
+          <span>👥 Mitglieder</span>
+          <span>→</span>
+        </a>
+
+        <a href="/admin/course-analytics.html" class="admin-link">
+          <span>🎬 Course Analytics</span>
+          <span>→</span>
+        </a>
+
+        <a href="/admin/sr-analytics.html" class="admin-link active">
+          <span>🎳 SR Analytics</span>
+          <span>→</span>
+        </a>
+
+        <a href="#" class="admin-link">
+          <span>💰 Affiliate</span>
+          <span>→</span>
+        </a>
+
+        <a href="#" class="admin-link">
+          <span>🛡 Security</span>
+          <span>→</span>
+        </a>
+
+      </div>
+
+    </aside>
+
+    <div class="analytics-content">
+
+      <div class="analytics-card">
+
+        <div class="badge">Live Statistik</div>
+
+        <h2 class="section-heading" style="font-size:38px;margin-bottom:10px;">
+          Setup Room Übersicht
+        </h2>
+
+        <p class="section-subtext">
+          Überblick über Setup Room Nutzung,
+          aktive Mitglieder und beliebteste Kategorien.
+        </p>
+
+        <div class="analytics-grid">
+
+          <div class="analytics-box">
+            <div class="analytics-label">Gesamt Aktivitäten</div>
+            <div class="analytics-value" id="totalActions">0</div>
+            <div class="analytics-sub">Alle Setup Room Events</div>
+          </div>
+
+          <div class="analytics-box">
+            <div class="analytics-label">Aktive Mitglieder</div>
+            <div class="analytics-value" id="activeMembers">0</div>
+            <div class="analytics-sub">Einzigartige Nutzer</div>
+          </div>
+
+          <div class="analytics-box">
+            <div class="analytics-label">Top Kategorie</div>
+            <div class="analytics-value" id="topCategory">-</div>
+            <div class="analytics-sub">Beliebteste Kategorie</div>
+          </div>
+
+          <div class="analytics-box">
+            <div class="analytics-label">Letzte Aktivität</div>
+            <div class="analytics-value" id="lastActivity">-</div>
+            <div class="analytics-sub">Neuester Setup Room Event</div>
+          </div>
+
+        </div>
+
+      </div>
+
+      <div class="course-grid">
+
+        <div class="analytics-card">
+
+          <div class="badge">Kategorien</div>
+
+          <h2 class="section-heading" style="font-size:32px;margin-bottom:10px;">
+            Top Kategorien
+          </h2>
+
+          <p class="section-subtext">
+            Welche Setup Room Bereiche aktuell am meisten genutzt werden.
+          </p>
+
+          <div class="ranking-list" id="categoryList">
+
+            <div class="empty-state">
+              Noch keine Kategorien geladen.
+            </div>
+
+          </div>
+
+        </div>
+
+        <div class="analytics-card">
+
+          <div class="badge">Feed</div>
+
+          <h2 class="section-heading" style="font-size:32px;margin-bottom:10px;">
+            Letzte Setup Room Aktivität
+          </h2>
+
+          <p class="section-subtext">
+            Neueste Interaktionen deiner Mitglieder.
+          </p>
+
+          <div class="feed" id="activityFeed">
+
+            <div class="empty-state">
+              Noch keine Aktivität vorhanden.
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+  <div class="footer-note">
+    BullProsperity Admin System.
+  </div>
+
+</div>
+
+<script>
+
+async function loadSRAnalytics(){
+
+  const { data, error } = await supabaseClient
+    .from("setup_room_activity")
+    .select("*")
+    .order("created_at", { ascending:false });
+
+  if(error){
+    console.log("SR Analytics Fehler:", error);
+    return;
+  }
+
+  const activity = data || [];
+
+  document.getElementById("totalActions").textContent =
+    activity.length;
+
+  const uniqueMembers = [
+    ...new Set(
+      activity.map(x => x.email).filter(Boolean)
+    )
+  ];
+
+  document.getElementById("activeMembers").textContent =
+    uniqueMembers.length;
+
+  if(activity[0]?.created_at){
+
+    document.getElementById("lastActivity").textContent =
+      new Date(activity[0].created_at).toLocaleTimeString("de-DE", {
+        hour:"2-digit",
+        minute:"2-digit"
+      });
+
+  }
+
+  const categoryStats = {};
+
+  activity.forEach(item => {
+
+    const category =
+      item.category || "Unknown";
+
+    categoryStats[category] =
+      (categoryStats[category] || 0) + 1;
+
+  });
+
+  const sortedCategories =
+    Object.entries(categoryStats)
+      .sort((a,b) => b[1] - a[1]);
+
+  document.getElementById("topCategory").textContent =
+    sortedCategories[0]?.[0] || "-";
+
+  const categoryList =
+    document.getElementById("categoryList");
+
+  categoryList.innerHTML = "";
+
+  if(!sortedCategories.length){
+
+    categoryList.innerHTML = `
+      <div class="empty-state">
+        Noch keine Kategorien vorhanden.
+      </div>
+    `;
+
+  } else {
+
+    sortedCategories.slice(0,8).forEach(([category,count],index) => {
+
+      categoryList.innerHTML += `
+
+        <div class="ranking-item">
+
+          <div class="rank-num">
+            ${index + 1}
+          </div>
+
+          <div>
+            <div class="ranking-title">
+              ${category}
+            </div>
+
+            <div class="ranking-meta">
+              Setup Room Aktivität
+            </div>
+          </div>
+
+          <div class="ranking-count">
+            ${count}
+          </div>
+
+        </div>
+
+      `;
+
+    });
+
+  }
+
+  const feed =
+    document.getElementById("activityFeed");
+
+  feed.innerHTML = "";
+
+  if(!activity.length){
+
+    feed.innerHTML = `
+      <div class="empty-state">
+        Noch keine Aktivität vorhanden.
+      </div>
+    `;
+
+    return;
+  }
+
+  activity.slice(0,12).forEach(item => {
+
+    const date =
+      item.created_at
+        ? new Date(item.created_at).toLocaleString("de-DE", {
+            day:"2-digit",
+            month:"2-digit",
+            hour:"2-digit",
+            minute:"2-digit"
+          })
+        : "-";
+
+    feed.innerHTML += `
+
+      <div class="feed-item">
+
+        <strong>
+          ${item.category || "Setup Room"}
+        </strong>
+
+        <p>
+          ${item.email || "Unknown User"}
+          •
+          ${item.action || "activity"}
+          •
+          ${date}
+        </p>
+
+      </div>
+
+    `;
+
+  });
+
+}
+
+loadSRAnalytics();
+
+</script>
+
+</body>
+</html>
