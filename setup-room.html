@@ -3,8 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
   <title>BullProsperity | Setup Room</title>
+
   <link rel="stylesheet" href="theme.css" />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="/supabase.js"></script>
+  <script src="/login.js" defer></script>
 
   <style>
     .auth-badge{
@@ -36,10 +41,13 @@
     .auth-badge.status-locked::before{background:#ef4444;}
   </style>
 </head>
+
 <body data-protected="true">
   <div class="page">
+
     <nav class="navbar">
       <a href="index.html" class="logo">BullProsperity</a>
+
       <div class="nav-links">
         <a href="index.html">Home</a>
         <a href="hub.html">Hub</a>
@@ -54,12 +62,18 @@
 
     <section class="hero-shell">
       <div class="badge">Premium Mitgliederbereich</div>
-      <h1 class="hero-title">Echte Marktbeispiele im <span class="gold">BullProsperity Setup Room</span></h1>
+
+      <h1 class="hero-title">
+        Echte Marktbeispiele im
+        <span class="gold">BullProsperity Setup Room</span>
+      </h1>
+
       <p class="hero-text">
         Hier findest du Marktanalysen, Setup-Ideen und Praxisbeispiele aus der BullProsperity Strategie.
         Dieser Bereich hilft dir, das Wissen aus Modul 8 direkt in echten Marktbewegungen zu verstehen
         und sauber nachzuvollziehen.
       </p>
+
       <div class="hero-buttons">
         <a href="course.html" class="btn primary">Zum Kurs</a>
         <a href="tools.html" class="btn secondary">Zu den Tools</a>
@@ -68,84 +82,157 @@
 
     <section class="section">
       <h2 class="section-heading">Aktuelle Setup Kategorien</h2>
+
       <p class="section-subtext">
         Diese Bereiche sind direkt verlinkt. Du kannst später jede Kategorie
         mit einer eigenen Unterseite oder einem eigenen Analysebereich verbinden.
       </p>
 
       <div class="grid-3">
+
         <div class="setup-card">
-          <div><div class="badge">SMC</div><h3>Liquidity Setups</h3><p>Beispiele für Liquidity Sweeps, Stop Hunts und institutionelle Bewegungen rund um Equal Highs und Equal Lows.</p></div>
-          <a href="liquidity.html" class="setup-link">Setups ansehen</a>
+          <div>
+            <div class="badge">SMC</div>
+            <h3>Liquidity Setups</h3>
+            <p>Beispiele für Liquidity Sweeps, Stop Hunts und institutionelle Bewegungen rund um Equal Highs und Equal Lows.</p>
+          </div>
+          <a href="liquidity.html" class="setup-link" data-category="Liquidity Setups">Setups ansehen</a>
         </div>
 
         <div class="setup-card">
-          <div><div class="badge">Entries</div><h3>Entry Modelle</h3><p>BullProsperity Entry Modelle mit Confirmation, Struktur, Timing und sauberer Ausführung.</p></div>
-          <a href="entry-models.html" class="setup-link">Beispiele ansehen</a>
+          <div>
+            <div class="badge">Entries</div>
+            <h3>Entry Modelle</h3>
+            <p>BullProsperity Entry Modelle mit Confirmation, Struktur, Timing und sauberer Ausführung.</p>
+          </div>
+          <a href="entry-models.html" class="setup-link" data-category="Entry Modelle">Beispiele ansehen</a>
         </div>
 
         <div class="setup-card">
-          <div><div class="badge">Structure</div><h3>Marktstruktur</h3><p>BOS, CHoCH, Strukturwechsel und Trendverständnis im Chart mit klarer visueller Erklärung.</p></div>
-          <a href="market-structure.html" class="setup-link">Charts öffnen</a>
+          <div>
+            <div class="badge">Structure</div>
+            <h3>Marktstruktur</h3>
+            <p>BOS, CHoCH, Strukturwechsel und Trendverständnis im Chart mit klarer visueller Erklärung.</p>
+          </div>
+          <a href="market-structure.html" class="setup-link" data-category="Marktstruktur">Charts öffnen</a>
         </div>
 
         <div class="setup-card">
-          <div><div class="badge">Practice</div><h3>Replay Analyse</h3><p>Trainiere dein Auge mit Replay Analysen und markiere eigene Setups zur besseren Routineentwicklung.</p></div>
-          <a href="replay.html" class="setup-link">Analyse starten</a>
+          <div>
+            <div class="badge">Practice</div>
+            <h3>Replay Analyse</h3>
+            <p>Trainiere dein Auge mit Replay Analysen und markiere eigene Setups zur besseren Routineentwicklung.</p>
+          </div>
+          <a href="replay.html" class="setup-link" data-category="Replay Analyse">Analyse starten</a>
         </div>
 
         <div class="setup-card">
-          <div><div class="badge">Examples</div><h3>Live Beispiele</h3><p>Beispiele aus echten Marktbewegungen erklärt, damit du Timing, Struktur und Bestätigung besser verstehst.</p></div>
-          <a href="live-setups.html" class="setup-link">Beispiele ansehen</a>
+          <div>
+            <div class="badge">Examples</div>
+            <h3>Live Beispiele</h3>
+            <p>Beispiele aus echten Marktbewegungen erklärt, damit du Timing, Struktur und Bestätigung besser verstehst.</p>
+          </div>
+          <a href="live-setups.html" class="setup-link" data-category="Live Beispiele">Beispiele ansehen</a>
         </div>
 
         <div class="setup-card">
-          <div><div class="badge">Members</div><h3>Community Setups</h3><p>Setup-Ideen und Beispiele aus dem Mitgliederbereich für mehr Austausch und mehrere Perspektiven.</p></div>
-          <a href="community.html" class="setup-link">Community öffnen</a>
+          <div>
+            <div class="badge">Members</div>
+            <h3>Community Setups</h3>
+            <p>Setup-Ideen und Beispiele aus dem Mitgliederbereich für mehr Austausch und mehrere Perspektiven.</p>
+          </div>
+          <a href="community.html" class="setup-link" data-category="Community Setups">Community öffnen</a>
         </div>
+
       </div>
     </section>
 
-    <div class="footer-note">BullProsperity dient ausschließlich Bildungszwecken und stellt keine Finanzberatung dar.</div>
+    <div class="footer-note">
+      BullProsperity dient ausschließlich Bildungszwecken und stellt keine Finanzberatung dar.
+    </div>
+
   </div>
 
-  <script>
-    const authBadge = document.getElementById("authBadge");
-    const loginNavBtn = document.getElementById("loginNavBtn");
+<script>
+const authBadge = document.getElementById("authBadge");
+const loginNavBtn = document.getElementById("loginNavBtn");
 
-    (async () => {
-      try {
-        const res = await fetch("/api/access", {
-          credentials: "include",
-          cache: "no-store"
-        });
+let currentUser = {
+  email: "unknown@bullprosperity.local",
+  role: "guest"
+};
 
-        if (!res.ok) {
-          window.location.href = "locked.html";
-          return;
-        }
+async function trackSetupRoom(action, category, targetUrl) {
+  try {
+    if (!window.supabaseClient) return;
 
-        const data = await res.json();
-        const role = data?.role || "guest";
+    await supabaseClient
+      .from("setup_room_activity")
+      .insert({
+        email: currentUser.email,
+        role: currentUser.role,
+        action: action,
+        category: category || "Setup Room",
+        target_url: targetUrl || window.location.pathname
+      });
 
-        if (role !== "admin" && role !== "premium") {
-          window.location.href = "locked.html";
-          return;
-        }
+    console.log("SR Tracking gespeichert:", action);
+  } catch (err) {
+    console.log("SR Tracking Fehler:", err);
+  }
+}
 
-        if (role === "admin") {
-          authBadge.textContent = "Admin Zugang aktiv";
-          authBadge.className = "auth-badge status-admin";
-        } else if (role === "premium") {
-          authBadge.textContent = "Premium aktiv";
-          authBadge.className = "auth-badge status-premium";
-        }
+(async () => {
+  try {
+    const res = await fetch("/api/access", {
+      credentials: "include",
+      cache: "no-store"
+    });
 
-        loginNavBtn.style.display = "none";
-      } catch (err) {
-        window.location.href = "locked.html";
-      }
-    })();
-  </script>
+    if (!res.ok) {
+      window.location.href = "locked.html";
+      return;
+    }
+
+    const data = await res.json();
+    const role = data?.role || "guest";
+
+    currentUser = {
+      email: data.email || "admin@bullprosperity.local",
+      role: role
+    };
+
+    if (role !== "admin" && role !== "premium") {
+      window.location.href = "locked.html";
+      return;
+    }
+
+    if (role === "admin") {
+      authBadge.textContent = "Admin Zugang aktiv";
+      authBadge.className = "auth-badge status-admin";
+    } else if (role === "premium") {
+      authBadge.textContent = "Premium aktiv";
+      authBadge.className = "auth-badge status-premium";
+    }
+
+    loginNavBtn.style.display = "none";
+
+    await trackSetupRoom("setup_room_opened", "Setup Room", window.location.pathname);
+
+  } catch (err) {
+    window.location.href = "locked.html";
+  }
+})();
+
+document.querySelectorAll(".setup-link").forEach(link => {
+  link.addEventListener("click", async () => {
+    const category = link.getAttribute("data-category") || link.textContent.trim();
+    const targetUrl = link.getAttribute("href");
+
+    await trackSetupRoom("category_clicked", category, targetUrl);
+  });
+});
+</script>
+
 </body>
 </html>
