@@ -713,5 +713,50 @@ body::after{
   align-items:center;
   justify-content:center;
 }
+  /* GLOBAL CARD BUTTON SYNC FIX */
+.grid-2,
+.grid-3,
+.grid-4,
+.hub-links-grid{
+  align-items:stretch;
+}
+
+.card,
+.section-card,
+.info-card,
+.setup-card,
+.example-card,
+.tool-card,
+.community-card,
+.hub-link-card{
+  height:100%;
+  display:flex !important;
+  flex-direction:column !important;
+}
+
+.card p,
+.section-card p,
+.info-card p,
+.setup-card p,
+.example-card p,
+.tool-card p,
+.community-card p,
+.hub-link-card p{
+  flex:1;
+}
+
+.card-link,
+.setup-link,
+.example-link,
+.community-link,
+.tool-link,
+.hub-btn{
+  margin-top:auto !important;
+  align-self:flex-start;
+  min-height:46px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+}
 }
   
