@@ -582,5 +582,27 @@ body::after{
   background:rgba(255,255,255,0.04);
   border:1px solid rgba(255,255,255,0.08);
 }
+  .logout-btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding:10px 16px;
+  border-radius:999px;
+  text-decoration:none;
+  font-size:13px;
+  font-weight:700;
+  color:#fff;
+  border:1px solid #252525;
+  background:rgba(255,255,255,0.03);
+  transition:all .2s ease;
+  backdrop-filter:blur(10px);
+}
+
+.logout-btn:hover{
+  border-color:#ffd700;
+  color:#ffd700;
+  background:rgba(255,215,0,0.06);
+  box-shadow:0 0 20px rgba(255,215,0,0.08);
+}
 }
   
