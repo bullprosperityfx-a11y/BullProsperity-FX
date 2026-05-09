@@ -79,7 +79,7 @@
         <a href="setup-room.html">Setup Room</a>
         <a href="community.html">Community</a>
         <a id="loginNavBtn" href="/api/whop/login">Login</a>
-        <div id="authBadge" class="auth-badge status-locked">Kein Zugang</div>
+       <div id="authBadge" class="auth-badge status-loading">Prüfe Zugang...</div>
       </div>
     </nav>
 
@@ -328,12 +328,12 @@
         }
 
         if (role === "admin") {
-          authBadge.textContent = "Admin Zugang aktiv";
-          authBadge.className = "auth-badge status-admin";
-        } else if (role === "premium") {
-          authBadge.textContent = "Premium aktiv";
-          authBadge.className = "auth-badge status-premium";
-        }
+  authBadge.textContent = "● Admin";
+  authBadge.className = "auth-badge status-admin";
+} else if (role === "premium") {
+  authBadge.textContent = "● Premium";
+  authBadge.className = "auth-badge status-premium";
+}
 
         loginNavBtn.style.display = "none";
       } catch (err) {
