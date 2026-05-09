@@ -547,4 +547,40 @@ body::after{
   .hero-shell{
     margin-top:10px;
   }
+.auth-badge{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding:10px 16px;
+  border-radius:999px;
+  font-size:13px;
+  font-weight:800;
+  letter-spacing:0.3px;
+  backdrop-filter:blur(10px);
+  transition:0.25s ease;
+  white-space:nowrap;
 }
+
+.status-admin{
+  color:#111;
+  background:linear-gradient(135deg,#ffd700,#ffea61);
+  box-shadow:0 0 20px rgba(243,210,27,0.18);
+}
+
+.status-premium{
+  color:#f5f5f5;
+  background:rgba(255,255,255,0.05);
+  border:1px solid rgba(255,255,255,0.08);
+}
+
+.status-premium:hover{
+  border-color:rgba(243,210,27,0.18);
+  color:var(--gold);
+}
+.status-loading{
+  color:#d6d6d6;
+  background:rgba(255,255,255,0.04);
+  border:1px solid rgba(255,255,255,0.08);
+}
+}
+  
