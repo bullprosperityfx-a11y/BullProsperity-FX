@@ -1,6 +1,15 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
+  <style>
+  body[data-protected="true"]{
+    visibility:hidden;
+  }
+
+  body[data-protected="true"].access-ready{
+    visibility:visible;
+  }
+</style>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>BullProsperity | Hub</title>
@@ -21,7 +30,7 @@
       if (data.role !== "admin" && data.role !== "premium") {
         window.location.href = "locked.html";
       }
-
+document.body.classList.add("access-ready");
     } catch (err) {
       window.location.href = "locked.html";
     }
@@ -455,7 +464,7 @@
   </style>
 </head>
 
-<body>
+<body data-protected="true">
   <div class="page">
 
     <nav class="navbar">
