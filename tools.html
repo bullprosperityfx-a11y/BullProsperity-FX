@@ -676,7 +676,7 @@
           window.location.href = "locked.html";
           return;
         }
-
+document.body.classList.add("access-ready");
         if (role === "admin") {
   authBadge.textContent = "Admin";
   authBadge.className = "auth-badge status-admin";
