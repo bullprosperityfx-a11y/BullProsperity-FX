@@ -813,32 +813,26 @@
         }
 
         if (role === "admin") {
-  authBadge.textContent = "● Admin";
+  authBadge.textContent = "Admin";
   authBadge.className = "auth-badge status-admin";
+
+  if (statusValue) statusValue.textContent = "Admin";
+
+  if (adminSignalsCard) adminSignalsCard.style.display = "block";
+  if (adminSignalsTopBtn) adminSignalsTopBtn.style.display = "inline-flex";
+  if (adminSignalsHeroBtn) adminSignalsHeroBtn.style.display = "inline-flex";
+
+  if (adminDashboardCard) adminDashboardCard.style.display = "block";
+  if (adminDashboardTopBtn) adminDashboardTopBtn.style.display = "inline-flex";
+  if (adminDashboardHeroBtn) adminDashboardHeroBtn.style.display = "inline-flex";
 }
 
-if (role === "premium") {
-  authBadge.textContent = "● Premium";
+else if (role === "premium") {
+  authBadge.textContent = "Premium";
   authBadge.className = "auth-badge status-premium";
+
+  if (statusValue) statusValue.textContent = "Premium";
 }
-
-          if (statusValue) statusValue.textContent = "Admin";
-
-          if (adminSignalsCard) adminSignalsCard.style.display = "block";
-          if (adminSignalsTopBtn) adminSignalsTopBtn.style.display = "inline-flex";
-          if (adminSignalsHeroBtn) adminSignalsHeroBtn.style.display = "inline-flex";
-
-          if (adminDashboardCard) adminDashboardCard.style.display = "block";
-          if (adminDashboardTopBtn) adminDashboardTopBtn.style.display = "inline-flex";
-          if (adminDashboardHeroBtn) adminDashboardHeroBtn.style.display = "inline-flex";
-
-        } else if (role === "premium") {
-          authBadge.textContent = "Premium aktiv";
-          authBadge.className = "auth-badge status-premium";
-
-          if (statusValue) statusValue.textContent = "Premium";
-        }
-
         loginNavBtn.style.display = "none";
 
         if (role === "admin" || role === "premium" || role === "longterm") {
