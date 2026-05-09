@@ -1,6 +1,15 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
+  <style>
+  body[data-protected="true"]{
+    visibility:hidden;
+  }
+
+  body[data-protected="true"].access-ready{
+    visibility:visible;
+  }
+</style>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>BullProsperity | Community</title>
@@ -180,7 +189,7 @@
           window.location.href = "locked.html";
           return;
         }
-
+document.body.classList.add("access-ready");
         if (role === "admin") {
   authBadge.textContent = "Admin";
   authBadge.className = "auth-badge status-admin";
