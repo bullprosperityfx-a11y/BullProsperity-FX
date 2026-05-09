@@ -1,7 +1,13 @@
 document.addEventListener("DOMContentLoaded", async () => {
   const loginBtn = document.getElementById("loginNavBtn");
+  const logoutBtn = document.getElementById("logoutBtn");
+
   const authStatus = document.getElementById("authStatus");
   const statusDot = document.getElementById("statusDot");
+
+  const startBtn = document.getElementById("startBtn");
+  const learnMoreBtn = document.getElementById("learnMoreBtn");
+  const homeHeroButtons = document.getElementById("homeHeroButtons");
 
   let accessData = null;
 
@@ -14,17 +20,18 @@ document.addEventListener("DOMContentLoaded", async () => {
     const data = await res.json();
     accessData = data;
 
+    const isLoggedIn = data.role === "admin" || data.role === "premium";
+
     if (authStatus) authStatus.textContent = "Kein Zugang";
     if (statusDot) statusDot.className = "status-dot status-locked";
 
-    if (data.role === "admin" || data.role === "premium") {
-      if (loginBtn) loginBtn.style.display = "none";
+    if (loginBtn) loginBtn.style.display = isLoggedIn ? "none" : "inline-flex";
+    if (logoutBtn) logoutBtn.style.display = isLoggedIn ? "inline-flex" : "none";
 
+    if (isLoggedIn) {
       if (authStatus) {
         authStatus.textContent =
-          data.role === "admin"
-            ? "Admin Zugang aktiv"
-            : "Premium aktiv";
+          data.role === "admin" ? "Admin" : "Premium";
       }
 
       if (statusDot) {
@@ -33,7 +40,15 @@ document.addEventListener("DOMContentLoaded", async () => {
           (data.role === "admin" ? "status-admin" : "status-premium");
       }
 
+      if (startBtn) startBtn.style.display = "none";
+      if (homeHeroButtons) homeHeroButtons.style.justifyContent = "center";
+      if (learnMoreBtn) learnMoreBtn.style.margin = "0 auto";
+
       startInactivityLogout(accessData);
+    } else {
+      if (startBtn) startBtn.style.display = "inline-flex";
+      if (homeHeroButtons) homeHeroButtons.style.justifyContent = "center";
+      if (learnMoreBtn) learnMoreBtn.style.margin = "0";
     }
 
   } catch (err) {
@@ -41,6 +56,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     if (authStatus) authStatus.textContent = "Fehler";
     if (statusDot) statusDot.className = "status-dot status-locked";
+
+    if (startBtn) startBtn.style.display = "inline-flex";
+    if (learnMoreBtn) learnMoreBtn.style.margin = "0";
   }
 
   await trackLessonOpen(accessData);
