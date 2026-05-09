@@ -524,15 +524,9 @@
             Verlauf aller Login Aktivitäten.
           </p>
 
-          <div class="security-chart">
-
-            <div class="chart-lines"></div>
-
-            <div class="chart-path"></div>
-
-          </div>
-
-        </div>
+         <div class="security-chart">
+  <canvas id="loginChart"></canvas>
+</div>
 
         <div class="analytics-card">
 
@@ -729,6 +723,60 @@
   </div>
 
 </div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
+<script>
+const loginChartCanvas = document.getElementById("loginChart");
+
+if (loginChartCanvas) {
+  new Chart(loginChartCanvas, {
+    type: "line",
+    data: {
+      labels: ["Mo", "Di", "Mi", "Do", "Fr", "Sa", "So"],
+      datasets: [{
+        label: "Logins",
+        data: [12, 18, 14, 22, 31, 19, 26],
+        borderColor: "#ffd700",
+        backgroundColor: "rgba(255,215,0,0.12)",
+        borderWidth: 3,
+        tension: 0.35,
+        fill: true,
+        pointRadius: 4,
+        pointHoverRadius: 6,
+        pointBackgroundColor: "#ffd700",
+        pointBorderColor: "#111"
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          display: false
+        }
+      },
+      scales: {
+        x: {
+          ticks: {
+            color: "#9f9f9f"
+          },
+          grid: {
+            color: "rgba(255,255,255,0.05)"
+          }
+        },
+        y: {
+          beginAtZero: true,
+          ticks: {
+            color: "#9f9f9f"
+          },
+          grid: {
+            color: "rgba(255,255,255,0.05)"
+          }
+        }
+      }
+    }
+  });
+}
+</script>
 </body>
 </html>
