@@ -670,6 +670,48 @@ body::after{
     padding:12px 18px;
     border-radius:999px;
   }
+/* BUTTON ALIGNMENT FIX */
+.card,
+.section-card,
+.info-card,
+.module,
+.setup-card,
+.example-card,
+.tool-card,
+.community-card,
+.hub-link-card{
+  display:flex;
+  flex-direction:column;
+}
+
+.card .btn,
+.section-card .btn,
+.info-card .btn,
+.setup-card .btn,
+.example-card .btn,
+.tool-card .btn,
+.community-card .btn,
+.card-link,
+.setup-link,
+.example-link,
+.community-link,
+.tool-link,
+.hub-link-meta,
+.hub-btn{
+  margin-top:auto;
+}
+
+.btn,
+.hub-btn,
+.card-link,
+.setup-link,
+.example-link,
+.community-link,
+.tool-link{
+  min-height:46px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
 }
 }
   
