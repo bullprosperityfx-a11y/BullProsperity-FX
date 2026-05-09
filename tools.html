@@ -676,7 +676,15 @@
   authBadge.className = "auth-badge status-premium";
 }
 
-        loginNavBtn.style.display = "none";
+        if (loginNavBtn) {
+  loginNavBtn.style.display = "none";
+}
+
+const logoutBtn = document.getElementById("logoutBtn");
+
+if (logoutBtn && (role === "admin" || role === "premium")) {
+  logoutBtn.style.display = "inline-flex";
+}
 
         loadChart(activeSymbol, activeLabel);
         renderJournal();
