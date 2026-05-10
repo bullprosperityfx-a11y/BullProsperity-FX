@@ -419,7 +419,141 @@
       font-size:12px;
       font-weight:700;
     }
+.notification-wrap{
+  position:relative;
+  display:flex;
+  align-items:center;
+}
 
+.notification-btn{
+  width:48px;
+  height:48px;
+  border-radius:18px;
+  background:rgba(255,215,0,.06);
+  border:1px solid rgba(255,215,0,.14);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+  position:relative;
+  transition:.25s ease;
+  backdrop-filter:blur(12px);
+}
+
+.notification-btn:hover{
+  border-color:#ffd700;
+  transform:translateY(-2px);
+  box-shadow:0 0 24px rgba(255,215,0,.14);
+}
+
+.notification-icon{
+  font-size:20px;
+  color:#ffd700;
+}
+
+.notification-count{
+  position:absolute;
+  top:-6px;
+  right:-6px;
+  min-width:22px;
+  height:22px;
+  padding:0 6px;
+  border-radius:999px;
+  background:#ffd700;
+  color:#111;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:11px;
+  font-weight:900;
+  box-shadow:0 0 18px rgba(255,215,0,.45);
+  animation:notificationPulse 2s infinite;
+}
+
+@keyframes notificationPulse{
+  0%{transform:scale(1);}
+  50%{transform:scale(1.08);}
+  100%{transform:scale(1);}
+}
+
+.notification-panel{
+  position:absolute;
+  top:62px;
+  right:0;
+  width:360px;
+  background:rgba(10,10,10,.96);
+  border:1px solid rgba(255,215,0,.14);
+  border-radius:26px;
+  overflow:hidden;
+  backdrop-filter:blur(18px);
+  box-shadow:0 25px 80px rgba(0,0,0,.5);
+  display:none;
+  z-index:999;
+}
+
+.notification-panel.active{
+  display:block;
+}
+
+.notification-header{
+  padding:22px;
+  border-bottom:1px solid rgba(255,255,255,.06);
+}
+
+.notification-title{
+  color:#fff;
+  font-size:18px;
+  font-weight:900;
+}
+
+.notification-sub{
+  color:#8f8f8f;
+  font-size:13px;
+  margin-top:6px;
+}
+
+.notification-list{
+  display:grid;
+}
+
+.notification-item{
+  padding:18px 22px;
+  border-bottom:1px solid rgba(255,255,255,.05);
+  transition:.2s ease;
+  cursor:pointer;
+}
+
+.notification-item:hover{
+  background:rgba(255,215,0,.04);
+}
+
+.notification-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.notification-badge{
+  font-size:11px;
+  font-weight:900;
+  color:#111;
+  background:#ffd700;
+  padding:5px 8px;
+  border-radius:999px;
+}
+
+.notification-time{
+  color:#8f8f8f;
+  font-size:12px;
+}
+
+.notification-text{
+  color:#fff;
+  margin-top:10px;
+  line-height:1.5;
+  font-size:14px;
+}
+    
     @media(max-width:1100px){
       .hub-top-grid,
       .hub-mid-grid,
@@ -465,6 +599,88 @@
         <a id="loginNavBtn" href="/api/whop/login">Login</a>
         <a id="logoutBtn" href="/api/logout" class="logout-btn" style="display:none;">Logout</a>
         <div id="authBadge" class="auth-badge status-loading">Prüfe Zugang...</div>
+        <div class="notification-wrap">
+
+  <div class="notification-btn" id="notificationBtn">
+    <div class="notification-icon">🔔</div>
+    <div class="notification-count">3</div>
+  </div>
+
+  <div class="notification-panel" id="notificationPanel">
+
+    <div class="notification-header">
+
+      <div class="notification-title">
+        BullProsperity Alerts
+      </div>
+
+      <div class="notification-sub">
+        Neue Updates & Marktinformationen
+      </div>
+
+    </div>
+
+    <div class="notification-list">
+
+      <div class="notification-item">
+
+        <div class="notification-top">
+          <div class="notification-badge">
+            LESSON
+          </div>
+
+          <div class="notification-time">
+            Jetzt
+          </div>
+        </div>
+
+        <div class="notification-text">
+          Neue SMC Lesson wurde veröffentlicht.
+        </div>
+
+      </div>
+
+      <div class="notification-item">
+
+        <div class="notification-top">
+          <div class="notification-badge">
+            SETUP
+          </div>
+
+          <div class="notification-time">
+            12 min
+          </div>
+        </div>
+
+        <div class="notification-text">
+          XAUUSD Setup im Setup Room gepostet.
+        </div>
+
+      </div>
+
+      <div class="notification-item">
+
+        <div class="notification-top">
+          <div class="notification-badge">
+            MARKET
+          </div>
+
+          <div class="notification-time">
+            1h
+          </div>
+        </div>
+
+        <div class="notification-text">
+          NASDAQ zeigt erhöhte Volatilität.
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
       </div>
     </nav>
 
@@ -881,6 +1097,36 @@ if (logoutBtn && (role === "admin" || role === "premium")) {
     console.log("Supabase Fehler", err);
   }
 })();
+</script>
+  <script>
+
+const notificationBtn =
+document.getElementById("notificationBtn");
+
+const notificationPanel =
+document.getElementById("notificationPanel");
+
+if(notificationBtn && notificationPanel){
+
+  notificationBtn.addEventListener("click", () => {
+
+    notificationPanel.classList.toggle("active");
+
+  });
+
+  document.addEventListener("click", (e) => {
+
+    if(
+      !notificationBtn.contains(e.target) &&
+      !notificationPanel.contains(e.target)
+    ){
+      notificationPanel.classList.remove("active");
+    }
+
+  });
+
+}
+
 </script>
 </body>
 </html>
