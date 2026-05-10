@@ -1,1 +1,559 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
+  <title>BullProsperity | Notifications</title>
+
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <link rel="manifest" href="/manifest.json">
+  <link rel="apple-touch-icon" href="/favicon.png">
+  <meta name="theme-color" content="#050505">
+
+  <link rel="stylesheet" href="/theme.css" />
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="/supabase.js"></script>
+  <script src="/login.js" defer></script>
+
+  <script>
+    (async () => {
+      try {
+        const res = await fetch("/api/access", {
+          credentials: "include",
+          cache: "no-store"
+        });
+
+        const data = await res.json();
+
+        if (data.role !== "admin") {
+          window.location.href = "/locked.html";
+        }
+      } catch {
+        window.location.href = "/locked.html";
+      }
+    })();
+  </script>
+
+  <style>
+    .admin-layout{
+      display:grid;
+      grid-template-columns:320px 1fr;
+      gap:24px;
+      margin-top:24px;
+      align-items:start;
+    }
+
+    .admin-sidebar,
+    .admin-card{
+      border:1px solid var(--line);
+      border-radius:28px;
+      background:linear-gradient(180deg,var(--panel),var(--panel-2));
+      padding:24px;
+    }
+
+    .admin-sidebar{
+      position:sticky;
+      top:20px;
+      min-height:calc(100vh - 120px);
+    }
+
+    .admin-content{
+      display:grid;
+      gap:24px;
+    }
+
+    .admin-nav{
+      display:grid;
+      gap:12px;
+      margin-top:24px;
+    }
+
+    .admin-link{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      padding:14px 16px;
+      border-radius:18px;
+      background:#111;
+      border:1px solid #252525;
+      color:#fff;
+      text-decoration:none;
+      font-weight:850;
+      min-height:58px;
+      transition:.2s ease;
+    }
+
+    .admin-link:hover,
+    .admin-link.active{
+      border-color:#ffd700;
+      color:#ffd700;
+      transform:translateX(4px);
+    }
+
+    .notify-grid{
+      display:grid;
+      grid-template-columns:1fr .9fr;
+      gap:24px;
+      align-items:start;
+    }
+
+    .notify-form{
+      display:grid;
+      gap:16px;
+      margin-top:20px;
+    }
+
+    .notify-field{
+      display:grid;
+      gap:8px;
+    }
+
+    .notify-field label{
+      color:#ffd700;
+      font-weight:900;
+      font-size:13px;
+      text-transform:uppercase;
+      letter-spacing:.08em;
+    }
+
+    .notify-field input,
+    .notify-field textarea,
+    .notify-field select{
+      width:100%;
+      border-radius:18px;
+      border:1px solid rgba(255,215,0,.16);
+      background:#111;
+      color:#fff;
+      padding:16px;
+      outline:none;
+      font-size:15px;
+      font-family:Arial,sans-serif;
+    }
+
+    .notify-field textarea{
+      min-height:160px;
+      resize:vertical;
+      line-height:1.6;
+    }
+
+    .notify-field input:focus,
+    .notify-field textarea:focus,
+    .notify-field select:focus{
+      border-color:#ffd700;
+      box-shadow:0 0 22px rgba(255,215,0,.08);
+    }
+
+    .notify-submit{
+      margin-top:8px;
+      border:none;
+      border-radius:999px;
+      background:#ffd700;
+      color:#111;
+      padding:16px 22px;
+      font-weight:950;
+      cursor:pointer;
+      font-size:15px;
+      transition:.2s ease;
+    }
+
+    .notify-submit:hover{
+      transform:translateY(-2px);
+      box-shadow:0 0 26px rgba(255,215,0,.16);
+    }
+
+    .notify-preview{
+      background:#111;
+      border:1px solid rgba(255,215,0,.14);
+      border-radius:24px;
+      padding:22px;
+      margin-top:20px;
+      position:relative;
+      overflow:hidden;
+    }
+
+    .notify-preview::before{
+      content:"";
+      position:absolute;
+      right:-80px;
+      top:-80px;
+      width:220px;
+      height:220px;
+      background:radial-gradient(circle,rgba(255,215,0,.16),transparent 70%);
+      pointer-events:none;
+    }
+
+    .preview-top{
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      align-items:center;
+      margin-bottom:14px;
+      position:relative;
+      z-index:1;
+    }
+
+    .preview-type{
+      display:inline-flex;
+      padding:7px 11px;
+      border-radius:999px;
+      background:#ffd700;
+      color:#111;
+      font-size:11px;
+      font-weight:950;
+      letter-spacing:.08em;
+    }
+
+    .preview-time{
+      color:#8f8f8f;
+      font-size:12px;
+      font-weight:800;
+    }
+
+    .preview-title{
+      color:#ffd700;
+      font-size:22px;
+      font-weight:950;
+      margin-bottom:10px;
+      position:relative;
+      z-index:1;
+    }
+
+    .preview-message{
+      color:rgba(255,255,255,.82);
+      line-height:1.7;
+      font-size:15px;
+      position:relative;
+      z-index:1;
+    }
+
+    .notification-feed{
+      display:grid;
+      gap:12px;
+      margin-top:20px;
+    }
+
+    .notification-row{
+      background:#111;
+      border:1px solid rgba(255,215,0,.12);
+      border-radius:18px;
+      padding:18px;
+    }
+
+    .notification-row-top{
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      align-items:center;
+      margin-bottom:10px;
+    }
+
+    .notification-row strong{
+      color:#ffd700;
+      display:block;
+      margin-bottom:6px;
+      font-size:16px;
+    }
+
+    .notification-row p{
+      margin:0;
+      color:#a8a8a8;
+      line-height:1.6;
+      font-size:13px;
+    }
+
+    .status-message{
+      margin-top:14px;
+      color:#9f9f9f;
+      font-size:14px;
+      font-weight:800;
+    }
+
+    @media(max-width:1200px){
+      .admin-layout,
+      .notify-grid{
+        grid-template-columns:1fr;
+      }
+
+      .admin-sidebar{
+        position:relative;
+        top:0;
+        min-height:auto;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="page">
+
+  <nav class="navbar">
+    <a href="/admin/dashboard.html" class="logo">BullProsperity | Admin</a>
+
+    <div class="nav-links">
+      <a href="/hub.html">Hub</a>
+      <a href="/course.html">Course</a>
+      <a href="/tools.html">Tools</a>
+      <a href="/community.html">Community</a>
+    </div>
+  </nav>
+
+  <section class="hero-shell">
+    <div class="badge">Admin Notifications</div>
+
+    <h1 class="hero-title">
+      BullProsperity
+      <span class="gold">Alert Center</span>
+    </h1>
+
+    <p class="hero-text">
+      Erstelle Premium Notifications für Mitglieder: Lessons, Setups, Market Updates und System Hinweise.
+    </p>
+  </section>
+
+  <section class="admin-layout">
+
+    <aside class="admin-sidebar">
+      <div class="badge">Verwaltung</div>
+
+      <h2 class="section-heading" style="font-size:34px;margin-bottom:8px;">
+        Control Center
+      </h2>
+
+      <div class="admin-nav">
+        <a href="/admin/dashboard.html" class="admin-link"><span>📊 Dashboard</span><span>→</span></a>
+        <a href="/admin/members.html" class="admin-link"><span>👥 Mitglieder</span><span>→</span></a>
+        <a href="/admin/course-analytics.html" class="admin-link"><span>🎬 Course Analytics</span><span>→</span></a>
+        <a href="/admin/sr-analytics.html" class="admin-link"><span>🎳 SR Analytics</span><span>→</span></a>
+        <a href="/admin/notifications.html" class="admin-link active"><span>🔔 Notifications</span><span>→</span></a>
+        <a href="/admin/security.html" class="admin-link"><span>🛡 Security</span><span>→</span></a>
+      </div>
+    </aside>
+
+    <div class="admin-content">
+
+      <div class="notify-grid">
+
+        <div class="admin-card">
+          <div class="badge">Notification erstellen</div>
+
+          <h2 class="section-heading" style="font-size:38px;margin-bottom:10px;">
+            Neue Alert senden
+          </h2>
+
+          <p class="section-subtext">
+            Diese Nachricht erscheint im Hub als Premium Notification.
+          </p>
+
+          <form class="notify-form" id="notificationForm">
+
+            <div class="notify-field">
+              <label for="notificationType">Kategorie</label>
+              <select id="notificationType">
+                <option value="LESSON">LESSON</option>
+                <option value="SETUP">SETUP</option>
+                <option value="MARKET">MARKET</option>
+                <option value="SYSTEM">SYSTEM</option>
+              </select>
+            </div>
+
+            <div class="notify-field">
+              <label for="notificationTitle">Titel</label>
+              <input id="notificationTitle" placeholder="z. B. Neue SMC Lesson online" required />
+            </div>
+
+            <div class="notify-field">
+              <label for="notificationMessage">Nachricht</label>
+              <textarea id="notificationMessage" placeholder="Schreibe deine Notification..." required></textarea>
+            </div>
+
+            <button class="notify-submit" type="submit">
+              Notification senden
+            </button>
+
+            <div class="status-message" id="notificationStatus">
+              Bereit zum Senden.
+            </div>
+
+          </form>
+        </div>
+
+        <div class="admin-card">
+          <div class="badge">Live Vorschau</div>
+
+          <h2 class="section-heading" style="font-size:34px;margin-bottom:10px;">
+            Preview
+          </h2>
+
+          <p class="section-subtext">
+            So sieht die Notification später für Mitglieder aus.
+          </p>
+
+          <div class="notify-preview">
+            <div class="preview-top">
+              <div class="preview-type" id="previewType">SYSTEM</div>
+              <div class="preview-time">Jetzt</div>
+            </div>
+
+            <div class="preview-title" id="previewTitle">
+              BullProsperity Update
+            </div>
+
+            <div class="preview-message" id="previewMessage">
+              Deine Nachricht erscheint hier als Vorschau.
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="admin-card">
+        <div class="badge">Letzte Notifications</div>
+
+        <h2 class="section-heading" style="font-size:36px;margin-bottom:10px;">
+          Gesendete Alerts
+        </h2>
+
+        <p class="section-subtext">
+          Die neuesten gesendeten Notifications.
+        </p>
+
+        <div class="notification-feed" id="notificationFeed">
+          <div class="notification-row">
+            <strong>Noch keine Daten geladen</strong>
+            <p>Gesendete Notifications erscheinen hier automatisch.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </section>
+
+  <div class="footer-note">
+    BullProsperity Notification Center.
+  </div>
+
+</div>
+
+<script>
+const form = document.getElementById("notificationForm");
+const titleInput = document.getElementById("notificationTitle");
+const messageInput = document.getElementById("notificationMessage");
+const typeInput = document.getElementById("notificationType");
+const statusBox = document.getElementById("notificationStatus");
+
+const previewType = document.getElementById("previewType");
+const previewTitle = document.getElementById("previewTitle");
+const previewMessage = document.getElementById("previewMessage");
+const notificationFeed = document.getElementById("notificationFeed");
+
+function updatePreview(){
+  previewType.textContent = typeInput.value || "SYSTEM";
+  previewTitle.textContent = titleInput.value.trim() || "BullProsperity Update";
+  previewMessage.textContent = messageInput.value.trim() || "Deine Nachricht erscheint hier als Vorschau.";
+}
+
+[typeInput, titleInput, messageInput].forEach(el => {
+  el.addEventListener("input", updatePreview);
+  el.addEventListener("change", updatePreview);
+});
+
+function formatDate(value){
+  if(!value) return "-";
+
+  return new Date(value).toLocaleString("de-DE", {
+    day:"2-digit",
+    month:"2-digit",
+    hour:"2-digit",
+    minute:"2-digit"
+  });
+}
+
+async function loadNotifications(){
+  try{
+    const { data, error } = await supabaseClient
+      .from("notifications")
+      .select("*")
+      .order("created_at", { ascending:false })
+      .limit(10);
+
+    if(error){
+      console.log(error);
+      return;
+    }
+
+    if(!data || !data.length){
+      notificationFeed.innerHTML = `
+        <div class="notification-row">
+          <strong>Noch keine Notifications</strong>
+          <p>Sobald du Alerts sendest, erscheinen sie hier.</p>
+        </div>
+      `;
+      return;
+    }
+
+    notificationFeed.innerHTML = "";
+
+    data.forEach(item => {
+      notificationFeed.innerHTML += `
+        <div class="notification-row">
+          <div class="notification-row-top">
+            <div class="preview-type">${item.type || "SYSTEM"}</div>
+            <div class="preview-time">${formatDate(item.created_at)}</div>
+          </div>
+
+          <strong>${item.title || "Ohne Titel"}</strong>
+          <p>${item.message || ""}</p>
+        </div>
+      `;
+    });
+
+  }catch(err){
+    console.log("Notification Feed Fehler:", err);
+  }
+}
+
+form.addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const title = titleInput.value.trim();
+  const message = messageInput.value.trim();
+  const type = typeInput.value;
+
+  if(!title || !message){
+    statusBox.textContent = "Bitte Titel und Nachricht ausfüllen.";
+    return;
+  }
+
+  statusBox.textContent = "Notification wird gesendet...";
+
+  const { error } = await supabaseClient
+    .from("notifications")
+    .insert({
+      title,
+      message,
+      type
+    });
+
+  if(error){
+    console.log(error);
+    statusBox.textContent = "Fehler beim Senden. Prüfe Supabase RLS/Policies.";
+    return;
+  }
+
+  statusBox.textContent = "Notification erfolgreich gesendet.";
+  form.reset();
+  updatePreview();
+  loadNotifications();
+});
+
+updatePreview();
+loadNotifications();
+</script>
+
+</body>
+</html>
