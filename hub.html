@@ -1128,5 +1128,204 @@ if(notificationBtn && notificationPanel){
 }
 
 </script>
+  <script>
+const notificationContainer = document.createElement("div");
+notificationContainer.id = "bpNotifications";
+document.body.appendChild(notificationContainer);
+
+const notificationStyle = document.createElement("style");
+
+notificationStyle.innerHTML = `
+#bpNotifications{
+  position:fixed;
+  top:24px;
+  right:24px;
+  z-index:999999;
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+  width:360px;
+  pointer-events:none;
+}
+
+.bp-notification{
+  background:linear-gradient(180deg,#111,#090909);
+  border:1px solid rgba(255,215,0,.18);
+  border-radius:22px;
+  padding:18px;
+  color:#fff;
+  position:relative;
+  overflow:hidden;
+  animation:notificationEnter .45s ease;
+  box-shadow:
+    0 0 25px rgba(255,215,0,.10),
+    inset 0 0 0 1px rgba(255,255,255,.02);
+  backdrop-filter:blur(10px);
+}
+
+.bp-notification::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:
+  radial-gradient(circle at top right,
+  rgba(255,215,0,.16),
+  transparent 60%);
+  pointer-events:none;
+}
+
+.bp-notification-title{
+  font-size:16px;
+  font-weight:900;
+  color:#ffd700;
+  margin-bottom:6px;
+}
+
+.bp-notification-message{
+  color:rgba(255,255,255,.82);
+  line-height:1.6;
+  font-size:14px;
+}
+
+.bp-notification-type{
+  margin-top:12px;
+  display:inline-flex;
+  padding:6px 10px;
+  border-radius:999px;
+  background:rgba(255,215,0,.08);
+  border:1px solid rgba(255,215,0,.18);
+  color:#ffd700;
+  font-size:11px;
+  font-weight:800;
+  letter-spacing:.08em;
+}
+
+.bp-notification-glow{
+  position:absolute;
+  width:180px;
+  height:180px;
+  right:-80px;
+  top:-80px;
+  background:radial-gradient(circle,
+  rgba(255,215,0,.18),
+  transparent 70%);
+  pointer-events:none;
+}
+
+@keyframes notificationEnter{
+  from{
+    opacity:0;
+    transform:translateX(40px) scale(.96);
+  }
+  to{
+    opacity:1;
+    transform:translateX(0) scale(1);
+  }
+}
+
+@keyframes notificationExit{
+  to{
+    opacity:0;
+    transform:translateX(60px);
+  }
+}
+
+@media(max-width:700px){
+  #bpNotifications{
+    width:calc(100vw - 28px);
+    left:14px;
+    right:14px;
+    top:14px;
+  }
+}
+`;
+
+document.head.appendChild(notificationStyle);
+
+function playNotificationSound(){
+  const audio = new Audio(
+    "https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3"
+  );
+
+  audio.volume = 0.35;
+
+  audio.play().catch(() => {});
+}
+
+function showNotification(notification){
+
+  const card = document.createElement("div");
+
+  card.className = "bp-notification";
+
+  card.innerHTML = `
+    <div class="bp-notification-glow"></div>
+
+    <div class="bp-notification-title">
+      ${notification.title || "BullProsperity"}
+    </div>
+
+    <div class="bp-notification-message">
+      ${notification.message || ""}
+    </div>
+
+    <div class="bp-notification-type">
+      ${notification.type || "SYSTEM"}
+    </div>
+  `;
+
+  notificationContainer.prepend(card);
+
+  playNotificationSound();
+
+  setTimeout(() => {
+
+    card.style.animation =
+      "notificationExit .4s ease forwards";
+
+    setTimeout(() => {
+      card.remove();
+    }, 400);
+
+  }, 7000);
+}
+
+async function loadNotifications(){
+
+  try{
+
+    const { data, error } = await supabaseClient
+      .from("notifications")
+      .select("*")
+      .order("created_at", { ascending:false })
+      .limit(1);
+
+    if(error) return;
+
+    if(!data?.length) return;
+
+    const latest = data[0];
+
+    const alreadySeen =
+      localStorage.getItem("bp_last_notification");
+
+    if(alreadySeen == latest.id) return;
+
+    localStorage.setItem(
+      "bp_last_notification",
+      latest.id
+    );
+
+    showNotification(latest);
+
+  }catch(err){
+    console.log("Notification Fehler");
+  }
+}
+
+loadNotifications();
+
+setInterval(loadNotifications, 10000);
+</script>
 </body>
 </html>
