@@ -313,3 +313,33 @@ function startInactivityLogout(accessData) {
   setupVimeoInactivityTracking();
   resetTimer();
 }
+// ===============================
+// AUTO LOGOUT BEI INAKTIVITÄT
+// ===============================
+
+let bpInactivityTimer;
+
+function bpClearSessionAndLock() {
+  document.cookie = "bp_role=; Max-Age=0; path=/";
+  document.cookie = "bp_email=; Max-Age=0; path=/";
+  document.cookie = "whop_access_token=; Max-Age=0; path=/";
+
+  localStorage.clear();
+  sessionStorage.clear();
+
+  window.location.href = "/locked.html?reason=inactive";
+}
+
+function bpResetInactivityTimer() {
+  clearTimeout(bpInactivityTimer);
+
+  bpInactivityTimer = setTimeout(() => {
+    bpClearSessionAndLock();
+  }, 15 * 60 * 1000);
+}
+
+["click", "mousemove", "keydown", "scroll", "touchstart"].forEach((event) => {
+  document.addEventListener(event, bpResetInactivityTimer);
+});
+
+bpResetInactivityTimer();
