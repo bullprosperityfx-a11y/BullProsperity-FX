@@ -1,7 +1,25 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
- 
+ <script>
+(async () => {
+  try {
+    const res = await fetch("/api/access", {
+      credentials: "include",
+      cache: "no-store"
+    });
+
+    const data = await res.json();
+
+    if (data.role !== "admin" && data.role !== "premium") {
+      window.location.href = "/locked.html";
+    }
+
+  } catch (err) {
+    window.location.href = "/locked.html";
+  }
+})();
+</script>
   <style>
   body[data-protected="true"]{
     visibility:hidden;
