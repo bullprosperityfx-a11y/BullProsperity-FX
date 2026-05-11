@@ -348,3 +348,30 @@ function bpResetInactivityTimer() {
 });
 
 bpResetInactivityTimer();
+async function bpLogoutNow() {
+  try {
+    await fetch("/api/logout", {
+      method: "POST",
+      credentials: "include",
+      cache: "no-store"
+    });
+  } catch (err) {
+    console.log("Logout Fehler:", err);
+  }
+
+  localStorage.clear();
+  sessionStorage.clear();
+
+  window.location.href = "/locked.html?reason=logout";
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  const logoutBtn = document.getElementById("logoutBtn");
+
+  if (logoutBtn) {
+    logoutBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      bpLogoutNow();
+    });
+  }
+});
