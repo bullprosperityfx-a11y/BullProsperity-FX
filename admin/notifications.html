@@ -531,19 +531,26 @@ form.addEventListener("submit", async (e) => {
 
   statusBox.textContent = "Notification wird gesendet...";
 
-  const { error } = await supabaseClient
-    .from("notifications")
-    .insert({
-      title,
-      message,
-      type
-    });
+  const res = await fetch("/api/admin/notifications", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json"
+  },
+  credentials: "include",
+  body: JSON.stringify({
+    title,
+    message,
+    type
+  })
+});
 
-  if(error){
-    console.log(error);
-    statusBox.textContent = "Fehler beim Senden. Prüfe Supabase RLS/Policies.";
-    return;
-  }
+const result = await res.json();
+
+if (!res.ok) {
+  console.log(result);
+  statusBox.textContent = result.error || "Fehler beim Senden.";
+  return;
+}
 
   statusBox.textContent = "Notification erfolgreich gesendet.";
   form.reset();
