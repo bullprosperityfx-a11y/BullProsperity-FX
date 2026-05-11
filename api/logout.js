@@ -1,11 +1,28 @@
 export default async function handler(req, res) {
-  res.setHeader("Set-Cookie", [
-    "bp_role=; Path=/; Max-Age=0; SameSite=Lax; Secure",
-    "bp_email=; Path=/; Max-Age=0; SameSite=Lax; Secure",
-    "whop_access_token=; Path=/; Max-Age=0; SameSite=Lax; Secure",
-    "whop_state=; Path=/; Max-Age=0; SameSite=Lax; Secure",
-    "whop_verifier=; Path=/; Max-Age=0; SameSite=Lax; Secure"
-  ]);
+  const cookiesToClear = [
+    "bp_role",
+    "bp_email",
+    "whop_access_token",
+    "whop_state",
+    "whop_verifier"
+  ];
 
-  return res.status(200).json({ ok: true });
+  res.setHeader(
+    "Set-Cookie",
+    cookiesToClear.map(
+      (name) =>
+        `${name}=; Path=/; Max-Age=0; HttpOnly; SameSite=Lax; Secure`
+    )
+  );
+
+  // Wenn Button/Browser direkt auf /api/logout geht:
+  if (req.method === "GET") {
+    return res.redirect(302, "/locked.html?reason=logout");
+  }
+
+  // Wenn login.js per fetch logout macht:
+  return res.status(200).json({
+    ok: true,
+    role: "guest"
+  });
 }
