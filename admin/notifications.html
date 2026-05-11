@@ -270,7 +270,28 @@
       font-size:14px;
       font-weight:800;
     }
+.notification-actions{
+  display:flex;
+  gap:10px;
+  margin-top:14px;
+  flex-wrap:wrap;
+}
 
+.notification-action-btn{
+  border:1px solid rgba(255,215,0,.18);
+  background:#0c0c0c;
+  color:#ffd700;
+  border-radius:999px;
+  padding:9px 13px;
+  font-weight:900;
+  cursor:pointer;
+}
+
+.notification-action-btn.danger{
+  color:#ef4444;
+  border-color:rgba(239,68,68,.35);
+}
+    
     @media(max-width:1200px){
       .admin-layout,
       .notify-grid{
@@ -451,6 +472,8 @@ const previewTitle = document.getElementById("previewTitle");
 const previewMessage = document.getElementById("previewMessage");
 const notificationFeed = document.getElementById("notificationFeed");
 
+let editingId = null;
+
 function updatePreview(){
   previewType.textContent = typeInput.value || "SYSTEM";
   previewTitle.textContent = titleInput.value.trim() || "BullProsperity Update";
@@ -473,13 +496,32 @@ function formatDate(value){
   });
 }
 
+async function adminUpdateNotification(payload){
+  const res = await fetch("/api/admin/notifications", {
+    method:"PATCH",
+    headers:{
+      "Content-Type":"application/json"
+    },
+    credentials:"include",
+    body:JSON.stringify(payload)
+  });
+
+  const result = await res.json();
+
+  if(!res.ok){
+    throw new Error(result.error || "Update Fehler");
+  }
+
+  return result;
+}
+
 async function loadNotifications(){
   try{
     const { data, error } = await supabaseClient
       .from("notifications")
       .select("*")
       .order("created_at", { ascending:false })
-      .limit(10);
+      .limit(20);
 
     if(error){
       console.log(error);
@@ -499,15 +541,73 @@ async function loadNotifications(){
     notificationFeed.innerHTML = "";
 
     data.forEach(item => {
+
+      const activeText =
+        item.is_active === false
+          ? "Zurückgezogen"
+          : "Aktiv";
+
+      const activeColor =
+        item.is_active === false
+          ? "#ef4444"
+          : "#22c55e";
+
+      const safeItem = encodeURIComponent(JSON.stringify(item));
+
       notificationFeed.innerHTML += `
         <div class="notification-row">
+
           <div class="notification-row-top">
-            <div class="preview-type">${item.type || "SYSTEM"}</div>
-            <div class="preview-time">${formatDate(item.created_at)}</div>
+            <div class="preview-type">
+              ${item.type || "SYSTEM"}
+            </div>
+
+            <div class="preview-time">
+              ${formatDate(item.created_at)}
+            </div>
           </div>
 
-          <strong>${item.title || "Ohne Titel"}</strong>
-          <p>${item.message || ""}</p>
+          <strong>
+            ${item.title || "Ohne Titel"}
+          </strong>
+
+          <p>
+            ${item.message || ""}
+          </p>
+
+          <p style="
+            margin-top:10px;
+            color:${activeColor};
+            font-weight:900;
+          ">
+            Status: ${activeText}
+          </p>
+
+          <div class="notification-actions">
+
+            <button
+              class="notification-action-btn"
+              onclick="editNotification('${safeItem}')"
+            >
+              Bearbeiten
+            </button>
+
+            <button
+              class="notification-action-btn danger"
+              onclick="retractNotification('${item.id}')"
+            >
+              Zurückziehen
+            </button>
+
+            <button
+              class="notification-action-btn"
+              onclick="reactivateNotification('${item.id}')"
+            >
+              Wieder aktivieren
+            </button>
+
+          </div>
+
         </div>
       `;
     });
@@ -517,7 +617,81 @@ async function loadNotifications(){
   }
 }
 
+function editNotification(encodedItem){
+
+  const item =
+    JSON.parse(decodeURIComponent(encodedItem));
+
+  editingId = item.id;
+
+  titleInput.value = item.title || "";
+  messageInput.value = item.message || "";
+  typeInput.value = item.type || "SYSTEM";
+
+  statusBox.textContent =
+    "Bearbeitungsmodus aktiv.";
+
+  document.querySelector(".notify-submit")
+    .textContent = "Änderungen speichern";
+
+  updatePreview();
+
+  window.scrollTo({
+    top:0,
+    behavior:"smooth"
+  });
+}
+
+async function retractNotification(id){
+
+  if(
+    !confirm(
+      "Diese Notification wirklich zurückziehen?"
+    )
+  ) return;
+
+  try{
+
+    await adminUpdateNotification({
+      id,
+      is_active:false
+    });
+
+    statusBox.textContent =
+      "Notification wurde zurückgezogen.";
+
+    loadNotifications();
+
+  }catch(err){
+
+    statusBox.textContent = err.message;
+
+  }
+}
+
+async function reactivateNotification(id){
+
+  try{
+
+    await adminUpdateNotification({
+      id,
+      is_active:true
+    });
+
+    statusBox.textContent =
+      "Notification wurde wieder aktiviert.";
+
+    loadNotifications();
+
+  }catch(err){
+
+    statusBox.textContent = err.message;
+
+  }
+}
+
 form.addEventListener("submit", async (e) => {
+
   e.preventDefault();
 
   const title = titleInput.value.trim();
@@ -525,36 +699,87 @@ form.addEventListener("submit", async (e) => {
   const type = typeInput.value;
 
   if(!title || !message){
-    statusBox.textContent = "Bitte Titel und Nachricht ausfüllen.";
+
+    statusBox.textContent =
+      "Bitte Titel und Nachricht ausfüllen.";
+
     return;
   }
 
-  statusBox.textContent = "Notification wird gesendet...";
+  statusBox.textContent =
+    editingId
+      ? "Änderungen werden gespeichert..."
+      : "Notification wird gesendet...";
 
-  const res = await fetch("/api/admin/notifications", {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json"
-  },
-  credentials: "include",
-  body: JSON.stringify({
-    title,
-    message,
-    type
-  })
-});
+  if(editingId){
 
-const result = await res.json();
+    try{
 
-if (!res.ok) {
-  console.log(result);
-  statusBox.textContent = result.error || "Fehler beim Senden.";
-  return;
-}
+      await adminUpdateNotification({
+        id:editingId,
+        title,
+        message,
+        type
+      });
 
-  statusBox.textContent = "Notification erfolgreich gesendet.";
+      statusBox.textContent =
+        "Notification erfolgreich bearbeitet.";
+
+      editingId = null;
+
+      document.querySelector(".notify-submit")
+        .textContent = "Notification senden";
+
+      form.reset();
+
+      updatePreview();
+
+      loadNotifications();
+
+    }catch(err){
+
+      statusBox.textContent = err.message;
+
+    }
+
+    return;
+  }
+
+  const res = await fetch(
+    "/api/admin/notifications",
+    {
+      method:"POST",
+      headers:{
+        "Content-Type":"application/json"
+      },
+      credentials:"include",
+      body:JSON.stringify({
+        title,
+        message,
+        type
+      })
+    }
+  );
+
+  const result = await res.json();
+
+  if(!res.ok){
+
+    console.log(result);
+
+    statusBox.textContent =
+      result.error || "Fehler beim Senden.";
+
+    return;
+  }
+
+  statusBox.textContent =
+    "Notification erfolgreich gesendet.";
+
   form.reset();
+
   updatePreview();
+
   loadNotifications();
 });
 
