@@ -603,8 +603,7 @@
 
   <div class="notification-btn" id="notificationBtn">
     <div class="notification-icon">🔔</div>
-    <div class="notification-count">3</div>
-  </div>
+   <div class="notification-count" id="notificationCount">0</div>
 
   <div class="notification-panel" id="notificationPanel">
 
@@ -620,66 +619,12 @@
 
     </div>
 
-    <div class="notification-list">
-
-      <div class="notification-item">
-
-        <div class="notification-top">
-          <div class="notification-badge">
-            LESSON
-          </div>
-
-          <div class="notification-time">
-            Jetzt
-          </div>
-        </div>
-
-        <div class="notification-text">
-          Neue SMC Lesson wurde veröffentlicht.
-        </div>
-
-      </div>
-
-      <div class="notification-item">
-
-        <div class="notification-top">
-          <div class="notification-badge">
-            SETUP
-          </div>
-
-          <div class="notification-time">
-            12 min
-          </div>
-        </div>
-
-        <div class="notification-text">
-          XAUUSD Setup im Setup Room gepostet.
-        </div>
-
-      </div>
-
-      <div class="notification-item">
-
-        <div class="notification-top">
-          <div class="notification-badge">
-            MARKET
-          </div>
-
-          <div class="notification-time">
-            1h
-          </div>
-        </div>
-
-        <div class="notification-text">
-          NASDAQ zeigt erhöhte Volatilität.
-        </div>
-
-      </div>
-
+  <div class="notification-list" id="notificationList">
+  <div class="notification-item">
+    <div class="notification-text">
+      Lade Notifications...
     </div>
-
   </div>
-
 </div>
       </div>
     </nav>
@@ -1389,5 +1334,67 @@ async function loadBellNotifications(){
 loadBellNotifications();
 setInterval(loadBellNotifications, 10000);
 </script>
+ <script>
+async function bpLoadBellNotifications(){
+  const list = document.getElementById("notificationList");
+  const count = document.getElementById("notificationCount");
+
+  if(!list) return;
+
+  try{
+    const { data, error } = await supabaseClient
+      .from("notifications")
+      .select("*")
+      .order("created_at", { ascending:false })
+      .limit(5);
+
+    if(error){
+      console.log("Bell Fehler:", error);
+      return;
+    }
+
+    if(!data || !data.length){
+      list.innerHTML = `
+        <div class="notification-item">
+          <div class="notification-text">
+            Noch keine Notifications vorhanden.
+          </div>
+        </div>
+      `;
+
+      if(count) count.textContent = "0";
+      return;
+    }
+
+    if(count) count.textContent = data.length;
+
+    list.innerHTML = "";
+
+    data.forEach(item => {
+      list.innerHTML += `
+        <div class="notification-item">
+          <div class="notification-top">
+            <div class="notification-badge">${item.type || "SYSTEM"}</div>
+            <div class="notification-time">Neu</div>
+          </div>
+
+          <div class="notification-text">
+            <strong style="color:#ffd700;display:block;margin-bottom:6px;">
+              ${item.title || "BullProsperity Update"}
+            </strong>
+            ${item.message || ""}
+          </div>
+        </div>
+      `;
+    });
+
+  }catch(err){
+    console.log("Bell System Fehler:", err);
+  }
+}
+
+bpLoadBellNotifications();
+setInterval(bpLoadBellNotifications, 10000);
+</script>         
 </body>
 </html>
