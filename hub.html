@@ -1327,5 +1327,67 @@ loadNotifications();
 
 setInterval(loadNotifications, 10000);
 </script>
+  <script>
+async function loadBellNotifications(){
+  const panelList = document.querySelector(".notification-list");
+  const countBadge = document.querySelector(".notification-count");
+
+  if(!panelList) return;
+
+  try{
+    const { data, error } = await supabaseClient
+      .from("notifications")
+      .select("*")
+      .order("created_at", { ascending:false })
+      .limit(5);
+
+    if(error){
+      console.log("Bell Notification Fehler:", error);
+      return;
+    }
+
+    if(!data || !data.length){
+      panelList.innerHTML = `
+        <div class="notification-item">
+          <div class="notification-text">
+            Noch keine Notifications vorhanden.
+          </div>
+        </div>
+      `;
+
+      if(countBadge) countBadge.textContent = "0";
+      return;
+    }
+
+    if(countBadge) countBadge.textContent = data.length;
+
+    panelList.innerHTML = "";
+
+    data.forEach(item => {
+      panelList.innerHTML += `
+        <div class="notification-item">
+          <div class="notification-top">
+            <div class="notification-badge">${item.type || "SYSTEM"}</div>
+            <div class="notification-time">Neu</div>
+          </div>
+
+          <div class="notification-text">
+            <strong style="color:#ffd700;display:block;margin-bottom:6px;">
+              ${item.title || "BullProsperity Update"}
+            </strong>
+            ${item.message || ""}
+          </div>
+        </div>
+      `;
+    });
+
+  }catch(err){
+    console.log("Bell System Fehler:", err);
+  }
+}
+
+loadBellNotifications();
+setInterval(loadBellNotifications, 10000);
+</script>
 </body>
 </html>
