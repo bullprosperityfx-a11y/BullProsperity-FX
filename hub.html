@@ -1283,6 +1283,7 @@ async function loadBellNotifications(){
     const { data, error } = await supabaseClient
       .from("notifications")
       .select("*")
+      .eq("is_active", true)
       .order("created_at", { ascending:false })
       .limit(5);
 
