@@ -1,5 +1,3 @@
-import { createClient } from "@supabase/supabase-js";
-
 export default async function handler(req, res) {
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Method not allowed" });
@@ -40,25 +38,29 @@ export default async function handler(req, res) {
       });
     }
 
-    const supabaseAdmin = createClient(supabaseUrl, serviceRoleKey);
-
-    const { error } = await supabaseAdmin
-      .from("notifications")
-      .insert({
+    const insertRes = await fetch(`${supabaseUrl}/rest/v1/notifications`, {
+      method: "POST",
+      headers: {
+        apikey: serviceRoleKey,
+        Authorization: `Bearer ${serviceRoleKey}`,
+        "Content-Type": "application/json",
+        Prefer: "return=minimal"
+      },
+      body: JSON.stringify({
         title,
         message,
         type: type || "SYSTEM"
-      });
+      })
+    });
 
-    if (error) {
+    if (!insertRes.ok) {
+      const text = await insertRes.text();
       return res.status(500).json({
-        error: error.message
+        error: text || "Supabase Insert Fehler."
       });
     }
 
-    return res.status(200).json({
-      success: true
-    });
+    return res.status(200).json({ success: true });
 
   } catch (err) {
     console.log("Notification API Fehler:", err);
