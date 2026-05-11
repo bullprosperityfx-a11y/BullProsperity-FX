@@ -11,6 +11,23 @@
   <link rel="stylesheet" href="theme.css" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const loginBtn = document.getElementById("loginNavBtn");
+    const authStatus = document.getElementById("authStatus");
+    const statusDot = document.getElementById("statusDot");
+
+    if (loginBtn) loginBtn.style.display = "inline-flex";
+
+    if (authStatus) {
+      authStatus.textContent = "Kein Zugang";
+    }
+
+    if (statusDot) {
+      statusDot.className = "status-dot status-locked";
+    }
+  });
+</script>
  
 
   <style>
