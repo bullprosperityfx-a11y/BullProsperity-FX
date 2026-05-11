@@ -319,17 +319,22 @@ function startInactivityLogout(accessData) {
 
 let bpInactivityTimer;
 
-function bpClearSessionAndLock() {
-  document.cookie = "bp_role=; Max-Age=0; path=/";
-  document.cookie = "bp_email=; Max-Age=0; path=/";
-  document.cookie = "whop_access_token=; Max-Age=0; path=/";
+async function bpClearSessionAndLock() {
+  try {
+    await fetch("/api/logout", {
+      method: "POST",
+      credentials: "include",
+      cache: "no-store"
+    });
+  } catch (err) {
+    console.log("Logout Fehler:", err);
+  }
 
   localStorage.clear();
   sessionStorage.clear();
 
   window.location.href = "/locked.html?reason=inactive";
 }
-
 function bpResetInactivityTimer() {
   clearTimeout(bpInactivityTimer);
 
