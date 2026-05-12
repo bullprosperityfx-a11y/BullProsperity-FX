@@ -30,20 +30,10 @@
   </script>
 
   <style>
-    .journal-shell{
-      display:grid;
-      gap:24px;
-      margin-top:24px;
-    }
+    .journal-shell{display:grid;gap:24px;margin-top:24px;}
+    .journal-top{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;}
 
-    .journal-top{
-      display:grid;
-      grid-template-columns:repeat(4,1fr);
-      gap:18px;
-    }
-
-    .journal-card,
-    .journal-stat{
+    .journal-card,.journal-stat{
       background:linear-gradient(180deg,var(--panel),var(--panel-2));
       border:1px solid var(--line);
       border-radius:28px;
@@ -52,8 +42,7 @@
       overflow:hidden;
     }
 
-    .journal-card::before,
-    .journal-stat::before{
+    .journal-card::before,.journal-stat::before{
       content:"";
       position:absolute;
       right:-80px;
@@ -73,23 +62,9 @@
       margin-bottom:10px;
     }
 
-    .journal-value{
-      color:#ffd700;
-      font-size:34px;
-      font-weight:950;
-    }
-
-    .journal-sub{
-      margin-top:8px;
-      color:rgba(255,255,255,.6);
-      line-height:1.5;
-      font-size:13px;
-    }
-
-    .journal-list{
-      display:grid;
-      gap:16px;
-    }
+    .journal-value{color:#ffd700;font-size:34px;font-weight:950;}
+    .journal-sub{margin-top:8px;color:rgba(255,255,255,.6);line-height:1.5;font-size:13px;}
+    .journal-list{display:grid;gap:16px;}
 
     .review-card{
       background:#0f0f0f;
@@ -107,17 +82,8 @@
       margin-bottom:18px;
     }
 
-    .review-market{
-      color:#ffd700;
-      font-size:24px;
-      font-weight:950;
-    }
-
-    .review-badges{
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-    }
+    .review-market{color:#ffd700;font-size:24px;font-weight:950;}
+    .review-badges{display:flex;gap:10px;flex-wrap:wrap;}
 
     .review-badge{
       padding:8px 12px;
@@ -152,11 +118,7 @@
       font-weight:800;
     }
 
-    .review-box-value{
-      color:#fff;
-      font-size:18px;
-      font-weight:900;
-    }
+    .review-box-value{color:#fff;font-size:18px;font-weight:900;}
 
     .review-analysis{
       margin-top:18px;
@@ -169,12 +131,7 @@
       white-space:pre-wrap;
     }
 
-    .review-actions{
-      display:flex;
-      gap:12px;
-      flex-wrap:wrap;
-      margin-top:18px;
-    }
+    .review-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:18px;}
 
     .journal-btn{
       border:none;
@@ -193,6 +150,50 @@
       border:1px solid rgba(255,215,0,.14);
     }
 
+    .journal-btn.danger{
+      background:#111;
+      color:#ef4444;
+      border:1px solid rgba(239,68,68,.28);
+    }
+
+    .result-editor{
+      display:grid;
+      grid-template-columns:1fr 1fr auto;
+      gap:10px;
+      margin-top:16px;
+    }
+
+    .result-editor select,
+    .result-editor input{
+      background:#111;
+      color:#fff;
+      border:1px solid rgba(255,215,0,.16);
+      border-radius:999px;
+      padding:12px 14px;
+      outline:none;
+    }
+
+    .equity-box{
+      min-height:220px;
+      border-radius:24px;
+      background:#0f0f0f;
+      border:1px solid rgba(255,215,0,.12);
+      padding:22px;
+      margin-top:18px;
+      display:flex;
+      align-items:end;
+      gap:8px;
+      overflow:hidden;
+    }
+
+    .equity-bar{
+      flex:1;
+      min-height:8px;
+      border-radius:999px 999px 0 0;
+      background:#ffd700;
+      opacity:.8;
+    }
+
     .empty-state{
       text-align:center;
       padding:60px 20px;
@@ -202,17 +203,12 @@
     }
 
     @media(max-width:1200px){
-      .journal-top,
-      .review-grid{
-        grid-template-columns:1fr 1fr;
-      }
+      .journal-top,.review-grid{grid-template-columns:1fr 1fr;}
+      .result-editor{grid-template-columns:1fr;}
     }
 
     @media(max-width:700px){
-      .journal-top,
-      .review-grid{
-        grid-template-columns:1fr;
-      }
+      .journal-top,.review-grid{grid-template-columns:1fr;}
     }
   </style>
 </head>
@@ -240,47 +236,75 @@
       </h1>
 
       <p class="hero-text">
-        Interne AI Review Datenbank für spätere Analytics, Equity Tracking,
-        Setup Scores und Performance Systeme.
+        Interne AI Review Datenbank mit Performance Tracking, Winrate, P&L,
+        Setup Scores und Equity Vorbereitung.
       </p>
     </section>
 
     <div class="journal-shell">
 
       <section class="journal-top">
-
         <div class="journal-stat">
           <div class="journal-label">Gesamte Reviews</div>
           <div class="journal-value" id="totalReviews">0</div>
-          <div class="journal-sub">
-            Gespeicherte AI Reviews insgesamt.
-          </div>
+          <div class="journal-sub">Gespeicherte AI Reviews insgesamt.</div>
         </div>
 
         <div class="journal-stat">
           <div class="journal-label">Durchschnitt RR</div>
           <div class="journal-value" id="avgRR">0R</div>
-          <div class="journal-sub">
-            Durchschnittlicher Risk Reward Wert.
-          </div>
-        </div>
-
-        <div class="journal-stat">
-          <div class="journal-label">Top Markt</div>
-          <div class="journal-value" id="topMarket">-</div>
-          <div class="journal-sub">
-            Meist analysierter Markt.
-          </div>
+          <div class="journal-sub">Durchschnittlicher Risk Reward Wert.</div>
         </div>
 
         <div class="journal-stat">
           <div class="journal-label">Average Score</div>
           <div class="journal-value" id="avgScore">0</div>
-          <div class="journal-sub">
-            Durchschnittlicher Setup Score.
-          </div>
+          <div class="journal-sub">Durchschnittlicher Setup Score.</div>
         </div>
 
+        <div class="journal-stat">
+          <div class="journal-label">Top Markt</div>
+          <div class="journal-value" id="topMarket">-</div>
+          <div class="journal-sub">Meist analysierter Markt.</div>
+        </div>
+
+        <div class="journal-stat">
+          <div class="journal-label">Winrate</div>
+          <div class="journal-value" id="winrateValue">0%</div>
+          <div class="journal-sub">Gewinnquote aller abgeschlossenen Trades.</div>
+        </div>
+
+        <div class="journal-stat">
+          <div class="journal-label">Gesamt P&L</div>
+          <div class="journal-value" id="pnlValue">0€</div>
+          <div class="journal-sub">Gesamter Gewinn und Verlust.</div>
+        </div>
+
+        <div class="journal-stat">
+          <div class="journal-label">Wins</div>
+          <div class="journal-value" id="winsValue">0</div>
+          <div class="journal-sub">Positive abgeschlossene Trades.</div>
+        </div>
+
+        <div class="journal-stat">
+          <div class="journal-label">Losses</div>
+          <div class="journal-value" id="lossesValue">0</div>
+          <div class="journal-sub">Negative abgeschlossene Trades.</div>
+        </div>
+      </section>
+
+      <section class="journal-card">
+        <div class="badge">Equity Preview</div>
+
+        <h2 class="section-heading" style="font-size:34px;margin-bottom:10px;">
+          AI Equity Curve
+        </h2>
+
+        <p class="section-subtext">
+          Visuelle Vorschau deiner gespeicherten P&L Entwicklung aus AI Reviews.
+        </p>
+
+        <div class="equity-box" id="equityBox"></div>
       </section>
 
       <section class="journal-card">
@@ -293,16 +317,12 @@
 
         <p class="section-subtext">
           Alle internen BullProsperity AI Reviews werden hier gesammelt.
+          Du kannst Resultat und P&L pro Review setzen.
         </p>
 
         <div class="review-actions">
-          <button class="journal-btn secondary" id="exportBtn">
-            Journal exportieren
-          </button>
-
-          <button class="journal-btn secondary" id="clearBtn">
-            Alles löschen
-          </button>
+          <button class="journal-btn secondary" id="exportBtn">Journal exportieren</button>
+          <button class="journal-btn secondary" id="clearBtn">Alles löschen</button>
         </div>
 
         <div class="journal-list" id="journalList" style="margin-top:22px;">
@@ -324,252 +344,274 @@ const totalReviews = document.getElementById("totalReviews");
 const avgRR = document.getElementById("avgRR");
 const topMarket = document.getElementById("topMarket");
 const avgScore = document.getElementById("avgScore");
+const winrateValue = document.getElementById("winrateValue");
+const pnlValue = document.getElementById("pnlValue");
+const winsValue = document.getElementById("winsValue");
+const lossesValue = document.getElementById("lossesValue");
+const equityBox = document.getElementById("equityBox");
 
 const exportBtn = document.getElementById("exportBtn");
 const clearBtn = document.getElementById("clearBtn");
 
 function getReviews(){
-  return JSON.parse(
-    localStorage.getItem("bp_ai_reviews") || "[]"
-  );
+  return JSON.parse(localStorage.getItem("bp_ai_reviews") || "[]");
+}
+
+function saveReviews(reviews){
+  localStorage.setItem("bp_ai_reviews", JSON.stringify(reviews));
+}
+
+function extractRR(text){
+  const match = String(text || "").match(/RR:\s([0-9.]+)R/i);
+  return match ? parseFloat(match[1]) : null;
+}
+
+function extractScore(text){
+  const match = String(text || "").match(/Setup Score:\s([0-9]+)/i);
+  return match ? parseFloat(match[1]) : null;
 }
 
 function calculateStats(reviews){
-
   totalReviews.textContent = reviews.length;
 
   if(!reviews.length){
     avgRR.textContent = "0R";
     topMarket.textContent = "-";
     avgScore.textContent = "0";
+    winrateValue.textContent = "0%";
+    pnlValue.textContent = "0€";
+    winsValue.textContent = "0";
+    lossesValue.textContent = "0";
+    renderEquity([]);
     return;
   }
 
   let rrTotal = 0;
   let rrCount = 0;
-
   let scoreTotal = 0;
   let scoreCount = 0;
+  let wins = 0;
+  let losses = 0;
+  let totalPnl = 0;
 
   const marketMap = {};
 
   reviews.forEach(review => {
+    const rr = extractRR(review.review);
+    const score = extractScore(review.review);
 
-    const rrMatch = review.review.match(/RR:\s([0-9.]+)R/i);
-
-    if(rrMatch){
-      rrTotal += parseFloat(rrMatch[1]);
+    if(rr !== null){
+      rrTotal += rr;
       rrCount++;
     }
 
-    const scoreMatch =
-      review.review.match(/Setup Score:\s([0-9]+)/i);
-
-    if(scoreMatch){
-      scoreTotal += parseFloat(scoreMatch[1]);
+    if(score !== null){
+      scoreTotal += score;
       scoreCount++;
     }
 
-    marketMap[review.market] =
-      (marketMap[review.market] || 0) + 1;
+    if(review.market){
+      marketMap[review.market] = (marketMap[review.market] || 0) + 1;
+    }
 
+    if(review.result === "WIN") wins++;
+    if(review.result === "LOSS") losses++;
+
+    if(review.pnl){
+      totalPnl += Number(review.pnl);
+    }
   });
 
-  avgRR.textContent =
-    rrCount
-    ? (rrTotal / rrCount).toFixed(2) + "R"
-    : "0R";
-
-  avgScore.textContent =
-    scoreCount
-    ? Math.round(scoreTotal / scoreCount)
-    : "0";
+  avgRR.textContent = rrCount ? (rrTotal / rrCount).toFixed(2) + "R" : "0R";
+  avgScore.textContent = scoreCount ? Math.round(scoreTotal / scoreCount) : "0";
 
   let bestMarket = "-";
   let bestCount = 0;
 
   Object.entries(marketMap).forEach(([market,count]) => {
-
     if(count > bestCount){
       bestMarket = market;
       bestCount = count;
     }
-
   });
 
   topMarket.textContent = bestMarket;
+  winsValue.textContent = wins;
+  lossesValue.textContent = losses;
+
+  const totalFinished = wins + losses;
+
+  winrateValue.textContent =
+    totalFinished ? Math.round((wins / totalFinished) * 100) + "%" : "0%";
+
+  pnlValue.textContent = totalPnl.toFixed(2) + "€";
+  pnlValue.style.color = totalPnl >= 0 ? "#22c55e" : "#ef4444";
+
+  renderEquity(reviews);
+}
+
+function renderEquity(reviews){
+  equityBox.innerHTML = "";
+
+  if(!reviews.length){
+    equityBox.innerHTML = `<div class="empty-state" style="width:100%;">Noch keine Equity Daten vorhanden.</div>`;
+    return;
+  }
+
+  let equity = 0;
+  const curve = [];
+
+  reviews.slice().reverse().forEach(review => {
+    equity += Number(review.pnl || 0);
+    curve.push(equity);
+  });
+
+  if(!curve.length){
+    equityBox.innerHTML = `<div class="empty-state" style="width:100%;">Noch keine P&L Werte eingetragen.</div>`;
+    return;
+  }
+
+  const min = Math.min(...curve, 0);
+  const max = Math.max(...curve, 1);
+  const range = Math.max(max - min, 1);
+
+  curve.forEach(value => {
+    const height = 20 + ((value - min) / range) * 160;
+    const bar = document.createElement("div");
+    bar.className = "equity-bar";
+    bar.style.height = height + "px";
+    bar.style.background = value >= 0 ? "#ffd700" : "#ef4444";
+    equityBox.appendChild(bar);
+  });
 }
 
 function renderJournal(){
-
   const reviews = getReviews();
 
   calculateStats(reviews);
 
   if(!reviews.length){
-
     journalList.innerHTML = `
       <div class="empty-state">
         Noch keine gespeicherten AI Reviews vorhanden.
       </div>
     `;
-
     return;
   }
 
   journalList.innerHTML = "";
 
   reviews.forEach((review,index) => {
-
-    const date = new Date(review.date)
-    .toLocaleString("de-DE",{
+    const date = new Date(review.date).toLocaleString("de-DE",{
       day:"2-digit",
       month:"2-digit",
       hour:"2-digit",
       minute:"2-digit"
     });
 
-    const rrMatch =
-      review.review.match(/RR:\s([0-9.]+R)/i);
+    const rr = extractRR(review.review);
+    const score = extractScore(review.review);
 
-    const scoreMatch =
-      review.review.match(/Setup Score:\s([0-9]+)/i);
-
-    const rr =
-      rrMatch ? rrMatch[1] : "-";
-
-    const score =
-      scoreMatch ? scoreMatch[1] : "-";
+    const result = review.result || "OPEN";
+    const pnl = review.pnl || "";
 
     journalList.innerHTML += `
       <div class="review-card">
-
         <div class="review-top">
-
           <div>
-            <div class="review-market">
-              ${review.market}
-            </div>
-
-            <div style="color:#8f8f8f;font-size:13px;margin-top:6px;">
-              ${date}
-            </div>
+            <div class="review-market">${review.market || "-"}</div>
+            <div style="color:#8f8f8f;font-size:13px;margin-top:6px;">${date}</div>
           </div>
 
           <div class="review-badges">
-            <div class="review-badge">
-              ${review.direction}
-            </div>
-
-            <div class="review-badge">
-              RR ${rr}
-            </div>
-
-            <div class="review-badge">
-              Score ${score}
-            </div>
+            <div class="review-badge">${review.direction || "-"}</div>
+            <div class="review-badge">RR ${rr !== null ? rr + "R" : "-"}</div>
+            <div class="review-badge">Score ${score !== null ? score : "-"}</div>
+            <div class="review-badge">${result}</div>
+            <div class="review-badge">${pnl ? pnl + "€" : "P&L -"}</div>
           </div>
-
         </div>
 
         <div class="review-grid">
-
           <div class="review-box">
             <div class="review-box-label">Markt</div>
-            <div class="review-box-value">
-              ${review.market}
-            </div>
+            <div class="review-box-value">${review.market || "-"}</div>
           </div>
 
           <div class="review-box">
             <div class="review-box-label">Direction</div>
-            <div class="review-box-value">
-              ${review.direction}
-            </div>
+            <div class="review-box-value">${review.direction || "-"}</div>
           </div>
 
           <div class="review-box">
             <div class="review-box-label">RR</div>
-            <div class="review-box-value">
-              ${rr}
-            </div>
+            <div class="review-box-value">${rr !== null ? rr + "R" : "-"}</div>
           </div>
 
           <div class="review-box">
             <div class="review-box-label">Score</div>
-            <div class="review-box-value">
-              ${score}
-            </div>
+            <div class="review-box-value">${score !== null ? score : "-"}</div>
           </div>
-
         </div>
 
-        <div class="review-analysis">
-${review.review}
+        <div class="result-editor">
+          <select id="result-${index}">
+            <option value="OPEN" ${result === "OPEN" ? "selected" : ""}>OPEN</option>
+            <option value="WIN" ${result === "WIN" ? "selected" : ""}>WIN</option>
+            <option value="LOSS" ${result === "LOSS" ? "selected" : ""}>LOSS</option>
+            <option value="BE" ${result === "BE" ? "selected" : ""}>BREAK EVEN</option>
+          </select>
+
+          <input id="pnl-${index}" type="number" step="0.01" placeholder="P&L in €" value="${pnl}">
+
+          <button class="journal-btn" onclick="saveResult(${index})">Speichern</button>
         </div>
+
+        <div class="review-analysis">${review.review}</div>
 
         <div class="review-actions">
-
-          <button
-            class="journal-btn"
-            onclick="copyReview(${index})"
-          >
-            Kopieren
-          </button>
-
-          <button
-            class="journal-btn secondary"
-            onclick="deleteReview(${index})"
-          >
-            Löschen
-          </button>
-
+          <button class="journal-btn" onclick="copyReview(${index})">Kopieren</button>
+          <button class="journal-btn secondary" onclick="deleteReview(${index})">Löschen</button>
         </div>
-
       </div>
     `;
   });
 }
 
-function copyReview(index){
-
+function saveResult(index){
   const reviews = getReviews();
 
-  navigator.clipboard.writeText(
-    reviews[index].review
-  );
+  reviews[index].result = document.getElementById(`result-${index}`).value;
+  reviews[index].pnl = document.getElementById(`pnl-${index}`).value;
 
+  saveReviews(reviews);
+  renderJournal();
+}
+
+function copyReview(index){
+  const reviews = getReviews();
+  navigator.clipboard.writeText(reviews[index].review);
   alert("Review kopiert.");
 }
 
 function deleteReview(index){
-
   if(!confirm("Review löschen?")) return;
 
   const reviews = getReviews();
-
   reviews.splice(index,1);
 
-  localStorage.setItem(
-    "bp_ai_reviews",
-    JSON.stringify(reviews)
-  );
-
+  saveReviews(reviews);
   renderJournal();
 }
 
 clearBtn.addEventListener("click", () => {
-
-  if(!confirm("Gesamtes AI Journal löschen?"))
-  return;
+  if(!confirm("Gesamtes AI Journal löschen?")) return;
 
   localStorage.removeItem("bp_ai_reviews");
-
   renderJournal();
 });
 
 exportBtn.addEventListener("click", () => {
-
   const reviews = getReviews();
 
   const blob = new Blob(
@@ -578,12 +620,10 @@ exportBtn.addEventListener("click", () => {
   );
 
   const url = URL.createObjectURL(blob);
-
   const a = document.createElement("a");
 
   a.href = url;
   a.download = "bullprosperity-ai-journal.json";
-
   a.click();
 
   URL.revokeObjectURL(url);
