@@ -27,7 +27,7 @@
         if (data.role !== "admin") {
           window.location.href = "/locked.html";
         }
-      } catch (err) {
+      } catch {
         window.location.href = "/locked.html";
       }
     })();
@@ -36,7 +36,7 @@
   <style>
     .ai-grid{
       display:grid;
-      grid-template-columns:1fr .85fr;
+      grid-template-columns:1fr .9fr;
       gap:24px;
       margin-top:24px;
       align-items:start;
@@ -127,6 +127,12 @@
       display:none;
     }
 
+    .mini-grid{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:12px;
+    }
+
     .ai-btn{
       border:none;
       border-radius:999px;
@@ -139,9 +145,22 @@
       margin-top:6px;
     }
 
+    .ai-btn.secondary{
+      background:#111;
+      color:#fff;
+      border:1px solid rgba(255,215,0,.18);
+    }
+
     .ai-btn:disabled{
       opacity:.55;
       cursor:not-allowed;
+    }
+
+    .ai-actions{
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+      margin-top:14px;
     }
 
     .ai-result{
@@ -172,6 +191,34 @@
       white-space:pre-wrap;
     }
 
+    .score-grid{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:12px;
+      margin-top:16px;
+    }
+
+    .score-box{
+      background:#111;
+      border:1px solid rgba(255,215,0,.14);
+      border-radius:18px;
+      padding:16px;
+    }
+
+    .score-label{
+      color:#8f8f8f;
+      font-size:12px;
+      font-weight:900;
+      text-transform:uppercase;
+      margin-bottom:8px;
+    }
+
+    .score-value{
+      color:#ffd700;
+      font-size:28px;
+      font-weight:950;
+    }
+
     .locked-pill{
       display:inline-flex;
       padding:8px 12px;
@@ -190,6 +237,31 @@
       animation:pulseAI 1.2s infinite;
     }
 
+    .history-list{
+      display:grid;
+      gap:12px;
+      margin-top:18px;
+    }
+
+    .history-item{
+      background:#111;
+      border:1px solid rgba(255,215,0,.12);
+      border-radius:18px;
+      padding:16px;
+      cursor:pointer;
+    }
+
+    .history-item strong{
+      color:#ffd700;
+      display:block;
+      margin-bottom:6px;
+    }
+
+    .history-item span{
+      color:#aaa;
+      font-size:13px;
+    }
+
     @keyframes pulseAI{
       0%{opacity:.45;}
       50%{opacity:1;}
@@ -197,7 +269,9 @@
     }
 
     @media(max-width:1100px){
-      .ai-grid{
+      .ai-grid,
+      .mini-grid,
+      .score-grid{
         grid-template-columns:1fr;
       }
     }
@@ -225,7 +299,7 @@
       </h1>
 
       <p class="hero-text">
-        Interner AI Bereich für Trade Reviews, Screenshot Analysen, Bias Checks und spätere Premium Features.
+        Interner AI Bereich für Trade Reviews, Screenshot Analysen, Bias Checks, Setup Scores und spätere Premium Features.
       </p>
 
       <div class="locked-pill">
@@ -243,7 +317,7 @@
         </h2>
 
         <p class="section-subtext">
-          Lade TradingView oder MT5 Screenshots hoch und lasse dein Setup intern analysieren.
+          Lade TradingView oder MT5 Screenshots hoch. RR, Risiko und Setup Daten werden sofort intern berechnet.
         </p>
 
         <form class="ai-form" id="aiForm">
@@ -257,46 +331,111 @@
             <img id="imagePreview" class="preview-image" alt="Chart Preview">
           </div>
 
-          <div class="ai-field">
-            <label>Markt</label>
-            <select id="market">
-              <option>XAUUSD</option>
-              <option>EURUSD</option>
-              <option>NASDAQ</option>
-              <option>US30</option>
-              <option>BTCUSD</option>
-              <option>GBPJPY</option>
-            </select>
+          <div class="mini-grid">
+            <div class="ai-field">
+              <label>Markt</label>
+              <select id="market">
+                <option>XAUUSD</option>
+                <option>EURUSD</option>
+                <option>NASDAQ</option>
+                <option>US30</option>
+                <option>BTCUSD</option>
+                <option>GBPJPY</option>
+              </select>
+            </div>
+
+            <div class="ai-field">
+              <label>Richtung</label>
+              <select id="direction">
+                <option>Buy</option>
+                <option>Sell</option>
+              </select>
+            </div>
+
+            <div class="ai-field">
+              <label>Bias</label>
+              <select id="bias">
+                <option>Bullish</option>
+                <option>Bearish</option>
+                <option>Neutral</option>
+                <option>Unklar</option>
+              </select>
+            </div>
           </div>
 
-          <div class="ai-field">
-            <label>Bias</label>
-            <select id="bias">
-              <option>Bullish</option>
-              <option>Bearish</option>
-              <option>Neutral</option>
-              <option>Unklar</option>
-            </select>
+          <div class="mini-grid">
+            <div class="ai-field">
+              <label>Entry</label>
+              <input id="entry" placeholder="z. B. 2365.20">
+            </div>
+
+            <div class="ai-field">
+              <label>Stop Loss</label>
+              <input id="sl" placeholder="z. B. 2358.00">
+            </div>
+
+            <div class="ai-field">
+              <label>Take Profit</label>
+              <input id="tp" placeholder="z. B. 2380.00">
+            </div>
           </div>
 
-          <div class="ai-field">
-            <label>Entry</label>
-            <input id="entry" placeholder="z. B. 2365.20">
-          </div>
+          <div class="mini-grid">
+            <div class="ai-field">
+              <label>Session</label>
+              <select id="session">
+                <option>London</option>
+                <option>New York</option>
+                <option>London + New York</option>
+                <option>Asia</option>
+                <option>Unklar</option>
+              </select>
+            </div>
 
-          <div class="ai-field">
-            <label>Stop Loss</label>
-            <input id="sl" placeholder="z. B. 2358.00">
-          </div>
+            <div class="ai-field">
+              <label>Setup Modell</label>
+              <select id="setupModel">
+                <option>Liquidity Sweep + BOS + FVG</option>
+                <option>CHoCH + Retest</option>
+                <option>Orderblock Retest</option>
+                <option>Breakout Retest</option>
+                <option>Range Liquidity</option>
+                <option>Unklar</option>
+              </select>
+            </div>
 
-          <div class="ai-field">
-            <label>Take Profit</label>
-            <input id="tp" placeholder="z. B. 2380.00">
+            <div class="ai-field">
+              <label>Emotion</label>
+              <select id="emotion">
+                <option>Diszipliniert</option>
+                <option>Unsicher</option>
+                <option>FOMO</option>
+                <option>Geduldig</option>
+                <option>Impulsiv</option>
+              </select>
+            </div>
           </div>
 
           <div class="ai-field">
             <label>Notizen</label>
             <textarea id="notes" placeholder="Was siehst du im Chart? Liquidity, BOS, CHoCH, FVG, POI..."></textarea>
+          </div>
+
+          <div class="score-grid">
+            <div class="score-box">
+              <div class="score-label">Risk</div>
+              <div class="score-value" id="riskValue">-</div>
+            </div>
+
+            <div class="score-box">
+              <div class="score-label">Reward</div>
+              <div class="score-value" id="rewardValue">-</div>
+            </div>
+
+            <div class="score-box">
+              <div class="score-label">RR</div>
+              <div class="score-value" id="rrValue">-</div>
+            </div>
           </div>
 
           <button class="ai-btn" id="aiSubmitBtn" type="submit">
@@ -314,7 +453,7 @@
         </h2>
 
         <p class="section-subtext">
-          Echte interne AI-Anbindung. Dieses Feature ist noch nicht für Premium Member sichtbar.
+          Interne AI-Anbindung. Solange Billing nicht aktiv ist, bleiben RR, History und lokale Reviews trotzdem nutzbar.
         </p>
 
         <div class="ai-result" id="aiResult">
@@ -324,17 +463,43 @@
           </div>
 
           <div class="ai-result-box">
-            <strong>AI Checks</strong>
-            <p>BOS, CHoCH, Liquidity Sweep, POI, Risk Reward, Entry Qualität, SL Qualität und Setup Score.</p>
+            <strong>Interne Checks</strong>
+            <p>RR, Risk, Reward, Richtung, Bias, Session, Emotion, Setup Modell und AI Analyse.</p>
           </div>
+        </div>
 
-          <div class="ai-result-box">
-            <strong>Release Status</strong>
-            <p>Noch nicht für Premium Member sichtbar.</p>
-          </div>
+        <div class="ai-actions">
+          <button class="ai-btn secondary" type="button" id="copyReviewBtn">
+            Analyse kopieren
+          </button>
+
+          <button class="ai-btn secondary" type="button" id="saveReviewBtn">
+            Review speichern
+          </button>
+
+          <button class="ai-btn secondary" type="button" id="clearHistoryBtn">
+            History löschen
+          </button>
         </div>
       </div>
 
+    </section>
+
+    <section class="ai-card" style="margin-top:24px;">
+      <div class="badge">Review History</div>
+      <h2 class="section-heading" style="font-size:34px;margin-bottom:10px;">
+        Gespeicherte AI Reviews
+      </h2>
+      <p class="section-subtext">
+        Interne Admin-History im Browser gespeichert. Noch nicht für Mitglieder sichtbar.
+      </p>
+
+      <div class="history-list" id="historyList">
+        <div class="history-item">
+          <strong>Noch keine Reviews gespeichert</strong>
+          <span>Gespeicherte Analysen erscheinen hier.</span>
+        </div>
+      </div>
     </section>
 
     <div class="footer-note">
@@ -350,7 +515,17 @@ const aiForm = document.getElementById("aiForm");
 const aiResult = document.getElementById("aiResult");
 const aiSubmitBtn = document.getElementById("aiSubmitBtn");
 
+const riskValue = document.getElementById("riskValue");
+const rewardValue = document.getElementById("rewardValue");
+const rrValue = document.getElementById("rrValue");
+
+const copyReviewBtn = document.getElementById("copyReviewBtn");
+const saveReviewBtn = document.getElementById("saveReviewBtn");
+const clearHistoryBtn = document.getElementById("clearHistoryBtn");
+const historyList = document.getElementById("historyList");
+
 let imageBase64 = "";
+let latestReviewText = "";
 
 imageInput.addEventListener("change", () => {
   const file = imageInput.files[0];
@@ -368,7 +543,81 @@ imageInput.addEventListener("change", () => {
   reader.readAsDataURL(file);
 });
 
+function getSetupData(){
+  return {
+    market: document.getElementById("market").value,
+    direction: document.getElementById("direction").value,
+    bias: document.getElementById("bias").value,
+    entry: document.getElementById("entry").value || "-",
+    sl: document.getElementById("sl").value || "-",
+    tp: document.getElementById("tp").value || "-",
+    session: document.getElementById("session").value,
+    setupModel: document.getElementById("setupModel").value,
+    emotion: document.getElementById("emotion").value,
+    notes: document.getElementById("notes").value || "Keine Notizen eingetragen."
+  };
+}
+
+function calculateRR(){
+  const direction = document.getElementById("direction").value;
+  const entry = parseFloat(document.getElementById("entry").value);
+  const sl = parseFloat(document.getElementById("sl").value);
+  const tp = parseFloat(document.getElementById("tp").value);
+
+  if(isNaN(entry) || isNaN(sl) || isNaN(tp)){
+    riskValue.textContent = "-";
+    rewardValue.textContent = "-";
+    rrValue.textContent = "-";
+    return { risk:"-", reward:"-", rr:"-" };
+  }
+
+  const risk = Math.abs(entry - sl);
+  const reward = Math.abs(tp - entry);
+  const rr = risk > 0 ? reward / risk : 0;
+
+  riskValue.textContent = risk.toFixed(2);
+  rewardValue.textContent = reward.toFixed(2);
+  rrValue.textContent = rr.toFixed(2) + "R";
+
+  return {
+    risk: risk.toFixed(2),
+    reward: reward.toFixed(2),
+    rr: rr.toFixed(2) + "R"
+  };
+}
+
+["entry","sl","tp","direction"].forEach(id => {
+  document.getElementById(id).addEventListener("input", calculateRR);
+  document.getElementById(id).addEventListener("change", calculateRR);
+});
+
+function localScore(rr){
+  const data = getSetupData();
+  let score = 50;
+
+  const rrNumber = parseFloat(String(rr).replace("R",""));
+
+  if(!isNaN(rrNumber)){
+    if(rrNumber >= 3) score += 20;
+    else if(rrNumber >= 2) score += 12;
+    else if(rrNumber >= 1.5) score += 6;
+    else score -= 12;
+  }
+
+  if(data.bias !== "Unklar") score += 8;
+  if(data.setupModel !== "Unklar") score += 10;
+  if(data.session !== "Unklar") score += 6;
+  if(data.emotion === "Diszipliniert" || data.emotion === "Geduldig") score += 6;
+  if(data.emotion === "FOMO" || data.emotion === "Impulsiv") score -= 10;
+
+  score = Math.max(0, Math.min(100, score));
+
+  return score;
+}
+
 function setResult(title, text){
+  latestReviewText = `${title}\n\n${text}`;
+
   aiResult.innerHTML = `
     <div class="ai-result-box">
       <strong>${title}</strong>
@@ -377,15 +626,55 @@ function setResult(title, text){
   `;
 }
 
+function fallbackReview(errorMessage){
+  const data = getSetupData();
+  const rr = calculateRR();
+  const score = localScore(rr.rr);
+
+  return `
+BullProsperity AI Local Review
+
+Status:
+Die echte AI Analyse ist vorbereitet, aber aktuell blockiert durch API/Billing oder Serverantwort:
+${errorMessage || "Keine genaue Fehlermeldung."}
+
+Setup Daten:
+Markt: ${data.market}
+Richtung: ${data.direction}
+Bias: ${data.bias}
+Entry: ${data.entry}
+SL: ${data.sl}
+TP: ${data.tp}
+Session: ${data.session}
+Setup Modell: ${data.setupModel}
+Emotion: ${data.emotion}
+
+RR Check:
+Risk: ${rr.risk}
+Reward: ${rr.reward}
+RR: ${rr.rr}
+
+Interner Setup Score:
+${score}/100
+
+Lokale Einschätzung:
+${score >= 80 ? "Starkes Setup Profil. Trotzdem erst mit sauberer Confirmation handeln." : ""}
+${score >= 60 && score < 80 ? "Solides Setup, aber Kontext und Entry müssen sauber bestätigt werden." : ""}
+${score < 60 ? "Setup wirkt noch nicht sauber genug. Mehr Confirmation und klarere Struktur abwarten." : ""}
+
+Notizen:
+${data.notes}
+
+Education Hinweis:
+Dies ist keine Finanzberatung, sondern eine interne BullProsperity Education Analyse.
+`;
+}
+
 aiForm.addEventListener("submit", async (e) => {
   e.preventDefault();
 
-  const market = document.getElementById("market").value;
-  const bias = document.getElementById("bias").value;
-  const entry = document.getElementById("entry").value || "-";
-  const sl = document.getElementById("sl").value || "-";
-  const tp = document.getElementById("tp").value || "-";
-  const notes = document.getElementById("notes").value || "Keine Notizen eingetragen.";
+  const data = getSetupData();
+  const rr = calculateRR();
 
   if (!imageBase64) {
     setResult("Fehler", "Bitte zuerst einen Chart Screenshot hochladen.");
@@ -398,7 +687,7 @@ aiForm.addEventListener("submit", async (e) => {
   aiResult.innerHTML = `
     <div class="ai-result-box">
       <strong>Analyse läuft</strong>
-      <p class="ai-loading">BullProsperity AI prüft Marktstruktur, Liquidity, Entry, SL, TP und Setup Qualität...</p>
+      <p class="ai-loading">BullProsperity AI prüft Screenshot, Marktstruktur, Liquidity, Entry, SL, TP, RR und Setup Qualität...</p>
     </div>
   `;
 
@@ -410,12 +699,8 @@ aiForm.addEventListener("submit", async (e) => {
       },
       credentials: "include",
       body: JSON.stringify({
-        market,
-        bias,
-        entry,
-        sl,
-        tp,
-        notes,
+        ...data,
+        rr,
         imageBase64
       })
     });
@@ -423,11 +708,35 @@ aiForm.addEventListener("submit", async (e) => {
     const result = await res.json();
 
     if (!res.ok) {
-      setResult("AI Fehler", result.error || "Analyse konnte nicht durchgeführt werden.");
+      const fallback = fallbackReview(result.error || "AI Analyse konnte nicht durchgeführt werden.");
+      setResult("AI Fehler • Local Review aktiv", fallback);
       return;
     }
 
+    const score = localScore(rr.rr);
+
+    latestReviewText = `
+BullProsperity AI Analyse
+
+Setup Score: ${score}/100
+Risk: ${rr.risk}
+Reward: ${rr.reward}
+RR: ${rr.rr}
+
+${result.analysis || "Keine Analyse erhalten."}
+`;
+
     aiResult.innerHTML = `
+      <div class="ai-result-box">
+        <strong>Setup Score</strong>
+        <p>${score}/100</p>
+      </div>
+
+      <div class="ai-result-box">
+        <strong>Risk Reward</strong>
+        <p>Risk: ${rr.risk}<br>Reward: ${rr.reward}<br>RR: ${rr.rr}</p>
+      </div>
+
       <div class="ai-result-box">
         <strong>BullProsperity AI Analyse</strong>
         <p>${result.analysis || "Keine Analyse erhalten."}</p>
@@ -435,12 +744,96 @@ aiForm.addEventListener("submit", async (e) => {
     `;
 
   } catch (err) {
-    setResult("Server Fehler", "Die AI Analyse konnte nicht geladen werden.");
+    const fallback = fallbackReview("Server Fehler oder API nicht erreichbar.");
+    setResult("Server Fehler • Local Review aktiv", fallback);
   } finally {
     aiSubmitBtn.disabled = false;
     aiSubmitBtn.textContent = "BullProsperity AI Analyse starten";
   }
 });
+
+copyReviewBtn.addEventListener("click", async () => {
+  if(!latestReviewText){
+    alert("Noch keine Analyse vorhanden.");
+    return;
+  }
+
+  await navigator.clipboard.writeText(latestReviewText);
+  alert("Analyse kopiert.");
+});
+
+saveReviewBtn.addEventListener("click", () => {
+  if(!latestReviewText){
+    alert("Noch keine Analyse vorhanden.");
+    return;
+  }
+
+  const data = getSetupData();
+  const saved = JSON.parse(localStorage.getItem("bp_ai_reviews") || "[]");
+
+  saved.unshift({
+    date: new Date().toISOString(),
+    market: data.market,
+    direction: data.direction,
+    review: latestReviewText
+  });
+
+  localStorage.setItem("bp_ai_reviews", JSON.stringify(saved.slice(0, 20)));
+  loadHistory();
+  alert("Review gespeichert.");
+});
+
+clearHistoryBtn.addEventListener("click", () => {
+  if(!confirm("AI Review History wirklich löschen?")) return;
+
+  localStorage.removeItem("bp_ai_reviews");
+  loadHistory();
+});
+
+function loadHistory(){
+  const saved = JSON.parse(localStorage.getItem("bp_ai_reviews") || "[]");
+
+  if(!saved.length){
+    historyList.innerHTML = `
+      <div class="history-item">
+        <strong>Noch keine Reviews gespeichert</strong>
+        <span>Gespeicherte Analysen erscheinen hier.</span>
+      </div>
+    `;
+    return;
+  }
+
+  historyList.innerHTML = "";
+
+  saved.forEach((item, index) => {
+    const date = new Date(item.date).toLocaleString("de-DE", {
+      day:"2-digit",
+      month:"2-digit",
+      hour:"2-digit",
+      minute:"2-digit"
+    });
+
+    historyList.innerHTML += `
+      <div class="history-item" onclick="openHistory(${index})">
+        <strong>${item.market} • ${item.direction}</strong>
+        <span>${date}</span>
+      </div>
+    `;
+  });
+}
+
+function openHistory(index){
+  const saved = JSON.parse(localStorage.getItem("bp_ai_reviews") || "[]");
+  const item = saved[index];
+
+  if(!item) return;
+
+  latestReviewText = item.review;
+  setResult("Gespeicherter AI Review", item.review);
+}
+
+loadHistory();
+calculateRR();
 </script>
 
 </body>
