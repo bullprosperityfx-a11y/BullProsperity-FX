@@ -12,7 +12,6 @@
   <meta name="theme-color" content="#050505">
 
   <link rel="stylesheet" href="/theme.css" />
-
   <script src="/login.js" defer></script>
 
   <script>
@@ -28,7 +27,6 @@
         if (data.role !== "admin") {
           window.location.href = "/locked.html";
         }
-
       } catch (err) {
         window.location.href = "/locked.html";
       }
@@ -141,6 +139,11 @@
       margin-top:6px;
     }
 
+    .ai-btn:disabled{
+      opacity:.55;
+      cursor:not-allowed;
+    }
+
     .ai-result{
       margin-top:20px;
       display:grid;
@@ -166,6 +169,7 @@
       margin:0;
       color:rgba(255,255,255,.72);
       line-height:1.6;
+      white-space:pre-wrap;
     }
 
     .locked-pill{
@@ -178,6 +182,18 @@
       font-size:12px;
       font-weight:900;
       margin-top:14px;
+    }
+
+    .ai-loading{
+      color:#ffd700;
+      font-weight:900;
+      animation:pulseAI 1.2s infinite;
+    }
+
+    @keyframes pulseAI{
+      0%{opacity:.45;}
+      50%{opacity:1;}
+      100%{opacity:.45;}
     }
 
     @media(max-width:1100px){
@@ -227,7 +243,7 @@
         </h2>
 
         <p class="section-subtext">
-          Lade später TradingView oder MT5 Screenshots hoch und lasse Setups automatisch prüfen.
+          Lade TradingView oder MT5 Screenshots hoch und lasse dein Setup intern analysieren.
         </p>
 
         <form class="ai-form" id="aiForm">
@@ -235,9 +251,9 @@
           <div class="upload-box">
             <strong>Chart Screenshot hochladen</strong>
             <p style="color:#aaa;line-height:1.6;">
-              Unterstützt später TradingView, MT5 und Setup Room Screenshots.
+              Unterstützt TradingView, MT5 und Setup Room Screenshots.
             </p>
-            <input type="file" id="chartImage" accept="image/*">
+            <input type="file" id="chartImage" accept="image/*" required>
             <img id="imagePreview" class="preview-image" alt="Chart Preview">
           </div>
 
@@ -283,8 +299,8 @@
             <textarea id="notes" placeholder="Was siehst du im Chart? Liquidity, BOS, CHoCH, FVG, POI..."></textarea>
           </div>
 
-          <button class="ai-btn" type="submit">
-            AI Preview Analyse starten
+          <button class="ai-btn" id="aiSubmitBtn" type="submit">
+            BullProsperity AI Analyse starten
           </button>
 
         </form>
@@ -298,18 +314,18 @@
         </h2>
 
         <p class="section-subtext">
-          Diese Box ist aktuell ein interner Preview-Modus. Die echte AI-Anbindung kommt später.
+          Echte interne AI-Anbindung. Dieses Feature ist noch nicht für Premium Member sichtbar.
         </p>
 
         <div class="ai-result" id="aiResult">
           <div class="ai-result-box">
             <strong>Status</strong>
-            <p>Warte auf Setup Eingabe.</p>
+            <p>Warte auf Chart Screenshot und Setup Eingabe.</p>
           </div>
 
           <div class="ai-result-box">
-            <strong>Geplante AI Checks</strong>
-            <p>BOS, CHoCH, Liquidity Sweep, POI, Risk Reward, Entry Qualität und psychologische Fehler.</p>
+            <strong>AI Checks</strong>
+            <p>BOS, CHoCH, Liquidity Sweep, POI, Risk Reward, Entry Qualität, SL Qualität und Setup Score.</p>
           </div>
 
           <div class="ai-result-box">
@@ -332,6 +348,9 @@ const imageInput = document.getElementById("chartImage");
 const imagePreview = document.getElementById("imagePreview");
 const aiForm = document.getElementById("aiForm");
 const aiResult = document.getElementById("aiResult");
+const aiSubmitBtn = document.getElementById("aiSubmitBtn");
+
+let imageBase64 = "";
 
 imageInput.addEventListener("change", () => {
   const file = imageInput.files[0];
@@ -341,14 +360,24 @@ imageInput.addEventListener("change", () => {
   const reader = new FileReader();
 
   reader.onload = (e) => {
-    imagePreview.src = e.target.result;
+    imageBase64 = e.target.result;
+    imagePreview.src = imageBase64;
     imagePreview.style.display = "block";
   };
 
   reader.readAsDataURL(file);
 });
 
-aiForm.addEventListener("submit", (e) => {
+function setResult(title, text){
+  aiResult.innerHTML = `
+    <div class="ai-result-box">
+      <strong>${title}</strong>
+      <p>${text}</p>
+    </div>
+  `;
+}
+
+aiForm.addEventListener("submit", async (e) => {
   e.preventDefault();
 
   const market = document.getElementById("market").value;
@@ -358,27 +387,59 @@ aiForm.addEventListener("submit", (e) => {
   const tp = document.getElementById("tp").value || "-";
   const notes = document.getElementById("notes").value || "Keine Notizen eingetragen.";
 
+  if (!imageBase64) {
+    setResult("Fehler", "Bitte zuerst einen Chart Screenshot hochladen.");
+    return;
+  }
+
+  aiSubmitBtn.disabled = true;
+  aiSubmitBtn.textContent = "AI analysiert Setup...";
+
   aiResult.innerHTML = `
     <div class="ai-result-box">
-      <strong>AI Preview Analyse</strong>
-      <p>Markt: ${market}<br>Bias: ${bias}<br>Entry: ${entry}<br>SL: ${sl}<br>TP: ${tp}</p>
-    </div>
-
-    <div class="ai-result-box">
-      <strong>SMC Check</strong>
-      <p>Preview: Die spätere AI wird prüfen, ob Struktur, Liquidity, POI und Entry logisch zusammenpassen.</p>
-    </div>
-
-    <div class="ai-result-box">
-      <strong>Risk Check</strong>
-      <p>Preview: Die spätere AI bewertet Risiko, RR, Stop-Loss Platzierung und Trade Qualität.</p>
-    </div>
-
-    <div class="ai-result-box">
-      <strong>Deine Notizen</strong>
-      <p>${notes}</p>
+      <strong>Analyse läuft</strong>
+      <p class="ai-loading">BullProsperity AI prüft Marktstruktur, Liquidity, Entry, SL, TP und Setup Qualität...</p>
     </div>
   `;
+
+  try {
+    const res = await fetch("/api/ai-review", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      credentials: "include",
+      body: JSON.stringify({
+        market,
+        bias,
+        entry,
+        sl,
+        tp,
+        notes,
+        imageBase64
+      })
+    });
+
+    const result = await res.json();
+
+    if (!res.ok) {
+      setResult("AI Fehler", result.error || "Analyse konnte nicht durchgeführt werden.");
+      return;
+    }
+
+    aiResult.innerHTML = `
+      <div class="ai-result-box">
+        <strong>BullProsperity AI Analyse</strong>
+        <p>${result.analysis || "Keine Analyse erhalten."}</p>
+      </div>
+    `;
+
+  } catch (err) {
+    setResult("Server Fehler", "Die AI Analyse konnte nicht geladen werden.");
+  } finally {
+    aiSubmitBtn.disabled = false;
+    aiSubmitBtn.textContent = "BullProsperity AI Analyse starten";
+  }
 });
 </script>
 
