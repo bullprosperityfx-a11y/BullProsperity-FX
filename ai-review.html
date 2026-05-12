@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>BullProsperity | AI Review</title>
+
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <link rel="manifest" href="/manifest.json">
+  <link rel="apple-touch-icon" href="/favicon.png">
+  <meta name="theme-color" content="#050505">
+
+  <link rel="stylesheet" href="/theme.css" />
+
+  <script src="/login.js" defer></script>
+
+  <script>
+    (async () => {
+      try {
+        const res = await fetch("/api/access", {
+          credentials: "include",
+          cache: "no-store"
+        });
+
+        const data = await res.json();
+
+        if (data.role !== "admin") {
+          window.location.href = "/locked.html";
+        }
+
+      } catch (err) {
+        window.location.href = "/locked.html";
+      }
+    })();
+  </script>
+
+  <style>
+    .ai-grid{
+      display:grid;
+      grid-template-columns:1fr .85fr;
+      gap:24px;
+      margin-top:24px;
+      align-items:start;
+    }
+
+    .ai-card{
+      border:1px solid var(--line);
+      border-radius:28px;
+      background:linear-gradient(180deg,var(--panel),var(--panel-2));
+      padding:24px;
+      position:relative;
+      overflow:hidden;
+    }
+
+    .ai-card::before{
+      content:"";
+      position:absolute;
+      right:-100px;
+      top:-100px;
+      width:260px;
+      height:260px;
+      background:radial-gradient(circle,rgba(255,215,0,.13),transparent 70%);
+      pointer-events:none;
+    }
+
+    .ai-form{
+      display:grid;
+      gap:16px;
+      margin-top:20px;
+      position:relative;
+      z-index:1;
+    }
+
+    .ai-field{
+      display:grid;
+      gap:8px;
+    }
+
+    .ai-field label{
+      color:#ffd700;
+      font-size:12px;
+      font-weight:900;
+      text-transform:uppercase;
+      letter-spacing:.08em;
+    }
+
+    .ai-field input,
+    .ai-field select,
+    .ai-field textarea{
+      width:100%;
+      background:#111;
+      color:#fff;
+      border:1px solid rgba(255,215,0,.16);
+      border-radius:18px;
+      padding:15px;
+      outline:none;
+      font-size:15px;
+      box-sizing:border-box;
+    }
+
+    .ai-field textarea{
+      min-height:130px;
+      resize:vertical;
+      line-height:1.6;
+    }
+
+    .upload-box{
+      border:1px dashed rgba(255,215,0,.32);
+      background:rgba(255,215,0,.04);
+      border-radius:22px;
+      padding:24px;
+      text-align:center;
+      color:#fff;
+    }
+
+    .upload-box input{
+      margin-top:14px;
+    }
+
+    .preview-image{
+      width:100%;
+      max-height:360px;
+      object-fit:contain;
+      border-radius:20px;
+      border:1px solid rgba(255,215,0,.14);
+      background:#080808;
+      margin-top:16px;
+      display:none;
+    }
+
+    .ai-btn{
+      border:none;
+      border-radius:999px;
+      padding:15px 22px;
+      background:#ffd700;
+      color:#111;
+      font-weight:950;
+      cursor:pointer;
+      font-size:15px;
+      margin-top:6px;
+    }
+
+    .ai-result{
+      margin-top:20px;
+      display:grid;
+      gap:14px;
+      position:relative;
+      z-index:1;
+    }
+
+    .ai-result-box{
+      background:#111;
+      border:1px solid rgba(255,215,0,.14);
+      border-radius:20px;
+      padding:18px;
+    }
+
+    .ai-result-box strong{
+      color:#ffd700;
+      display:block;
+      margin-bottom:8px;
+    }
+
+    .ai-result-box p{
+      margin:0;
+      color:rgba(255,255,255,.72);
+      line-height:1.6;
+    }
+
+    .locked-pill{
+      display:inline-flex;
+      padding:8px 12px;
+      border-radius:999px;
+      background:rgba(255,215,0,.08);
+      border:1px solid rgba(255,215,0,.22);
+      color:#ffd700;
+      font-size:12px;
+      font-weight:900;
+      margin-top:14px;
+    }
+
+    @media(max-width:1100px){
+      .ai-grid{
+        grid-template-columns:1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="page">
+
+    <nav class="navbar">
+      <a href="/admin/dashboard.html" class="logo">BullProsperity | AI Lab</a>
+
+      <div class="nav-links">
+        <a href="/hub.html">Hub</a>
+        <a href="/admin/dashboard.html">Admin</a>
+        <a id="logoutBtn" href="/api/logout" class="logout-btn">Logout</a>
+      </div>
+    </nav>
+
+    <section class="hero-shell">
+      <div class="badge">Hidden Admin Update</div>
+
+      <h1 class="hero-title">
+        BullProsperity <span class="gold">AI Review</span>
+      </h1>
+
+      <p class="hero-text">
+        Interner AI Bereich für Trade Reviews, Screenshot Analysen, Bias Checks und spätere Premium Features.
+      </p>
+
+      <div class="locked-pill">
+        Nur Admin sichtbar • Noch nicht veröffentlicht
+      </div>
+    </section>
+
+    <section class="ai-grid">
+
+      <div class="ai-card">
+        <div class="badge">AI Trade Review</div>
+
+        <h2 class="section-heading" style="font-size:36px;margin-bottom:10px;">
+          Setup hochladen
+        </h2>
+
+        <p class="section-subtext">
+          Lade später TradingView oder MT5 Screenshots hoch und lasse Setups automatisch prüfen.
+        </p>
+
+        <form class="ai-form" id="aiForm">
+
+          <div class="upload-box">
+            <strong>Chart Screenshot hochladen</strong>
+            <p style="color:#aaa;line-height:1.6;">
+              Unterstützt später TradingView, MT5 und Setup Room Screenshots.
+            </p>
+            <input type="file" id="chartImage" accept="image/*">
+            <img id="imagePreview" class="preview-image" alt="Chart Preview">
+          </div>
+
+          <div class="ai-field">
+            <label>Markt</label>
+            <select id="market">
+              <option>XAUUSD</option>
+              <option>EURUSD</option>
+              <option>NASDAQ</option>
+              <option>US30</option>
+              <option>BTCUSD</option>
+              <option>GBPJPY</option>
+            </select>
+          </div>
+
+          <div class="ai-field">
+            <label>Bias</label>
+            <select id="bias">
+              <option>Bullish</option>
+              <option>Bearish</option>
+              <option>Neutral</option>
+              <option>Unklar</option>
+            </select>
+          </div>
+
+          <div class="ai-field">
+            <label>Entry</label>
+            <input id="entry" placeholder="z. B. 2365.20">
+          </div>
+
+          <div class="ai-field">
+            <label>Stop Loss</label>
+            <input id="sl" placeholder="z. B. 2358.00">
+          </div>
+
+          <div class="ai-field">
+            <label>Take Profit</label>
+            <input id="tp" placeholder="z. B. 2380.00">
+          </div>
+
+          <div class="ai-field">
+            <label>Notizen</label>
+            <textarea id="notes" placeholder="Was siehst du im Chart? Liquidity, BOS, CHoCH, FVG, POI..."></textarea>
+          </div>
+
+          <button class="ai-btn" type="submit">
+            AI Preview Analyse starten
+          </button>
+
+        </form>
+      </div>
+
+      <div class="ai-card">
+        <div class="badge">AI Analyse Output</div>
+
+        <h2 class="section-heading" style="font-size:34px;margin-bottom:10px;">
+          BullProsperity AI Ergebnis
+        </h2>
+
+        <p class="section-subtext">
+          Diese Box ist aktuell ein interner Preview-Modus. Die echte AI-Anbindung kommt später.
+        </p>
+
+        <div class="ai-result" id="aiResult">
+          <div class="ai-result-box">
+            <strong>Status</strong>
+            <p>Warte auf Setup Eingabe.</p>
+          </div>
+
+          <div class="ai-result-box">
+            <strong>Geplante AI Checks</strong>
+            <p>BOS, CHoCH, Liquidity Sweep, POI, Risk Reward, Entry Qualität und psychologische Fehler.</p>
+          </div>
+
+          <div class="ai-result-box">
+            <strong>Release Status</strong>
+            <p>Noch nicht für Premium Member sichtbar.</p>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <div class="footer-note">
+      BullProsperity AI Lab ist ein internes Admin Feature und noch nicht veröffentlicht.
+    </div>
+
+  </div>
+
+<script>
+const imageInput = document.getElementById("chartImage");
+const imagePreview = document.getElementById("imagePreview");
+const aiForm = document.getElementById("aiForm");
+const aiResult = document.getElementById("aiResult");
+
+imageInput.addEventListener("change", () => {
+  const file = imageInput.files[0];
+
+  if (!file) return;
+
+  const reader = new FileReader();
+
+  reader.onload = (e) => {
+    imagePreview.src = e.target.result;
+    imagePreview.style.display = "block";
+  };
+
+  reader.readAsDataURL(file);
+});
+
+aiForm.addEventListener("submit", (e) => {
+  e.preventDefault();
+
+  const market = document.getElementById("market").value;
+  const bias = document.getElementById("bias").value;
+  const entry = document.getElementById("entry").value || "-";
+  const sl = document.getElementById("sl").value || "-";
+  const tp = document.getElementById("tp").value || "-";
+  const notes = document.getElementById("notes").value || "Keine Notizen eingetragen.";
+
+  aiResult.innerHTML = `
+    <div class="ai-result-box">
+      <strong>AI Preview Analyse</strong>
+      <p>Markt: ${market}<br>Bias: ${bias}<br>Entry: ${entry}<br>SL: ${sl}<br>TP: ${tp}</p>
+    </div>
+
+    <div class="ai-result-box">
+      <strong>SMC Check</strong>
+      <p>Preview: Die spätere AI wird prüfen, ob Struktur, Liquidity, POI und Entry logisch zusammenpassen.</p>
+    </div>
+
+    <div class="ai-result-box">
+      <strong>Risk Check</strong>
+      <p>Preview: Die spätere AI bewertet Risiko, RR, Stop-Loss Platzierung und Trade Qualität.</p>
+    </div>
+
+    <div class="ai-result-box">
+      <strong>Deine Notizen</strong>
+      <p>${notes}</p>
+    </div>
+  `;
+});
+</script>
+
+</body>
+</html>
