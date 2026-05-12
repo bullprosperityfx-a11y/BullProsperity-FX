@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+  <title>BullProsperity | AI Journal</title>
+
+  <link rel="stylesheet" href="/theme.css" />
+  <script src="/login.js" defer></script>
+
+  <script>
+    (async () => {
+      try{
+        const res = await fetch("/api/access",{
+          credentials:"include",
+          cache:"no-store"
+        });
+
+        const data = await res.json();
+
+        if(data.role !== "admin"){
+          window.location.href="/locked.html";
+        }
+
+      }catch{
+        window.location.href="/locked.html";
+      }
+    })();
+  </script>
+
+  <style>
+    .journal-shell{
+      display:grid;
+      gap:24px;
+      margin-top:24px;
+    }
+
+    .journal-top{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:18px;
+    }
+
+    .journal-card,
+    .journal-stat{
+      background:linear-gradient(180deg,var(--panel),var(--panel-2));
+      border:1px solid var(--line);
+      border-radius:28px;
+      padding:24px;
+      position:relative;
+      overflow:hidden;
+    }
+
+    .journal-card::before,
+    .journal-stat::before{
+      content:"";
+      position:absolute;
+      right:-80px;
+      top:-80px;
+      width:220px;
+      height:220px;
+      background:radial-gradient(circle,rgba(255,215,0,.12),transparent 70%);
+      pointer-events:none;
+    }
+
+    .journal-label{
+      color:#8f8f8f;
+      font-size:12px;
+      text-transform:uppercase;
+      letter-spacing:.08em;
+      font-weight:900;
+      margin-bottom:10px;
+    }
+
+    .journal-value{
+      color:#ffd700;
+      font-size:34px;
+      font-weight:950;
+    }
+
+    .journal-sub{
+      margin-top:8px;
+      color:rgba(255,255,255,.6);
+      line-height:1.5;
+      font-size:13px;
+    }
+
+    .journal-list{
+      display:grid;
+      gap:16px;
+    }
+
+    .review-card{
+      background:#0f0f0f;
+      border:1px solid rgba(255,215,0,.12);
+      border-radius:24px;
+      padding:22px;
+    }
+
+    .review-top{
+      display:flex;
+      justify-content:space-between;
+      gap:16px;
+      align-items:center;
+      flex-wrap:wrap;
+      margin-bottom:18px;
+    }
+
+    .review-market{
+      color:#ffd700;
+      font-size:24px;
+      font-weight:950;
+    }
+
+    .review-badges{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
+    .review-badge{
+      padding:8px 12px;
+      border-radius:999px;
+      background:rgba(255,215,0,.06);
+      border:1px solid rgba(255,215,0,.18);
+      color:#ffd700;
+      font-size:11px;
+      font-weight:900;
+      letter-spacing:.08em;
+    }
+
+    .review-grid{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:14px;
+      margin-top:16px;
+    }
+
+    .review-box{
+      background:#111;
+      border:1px solid rgba(255,215,0,.10);
+      border-radius:18px;
+      padding:14px;
+    }
+
+    .review-box-label{
+      color:#8f8f8f;
+      font-size:11px;
+      text-transform:uppercase;
+      margin-bottom:6px;
+      font-weight:800;
+    }
+
+    .review-box-value{
+      color:#fff;
+      font-size:18px;
+      font-weight:900;
+    }
+
+    .review-analysis{
+      margin-top:18px;
+      background:#111;
+      border-radius:18px;
+      border:1px solid rgba(255,215,0,.10);
+      padding:18px;
+      color:rgba(255,255,255,.74);
+      line-height:1.7;
+      white-space:pre-wrap;
+    }
+
+    .review-actions{
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+      margin-top:18px;
+    }
+
+    .journal-btn{
+      border:none;
+      border-radius:999px;
+      padding:12px 18px;
+      background:#ffd700;
+      color:#111;
+      font-weight:900;
+      cursor:pointer;
+      font-size:14px;
+    }
+
+    .journal-btn.secondary{
+      background:#111;
+      color:#fff;
+      border:1px solid rgba(255,215,0,.14);
+    }
+
+    .empty-state{
+      text-align:center;
+      padding:60px 20px;
+      color:#8f8f8f;
+      border:1px dashed rgba(255,215,0,.16);
+      border-radius:24px;
+    }
+
+    @media(max-width:1200px){
+      .journal-top,
+      .review-grid{
+        grid-template-columns:1fr 1fr;
+      }
+    }
+
+    @media(max-width:700px){
+      .journal-top,
+      .review-grid{
+        grid-template-columns:1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="page">
+
+    <nav class="navbar">
+      <a href="/admin/dashboard.html" class="logo">
+        BullProsperity | AI Journal
+      </a>
+
+      <div class="nav-links">
+        <a href="/hub.html">Hub</a>
+        <a href="/admin/dashboard.html">Admin</a>
+        <a href="/ai-review.html">AI Review</a>
+      </div>
+    </nav>
+
+    <section class="hero-shell">
+      <div class="badge">Hidden AI Infrastructure</div>
+
+      <h1 class="hero-title">
+        BullProsperity <span class="gold">AI Journal</span>
+      </h1>
+
+      <p class="hero-text">
+        Interne AI Review Datenbank für spätere Analytics, Equity Tracking,
+        Setup Scores und Performance Systeme.
+      </p>
+    </section>
+
+    <div class="journal-shell">
+
+      <section class="journal-top">
+
+        <div class="journal-stat">
+          <div class="journal-label">Gesamte Reviews</div>
+          <div class="journal-value" id="totalReviews">0</div>
+          <div class="journal-sub">
+            Gespeicherte AI Reviews insgesamt.
+          </div>
+        </div>
+
+        <div class="journal-stat">
+          <div class="journal-label">Durchschnitt RR</div>
+          <div class="journal-value" id="avgRR">0R</div>
+          <div class="journal-sub">
+            Durchschnittlicher Risk Reward Wert.
+          </div>
+        </div>
+
+        <div class="journal-stat">
+          <div class="journal-label">Top Markt</div>
+          <div class="journal-value" id="topMarket">-</div>
+          <div class="journal-sub">
+            Meist analysierter Markt.
+          </div>
+        </div>
+
+        <div class="journal-stat">
+          <div class="journal-label">Average Score</div>
+          <div class="journal-value" id="avgScore">0</div>
+          <div class="journal-sub">
+            Durchschnittlicher Setup Score.
+          </div>
+        </div>
+
+      </section>
+
+      <section class="journal-card">
+
+        <div class="badge">AI Reviews</div>
+
+        <h2 class="section-heading" style="font-size:36px;margin-bottom:10px;">
+          Gespeicherte AI Analysen
+        </h2>
+
+        <p class="section-subtext">
+          Alle internen BullProsperity AI Reviews werden hier gesammelt.
+        </p>
+
+        <div class="review-actions">
+          <button class="journal-btn secondary" id="exportBtn">
+            Journal exportieren
+          </button>
+
+          <button class="journal-btn secondary" id="clearBtn">
+            Alles löschen
+          </button>
+        </div>
+
+        <div class="journal-list" id="journalList" style="margin-top:22px;">
+          <div class="empty-state">
+            Noch keine gespeicherten AI Reviews vorhanden.
+          </div>
+        </div>
+
+      </section>
+
+    </div>
+
+  </div>
+
+<script>
+const journalList = document.getElementById("journalList");
+
+const totalReviews = document.getElementById("totalReviews");
+const avgRR = document.getElementById("avgRR");
+const topMarket = document.getElementById("topMarket");
+const avgScore = document.getElementById("avgScore");
+
+const exportBtn = document.getElementById("exportBtn");
+const clearBtn = document.getElementById("clearBtn");
+
+function getReviews(){
+  return JSON.parse(
+    localStorage.getItem("bp_ai_reviews") || "[]"
+  );
+}
+
+function calculateStats(reviews){
+
+  totalReviews.textContent = reviews.length;
+
+  if(!reviews.length){
+    avgRR.textContent = "0R";
+    topMarket.textContent = "-";
+    avgScore.textContent = "0";
+    return;
+  }
+
+  let rrTotal = 0;
+  let rrCount = 0;
+
+  let scoreTotal = 0;
+  let scoreCount = 0;
+
+  const marketMap = {};
+
+  reviews.forEach(review => {
+
+    const rrMatch = review.review.match(/RR:\s([0-9.]+)R/i);
+
+    if(rrMatch){
+      rrTotal += parseFloat(rrMatch[1]);
+      rrCount++;
+    }
+
+    const scoreMatch =
+      review.review.match(/Setup Score:\s([0-9]+)/i);
+
+    if(scoreMatch){
+      scoreTotal += parseFloat(scoreMatch[1]);
+      scoreCount++;
+    }
+
+    marketMap[review.market] =
+      (marketMap[review.market] || 0) + 1;
+
+  });
+
+  avgRR.textContent =
+    rrCount
+    ? (rrTotal / rrCount).toFixed(2) + "R"
+    : "0R";
+
+  avgScore.textContent =
+    scoreCount
+    ? Math.round(scoreTotal / scoreCount)
+    : "0";
+
+  let bestMarket = "-";
+  let bestCount = 0;
+
+  Object.entries(marketMap).forEach(([market,count]) => {
+
+    if(count > bestCount){
+      bestMarket = market;
+      bestCount = count;
+    }
+
+  });
+
+  topMarket.textContent = bestMarket;
+}
+
+function renderJournal(){
+
+  const reviews = getReviews();
+
+  calculateStats(reviews);
+
+  if(!reviews.length){
+
+    journalList.innerHTML = `
+      <div class="empty-state">
+        Noch keine gespeicherten AI Reviews vorhanden.
+      </div>
+    `;
+
+    return;
+  }
+
+  journalList.innerHTML = "";
+
+  reviews.forEach((review,index) => {
+
+    const date = new Date(review.date)
+    .toLocaleString("de-DE",{
+      day:"2-digit",
+      month:"2-digit",
+      hour:"2-digit",
+      minute:"2-digit"
+    });
+
+    const rrMatch =
+      review.review.match(/RR:\s([0-9.]+R)/i);
+
+    const scoreMatch =
+      review.review.match(/Setup Score:\s([0-9]+)/i);
+
+    const rr =
+      rrMatch ? rrMatch[1] : "-";
+
+    const score =
+      scoreMatch ? scoreMatch[1] : "-";
+
+    journalList.innerHTML += `
+      <div class="review-card">
+
+        <div class="review-top">
+
+          <div>
+            <div class="review-market">
+              ${review.market}
+            </div>
+
+            <div style="color:#8f8f8f;font-size:13px;margin-top:6px;">
+              ${date}
+            </div>
+          </div>
+
+          <div class="review-badges">
+            <div class="review-badge">
+              ${review.direction}
+            </div>
+
+            <div class="review-badge">
+              RR ${rr}
+            </div>
+
+            <div class="review-badge">
+              Score ${score}
+            </div>
+          </div>
+
+        </div>
+
+        <div class="review-grid">
+
+          <div class="review-box">
+            <div class="review-box-label">Markt</div>
+            <div class="review-box-value">
+              ${review.market}
+            </div>
+          </div>
+
+          <div class="review-box">
+            <div class="review-box-label">Direction</div>
+            <div class="review-box-value">
+              ${review.direction}
+            </div>
+          </div>
+
+          <div class="review-box">
+            <div class="review-box-label">RR</div>
+            <div class="review-box-value">
+              ${rr}
+            </div>
+          </div>
+
+          <div class="review-box">
+            <div class="review-box-label">Score</div>
+            <div class="review-box-value">
+              ${score}
+            </div>
+          </div>
+
+        </div>
+
+        <div class="review-analysis">
+${review.review}
+        </div>
+
+        <div class="review-actions">
+
+          <button
+            class="journal-btn"
+            onclick="copyReview(${index})"
+          >
+            Kopieren
+          </button>
+
+          <button
+            class="journal-btn secondary"
+            onclick="deleteReview(${index})"
+          >
+            Löschen
+          </button>
+
+        </div>
+
+      </div>
+    `;
+  });
+}
+
+function copyReview(index){
+
+  const reviews = getReviews();
+
+  navigator.clipboard.writeText(
+    reviews[index].review
+  );
+
+  alert("Review kopiert.");
+}
+
+function deleteReview(index){
+
+  if(!confirm("Review löschen?")) return;
+
+  const reviews = getReviews();
+
+  reviews.splice(index,1);
+
+  localStorage.setItem(
+    "bp_ai_reviews",
+    JSON.stringify(reviews)
+  );
+
+  renderJournal();
+}
+
+clearBtn.addEventListener("click", () => {
+
+  if(!confirm("Gesamtes AI Journal löschen?"))
+  return;
+
+  localStorage.removeItem("bp_ai_reviews");
+
+  renderJournal();
+});
+
+exportBtn.addEventListener("click", () => {
+
+  const reviews = getReviews();
+
+  const blob = new Blob(
+    [JSON.stringify(reviews,null,2)],
+    { type:"application/json" }
+  );
+
+  const url = URL.createObjectURL(blob);
+
+  const a = document.createElement("a");
+
+  a.href = url;
+  a.download = "bullprosperity-ai-journal.json";
+
+  a.click();
+
+  URL.revokeObjectURL(url);
+});
+
+renderJournal();
+</script>
+
+</body>
+</html>
