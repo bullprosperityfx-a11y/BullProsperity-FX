@@ -689,4 +689,91 @@ body::after{
     align-items:center;
     border-radius:18px;
   }
+  /* COURSE / LESSON DESIGN FIX */
+
+.module{
+  background:linear-gradient(180deg,rgba(18,18,18,.94),rgba(8,8,8,.96));
+  border:1px solid rgba(243,210,27,.22);
+  border-radius:26px;
+  padding:22px;
+}
+
+.module-title{
+  color:var(--gold);
+  font-size:18px;
+  font-weight:950;
+  max-width:none;
+}
+
+.lesson{
+  background:rgba(255,255,255,.035);
+  border:1px solid rgba(243,210,27,.28);
+  border-radius:16px;
+  padding:15px 16px;
+  color:#fff;
+  font-size:15px;
+  font-weight:850;
+  line-height:1.35;
+  box-shadow:none;
+}
+
+.lesson:hover{
+  background:rgba(243,210,27,.07);
+  border-color:rgba(243,210,27,.55);
+  color:var(--gold);
+  transform:translateY(-2px);
+}
+
+.lesson.active{
+  background:rgba(243,210,27,.10);
+  border-color:rgba(243,210,27,.65);
+  color:var(--gold);
+}
+
+.course-shell,
+.course-layout,
+.lesson-shell{
+  align-items:start;
+}
+
+.course-sidebar,
+.lesson-sidebar{
+  background:linear-gradient(180deg,rgba(18,18,18,.94),rgba(8,8,8,.96));
+  border:1px solid rgba(243,210,27,.22);
+  border-radius:28px;
+  padding:22px;
+}
+
+.course-content,
+.lesson-content{
+  background:linear-gradient(180deg,rgba(18,18,18,.94),rgba(8,8,8,.96));
+  border:1px solid rgba(243,210,27,.22);
+  border-radius:28px;
+  padding:28px;
+}
+
+.course-content .card,
+.lesson-content .card,
+.course-content .section-card,
+.lesson-content .section-card{
+  background:rgba(255,255,255,.025);
+  border:1px solid rgba(243,210,27,.18);
+  border-radius:22px;
+  padding:20px;
+}
+
+@media(max-width:860px){
+  .course-sidebar,
+  .lesson-sidebar,
+  .course-content,
+  .lesson-content{
+    padding:18px;
+    border-radius:22px;
+  }
+
+  .lesson{
+    font-size:14px;
+    padding:14px;
+  }
+}
 }
