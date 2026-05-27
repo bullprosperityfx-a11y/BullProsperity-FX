@@ -2,24 +2,25 @@
 <html lang="de">
 <head>
   <script>
-(async () => {
-  try {
-    const res = await fetch("/api/access", {
-      credentials: "include",
-      cache: "no-store"
-    });
+    (async () => {
+      try {
+        const res = await fetch("/api/access", {
+          credentials: "include",
+          cache: "no-store"
+        });
 
-    const data = await res.json();
+        const data = await res.json();
 
-    if (data.role !== "admin" && data.role !== "premium") {
-      window.location.href = "/locked.html";
-    }
+        if (data.role !== "admin" && data.role !== "premium") {
+          window.location.href = "/locked.html";
+        }
 
-  } catch (err) {
-    window.location.href = "/locked.html";
-  }
-})();
-</script>
+      } catch (err) {
+        window.location.href = "/locked.html";
+      }
+    })();
+  </script>
+
   <style>
     body[data-protected="true"]{
       visibility:hidden;
@@ -30,14 +31,15 @@
     }
   </style>
 
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BullProsperity | Hub</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <link rel="icon" type="image/png" href="/favicon.png">
-  <link rel="manifest" href="/manifest.json">
-  <link rel="apple-touch-icon" href="/favicon.png">
-  <meta name="theme-color" content="#050505">
+  <title>BullProsperity | Premium Hub</title>
+
+  <link rel="icon" type="image/png" href="/favicon.png" />
+  <link rel="manifest" href="/manifest.json" />
+  <link rel="apple-touch-icon" href="/favicon.png" />
+  <meta name="theme-color" content="#050505" />
 
   <link rel="stylesheet" href="theme.css" />
 
@@ -45,6 +47,13 @@
   <script src="/supabase.js"></script>
 
   <style>
+    body{
+      background:
+        radial-gradient(circle at top left, rgba(255,215,0,.10), transparent 34%),
+        radial-gradient(circle at 80% 10%, rgba(255,215,0,.06), transparent 28%),
+        linear-gradient(180deg,#030303,#080808 45%,#020202);
+    }
+
     .auth-badge{
       display:inline-flex;
       align-items:center;
@@ -52,7 +61,7 @@
       padding:10px 14px;
       border-radius:999px;
       font-size:13px;
-      font-weight:700;
+      font-weight:800;
       border:1px solid #252525;
       background:#111;
       color:#fff;
@@ -70,7 +79,6 @@
 
     .auth-badge.status-admin::before{background:#ffd700;}
     .auth-badge.status-premium::before{background:#22c55e;}
-    .auth-badge.status-longterm::before{background:#3b82f6;}
     .auth-badge.status-locked::before{background:#ef4444;}
 
     .hub-shell{
@@ -92,39 +100,67 @@
     .hub-link-card,
     .hub-note-card,
     .hub-longterm-card{
-      background:#0c0c0c;
+      background:
+        linear-gradient(180deg, rgba(255,215,0,.045), rgba(255,255,255,.015)),
+        rgba(10,10,10,.92);
       border:1px solid var(--line);
-      border-radius:24px;
+      border-radius:26px;
       padding:24px;
+      backdrop-filter:blur(18px);
+      box-shadow:
+        0 22px 60px rgba(0,0,0,.45),
+        inset 0 0 0 1px rgba(255,255,255,.025);
     }
 
-    .hub-hero-card{
+    .hub-hero-card,
+    .hub-longterm-card{
       position:relative;
       overflow:hidden;
     }
 
-    .hub-hero-card::before{
+    .hub-hero-card::before,
+    .hub-longterm-card::before{
       content:"";
       position:absolute;
       right:-90px;
       bottom:-90px;
-      width:250px;
-      height:250px;
-      background:radial-gradient(circle, rgba(255,215,0,.14), transparent 70%);
+      width:270px;
+      height:270px;
+      background:radial-gradient(circle, rgba(255,215,0,.16), transparent 70%);
       pointer-events:none;
+    }
+
+    .hub-hero-card::after,
+    .hub-longterm-card::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:linear-gradient(120deg, transparent 0%, rgba(255,215,0,.08) 50%, transparent 100%);
+      transform:translateX(-120%);
+      animation:bpShine 7s infinite;
+      pointer-events:none;
+    }
+
+    @keyframes bpShine{
+      0%{transform:translateX(-120%);}
+      45%{transform:translateX(120%);}
+      100%{transform:translateX(120%);}
     }
 
     .hub-title{
       margin:10px 0 10px;
-      font-size:36px;
-      line-height:1.06;
+      font-size:38px;
+      line-height:1.04;
       color:#fff;
+      letter-spacing:-.04em;
+      text-shadow:0 0 34px rgba(255,215,0,.08);
     }
 
     .hub-subtitle{
       margin:10px 0 0;
       font-size:28px;
       color:#fff;
+      letter-spacing:-.03em;
     }
 
     .hub-text{
@@ -135,7 +171,59 @@
 
     .hub-highlight{
       color:#ffd700;
-      font-weight:900;
+      font-weight:950;
+    }
+
+    .bp-command-center{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:14px;
+      margin-top:22px;
+    }
+
+    .bp-command-card{
+      border:1px solid rgba(255,215,0,.18);
+      background:linear-gradient(180deg,rgba(255,215,0,.08),rgba(255,255,255,.02));
+      border-radius:20px;
+      padding:18px;
+    }
+
+    .bp-command-label{
+      color:rgba(255,255,255,.55);
+      font-size:12px;
+      text-transform:uppercase;
+      letter-spacing:.10em;
+      margin-bottom:8px;
+    }
+
+    .bp-command-value{
+      color:#fff;
+      font-size:22px;
+      font-weight:950;
+    }
+
+    .bp-command-value.gold{
+      color:#ffd700;
+    }
+
+    .bp-live-dot{
+      width:9px;
+      height:9px;
+      background:#22c55e;
+      border-radius:50%;
+      display:inline-block;
+      box-shadow:0 0 16px rgba(34,197,94,.7);
+      margin-right:8px;
+    }
+
+    .bp-premium-strip{
+      margin-top:22px;
+      border:1px solid rgba(255,215,0,.20);
+      background:linear-gradient(90deg,rgba(255,215,0,.12),rgba(255,255,255,.02),rgba(255,215,0,.08));
+      border-radius:22px;
+      padding:18px;
+      color:#fff;
+      font-weight:850;
     }
 
     .hub-stats{
@@ -163,7 +251,7 @@
     .hub-stat-value{
       color:#ffd700;
       font-size:26px;
-      font-weight:900;
+      font-weight:950;
     }
 
     .hub-stat-sub{
@@ -186,7 +274,7 @@
       text-decoration:none;
       padding:12px 16px;
       border-radius:14px;
-      font-weight:800;
+      font-weight:850;
       border:1px solid transparent;
       cursor:pointer;
     }
@@ -207,13 +295,17 @@
       color:#ffd700;
     }
 
-    .hub-checklist{
+    .hub-checklist,
+    .hub-flow,
+    .hub-watchlist{
       display:grid;
       gap:12px;
       margin-top:18px;
     }
 
-    .hub-check-item{
+    .hub-check-item,
+    .hub-flow-item,
+    .hub-watch-item{
       background:#111;
       border:1px solid #252525;
       border-radius:16px;
@@ -222,7 +314,8 @@
       line-height:1.55;
     }
 
-    .hub-check-item strong{
+    .hub-check-item strong,
+    .hub-longterm-item strong{
       color:#ffd700;
     }
 
@@ -230,18 +323,37 @@
       display:grid;
       grid-template-columns:repeat(2,1fr);
       gap:16px;
+      margin-top:18px;
     }
 
     .hub-link-card{
+      position:relative;
+      overflow:hidden;
       text-decoration:none;
       color:#fff;
-      transition:.2s ease;
+      transition:.25s ease;
       display:block;
+    }
+
+    .hub-link-card::before{
+      content:"";
+      position:absolute;
+      inset:auto -40px -70px auto;
+      width:150px;
+      height:150px;
+      background:radial-gradient(circle, rgba(255,215,0,.15), transparent 70%);
+      opacity:0;
+      transition:.25s ease;
+    }
+
+    .hub-link-card:hover::before{
+      opacity:1;
     }
 
     .hub-link-card:hover{
       border-color:#ffd700;
-      transform:translateY(-2px);
+      transform:translateY(-5px) scale(1.01);
+      box-shadow:0 18px 40px rgba(255,215,0,.08);
     }
 
     .hub-link-card h3{
@@ -264,7 +376,7 @@
       margin-top:18px;
       color:#ffd700;
       font-size:13px;
-      font-weight:700;
+      font-weight:800;
     }
 
     .admin-glow{
@@ -272,27 +384,11 @@
       background:linear-gradient(180deg, rgba(255,215,0,.08), #0c0c0c);
     }
 
-    .admin-glow:hover{
-      border-color:#ffd700;
-      box-shadow:0 0 28px rgba(255,215,0,.08);
-    }
-
-    .hub-watchlist{
-      display:grid;
-      gap:10px;
-      margin-top:16px;
-    }
-
     .hub-watch-item{
-      background:#111;
-      border:1px solid #252525;
-      border-radius:16px;
-      padding:14px 16px;
       display:flex;
       justify-content:space-between;
       align-items:center;
       gap:12px;
-      color:#fff;
     }
 
     .hub-watch-item strong{
@@ -313,7 +409,7 @@
       padding:8px 12px;
       border-radius:999px;
       font-size:12px;
-      font-weight:700;
+      font-weight:800;
     }
 
     .hub-watch-item a:hover{
@@ -321,17 +417,7 @@
       color:#ffd700;
     }
 
-    .hub-flow{
-      display:grid;
-      gap:12px;
-      margin-top:16px;
-    }
-
     .hub-flow-item{
-      background:#111;
-      border:1px solid #252525;
-      border-radius:16px;
-      padding:14px;
       display:flex;
       gap:14px;
       align-items:flex-start;
@@ -348,7 +434,7 @@
       background:#17130a;
       border:1px solid rgba(255,215,0,.2);
       color:#ffd700;
-      font-weight:900;
+      font-weight:950;
     }
 
     .hub-flow-item strong{
@@ -382,22 +468,6 @@
       font-size:13px;
     }
 
-    .hub-longterm-card{
-      position:relative;
-      overflow:hidden;
-    }
-
-    .hub-longterm-card::before{
-      content:"";
-      position:absolute;
-      right:-100px;
-      bottom:-100px;
-      width:260px;
-      height:260px;
-      background:radial-gradient(circle, rgba(255,215,0,.16), transparent 70%);
-      pointer-events:none;
-    }
-
     .hub-longterm-grid{
       display:grid;
       grid-template-columns:1.1fr .9fr;
@@ -420,10 +490,6 @@
       line-height:1.55;
     }
 
-    .hub-longterm-item strong{
-      color:#ffd700;
-    }
-
     .hub-badges{
       display:flex;
       gap:8px;
@@ -438,10 +504,9 @@
       padding:7px 10px;
       border-radius:999px;
       font-size:12px;
-      font-weight:700;
+      font-weight:800;
     }
 
-    /* CLEAN PREMIUM NOTIFICATION */
     .notification-wrap{
       position:relative;
       display:inline-flex;
@@ -659,6 +724,12 @@
       }
     }
 
+    @media(max-width:900px){
+      .bp-command-center{
+        grid-template-columns:1fr;
+      }
+    }
+
     @media(max-width:760px){
       .hub-links-grid,
       .hub-stats{
@@ -701,8 +772,10 @@
         <a href="tools.html">Tools</a>
         <a href="setup-room.html">Setup Room</a>
         <a href="community.html">Community</a>
+
         <a id="loginNavBtn" href="/api/whop/login">Login</a>
         <a id="logoutBtn" href="/api/logout" class="logout-btn" style="display:none;">Logout</a>
+
         <div id="authBadge" class="auth-badge status-loading">Prüfe Zugang...</div>
 
         <div class="notification-wrap">
@@ -728,15 +801,44 @@
     </nav>
 
     <section class="hero-shell">
-      <div class="badge">Members Hub</div>
-      <h1 class="hero-title">BullProsperity <span class="gold">Hub</span></h1>
+      <div class="badge">Premium Members Hub</div>
+
+      <h1 class="hero-title">
+        BullProsperity <span class="gold">Command Center</span>
+      </h1>
+
       <p class="hero-text">
-        Dein zentraler Mitgliederbereich für Kurs, Tools, Setup Room, Community
-        und langfristigen Vermögensaufbau.
+        Dein privater Trading-Bereich für Smart Money Analyse, Kursfortschritt,
+        Setups, Tools, Journal, Community und langfristigen Vermögensaufbau.
       </p>
+
+      <div class="bp-command-center">
+        <div class="bp-command-card">
+          <div class="bp-command-label">Access</div>
+          <div class="bp-command-value gold" id="heroAccessValue">Premium</div>
+        </div>
+
+        <div class="bp-command-card">
+          <div class="bp-command-label">Market Status</div>
+          <div class="bp-command-value">
+            <span class="bp-live-dot"></span>Live
+          </div>
+        </div>
+
+        <div class="bp-command-card">
+          <div class="bp-command-label">Session</div>
+          <div class="bp-command-value" id="bpSessionValue">Loading...</div>
+        </div>
+      </div>
+
+      <div class="bp-premium-strip">
+        Discipline. Structure. Execution. — Das ist dein BullProsperity Workflow.
+      </div>
+
       <div class="hero-buttons">
-        <a href="course.html" class="btn primary">Zum Kurs</a>
-        <a href="tools.html" class="btn secondary">Zu den Tools</a>
+        <a href="course.html" class="btn primary">Kurs fortsetzen</a>
+        <a href="tools.html" class="btn secondary">Market Tools öffnen</a>
+        <a href="setup-room.html" class="btn secondary">Setup Room</a>
         <a id="adminSignalsHeroBtn" href="/admin-signals" class="btn primary" style="display:none;">Admin Signals</a>
         <a id="adminDashboardHeroBtn" href="/admin/dashboard.html" class="btn secondary" style="display:none;">Admin Dashboard</a>
       </div>
@@ -747,9 +849,11 @@
       <section id="hub-dashboard" class="hub-top-grid">
         <div class="hub-hero-card">
           <div class="badge">Dashboard</div>
+
           <h2 class="hub-title">
             Dein <span class="hub-highlight">BullProsperity System</span> an einem Ort
           </h2>
+
           <p class="hub-text">
             Nutze den Hub als Zentrale für deinen Workflow:
             Kurs lernen, Charts analysieren, Setups prüfen, Risiko berechnen,
@@ -762,20 +866,23 @@
               <div class="hub-stat-value" id="statusValue">Premium</div>
               <div class="hub-stat-sub">Mitgliederbereich aktiv</div>
             </div>
+
             <div class="hub-stat">
               <div class="hub-stat-label">Module</div>
               <div class="hub-stat-value">5+</div>
-              <div class="hub-stat-sub">Kurs, Tools, Community, Setups, Longterm</div>
+              <div class="hub-stat-sub">Course, Tools, Community, Setups, Longterm</div>
             </div>
+
             <div class="hub-stat">
               <div class="hub-stat-label">Fokus</div>
               <div class="hub-stat-value">SMC</div>
-              <div class="hub-stat-sub">Strukturierter Trading-Ansatz</div>
+              <div class="hub-stat-sub">Smart Money Konzept</div>
             </div>
+
             <div class="hub-stat">
               <div class="hub-stat-label">Extra</div>
               <div class="hub-stat-value">Pro</div>
-              <div class="hub-stat-sub">Longterm Investment Erweiterung</div>
+              <div class="hub-stat-sub">Premium Erweiterungen</div>
             </div>
           </div>
 
@@ -789,6 +896,7 @@
 
         <div class="hub-card">
           <div class="badge">BullProsperity Workflow</div>
+
           <h2 class="hub-subtitle">So nutzt du den Hub richtig</h2>
 
           <div class="hub-checklist">
@@ -803,9 +911,10 @@
       <section class="hub-mid-grid">
         <div class="hub-card">
           <div class="badge">Schnellzugriffe</div>
+
           <h2 class="hub-subtitle">Deine wichtigsten Bereiche</h2>
 
-          <div class="hub-links-grid" style="margin-top:18px;">
+          <div class="hub-links-grid">
             <a href="course.html" class="hub-link-card">
               <div class="badge">Course</div>
               <h3>Kursbereich</h3>
@@ -859,7 +968,7 @@
             <a id="adminSignalsCard" href="/admin-signals" class="hub-link-card admin-glow" style="display:none;">
               <div class="badge">Admin</div>
               <h3>Admin Signals</h3>
-              <p>Erstelle professionelle BullProsperity Signale mit Bild, Analyse-Link, Entry, SL, TPs und automatischer Pip-Berechnung.</p>
+              <p>Erstelle professionelle BullProsperity Signale mit Bild, Entry, SL, TPs und Analyse-Link.</p>
               <div class="hub-link-meta">
                 <span>Signal Panel öffnen</span>
                 <span>→</span>
@@ -880,6 +989,7 @@
 
         <div class="hub-card">
           <div class="badge">Fokusmärkte</div>
+
           <h2 class="hub-subtitle">Schneller Zugriff auf Märkte</h2>
 
           <div class="hub-watchlist">
@@ -914,6 +1024,7 @@
       <section class="hub-bottom-grid">
         <div class="hub-card">
           <div class="badge">Tagesstruktur</div>
+
           <h2 class="hub-subtitle">Dein täglicher BullProsperity Ablauf</h2>
 
           <div class="hub-flow">
@@ -953,22 +1064,30 @@
 
         <div class="hub-note-card">
           <div class="badge">Quick Notes</div>
+
           <h2 class="hub-subtitle">Deine Tagesnotizen</h2>
+
           <p class="hub-text">
             Nutze diesen Bereich für Bias, wichtige Levels, Session-Ideen oder kurze Erinnerungen.
           </p>
 
           <textarea id="hubNotes" placeholder="Schreibe hier deinen Tagesbias, wichtige Levels oder Erinnerungen für deine Session..."></textarea>
+
           <div class="hub-actions" style="margin-top:12px;">
             <button id="saveHubNotes" class="hub-btn primary" type="button">Notizen speichern</button>
           </div>
+
           <div id="hubNoteStatus" class="hub-note-status">Noch keine Notizen gespeichert.</div>
         </div>
       </section>
 
       <section class="hub-longterm-card">
         <div class="badge">BullProsperity Longterm</div>
-        <h2 class="hub-title">Langfristiger <span class="hub-highlight">Vermögensaufbau</span></h2>
+
+        <h2 class="hub-title">
+          Langfristiger <span class="hub-highlight">Vermögensaufbau</span>
+        </h2>
+
         <p class="hub-text" id="longtermText">
           Eigene Premium-Unterseite mit ETFs, Cryptos, Indices, bekannten Aktien, Rohstoffen,
           Portfolio Tracker, DCA Rechner und Investment Journal.
@@ -995,7 +1114,9 @@
           <div>
             <div class="hub-card" style="padding:20px;background:#111;border-color:#252525;">
               <div class="badge">Premium Modul</div>
+
               <h2 class="hub-subtitle" style="font-size:26px;">Longterm Pro Bereich</h2>
+
               <p class="hub-text" style="margin-top:10px;">
                 Öffne direkt die Longterm-Unterseite oder erfahre mehr über das Premium-Modul.
               </p>
@@ -1031,6 +1152,7 @@
     const adminDashboardTopBtn = document.getElementById("adminDashboardTopBtn");
     const adminDashboardHeroBtn = document.getElementById("adminDashboardHeroBtn");
     const statusValue = document.getElementById("statusValue");
+    const heroAccessValue = document.getElementById("heroAccessValue");
 
     const savedHubNotes = localStorage.getItem("bp_hub_notes");
 
@@ -1048,6 +1170,28 @@
           : "Leere Notiz gespeichert.";
       });
     }
+
+    function bpUpdateSession(){
+      const el = document.getElementById("bpSessionValue");
+      if(!el) return;
+
+      const hour = new Date().getHours();
+
+      if(hour >= 7 && hour < 10){
+        el.textContent = "London Open";
+      } else if(hour >= 10 && hour < 14){
+        el.textContent = "London Session";
+      } else if(hour >= 14 && hour < 17){
+        el.textContent = "NY Open";
+      } else if(hour >= 17 && hour < 22){
+        el.textContent = "NY Session";
+      } else {
+        el.textContent = "Preparation";
+      }
+    }
+
+    bpUpdateSession();
+    setInterval(bpUpdateSession, 60000);
 
     (async () => {
       try {
@@ -1076,6 +1220,7 @@
           authBadge.className = "auth-badge status-admin";
 
           if (statusValue) statusValue.textContent = "Admin";
+          if (heroAccessValue) heroAccessValue.textContent = "Admin";
 
           if (adminSignalsCard) adminSignalsCard.style.display = "block";
           if (adminSignalsTopBtn) adminSignalsTopBtn.style.display = "inline-flex";
@@ -1091,6 +1236,7 @@
           authBadge.className = "auth-badge status-premium";
 
           if (statusValue) statusValue.textContent = "Premium";
+          if (heroAccessValue) heroAccessValue.textContent = "Premium";
         }
 
         if (loginNavBtn) loginNavBtn.style.display = "none";
