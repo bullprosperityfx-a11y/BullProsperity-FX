@@ -63,6 +63,8 @@ body::after{
   padding:24px;
 }
 
+/* NAVBAR */
+
 .navbar{
   display:flex;
   justify-content:space-between;
@@ -78,6 +80,7 @@ body::after{
   font-weight:900;
   color:var(--gold);
   text-decoration:none;
+  letter-spacing:-0.3px;
 }
 
 .nav-links{
@@ -99,6 +102,8 @@ body::after{
 .nav-links a.active{
   color:var(--gold);
 }
+
+/* GLOBAL CARDS */
 
 .shell,
 .hero-shell,
@@ -170,6 +175,41 @@ body::after{
   margin-bottom:24px;
 }
 
+/* HERO LINE FIX */
+
+.bp-premium-strip{
+  display:none !important;
+}
+
+.bp-hero-line{
+  margin-top:16px;
+  margin-bottom:22px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  flex-wrap:wrap;
+  color:#fff;
+  font-weight:900;
+}
+
+.bp-hero-line span{
+  padding:7px 12px;
+  border-radius:999px;
+  border:1px solid rgba(243,210,27,.28);
+  background:rgba(243,210,27,.06);
+  color:var(--gold);
+  font-size:13px;
+  box-shadow:0 0 18px rgba(243,210,27,.07);
+}
+
+.bp-hero-line small{
+  color:rgba(255,255,255,.68);
+  font-size:13px;
+  font-weight:800;
+}
+
+/* BUTTONS */
+
 .hero-buttons,
 .button-row,
 .card-buttons,
@@ -207,6 +247,8 @@ body::after{
 .btn:hover{
   transform:translateY(-1px);
 }
+
+/* SECTIONS */
 
 .section{
   margin-bottom:28px;
@@ -325,6 +367,8 @@ body::after{
   text-decoration:none;
 }
 
+/* LISTS */
+
 .list-box{
   display:grid;
   gap:12px;
@@ -340,6 +384,8 @@ body::after{
   font-weight:700;
   font-size:15px;
 }
+
+/* MODULES */
 
 .module{
   padding:18px;
@@ -394,6 +440,8 @@ body::after{
   color:var(--gold);
 }
 
+/* CHART */
+
 .chart-frame{
   border:1px solid var(--line);
   border-radius:22px;
@@ -409,6 +457,8 @@ body::after{
   display:block;
   background:#0c0c0c;
 }
+
+/* AUTH */
 
 .auth-badge{
   display:inline-flex;
@@ -470,20 +520,7 @@ body::after{
   box-shadow:0 0 20px rgba(255,215,0,.08);
 }
 
-.footer-note{
-  padding:18px 8px 8px;
-  text-align:center;
-  color:#bcbcbc;
-  font-size:13px;
-  line-height:1.6;
-}
-
-/* WICHTIGER FIX FÜR HUB */
-.bp-premium-strip{
-  margin-top:22px !important;
-  margin-bottom:0 !important;
-  display:block !important;
-}
+/* HUB FIXES */
 
 .hub-link-card{
   height:100%;
@@ -503,7 +540,18 @@ body::after{
   margin-top:0 !important;
 }
 
+/* FOOTER */
+
+.footer-note{
+  padding:18px 8px 8px;
+  text-align:center;
+  color:#bcbcbc;
+  font-size:13px;
+  line-height:1.6;
+}
+
 /* RESPONSIVE */
+
 @media(max-width:1200px){
   .hero-title,
   .section-heading{
@@ -628,6 +676,11 @@ body::after{
 
   .hero-text{
     font-size:15px;
+  }
+
+  .bp-hero-line{
+    margin-top:10px;
+    margin-bottom:18px;
   }
 
   .hero-buttons,
