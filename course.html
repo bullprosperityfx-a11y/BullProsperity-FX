@@ -59,19 +59,22 @@
       backdrop-filter:blur(22px);
     }
 
-    .course-sidebar{
-      padding:22px;
-      position:sticky;
-      top:20px;
-      max-height:calc(100vh - 40px);
-      overflow:hidden;
-    }
+   .course-sidebar{
+  padding:22px;
+  position:sticky;
+  top:20px;
+  height:auto;
+  overflow:visible;
+}
 
-    .course-scroll{
-      height:calc(100vh - 160px);
-      overflow-y:auto;
-      padding-right:8px;
-    }
+.course-scroll{
+  height:auto;
+  overflow:visible;
+  padding-right:0;
+  display:flex;
+  flex-direction:column;
+  gap:18px;
+}
 
     .course-scroll::-webkit-scrollbar{
       width:7px;
@@ -265,6 +268,13 @@
         overflow:visible;
         padding-right:0;
       }
+      .module{
+  margin-bottom:0;
+}
+
+.course-sidebar{
+  align-self:start;
+}
     }
 
     @media(max-width:760px){
