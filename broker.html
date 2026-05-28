@@ -286,5 +286,16 @@
       } catch {}
     });
   </script>
+  <script>
+  window.addEventListener("load", () => {
+    const loader = document.getElementById("bpLoader");
+
+    setTimeout(() => {
+      if(loader){
+        loader.classList.add("hide");
+      }
+    }, 700);
+  });
+</script>
 </body>
 </html>
