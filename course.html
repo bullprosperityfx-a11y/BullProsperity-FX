@@ -2,62 +2,225 @@
 <html lang="de">
 <head>
   <script>
-(async () => {
-  try {
-    const res = await fetch("/api/access", {
-      credentials: "include",
-      cache: "no-store"
-    });
+    (async () => {
+      try {
+        const res = await fetch("/api/access", {
+          credentials: "include",
+          cache: "no-store"
+        });
 
-    const data = await res.json();
+        const data = await res.json();
 
-    if (data.role !== "admin" && data.role !== "premium") {
-      window.location.href = "/locked.html";
-    }
+        if (data.role !== "admin" && data.role !== "premium") {
+          window.location.href = "/locked.html";
+        }
+      } catch (err) {
+        window.location.href = "/locked.html";
+      }
+    })();
+  </script>
 
-  } catch (err) {
-    window.location.href = "/locked.html";
-  }
-})();
-</script>
   <style>
-  body[data-protected="true"]{
-    visibility:hidden;
-  }
+    body[data-protected="true"]{visibility:hidden;}
+    body[data-protected="true"].access-ready{visibility:visible;}
+  </style>
 
-  body[data-protected="true"].access-ready{
-    visibility:visible;
-  }
-</style>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <title>BullProsperity | Course</title>
-   <link rel="icon" type="image/png" href="/favicon.png">
-<link rel="manifest" href="/manifest.json">
-<link rel="apple-touch-icon" href="/favicon.png">
-<meta name="theme-color" content="#050505">
-  <link rel="stylesheet" href="theme.css" />
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+  <link rel="icon" type="image/png" href="/favicon.png" />
+  <link rel="manifest" href="/manifest.json" />
+  <link rel="apple-touch-icon" href="/favicon.png" />
+  <meta name="theme-color" content="#050505" />
 
   <link rel="stylesheet" href="theme.css" />
 
   <style>
-    .course-layout{display:grid;grid-template-columns:430px 1fr;gap:24px;align-items:start;}
-    .course-sidebar,.course-main-card{border:1px solid var(--line);border-radius:28px;background:linear-gradient(180deg, var(--panel), var(--panel-2));box-shadow:0 0 0 1px rgba(255,255,255,0.02) inset;}
-    .course-sidebar{padding:22px;position:sticky;top:20px;max-height:calc(100vh - 40px);overflow:hidden;}
-    .course-scroll{height:calc(100vh - 140px);overflow-y:auto;padding-right:8px;}
-    .course-scroll::-webkit-scrollbar{width:8px;}
-    .course-scroll::-webkit-scrollbar-thumb{background:var(--gold);border-radius:999px;}
-    .course-scroll::-webkit-scrollbar-track{background:rgba(255,255,255,0.06);border-radius:999px;}
-    .course-subtitle{color:var(--subtle);font-size:15px;margin-bottom:16px;}
-    .progress-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;font-weight:800;font-size:16px;}
-    .progress-bar{width:100%;height:16px;background:#2b2b2b;border-radius:999px;overflow:hidden;border:1px solid rgba(255,255,255,0.08);margin-bottom:22px;}
-    .progress-fill{width:18%;height:100%;background:linear-gradient(90deg,var(--gold),#ffea61);border-radius:999px;box-shadow:0 0 20px rgba(243,210,27,0.22);}
-    .course-main{display:grid;gap:24px;}
-    .course-main-card{padding:24px;}
-    .video-placeholder{margin-top:18px;min-height:240px;border-radius:22px;border:1px solid rgba(243,210,27,0.18);background:radial-gradient(circle at center, rgba(255,255,255,0.03), rgba(255,255,255,0.01)), #101010;display:flex;align-items:center;justify-content:center;text-align:center;color:#d7d7d7;padding:24px;line-height:1.5;}
+    .course-layout{
+      display:grid;
+      grid-template-columns:390px 1fr;
+      gap:24px;
+      align-items:start;
+    }
+
+    .course-sidebar,
+    .course-main-card,
+    .course-panel{
+      border:1px solid rgba(243,210,27,.22);
+      border-radius:28px;
+      background:
+        linear-gradient(180deg,rgba(255,215,0,.04),rgba(255,255,255,.01)),
+        rgba(10,10,10,.94);
+      box-shadow:
+        0 22px 55px rgba(0,0,0,.35),
+        inset 0 0 0 1px rgba(255,255,255,.02);
+      backdrop-filter:blur(22px);
+    }
+
+    .course-sidebar{
+      padding:22px;
+      position:sticky;
+      top:20px;
+      max-height:calc(100vh - 40px);
+      overflow:hidden;
+    }
+
+    .course-scroll{
+      height:calc(100vh - 160px);
+      overflow-y:auto;
+      padding-right:8px;
+    }
+
+    .course-scroll::-webkit-scrollbar{
+      width:7px;
+    }
+
+    .course-scroll::-webkit-scrollbar-thumb{
+      background:var(--gold);
+      border-radius:999px;
+    }
+
+    .course-scroll::-webkit-scrollbar-track{
+      background:rgba(255,255,255,.06);
+      border-radius:999px;
+    }
+
+    .course-subtitle{
+      color:rgba(255,255,255,.65);
+      font-size:14px;
+      font-weight:800;
+      margin-bottom:16px;
+    }
+
+    .progress-head{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      margin-bottom:12px;
+      font-weight:900;
+      font-size:14px;
+      color:#fff;
+    }
+
+    .progress-bar{
+      width:100%;
+      height:12px;
+      background:#171717;
+      border-radius:999px;
+      overflow:hidden;
+      border:1px solid rgba(255,255,255,.08);
+      margin-bottom:22px;
+    }
+
+    .progress-fill{
+      width:18%;
+      height:100%;
+      background:linear-gradient(90deg,var(--gold),#ffea61);
+      border-radius:999px;
+      box-shadow:0 0 20px rgba(243,210,27,.25);
+    }
+
+    .course-main{
+      display:grid;
+      gap:24px;
+    }
+
+    .course-main-card,
+    .course-panel{
+      padding:26px;
+    }
+
+    .module{
+      padding:18px;
+      margin-bottom:16px;
+      border-radius:22px;
+      background:rgba(255,255,255,.025);
+      border:1px solid rgba(243,210,27,.18);
+    }
+
+    .module-header{
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap:12px;
+      margin-bottom:14px;
+    }
+
+    .module-title{
+      color:var(--gold);
+      font-size:16px;
+      font-weight:950;
+      line-height:1.25;
+      max-width:none;
+    }
+
+    .module-count{
+      color:rgba(255,255,255,.75);
+      font-size:12px;
+      font-weight:900;
+      white-space:nowrap;
+      padding-top:2px;
+    }
+
+    .lesson{
+      display:block;
+      text-decoration:none;
+      background:rgba(255,255,255,.035);
+      border:1px solid rgba(243,210,27,.24);
+      border-radius:16px;
+      padding:14px 15px;
+      margin-bottom:10px;
+      color:#fff;
+      font-size:14px;
+      font-weight:850;
+      line-height:1.35;
+      transition:.25s ease;
+    }
+
+    .lesson:hover,
+    .lesson.active{
+      background:rgba(243,210,27,.08);
+      border-color:rgba(243,210,27,.65);
+      color:var(--gold);
+      transform:translateY(-2px);
+      box-shadow:0 0 22px rgba(243,210,27,.08);
+    }
+
+    .video-placeholder{
+      margin-top:18px;
+      min-height:240px;
+      border-radius:22px;
+      border:1px solid rgba(243,210,27,.18);
+      background:
+        radial-gradient(circle at center, rgba(243,210,27,.06), transparent 55%),
+        #101010;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      text-align:center;
+      color:rgba(255,255,255,.72);
+      padding:24px;
+      line-height:1.5;
+      font-weight:750;
+    }
+
+    .course-list{
+      display:grid;
+      gap:12px;
+    }
+
+    .course-list-item{
+      border:1px solid rgba(243,210,27,.16);
+      background:rgba(255,255,255,.025);
+      border-radius:16px;
+      padding:15px 16px;
+      color:#f4f4f4;
+      line-height:1.5;
+      font-weight:750;
+      font-size:15px;
+    }
 
     .auth-badge{
       display:inline-flex;
@@ -66,7 +229,7 @@
       padding:10px 14px;
       border-radius:999px;
       font-size:13px;
-      font-weight:700;
+      font-weight:800;
       border:1px solid #252525;
       background:#111;
       color:#fff;
@@ -84,13 +247,42 @@
 
     .auth-badge.status-admin::before{background:#ffd700;}
     .auth-badge.status-premium::before{background:#22c55e;}
-    .auth-badge.status-longterm::before{background:#3b82f6;}
     .auth-badge.status-locked::before{background:#ef4444;}
 
     @media(max-width:1200px){
-      .course-layout{grid-template-columns:1fr;}
-      .course-sidebar{position:relative;top:0;max-height:none;}
-      .course-scroll{height:auto;overflow:visible;padding-right:0;}
+      .course-layout{
+        grid-template-columns:1fr;
+      }
+
+      .course-sidebar{
+        position:relative;
+        top:0;
+        max-height:none;
+      }
+
+      .course-scroll{
+        height:auto;
+        overflow:visible;
+        padding-right:0;
+      }
+    }
+
+    @media(max-width:760px){
+      .course-sidebar,
+      .course-main-card,
+      .course-panel{
+        padding:18px;
+        border-radius:22px;
+      }
+
+      .module{
+        padding:15px;
+      }
+
+      .lesson{
+        font-size:13px;
+        padding:13px 14px;
+      }
     }
   </style>
 </head>
@@ -110,7 +302,7 @@
         <a href="community.html">Community</a>
         <a id="loginNavBtn" href="/api/whop/login">Login</a>
         <a id="logoutBtn" href="/api/logout" class="logout-btn" style="display:none;">Logout</a>
-       <div id="authBadge" class="auth-badge status-loading">Prüfe Zugang...</div>
+        <div id="authBadge" class="auth-badge status-loading">Prüfe Zugang...</div>
       </div>
     </nav>
 
@@ -123,7 +315,6 @@
 
       <p class="hero-text">
         Arbeite dich strukturiert durch alle Module – von den Grundlagen bis zur BullProsperity SMC Strategie.
-        Jedes Thema baut logisch aufeinander auf, damit Mitglieder nicht nur Wissen sammeln, sondern echte Klarheit entwickeln.
       </p>
 
       <div class="hero-buttons">
@@ -133,7 +324,6 @@
     </section>
 
     <section class="course-layout">
-
       <aside class="course-sidebar">
         <div class="course-subtitle">Education Platform.</div>
 
@@ -153,7 +343,6 @@
               <div class="module-title">Modul 1 — Einführung</div>
               <div class="module-count">3 Lektionen</div>
             </div>
-
             <a href="lesson1.html#lesson-video" class="lesson active">Lesson 1 — Willkommen bei BullProsperity</a>
             <a href="lesson2.html#lesson-video" class="lesson">Lesson 2 — Wie du diese Plattform richtig nutzt</a>
             <a href="lesson3.html#lesson-video" class="lesson">Lesson 3 — Risikoaufklärung & wichtiger Hinweis</a>
@@ -164,7 +353,6 @@
               <div class="module-title">Modul 2 — Trading Grundlagen</div>
               <div class="module-count">4 Lektionen</div>
             </div>
-
             <a href="lesson4.html#lesson-video" class="lesson">Lesson 4 — Was ist Trading wirklich</a>
             <a href="lesson5.html#lesson-video" class="lesson">Lesson 5 — Warum Retail Trader verlieren</a>
             <a href="lesson6.html#lesson-video" class="lesson">Lesson 6 — Die wichtigsten Märkte erklärt</a>
@@ -176,7 +364,6 @@
               <div class="module-title">Modul 3 — Chartanalyse</div>
               <div class="module-count">4 Lektionen</div>
             </div>
-
             <a href="lesson8.html#lesson-video" class="lesson">Lesson 8 — Grundlagen der Chartanalyse</a>
             <a href="lesson9.html#lesson-video" class="lesson">Lesson 9 — Marktstruktur verstehen</a>
             <a href="lesson10.html#lesson-video" class="lesson">Lesson 10 — Trend, Range und Impuls</a>
@@ -188,7 +375,6 @@
               <div class="module-title">Modul 4 — Liquidität & Marktbewegung</div>
               <div class="module-count">4 Lektionen</div>
             </div>
-
             <a href="lesson12.html#lesson-video" class="lesson">Lesson 12 — Liquidity Grundlagen</a>
             <a href="lesson13.html#lesson-video" class="lesson">Lesson 13 — Warum Märkte Liquidität suchen</a>
             <a href="lesson14.html#lesson-video" class="lesson">Lesson 14 — Marktbewegungen verstehen</a>
@@ -200,7 +386,6 @@
               <div class="module-title">Modul 5 — Entry Verständnis</div>
               <div class="module-count">4 Lektionen</div>
             </div>
-
             <a href="lesson16.html#lesson-video" class="lesson">Lesson 16 — Timing & Trading Sessions</a>
             <a href="lesson17.html#lesson-video" class="lesson">Lesson 17 — Entries verstehen</a>
             <a href="lesson18.html#lesson-video" class="lesson">Lesson 18 — Confirmation Signale</a>
@@ -212,7 +397,6 @@
               <div class="module-title">Modul 6 — Risk Management</div>
               <div class="module-count">4 Lektionen</div>
             </div>
-
             <a href="lesson20.html#lesson-video" class="lesson">Lesson 20 — Risk Management Grundlagen</a>
             <a href="lesson21.html#lesson-video" class="lesson">Lesson 21 — Positionsgröße berechnen</a>
             <a href="lesson22.html#lesson-video" class="lesson">Lesson 22 — Risk-Reward Verhältnis</a>
@@ -224,7 +408,6 @@
               <div class="module-title">Modul 7 — Psychologie & Routine</div>
               <div class="module-count">6 Lektionen</div>
             </div>
-
             <a href="lesson24.html#lesson-video" class="lesson">Lesson 24 — Trading Psychologie</a>
             <a href="lesson25.html#lesson-video" class="lesson">Lesson 25 — Emotionen im Trading</a>
             <a href="lesson26.html#lesson-video" class="lesson">Lesson 26 — Disziplin entwickeln</a>
@@ -238,7 +421,6 @@
               <div class="module-title">Modul 8 — BullProsperity SMC Strategie</div>
               <div class="module-count">4 Lektionen</div>
             </div>
-
             <a href="lesson30.html#lesson-video" class="lesson">Lesson 30 — Das BullProsperity Marktmodell</a>
             <a href="lesson31.html#lesson-video" class="lesson">Lesson 31 — Institutionelle Preiszonen</a>
             <a href="lesson32.html#lesson-video" class="lesson">Lesson 32 — Das BullProsperity Entry Modell</a>
@@ -253,13 +435,12 @@
         <div class="course-main-card">
           <div class="badge">Pflichtlektion</div>
 
-          <h2 class="section-heading" style="font-size:36px; margin-bottom:10px;">
+          <h2 class="section-heading" style="font-size:36px;margin-bottom:10px;">
             Starte mit Modul 1
           </h2>
 
           <p class="section-subtext" style="margin-bottom:16px;">
             Beginne mit der Einführung und arbeite dich danach Modul für Modul durch.
-            Die Education ist sauber strukturiert und leicht nachvollziehbar aufgebaut.
           </p>
 
           <div class="button-row">
@@ -273,59 +454,49 @@
         </div>
 
         <div class="grid-2">
-
-          <div class="section-card">
+          <div class="course-panel">
             <div class="badge">Warum diese Struktur?</div>
+            <h2 class="section-heading" style="font-size:34px;margin-bottom:10px;">Logischer Lernaufbau</h2>
 
-            <h2 class="section-heading" style="font-size:34px; margin-bottom:10px;">
-              Logischer Lernaufbau
-            </h2>
-
-            <div class="list-box">
-              <div class="list-item">Jedes Thema ist klar einem Modul zugeordnet.</div>
-              <div class="list-item">Die Reihenfolge baut sinnvoll aufeinander auf.</div>
-              <div class="list-item">Die Navigation bleibt übersichtlich und professionell.</div>
-              <div class="list-item">Modul 8 bündelt die BullProsperity Hauptstrategie.</div>
+            <div class="course-list">
+              <div class="course-list-item">Jedes Thema ist klar einem Modul zugeordnet.</div>
+              <div class="course-list-item">Die Reihenfolge baut sinnvoll aufeinander auf.</div>
+              <div class="course-list-item">Die Navigation bleibt übersichtlich und professionell.</div>
+              <div class="course-list-item">Modul 8 bündelt die BullProsperity Hauptstrategie.</div>
             </div>
           </div>
 
-          <div class="section-card">
+          <div class="course-panel">
             <div class="badge">BullProsperity Fokus</div>
-
-            <h2 class="section-heading" style="font-size:34px; margin-bottom:10px;">
-              Was Mitglieder hier lernen
-            </h2>
+            <h2 class="section-heading" style="font-size:34px;margin-bottom:10px;">Was Mitglieder hier lernen</h2>
 
             <p class="section-subtext" style="margin-bottom:0;">
-              Von den absoluten Grundlagen über Marktstruktur, Liquidität, Entry-Verständnis,
+              Von den Grundlagen über Marktstruktur, Liquidität, Entry-Verständnis,
               Risk Management und Trading Psychologie bis hin zur vollständigen BullProsperity SMC Strategie.
             </p>
           </div>
-
         </div>
 
-        <div class="section-card">
+        <div class="course-panel">
           <div class="badge">Modul 8 Highlight</div>
-
-          <h2 class="section-heading" style="font-size:34px; margin-bottom:10px;">
+          <h2 class="section-heading" style="font-size:34px;margin-bottom:10px;">
             Die BullProsperity SMC Strategie
           </h2>
 
           <div class="grid-2">
-            <div class="list-box">
-              <div class="list-item">Lesson 30 — Das BullProsperity Marktmodell</div>
-              <div class="list-item">Lesson 31 — Institutionelle Preiszonen</div>
+            <div class="course-list">
+              <div class="course-list-item">Lesson 30 — Das BullProsperity Marktmodell</div>
+              <div class="course-list-item">Lesson 31 — Institutionelle Preiszonen</div>
             </div>
 
-            <div class="list-box">
-              <div class="list-item">Lesson 32 — Das BullProsperity Entry Modell</div>
-              <div class="list-item">Lesson 33 — Live Setup Beispiele</div>
+            <div class="course-list">
+              <div class="course-list-item">Lesson 32 — Das BullProsperity Entry Modell</div>
+              <div class="course-list-item">Lesson 33 — Live Setup Beispiele</div>
             </div>
           </div>
         </div>
 
       </div>
-
     </section>
 
     <div class="footer-note">
@@ -337,6 +508,7 @@
   <script>
     const authBadge = document.getElementById("authBadge");
     const loginNavBtn = document.getElementById("loginNavBtn");
+    const logoutBtn = document.getElementById("logoutBtn");
 
     (async () => {
       try {
@@ -357,30 +529,26 @@
           window.location.href = "locked.html";
           return;
         }
+
         document.body.classList.add("access-ready");
 
         if (role === "admin") {
-  authBadge.textContent = "Admin";
-  authBadge.className = "auth-badge status-admin";
-} else if (role === "premium") {
-  authBadge.textContent = "Premium";
-  authBadge.className = "auth-badge status-premium";
-}
+          authBadge.textContent = "Admin";
+          authBadge.className = "auth-badge status-admin";
+        }
 
-       if (loginNavBtn) {
-  loginNavBtn.style.display = "none";
-}
+        if (role === "premium") {
+          authBadge.textContent = "Premium";
+          authBadge.className = "auth-badge status-premium";
+        }
 
-const logoutBtn = document.getElementById("logoutBtn");
+        if (loginNavBtn) loginNavBtn.style.display = "none";
+        if (logoutBtn) logoutBtn.style.display = "inline-flex";
 
-if (logoutBtn && (role === "admin" || role === "premium")) {
-  logoutBtn.style.display = "inline-flex";
-}
       } catch (err) {
         window.location.href = "locked.html";
       }
     })();
   </script>
-
 </body>
 </html>
