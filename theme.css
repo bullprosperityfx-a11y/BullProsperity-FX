@@ -122,10 +122,13 @@ body::after{
 .example-card,
 .tool-card,
 .community-card{
-  border:1px solid var(--line);
+  border:1px solid rgba(243,210,27,.16);
   border-radius:28px;
-  background:linear-gradient(180deg,var(--panel),var(--panel-2));
-  box-shadow:0 0 0 1px rgba(255,255,255,.02) inset;
+  background:
+    linear-gradient(180deg,rgba(18,18,18,.88),rgba(10,10,10,.96));
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,.02),
+    0 0 40px rgba(0,0,0,.35);
 }
 
 .hero-shell{
@@ -265,17 +268,9 @@ body::after{
   align-items:stretch;
 }
 
-.grid-2{
-  grid-template-columns:1fr 1fr;
-}
-
-.grid-3{
-  grid-template-columns:repeat(3,1fr);
-}
-
-.grid-4{
-  grid-template-columns:repeat(4,1fr);
-}
+.grid-2{grid-template-columns:1fr 1fr;}
+.grid-3{grid-template-columns:repeat(3,1fr);}
+.grid-4{grid-template-columns:repeat(4,1fr);}
 
 .card,
 .section-card,
@@ -360,21 +355,30 @@ body::after{
   gap:12px;
 }
 
-.list-item{
-  border:1px solid rgba(243,210,27,.14);
-  background:rgba(255,255,255,.02);
+.list-item,
+.course-list-item{
+  border:1px solid rgba(255,215,0,.10);
+  background:
+    linear-gradient(180deg,rgba(255,255,255,.03),rgba(255,255,255,.015));
   border-radius:16px;
   padding:15px 16px;
   color:#f4f4f4;
   line-height:1.5;
   font-weight:700;
   font-size:15px;
+  min-height:62px;
+  display:flex;
+  align-items:center;
 }
 
-/* MODULES */
+/* MODULES & LESSONS */
 
 .module{
-  padding:18px;
+  background:linear-gradient(180deg,rgba(18,18,18,.88),rgba(8,8,8,.96));
+  border:1px solid rgba(243,210,27,.16);
+  border-radius:26px;
+  padding:22px;
+  margin-bottom:0;
 }
 
 .module-header{
@@ -388,42 +392,98 @@ body::after{
 .module-title{
   color:var(--gold);
   font-size:18px;
-  font-weight:800;
+  font-weight:950;
   line-height:1.15;
-  max-width:220px;
+  max-width:none;
 }
 
 .module-count{
   color:#fff;
-  font-size:15px;
+  font-size:14px;
   font-weight:800;
   white-space:nowrap;
 }
 
 .lesson{
-  display:block;
+  display:flex;
+  align-items:center;
+  min-height:74px;
   text-decoration:none;
   color:#fff;
-  background:#242424;
-  border:2px solid rgba(255,215,0,.22);
+  background:
+    linear-gradient(180deg,rgba(255,255,255,.03),rgba(255,255,255,.015));
+  border:1px solid rgba(243,210,27,.18);
   border-radius:18px;
-  padding:16px 18px;
+  padding:15px 16px;
   margin-bottom:12px;
-  font-size:16px;
-  font-weight:750;
-  line-height:1.3;
+  font-size:15px;
+  font-weight:850;
+  line-height:1.35;
   transition:.25s ease;
+  box-shadow:none;
 }
 
-.lesson:hover{
-  transform:translateY(-2px);
-  border-color:rgba(255,215,0,.48);
-  color:var(--gold);
-  box-shadow:0 0 18px rgba(255,215,0,.08);
-}
-
+.lesson:hover,
 .lesson.active{
+  background:rgba(243,210,27,.08);
+  border-color:rgba(243,210,27,.55);
   color:var(--gold);
+  transform:translateY(-2px);
+  box-shadow:0 0 24px rgba(243,210,27,.08);
+}
+
+/* COURSE CLEAN FIX */
+
+.course-layout,
+.lesson-shell{
+  align-items:start;
+}
+
+.course-sidebar,
+.lesson-sidebar{
+  align-self:start;
+  background:linear-gradient(180deg,rgba(18,18,18,.88),rgba(8,8,8,.96));
+  border:1px solid rgba(243,210,27,.18);
+  border-radius:28px;
+  padding:22px;
+}
+
+.course-scroll{
+  height:auto;
+  overflow:visible;
+  padding-right:0;
+  display:flex;
+  flex-direction:column;
+  gap:18px;
+}
+
+.course-main{
+  gap:18px;
+}
+
+.course-main-card,
+.course-panel,
+.course-content,
+.lesson-content{
+  background:
+    linear-gradient(180deg,rgba(18,18,18,.88),rgba(10,10,10,.96));
+  border:1px solid rgba(243,210,27,.12);
+  border-radius:28px;
+  padding:28px;
+  backdrop-filter:blur(18px);
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,.02),
+    0 0 40px rgba(0,0,0,.35);
+}
+
+.course-main-card .video-placeholder,
+.video-placeholder{
+  margin-top:24px;
+  border-radius:26px;
+  border:1px solid rgba(243,210,27,.10);
+  background:
+    radial-gradient(circle at top,rgba(243,210,27,.05),transparent 70%),
+    #0c0c0c;
 }
 
 /* CHART */
@@ -506,7 +566,7 @@ body::after{
   box-shadow:0 0 20px rgba(255,215,0,.08);
 }
 
-/* HUB GLOBAL FIXES */
+/* HUB FIXES */
 
 .hub-link-card{
   height:100%;
@@ -568,8 +628,15 @@ body::after{
   .setup-card,
   .example-card,
   .tool-card,
-  .community-card{
-    padding:22px;
+  .community-card,
+  .course-sidebar,
+  .lesson-sidebar,
+  .course-main-card,
+  .course-panel,
+  .course-content,
+  .lesson-content{
+    padding:18px;
+    border-radius:22px;
   }
 
   .hero-title,
@@ -588,6 +655,12 @@ body::after{
 
   .chart-frame iframe{
     height:420px;
+  }
+
+  .lesson{
+    font-size:14px;
+    padding:14px;
+    min-height:58px;
   }
 }
 
@@ -682,98 +755,4 @@ body::after{
     border-radius:18px;
     font-size:16px;
   }
-
-  .lesson{
-    min-height:58px;
-    display:flex;
-    align-items:center;
-    border-radius:18px;
-  }
-  /* COURSE / LESSON DESIGN FIX */
-
-.module{
-  background:linear-gradient(180deg,rgba(18,18,18,.94),rgba(8,8,8,.96));
-  border:1px solid rgba(243,210,27,.22);
-  border-radius:26px;
-  padding:22px;
-}
-
-.module-title{
-  color:var(--gold);
-  font-size:18px;
-  font-weight:950;
-  max-width:none;
-}
-
-.lesson{
-  background:rgba(255,255,255,.035);
-  border:1px solid rgba(243,210,27,.28);
-  border-radius:16px;
-  padding:15px 16px;
-  color:#fff;
-  font-size:15px;
-  font-weight:850;
-  line-height:1.35;
-  box-shadow:none;
-}
-
-.lesson:hover{
-  background:rgba(243,210,27,.07);
-  border-color:rgba(243,210,27,.55);
-  color:var(--gold);
-  transform:translateY(-2px);
-}
-
-.lesson.active{
-  background:rgba(243,210,27,.10);
-  border-color:rgba(243,210,27,.65);
-  color:var(--gold);
-}
-
-.course-shell,
-.course-layout,
-.lesson-shell{
-  align-items:start;
-}
-
-.course-sidebar,
-.lesson-sidebar{
-  background:linear-gradient(180deg,rgba(18,18,18,.94),rgba(8,8,8,.96));
-  border:1px solid rgba(243,210,27,.22);
-  border-radius:28px;
-  padding:22px;
-}
-
-.course-content,
-.lesson-content{
-  background:linear-gradient(180deg,rgba(18,18,18,.94),rgba(8,8,8,.96));
-  border:1px solid rgba(243,210,27,.22);
-  border-radius:28px;
-  padding:28px;
-}
-
-.course-content .card,
-.lesson-content .card,
-.course-content .section-card,
-.lesson-content .section-card{
-  background:rgba(255,255,255,.025);
-  border:1px solid rgba(243,210,27,.18);
-  border-radius:22px;
-  padding:20px;
-}
-
-@media(max-width:860px){
-  .course-sidebar,
-  .lesson-sidebar,
-  .course-content,
-  .lesson-content{
-    padding:18px;
-    border-radius:22px;
-  }
-
-  .lesson{
-    font-size:14px;
-    padding:14px;
-  }
-}
 }
