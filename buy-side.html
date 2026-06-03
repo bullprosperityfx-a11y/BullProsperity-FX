@@ -1,1 +1,354 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
+  <title>BullProsperity | Buy Side Liquidity</title>
+
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <link rel="manifest" href="/manifest.json">
+  <link rel="apple-touch-icon" href="/favicon.png">
+  <meta name="theme-color" content="#050505">
+
+  <link rel="stylesheet" href="/theme.css" />
+  <script src="/login.js" defer></script>
+
+  <script>
+    (async () => {
+      try {
+        const res = await fetch("/api/access", {
+          credentials: "include",
+          cache: "no-store"
+        });
+
+        const data = await res.json();
+
+        if (data.role !== "admin" && data.role !== "premium") {
+          window.location.href = "/locked.html";
+        }
+      } catch (err) {
+        window.location.href = "/locked.html";
+      }
+    })();
+  </script>
+
+  <style>
+    .chart-box{
+      position:relative;
+      overflow:hidden;
+      border-radius:22px;
+      border:1px solid rgba(255,215,0,.18);
+      cursor:pointer;
+      background:#050505;
+      transition:.35s ease;
+    }
+
+    .chart-box:hover{
+      transform:translateY(-3px);
+      border-color:rgba(255,215,0,.42);
+      box-shadow:0 22px 60px rgba(0,0,0,.55);
+    }
+
+    .chart-box img{
+      width:100%;
+      display:block;
+    }
+
+    .chart-overlay{
+      position:absolute;
+      left:18px;
+      bottom:18px;
+      padding:11px 17px;
+      border-radius:999px;
+      background:rgba(0,0,0,.72);
+      border:1px solid rgba(255,215,0,.25);
+      color:#ffe600;
+      font-size:.9rem;
+      font-weight:800;
+      backdrop-filter:blur(10px);
+      pointer-events:none;
+    }
+
+    .buy-card-link{
+      min-height:190px;
+      display:flex;
+      flex-direction:column;
+      justify-content:flex-start;
+      padding:28px;
+      border-radius:28px;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.035), rgba(255,255,255,.012));
+      border:1px solid rgba(255,215,0,.16);
+      box-shadow:0 18px 45px rgba(0,0,0,.25);
+      transition:.3s ease;
+      text-decoration:none;
+      color:inherit;
+      cursor:pointer;
+    }
+
+    .buy-card-link:hover{
+      transform:translateY(-4px);
+      border-color:rgba(255,215,0,.34);
+      box-shadow:0 24px 60px rgba(0,0,0,.38);
+    }
+
+    .buy-card-link .badge{
+      width:100%;
+      justify-content:flex-start;
+      margin-bottom:18px;
+      background:linear-gradient(90deg, rgba(255,215,0,.22), rgba(255,215,0,.04));
+    }
+
+    .buy-card-link h3{
+      color:#ffe600;
+      font-size:1.35rem;
+      font-weight:900;
+      margin-bottom:12px;
+    }
+
+    .buy-card-link p{
+      color:#e3e3e3;
+      line-height:1.65;
+      font-weight:600;
+      margin:0;
+    }
+
+    .chart-modal{
+      position:fixed;
+      inset:0;
+      background:rgba(0,0,0,.52);
+      backdrop-filter:blur(6px);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      opacity:0;
+      visibility:hidden;
+      transition:.25s ease;
+      z-index:9999;
+      padding:42px;
+    }
+
+    .chart-modal.active{
+      opacity:1;
+      visibility:visible;
+    }
+
+    .chart-modal-content{
+      position:relative;
+      width:min(1050px,88vw);
+      max-height:82vh;
+      animation:zoomFade .25s ease;
+    }
+
+    .chart-modal-content img{
+      width:100%;
+      max-height:82vh;
+      object-fit:contain;
+      display:block;
+      border-radius:24px;
+      border:1px solid rgba(255,215,0,.22);
+      box-shadow:0 30px 80px rgba(0,0,0,.6);
+      background:#050505;
+    }
+
+    .chart-close{
+      position:absolute;
+      top:-18px;
+      right:-18px;
+      width:50px;
+      height:50px;
+      border-radius:50%;
+      background:#0f0f0f;
+      border:1px solid rgba(255,215,0,.35);
+      color:#ffe600;
+      font-size:2rem;
+      font-weight:700;
+      cursor:pointer;
+      z-index:10001;
+      line-height:1;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      transition:.25s ease;
+    }
+
+    .chart-close:hover{
+      transform:scale(1.08);
+      background:#161616;
+      border-color:rgba(255,215,0,.65);
+    }
+
+    @keyframes zoomFade{
+      from{
+        opacity:0;
+        transform:scale(.92);
+      }
+
+      to{
+        opacity:1;
+        transform:scale(1);
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="page">
+
+    <nav class="navbar">
+      <a href="/index.html" class="logo">BullProsperity</a>
+
+      <div class="nav-links">
+        <a href="/index.html">Home</a>
+        <a href="/hub.html">Hub</a>
+        <a href="/course.html">Course</a>
+        <a href="/tools.html">Tools</a>
+        <a href="/setup-room.html" class="active">Setup Room</a>
+        <a href="/community.html">Community</a>
+        <a id="loginNavBtn" href="/api/whop/login">Login</a>
+      </div>
+    </nav>
+
+    <section class="hero-shell">
+      <div class="badge">Buy Side Kategorie</div>
+
+      <h1 class="hero-title">
+        Buy Side <span class="gold">Liquidity</span>
+      </h1>
+
+      <p class="hero-text">
+        Buy-Side Liquidity entsteht häufig oberhalb von klar sichtbaren Hochs.
+        In diesem Bereich lernst du, wie Equal Highs, Liquidity Sweeps, BOS,
+        FVG Retests und saubere Entries miteinander verbunden werden.
+      </p>
+
+      <div class="hero-buttons">
+        <a href="/liquidity.html" class="btn primary">Zurück zu Liquidity</a>
+        <a href="/setup-room.html" class="btn secondary">Setup Room</a>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="section-heading">
+        Equal High Sweep verstehen
+      </h2>
+
+      <div class="grid-2">
+        <div class="section-card">
+          <div class="chart-box" onclick="openChartZoom('buy-side-liquidity.png')">
+            <img src="buy-side-liquidity.png" alt="Buy Side Liquidity Setup">
+
+            <div class="chart-overlay">
+              Zum Vergrößern klicken
+            </div>
+          </div>
+        </div>
+
+        <div class="section-card">
+          <div class="badge">Buy Side Check</div>
+
+          <div class="list-box">
+            <div class="list-item">Gibt es Equal Highs oder klare Swing Highs?</div>
+            <div class="list-item">Liegt oberhalb der Hochs sichtbare Buy-Side Liquidität?</div>
+            <div class="list-item">Wurde die Liquidität sauber gesweept?</div>
+            <div class="list-item">Kommt danach ein BOS oder CHoCH?</div>
+            <div class="list-item">Liegt der Entry nach dem Sweep in einer hochwertigen Zone?</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="section-heading">
+        Buy Side Setup Ablauf
+      </h2>
+
+      <div class="grid-3">
+        <a href="#" class="buy-card-link">
+          <div class="badge">1. Liquidity</div>
+          <h3>Equal Highs erkennen</h3>
+          <p>
+            Mehrere ähnliche Hochs zeigen, wo viele Trader Stopps oder Breakout-Orders platzieren.
+          </p>
+        </a>
+
+        <a href="#" class="buy-card-link">
+          <div class="badge">2. Sweep</div>
+          <h3>Buy-Side Sweep</h3>
+          <p>
+            Der Markt greift die Liquidität oberhalb der Hochs ab, bevor die eigentliche Reaktion startet.
+          </p>
+        </a>
+
+        <a href="#" class="buy-card-link">
+          <div class="badge">3. Entry</div>
+          <h3>BOS + FVG Retest</h3>
+          <p>
+            Nach dem Strukturbruch wird der Retest abgewartet, um einen sauberen Entry zu planen.
+          </p>
+        </a>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="section-heading">
+        Was du daraus lernen sollst
+      </h2>
+
+      <div class="grid-3">
+        <a href="#" class="buy-card-link">
+          <div class="badge">Mindset</div>
+          <h3>Nicht den Sweep jagen</h3>
+          <p>
+            Der Sweep alleine ist kein Entry. Erst Confirmation und Struktur machen das Setup handelbar.
+          </p>
+        </a>
+
+        <a href="#" class="buy-card-link">
+          <div class="badge">Structure</div>
+          <h3>BOS bestätigt Richtung</h3>
+          <p>
+            Der Break of Structure zeigt, ob nach dem Liquidity Grab wirklich Momentum entsteht.
+          </p>
+        </a>
+
+        <a href="#" class="buy-card-link">
+          <div class="badge">Execution</div>
+          <h3>Entry im Discount</h3>
+          <p>
+            Der saubere Retest im FVG oder in einer validen Zone liefert den professionellen Entry.
+          </p>
+        </a>
+      </div>
+    </section>
+
+    <div class="footer-note">
+      BullProsperity dient ausschließlich Bildungszwecken.
+    </div>
+
+  </div>
+
+  <div id="chartZoomModal" class="chart-modal" onclick="closeChartZoom()">
+    <div class="chart-modal-content" onclick="event.stopPropagation()">
+      <button class="chart-close" onclick="closeChartZoom()" type="button">×</button>
+      <img id="chartZoomImg" src="" alt="Chart Zoom">
+    </div>
+  </div>
+
+  <script>
+    function openChartZoom(src){
+      const modal = document.getElementById("chartZoomModal");
+      const img = document.getElementById("chartZoomImg");
+
+      img.src = src;
+      modal.classList.add("active");
+    }
+
+    function closeChartZoom(){
+      const modal = document.getElementById("chartZoomModal");
+      modal.classList.remove("active");
+    }
+  </script>
+</body>
+</html>
