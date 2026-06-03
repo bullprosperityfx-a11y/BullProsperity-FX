@@ -5,174 +5,303 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>BullProsperity | Liquidity Setups</title>
   <link rel="icon" type="image/png" href="/favicon.png">
-<link rel="manifest" href="/manifest.json">
-<link rel="apple-touch-icon" href="/favicon.png">
-<meta name="theme-color" content="#050505">
-  <link rel="stylesheet" href="theme.css" />
+  <link rel="manifest" href="/manifest.json">
+  <link rel="apple-touch-icon" href="/favicon.png">
+  <meta name="theme-color" content="#050505">
+  <link rel="stylesheet" href="/theme.css" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <script src="/login.js" defer></script>
-
   <script>
     (async () => {
       try {
-        const res = await fetch("/api/access", { credentials: "include" });
+        const res = await fetch("/api/access", {
+          credentials: "include",
+          cache: "no-store"
+        });
         const data = await res.json();
         if (data.role !== "admin" && data.role !== "premium") {
-          window.location.href = "locked.html";
+          window.location.href = "/locked.html";
         }
       } catch (err) {
-        window.location.href = "locked.html";
+        window.location.href = "/locked.html";
       }
     })();
   </script>
-
   <style>
-    .chart-placeholder{
-      border:1px solid var(--line);
-      border-radius:22px;
+    .chart-preview{
+      width:100%;
       min-height:420px;
-      background:
-        radial-gradient(circle at center, rgba(255,255,255,0.03), rgba(255,255,255,0.01)),
-        #0c0c0c;
-      display:flex;
+      border:1px solid rgba(255,215,0,.25);
+      border-radius:24px;
+      overflow:hidden;
+      background:#050505;
+      position:relative;
+      cursor:zoom-in;
+    }
+    .chart-preview img{
+      width:100%;
+      height:100%;
+      min-height:420px;
+      object-fit:cover;
+      display:block;
+    }
+    .chart-overlay{
+      position:absolute;
+      right:18px;
+      bottom:18px;
+      padding:10px 14px;
+      border-radius:999px;
+      background:rgba(0,0,0,.72);
+      border:1px solid rgba(255,215,0,.35);
+      color:#ffe600;
+      font-size:13px;
+      font-weight:700;
+    }
+    .chart-modal{
+      display:none;
+      position:fixed;
+      inset:0;
+      z-index:9999;
+      background:rgba(0,0,0,.82);
+      backdrop-filter:blur(12px);
       align-items:center;
       justify-content:center;
-      text-align:center;
-      color:#d4d4d4;
       padding:24px;
-      line-height:1.7;
+    }
+    .chart-modal.active{
+      display:flex;
+    }
+    .chart-modal-content{
+      width:min(92vw,1200px);
+      height:min(86vh,760px);
+      border-radius:28px;
+      overflow:hidden;
+      border:1px solid rgba(255,215,0,.35);
+      background:#050505;
+      position:relative;
+    }
+    .chart-close{
+      position:absolute;
+      top:16px;
+      right:16px;
+      z-index:10;
+      width:42px;
+      height:42px;
+      border:none;
+      border-radius:50%;
+      background:#111;
+      color:#ffe600;
+      font-size:28px;
+      cursor:pointer;
+    }
+    .chart-zoom-wrap{
+      width:100%;
+      height:100%;
+      overflow:auto;
+    }
+    .chart-zoom-wrap img{
+      width:125%;
+      max-width:none;
+      display:block;
     }
   </style>
 </head>
 <body>
   <div class="page">
-
     <nav class="navbar">
-      <a href="index.html" class="logo">BullProsperity</a>
+      <a href="/index.html" class="logo">
+        BullProsperity
+      </a>
       <div class="nav-links">
-        <a href="index.html">Home</a>
-        <a href="hub.html">Hub</a>
-        <a href="course.html">Course</a>
-        <a href="tools.html">Tools</a>
-        <a href="setup-room.html" class="active">Setup Room</a>
-        <a href="community.html">Community</a>
+        <a href="/index.html">Home</a>
+        <a href="/hub.html">Hub</a>
+        <a href="/course.html">Course</a>
+        <a href="/tools.html">Tools</a>
+        <a href="/setup-room.html" class="active">Setup Room</a>
+        <a href="/community.html">Community</a>
         <a id="loginNavBtn" href="/api/whop/login">Login</a>
       </div>
     </nav>
-
     <section class="hero-shell">
-      <div class="badge">SMC Kategorie</div>
-      <h1 class="hero-title">Liquidity <span class="gold">Setups</span></h1>
+      <div class="badge">
+        SMC Kategorie
+      </div>
+      <h1 class="hero-title">
+        Liquidity <span class="gold">Setups</span>
+      </h1>
       <p class="hero-text">
-        In diesem Bereich geht es um Liquidity Sweeps, Stop Hunts, Equal Highs und Equal Lows.
-        Genau hier beginnt oft der Unterschied zwischen Retail-Denken und Smart-Money-Verständnis.
+        In diesem Bereich geht es um Liquidity Sweeps,
+        Stop Hunts, Equal Highs und Equal Lows.
+        Genau hier beginnt oft der Unterschied
+        zwischen Retail-Denken und Smart-Money-Verständnis.
       </p>
       <div class="hero-buttons">
-        <a href="setup-room.html" class="btn primary">Zurück zum Setup Room</a>
-        <a href="course.html" class="btn secondary">Zum Kurs</a>
+        <a href="/setup-room.html" class="btn primary">
+          Zurück zum Setup Room
+        </a>
+        <a href="/course.html" class="btn secondary">
+          Zum Kurs
+        </a>
       </div>
     </section>
-
     <section class="section">
-      <h2 class="section-heading">Liquidity im Chart verstehen</h2>
+      <h2 class="section-heading">
+        Liquidity im Chart verstehen
+      </h2>
       <p class="section-subtext">
-        Hier kannst du später echte Chart-Screenshots, TradingView-Embeds oder markierte Setups einsetzen.
+        Hier kannst du echte Chart-Screenshots,
+        TradingView-Embeds oder markierte Setups einsetzen.
       </p>
-
       <div class="grid-2">
         <div class="section-card">
-         <div class="chart-preview" onclick="openChartZoom('/images/liquidity-example.png')">
-  <img src="/images/liquidity-example.png" alt="Liquidity Setup Chart">
-
-  <div class="chart-overlay">
-    Zum Vergrößern klicken
-  </div>
-</div>
-
-<div id="chartZoomModal" class="chart-modal" onclick="closeChartZoom()">
-  <div class="chart-modal-content" onclick="event.stopPropagation()">
-
-    <button class="chart-close" onclick="closeChartZoom()">×</button>
-
-    <div class="chart-zoom-wrap">
-      <img id="chartZoomImg" src="" alt="Chart Zoom">
-    </div>
-
-  </div>
-</div>
+          <div
+            class="chart-preview"
+            onclick="openChartZoom('/liquidity-example.png')"
+          >
+            <img
+              src="/liquidity-example.png"
+              alt="Liquidity Setup Chart"
+            >
+            <div class="chart-overlay">
+              Zum Vergrößern klicken
+            </div>
+          </div>
         </div>
-
         <div class="section-card">
-          <div class="badge">Worauf achten?</div>
+          <div class="badge">
+            Worauf achten?
+          </div>
           <div class="list-box">
-            <div class="list-item">Liegt Buy-Side oder Sell-Side Liquidität im Markt?</div>
-            <div class="list-item">Gibt es Equal Highs oder Equal Lows?</div>
-            <div class="list-item">Wurde Liquidität nur angetippt oder sauber gesweept?</div>
-            <div class="list-item">Kommt danach eine Reaktion mit Strukturbruch?</div>
-            <div class="list-item">Passt das Setup zum Higher Timeframe Bias?</div>
+            <div class="list-item">
+              Liegt Buy-Side oder Sell-Side Liquidität im Markt?
+            </div>
+            <div class="list-item">
+              Gibt es Equal Highs oder Equal Lows?
+            </div>
+            <div class="list-item">
+              Wurde Liquidität nur angetippt oder sauber gesweept?
+            </div>
+            <div class="list-item">
+              Kommt danach eine Reaktion mit Strukturbruch?
+            </div>
+            <div class="list-item">
+              Passt das Setup zum Higher Timeframe Bias?
+            </div>
           </div>
         </div>
       </div>
     </section>
-
     <section class="section">
-      <h2 class="section-heading">Setup Beispiele</h2>
+      <h2 class="section-heading">
+        Setup Beispiele
+      </h2>
       <p class="section-subtext">
-        Diese Karten kannst du später mit echten Einzelbeispielen verbinden.
+        Diese Karten kannst du später
+        mit echten Einzelbeispielen verbinden.
       </p>
-
       <div class="grid-3">
         <div class="example-card">
           <div>
-            <div class="badge">Buy Side</div>
-            <h3>Equal High Sweep</h3>
-            <p>Klassisches Szenario, bei dem Hochs abgeholt werden, bevor der Markt wieder reagiert.</p>
+            <div class="badge">
+              Buy Side
+            </div>
+            <h3>
+              Equal High Sweep
+            </h3>
+            <p>
+              Klassisches Szenario,
+              bei dem Hochs abgeholt werden,
+              bevor der Markt wieder reagiert.
+            </p>
           </div>
-          <a href="#" class="example-link">Beispiel öffnen</a>
+          <a href="#" class="example-link">
+            Beispiel öffnen
+          </a>
         </div>
-
         <div class="example-card">
           <div>
-            <div class="badge">Sell Side</div>
-            <h3>Low Sweep Reversal</h3>
-            <p>Der Markt nimmt Tiefs raus und dreht danach aus einer starken Zone nach oben.</p>
+            <div class="badge">
+              Sell Side
+            </div>
+            <h3>
+              Low Sweep Reversal
+            </h3>
+            <p>
+              Der Markt nimmt Tiefs raus
+              und dreht danach
+              aus einer starken Zone nach oben.
+            </p>
           </div>
-          <a href="#" class="example-link">Beispiel öffnen</a>
+          <a href="#" class="example-link">
+            Beispiel öffnen
+          </a>
         </div>
-
         <div class="example-card">
           <div>
-            <div class="badge">Institutional</div>
-            <h3>Liquidity + BOS</h3>
-            <p>Erst Sweep, dann Break of Structure und anschließend ein präziser Entry.</p>
+            <div class="badge">
+              Institutional
+            </div>
+            <h3>
+              Liquidity + BOS
+            </h3>
+            <p>
+              Erst Sweep,
+              dann Break of Structure
+              und anschließend ein präziser Entry.
+            </p>
           </div>
-          <a href="#" class="example-link">Beispiel öffnen</a>
+          <a href="#" class="example-link">
+            Beispiel öffnen
+          </a>
         </div>
       </div>
     </section>
-
     <div class="footer-note">
-      BullProsperity dient ausschließlich Bildungszwecken und stellt keine Finanzberatung dar.
+      BullProsperity dient ausschließlich Bildungszwecken
+      und stellt keine Finanzberatung dar.
     </div>
-
+  </div>
+  <div
+    id="chartZoomModal"
+    class="chart-modal"
+    onclick="closeChartZoom()"
+  >
+    <div
+      class="chart-modal-content"
+      onclick="event.stopPropagation()"
+    >
+      <button
+        class="chart-close"
+        onclick="closeChartZoom()"
+      >
+        ×
+      </button>
+      <div class="chart-zoom-wrap">
+        <img
+          id="chartZoomImg"
+          src=""
+          alt="Chart Zoom"
+        >
+      </div>
+    </div>
   </div>
   <script>
-function openChartZoom(src){
-  const modal = document.getElementById("chartZoomModal");
-  const img = document.getElementById("chartZoomImg");
-
-  img.src = src;
-  modal.classList.add("active");
-  document.body.style.overflow = "hidden";
-}
-
-function closeChartZoom(){
-  const modal = document.getElementById("chartZoomModal");
-
-  modal.classList.remove("active");
-  document.body.style.overflow = "";
-}
-</script>
+    function openChartZoom(src){
+      const modal =
+        document.getElementById("chartZoomModal");
+      const img =
+        document.getElementById("chartZoomImg");
+      img.src = src;
+      modal.classList.add("active");
+      document.body.style.overflow = "hidden";
+    }
+    function closeChartZoom(){
+      const modal =
+        document.getElementById("chartZoomModal");
+      modal.classList.remove("active");
+      document.body.style.overflow = "";
+    }
+  </script>
 </body>
 </html>
