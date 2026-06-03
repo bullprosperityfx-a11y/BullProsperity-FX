@@ -785,16 +785,35 @@
 }
 
 .bp-hero-line{
-  margin-top:22px !important;
-  margin-bottom:26px !important;
-  gap:12px !important;
+  margin-top:22px;
+  margin-bottom:24px;
+  display:flex;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:10px;
 }
 
-.bp-hero-line span{
-  padding:10px 16px !important;
-  font-size:12px !important;
+.bp-flow-pill{
+  padding:10px 16px;
+  border-radius:999px;
+  border:1px solid rgba(255,215,0,.22);
+  background:linear-gradient(180deg,rgba(255,215,0,.10),rgba(255,255,255,.025));
+  color:#ffd700;
+  font-size:12px;
+  font-weight:950;
   letter-spacing:.08em;
   text-transform:uppercase;
+  box-shadow:0 0 18px rgba(255,215,0,.06);
+}
+
+.bp-flow-caption{
+  padding:10px 16px;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,.10);
+  background:rgba(255,255,255,.035);
+  color:rgba(255,255,255,.78);
+  font-size:13px;
+  font-weight:850;
 }
 
 .hero-buttons{
@@ -876,11 +895,11 @@
         </div>
       </div>
 
-      <div class="bp-hero-line">
-  <span>Discipline</span>
-  <span>Structure</span>
-  <span>Execution</span>
-  <small>Dein BullProsperity Workflow</small>
+     <div class="bp-hero-line">
+  <div class="bp-flow-pill">Discipline</div>
+  <div class="bp-flow-pill">Structure</div>
+  <div class="bp-flow-pill">Execution</div>
+  <div class="bp-flow-caption">Dein BullProsperity Workflow</div>
 </div>
 
       <div class="hero-buttons">
