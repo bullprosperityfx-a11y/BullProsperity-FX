@@ -1,160 +1,57 @@
 <!DOCTYPE html>
 <html lang="de">
-
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <title>BullProsperity | Liquidity</title>
+  <title>BullProsperity | Liquidity Setups</title>
 
-  <link rel="stylesheet" href="theme.css" />
-  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <link rel="manifest" href="/manifest.json">
+  <link rel="apple-touch-icon" href="/favicon.png">
+  <meta name="theme-color" content="#050505">
 
+  <link rel="stylesheet" href="/theme.css" />
   <script src="/login.js" defer></script>
 
   <script>
     (async () => {
       try {
-
         const res = await fetch("/api/access", {
-          credentials: "include"
+          credentials: "include",
+          cache: "no-store"
         });
 
         const data = await res.json();
 
-        if (
-          data.role !== "admin" &&
-          data.role !== "premium"
-        ) {
-          window.location.href = "locked.html";
+        if (data.role !== "admin" && data.role !== "premium") {
+          window.location.href = "/locked.html";
         }
-
       } catch (err) {
-
-        window.location.href = "locked.html";
-
+        window.location.href = "/locked.html";
       }
     })();
   </script>
 
   <style>
-
-    body{
-      background:#050505;
-      color:#fff;
-      overflow-x:hidden;
-    }
-
-    .liquidity-wrapper{
-      width:min(1450px,92%);
-      margin:auto;
-      padding:140px 0 80px;
-    }
-
-    .liquidity-hero{
-      margin-bottom:60px;
-    }
-
-    .liquidity-badge{
-      width:fit-content;
-
-      padding:10px 18px;
-
-      border-radius:999px;
-
-      background:rgba(255,215,0,.08);
-
-      border:1px solid rgba(255,215,0,.14);
-
-      color:#ffe600;
-
-      font-size:.82rem;
-      font-weight:700;
-      letter-spacing:.5px;
-
-      margin-bottom:22px;
-    }
-
-    .liquidity-title{
-      font-size:clamp(3rem,7vw,6rem);
-      font-weight:900;
-      line-height:.95;
-      letter-spacing:-3px;
-
-      margin-bottom:26px;
-
-      background:linear-gradient(
-        180deg,
-        #fff799 0%,
-        #ffe600 45%,
-        #ffbf00 100%
-      );
-
-      -webkit-background-clip:text;
-      -webkit-text-fill-color:transparent;
-
-      text-shadow:
-        0 0 14px rgba(255,230,0,.15),
-        0 0 40px rgba(255,200,0,.08);
-    }
-
-    .liquidity-text{
-      max-width:850px;
-
-      color:#bdbdbd;
-
-      font-size:1.08rem;
-      line-height:1.8;
-    }
-
-    .liquidity-grid{
-      display:grid;
-      grid-template-columns:1.2fr .8fr;
-      gap:28px;
-      align-items:start;
-    }
-
-    .liquidity-card{
-      background:
-        linear-gradient(
-          180deg,
-          rgba(255,255,255,.03),
-          rgba(255,255,255,.01)
-        );
-
-      border:1px solid rgba(255,215,0,.12);
-
-      border-radius:34px;
-
-      padding:24px;
-
-      box-shadow:
-        0 0 0 1px rgba(255,215,0,.03),
-        0 25px 70px rgba(0,0,0,.45);
-
-      backdrop-filter:blur(10px);
+    .liquidity-heading{
+      margin-bottom:34px;
     }
 
     .chart-box{
       position:relative;
-
       overflow:hidden;
-
       border-radius:26px;
-
-      border:1px solid rgba(255,215,0,.16);
-
+      border:1px solid rgba(255,215,0,.18);
       cursor:pointer;
-
+      background:#050505;
       transition:.35s ease;
     }
 
     .chart-box:hover{
-      transform:translateY(-4px);
-      border-color:rgba(255,215,0,.35);
-
-      box-shadow:
-        0 20px 60px rgba(0,0,0,.55);
+      transform:translateY(-3px);
+      border-color:rgba(255,215,0,.42);
+      box-shadow:0 22px 60px rgba(0,0,0,.55);
     }
 
     .chart-box img{
@@ -166,30 +63,14 @@
       position:absolute;
       left:18px;
       bottom:18px;
-
-      padding:12px 18px;
-
+      padding:11px 17px;
       border-radius:999px;
-
       background:rgba(0,0,0,.72);
-
-      border:1px solid rgba(255,215,0,.15);
-
+      border:1px solid rgba(255,215,0,.25);
       color:#ffe600;
-
       font-size:.9rem;
-      font-weight:700;
-
-      backdrop-filter:blur(10px);
-    }
-
-    .side-title{
-      margin-bottom:24px;
-
-      font-size:1.2rem;
       font-weight:800;
-
-      color:#ffe600;
+      backdrop-filter:blur(10px);
     }
 
     .liquidity-list{
@@ -200,117 +81,62 @@
 
     .liquidity-item{
       padding:20px 22px;
-
       border-radius:18px;
-
       background:rgba(255,255,255,.02);
-
-      border:1px solid rgba(255,215,0,.1);
-
-      color:#e6e6e6;
-
+      border:1px solid rgba(255,215,0,.12);
+      color:#f1f1f1;
       line-height:1.6;
-      font-weight:600;
-
-      transition:.3s ease;
-    }
-
-    .liquidity-item:hover{
-      border-color:rgba(255,215,0,.3);
-
-      transform:translateX(3px);
-    }
-
-    .setup-section{
-      margin-top:70px;
-    }
-
-    .setup-title{
-      font-size:clamp(2rem,5vw,3.2rem);
-      font-weight:900;
-
-      margin-bottom:26px;
-
-      color:#ffe600;
-    }
-
-    .setup-grid{
-      display:grid;
-      grid-template-columns:repeat(3,1fr);
-      gap:24px;
-    }
-
-    .setup-card{
-      padding:28px;
-
-      border-radius:28px;
-
-      background:
-        linear-gradient(
-          180deg,
-          rgba(255,255,255,.03),
-          rgba(255,255,255,.01)
-        );
-
-      border:1px solid rgba(255,215,0,.12);
-
-      transition:.35s ease;
-    }
-
-    .setup-card:hover{
-      transform:translateY(-5px);
-
-      border-color:rgba(255,215,0,.3);
-    }
-
-    .setup-card span{
-      display:inline-flex;
-
-      margin-bottom:18px;
-
-      padding:8px 14px;
-
-      border-radius:999px;
-
-      background:rgba(255,215,0,.08);
-
-      border:1px solid rgba(255,215,0,.12);
-
-      color:#ffe600;
-
-      font-size:.8rem;
       font-weight:700;
     }
 
-    .setup-card h3{
-      margin-bottom:14px;
-
-      font-size:1.35rem;
-      font-weight:800;
+    .liquidity-item:hover{
+      border-color:rgba(255,215,0,.32);
     }
 
-    .setup-card p{
-      color:#bdbdbd;
+    .bp-setup-card{
+      padding:28px;
+      border-radius:28px;
+      background:linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.01));
+      border:1px solid rgba(255,215,0,.14);
+      transition:.35s ease;
+    }
+
+    .bp-setup-card:hover{
+      transform:translateY(-5px);
+      border-color:rgba(255,215,0,.34);
+    }
+
+    .bp-setup-card .badge{
+      width:100%;
+      justify-content:flex-start;
+      margin-bottom:18px;
+      background:linear-gradient(90deg, rgba(255,215,0,.25), rgba(255,215,0,.05));
+    }
+
+    .bp-setup-card h3{
+      color:#ffe600;
+      margin-bottom:12px;
+      font-size:1.35rem;
+      font-weight:900;
+    }
+
+    .bp-setup-card p{
+      color:#d7d7d7;
       line-height:1.7;
+      font-weight:600;
     }
 
     .chart-modal{
       position:fixed;
       inset:0;
-
-      background:rgba(0,0,0,.92);
-
+      background:rgba(0,0,0,.9);
       display:flex;
       align-items:center;
       justify-content:center;
-
       opacity:0;
       visibility:hidden;
-
       transition:.25s ease;
-
       z-index:9999;
-
       padding:30px;
     }
 
@@ -321,269 +147,152 @@
 
     .chart-modal-content{
       position:relative;
-      width:min(1450px,100%);
+      width:min(1450px,96vw);
     }
 
     .chart-modal-content img{
       width:100%;
-
+      display:block;
       border-radius:24px;
-
-      border:1px solid rgba(255,215,0,.16);
+      border:1px solid rgba(255,215,0,.22);
     }
 
     .chart-close{
       position:absolute;
       top:-18px;
       right:-18px;
-
       width:54px;
       height:54px;
-
       border:none;
       border-radius:50%;
-
       background:#0f0f0f;
-
-      border:1px solid rgba(255,215,0,.18);
-
-      color:#fff;
-
+      border:1px solid rgba(255,215,0,.28);
+      color:#ffe600;
       font-size:2rem;
-
       cursor:pointer;
+      z-index:5;
     }
-
-    @media(max-width:980px){
-
-      .liquidity-grid{
-        grid-template-columns:1fr;
-      }
-
-      .setup-grid{
-        grid-template-columns:1fr;
-      }
-
-      .liquidity-wrapper{
-        padding-top:120px;
-      }
-
-    }
-
   </style>
 </head>
 
 <body>
+  <div class="page">
 
-  <div class="liquidity-wrapper">
+    <nav class="navbar">
+      <a href="/index.html" class="logo">BullProsperity</a>
 
-    <section class="liquidity-hero">
-
-      <div class="liquidity-badge">
-        SMC Kategorie
+      <div class="nav-links">
+        <a href="/index.html">Home</a>
+        <a href="/hub.html">Hub</a>
+        <a href="/course.html">Course</a>
+        <a href="/tools.html">Tools</a>
+        <a href="/setup-room.html" class="active">Setup Room</a>
+        <a href="/community.html">Community</a>
+        <a id="loginNavBtn" href="/api/whop/login">Login</a>
       </div>
+    </nav>
 
-      <h1 class="liquidity-title">
-        Liquidity Setups
+    <section class="hero-shell">
+      <div class="badge">SMC Kategorie</div>
+
+      <h1 class="hero-title">
+        Liquidity <span class="gold">Setups</span>
       </h1>
 
-      <p class="liquidity-text">
-        In diesem Bereich geht es um Liquidity Sweeps,
-        Stop Hunts, Equal Highs und Equal Lows.
-        Genau hier beginnt oft der Unterschied
-        zwischen Retail-Denken und
-        Smart-Money-Verständnis.
+      <p class="hero-text">
+        In diesem Bereich geht es um Liquidity Sweeps, Stop Hunts, Equal Highs und Equal Lows.
+        Genau hier beginnt oft der Unterschied zwischen Retail-Denken und Smart-Money-Verständnis.
       </p>
 
+      <div class="hero-buttons">
+        <a href="/setup-room.html" class="btn primary">Zurück zum Setup Room</a>
+        <a href="/course.html" class="btn secondary">Zum Kurs</a>
+      </div>
     </section>
 
-    <section class="liquidity-grid">
-
-      <div class="liquidity-card">
-
-        <div
-          class="chart-box"
-          onclick="openChartZoom('liquidity-example.png')"
-        >
-
-          <img
-            src="liquidity-example.png"
-            alt="Liquidity Setup"
-          >
-
-          <div class="chart-overlay">
-            Zum Vergrößern klicken
-          </div>
-
-        </div>
-
-      </div>
-
-      <div class="liquidity-card">
-
-        <div class="side-title">
-          Worauf achten?
-        </div>
-
-        <div class="liquidity-list">
-
-          <div class="liquidity-item">
-            Liegt Buy-Side oder Sell-Side
-            Liquidität im Markt?
-          </div>
-
-          <div class="liquidity-item">
-            Gibt es Equal Highs
-            oder Equal Lows?
-          </div>
-
-          <div class="liquidity-item">
-            Wurde Liquidität nur angetippt
-            oder sauber gesweept?
-          </div>
-
-          <div class="liquidity-item">
-            Kommt danach eine Reaktion
-            mit Strukturbruch?
-          </div>
-
-          <div class="liquidity-item">
-            Passt das Setup zum
-            Higher Timeframe Bias?
-          </div>
-
-        </div>
-
-      </div>
-
-    </section>
-
-    <section class="setup-section">
-
-      <h2 class="setup-title">
-        Setup Beispiele
+    <section class="section">
+      <h2 class="section-heading liquidity-heading">
+        Liquidity im Chart verstehen
       </h2>
 
-      <div class="setup-grid">
+      <div class="grid-2">
+        <div class="section-card">
+          <div class="chart-box" onclick="openChartZoom('liquidity-example.png')">
+            <img src="liquidity-example.png" alt="Liquidity Setup Chart">
 
-        <div class="setup-card">
-
-          <span>
-            Buy Side
-          </span>
-
-          <h3>
-            Equal High Sweep
-          </h3>
-
-          <p>
-            Klassisches Szenario,
-            bei dem Hochs abgeholt
-            werden bevor der Markt
-            wieder reagiert.
-          </p>
-
+            <div class="chart-overlay">
+              Zum Vergrößern klicken
+            </div>
+          </div>
         </div>
 
-        <div class="setup-card">
+        <div class="section-card">
+          <div class="badge">Worauf achten?</div>
 
-          <span>
-            Sell Side
-          </span>
-
-          <h3>
-            Low Sweep Reversal
-          </h3>
-
-          <p>
-            Der Markt nimmt Tiefs raus
-            und dreht danach aus einer
-            starken Zone nach oben.
-          </p>
-
+          <div class="liquidity-list">
+            <div class="liquidity-item">Liegt Buy-Side oder Sell-Side Liquidität im Markt?</div>
+            <div class="liquidity-item">Gibt es Equal Highs oder Equal Lows?</div>
+            <div class="liquidity-item">Wurde Liquidität nur angetippt oder sauber gesweept?</div>
+            <div class="liquidity-item">Kommt danach eine Reaktion mit Strukturbruch?</div>
+            <div class="liquidity-item">Passt das Setup zum Higher Timeframe Bias?</div>
+          </div>
         </div>
-
-        <div class="setup-card">
-
-          <span>
-            Institutional
-          </span>
-
-          <h3>
-            Liquidity + BOS
-          </h3>
-
-          <p>
-            Erst Sweep,
-            dann Break of Structure
-            und anschließend
-            ein präziser Entry.
-          </p>
-
-        </div>
-
       </div>
-
     </section>
 
-  </div>
+    <section class="section">
+      <h2 class="section-heading">Setup Beispiele</h2>
 
-  <div
-    id="chartZoomModal"
-    class="chart-modal"
-    onclick="closeChartZoom()"
-  >
+      <div class="grid-3">
+        <div class="bp-setup-card">
+          <div class="badge">Buy Side</div>
+          <h3>Equal High Sweep</h3>
+          <p>Klassisches Szenario, bei dem Hochs abgeholt werden, bevor der Markt wieder reagiert.</p>
+        </div>
 
-    <div
-      class="chart-modal-content"
-      onclick="event.stopPropagation()"
-    >
+        <div class="bp-setup-card">
+          <div class="badge">Sell Side</div>
+          <h3>Low Sweep Reversal</h3>
+          <p>Der Markt nimmt Tiefs raus und dreht danach aus einer starken Zone nach oben.</p>
+        </div>
 
-      <button
-        class="chart-close"
-        onclick="closeChartZoom()"
-      >
-        ×
-      </button>
+        <div class="bp-setup-card">
+          <div class="badge">Institutional</div>
+          <h3>Liquidity + BOS</h3>
+          <p>Erst Sweep, dann Break of Structure und anschließend ein präziser Entry.</p>
+        </div>
+      </div>
+    </section>
 
-      <img
-        id="chartZoomImg"
-        src=""
-        alt="Chart Zoom"
-      >
-
+    <div class="footer-note">
+      BullProsperity dient ausschließlich Bildungszwecken und stellt keine Finanzberatung dar.
     </div>
 
   </div>
 
+  <div id="chartZoomModal" class="chart-modal" onclick="closeChartZoom()">
+    <div class="chart-modal-content" onclick="event.stopPropagation()">
+      <button class="chart-close" onclick="closeChartZoom()">×</button>
+      <img id="chartZoomImg" src="" alt="Chart Zoom">
+    </div>
+  </div>
+
   <script>
-
     function openChartZoom(src){
-
-      const modal =
-        document.getElementById("chartZoomModal");
-
-      const img =
-        document.getElementById("chartZoomImg");
+      const modal = document.getElementById("chartZoomModal");
+      const img = document.getElementById("chartZoomImg");
 
       img.src = src;
-
       modal.classList.add("active");
-
       document.body.style.overflow = "hidden";
     }
 
     function closeChartZoom(){
-
-      const modal =
-        document.getElementById("chartZoomModal");
+      const modal = document.getElementById("chartZoomModal");
 
       modal.classList.remove("active");
-
       document.body.style.overflow = "";
     }
-
   </script>
-
 </body>
 </html>
