@@ -806,3 +806,29 @@ body::after{
   display:block;
 }
 }
+/* FIX: Klickbare Setup Cards ohne blauen Link-Unterstrich */
+a.bp-setup-card,
+a.bp-setup-card:link,
+a.bp-setup-card:visited,
+a.bp-setup-card:hover,
+a.bp-setup-card:active,
+a.bp-setup-card:focus{
+  text-decoration:none !important;
+  color:inherit !important;
+  display:flex !important;
+}
+
+a.bp-setup-card *,
+a.bp-setup-card h3,
+a.bp-setup-card p,
+a.bp-setup-card .badge{
+  text-decoration:none !important;
+}
+
+a.bp-setup-card h3{
+  color:var(--gold) !important;
+}
+
+a.bp-setup-card p{
+  color:#efefef !important;
+}
