@@ -805,7 +805,6 @@ body::after{
   max-width:none;
   display:block;
 }
-}
 /* FIX: Klickbare Setup Cards ohne blauen Link-Unterstrich */
 a.bp-setup-card,
 a.bp-setup-card:link,
