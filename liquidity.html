@@ -82,11 +82,25 @@
 
       <div class="grid-2">
         <div class="section-card">
-          <div class="chart-placeholder">
-            Hier kommt später dein Chart rein.<br><br>
-            Beispiel:<br>
-            Sell-Side Sweep → Rejection → BOS → Entry
-          </div>
+         <div class="chart-preview" onclick="openChartZoom('/images/liquidity-example.png')">
+  <img src="/images/liquidity-example.png" alt="Liquidity Setup Chart">
+
+  <div class="chart-overlay">
+    Zum Vergrößern klicken
+  </div>
+</div>
+
+<div id="chartZoomModal" class="chart-modal" onclick="closeChartZoom()">
+  <div class="chart-modal-content" onclick="event.stopPropagation()">
+
+    <button class="chart-close" onclick="closeChartZoom()">×</button>
+
+    <div class="chart-zoom-wrap">
+      <img id="chartZoomImg" src="" alt="Chart Zoom">
+    </div>
+
+  </div>
+</div>
         </div>
 
         <div class="section-card">
@@ -143,5 +157,22 @@
     </div>
 
   </div>
+  <script>
+function openChartZoom(src){
+  const modal = document.getElementById("chartZoomModal");
+  const img = document.getElementById("chartZoomImg");
+
+  img.src = src;
+  modal.classList.add("active");
+  document.body.style.overflow = "hidden";
+}
+
+function closeChartZoom(){
+  const modal = document.getElementById("chartZoomModal");
+
+  modal.classList.remove("active");
+  document.body.style.overflow = "";
+}
+</script>
 </body>
 </html>
