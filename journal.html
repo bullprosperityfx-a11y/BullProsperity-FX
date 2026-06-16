@@ -9,7 +9,6 @@
 <link rel="apple-touch-icon" href="/favicon.png">
 <meta name="theme-color" content="#050505">
   <link rel="stylesheet" href="theme.css" />
-  <link rel="stylesheet" href="theme.css" />
   <script src="/login.js" defer></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
@@ -29,6 +28,76 @@
   </script>
 
   <style>
+    body[data-protected="true"]{
+      visibility:hidden;
+    }
+
+    body[data-protected="true"].access-ready{
+      visibility:visible;
+    }
+
+    .journal-page{
+      background:
+        linear-gradient(135deg, rgba(243,210,27,0.07), transparent 28%),
+        radial-gradient(circle at 78% 8%, rgba(43,191,120,0.10), transparent 24%),
+        radial-gradient(circle at 12% 26%, rgba(243,210,27,0.10), transparent 22%),
+        #050505;
+    }
+
+    .journal-page .navbar{
+      position:sticky;
+      top:14px;
+      z-index:50;
+      padding:14px 16px;
+      border:1px solid rgba(243,210,27,0.14);
+      border-radius:24px;
+      background:rgba(7,7,7,0.78);
+      backdrop-filter:blur(18px);
+      box-shadow:0 18px 60px rgba(0,0,0,0.28);
+    }
+
+    .journal-page .logo,
+    .journal-page .section-heading{
+      letter-spacing:0;
+    }
+
+    .journal-page .hero-shell{
+      margin-top:14px;
+      padding:40px;
+      border-radius:34px;
+      background:
+        linear-gradient(145deg, rgba(255,255,255,0.055), transparent 38%),
+        radial-gradient(circle at 76% 20%, rgba(243,210,27,0.14), transparent 30%),
+        linear-gradient(180deg, rgba(18,18,18,0.92), rgba(5,5,5,0.98));
+      overflow:hidden;
+    }
+
+    .journal-page .hero-shell::before{
+      width:520px;
+      height:520px;
+      top:-220px;
+      right:-160px;
+      background:radial-gradient(circle, rgba(243,210,27,0.16), transparent 66%);
+    }
+
+    .journal-page .hero-title{
+      max-width:1050px;
+      font-size:clamp(44px, 5vw, 74px);
+      letter-spacing:0;
+      line-height:.92;
+    }
+
+    .journal-page .hero-text{
+      max-width:900px;
+    }
+
+    .journal-page .badge{
+      border-color:rgba(243,210,27,0.18);
+      background:rgba(243,210,27,0.065);
+      color:var(--gold);
+      box-shadow:none;
+    }
+
     .journal-layout{
       display:grid;
       grid-template-columns:1.05fr 0.95fr;
@@ -37,11 +106,15 @@
     }
 
     .journal-panel{
-      border:1px solid var(--line);
-      border-radius:28px;
-      background:linear-gradient(180deg, var(--panel), var(--panel-2));
-      box-shadow:0 0 0 1px rgba(255,255,255,0.02) inset;
-      padding:24px;
+      border:1px solid rgba(243,210,27,0.16);
+      border-radius:26px;
+      background:
+        linear-gradient(145deg, rgba(255,255,255,0.035), transparent 44%),
+        linear-gradient(180deg, rgba(17,17,17,0.9), rgba(7,7,7,0.96));
+      box-shadow:
+        inset 0 0 0 1px rgba(255,255,255,0.025),
+        0 22px 58px rgba(0,0,0,0.28);
+      padding:28px;
     }
 
     .form-grid{
@@ -78,6 +151,7 @@
       padding:14px 16px;
       font-size:15px;
       outline:none;
+      box-sizing:border-box;
     }
 
     .field textarea{
@@ -104,6 +178,23 @@
       cursor:pointer;
     }
 
+    .journal-page .btn{
+      border-radius:999px;
+      min-height:46px;
+    }
+
+    .journal-page .btn.primary{
+      background:var(--gold);
+      color:#111;
+      box-shadow:0 0 24px rgba(243,210,27,0.16);
+    }
+
+    .journal-page .btn.secondary{
+      color:#fff;
+      border-color:rgba(255,255,255,0.14);
+      background:rgba(255,255,255,0.025);
+    }
+
     .stats-grid{
       display:grid;
       grid-template-columns:1fr 1fr;
@@ -114,7 +205,9 @@
     .stat-card{
       border:1px solid rgba(243,210,27,0.14);
       border-radius:20px;
-      background:rgba(255,255,255,0.02);
+      background:
+        radial-gradient(circle at top right, rgba(243,210,27,0.055), transparent 58%),
+        rgba(255,255,255,0.02);
       padding:18px;
     }
 
@@ -147,7 +240,7 @@
     .entry-card{
       border:1px solid rgba(243,210,27,0.14);
       border-radius:20px;
-      background:rgba(255,255,255,0.02);
+      background:rgba(255,255,255,0.025);
       padding:18px;
     }
 
@@ -238,7 +331,7 @@
       border:none;
       cursor:pointer;
       padding:10px 14px;
-      border-radius:12px;
+      border-radius:999px;
       font-weight:800;
       font-size:14px;
       transition:0.2s ease;
@@ -335,6 +428,7 @@
     .legend-dot.blue{background:#4da3ff;}
 
     .calendar-shell{
+          .calendar-shell{
       margin-top:16px;
       overflow-x:auto;
       padding-bottom:4px;
@@ -360,7 +454,7 @@
       min-height:112px;
       border:1px solid rgba(255,255,255,0.08);
       border-radius:16px;
-      background:rgba(255,255,255,0.02);
+      background:rgba(255,255,255,0.025);
       padding:10px;
       position:relative;
       cursor:pointer;
@@ -532,6 +626,95 @@
       font-size:14px;
     }
 
+    .auth-badge{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:10px 14px;
+      border-radius:999px;
+      font-size:13px;
+      font-weight:700;
+      border:1px solid rgba(255,255,255,0.08);
+      background:rgba(255,255,255,0.04);
+      color:#fff;
+      white-space:nowrap;
+    }
+
+    .auth-badge::before{
+      content:"";
+      width:10px;
+      height:10px;
+      border-radius:50%;
+      display:inline-block;
+      background:#666;
+    }
+
+    .auth-badge.status-admin::before{background:#ffd700;}
+    .auth-badge.status-premium::before{background:#22c55e;}
+    .auth-badge.status-locked::before{background:#ef4444;}
+
+    .journal-page .logout-btn{
+      border-color:rgba(255,255,255,0.08);
+      background:rgba(255,255,255,0.04);
+    }
+
+    .journal-page .footer-note{
+      display:flex;
+      flex-wrap:wrap;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+      border:1px solid rgba(243,210,27,0.14);
+      border-radius:24px;
+      background:rgba(255,255,255,0.025);
+      padding:22px 26px;
+      margin:28px 0 10px;
+      color:#bdbdbd;
+      font-size:14px;
+      font-weight:800;
+      text-align:left;
+    }
+
+    .journal-page .footer-note strong{
+      display:block;
+      color:var(--gold);
+      font-size:16px;
+      margin-bottom:2px;
+    }
+
+    .journal-page .footer-note span{
+      color:#d2d2d2;
+      font-weight:700;
+    }
+
+    .journal-page .footer-note nav{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+    }
+
+    .journal-page .footer-note a{
+      color:#fff;
+      text-decoration:none;
+      font-weight:900;
+      padding:9px 12px;
+      border-radius:999px;
+      background:rgba(255,255,255,0.035);
+      border:1px solid rgba(255,255,255,0.07);
+    }
+
+    .journal-page .footer-note a:hover{
+      color:var(--gold);
+      border-color:rgba(243,210,27,0.34);
+    }
+
+    .journal-page .footer-note p{
+      flex-basis:100%;
+      margin:0;
+      color:#aaa;
+      font-weight:700;
+    }
+
     .news-event{
       border:1px solid rgba(255,255,255,0.10);
       border-radius:14px;
@@ -557,10 +740,18 @@
     }
 
     @media(max-width:760px){
+      .journal-page .hero-shell{
+        padding:24px !important;
+      }
+
       .form-grid,
       .stats-grid,
       .entry-grid{
         grid-template-columns:1fr;
+      }
+
+      .journal-panel{
+        padding:20px;
       }
 
       .calendar-grid{
@@ -572,11 +763,16 @@
       .week-summary{
         min-height:100px;
       }
+
+      .journal-page .footer-note{
+        align-items:flex-start;
+        flex-direction:column;
+      }
     }
   </style>
 </head>
 
-<body>
+<body class="journal-page" data-protected="true">
   <div class="page">
 
     <nav class="navbar">
@@ -590,6 +786,8 @@
         <a href="setup-room.html">Setup Room</a>
         <a href="community.html">Community</a>
         <a id="loginNavBtn" href="/api/whop/login">Login</a>
+        <a id="logoutBtn" href="/api/logout" class="logout-btn" style="display:none;">Logout</a>
+        <div id="authBadge" class="auth-badge status-loading">Prüfe Zugang...</div>
       </div>
     </nav>
 
@@ -660,8 +858,7 @@
               <option value="Break Even">Break Even</option>
             </select>
           </div>
-
-          <div class="field">
+                    <div class="field">
             <label for="profitLoss">Gewinn / Verlust in €</label>
             <input type="number" id="profitLoss" placeholder="z. B. 50 oder -30" />
           </div>
@@ -841,7 +1038,17 @@
     </section>
 
     <div class="footer-note">
-      BullProsperity dient ausschließlich Bildungszwecken und stellt keine Finanzberatung dar.
+      <div>
+        <strong>BullProsperity</strong>
+        <span>Trading Journal für Review, Disziplin, Statistik und Trading Education.</span>
+      </div>
+      <nav>
+        <a href="impressum.html">Impressum</a>
+        <a href="datenschutz.html">Datenschutz</a>
+        <a href="risikohinweis.html">Risikohinweis</a>
+        <a href="community.html">Kontakt</a>
+      </nav>
+      <p>BullProsperity dient ausschließlich Bildungs- und Informationszwecken. Es werden keine Gewinne garantiert.</p>
     </div>
 
   </div>
@@ -849,6 +1056,10 @@
 <script>
 const storageKey = "bullprosperity_trading_journal";
 const balanceKey = "bullprosperity_start_balance";
+
+const authBadge = document.getElementById("authBadge");
+const loginNavBtn = document.getElementById("loginNavBtn");
+const logoutBtn = document.getElementById("logoutBtn");
 
 const tradeDate = document.getElementById("tradeDate");
 const market = document.getElementById("market");
@@ -960,124 +1171,7 @@ function resetForm() {
   newsNote.value = "";
   notes.value = "";
 }
-
-function normalizeDate(value) {
-  if (!value) return "";
-
-  if (typeof value === "string") {
-    return value.split(" ")[0].split("T")[0];
-  }
-
-  try {
-    return formatDateLocal(new Date(value));
-  } catch {
-    return "";
-  }
-}
-
-function getEventsForDate(dateStr) {
-  return economicEvents.filter(event => normalizeDate(event.date) === dateStr);
-}
-
-function hasNewsForDate(dateStr) {
-  return getEventsForDate(dateStr).length > 0;
-}
-
-async function loadEconomicEvents() {
-  try {
-    const year = calendarDate.getFullYear();
-    const month = calendarDate.getMonth();
-
-    const fromDate = new Date(year, month - 1, 1);
-    const toDate = new Date(year, month + 2, 0);
-
-    const from = formatDateLocal(fromDate);
-    const to = formatDateLocal(toDate);
-
-    const res = await fetch(`/api/economic-calendar?from=${from}&to=${to}`, {
-      credentials: "include",
-      cache: "no-store"
-    });
-
-    const data = await res.json();
-    economicEvents = data.events || [];
-  } catch (err) {
-    console.error("News konnten nicht geladen werden:", err);
-    economicEvents = [];
-  }
-}
-
-function renderStats(trades) {
-  const start = getStartBalance();
-  const pnl = trades.reduce((sum, trade) => sum + Number(trade.profitLoss || 0), 0);
-  const current = start + pnl;
-  const performance = start > 0 ? ((current - start) / start) * 100 : 0;
-
-  const wins = trades.filter(t => t.result === "Gewinn").length;
-  const losses = trades.filter(t => t.result === "Verlust").length;
-  const newsTrades = trades.filter(t => t.newsDay === "Ja").length;
-
-  startBalanceDisplay.textContent = formatMoney(start);
-  currentBalanceDisplay.textContent = formatMoney(current);
-  performanceDisplay.textContent = performance.toFixed(2) + "%";
-  tradeCount.textContent = trades.length;
-  winCount.textContent = wins;
-  lossCount.textContent = losses;
-  newsTradeCount.textContent = newsTrades;
-  lastMarket.textContent = trades[0]?.market || "-";
-}
-
-function renderTrades() {
-  const trades = getTrades();
-  journalList.innerHTML = "";
-
-  renderStats(trades);
-
-  if (trades.length === 0) {
-    emptyState.style.display = "block";
-    return;
-  }
-
-  emptyState.style.display = "none";
-
-  trades.forEach((trade, index) => {
-    const card = document.createElement("div");
-    card.className = "entry-card";
-
-    let badgeClass = "entry-badge";
-    if (trade.result === "Verlust") badgeClass = "entry-badge loss";
-    if (trade.result === "Break Even") badgeClass = "entry-badge be";
-
-    card.innerHTML = `
-      <div class="entry-top">
-        <div>
-          <div class="entry-title">${escapeHTML(trade.market || "Unbekannter Markt")}</div>
-          <div style="color:#bdbdbd; font-size:14px; margin-top:6px;">
-            ${escapeHTML(trade.date || "Kein Datum")} • ${escapeHTML(trade.session || "Keine Session")}
-          </div>
         </div>
-        <div class="${badgeClass}">${escapeHTML(trade.result || "Kein Ergebnis")}</div>
-      </div>
-
-      <div class="entry-grid">
-        <div class="entry-item"><div class="k">Richtung</div><div class="v">${escapeHTML(trade.direction || "-")}</div></div>
-        <div class="entry-item"><div class="k">P/L</div><div class="v">${formatMoney(trade.profitLoss)}</div></div>
-        <div class="entry-item"><div class="k">Entry</div><div class="v">${escapeHTML(trade.entry || "-")}</div></div>
-        <div class="entry-item"><div class="k">Stop Loss</div><div class="v">${escapeHTML(trade.stopLoss || "-")}</div></div>
-        <div class="entry-item"><div class="k">Take Profit</div><div class="v">${escapeHTML(trade.takeProfit || "-")}</div></div>
-        <div class="entry-item"><div class="k">RR</div><div class="v">${escapeHTML(trade.rr || "-")}</div></div>
-        <div class="entry-item"><div class="k">News-Tag</div><div class="v">${escapeHTML(trade.newsDay || "Nein")}</div></div>
-        <div class="entry-item"><div class="k">News Notiz</div><div class="v">${escapeHTML(trade.newsNote || "-")}</div></div>
-        <div class="entry-item"><div class="k">Setup</div><div class="v">${escapeHTML(trade.setupType || "-")}</div></div>
-        <div class="entry-item"><div class="k">Emotion</div><div class="v">${escapeHTML(trade.emotion || "-")}</div></div>
-      </div>
-
-      <div class="entry-notes">${escapeHTML(trade.notes || "Keine Notizen vorhanden.")}</div>
-
-      <div class="entry-actions">
-        <button class="small-btn primary" onclick="downloadTradePDF(${index})">PDF herunterladen</button>
-        <button class="small-btn secondary" onclick="deleteTrade(${index})">Eintrag löschen</button>
-      </div>
     `;
 
     journalList.appendChild(card);
@@ -1452,16 +1546,34 @@ window.deleteTrade = deleteTrade;
 window.downloadTradePDF = downloadTradePDF;
 
 document.addEventListener("DOMContentLoaded", async () => {
-  const loginBtn = document.getElementById("loginNavBtn");
-
   try {
     const res = await fetch("/api/access", { credentials: "include" });
     const data = await res.json();
+    const role = data?.role || "guest";
 
-    if (data.role === "admin" || data.role === "premium") {
-      if (loginBtn) loginBtn.style.display = "none";
+    if (role !== "admin" && role !== "premium") {
+      window.location.href = "locked.html";
+      return;
     }
-  } catch {}
+
+    document.body.classList.add("access-ready");
+
+    if (role === "admin") {
+      authBadge.textContent = "Admin";
+      authBadge.className = "auth-badge status-admin";
+    }
+
+    if (role === "premium") {
+      authBadge.textContent = "Premium";
+      authBadge.className = "auth-badge status-premium";
+    }
+
+    if (loginNavBtn) loginNavBtn.style.display = "none";
+    if (logoutBtn) logoutBtn.style.display = "inline-flex";
+  } catch {
+    window.location.href = "locked.html";
+    return;
+  }
 
   startBalance.value = getStartBalance() || "";
   await loadEconomicEvents();
