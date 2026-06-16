@@ -32,14 +32,166 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>BullProsperity | Community</title>
-   <link rel="icon" type="image/png" href="/favicon.png">
-<link rel="manifest" href="/manifest.json">
-<link rel="apple-touch-icon" href="/favicon.png">
-<meta name="theme-color" content="#050505">
-  <link rel="stylesheet" href="theme.css" />
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <link rel="manifest" href="/manifest.json">
+  <link rel="apple-touch-icon" href="/favicon.png">
+  <meta name="theme-color" content="#050505">
   <link rel="stylesheet" href="theme.css" />
 
   <style>
+    .community-page{
+      background:
+        linear-gradient(135deg, rgba(243,210,27,0.07), transparent 28%),
+        radial-gradient(circle at 78% 8%, rgba(43,191,120,0.10), transparent 24%),
+        radial-gradient(circle at 12% 26%, rgba(243,210,27,0.10), transparent 22%),
+        #050505;
+    }
+
+    .community-page .navbar{
+      position:sticky;
+      top:14px;
+      z-index:50;
+      padding:14px 16px;
+      border:1px solid rgba(243,210,27,0.14);
+      border-radius:24px;
+      background:rgba(7,7,7,0.78);
+      backdrop-filter:blur(18px);
+      box-shadow:0 18px 60px rgba(0,0,0,0.28);
+    }
+
+    .community-page .logo,
+    .community-page .section-heading{
+      letter-spacing:0;
+    }
+
+    .community-page .hero-shell{
+      margin-top:14px;
+      padding:40px;
+      border-radius:34px;
+      background:
+        linear-gradient(145deg, rgba(255,255,255,0.055), transparent 38%),
+        radial-gradient(circle at 76% 20%, rgba(243,210,27,0.14), transparent 30%),
+        linear-gradient(180deg, rgba(18,18,18,0.92), rgba(5,5,5,0.98));
+      overflow:hidden;
+    }
+
+    .community-page .hero-shell::before{
+      width:520px;
+      height:520px;
+      top:-220px;
+      right:-160px;
+      background:radial-gradient(circle, rgba(243,210,27,0.16), transparent 66%);
+    }
+
+    .community-page .hero-title{
+      max-width:1050px;
+      font-size:clamp(44px, 5vw, 74px);
+      letter-spacing:0;
+      line-height:.92;
+    }
+
+    .community-page .hero-text{
+      max-width:950px;
+    }
+
+    .community-page .badge{
+      border-color:rgba(243,210,27,0.18);
+      background:rgba(243,210,27,0.065);
+      color:var(--gold);
+      box-shadow:none;
+    }
+
+    .community-page .btn{
+      border-radius:999px;
+      min-height:46px;
+    }
+
+    .community-page .btn.primary,
+    .community-page .community-link{
+      background:var(--gold);
+      color:#111;
+      box-shadow:0 0 24px rgba(243,210,27,0.16);
+    }
+
+    .community-page .btn.secondary{
+      color:#fff;
+      border-color:rgba(255,255,255,0.14);
+      background:rgba(255,255,255,0.025);
+    }
+
+    .community-page .grid-3,
+    .community-page .grid-2{
+      align-items:stretch;
+    }
+
+    .community-page .community-card,
+    .community-page .section-card,
+    .community-page .discord-card{
+      border:1px solid rgba(243,210,27,0.16);
+      border-radius:26px;
+      background:
+        linear-gradient(145deg, rgba(255,255,255,0.035), transparent 44%),
+        linear-gradient(180deg, rgba(17,17,17,0.9), rgba(7,7,7,0.96));
+      box-shadow:
+        inset 0 0 0 1px rgba(255,255,255,0.025),
+        0 22px 58px rgba(0,0,0,0.28);
+    }
+
+    .community-page .community-card{
+      position:relative;
+      overflow:hidden;
+      padding:26px;
+      display:flex;
+      flex-direction:column;
+      gap:18px;
+      min-height:260px;
+      transition:transform .25s ease, border-color .25s ease, box-shadow .25s ease;
+    }
+
+    .community-page .community-card::before{
+      content:"";
+      position:absolute;
+      inset:auto -70px -90px auto;
+      width:190px;
+      height:190px;
+      background:radial-gradient(circle, rgba(243,210,27,0.12), transparent 70%);
+      opacity:.65;
+      pointer-events:none;
+    }
+
+    .community-page .community-card:hover{
+      transform:translateY(-6px);
+      border-color:rgba(243,210,27,0.5);
+      box-shadow:0 22px 58px rgba(0,0,0,0.34);
+    }
+
+    .community-page .community-card > div{
+      position:relative;
+      z-index:1;
+    }
+
+    .community-page .community-card h3,
+    .community-page .section-card h2,
+    .community-page .discord-card h2{
+      color:#fff;
+      letter-spacing:0;
+    }
+
+    .community-page .community-card p,
+    .community-page .section-card p{
+      color:#d9d9d9;
+      font-weight:700;
+    }
+
+    .community-page .community-link{
+      align-self:flex-start;
+      margin-top:auto;
+      border-radius:999px;
+      min-height:46px;
+      position:relative;
+      z-index:1;
+    }
+
     .auth-badge{
       display:inline-flex;
       align-items:center;
@@ -68,11 +220,13 @@
     .auth-badge.status-longterm::before{background:#3b82f6;}
     .auth-badge.status-locked::before{background:#ef4444;}
 
+    .community-page .auth-badge,
+    .community-page .logout-btn{
+      border-color:rgba(255,255,255,0.08);
+      background:rgba(255,255,255,0.04);
+    }
+
     .discord-card{
-      border:1px solid var(--line);
-      border-radius:28px;
-      background:linear-gradient(180deg, var(--panel), var(--panel-2));
-      box-shadow:0 0 0 1px rgba(255,255,255,0.02) inset;
       padding:28px;
       margin-top:24px;
     }
@@ -83,10 +237,78 @@
       font-size:16px;
       margin-bottom:20px;
     }
+
+    .community-page .footer-note{
+      display:flex;
+      flex-wrap:wrap;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+      border:1px solid rgba(243,210,27,0.14);
+      border-radius:24px;
+      background:rgba(255,255,255,0.025);
+      padding:22px 26px;
+      margin:0 0 10px;
+      color:#bdbdbd;
+      font-size:14px;
+      font-weight:800;
+      text-align:left;
+    }
+
+    .community-page .footer-note strong{
+      display:block;
+      color:var(--gold);
+      font-size:16px;
+      margin-bottom:2px;
+    }
+
+    .community-page .footer-note span{
+      color:#d2d2d2;
+      font-weight:700;
+    }
+
+    .community-page .footer-note nav{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+    }
+
+    .community-page .footer-note a{
+      color:#fff;
+      text-decoration:none;
+      font-weight:900;
+      padding:9px 12px;
+      border-radius:999px;
+      background:rgba(255,255,255,0.035);
+      border:1px solid rgba(255,255,255,0.07);
+    }
+
+    .community-page .footer-note a:hover{
+      color:var(--gold);
+      border-color:rgba(243,210,27,0.34);
+    }
+
+    .community-page .footer-note p{
+      flex-basis:100%;
+      margin:0;
+      color:#aaa;
+      font-weight:700;
+    }
+
+    @media(max-width:860px){
+      .community-page .hero-shell{
+        padding:24px !important;
+      }
+
+      .community-page .footer-note{
+        align-items:flex-start;
+        flex-direction:column;
+      }
+    }
   </style>
 </head>
 
-<body data-protected="true">
+<body class="community-page" data-protected="true">
   <div class="page">
     <nav class="navbar">
       <a href="index.html" class="logo">BullProsperity</a>
@@ -187,7 +409,19 @@
       </div>
     </section>
 
-    <div class="footer-note">BullProsperity dient ausschließlich Bildungszwecken</div>
+    <div class="footer-note">
+      <div>
+        <strong>BullProsperity</strong>
+        <span>Community für Setups, Reviews, Disziplin und Trading Education.</span>
+      </div>
+      <nav>
+        <a href="impressum.html">Impressum</a>
+        <a href="datenschutz.html">Datenschutz</a>
+        <a href="risikohinweis.html">Risikohinweis</a>
+        <a href="community.html">Kontakt</a>
+      </nav>
+      <p>BullProsperity dient ausschließlich Bildungs- und Informationszwecken. Es werden keine Gewinne garantiert.</p>
+    </div>
   </div>
 
   <script>
@@ -213,41 +447,32 @@
           window.location.href = "locked.html";
           return;
         }
-document.body.classList.add("access-ready");
+
+        document.body.classList.add("access-ready");
+
         if (role === "admin") {
-  authBadge.textContent = "Admin";
-  authBadge.className = "auth-badge status-admin";
-}
+          authBadge.textContent = "Admin";
+          authBadge.className = "auth-badge status-admin";
+        }
 
-if (role === "premium") {
-  authBadge.textContent = "Premium";
-  authBadge.className = "auth-badge status-premium";
-}
+        if (role === "premium") {
+          authBadge.textContent = "Premium";
+          authBadge.className = "auth-badge status-premium";
+        }
 
-       if (loginNavBtn) {
-  loginNavBtn.style.display = "none";
-}
+        if (loginNavBtn) {
+          loginNavBtn.style.display = "none";
+        }
 
-const logoutBtn = document.getElementById("logoutBtn");
+        const logoutBtn = document.getElementById("logoutBtn");
 
-if (logoutBtn && (role === "admin" || role === "premium")) {
-  logoutBtn.style.display = "inline-flex";
-}
+        if (logoutBtn && (role === "admin" || role === "premium")) {
+          logoutBtn.style.display = "inline-flex";
+        }
       } catch (err) {
         window.location.href = "locked.html";
       }
     })();
   </script>
- <script>
-  window.addEventListener("load", () => {
-    const loader = document.getElementById("bpLoader");
-
-    setTimeout(() => {
-      if(loader){
-        loader.classList.add("hide");
-      }
-    }, 700);
-  });
-</script>
 </body>
 </html>
