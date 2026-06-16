@@ -258,7 +258,7 @@
       border:1px solid rgba(255,255,255,.10);
       background:rgba(255,255,255,.03);
       color:rgba(255,255,255,.78);
-      font-size:13px;
+            font-size:13px;
       font-weight:800;
       line-height:1;
       white-space:nowrap;
@@ -518,8 +518,7 @@
       gap:12px;
       margin-top:16px;
     }
-
-    .hub-longterm-item{
+        .hub-longterm-item{
       background:#111;
       border:1px solid #252525;
       border-radius:16px;
@@ -740,6 +739,222 @@
       letter-spacing:.08em;
     }
 
+    .hub-page{
+      background:
+        linear-gradient(135deg, rgba(243,210,27,0.07), transparent 28%),
+        radial-gradient(circle at 78% 8%, rgba(43,191,120,0.10), transparent 24%),
+        radial-gradient(circle at 12% 26%, rgba(243,210,27,0.10), transparent 22%),
+        #050505;
+    }
+
+    .hub-page .navbar{
+      position:sticky;
+      top:14px;
+      z-index:50;
+      padding:14px 16px;
+      border:1px solid rgba(243,210,27,0.14);
+      border-radius:24px;
+      background:rgba(7,7,7,0.78);
+      backdrop-filter:blur(18px);
+      box-shadow:0 18px 60px rgba(0,0,0,0.28);
+    }
+
+    .hub-page .logo{
+      letter-spacing:0;
+    }
+
+    .hub-page .hero-shell{
+      margin-top:14px;
+      padding:40px;
+      border-radius:34px;
+      background:
+        linear-gradient(145deg, rgba(255,255,255,0.055), transparent 38%),
+        radial-gradient(circle at 76% 20%, rgba(243,210,27,0.14), transparent 30%),
+        linear-gradient(180deg, rgba(18,18,18,0.92), rgba(5,5,5,0.98));
+      overflow:hidden;
+    }
+
+    .hub-page .hero-shell::before{
+      width:520px;
+      height:520px;
+            top:-220px;
+      right:-160px;
+      background:radial-gradient(circle, rgba(243,210,27,0.16), transparent 66%);
+    }
+
+    .hub-page .hero-title{
+      font-size:clamp(44px, 5vw, 74px);
+      letter-spacing:0;
+      line-height:.92;
+      max-width:980px;
+    }
+
+    .hub-page .hero-text{
+      max-width:860px;
+    }
+
+    .hub-page .badge,
+    .hub-page .bp-workflow-pill,
+    .hub-page .bp-workflow-text,
+    .hub-page .hub-badges span{
+      border-color:rgba(243,210,27,0.18);
+      background:rgba(243,210,27,0.065);
+      color:var(--gold);
+      box-shadow:none;
+    }
+
+    .hub-page .bp-workflow-text{
+      color:#e5e5e5;
+      border-color:rgba(255,255,255,0.09);
+      background:rgba(255,255,255,0.035);
+    }
+
+    .hub-page .hub-card,
+    .hub-page .hub-hero-card,
+    .hub-page .hub-link-card,
+    .hub-page .hub-note-card,
+    .hub-page .hub-longterm-card{
+      border:1px solid rgba(243,210,27,0.16);
+      border-radius:26px;
+      background:
+        linear-gradient(145deg, rgba(255,255,255,0.035), transparent 44%),
+        linear-gradient(180deg, rgba(17,17,17,0.9), rgba(7,7,7,0.96));
+      box-shadow:
+        inset 0 0 0 1px rgba(255,255,255,0.025),
+        0 22px 58px rgba(0,0,0,0.28);
+    }
+
+    .hub-page .hub-hero-card::after,
+    .hub-page .hub-longterm-card::after{
+      opacity:.45;
+    }
+
+    .hub-page .bp-command-card,
+    .hub-page .hub-stat,
+    .hub-page .hub-check-item,
+    .hub-page .hub-flow-item,
+    .hub-page .hub-watch-item,
+    .hub-page .hub-longterm-item{
+      border:1px solid rgba(243,210,27,0.13);
+      border-radius:18px;
+      background:rgba(255,255,255,0.025);
+    }
+
+    .hub-page .bp-command-card{
+      min-height:118px;
+      box-shadow:0 18px 48px rgba(0,0,0,0.18);
+    }
+
+    .hub-page .hub-title,
+    .hub-page .hub-subtitle{
+      letter-spacing:0;
+    }
+
+    .hub-page .hub-highlight,
+    .hub-page .hub-stat-value,
+    .hub-page .hub-check-item strong,
+    .hub-page .hub-longterm-item strong,
+    .hub-page .hub-watch-item strong,
+    .hub-page .hub-link-meta,
+    .hub-page .notification-heading,
+    .hub-page .bp-notification-title{
+      color:var(--gold);
+    }
+
+    .hub-page .hub-text,
+    .hub-page .hub-link-card p,
+    .hub-page .hub-flow-item p,
+    .hub-page .hub-stat-sub{
+      color:#d9d9d9;
+    }
+
+    .hub-page .hub-btn,
+    .hub-page .btn{
+      border-radius:999px;
+      min-height:46px;
+    }
+
+    .hub-page .hub-btn.primary,
+    .hub-page .btn.primary{
+      background:var(--gold);
+      color:#111;
+      box-shadow:0 0 24px rgba(243,210,27,0.16);
+    }
+
+    .hub-page .hub-btn.secondary,
+    .hub-page .btn.secondary{
+      color:#fff;
+      border-color:rgba(255,255,255,0.14);
+      background:rgba(255,255,255,0.025);
+    }
+
+    .hub-page .hub-link-card:hover{
+      border-color:rgba(243,210,27,0.5);
+      transform:translateY(-6px);
+      box-shadow:0 22px 58px rgba(0,0,0,0.34);
+    }
+
+    .hub-page .hub-flow-num{
+      background:rgba(243,210,27,0.08);
+      border-color:rgba(243,210,27,0.18);
+      color:var(--gold);
+    }
+
+    .hub-page .hub-note-card textarea{
+      border-color:rgba(243,210,27,0.14);
+      background:rgba(255,255,255,0.025);
+      border-radius:18px;
+      outline:none;
+    }
+
+    .hub-page .hub-note-card textarea:focus{
+      border-color:rgba(243,210,27,0.46);
+      box-shadow:0 0 0 3px rgba(243,210,27,0.08);
+    }
+
+    .hub-page .auth-badge,
+    .hub-page .logout-btn{
+      border-color:rgba(255,255,255,0.08);
+      background:rgba(255,255,255,0.04);
+    }
+
+    .hub-page .notification-btn{
+      width:auto;
+      min-width:96px;
+      height:46px;
+      padding:0 14px;
+      border-radius:999px;
+      background:rgba(255,255,255,0.035);
+      border-color:rgba(243,210,27,0.18);
+      gap:8px;
+    }
+
+    .hub-page .notification-icon{
+      font-size:13px;
+      font-weight:900;
+      color:var(--gold);
+      letter-spacing:.02em;
+    }
+
+    .hub-page .notification-count{
+      position:static;
+      min-width:24px;
+      height:24px;
+      box-shadow:none;
+    }
+
+    .hub-page .footer-note{
+      border:1px solid rgba(243,210,27,0.14);
+      border-radius:24px;
+      background:rgba(255,255,255,0.025);
+      padding:18px 22px;
+      margin:0 0 10px;
+      color:#bdbdbd;
+      font-size:14px;
+      font-weight:800;
+      text-align:center;
+    }
+
     @keyframes notificationEnter{
       from{opacity:0;transform:translateX(40px) scale(.96);}
       to{opacity:1;transform:translateX(0) scale(1);}
@@ -821,11 +1036,18 @@
       .hero-buttons{
         margin-top:8px;
       }
+            .hub-page .hero-shell{
+        padding:24px !important;
+      }
+
+      .hub-page .notification-btn{
+        min-width:auto;
+      }
     }
   </style>
 </head>
 
-<body data-protected="true">
+<body class="hub-page" data-protected="true">
   <div class="page">
 
     <nav class="navbar">
@@ -846,7 +1068,7 @@
 
         <div class="notification-wrap">
           <button class="notification-btn" id="notificationBtn" type="button" aria-label="Notifications öffnen">
-            <span class="notification-icon">🔔</span>
+            <span class="notification-icon">Alerts</span>
             <span class="notification-count" id="notificationCount">0</span>
           </button>
 
@@ -1074,7 +1296,7 @@
 
             <div class="hub-flow-item">
               <div class="hub-flow-num">4</div>
-              <div><strong>Trade dokumentieren</strong><p>Halte Bias, Ausführung und Gedanken fest, um langfristig besser zu werden.</p></div>
+                            <div><strong>Trade dokumentieren</strong><p>Halte Bias, Ausführung und Gedanken fest, um langfristig besser zu werden.</p></div>
             </div>
           </div>
         </div>
@@ -1333,8 +1555,7 @@
       if(diff < 60) return "Jetzt";
       if(diff < 3600) return Math.floor(diff / 60) + " min";
       if(diff < 86400) return Math.floor(diff / 3600) + "h";
-
-      return date.toLocaleDateString("de-DE", {
+            return date.toLocaleDateString("de-DE", {
         day:"2-digit",
         month:"2-digit"
       });
