@@ -4,10 +4,10 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>BullProsperity | Motivation & Disziplin</title>
-   <link rel="icon" type="image/png" href="/favicon.png">
-<link rel="manifest" href="/manifest.json">
-<link rel="apple-touch-icon" href="/favicon.png">
-<meta name="theme-color" content="#050505">
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <link rel="manifest" href="/manifest.json">
+  <link rel="apple-touch-icon" href="/favicon.png">
+  <meta name="theme-color" content="#050505">
   <link rel="stylesheet" href="theme.css" />
   <script src="/login.js" defer></script>
 
@@ -27,6 +27,68 @@
   </script>
 
   <style>
+    .mind-page{
+      background:
+        linear-gradient(135deg, rgba(243,210,27,0.07), transparent 28%),
+        radial-gradient(circle at 78% 8%, rgba(43,191,120,0.10), transparent 24%),
+        radial-gradient(circle at 12% 26%, rgba(243,210,27,0.10), transparent 22%),
+        #050505;
+    }
+
+    .mind-page .navbar{
+      position:sticky;
+      top:14px;
+      z-index:50;
+      padding:14px 16px;
+      border:1px solid rgba(243,210,27,0.14);
+      border-radius:24px;
+      background:rgba(7,7,7,0.78);
+      backdrop-filter:blur(18px);
+      box-shadow:0 18px 60px rgba(0,0,0,0.28);
+    }
+
+    .mind-page .logo,
+    .mind-page .section-heading{
+      letter-spacing:0;
+    }
+
+    .mind-page .hero-shell{
+      margin-top:14px;
+      padding:40px;
+      border-radius:34px;
+      background:
+        linear-gradient(145deg, rgba(255,255,255,0.055), transparent 38%),
+        radial-gradient(circle at 76% 20%, rgba(243,210,27,0.14), transparent 30%),
+        linear-gradient(180deg, rgba(18,18,18,0.92), rgba(5,5,5,0.98));
+      overflow:hidden;
+    }
+
+    .mind-page .hero-shell::before{
+      width:520px;
+      height:520px;
+      top:-220px;
+      right:-160px;
+      background:radial-gradient(circle, rgba(243,210,27,0.16), transparent 66%);
+    }
+
+    .mind-page .hero-title{
+      max-width:1050px;
+      font-size:clamp(44px, 5vw, 74px);
+      letter-spacing:0;
+      line-height:.92;
+    }
+
+    .mind-page .hero-text{
+      max-width:900px;
+    }
+
+    .mind-page .badge{
+      border-color:rgba(243,210,27,0.18);
+      background:rgba(243,210,27,0.065);
+      color:var(--gold);
+      box-shadow:none;
+    }
+
     .mind-layout{
       display:grid;
       grid-template-columns:1.05fr 0.95fr;
@@ -35,11 +97,15 @@
     }
 
     .mind-panel{
-      border:1px solid var(--line);
-      border-radius:28px;
-      background:linear-gradient(180deg, var(--panel), var(--panel-2));
-      box-shadow:0 0 0 1px rgba(255,255,255,0.02) inset;
-      padding:24px;
+      border:1px solid rgba(243,210,27,0.16);
+      border-radius:26px;
+      background:
+        linear-gradient(145deg, rgba(255,255,255,0.035), transparent 44%),
+        linear-gradient(180deg, rgba(17,17,17,0.9), rgba(7,7,7,0.96));
+      box-shadow:
+        inset 0 0 0 1px rgba(255,255,255,0.025),
+        0 22px 58px rgba(0,0,0,0.28);
+      padding:28px;
     }
 
     .field{
@@ -154,8 +220,7 @@
       font-size:14px;
       font-weight:700;
     }
-
-    .empty-state{
+        .empty-state{
       border:1px dashed rgba(243,210,27,0.18);
       border-radius:20px;
       padding:24px;
@@ -166,6 +231,94 @@
       background:rgba(255,255,255,0.02);
     }
 
+    .auth-badge{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:10px 14px;
+      border-radius:999px;
+      font-size:13px;
+      font-weight:700;
+      border:1px solid rgba(255,255,255,0.08);
+      background:rgba(255,255,255,0.04);
+      color:#fff;
+      white-space:nowrap;
+    }
+
+    .auth-badge::before{
+      content:"";
+      width:10px;
+      height:10px;
+      border-radius:50%;
+      display:inline-block;
+      background:#666;
+    }
+
+    .auth-badge.status-admin::before{background:#ffd700;}
+    .auth-badge.status-premium::before{background:#22c55e;}
+
+    .mind-page .logout-btn{
+      border-color:rgba(255,255,255,0.08);
+      background:rgba(255,255,255,0.04);
+    }
+
+    .mind-page .footer-note{
+      display:flex;
+      flex-wrap:wrap;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+      border:1px solid rgba(243,210,27,0.14);
+      border-radius:24px;
+      background:rgba(255,255,255,0.025);
+      padding:22px 26px;
+      margin:28px 0 10px;
+      color:#bdbdbd;
+      font-size:14px;
+      font-weight:800;
+      text-align:left;
+    }
+
+    .mind-page .footer-note strong{
+      display:block;
+      color:var(--gold);
+      font-size:16px;
+      margin-bottom:2px;
+    }
+
+    .mind-page .footer-note span{
+      color:#d2d2d2;
+      font-weight:700;
+    }
+
+    .mind-page .footer-note nav{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+    }
+
+    .mind-page .footer-note a{
+      color:#fff;
+      text-decoration:none;
+      font-weight:900;
+      padding:9px 12px;
+      border-radius:999px;
+      background:rgba(255,255,255,0.035);
+      border:1px solid rgba(255,255,255,0.07);
+    }
+
+    .mind-page .footer-note a:hover{
+      color:var(--gold);
+      border-color:rgba(243,210,27,0.34);
+    }
+
+    .mind-page .footer-note p{
+      flex-basis:100%;
+      margin:0;
+      color:#aaa;
+      font-weight:700;
+    }
+
     @media(max-width:1100px){
       .mind-layout{
         grid-template-columns:1fr;
@@ -173,7 +326,7 @@
     }
   </style>
 </head>
-<body>
+<body class="mind-page">
   <div class="page">
 
     <nav class="navbar">
@@ -186,6 +339,8 @@
         <a href="setup-room.html">Setup Room</a>
         <a href="community.html" class="active">Community</a>
         <a id="loginNavBtn" href="/api/whop/login">Login</a>
+        <a id="logoutBtn" href="/api/logout" class="logout-btn" style="display:none;">Logout</a>
+        <div id="authBadge" class="auth-badge status-loading" style="display:none;">Zugang</div>
       </div>
     </nav>
 
@@ -270,12 +425,25 @@
     </section>
 
     <div class="footer-note">
-      BullProsperity dient ausschließlich Bildungszwecken und stellt keine Finanzberatung dar.
+      <div>
+        <strong>BullProsperity</strong>
+        <span>Motivation, Disziplin, Routine und Trading Education.</span>
+      </div>
+      <nav>
+        <a href="impressum.html">Impressum</a>
+        <a href="datenschutz.html">Datenschutz</a>
+        <a href="risikohinweis.html">Risikohinweis</a>
+        <a href="community.html">Kontakt</a>
+      </nav>
+      <p>BullProsperity dient ausschließlich Bildungs- und Informationszwecken. Es werden keine Gewinne garantiert.</p>
     </div>
   </div>
 
   <script>
     const storageKey = "bullprosperity_mind_posts";
+    const authBadge = document.getElementById("authBadge");
+    const loginNavBtn = document.getElementById("loginNavBtn");
+    const logoutBtn = document.getElementById("logoutBtn");
 
     const mindTitle = document.getElementById("mindTitle");
     const mindCategory = document.getElementById("mindCategory");
@@ -382,17 +550,48 @@
     window.deleteMindPost = deleteMindPost;
 
     renderPosts();
-  </script>
-  <script>
-  window.addEventListener("load", () => {
-    const loader = document.getElementById("bpLoader");
 
-    setTimeout(() => {
-      if(loader){
-        loader.classList.add("hide");
+    document.addEventListener("DOMContentLoaded", async () => {
+      try {
+        const res = await fetch("/api/access", { credentials: "include" });
+        const data = await res.json();
+        const role = data?.role || "guest";
+
+        if (role !== "admin" && role !== "premium") {
+          window.location.href = "locked.html";
+          return;
+        }
+
+        if (role === "admin") {
+          authBadge.textContent = "Admin";
+          authBadge.className = "auth-badge status-admin";
+          authBadge.style.display = "inline-flex";
+        }
+
+        if (role === "premium") {
+          authBadge.textContent = "Premium";
+          authBadge.className = "auth-badge status-premium";
+          authBadge.style.display = "inline-flex";
+        }
+
+        if (loginNavBtn) loginNavBtn.style.display = "none";
+        if (logoutBtn) logoutBtn.style.display = "inline-flex";
+      } catch (err) {
+        window.location.href = "locked.html";
       }
-    }, 700);
-  });
-</script>
+    });
+  </script>
+
+  <script>
+    window.addEventListener("load", () => {
+      const loader = document.getElementById("bpLoader");
+
+      setTimeout(() => {
+        if(loader){
+          loader.classList.add("hide");
+        }
+      }, 700);
+    });
+  </script>
 </body>
 </html>
