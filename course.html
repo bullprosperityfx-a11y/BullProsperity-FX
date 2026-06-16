@@ -38,6 +38,68 @@
   <link rel="stylesheet" href="theme.css" />
 
   <style>
+    .course-page{
+      background:
+        linear-gradient(135deg, rgba(243,210,27,0.07), transparent 28%),
+        radial-gradient(circle at 78% 8%, rgba(43,191,120,0.10), transparent 24%),
+        radial-gradient(circle at 12% 26%, rgba(243,210,27,0.10), transparent 22%),
+        #050505;
+    }
+
+    .course-page .navbar{
+      position:sticky;
+      top:14px;
+      z-index:50;
+      padding:14px 16px;
+      border:1px solid rgba(243,210,27,0.14);
+      border-radius:24px;
+      background:rgba(7,7,7,0.78);
+      backdrop-filter:blur(18px);
+      box-shadow:0 18px 60px rgba(0,0,0,0.28);
+    }
+
+    .course-page .logo,
+    .course-page .section-heading{
+      letter-spacing:0;
+    }
+
+    .course-page .hero-shell{
+      margin-top:14px;
+      padding:40px;
+      border-radius:34px;
+      background:
+        linear-gradient(145deg, rgba(255,255,255,0.055), transparent 38%),
+        radial-gradient(circle at 76% 20%, rgba(243,210,27,0.14), transparent 30%),
+        linear-gradient(180deg, rgba(18,18,18,0.92), rgba(5,5,5,0.98));
+      overflow:hidden;
+    }
+
+    .course-page .hero-shell::before{
+      width:520px;
+      height:520px;
+      top:-220px;
+      right:-160px;
+      background:radial-gradient(circle, rgba(243,210,27,0.16), transparent 66%);
+    }
+
+    .course-page .hero-title{
+      max-width:1100px;
+      font-size:clamp(44px, 5vw, 74px);
+      letter-spacing:0;
+      line-height:.92;
+    }
+
+    .course-page .hero-text{
+      max-width:960px;
+    }
+
+    .course-page .badge{
+      border-color:rgba(243,210,27,0.18);
+      background:rgba(243,210,27,0.065);
+      color:var(--gold);
+      box-shadow:none;
+    }
+
     .course-layout{
       display:grid;
       grid-template-columns:400px 1fr;
@@ -48,10 +110,14 @@
     .course-sidebar,
     .course-main-card,
     .course-panel{
-      border:1px solid rgba(243,210,27,.18);
+      border:1px solid rgba(243,210,27,.16);
       border-radius:28px;
-      background:linear-gradient(180deg,rgba(18,18,18,.94),rgba(8,8,8,.97));
-      box-shadow:0 22px 55px rgba(0,0,0,.35), inset 0 0 0 1px rgba(255,255,255,.02);
+      background:
+        linear-gradient(145deg, rgba(255,255,255,0.035), transparent 44%),
+        linear-gradient(180deg, rgba(17,17,17,0.9), rgba(7,7,7,0.96));
+      box-shadow:
+        inset 0 0 0 1px rgba(255,255,255,0.025),
+        0 22px 58px rgba(0,0,0,0.28);
     }
 
     .course-sidebar{
@@ -73,10 +139,16 @@
     .course-scroll::-webkit-scrollbar-track{background:rgba(255,255,255,.06);border-radius:999px;}
 
     .course-subtitle{
-      color:rgba(255,255,255,.68);
+      display:inline-flex;
+      align-items:center;
+      padding:8px 12px;
+      border:1px solid rgba(243,210,27,0.18);
+      border-radius:999px;
+      background:rgba(243,210,27,0.065);
+      color:var(--gold);
       font-size:13px;
       font-weight:850;
-      margin-bottom:14px;
+      margin-bottom:16px;
     }
 
     .progress-head{
@@ -92,7 +164,7 @@
     .progress-bar{
       width:100%;
       height:12px;
-      background:#171717;
+      background:rgba(255,255,255,0.035);
       border-radius:999px;
       overflow:hidden;
       border:1px solid rgba(255,255,255,.08);
@@ -111,7 +183,7 @@
       padding:15px;
       margin-bottom:14px;
       border-radius:22px;
-      background:rgba(255,255,255,.025);
+      background:linear-gradient(180deg,rgba(255,255,255,.032),rgba(255,255,255,.015));
       border:1px solid rgba(243,210,27,.16);
       display:block !important;
       height:auto !important;
@@ -150,12 +222,12 @@
       border-radius:15px;
       text-decoration:none;
       color:#fff;
-      background:linear-gradient(180deg,rgba(255,255,255,.035),rgba(255,255,255,.014));
-      border:1px solid rgba(243,210,27,.20);
+      background:rgba(255,255,255,0.025);
+      border:1px solid rgba(255,255,255,0.08);
       font-size:13px;
       font-weight:850;
       line-height:1.3;
-      letter-spacing:-.1px;
+      letter-spacing:0;
       transition:.22s ease;
     }
 
@@ -180,12 +252,31 @@
       padding:28px;
     }
 
+    .course-page .btn{
+      border-radius:999px;
+      min-height:46px;
+    }
+
+    .course-page .btn.primary{
+      background:var(--gold);
+      color:#111;
+      box-shadow:0 0 24px rgba(243,210,27,0.16);
+    }
+
+    .course-page .btn.secondary{
+      color:#fff;
+      border-color:rgba(255,255,255,0.14);
+      background:rgba(255,255,255,0.025);
+    }
+
     .video-placeholder{
       margin-top:22px;
       min-height:220px;
       border-radius:24px;
       border:1px solid rgba(243,210,27,.12);
-      background:radial-gradient(circle at top,rgba(243,210,27,.055),transparent 65%),#0c0c0c;
+      background:
+        radial-gradient(circle at top,rgba(243,210,27,.08),transparent 65%),
+        linear-gradient(180deg,rgba(255,255,255,.03),rgba(255,255,255,.015));
       display:flex;
       align-items:center;
       justify-content:center;
@@ -239,6 +330,69 @@
     .auth-badge.status-premium::before{background:#22c55e;}
     .auth-badge.status-locked::before{background:#ef4444;}
 
+    .course-page .auth-badge,
+    .course-page .logout-btn{
+      border-color:rgba(255,255,255,0.08);
+      background:rgba(255,255,255,0.04);
+    }
+
+    .course-page .footer-note{
+      display:flex;
+      flex-wrap:wrap;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+      border:1px solid rgba(243,210,27,0.14);
+      border-radius:24px;
+      background:rgba(255,255,255,0.025);
+      padding:22px 26px;
+      margin:28px 0 10px;
+      color:#bdbdbd;
+      font-size:14px;
+      font-weight:800;
+      text-align:left;
+    }
+
+    .course-page .footer-note strong{
+      display:block;
+      color:var(--gold);
+      font-size:16px;
+      margin-bottom:2px;
+    }
+
+    .course-page .footer-note span{
+      color:#d2d2d2;
+      font-weight:700;
+    }
+
+    .course-page .footer-note nav{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+    }
+
+    .course-page .footer-note a{
+      color:#fff;
+      text-decoration:none;
+      font-weight:900;
+      padding:9px 12px;
+      border-radius:999px;
+      background:rgba(255,255,255,0.035);
+      border:1px solid rgba(255,255,255,0.07);
+    }
+
+    .course-page .footer-note a:hover{
+      color:var(--gold);
+      border-color:rgba(243,210,27,0.34);
+    }
+
+    .course-page .footer-note p{
+      flex-basis:100%;
+      margin:0;
+      color:#aaa;
+      font-weight:700;
+    }
+
     @media(max-width:1200px){
       .course-layout{
         grid-template-columns:1fr;
@@ -258,6 +412,10 @@
     }
 
     @media(max-width:760px){
+      .course-page .hero-shell{
+        padding:24px !important;
+      }
+
       .course-sidebar,
       .course-main-card,
       .course-panel{
@@ -274,11 +432,16 @@
         font-size:13px;
         padding:11px 12px;
       }
+
+      .course-page .footer-note{
+        align-items:flex-start;
+        flex-direction:column;
+      }
     }
   </style>
 </head>
 
-<body data-protected="true">
+<body class="course-page" data-protected="true">
   <div class="page">
 
     <nav class="navbar">
@@ -296,8 +459,7 @@
         <div id="authBadge" class="auth-badge status-loading">Prüfe Zugang...</div>
       </div>
     </nav>
-
-    <section class="hero-shell">
+        <section class="hero-shell">
       <div class="badge">Education Platform</div>
 
       <h1 class="hero-title">
@@ -305,7 +467,7 @@
       </h1>
 
       <p class="hero-text">
-        Arbeite dich strukturiert durch alle Module – von den Grundlagen bis zur BullProsperity SMC Strategie.
+        Arbeite dich strukturiert durch alle Module - von den Grundlagen bis zur BullProsperity SMC Strategie.
         Jedes Thema baut logisch aufeinander auf, damit Mitglieder nicht nur Wissen sammeln, sondern echte Klarheit entwickeln.
       </p>
 
@@ -333,99 +495,99 @@
 
           <div class="module">
             <div class="module-header">
-              <div class="module-title">Modul 1 — Einführung</div>
+              <div class="module-title">Modul 1 - Einführung</div>
               <div class="module-count">3 Lektionen</div>
             </div>
 
-            <a href="lesson1.html#lesson-video" class="lesson active">Lesson 1 — Willkommen bei BullProsperity</a>
-            <a href="lesson2.html#lesson-video" class="lesson">Lesson 2 — Wie du diese Plattform richtig nutzt</a>
-            <a href="lesson3.html#lesson-video" class="lesson">Lesson 3 — Risikoaufklärung & wichtiger Hinweis</a>
+            <a href="lesson1.html#lesson-video" class="lesson active">Lesson 1 - Willkommen bei BullProsperity</a>
+            <a href="lesson2.html#lesson-video" class="lesson">Lesson 2 - Wie du diese Plattform richtig nutzt</a>
+            <a href="lesson3.html#lesson-video" class="lesson">Lesson 3 - Risikoaufklärung & wichtiger Hinweis</a>
           </div>
 
           <div class="module">
             <div class="module-header">
-              <div class="module-title">Modul 2 — Trading Grundlagen</div>
+              <div class="module-title">Modul 2 - Trading Grundlagen</div>
               <div class="module-count">4 Lektionen</div>
             </div>
 
-            <a href="lesson4.html#lesson-video" class="lesson">Lesson 4 — Was ist Trading wirklich</a>
-            <a href="lesson5.html#lesson-video" class="lesson">Lesson 5 — Warum Retail Trader verlieren</a>
-            <a href="lesson6.html#lesson-video" class="lesson">Lesson 6 — Die wichtigsten Märkte erklärt</a>
-            <a href="lesson7.html#lesson-video" class="lesson">Lesson 7 — Was du zum Traden brauchst</a>
+            <a href="lesson4.html#lesson-video" class="lesson">Lesson 4 - Was ist Trading wirklich</a>
+            <a href="lesson5.html#lesson-video" class="lesson">Lesson 5 - Warum Retail Trader verlieren</a>
+            <a href="lesson6.html#lesson-video" class="lesson">Lesson 6 - Die wichtigsten Märkte erklärt</a>
+            <a href="lesson7.html#lesson-video" class="lesson">Lesson 7 - Was du zum Traden brauchst</a>
           </div>
 
           <div class="module">
             <div class="module-header">
-              <div class="module-title">Modul 3 — Chartanalyse</div>
+              <div class="module-title">Modul 3 - Chartanalyse</div>
               <div class="module-count">4 Lektionen</div>
             </div>
 
-            <a href="lesson8.html#lesson-video" class="lesson">Lesson 8 — Grundlagen der Chartanalyse</a>
-            <a href="lesson9.html#lesson-video" class="lesson">Lesson 9 — Marktstruktur verstehen</a>
-            <a href="lesson10.html#lesson-video" class="lesson">Lesson 10 — Trend, Range und Impuls</a>
-            <a href="lesson11.html#lesson-video" class="lesson">Lesson 11 — Support & Resistance</a>
+            <a href="lesson8.html#lesson-video" class="lesson">Lesson 8 - Grundlagen der Chartanalyse</a>
+            <a href="lesson9.html#lesson-video" class="lesson">Lesson 9 - Marktstruktur verstehen</a>
+            <a href="lesson10.html#lesson-video" class="lesson">Lesson 10 - Trend, Range und Impuls</a>
+            <a href="lesson11.html#lesson-video" class="lesson">Lesson 11 - Support & Resistance</a>
           </div>
 
           <div class="module">
             <div class="module-header">
-              <div class="module-title">Modul 4 — Liquidität & Marktbewegung</div>
+              <div class="module-title">Modul 4 - Liquidität & Marktbewegung</div>
               <div class="module-count">4 Lektionen</div>
             </div>
 
-            <a href="lesson12.html#lesson-video" class="lesson">Lesson 12 — Liquidity Grundlagen</a>
-            <a href="lesson13.html#lesson-video" class="lesson">Lesson 13 — Warum Märkte Liquidität suchen</a>
-            <a href="lesson14.html#lesson-video" class="lesson">Lesson 14 — Marktbewegungen verstehen</a>
-            <a href="lesson15.html#lesson-video" class="lesson">Lesson 15 — Institutionelle Marktteilnehmer</a>
+            <a href="lesson12.html#lesson-video" class="lesson">Lesson 12 - Liquidity Grundlagen</a>
+            <a href="lesson13.html#lesson-video" class="lesson">Lesson 13 - Warum Märkte Liquidität suchen</a>
+            <a href="lesson14.html#lesson-video" class="lesson">Lesson 14 - Marktbewegungen verstehen</a>
+            <a href="lesson15.html#lesson-video" class="lesson">Lesson 15 - Institutionelle Marktteilnehmer</a>
           </div>
 
           <div class="module">
             <div class="module-header">
-              <div class="module-title">Modul 5 — Entry Verständnis</div>
+              <div class="module-title">Modul 5 - Entry Verständnis</div>
               <div class="module-count">4 Lektionen</div>
             </div>
 
-            <a href="lesson16.html#lesson-video" class="lesson">Lesson 16 — Timing & Trading Sessions</a>
-            <a href="lesson17.html#lesson-video" class="lesson">Lesson 17 — Entries verstehen</a>
-            <a href="lesson18.html#lesson-video" class="lesson">Lesson 18 — Confirmation Signale</a>
-            <a href="lesson19.html#lesson-video" class="lesson">Lesson 19 — Beispielanalysen</a>
+            <a href="lesson16.html#lesson-video" class="lesson">Lesson 16 - Timing & Trading Sessions</a>
+            <a href="lesson17.html#lesson-video" class="lesson">Lesson 17 - Entries verstehen</a>
+            <a href="lesson18.html#lesson-video" class="lesson">Lesson 18 - Confirmation Signale</a>
+            <a href="lesson19.html#lesson-video" class="lesson">Lesson 19 - Beispielanalysen</a>
           </div>
 
           <div class="module">
             <div class="module-header">
-              <div class="module-title">Modul 6 — Risk Management</div>
+              <div class="module-title">Modul 6 - Risk Management</div>
               <div class="module-count">4 Lektionen</div>
             </div>
 
-            <a href="lesson20.html#lesson-video" class="lesson">Lesson 20 — Risk Management Grundlagen</a>
-            <a href="lesson21.html#lesson-video" class="lesson">Lesson 21 — Positionsgröße berechnen</a>
-            <a href="lesson22.html#lesson-video" class="lesson">Lesson 22 — Risk-Reward Verhältnis</a>
-            <a href="lesson23.html#lesson-video" class="lesson">Lesson 23 — Drawdown Kontrolle</a>
+            <a href="lesson20.html#lesson-video" class="lesson">Lesson 20 - Risk Management Grundlagen</a>
+            <a href="lesson21.html#lesson-video" class="lesson">Lesson 21 - Positionsgröße berechnen</a>
+            <a href="lesson22.html#lesson-video" class="lesson">Lesson 22 - Risk-Reward Verhältnis</a>
+            <a href="lesson23.html#lesson-video" class="lesson">Lesson 23 - Drawdown Kontrolle</a>
           </div>
 
           <div class="module">
             <div class="module-header">
-              <div class="module-title">Modul 7 — Psychologie & Routine</div>
+              <div class="module-title">Modul 7 - Psychologie & Routine</div>
               <div class="module-count">6 Lektionen</div>
             </div>
 
-            <a href="lesson24.html#lesson-video" class="lesson">Lesson 24 — Trading Psychologie</a>
-            <a href="lesson25.html#lesson-video" class="lesson">Lesson 25 — Emotionen im Trading</a>
-            <a href="lesson26.html#lesson-video" class="lesson">Lesson 26 — Disziplin entwickeln</a>
-            <a href="lesson27.html#lesson-video" class="lesson">Lesson 27 — Tagesablauf eines Traders</a>
-            <a href="lesson28.html#lesson-video" class="lesson">Lesson 28 — Trading Journal</a>
-            <a href="lesson29.html#lesson-video" class="lesson">Lesson 29 — Kontinuierliche Verbesserung</a>
+            <a href="lesson24.html#lesson-video" class="lesson">Lesson 24 - Trading Psychologie</a>
+            <a href="lesson25.html#lesson-video" class="lesson">Lesson 25 - Emotionen im Trading</a>
+            <a href="lesson26.html#lesson-video" class="lesson">Lesson 26 - Disziplin entwickeln</a>
+            <a href="lesson27.html#lesson-video" class="lesson">Lesson 27 - Tagesablauf eines Traders</a>
+            <a href="lesson28.html#lesson-video" class="lesson">Lesson 28 - Trading Journal</a>
+            <a href="lesson29.html#lesson-video" class="lesson">Lesson 29 - Kontinuierliche Verbesserung</a>
           </div>
 
           <div class="module">
             <div class="module-header">
-              <div class="module-title">Modul 8 — BullProsperity SMC Strategie</div>
+              <div class="module-title">Modul 8 - BullProsperity SMC Strategie</div>
               <div class="module-count">4 Lektionen</div>
             </div>
 
-            <a href="lesson30.html#lesson-video" class="lesson">Lesson 30 — Das BullProsperity Marktmodell</a>
-            <a href="lesson31.html#lesson-video" class="lesson">Lesson 31 — Institutionelle Preiszonen</a>
-            <a href="lesson32.html#lesson-video" class="lesson">Lesson 32 — Das BullProsperity Entry Modell</a>
-            <a href="lesson33.html#lesson-video" class="lesson">Lesson 33 — Live Setup Beispiele</a>
+            <a href="lesson30.html#lesson-video" class="lesson">Lesson 30 - Das BullProsperity Marktmodell</a>
+            <a href="lesson31.html#lesson-video" class="lesson">Lesson 31 - Institutionelle Preiszonen</a>
+            <a href="lesson32.html#lesson-video" class="lesson">Lesson 32 - Das BullProsperity Entry Modell</a>
+            <a href="lesson33.html#lesson-video" class="lesson">Lesson 33 - Live Setup Beispiele</a>
           </div>
 
         </div>
@@ -494,13 +656,13 @@
 
           <div class="grid-2">
             <div class="course-list">
-              <div class="course-list-item">Lesson 30 — Das BullProsperity Marktmodell</div>
-              <div class="course-list-item">Lesson 31 — Institutionelle Preiszonen</div>
+              <div class="course-list-item">Lesson 30 - Das BullProsperity Marktmodell</div>
+              <div class="course-list-item">Lesson 31 - Institutionelle Preiszonen</div>
             </div>
 
             <div class="course-list">
-              <div class="course-list-item">Lesson 32 — Das BullProsperity Entry Modell</div>
-              <div class="course-list-item">Lesson 33 — Live Setup Beispiele</div>
+              <div class="course-list-item">Lesson 32 - Das BullProsperity Entry Modell</div>
+              <div class="course-list-item">Lesson 33 - Live Setup Beispiele</div>
             </div>
           </div>
         </div>
@@ -509,7 +671,17 @@
     </section>
 
     <div class="footer-note">
-      BullProsperity dient ausschließlich Bildungs- und Informationszwecken
+      <div>
+        <strong>BullProsperity</strong>
+        <span>Course für Marktstruktur, Liquidität, Risiko und Trading Education.</span>
+      </div>
+      <nav>
+        <a href="impressum.html">Impressum</a>
+        <a href="datenschutz.html">Datenschutz</a>
+        <a href="risikohinweis.html">Risikohinweis</a>
+        <a href="community.html">Kontakt</a>
+      </nav>
+      <p>BullProsperity dient ausschließlich Bildungs- und Informationszwecken. Es werden keine Gewinne garantiert.</p>
     </div>
   </div>
 
@@ -571,3 +743,4 @@
 </script>
 </body>
 </html>
+    
