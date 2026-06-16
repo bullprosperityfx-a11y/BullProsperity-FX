@@ -5,9 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>BullProsperity | Home</title>
   <link rel="icon" type="image/png" href="/favicon.png">
-<link rel="manifest" href="/manifest.json">
-<link rel="apple-touch-icon" href="/favicon.png">
-<meta name="theme-color" content="#050505">
+  <link rel="manifest" href="/manifest.json">
+  <link rel="apple-touch-icon" href="/favicon.png">
+  <meta name="theme-color" content="#050505">
   <link rel="stylesheet" href="theme.css" />
   <script src="/login.js" defer></script>
 
@@ -102,9 +102,7 @@
       margin-right:0;
     }
 
-    .hero-center .hero-buttons{
-      justify-content:flex-start;
-    }
+    .hero-center .hero-buttons{ justify-content:flex-start; }
 
     .hero-kicker{
       display:flex;
@@ -445,6 +443,141 @@
       font-weight:700;
     }
 
+    .home-page .section{ margin-bottom:34px; }
+
+    .home-page .grid-2{
+      display:grid;
+      grid-template-columns:minmax(0, 1fr) minmax(0, 1fr);
+      gap:22px;
+      align-items:stretch;
+    }
+
+    .home-page .section-card{
+      border:1px solid rgba(243,210,27,0.16);
+      border-radius:26px;
+      background:
+        linear-gradient(145deg, rgba(255,255,255,0.035), transparent 44%),
+        linear-gradient(180deg, rgba(17,17,17,0.9), rgba(7,7,7,0.96));
+      box-shadow:
+        inset 0 0 0 1px rgba(255,255,255,0.025),
+        0 22px 58px rgba(0,0,0,0.28);
+      padding:30px;
+      height:auto;
+    }
+
+    .home-page .section-card .badge{
+      align-self:flex-start;
+      width:auto;
+      margin-bottom:16px;
+    }
+
+    .home-page .list-box{
+      display:grid;
+      gap:14px;
+      height:100%;
+    }
+
+    .home-page .list-item{
+      min-height:76px;
+      display:flex;
+      align-items:center;
+      border:1px solid rgba(243,210,27,0.13);
+      border-radius:18px;
+      background:rgba(255,255,255,0.025);
+      padding:18px 20px;
+      color:#f4f4f4;
+      font-size:15px;
+      line-height:1.45;
+      font-weight:800;
+    }
+
+    .home-page .trust-section .section-card{ padding:30px; }
+
+    .home-page .trust-grid{
+      display:grid;
+      grid-template-columns:repeat(3, minmax(0, 1fr));
+      gap:16px;
+      margin-top:18px;
+    }
+
+    .home-page .trust-grid > div{
+      min-height:150px;
+      border:1px solid rgba(243,210,27,0.13);
+      border-radius:20px;
+      background:
+        linear-gradient(145deg, rgba(243,210,27,0.055), transparent 40%),
+        rgba(255,255,255,0.025);
+      padding:22px;
+    }
+
+    .home-page .trust-grid h3{
+      color:#fff;
+      font-size:20px;
+      line-height:1.2;
+      margin-bottom:10px;
+      font-weight:900;
+    }
+
+    .home-page .trust-grid p{
+      color:#d9d9d9;
+      font-size:15px;
+      line-height:1.55;
+      font-weight:700;
+    }
+
+    .home-page .site-footer{
+      display:flex;
+      flex-wrap:wrap;
+      align-items:center;
+      justify-content:space-between;
+      gap:18px;
+      border:1px solid rgba(243,210,27,0.14);
+      border-radius:24px;
+      background:rgba(255,255,255,0.025);
+      padding:22px 26px;
+      margin:18px 0 8px;
+      color:#d2d2d2;
+      font-size:14px;
+      line-height:1.55;
+    }
+
+    .home-page .site-footer div{
+      display:grid;
+      gap:3px;
+    }
+
+    .home-page .site-footer strong{
+      color:var(--gold);
+      font-size:16px;
+    }
+
+    .home-page .site-footer nav{
+      display:flex;
+      flex-wrap:wrap;
+      gap:12px;
+    }
+
+    .home-page .site-footer a{
+      color:#fff;
+      text-decoration:none;
+      font-weight:900;
+      padding:9px 12px;
+      border-radius:999px;
+      background:rgba(255,255,255,0.035);
+      border:1px solid rgba(255,255,255,0.07);
+    }
+
+    .home-page .site-footer a:hover{
+      color:var(--gold);
+      border-color:rgba(243,210,27,0.34);
+    }
+
+    .home-page .site-footer p{
+      flex-basis:100%;
+      color:#bdbdbd;
+      margin:0;
+    }
+
     .status-dot{
       width:10px;
       height:10px;
@@ -462,7 +595,9 @@
 
       .feature-grid,
       .access-grid,
-      .flow-strip{
+      .flow-strip,
+      .home-page .grid-2,
+      .home-page .trust-grid{
         grid-template-columns:1fr;
       }
     }
@@ -751,4 +886,3 @@
   </script>
 </body>
 </html>
-```
