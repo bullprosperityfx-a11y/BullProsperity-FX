@@ -34,6 +34,68 @@
   </script>
 
   <style>
+    .ai-review-page{
+      background:
+        linear-gradient(135deg, rgba(243,210,27,0.07), transparent 28%),
+        radial-gradient(circle at 78% 8%, rgba(43,191,120,0.09), transparent 24%),
+        radial-gradient(circle at 12% 26%, rgba(243,210,27,0.10), transparent 22%),
+        #050505;
+    }
+
+    .ai-review-page .navbar{
+      position:sticky;
+      top:14px;
+      z-index:50;
+      padding:14px 16px;
+      border:1px solid rgba(243,210,27,0.14);
+      border-radius:24px;
+      background:rgba(7,7,7,0.78);
+      backdrop-filter:blur(18px);
+      box-shadow:0 18px 60px rgba(0,0,0,0.28);
+    }
+
+    .ai-review-page .logo,
+    .ai-review-page .section-heading{
+      letter-spacing:0;
+    }
+
+    .ai-review-page .hero-shell{
+      margin-top:14px;
+      padding:40px;
+      border-radius:34px;
+      background:
+        linear-gradient(145deg, rgba(255,255,255,0.055), transparent 38%),
+        radial-gradient(circle at 76% 20%, rgba(243,210,27,0.14), transparent 30%),
+        linear-gradient(180deg, rgba(18,18,18,0.92), rgba(5,5,5,0.98));
+      overflow:hidden;
+    }
+
+    .ai-review-page .hero-shell::before{
+      width:520px;
+      height:520px;
+      top:-220px;
+      right:-160px;
+      background:radial-gradient(circle, rgba(243,210,27,0.16), transparent 66%);
+    }
+
+    .ai-review-page .hero-title{
+      max-width:1050px;
+      font-size:clamp(44px, 5vw, 74px);
+      letter-spacing:0;
+      line-height:.92;
+    }
+
+    .ai-review-page .hero-text{
+      max-width:900px;
+    }
+
+    .ai-review-page .badge{
+      border-color:rgba(243,210,27,0.18);
+      background:rgba(243,210,27,0.065);
+      color:var(--gold);
+      box-shadow:none;
+    }
+
     .ai-grid{
       display:grid;
       grid-template-columns:1fr .9fr;
@@ -43,10 +105,15 @@
     }
 
     .ai-card{
-      border:1px solid var(--line);
-      border-radius:28px;
-      background:linear-gradient(180deg,var(--panel),var(--panel-2));
-      padding:24px;
+      border:1px solid rgba(243,210,27,0.16);
+      border-radius:26px;
+      background:
+        linear-gradient(145deg, rgba(255,255,255,0.035), transparent 44%),
+        linear-gradient(180deg, rgba(17,17,17,0.9), rgba(7,7,7,0.96));
+      box-shadow:
+        inset 0 0 0 1px rgba(255,255,255,0.025),
+        0 22px 58px rgba(0,0,0,0.28);
+      padding:28px;
       position:relative;
       overflow:hidden;
     }
@@ -58,7 +125,7 @@
       top:-100px;
       width:260px;
       height:260px;
-      background:radial-gradient(circle,rgba(255,215,0,.13),transparent 70%);
+      background:radial-gradient(circle,rgba(243,210,27,.13),transparent 70%);
       pointer-events:none;
     }
 
@@ -76,21 +143,21 @@
     }
 
     .ai-field label{
-      color:#ffd700;
+      color:var(--gold);
       font-size:12px;
       font-weight:900;
       text-transform:uppercase;
-      letter-spacing:.08em;
+      letter-spacing:0;
     }
 
     .ai-field input,
     .ai-field select,
     .ai-field textarea{
       width:100%;
-      background:#111;
+      background:rgba(255,255,255,0.035);
       color:#fff;
-      border:1px solid rgba(255,215,0,.16);
-      border-radius:18px;
+      border:1px solid rgba(243,210,27,.16);
+      border-radius:16px;
       padding:15px;
       outline:none;
       font-size:15px;
@@ -102,10 +169,9 @@
       resize:vertical;
       line-height:1.6;
     }
-
-    .upload-box{
-      border:1px dashed rgba(255,215,0,.32);
-      background:rgba(255,215,0,.04);
+        .upload-box{
+      border:1px dashed rgba(243,210,27,.32);
+      background:rgba(243,210,27,.04);
       border-radius:22px;
       padding:24px;
       text-align:center;
@@ -121,7 +187,7 @@
       max-height:360px;
       object-fit:contain;
       border-radius:20px;
-      border:1px solid rgba(255,215,0,.14);
+      border:1px solid rgba(243,210,27,.14);
       background:#080808;
       margin-top:16px;
       display:none;
@@ -137,7 +203,7 @@
       border:none;
       border-radius:999px;
       padding:15px 22px;
-      background:#ffd700;
+      background:var(--gold);
       color:#111;
       font-weight:950;
       cursor:pointer;
@@ -146,9 +212,9 @@
     }
 
     .ai-btn.secondary{
-      background:#111;
+      background:rgba(255,255,255,0.025);
       color:#fff;
-      border:1px solid rgba(255,215,0,.18);
+      border:1px solid rgba(255,255,255,0.14);
     }
 
     .ai-btn:disabled{
@@ -172,14 +238,14 @@
     }
 
     .ai-result-box{
-      background:#111;
-      border:1px solid rgba(255,215,0,.14);
+      background:rgba(255,255,255,0.025);
+      border:1px solid rgba(243,210,27,.14);
       border-radius:20px;
       padding:18px;
     }
 
     .ai-result-box strong{
-      color:#ffd700;
+      color:var(--gold);
       display:block;
       margin-bottom:8px;
     }
@@ -199,8 +265,8 @@
     }
 
     .score-box{
-      background:#111;
-      border:1px solid rgba(255,215,0,.14);
+      background:rgba(255,255,255,0.025);
+      border:1px solid rgba(243,210,27,.14);
       border-radius:18px;
       padding:16px;
     }
@@ -214,7 +280,7 @@
     }
 
     .score-value{
-      color:#ffd700;
+      color:var(--gold);
       font-size:28px;
       font-weight:950;
     }
@@ -223,16 +289,16 @@
       display:inline-flex;
       padding:8px 12px;
       border-radius:999px;
-      background:rgba(255,215,0,.08);
-      border:1px solid rgba(255,215,0,.22);
-      color:#ffd700;
+      background:rgba(243,210,27,.08);
+      border:1px solid rgba(243,210,27,.22);
+      color:var(--gold);
       font-size:12px;
       font-weight:900;
       margin-top:14px;
     }
 
     .ai-loading{
-      color:#ffd700;
+      color:var(--gold);
       font-weight:900;
       animation:pulseAI 1.2s infinite;
     }
@@ -244,17 +310,104 @@
     }
 
     .history-item{
-      background:#111;
-      border:1px solid rgba(255,215,0,.12);
+      background:rgba(255,255,255,0.025);
+      border:1px solid rgba(243,210,27,.12);
       border-radius:18px;
       padding:16px;
       cursor:pointer;
     }
 
     .history-item strong{
-      color:#ffd700;
+      color:var(--gold);
       display:block;
       margin-bottom:6px;
+    }
+
+    .auth-badge{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:10px 14px;
+      border-radius:999px;
+      font-size:13px;
+      font-weight:700;
+      border:1px solid rgba(255,255,255,0.08);
+      background:rgba(255,255,255,0.04);
+      color:#fff;
+      white-space:nowrap;
+    }
+
+    .auth-badge::before{
+      content:"";
+      width:10px;
+      height:10px;
+      border-radius:50%;
+      display:inline-block;
+      background:#666;
+    }
+
+    .auth-badge.status-admin::before{background:#ffd700;}
+
+    .ai-review-page .logout-btn{
+      border-color:rgba(255,255,255,0.08);
+      background:rgba(255,255,255,0.04);
+    }
+
+    .ai-review-page .footer-note{
+      display:flex;
+      flex-wrap:wrap;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+      border:1px solid rgba(243,210,27,0.14);
+      border-radius:24px;
+      background:rgba(255,255,255,0.025);
+      padding:22px 26px;
+      margin:28px 0 10px;
+      color:#bdbdbd;
+      font-size:14px;
+      font-weight:800;
+      text-align:left;
+    }
+
+    .ai-review-page .footer-note strong{
+      display:block;
+      color:var(--gold);
+      font-size:16px;
+      margin-bottom:2px;
+    }
+
+    .ai-review-page .footer-note span{
+      color:#d2d2d2;
+      font-weight:700;
+    }
+
+    .ai-review-page .footer-note nav{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+    }
+
+    .ai-review-page .footer-note a{
+      color:#fff;
+      text-decoration:none;
+      font-weight:900;
+      padding:9px 12px;
+      border-radius:999px;
+      background:rgba(255,255,255,0.035);
+      border:1px solid rgba(255,255,255,0.07);
+    }
+
+    .ai-review-page .footer-note a:hover{
+      color:var(--gold);
+      border-color:rgba(243,210,27,0.34);
+    }
+
+    .ai-review-page .footer-note p{
+      flex-basis:100%;
+      margin:0;
+      color:#aaa;
+      font-weight:700;
     }
 
     .history-item span{
@@ -278,36 +431,41 @@
   </style>
 </head>
 
-<body>
+<body class="ai-review-page">
   <div class="page">
 
     <nav class="navbar">
-      <a href="/admin/dashboard.html" class="logo">BullProsperity | AI Lab</a>
+      <a href="/index.html" class="logo">BullProsperity</a>
 
       <div class="nav-links">
+        <a href="/index.html">Home</a>
         <a href="/hub.html">Hub</a>
+        <a href="/course.html">Course</a>
+        <a href="/tools.html" class="active">Tools</a>
+        <a href="/setup-room.html">Setup Room</a>
+        <a href="/community.html">Community</a>
         <a href="/admin/dashboard.html">Admin</a>
-        <a id="logoutBtn" href="/api/logout" class="logout-btn">Logout</a>
+        <a id="logoutBtn" href="/api/logout" class="logout-btn" style="display:none;">Logout</a>
+        <div id="authBadge" class="auth-badge status-admin" style="display:none;">Admin</div>
       </div>
     </nav>
 
     <section class="hero-shell">
-      <div class="badge">Hidden Admin Update</div>
+      <div class="badge">Admin AI Lab</div>
 
       <h1 class="hero-title">
         BullProsperity <span class="gold">AI Review</span>
       </h1>
 
       <p class="hero-text">
-        Interner AI Bereich für Trade Reviews, Screenshot Analysen, Bias Checks, Setup Scores und spätere Premium Features.
+        Interner AI Bereich für Trade Reviews, Screenshot Analysen, Bias Checks, Setup Scores und saubere Auswertung.
       </p>
 
       <div class="locked-pill">
-        Nur Admin sichtbar • Noch nicht veröffentlicht
+        Nur Admin sichtbar - noch nicht veröffentlicht
       </div>
     </section>
-
-    <section class="ai-grid">
+        <section class="ai-grid">
 
       <div class="ai-card">
         <div class="badge">AI Trade Review</div>
@@ -503,12 +661,24 @@
     </section>
 
     <div class="footer-note">
-      BullProsperity AI Lab ist ein internes Admin Feature und noch nicht veröffentlicht.
+      <div>
+        <strong>BullProsperity</strong>
+        <span>AI Lab für interne Trade Reviews, Setup Scores und Trading Education.</span>
+      </div>
+      <nav>
+        <a href="/impressum.html">Impressum</a>
+        <a href="/datenschutz.html">Datenschutz</a>
+        <a href="/risikohinweis.html">Risikohinweis</a>
+        <a href="/community.html">Kontakt</a>
+      </nav>
+      <p>BullProsperity dient ausschließlich Bildungs- und Informationszwecken. Es werden keine Gewinne garantiert.</p>
     </div>
 
   </div>
 
 <script>
+const authBadge = document.getElementById("authBadge");
+const logoutBtn = document.getElementById("logoutBtn");
 const imageInput = document.getElementById("chartImage");
 const imagePreview = document.getElementById("imagePreview");
 const aiForm = document.getElementById("aiForm");
@@ -526,6 +696,33 @@ const historyList = document.getElementById("historyList");
 
 let imageBase64 = "";
 let latestReviewText = "";
+  document.addEventListener("DOMContentLoaded", async () => {
+  try {
+    const res = await fetch("/api/access", {
+      credentials: "include",
+      cache: "no-store"
+    });
+
+    const data = await res.json();
+
+    if (data.role !== "admin") {
+      window.location.href = "/locked.html";
+      return;
+    }
+
+    if (authBadge) {
+      authBadge.textContent = "Admin";
+      authBadge.className = "auth-badge status-admin";
+      authBadge.style.display = "inline-flex";
+    }
+
+    if (logoutBtn) {
+      logoutBtn.style.display = "inline-flex";
+    }
+  } catch (err) {
+    window.location.href = "/locked.html";
+  }
+});
 
 imageInput.addEventListener("change", () => {
   const file = imageInput.files[0];
@@ -709,7 +906,7 @@ aiForm.addEventListener("submit", async (e) => {
 
     if (!res.ok) {
       const fallback = fallbackReview(result.error || "AI Analyse konnte nicht durchgeführt werden.");
-      setResult("AI Fehler • Local Review aktiv", fallback);
+      setResult("AI Fehler - Local Review aktiv", fallback);
       return;
     }
 
@@ -745,7 +942,7 @@ ${result.analysis || "Keine Analyse erhalten."}
 
   } catch (err) {
     const fallback = fallbackReview("Server Fehler oder API nicht erreichbar.");
-    setResult("Server Fehler • Local Review aktiv", fallback);
+    setResult("Server Fehler - Local Review aktiv", fallback);
   } finally {
     aiSubmitBtn.disabled = false;
     aiSubmitBtn.textContent = "BullProsperity AI Analyse starten";
@@ -815,7 +1012,7 @@ function loadHistory(){
 
     historyList.innerHTML += `
       <div class="history-item" onclick="openHistory(${index})">
-        <strong>${item.market} • ${item.direction}</strong>
+        <strong>${item.market} - ${item.direction}</strong>
         <span>${date}</span>
       </div>
     `;
