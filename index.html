@@ -12,31 +12,291 @@
   <script src="/login.js" defer></script>
 
   <style>
+    body{
+      background:
+        linear-gradient(135deg, rgba(243,210,27,0.07), transparent 28%),
+        radial-gradient(circle at 76% 10%, rgba(43,191,120,0.14), transparent 24%),
+        radial-gradient(circle at 12% 28%, rgba(243,210,27,0.11), transparent 22%),
+        #050505;
+    }
+
+    .home-page .navbar{
+      position:sticky;
+      top:14px;
+      z-index:20;
+      padding:14px 16px;
+      border:1px solid rgba(243,210,27,0.14);
+      border-radius:24px;
+      background:rgba(7,7,7,0.78);
+      backdrop-filter:blur(18px);
+      box-shadow:0 18px 60px rgba(0,0,0,0.28);
+    }
+
+    .home-page .logo{ letter-spacing:0; }
+
+    .hero-shell.home-hero{
+      min-height:calc(100vh - 128px);
+      display:flex;
+      align-items:center;
+      padding:0;
+      border-radius:34px;
+      background:
+        linear-gradient(145deg, rgba(255,255,255,0.055), transparent 38%),
+        radial-gradient(circle at 72% 26%, rgba(243,210,27,0.16), transparent 30%),
+        linear-gradient(180deg, rgba(18,18,18,0.92), rgba(5,5,5,0.98));
+    }
+
+    .home-hero::before{
+      width:520px;
+      height:520px;
+      top:-220px;
+      right:-160px;
+      background:radial-gradient(circle, rgba(243,210,27,0.18), transparent 66%);
+      animation:heroPulse 7s ease-in-out infinite alternate;
+    }
+
+    .home-hero::after{
+      height:2px;
+      background:linear-gradient(90deg, transparent, rgba(243,210,27,0.9), rgba(31,213,119,0.65), transparent);
+    }
+
+    @keyframes heroPulse{
+      from{transform:translate3d(0,0,0) scale(1);}
+      to{transform:translate3d(-28px,22px,0) scale(1.08);}
+    }
+
+    .hero-grid{
+      position:relative;
+      z-index:2;
+      display:grid;
+      grid-template-columns:minmax(0, 1.05fr) minmax(360px, .95fr);
+      gap:34px;
+      align-items:center;
+      width:100%;
+      padding:46px;
+    }
+
     .hero-center{
-      text-align:center;
-      max-width:1100px;
-      margin:0 auto;
+      text-align:left;
+      max-width:760px;
+      margin:0;
     }
 
     .hero-center .badge{
-      margin-left:auto;
-      margin-right:auto;
+      margin-left:0;
+      margin-right:0;
     }
 
     .hero-center .hero-title{
-      max-width:none;
-      margin-left:auto;
-      margin-right:auto;
+      max-width:760px;
+      margin-left:0;
+      margin-right:0;
+      font-size:clamp(44px, 5vw, 78px);
+      letter-spacing:0;
+      line-height:.92;
     }
 
     .hero-center .hero-text{
-      max-width:900px;
-      margin-left:auto;
-      margin-right:auto;
+      max-width:680px;
+      margin-left:0;
+      margin-right:0;
     }
 
     .hero-center .hero-buttons{
-      justify-content:center;
+      justify-content:flex-start;
+    }
+
+    .hero-kicker{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin:26px 0 0;
+    }
+
+    .mini-stat{
+      min-width:150px;
+      padding:14px 16px;
+      border:1px solid rgba(255,255,255,0.08);
+      border-radius:18px;
+      background:rgba(255,255,255,0.035);
+    }
+
+    .mini-stat strong{
+      display:block;
+      color:#fff;
+      font-size:21px;
+      line-height:1;
+      margin-bottom:6px;
+    }
+
+    .mini-stat span{
+      color:#cfcfcf;
+      font-size:12px;
+      font-weight:800;
+      text-transform:uppercase;
+      letter-spacing:.7px;
+    }
+
+    .market-panel{
+      position:relative;
+      min-height:540px;
+      border:1px solid rgba(243,210,27,0.16);
+      border-radius:30px;
+      overflow:hidden;
+      background:
+        linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px),
+        radial-gradient(circle at 50% 0%, rgba(243,210,27,0.11), transparent 42%),
+        #070707;
+      background-size:100% 54px, 64px 100%, auto, auto;
+      box-shadow:
+        inset 0 0 0 1px rgba(255,255,255,0.03),
+        0 30px 90px rgba(0,0,0,0.38);
+    }
+
+    .market-panel::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:linear-gradient(110deg, transparent 0%, rgba(255,255,255,0.08) 45%, transparent 68%);
+      transform:translateX(-100%);
+      animation:scanLine 5.8s ease-in-out infinite;
+      pointer-events:none;
+    }
+
+    @keyframes scanLine{
+      0%,35%{transform:translateX(-100%);}
+      72%,100%{transform:translateX(100%);}
+    }
+
+    .market-topbar{
+      position:absolute;
+      inset:18px 18px auto;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      z-index:2;
+    }
+
+    .market-label,
+    .market-session{
+      padding:9px 12px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,0.09);
+      background:rgba(0,0,0,0.42);
+      color:#f5f5f5;
+      font-size:12px;
+      font-weight:900;
+      white-space:nowrap;
+    }
+
+    .market-session{
+      color:#1fd577;
+      border-color:rgba(31,213,119,0.32);
+    }
+
+    .candle{
+      position:absolute;
+      bottom:86px;
+      width:10px;
+      border-radius:999px;
+      color:var(--gold);
+      background:linear-gradient(180deg, #fff4a8, var(--gold) 48%, #caa800);
+      box-shadow:0 0 24px rgba(243,210,27,0.34);
+      animation:candleLift 4.5s ease-in-out infinite;
+    }
+
+    .candle.down{
+      color:#fff;
+      background:linear-gradient(180deg, #ffffff, #e9e9e9 52%, #a8a8a8);
+      box-shadow:0 0 22px rgba(255,255,255,0.22);
+    }
+
+    .candle::before{
+      content:"";
+      position:absolute;
+      left:50%;
+      top:-22px;
+      width:2px;
+      height:calc(100% + 44px);
+      transform:translateX(-50%);
+      background:currentColor;
+      opacity:.55;
+    }
+
+    @keyframes candleLift{
+      0%,100%{transform:translateY(0);}
+      50%{transform:translateY(-10px);}
+    }
+
+    .c1{left:12%;height:84px;animation-delay:.1s;}
+    .c2{left:21%;height:126px;animation-delay:.45s;}
+    .c3{left:32%;height:96px;animation-delay:.8s;}
+    .c4{left:47%;height:152px;animation-delay:1.1s;}
+    .c5{left:61%;height:112px;animation-delay:1.45s;}
+    .c6{left:76%;height:176px;animation-delay:1.8s;}
+
+    .smc-label{
+      position:absolute;
+      z-index:2;
+      padding:6px 9px;
+      border-radius:999px;
+      border:1px solid rgba(243,210,27,0.16);
+      background:rgba(0,0,0,0.28);
+      color:rgba(255,255,255,0.72);
+      font-size:11px;
+      font-weight:900;
+      letter-spacing:.8px;
+      text-transform:uppercase;
+    }
+
+    .smc-hh{left:73%;top:32%;}
+    .smc-hl{left:49%;top:58%;}
+    .smc-liq{left:18%;top:44%;color:rgba(243,210,27,0.72);}
+
+    .floating-note{
+      position:absolute;
+      z-index:3;
+      border:1px solid rgba(243,210,27,0.18);
+      border-radius:20px;
+      padding:16px;
+      background:rgba(9,9,9,0.76);
+      backdrop-filter:blur(18px);
+      box-shadow:0 18px 60px rgba(0,0,0,0.34);
+      animation:noteFloat 5.2s ease-in-out infinite;
+    }
+
+    .floating-note strong{
+      display:block;
+      color:var(--gold);
+      font-size:13px;
+      margin-bottom:6px;
+    }
+
+    .floating-note span{
+      color:#f2f2f2;
+      font-size:14px;
+      line-height:1.35;
+      font-weight:800;
+    }
+
+    .note-risk{
+      left:22px;
+      bottom:22px;
+      max-width:220px;
+    }
+
+    .note-entry{
+      right:22px;
+      bottom:72px;
+      max-width:210px;
+      animation-delay:1.1s;
+    }
+
+    @keyframes noteFloat{
+      0%,100%{transform:translateY(0);}
+      50%{transform:translateY(-12px);}
     }
 
     .feature-grid{
@@ -46,13 +306,41 @@
       margin-top:26px;
     }
 
+    .hero-feature-grid{
+      grid-column:1 / -1;
+      margin-top:0;
+    }
+
     .feature-card{
       border:1px solid var(--line);
-      border-radius:24px;
-      background:linear-gradient(180deg, rgba(28,28,28,0.88), rgba(14,14,14,0.94));
-      box-shadow:0 0 0 1px rgba(255,255,255,0.02) inset;
+      border-radius:22px;
+      background:
+        linear-gradient(135deg, rgba(243,210,27,0.08), transparent 34%),
+        linear-gradient(180deg, rgba(28,28,28,0.88), rgba(14,14,14,0.94));
+      box-shadow:0 0 0 1px rgba(255,255,255,0.02) inset, 0 18px 48px rgba(0,0,0,0.22);
       padding:26px 20px;
-      text-align:center;
+      text-align:left;
+      transition:transform .25s ease, border-color .25s ease, background .25s ease;
+    }
+
+    .feature-card:hover,
+    .access-card:hover{
+      transform:translateY(-6px);
+      border-color:rgba(243,210,27,0.5);
+    }
+
+    .feature-icon{
+      width:42px;
+      height:42px;
+      display:grid;
+      place-items:center;
+      border-radius:16px;
+      background:rgba(243,210,27,0.11);
+      border:1px solid rgba(243,210,27,0.18);
+      color:var(--gold);
+      font-size:20px;
+      font-weight:900;
+      margin-bottom:16px;
     }
 
     .feature-card h3{
@@ -78,10 +366,13 @@
 
     .access-card{
       border:1px solid var(--line);
-      border-radius:24px;
-      background:linear-gradient(180deg, rgba(28,28,28,0.88), rgba(14,14,14,0.94));
-      box-shadow:0 0 0 1px rgba(255,255,255,0.02) inset;
+      border-radius:22px;
+      background:
+        linear-gradient(145deg, rgba(255,255,255,0.045), transparent 42%),
+        linear-gradient(180deg, rgba(28,28,28,0.88), rgba(14,14,14,0.94));
+      box-shadow:0 0 0 1px rgba(255,255,255,0.02) inset, 0 18px 48px rgba(0,0,0,0.22);
       padding:24px;
+      transition:transform .25s ease, border-color .25s ease;
     }
 
     .access-card h3{
@@ -99,9 +390,7 @@
       margin-bottom:18px;
     }
 
-    .access-card .card-link{
-      margin-top:0;
-    }
+    .access-card .card-link{ margin-top:0; }
 
     .auth-box{
       display:flex;
@@ -116,6 +405,46 @@
       white-space:nowrap;
     }
 
+    .section.feature-band{ padding:28px 0 4px; }
+
+    .flow-strip{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:14px;
+      margin-top:22px;
+    }
+
+    .flow-step{
+      min-height:138px;
+      border:1px solid rgba(243,210,27,0.14);
+      border-radius:22px;
+      background:rgba(255,255,255,0.025);
+      padding:20px;
+    }
+
+    .flow-step span{
+      display:block;
+      color:var(--gold);
+      font-size:13px;
+      font-weight:900;
+      margin-bottom:12px;
+    }
+
+    .flow-step strong{
+      display:block;
+      color:#fff;
+      font-size:18px;
+      line-height:1.2;
+      margin-bottom:8px;
+    }
+
+    .flow-step p{
+      color:#d8d8d8;
+      font-size:14px;
+      line-height:1.5;
+      font-weight:700;
+    }
+
     .status-dot{
       width:10px;
       height:10px;
@@ -123,33 +452,43 @@
       background:#999;
     }
 
-    .status-premium{
-      background:#00d26a;
-    }
-
-    .status-admin{
-      background:#ffd700;
-    }
-
-    .status-locked{
-      background:#ff4d4d;
-    }
+    .status-premium{ background:#00d26a; }
+    .status-admin{ background:#ffd700; }
+    .status-locked{ background:#ff4d4d; }
 
     @media(max-width:1200px){
+      .hero-grid{ grid-template-columns:1fr; }
+      .market-panel{ min-height:440px; }
+
       .feature-grid,
-      .access-grid{
+      .access-grid,
+      .flow-strip{
         grid-template-columns:1fr;
       }
     }
 
     @media(max-width:860px){
-      .auth-box{
-        margin-top:10px;
+      .auth-box{ margin-top:10px; }
+      .home-page .navbar{ top:0; }
+      .hero-shell.home-hero{ min-height:auto; }
+      .hero-grid{ padding:24px; }
+      .market-panel{ min-height:390px; }
+
+      .market-topbar{
+        align-items:flex-start;
+        flex-direction:column;
+      }
+
+      .note-entry{ display:none; }
+
+      .hero-kicker{
+        display:grid;
+        grid-template-columns:1fr;
       }
     }
   </style>
 </head>
-<body>
+<body class="home-page">
   <div class="page">
 
     <nav class="navbar">
@@ -162,6 +501,7 @@
         <a href="tools">Tools</a>
         <a href="setup-room">Setup Room</a>
         <a href="community">Community</a>
+        <a href="risikohinweis">Risikohinweis</a>
         <a href="/waitlist">Waitlist beitreten</a>
         <a id="loginNavBtn" href="/api/whop/login">Login</a>
         <a id="logoutBtn" href="/api/logout"class="logout-btn"style="display:none;">Logout</a>
@@ -173,39 +513,88 @@
       </div>
     </nav>
 
-    <section class="hero-shell">
-      <div class="hero-center">
-        <div class="badge">Pro Trading Education</div>
+    <section class="hero-shell home-hero">
+      <div class="hero-grid">
+        <div class="hero-center">
+          <div class="badge">Trading Education & Marktstruktur</div>
 
-        <h1 class="hero-title">
-          Build Wealth With
-          <span class="gold">BullProsperity</span>
-        </h1>
+          <h1 class="hero-title">
+            Trading-Wissen mit Struktur:
+            <span class="gold">BullProsperity</span>
+          </h1>
 
-        <p class="hero-text">
-          Lerne Marktstruktur, Entries, Risikomanagement und Trading-Psychologie auf einer Plattform,
-          die elegant, modern und wie eine echte Premium-Brand aufgebaut ist.
-        </p>
+          <p class="hero-text">
+            BullProsperity ist eine Plattform für Finanzbildung, Marktverständnis und strukturiertes
+            Trading-Wissen. Der Fokus liegt auf Marktstruktur, Entries, Risikomanagement und
+            Trading-Psychologie - ohne Gewinnversprechen und ohne individuelle Anlageberatung.
+          </p>
 
-       <div class="hero-buttons" id="homeHeroButtons">
-  <a id="startBtn" href="/api/whop/login" class="btn primary">Jetzt starten</a>
-  <a id="learnMoreBtn" href="javascript:void(0)" class="btn secondary">Mehr erfahren</a> 
-</div>
+          <div class="hero-buttons" id="homeHeroButtons">
+            <a id="startBtn" href="/api/whop/login" class="btn primary">Jetzt starten</a>
+            <a id="learnMoreBtn" href="javascript:void(0)" class="btn secondary">Mehr erfahren</a>
+            <a href="risikohinweis" class="btn secondary">Risiko verstehen</a>
+          </div>
 
-        <div class="feature-grid">
+          <div class="hero-kicker" aria-label="Plattform Highlights">
+            <div class="mini-stat">
+              <strong>33+</strong>
+              <span>Lektionen</span>
+            </div>
+            <div class="mini-stat">
+              <strong>4</strong>
+              <span>Praxisbereiche</span>
+            </div>
+            <div class="mini-stat">
+              <strong>0</strong>
+              <span>Gewinnversprechen</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="market-panel" aria-label="Animierte Marktstruktur Vorschau">
+          <div class="market-topbar">
+            <div class="market-label">BP-FX / Structure Map</div>
+            <div class="market-session">Live Lernmodus</div>
+          </div>
+
+          <div class="candle c1"></div>
+          <div class="candle down c2"></div>
+          <div class="candle c3"></div>
+          <div class="candle down c4"></div>
+          <div class="candle c5"></div>
+          <div class="candle c6"></div>
+
+          <span class="smc-label smc-liq">Liquidity</span>
+          <span class="smc-label smc-hl">HL</span>
+          <span class="smc-label smc-hh">HH</span>
+
+          <div class="floating-note note-risk">
+            <strong>Risk First</strong>
+            <span>Plan, Lot Size, Journal und klare Regeln vor jedem Setup.</span>
+          </div>
+          <div class="floating-note note-entry">
+            <strong>Entry Logic</strong>
+            <span>Marktstruktur lesen, Liquidität verstehen, Umsetzung sauber halten.</span>
+          </div>
+        </div>
+
+        <div class="feature-grid hero-feature-grid">
           <div class="feature-card">
+            <div class="feature-icon">01</div>
             <h3>Kurs</h3>
             <p>Strukturierte Lektionen, Module und professioneller Lernaufbau.</p>
           </div>
 
           <div class="feature-card">
+            <div class="feature-icon">02</div>
             <h3>Tools</h3>
             <p>Lot Size Rechner, Journal, Checklisten und TradingView Integration.</p>
           </div>
 
           <div class="feature-card">
+            <div class="feature-icon">03</div>
             <h3>Premium</h3>
-            <p>Setup Room, Strategy Material und exklusive Mitgliederbereiche.</p>
+            <p>Setup Room, Strategie-Material und Mitgliederbereiche mit klarem Risikofokus.</p>
           </div>
         </div>
       </div>
@@ -214,8 +603,9 @@
     <section id="zugang" class="section">
       <h2 class="section-heading" style="text-align:center;">Dein Zugang bei BullProsperity</h2>
       <p class="section-subtext" style="text-align:center; max-width:980px; margin-left:auto; margin-right:auto;">
-        Eine moderne Trading Education Plattform mit Kursbereich, Tools, exklusiven Setups
-        und strukturierten Mitgliederbereichen.
+        Eine moderne Trading Education Plattform mit Kursbereich, Tools, Setups und
+        strukturierten Mitgliederbereichen. Inhalte dienen der Bildung und ersetzen keine
+        persönliche Finanzberatung.
       </p>
 
       <div class="access-grid">
@@ -241,9 +631,38 @@
           <h3>Premium Bereiche</h3>
           <p>
             Greife auf Setup Room, Community und strategische Praxisbereiche zu,
-            um Theorie mit realer Anwendung zu verbinden.
+            um Theorie mit realer Anwendung und bewusstem Risikomanagement zu verbinden.
           </p>
           <a href="hub" class="card-link">Zum Hub</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section feature-band">
+      <div class="section-card">
+        <div class="badge">So arbeitet BullProsperity</div>
+        <h2 class="section-heading" style="font-size:34px; margin-bottom:10px;">Von Wissen zu sauberer Umsetzung</h2>
+        <div class="flow-strip">
+          <div class="flow-step">
+            <span>01</span>
+            <strong>Struktur lernen</strong>
+            <p>Module bauen Verständnis Schritt für Schritt auf.</p>
+          </div>
+          <div class="flow-step">
+            <span>02</span>
+            <strong>Setup planen</strong>
+            <p>Marktideen werden mit klaren Kriterien vorbereitet.</p>
+          </div>
+          <div class="flow-step">
+            <span>03</span>
+            <strong>Risiko steuern</strong>
+            <p>Tools helfen bei Lot Size, Journal und Disziplin.</p>
+          </div>
+          <div class="flow-step">
+            <span>04</span>
+            <strong>Review machen</strong>
+            <p>Ergebnisse werden ausgewertet statt emotional bewertet.</p>
+          </div>
         </div>
       </div>
     </section>
@@ -257,8 +676,8 @@
           </h2>
           <p class="section-subtext" style="margin-bottom:0;">
             BullProsperity verbindet Education, Struktur, Praxis und Community in einer Oberfläche,
-            die nicht nur gut aussieht, sondern logisch aufgebaut ist und Mitglieder durch einen
-            echten Lernprozess führt.
+            die logisch aufgebaut ist und Mitglieder durch einen nachvollziehbaren Lernprozess führt.
+            Die Inhalte sollen Wissen vermitteln, nicht schnelle Gewinne versprechen.
           </p>
         </div>
 
@@ -268,34 +687,68 @@
             <div class="list-item">Klare Module statt Informationschaos.</div>
             <div class="list-item">Tools für Risiko, Journal und Umsetzung.</div>
             <div class="list-item">Praxisbereiche für Setups und Marktideen.</div>
-            <div class="list-item">Premium Aufbau wie eine moderne Education Plattform.</div>
+            <div class="list-item">Transparente Hinweise zu Risiko, Eigenverantwortung und Grenzen der Inhalte.</div>
           </div>
         </div>
       </div>
     </section>
 
-    <div class="footer-note">
-      BullProsperity dient ausschließlich Bildungs- und Informationszwecken
-    </div>
+    <section class="section trust-section">
+      <div class="section-card">
+        <div class="badge">Transparenz & Sicherheit</div>
+        <h2 class="section-heading" style="font-size:34px; margin-bottom:10px;">Wichtige Hinweise</h2>
+        <div class="trust-grid">
+          <div>
+            <h3>Keine Gewinnversprechen</h3>
+            <p>Trading und Investitionen sind mit Risiken verbunden. BullProsperity garantiert keine Gewinne.</p>
+          </div>
+          <div>
+            <h3>Keine Anlageberatung</h3>
+            <p>Die Inhalte dienen Bildungs- und Informationszwecken und ersetzen keine individuelle Beratung.</p>
+          </div>
+          <div>
+            <h3>Kontakt & Rechtliches</h3>
+            <p>Impressum, Datenschutz und Risikohinweis sind transparent verlinkt und werden laufend gepflegt.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="site-footer">
+      <div>
+        <strong>BullProsperity</strong>
+        <span>Finanzbildung, Marktanalyse und Trading Education.</span>
+      </div>
+      <nav>
+        <a href="impressum">Impressum</a>
+        <a href="datenschutz">Datenschutz</a>
+        <a href="risikohinweis">Risikohinweis</a>
+        <a href="community">Kontakt</a>
+      </nav>
+      <p>BullProsperity dient ausschließlich Bildungs- und Informationszwecken. Es werden keine Gewinne garantiert.</p>
+    </footer>
 
   </div>
-  <script>
-document.getElementById("learnMoreBtn")?.addEventListener("click", () => {
-  document.getElementById("zugang")?.scrollIntoView({
-    behavior: "smooth"
-  });
-});
-</script>
-  <script>
-  window.addEventListener("load", () => {
-    const loader = document.getElementById("bpLoader");
 
-    setTimeout(() => {
-      if(loader){
-        loader.classList.add("hide");
-      }
-    }, 700);
-  });
-</script>
+  <script>
+    document.getElementById("learnMoreBtn")?.addEventListener("click", () => {
+      document.getElementById("zugang")?.scrollIntoView({
+        behavior: "smooth"
+      });
+    });
+  </script>
+
+  <script>
+    window.addEventListener("load", () => {
+      const loader = document.getElementById("bpLoader");
+
+      setTimeout(() => {
+        if(loader){
+          loader.classList.add("hide");
+        }
+      }, 700);
+    });
+  </script>
 </body>
 </html>
+```
