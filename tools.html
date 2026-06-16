@@ -40,11 +40,190 @@
   <script src="/login.js" defer></script>
 
   <style>
-    .chart-frame{
-      border:1px solid var(--line);
-      border-radius:22px;
+    .tools-page{
+      background:
+        linear-gradient(135deg, rgba(243,210,27,0.07), transparent 28%),
+        radial-gradient(circle at 78% 8%, rgba(43,191,120,0.10), transparent 24%),
+        radial-gradient(circle at 12% 26%, rgba(243,210,27,0.10), transparent 22%),
+        #050505;
+    }
+
+    .tools-page .navbar{
+      position:sticky;
+      top:14px;
+      z-index:50;
+      padding:14px 16px;
+      border:1px solid rgba(243,210,27,0.14);
+      border-radius:24px;
+      background:rgba(7,7,7,0.78);
+      backdrop-filter:blur(18px);
+      box-shadow:0 18px 60px rgba(0,0,0,0.28);
+    }
+
+    .tools-page .logo{
+      letter-spacing:0;
+    }
+
+    .tools-page .hero-shell{
+      margin-top:14px;
+      padding:40px;
+      border-radius:34px;
+      background:
+        linear-gradient(145deg, rgba(255,255,255,0.055), transparent 38%),
+        radial-gradient(circle at 76% 20%, rgba(243,210,27,0.14), transparent 30%),
+        linear-gradient(180deg, rgba(18,18,18,0.92), rgba(5,5,5,0.98));
       overflow:hidden;
-      background:#0c0c0c;
+    }
+
+    .tools-page .hero-shell::before{
+      width:520px;
+      height:520px;
+      top:-220px;
+      right:-160px;
+      background:radial-gradient(circle, rgba(243,210,27,0.16), transparent 66%);
+    }
+
+    .tools-page .hero-title{
+      max-width:1050px;
+      font-size:clamp(44px, 5vw, 74px);
+      letter-spacing:0;
+      line-height:.92;
+    }
+
+    .tools-page .hero-text{
+      max-width:900px;
+    }
+
+    .tools-page .badge,
+    .tools-page .bp-smc-tags span{
+      border-color:rgba(243,210,27,0.18);
+      background:rgba(243,210,27,0.065);
+      color:var(--gold);
+      box-shadow:none;
+    }
+
+    .tools-page .section{
+      margin-bottom:34px;
+    }
+
+    .tools-page .section-heading{
+      letter-spacing:0;
+    }
+
+    .tools-page .section-subtext{
+      max-width:900px;
+    }
+
+    .tools-page .grid-4{
+      display:grid;
+      grid-template-columns:repeat(4, minmax(0, 1fr));
+      gap:18px;
+    }
+
+    .tools-page .grid-2{
+      display:grid;
+      grid-template-columns:repeat(2, minmax(0, 1fr));
+      gap:22px;
+    }
+
+    .tools-page .tool-card,
+    .tools-page .section-card,
+    .tools-page .chart-frame,
+    .tools-page .bp-quick-journal{
+      border:1px solid rgba(243,210,27,0.16);
+      border-radius:26px;
+      background:
+        linear-gradient(145deg, rgba(255,255,255,0.035), transparent 44%),
+        linear-gradient(180deg, rgba(17,17,17,0.9), rgba(7,7,7,0.96));
+      box-shadow:
+        inset 0 0 0 1px rgba(255,255,255,0.025),
+        0 22px 58px rgba(0,0,0,0.28);
+    }
+
+    .tools-page .tool-card{
+      position:relative;
+      overflow:hidden;
+      padding:26px;
+      min-height:245px;
+      display:flex;
+      flex-direction:column;
+      gap:18px;
+      transition:transform .25s ease, border-color .25s ease, box-shadow .25s ease;
+    }
+
+    .tools-page .tool-card > div{
+      position:relative;
+      z-index:1;
+    }
+
+    .tools-page .tool-card::before{
+      content:"";
+      position:absolute;
+      inset:auto -70px -90px auto;
+      width:190px;
+      height:190px;
+      background:radial-gradient(circle, rgba(243,210,27,0.12), transparent 70%);
+      opacity:.65;
+      pointer-events:none;
+    }
+
+    .tools-page .tool-card:hover{
+      transform:translateY(-6px);
+      border-color:rgba(243,210,27,0.5);
+      box-shadow:0 22px 58px rgba(0,0,0,0.34);
+    }
+
+    .tools-page .tool-card h3,
+    .tools-page .section-card h3{
+      color:#fff;
+      letter-spacing:0;
+    }
+
+    .tools-page .tool-card p,
+    .tools-page .section-card p{
+      color:#d9d9d9;
+      font-weight:700;
+    }
+
+    .tools-page .tool-link,
+    .tools-page .btn,
+    .tools-page .bp-save-btn{
+      border-radius:999px;
+      min-height:46px;
+    }
+
+    .tools-page .tool-link{
+      align-self:flex-start;
+      margin-top:auto;
+      position:relative;
+      z-index:1;
+    }
+
+    .tools-page .tool-link,
+    .tools-page .btn.primary,
+    .tools-page .bp-save-btn{
+      background:var(--gold);
+      color:#111;
+      box-shadow:0 0 24px rgba(243,210,27,0.16);
+      z-index:1;
+    }
+
+    .tools-page .btn.secondary{
+      color:#fff;
+      border-color:rgba(255,255,255,0.14);
+      background:rgba(255,255,255,0.025);
+    }
+
+    .tools-page .section-card{
+      padding:28px;
+    }
+
+    .tools-page .list-box{
+      margin-top:16px;
+    }
+
+    .chart-frame{
+      overflow:hidden;
       margin-top:20px;
     }
 
@@ -59,19 +238,20 @@
     }
 
     .bp-watchlist button{
-      background:#111;
-      border:1px solid #333;
+      background:rgba(255,255,255,0.035);
+      border:1px solid rgba(255,255,255,0.08);
       color:#fff;
       padding:8px 14px;
       border-radius:999px;
       cursor:pointer;
-      font-weight:600;
+      font-weight:800;
     }
 
     .bp-watchlist button:hover,
     .bp-watchlist button.active{
-      border-color:#ffd700;
-      box-shadow:0 0 0 1px rgba(255,215,0,.15) inset;
+      color:var(--gold);
+      border-color:rgba(243,210,27,0.5);
+      box-shadow:0 0 0 1px rgba(243,210,27,.15) inset;
     }
 
     .bp-market-info{
@@ -92,8 +272,8 @@
 
     .bp-market-symbol{
       font-size:22px;
-      font-weight:800;
-      color:#ffd700;
+      font-weight:900;
+      color:var(--gold);
       margin-top:4px;
     }
 
@@ -127,8 +307,8 @@
     }
 
     .bp-sidepanel{
-      background:#101010;
-      border:1px solid #252525;
+      background:rgba(255,255,255,0.025);
+      border:1px solid rgba(243,210,27,0.13);
       border-radius:18px;
       padding:14px;
     }
@@ -149,8 +329,8 @@
     .bp-side-item{
       width:100%;
       text-align:left;
-      background:#151515;
-      border:1px solid #2a2a2a;
+      background:rgba(255,255,255,0.025);
+      border:1px solid rgba(255,255,255,0.08);
       border-radius:14px;
       padding:12px;
       color:#fff;
@@ -163,7 +343,7 @@
 
     .bp-side-item strong{
       display:block;
-      color:#ffd700;
+      color:var(--gold);
       font-size:14px;
     }
 
@@ -175,15 +355,12 @@
 
     .bp-side-item:hover,
     .bp-side-item.active{
-      border-color:#ffd700;
-      box-shadow:0 0 0 1px rgba(255,215,0,.12) inset;
+      border-color:rgba(243,210,27,0.5);
+      box-shadow:0 0 0 1px rgba(243,210,27,.12) inset;
     }
 
     .bp-quick-journal{
       margin-top:22px;
-      border:1px solid var(--line);
-      border-radius:22px;
-      background:#0c0c0c;
       padding:20px;
     }
 
@@ -204,9 +381,9 @@
     .bp-quick-journal select,
     .bp-quick-journal textarea{
       width:100%;
-      background:#111;
+      background:rgba(255,255,255,0.025);
       color:#fff;
-      border:1px solid #252525;
+      border:1px solid rgba(243,210,27,0.14);
       border-radius:14px;
       padding:12px 14px;
       box-sizing:border-box;
@@ -219,10 +396,7 @@
 
     .bp-save-btn{
       margin-top:12px;
-      background:#ffd700;
-      color:#111;
       border:none;
-      border-radius:14px;
       padding:12px 16px;
       font-weight:800;
       cursor:pointer;
@@ -235,8 +409,8 @@
     }
 
     .bp-journal-entry{
-      background:#111;
-      border:1px solid #252525;
+      background:rgba(255,255,255,0.025);
+      border:1px solid rgba(243,210,27,0.13);
       border-radius:14px;
       padding:14px;
     }
@@ -250,7 +424,7 @@
     }
 
     .bp-journal-entry strong{
-      color:#ffd700;
+      color:var(--gold);
     }
 
     .bp-journal-entry small{
@@ -285,7 +459,78 @@
     .auth-badge.status-longterm::before{background:#3b82f6;}
     .auth-badge.status-locked::before{background:#ef4444;}
 
+    .tools-page .auth-badge,
+    .tools-page .logout-btn{
+      border-color:rgba(255,255,255,0.08);
+      background:rgba(255,255,255,0.04);
+    }
+
+    .tools-page .footer-note{
+      display:flex;
+      flex-wrap:wrap;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+      border:1px solid rgba(243,210,27,0.14);
+      border-radius:24px;
+      background:rgba(255,255,255,0.025);
+      padding:22px 26px;
+      margin:0 0 10px;
+      color:#bdbdbd;
+      font-size:14px;
+      font-weight:800;
+      text-align:left;
+    }
+
+    .tools-page .footer-note strong{
+      display:block;
+      color:var(--gold);
+      font-size:16px;
+      margin-bottom:2px;
+    }
+
+    .tools-page .footer-note span{
+      color:#d2d2d2;
+      font-weight:700;
+    }
+
+    .tools-page .footer-note nav{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+    }
+
+    .tools-page .footer-note a{
+      color:#fff;
+      text-decoration:none;
+      font-weight:900;
+      padding:9px 12px;
+      border-radius:999px;
+      background:rgba(255,255,255,0.035);
+      border:1px solid rgba(255,255,255,0.07);
+    }
+
+    .tools-page .footer-note a:hover{
+      color:var(--gold);
+      border-color:rgba(243,210,27,0.34);
+    }
+
+    .tools-page .footer-note p{
+      flex-basis:100%;
+      margin:0;
+      color:#aaa;
+      font-weight:700;
+    }
+
     @media(max-width:1100px){
+      .tools-page .grid-4{
+        grid-template-columns:1fr 1fr;
+      }
+
+      .tools-page .grid-2{
+        grid-template-columns:1fr;
+      }
+
       .bp-chart-layout{
         grid-template-columns:1fr;
       }
@@ -303,10 +548,23 @@
       .bp-journal-grid{
         grid-template-columns:1fr;
       }
+
+      .tools-page .hero-shell{
+        padding:24px !important;
+      }
+
+      .tools-page .grid-4{
+        grid-template-columns:1fr;
+      }
+
+      .tools-page .footer-note{
+        align-items:flex-start;
+        flex-direction:column;
+      }
     }
   </style>
 </head>
-<body data-protected="true">
+<body class="tools-page" data-protected="true">
   <div class="page">
 
     <nav class="navbar">
@@ -537,7 +795,17 @@
     </section>
 
     <div class="footer-note">
-      BullProsperity dient ausschließlich Bildungszwecken
+      <div>
+        <strong>BullProsperity</strong>
+        <span>Tools für Risiko, Analyse, Journal und Trading Education.</span>
+      </div>
+      <nav>
+        <a href="impressum.html">Impressum</a>
+        <a href="datenschutz.html">Datenschutz</a>
+        <a href="risikohinweis.html">Risikohinweis</a>
+        <a href="community.html">Kontakt</a>
+      </nav>
+      <p>BullProsperity dient ausschließlich Bildungs- und Informationszwecken. Es werden keine Gewinne garantiert.</p>
     </div>
 
   </div>
@@ -699,24 +967,25 @@
           window.location.href = "locked.html";
           return;
         }
-document.body.classList.add("access-ready");
+        document.body.classList.add("access-ready");
+
         if (role === "admin") {
-  authBadge.textContent = "Admin";
-  authBadge.className = "auth-badge status-admin";
-} else if (role === "premium") {
-  authBadge.textContent = "Premium";
-  authBadge.className = "auth-badge status-premium";
-}
+          authBadge.textContent = "Admin";
+          authBadge.className = "auth-badge status-admin";
+        } else if (role === "premium") {
+          authBadge.textContent = "Premium";
+          authBadge.className = "auth-badge status-premium";
+        }
 
         if (loginNavBtn) {
-  loginNavBtn.style.display = "none";
-}
+          loginNavBtn.style.display = "none";
+        }
 
-const logoutBtn = document.getElementById("logoutBtn");
+        const logoutBtn = document.getElementById("logoutBtn");
 
-if (logoutBtn && (role === "admin" || role === "premium")) {
-  logoutBtn.style.display = "inline-flex";
-}
+        if (logoutBtn && (role === "admin" || role === "premium")) {
+          logoutBtn.style.display = "inline-flex";
+        }
 
         loadChart(activeSymbol, activeLabel);
         renderJournal();
@@ -725,16 +994,5 @@ if (logoutBtn && (role === "admin" || role === "premium")) {
       }
     })();
   </script>
-  <script>
-  window.addEventListener("load", () => {
-    const loader = document.getElementById("bpLoader");
-
-    setTimeout(() => {
-      if(loader){
-        loader.classList.add("hide");
-      }
-    }, 700);
-  });
-</script>
 </body>
 </html>
