@@ -284,23 +284,108 @@
       margin:22px 0;
     }
 
-    .member-search{
+    .member-search-shell{
       flex:1;
       min-width:260px;
+      position:relative;
+      display:flex;
+      align-items:center;
       min-height:52px;
       border-radius:18px;
-      border:1px solid rgba(243,210,27,.18);
-      background:rgba(255,255,255,.03);
+      border:1px solid rgba(243,210,27,.16);
+      background:
+        linear-gradient(135deg, rgba(243,210,27,.055), transparent 48%),
+        rgba(255,255,255,.035);
+      box-shadow:
+        inset 0 0 0 1px rgba(255,255,255,.025),
+        0 16px 40px rgba(0,0,0,.24);
+      overflow:hidden;
+      transition:.22s ease;
+    }
+
+    .member-search-shell::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:linear-gradient(90deg, rgba(255,255,255,.055), transparent 34%);
+      pointer-events:none;
+      opacity:.75;
+    }
+
+    .member-search-icon{
+      position:relative;
+      z-index:1;
+      width:46px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      color:var(--gold);
+      font-size:18px;
+      opacity:.95;
+    }
+
+    .member-search{
+      position:relative;
+      z-index:1;
+      width:100%;
+      min-width:0;
+      min-height:52px;
+      border:0;
+      background:transparent;
       color:#fff;
-      padding:14px 16px;
+      padding:14px 82px 14px 0;
       outline:none;
       font-weight:800;
       font-size:15px;
     }
 
-    .member-search:focus{
+    .member-search::placeholder{
+      color:rgba(255,255,255,.48);
+      font-weight:750;
+    }
+
+    .member-search-shell:focus-within{
       border-color:rgba(243,210,27,.55);
-      box-shadow:0 0 0 3px rgba(243,210,27,.08);
+      background:
+        linear-gradient(135deg, rgba(243,210,27,.09), transparent 48%),
+        rgba(255,255,255,.05);
+      box-shadow:
+        0 0 0 3px rgba(243,210,27,.08),
+        0 18px 44px rgba(0,0,0,.30);
+      transform:translateY(-1px);
+    }
+
+    .search-shortcut{
+      position:absolute;
+      right:12px;
+      z-index:2;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      min-width:48px;
+      height:30px;
+      border:1px solid rgba(243,210,27,.18);
+      border-radius:999px;
+      background:rgba(0,0,0,.26);
+      color:rgba(255,255,255,.62);
+      font-size:12px;
+      font-weight:950;
+      letter-spacing:.02em;
+      pointer-events:none;
+    }
+
+    @media(max-width:760px){
+      .member-search-shell{
+        min-width:100%;
+      }
+
+      .member-search{
+        padding-right:64px;
+      }
+
+      .search-shortcut{
+        min-width:38px;
+      }
     }
 
     .members-grid{
@@ -491,7 +576,11 @@
         </div>
 
         <div class="member-tools">
-          <input id="memberSearch" class="member-search" placeholder="Mitglied suchen nach E-Mail, Rolle oder letzter Seite..." />
+          <div class="member-search-shell">
+            <span class="member-search-icon">⌕</span>
+            <input id="memberSearch" class="member-search" placeholder="Mitglied, Rolle oder Aktivität suchen" />
+            <span class="search-shortcut">⌘ K</span>
+          </div>
           <button class="btn primary" id="reloadMembersBtn">Neu laden</button>
         </div>
 
@@ -683,6 +772,13 @@
     });
 
     reloadMembersBtn.addEventListener("click", loadMembers);
+
+    document.addEventListener("keydown", event => {
+      if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k") {
+        event.preventDefault();
+        memberSearch.focus();
+      }
+    });
 
     loadMembers();
   </script>
