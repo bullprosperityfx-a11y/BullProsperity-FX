@@ -11,9 +11,30 @@
 <meta name="theme-color" content="#050505">
 
   <link rel="stylesheet" href="/theme.css" />
+  <link rel="stylesheet" href="/admin/admin.css" />
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="/supabase.js"></script>
   <script src="/login.js" defer></script>
+
+  <script>
+    (async () => {
+      try{
+        const res = await fetch("/api/access", {
+          credentials:"include",
+          cache:"no-store"
+        });
+
+        const data = await res.json();
+
+        if(data.role !== "admin"){
+          window.location.href = "/locked.html";
+        }
+
+      } catch(err){
+        window.location.href = "/locked.html";
+      }
+    })();
+  </script>
 
   <style>
     .admin-layout{
@@ -217,7 +238,7 @@
       .admin-sidebar{
         position:relative;
         top:0;
-      }
+              }
 
       .analytics-grid{
         grid-template-columns:1fr 1fr;
@@ -246,16 +267,19 @@
   </style>
 </head>
 
-<body>
+<body class="admin-page">
 <div class="page">
 
-  <nav class="navbar">
-    <a href="/admin/dashboard.html" class="logo">BullProsperity | Analytics</a>
+  <nav class="admin-topbar">
+    <a href="/admin/dashboard.html" class="admin-brand">BullProsperity Admin</a>
 
-    <div class="nav-links">
+    <div class="admin-toplinks">
       <a href="/hub.html">Hub</a>
-      <a href="/admin/dashboard.html">Dashboard</a>
-      <a href="/admin/members.html">Mitglieder</a>
+      <a href="/course.html">Course</a>
+      <a href="/tools.html">Tools</a>
+      <a href="/setup-room.html">Setup Room</a>
+      <a href="/community.html">Community</a>
+      <a href="/api/logout">Logout</a>
     </div>
   </nav>
 
@@ -276,34 +300,17 @@
     <aside class="admin-sidebar">
       <div class="badge">Verwaltung</div>
 
-      <h2 class="section-heading" style="font-size:34px;margin-bottom:8px;">
-        Control Center
-      </h2>
+      <h2 class="admin-sidebar-title">Control Center</h2>
 
       <div class="admin-nav">
-        <a href="/admin/dashboard.html" class="admin-link">
-          <span>📊 Dashboard</span>
-          <span>→</span>
-        </a>
-
-        <a href="/admin/members.html" class="admin-link">
-          <span>👥 Mitglieder</span>
-          <span>→</span>
-        </a>
-
-        <a href="/admin/course-analytics.html" class="admin-link active">
-          <span>🎬 Course Analytics</span>
-          <span>→</span>
-        </a>
-
-        <a href="/admin/sr-analytics.html" class="admin-link"><span>🎳 SR Analytics</span><span>→</span></a>
-
-        <a href="#" class="admin-link">
-          <span>💰 Affiliate Stats</span>
-          <span>→</span>
-        </a>
-
-        <a href="/admin/security.html" class="admin-link"><span>🛡 Security</span><span>→</span></a>
+        <a href="/admin/dashboard.html" class="admin-link"><span>📊 Dashboard</span><small>LIVE</small></a>
+        <a href="/admin/members.html" class="admin-link"><span>👥 Mitglieder</span><small>USER</small></a>
+        <a href="/admin/course-analytics.html" class="admin-link active"><span>🎬 Course Analytics</span><small>WATCH</small></a>
+        <a href="/admin/sr-analytics.html" class="admin-link"><span>🎯 Setup Room Analytics</span><small>SMC</small></a>
+        <a href="/admin/notifications.html" class="admin-link"><span>🔔 Notifications</span><small>PUSH</small></a>
+        <a href="/admin/security.html" class="admin-link"><span>🛡️ Security</span><small>ADMIN</small></a>
+        <a href="/admin/ai-journal.html" class="admin-link"><span>🧠 AI Journal</span><small>REVIEW</small></a>
+        <a href="/admin-signals.html" class="admin-link"><span>📡 Admin Signals</span><small>POST</small></a>
       </div>
     </aside>
 
@@ -471,7 +478,7 @@
 </div>
 
 <script>
-function formatSeconds(seconds){
+  function formatSeconds(seconds){
   const total = Number(seconds || 0);
   const h = Math.floor(total / 3600);
   const m = Math.floor((total % 3600) / 60);
@@ -711,7 +718,7 @@ async function loadCourseAnalytics(){
   if(!activities.length){
     feed.innerHTML = `<div class="empty-state">Noch keine Aktivität vorhanden.</div>`;
   } else {
-    activities.slice(0,12).forEach(item => {
+        activities.slice(0,12).forEach(item => {
       const date = item.created_at
         ? new Date(item.created_at).toLocaleString("de-DE", {
             day:"2-digit",
