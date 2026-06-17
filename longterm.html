@@ -11,38 +11,17 @@
   <link rel="stylesheet" href="theme.css" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <script src="/login.js" defer></script>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-  <script>
-    (async () => {
-      try {
-        const res = await fetch("/api/access", {
-          credentials: "include",
-          cache: "no-store"
-        });
-
-        const data = await res.json();
-
-        if (data.role !== "admin" && data.role !== "premium") {
-          window.location.href = "locked.html";
-        }
-      } catch {
-        window.location.href = "locked.html";
-      }
-    })();
-  </script>
 
   <style>
-    .longterm-page{
+    .longterm-sales-page{
       background:
-        linear-gradient(135deg, rgba(243,210,27,0.07), transparent 28%),
-        radial-gradient(circle at 82% 10%, rgba(255,255,255,0.055), transparent 22%),
-        radial-gradient(circle at 18% 28%, rgba(243,210,27,0.10), transparent 24%),
+        linear-gradient(135deg, rgba(243,210,27,0.075), transparent 30%),
+        radial-gradient(circle at 82% 12%, rgba(255,255,255,0.055), transparent 22%),
+        radial-gradient(circle at 16% 32%, rgba(243,210,27,0.11), transparent 24%),
         #050505;
     }
 
-    .longterm-page .navbar{
+    .longterm-sales-page .navbar{
       position:sticky;
       top:14px;
       z-index:50;
@@ -54,348 +33,277 @@
       box-shadow:0 18px 60px rgba(0,0,0,0.28);
     }
 
-    .longterm-page .hero-shell{
+    .longterm-sales-page .logo,
+    .longterm-sales-page .section-heading{
+      letter-spacing:0;
+    }
+
+    .sales-hero{
       margin-top:14px;
-      padding:40px;
+      padding:42px;
+      border:1px solid rgba(243,210,27,0.16);
       border-radius:34px;
       background:
-        linear-gradient(145deg, rgba(255,255,255,0.052), transparent 38%),
-        radial-gradient(circle at 76% 20%, rgba(243,210,27,0.15), transparent 31%),
+        linear-gradient(145deg, rgba(255,255,255,0.052), transparent 40%),
+        radial-gradient(circle at 78% 22%, rgba(243,210,27,0.16), transparent 32%),
         linear-gradient(180deg, rgba(18,18,18,0.92), rgba(5,5,5,0.98));
-      overflow:hidden;
-    }
-
-    .longterm-page .hero-title{
-      max-width:1050px;
-      font-size:clamp(44px, 5vw, 74px);
-      letter-spacing:0;
-      line-height:.92;
-    }
-
-    .longterm-page .section-heading,
-    .longterm-page .logo{
-      letter-spacing:0;
-    }
-
-    .longterm-page .section-card,
-    .longterm-page .card,
-    .lt-panel{
-      border:1px solid rgba(243,210,27,0.16);
-      border-radius:26px;
-      background:
-        linear-gradient(145deg, rgba(255,255,255,0.034), transparent 44%),
-        linear-gradient(180deg, rgba(17,17,17,0.90), rgba(7,7,7,0.96));
       box-shadow:
         inset 0 0 0 1px rgba(255,255,255,0.025),
-        0 22px 58px rgba(0,0,0,0.28);
+        0 22px 60px rgba(0,0,0,0.30);
+      overflow:hidden;
+      position:relative;
     }
 
-    .lt-command{
-      display:grid;
-      grid-template-columns:repeat(4, 1fr);
+    .sales-hero::after{
+      content:"";
+      position:absolute;
+      left:0;
+      right:0;
+      bottom:0;
+      height:1px;
+      background:linear-gradient(90deg, transparent, rgba(243,210,27,0.82), transparent);
+      opacity:.65;
+    }
+
+    .sales-title{
+      max-width:1080px;
+      margin:0;
+      color:#fff;
+      font-size:clamp(44px, 5.2vw, 78px);
+      line-height:.92;
+      font-weight:950;
+      letter-spacing:0;
+    }
+
+    .sales-title .gold{
+      color:var(--gold);
+    }
+
+    .sales-sub{
+      max-width:920px;
+      margin:20px 0 0;
+      color:#ededed;
+      font-size:17px;
+      font-weight:700;
+      line-height:1.7;
+    }
+
+    .sales-actions{
+      display:flex;
+      flex-wrap:wrap;
       gap:14px;
       margin-top:26px;
     }
 
-    .lt-command-item{
-      border:1px solid rgba(243,210,27,0.13);
-      border-radius:20px;
-      background:rgba(255,255,255,0.025);
+    .sales-proof{
+      margin-top:20px;
+      color:#a8a8a8;
+      font-size:13px;
+      font-weight:800;
+      line-height:1.6;
+    }
+
+    .sales-stats{
+      display:grid;
+      grid-template-columns:repeat(4, 1fr);
+      gap:14px;
+      margin-top:28px;
+      position:relative;
+      z-index:2;
+    }
+
+    .sales-stat,
+    .sales-card,
+    .sales-panel,
+    .sales-price-card,
+    .sales-faq-item{
+      border:1px solid rgba(243,210,27,0.15);
+      border-radius:24px;
+      background:
+        linear-gradient(145deg, rgba(255,255,255,0.034), transparent 44%),
+        linear-gradient(180deg, rgba(17,17,17,0.90), rgba(7,7,7,0.96));
+      box-shadow:
+        inset 0 0 0 1px rgba(255,255,255,0.022),
+        0 20px 54px rgba(0,0,0,0.25);
+    }
+
+    .sales-stat{
       padding:17px;
     }
 
-    .lt-command-label{
+    .sales-stat-label{
       color:#9f9f9f;
       font-size:12px;
-      font-weight:800;
+      font-weight:850;
       text-transform:uppercase;
       letter-spacing:.08em;
       margin-bottom:8px;
     }
 
-    .lt-command-value{
-      color:#fff;
-      font-size:22px;
+    .sales-stat-value{
+      color:var(--gold);
+      font-size:28px;
       font-weight:950;
-      line-height:1.1;
+      line-height:1;
     }
 
-    .lt-command-sub{
-      color:#cfcfcf;
-      font-size:13px;
-      font-weight:700;
-      line-height:1.45;
+    .sales-stat-sub{
       margin-top:8px;
+      color:#cfcfcf;
+      font-size:12px;
+      font-weight:750;
+      line-height:1.45;
     }
 
-    .lt-grid{
+    .sales-shell{
       display:grid;
-      grid-template-columns:1.04fr .96fr;
+      gap:28px;
+      margin-top:28px;
+    }
+
+    .sales-grid-4,
+    .sales-grid-3,
+    .sales-market-grid{
+      display:grid;
+      gap:18px;
+    }
+
+    .sales-grid-4{
+      grid-template-columns:repeat(4, 1fr);
+    }
+
+    .sales-grid-3{
+      grid-template-columns:repeat(3, 1fr);
+    }
+
+    .sales-grid-2,
+    .sales-price-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
       gap:22px;
       align-items:stretch;
     }
 
-    .lt-panel{
-      padding:26px;
-      position:relative;
-      overflow:hidden;
-    }
-
-    .lt-panel::before{
-      content:"";
-      position:absolute;
-      right:-140px;
-      top:-160px;
-      width:320px;
-      height:320px;
-      background:radial-gradient(circle, rgba(243,210,27,0.10), transparent 70%);
-      pointer-events:none;
-    }
-
-    .allocation-premium{
-      display:grid;
-      gap:13px;
-      margin-top:22px;
-      position:relative;
-      z-index:2;
-    }
-
-    .allocation-row{
-      display:grid;
-      grid-template-columns:1fr 112px;
-      gap:14px;
-      align-items:center;
-      border:1px solid rgba(243,210,27,0.14);
-      background:linear-gradient(180deg, rgba(255,255,255,0.035), rgba(255,255,255,0.014));
-      border-radius:18px;
-      padding:14px 16px;
-    }
-
-    .allocation-left{
-      display:flex;
-      flex-direction:column;
-      gap:4px;
-    }
-
-    .allocation-left strong{
-      color:#fff;
-      font-size:15px;
-      font-weight:950;
-    }
-
-    .allocation-left span{
-      color:#a8a8a8;
-      font-size:12px;
-      font-weight:700;
-      line-height:1.4;
-    }
-
-    .allocation-row input,
-    .lt-field input{
-      width:100%;
-      border:none;
-      outline:none;
-      border-radius:15px;
-      background:rgba(0,0,0,0.34);
-      border:1px solid rgba(243,210,27,0.18);
-      color:#fff;
-      padding:13px 12px;
-      font-weight:900;
-    }
-
-    .allocation-row input{
-      color:var(--gold);
-      font-size:18px;
-      text-align:center;
-    }
-
-    .allocation-row input:focus,
-    .lt-field input:focus{
-      border-color:rgba(243,210,27,0.58);
-      box-shadow:0 0 0 3px rgba(243,210,27,0.08);
-    }
-
-    .chart-card{
-      min-height:456px;
-      display:flex;
-            flex-direction:column;
-      align-items:center;
-      justify-content:center;
-      text-align:center;
-    }
-
-    .chart-wrap{
-      width:min(370px, 100%);
-      height:330px;
-      margin:4px auto 0;
-      position:relative;
-      z-index:2;
-    }
-
-    .allocation-total{
+    .sales-market-grid{
+      grid-template-columns:repeat(5, 1fr);
       margin-top:18px;
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      padding:10px 16px;
-      border-radius:999px;
-      border:1px solid rgba(243,210,27,0.22);
-      background:rgba(243,210,27,0.06);
-      color:var(--gold);
-      font-size:14px;
-      font-weight:950;
-      position:relative;
-      z-index:2;
     }
 
-    .lt-video-grid,
-    .lt-market-grid,
-    .lt-broker-grid{
-      display:grid;
-      grid-template-columns:repeat(3, 1fr);
-      gap:18px;
-    }
-
-    .lt-video,
-    .lt-card{
-      border:1px solid rgba(243,210,27,0.14);
-      border-radius:22px;
-      background:
-        linear-gradient(145deg, rgba(255,255,255,0.035), transparent 44%),
-        rgba(8,8,8,0.86);
-      padding:20px;
+    .sales-card,
+    .sales-panel,
+    .sales-price-card{
+      padding:24px;
       min-height:100%;
     }
 
-    .lt-video{
-      min-height:184px;
-      display:flex;
-      flex-direction:column;
-      justify-content:space-between;
-      gap:16px;
-    }
-
-    .video-top{
-      width:48px;
-      height:48px;
-      border-radius:16px;
-      display:grid;
-      place-items:center;
-      border:1px solid rgba(243,210,27,0.18);
-      background:rgba(243,210,27,0.06);
-      color:var(--gold);
-      font-size:22px;
-      font-weight:950;
-    }
-
-    .lt-video strong,
-    .lt-card h3{
+    .sales-card h3,
+    .sales-faq-item h3{
       color:#fff;
       font-size:22px;
       line-height:1.15;
       font-weight:950;
-      margin:0;
+      margin:0 0 10px;
     }
 
-    .lt-video span,
-    .lt-card p{
-      color:#d8d8d8;
-      font-size:14px;
-      font-weight:700;
-      line-height:1.6;
-      margin:0;
-    }
-
-    .lt-card h3{
-      color:var(--gold);
-      margin-bottom:9px;
-    }
-
-    .lt-form{
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:14px;
-      margin-top:20px;
-    }
-
-    .lt-field{
-      display:flex;
-      flex-direction:column;
-      gap:8px;
-    }
-
-    .lt-field label{
-      color:#f5f5f5;
-      font-size:14px;
-      font-weight:850;
-    }
-
-    .lt-field input{
+    .sales-panel h2,
+    .sales-price-card h2,
+    .sales-final h2{
+            margin:0 0 12px;
       color:#fff;
+      font-size:clamp(28px, 3vw, 42px);
+      line-height:1.05;
+      font-weight:950;
+      letter-spacing:0;
+    }
+
+    .sales-card p,
+    .sales-panel p,
+    .sales-price-card p,
+    .sales-faq-item p,
+    .sales-final p{
+      margin:0;
+      color:#dedede;
       font-size:15px;
-      padding:15px 16px;
+      font-weight:700;
+      line-height:1.7;
     }
 
-    .lt-actions{
-      display:flex;
+    .sales-list{
+      display:grid;
       gap:12px;
-      flex-wrap:wrap;
       margin-top:18px;
     }
 
-    .result-box{
+    .sales-list-item,
+    .sales-market{
+      border:1px solid rgba(243,210,27,0.13);
+      border-radius:18px;
+      background:rgba(255,255,255,0.024);
+      color:#fff;
+      padding:15px 16px;
+      font-size:14px;
+      font-weight:750;
+      line-height:1.55;
+    }
+
+    .sales-list-item strong,
+    .sales-market strong{
+      color:var(--gold);
+    }
+
+    .sales-market strong{
+      display:block;
+      margin-bottom:7px;
+      font-size:15px;
+    }
+
+    .sales-market span{
+      display:block;
+      color:#d8d8d8;
+      font-size:13px;
+      line-height:1.5;
+      font-weight:700;
+    }
+
+    .sales-price{
+      margin:10px 0 10px;
+      color:var(--gold);
+      font-size:42px;
+      font-weight:950;
+      line-height:1;
+    }
+
+    .sales-note{
+      margin-top:14px;
+      color:#a8a8a8;
+      font-size:13px;
+      font-weight:750;
+      line-height:1.65;
+    }
+
+    .sales-faq{
+      display:grid;
+      gap:14px;
       margin-top:18px;
-      border:1px solid rgba(243,210,27,0.18);
-      border-radius:22px;
-      background:rgba(243,210,27,0.05);
+    }
+
+    .sales-faq-item{
       padding:18px;
     }
 
-    .result-big{
-      color:var(--gold);
-      font-size:34px;
-      font-weight:950;
-      margin-top:4px;
-      line-height:1.1;
+    .sales-final{
+      text-align:center;
+      border:1px solid rgba(243,210,27,0.16);
+      border-radius:28px;
+      padding:34px 24px;
+      background:
+        radial-gradient(circle at 50% 0%, rgba(243,210,27,0.12), transparent 34%),
+        linear-gradient(180deg, rgba(17,17,17,0.90), rgba(7,7,7,0.96));
     }
 
-    .market-list{
-      display:grid;
-      gap:10px;
-      margin-top:14px;
-    }
-
-    .market-item{
-      display:flex;
-      justify-content:space-between;
-      gap:12px;
-      align-items:center;
-      border:1px solid rgba(255,255,255,0.08);
-      background:rgba(255,255,255,0.024);
-      border-radius:16px;
-      padding:12px 14px;
-    }
-
-    .market-item strong{
-      color:#fff;
-      font-size:14px;
-      font-weight:900;
-    }
-
-    .market-item span{
-      color:var(--gold);
-      font-size:12px;
-      font-weight:900;
-    }
-
-    .mini-note{
-      margin-top:18px;
-      color:#a8a8a8;
-      font-size:12px;
-      line-height:1.7;
-      font-weight:700;
-      position:relative;
-      z-index:2;
+    .sales-final p{
+      max-width:820px;
+      margin:0 auto;
     }
 
     .footer-clean{
@@ -419,42 +327,38 @@
     }
 
     @media(max-width:1100px){
-      .lt-grid,
-      .lt-video-grid,
-      .lt-market-grid,
-      .lt-broker-grid,
-      .lt-command{
+      .sales-grid-4,
+      .sales-grid-3,
+      .sales-market-grid,
+      .sales-price-grid,
+      .sales-grid-2,
+      .sales-stats{
         grid-template-columns:1fr 1fr;
       }
     }
 
-    @media(max-width:760px){
-      .longterm-page .hero-shell{
-        padding:28px 22px;
+    @media(max-width:780px){
+      .sales-hero{
+        padding:30px 22px;
       }
 
-      .lt-grid,
-      .lt-video-grid,
-      .lt-market-grid,
-      .lt-broker-grid,
-      .lt-command,
-            .lt-form,
-      .allocation-row{
+      .sales-grid-4,
+      .sales-grid-3,
+      .sales-market-grid,
+      .sales-price-grid,
+      .sales-grid-2,
+      .sales-stats{
         grid-template-columns:1fr;
       }
 
-      .chart-card{
-        min-height:380px;
-      }
-
-      .chart-wrap{
-        height:280px;
+      .sales-price{
+        font-size:34px;
       }
     }
   </style>
 </head>
 
-<body class="longterm-page">
+<body class="longterm-sales-page">
   <div class="page">
     <nav class="navbar">
       <a href="index.html" class="logo">BullProsperity</a>
@@ -465,407 +369,250 @@
         <a href="tools.html">Tools</a>
         <a href="setup-room.html">Setup Room</a>
         <a href="community.html">Community</a>
-        <a id="loginNavBtn" href="/api/whop/login">Login</a>
-        <a id="logoutBtn" href="/api/logout" class="logout-btn" style="display:none;">Logout</a>
-        <div id="authBadge" class="auth-badge status-loading" style="display:none;">Zugang</div>
+        <a href="longterm-sales.html" class="active">Longterm</a>
+        <a href="/api/whop/login">Login</a>
       </div>
     </nav>
 
-    <section class="hero-shell">
-      <div class="badge">Longterm Pro</div>
-      <h1 class="hero-title">BullProsperity <span class="gold">Wealth System</span></h1>
-      <p class="hero-text">
-        Strukturiere deinen langfristigen Vermoegensaufbau mit ETFs, Aktien, Crypto und Rohstoffen.
-        Plane deine Allocation, simuliere Zinseszins und halte deine Investment-Entscheidungen sauber fest.
+    <section class="sales-hero">
+      <div class="badge">BullProsperity Longterm Pro</div>
+      <h1 class="sales-title">
+        Langfristiger <span class="gold">Vermögensaufbau</span> als Premium-Modul.
+      </h1>
+      <p class="sales-sub">
+        Longterm Pro erweitert BullProsperity um eine hochwertige Investment-Unterseite
+        mit ETFs, Crypto, Indices, bekannten Aktien, Rohstoffen, Portfolio Tracker,
+        DCA Rechner und Investment Journal - alles im cleanen Plattform-Design.
       </p>
-      <div class="hero-buttons">
-        <a href="#compound" class="btn primary">Compound Rechner</a>
-        <a href="#broker" class="btn secondary">Plattformen ansehen</a>
+
+      <div class="sales-actions">
+        <a href="https://whop.com/bullprosperity-fx/longterm" class="btn primary">Jetzt freischalten</a>
+        <a href="#features" class="btn secondary">Features ansehen</a>
       </div>
 
-      <div class="lt-command">
-        <div class="lt-command-item">
-          <div class="lt-command-label">Core</div>
-          <div class="lt-command-value">ETFs</div>
-          <div class="lt-command-sub">Ruhiger Aufbau mit breiter Streuung.</div>
-        </div>
-        <div class="lt-command-item">
-          <div class="lt-command-label">Growth</div>
-          <div class="lt-command-value">Aktien</div>
-          <div class="lt-command-sub">Qualitaet, Momentum und klare These.</div>
-        </div>
-        <div class="lt-command-item">
-          <div class="lt-command-label">Digital</div>
-          <div class="lt-command-value">Crypto</div>
-          <div class="lt-command-sub">BTC, ETH und strukturierter DCA.</div>
-        </div>
-        <div class="lt-command-item">
-          <div class="lt-command-label">Hedge</div>
-          <div class="lt-command-value">Gold</div>
-          <div class="lt-command-sub">Defensive Komponente im Portfolio.</div>
-        </div>
+      <div class="sales-proof">
+        Educational only. Keine Finanzberatung. Entwickelt als ruhige Ergänzung zu deinem BullProsperity System.
       </div>
-    </section>
 
-    <section class="section">
-      <div class="lt-video-grid">
-        <div class="lt-video">
-          <div class="video-top">01</div>
-          <strong>Langfristig investieren</strong>
-          <span>Warum Geduld, Wiederholung und klare Regeln wichtiger sind als spontane Marktmeinungen.</span>
+      <div class="sales-stats">
+        <div class="sales-stat">
+          <div class="sales-stat-label">Asset Klassen</div>
+          <div class="sales-stat-value">5</div>
+          <div class="sales-stat-sub">ETFs, Crypto, Indices, Aktien und Rohstoffe.</div>
         </div>
-        <div class="lt-video">
-          <div class="video-top">02</div>
-          <strong>Asset Klassen verstehen</strong>
-          <span>ETFs, Aktien, Crypto und Rohstoffe sauber einordnen, statt alles in einen Topf zu werfen.</span>
+        <div class="sales-stat">
+          <div class="sales-stat-label">Premium Tools</div>
+          <div class="sales-stat-value">4</div>
+          <div class="sales-stat-sub">Watchlist, Portfolio, DCA und Journal.</div>
         </div>
-        <div class="lt-video">
-          <div class="video-top">03</div>
-          <strong>Portfolio Disziplin</strong>
-          <span>DCA, Rebalancing und Investment Journal als feste Routine fuer langfristige Klarheit.</span>
+        <div class="sales-stat">
+          <div class="sales-stat-label">Modus</div>
+          <div class="sales-stat-value">Pro</div>
+          <div class="sales-stat-sub">Eigene Unterseite im Mitgliederbereich.</div>
+        </div>
+        <div class="sales-stat">
+          <div class="sales-stat-label">Fokus</div>
+          <div class="sales-stat-value">Longterm</div>
+          <div class="sales-stat-sub">Struktur statt Hektik.</div>
         </div>
       </div>
     </section>
+        <div class="sales-shell">
+      <section class="sales-grid-4" id="features">
+        <div class="sales-card">
+          <div class="badge">Feature</div>
+          <h3>Pro Watchlist</h3>
+          <p>Filterbare Marktübersicht mit ETFs, Crypto, Indices, bekannten Aktien und Rohstoffen.</p>
+        </div>
+        <div class="sales-card">
+          <div class="badge">Feature</div>
+          <h3>Portfolio Tracker</h3>
+          <p>Dokumentiere Ideen, Kategorien, Aufbaupläne und deine Longterm-Gewichtung sauber.</p>
+        </div>
+        <div class="sales-card">
+          <div class="badge">Feature</div>
+          <h3>DCA Rechner</h3>
+          <p>Simuliere regelmäßigen Aufbau über Monate und Jahre mit optionaler Rendite-Annahme.</p>
+        </div>
+        <div class="sales-card">
+          <div class="badge">Feature</div>
+          <h3>Investment Journal</h3>
+          <p>Halte fest, warum du ein Asset beobachtest und welche langfristige These dahintersteht.</p>
+        </div>
+      </section>
 
-    <section class="section lt-grid">
-      <div class="lt-panel">
-        <div class="badge">Portfolio Allocation</div>
-        <h2 class="section-heading" style="font-size:36px;margin-bottom:10px;">Investment Aufteilung</h2>
-        <p class="section-subtext" style="margin-bottom:0;">
-          Passe deine Gewichtung an und baue eine Longterm-Struktur, die zu deinem Risiko und deiner Strategie passt.
+      <section class="sales-grid-2">
+        <div class="sales-panel">
+          <div class="badge">Warum Longterm Pro?</div>
+          <h2>Nicht nur traden. Auch systematisch aufbauen.</h2>
+          <p>
+            Viele fokussieren sich nur auf kurzfristige Setups. Longterm Pro gibt deinem
+            BullProsperity System eine langfristige Ebene mit mehr Ruhe, mehr Struktur
+            und einem klareren Gesamtbild für Kapitalaufbau.
+          </p>
+
+          <div class="sales-list">
+            <div class="sales-list-item"><strong>Trading</strong> kann Chancen liefern, Longterm schafft Stabilität.</div>
+            <div class="sales-list-item"><strong>Struktur</strong> hilft dir, weniger impulsiv und wiederholbarer zu handeln.</div>
+            <div class="sales-list-item"><strong>Geduld</strong> wird zu einer Stärke, statt nur auf Bewegung zu reagieren.</div>
+            <div class="sales-list-item"><strong>BullProsperity</strong> wird damit zu einem ganzheitlicheren System.</div>
+          </div>
+        </div>
+
+        <div class="sales-panel">
+          <div class="badge">Für wen das ist</div>
+          <h2>Passt perfekt, wenn du langfristig klarer denken willst.</h2>
+
+          <div class="sales-list">
+            <div class="sales-list-item">Du willst neben Trading auch langfristig Vermögen aufbauen.</div>
+            <div class="sales-list-item">Du willst ETFs, Aktien, Crypto und Rohstoffe in einer klaren Struktur sehen.</div>
+            <div class="sales-list-item">Du willst eine Premium-Unterseite, die optisch zur Plattform passt.</div>
+            <div class="sales-list-item">Du willst nicht nur aktiv traden, sondern nachhaltiger planen.</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="sales-panel">
+        <div class="badge">Asset Klassen</div>
+        <h2>Diese Bereiche sind im Modul enthalten.</h2>
+        <p>
+          Longterm Pro ist nicht nur ein Chart-Bereich, sondern eine strukturierte Investment-Unterseite
+          mit mehreren Klassen und bekannten Longterm-Märkten.
         </p>
 
-        <div class="allocation-premium">
-          <div class="allocation-row">
-            <div class="allocation-left">
-              <strong>ETFs</strong>
-              <span>Core Portfolio / breite Stabilitaet</span>
-            </div>
-            <input id="etfAlloc" type="number" value="40">
+        <div class="sales-market-grid">
+          <div class="sales-market">
+            <strong>ETFs</strong>
+            <span>MSCI World, S&P 500, NASDAQ 100 und breite Marktteilnahme als langfristige Basis.</span>
+          </div>
+          <div class="sales-market">
+            <strong>Crypto</strong>
+            <span>Bitcoin und Ethereum als bekannte Longterm-Märkte mit Wachstumskomponente.</span>
+          </div>
+          <div class="sales-market">
+            <strong>Indices</strong>
+            <span>S&P 500 und Nasdaq für Makro-Struktur und Gesamtmarkt-Kontext.</span>
+          </div>
+          <div class="sales-market">
+            <strong>Aktien</strong>
+            <span>NVIDIA, Apple, Microsoft, Amazon, Tesla, Meta und weitere bekannte Namen.</span>
+          </div>
+          <div class="sales-market">
+            <strong>Rohstoffe</strong>
+            <span>Gold, Silber und Commodity Exposure als defensive Beimischung.</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="sales-grid-3">
+        <div class="sales-card">
+          <div class="badge">Design</div>
+          <h3>Eigene Unterseite</h3>
+          <p>Longterm Pro fühlt sich wie ein echter Premium-Bereich an, nicht wie ein angehängtes Extra.</p>
+        </div>
+        <div class="sales-card">
+          <div class="badge">Struktur</div>
+          <h3>Saubere Navigation</h3>
+          <p>Im Hub leicht auffindbar und direkt erreichbar als klarer BullProsperity Bereich.</p>
+        </div>
+        <div class="sales-card">
+          <div class="badge">Erlebnis</div>
+          <h3>Mehr Wert pro Nutzer</h3>
+          <p>Das Modul macht dein Angebot größer, attraktiver und wertiger für Mitglieder und Upsells.</p>
+        </div>
+      </section>
+
+      <section class="sales-price-grid">
+        <div class="sales-price-card">
+          <div class="badge">Was du freischaltest</div>
+          <h2>Longterm Pro Access</h2>
+          <div class="sales-price">Premium Modul</div>
+          <p>
+            Schalte eine eigenständige Investment-Unterseite innerhalb von BullProsperity frei
+            und erweitere dein System um langfristigen Vermögensaufbau.
+          </p>
+
+          <div class="sales-list">
+            <div class="sales-list-item">Pro Watchlist mit Kategorien</div>
+            <div class="sales-list-item">Bekannte Aktien wie NVIDIA, Apple, Microsoft, Amazon, Tesla und Meta</div>
+            <div class="sales-list-item">Portfolio Tracker im Plattform-Stil</div>
+            <div class="sales-list-item">DCA Rechner für strukturierten Aufbau</div>
+            <div class="sales-list-item">Investment Journal für deine These</div>
           </div>
 
-          <div class="allocation-row">
-            <div class="allocation-left">
-              <strong>Aktien</strong>
-              <span>Einzelwerte / Quality & Growth</span>
-            </div>
-            <input id="stockAlloc" type="number" value="25">
-          </div>
-
-          <div class="allocation-row">
-            <div class="allocation-left">
-              <strong>Crypto</strong>
-              <span>BTC, ETH & digitale Assets</span>
-            </div>
-            <input id="cryptoAlloc" type="number" value="20">
-          </div>
-
-          <div class="allocation-row">
-            <div class="allocation-left">
-              <strong>Rohstoffe</strong>
-              <span>Gold, Silber & Commodity Exposure</span>
-            </div>
-            <input id="commodityAlloc" type="number" value="15">
+          <div class="sales-note">
+            Zugang erfolgt über Whop. Danach wird der Bereich direkt im Hub bzw. über die Longterm Unterseite nutzbar.
           </div>
         </div>
 
-        <div class="lt-actions">
-          <button class="btn primary" id="updateAllocationBtn">Diagramm aktualisieren</button>
-        </div>
-      </div>
+        <div class="sales-price-card">
+          <div class="badge">Jetzt starten</div>
+          <h2>Mach BullProsperity noch runder.</h2>
+          <p>
+            Wenn BullProsperity mehr als nur eine Trading-Plattform sein soll,
+            ist Longterm Pro der logische nächste Schritt.
+          </p>
 
-      <div class="lt-panel chart-card">
-        <div class="badge">Diagramm</div>
-        <h2 class="section-heading" style="font-size:32px;margin-bottom:14px;">Portfolio Übersicht</h2>
-        <div class="chart-wrap">
-          <canvas id="allocationChart"></canvas>
-        </div>
-        <div class="allocation-total" id="allocationTotal">Gesamt: 100%</div>
-      </div>
-    </section>
+          <div class="sales-actions">
+            <a href="https://whop.com/bullprosperity-fx/longterm" class="btn primary">Jetzt freischalten</a>
+            <a href="hub.html" class="btn secondary">Zurück zum Hub</a>
+          </div>
 
-    <section class="section" id="compound">
-      <div class="lt-panel">
-        <div class="badge">Compound Rechner</div>
-        <h2 class="section-heading" style="font-size:36px;margin-bottom:10px;">Zinseszins berechnen</h2>
-        <p class="section-subtext" style="margin-bottom:0;">
-          Simuliere, wie sich Startkapital, monatliche Sparrate und Rendite ueber Jahre entwickeln koennen.
+          <div class="sales-note">
+            Ideal als Ergänzung zu deinem Hub, deinem Trading Workflow und deiner gesamten Markenwirkung.
+          </div>
+        </div>
+      </section>
+
+      <section class="sales-panel">
+        <div class="badge">FAQ</div>
+        <h2>Häufige Fragen</h2>
+
+        <div class="sales-faq">
+          <div class="sales-faq-item">
+            <h3>Ist Longterm Pro statt Trading gedacht?</h3>
+            <p>Nein. Es ist als Ergänzung gedacht: Trading für Aktivität, Longterm für Struktur und Vermögensaufbau.</p>
+          </div>
+          <div class="sales-faq-item">
+            <h3>Welche Märkte sind enthalten?</h3>
+            <p>ETFs, Crypto, Indices, bekannte Aktien und Rohstoffe innerhalb einer Pro Watchlist mit Kategorien.</p>
+          </div>
+          <div class="sales-faq-item">
+            <h3>Ist das Finanzberatung?</h3>
+            <p>Nein. BullProsperity dient ausschließlich Bildungszwecken. Das Modul vermittelt Struktur, Denkweise und Systeme.</p>
+          </div>
+          <div class="sales-faq-item">
+            <h3>Wie bekomme ich Zugriff?</h3>
+            <p>Nach der Freischaltung über Whop kannst du Longterm Pro direkt über deinen Hub und die Unterseite öffnen.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="sales-final">
+        <div class="badge">BullProsperity Premium Erweiterung</div>
+        <h2>Weniger Hektik. Mehr Struktur. Mehr Perspektive.</h2>
+        <p>
+          Longterm Pro bringt eine hochwertige Investment-Ebene in deine Plattform
+          und macht BullProsperity größer, runder und wertiger.
         </p>
 
-        <div class="lt-form">
-          <div class="lt-field">
-            <label>Startkapital EUR</label>
-            <input id="startCapital" type="number" value="1000">
-          </div>
-
-          <div class="lt-field">
-            <label>Monatliche Sparrate EUR</label>
-            <input id="monthlyRate" type="number" value="250">
-          </div>
-
-          <div class="lt-field">
-            <label>Jahre</label>
-            <input id="years" type="number" value="15">
-          </div>
-
-          <div class="lt-field">
-            <label>Erwartete Rendite % p.a.</label>
-            <input id="returnRate" type="number" value="7">
-          </div>
+        <div class="sales-actions" style="justify-content:center;">
+          <a href="https://whop.com/bullprosperity-fx/longterm" class="btn primary">Jetzt Zugang sichern</a>
+          <a href="longterm.html" class="btn secondary">Longterm ansehen</a>
         </div>
+      </section>
 
-        <div class="lt-actions">
-          <button class="btn primary" id="calcCompoundBtn">Berechnen</button>
+      <footer class="footer-clean">
+        <div>
+          <strong>BullProsperity</strong> dient ausschließlich Bildungszwecken und ersetzt keine Anlageberatung.
         </div>
-
-        <div class="result-box">
-          <div class="badge">Ergebnis</div>
-          <div class="result-big" id="compoundResult">0 EUR</div>
-          <p class="section-subtext" id="compoundText" style="margin:8px 0 0;">Berechnung erscheint hier.</p>
+        <div>
+          <a href="impressum.html">Impressum</a>
+          <a href="datenschutz.html">Datenschutz</a>
+          <a href="risikohinweis.html">Risikohinweis</a>
         </div>
-      </div>
-    </section>
-
-    <section class="section" id="broker">
-      <div class="lt-panel">
-        <div class="badge">Investment Infrastruktur</div>
-        <h2 class="section-heading" style="font-size:36px;margin-bottom:10px;">Plattformen & Kontoeröffnung</h2>
-        <p class="section-subtext" style="margin-bottom:0;">
-          Waehle je nach Anlageklasse die passende Plattform fuer deinen langfristigen Aufbau.
-        </p>
-
-        <div class="lt-broker-grid">
-          <div class="lt-card">
-            <h3>ETFs & Aktien</h3>
-            <p>Fuer Sparplaene, Einzelaktien und langfristige Portfolio-Struktur.</p>
-            <div class="lt-actions">
-              <a href="https://refnocode.trade.re/mgjhkl96" target="_blank" class="btn primary">Trade Republic</a>
-              <a href="https://de.scalable.capital/einladung/bnrfbr" target="_blank" class="btn secondary">Scalable</a>
-            </div>
-          </div>
-
-          <div class="lt-card">
-            <h3>Crypto</h3>
-            <p>Fuer Bitcoin, Ethereum und langfristige Crypto-Positionen mit klarer DCA-Struktur.</p>
-            <div class="lt-actions">
-              <a href="https://crypto.com/app/8b84znu244" target="_blank" class="btn primary">Crypto.com</a>
-            </div>
-          </div>
-
-          <div class="lt-card">
-            <h3>Rohstoffe</h3>
-            <p>Gold, Silber und weitere Rohstoffe als ruhige Beimischung innerhalb deiner Struktur.</p>
-            <div class="lt-actions">
-              <a href="broker.html" class="btn secondary">Broker Setup öffnen</a>
-            </div>
-                      </div>
-        </div>
-
-        <div class="mini-note">
-          Hinweis: BullProsperity dient Bildungszwecken. Investments und Trading beinhalten Risiken.
-        </div>
-      </div>
-    </section>
-
-    <section class="section">
-      <div class="lt-market-grid">
-        <div class="lt-card">
-          <h3>ETFs</h3>
-          <div class="market-list">
-            <div class="market-item"><strong>MSCI World</strong><span>Core</span></div>
-            <div class="market-item"><strong>S&P 500</strong><span>USA</span></div>
-            <div class="market-item"><strong>NASDAQ 100</strong><span>Tech</span></div>
-            <div class="market-item"><strong>Emerging Markets</strong><span>Growth</span></div>
-          </div>
-        </div>
-
-        <div class="lt-card">
-          <h3>Aktien</h3>
-          <div class="market-list">
-            <div class="market-item"><strong>NVIDIA</strong><span>AI</span></div>
-            <div class="market-item"><strong>Apple</strong><span>Quality</span></div>
-            <div class="market-item"><strong>Microsoft</strong><span>Software</span></div>
-            <div class="market-item"><strong>Tesla</strong><span>Growth</span></div>
-          </div>
-        </div>
-
-        <div class="lt-card">
-          <h3>Crypto</h3>
-          <div class="market-list">
-            <div class="market-item"><strong>Bitcoin</strong><span>BTC</span></div>
-            <div class="market-item"><strong>Ethereum</strong><span>ETH</span></div>
-            <div class="market-item"><strong>Solana</strong><span>SOL</span></div>
-            <div class="market-item"><strong>Crypto Basket</strong><span>DCA</span></div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <footer class="footer-clean">
-      <div>
-        <strong>BullProsperity</strong> dient ausschliesslich Bildungszwecken und ersetzt keine Anlageberatung.
-      </div>
-      <div>
-        <a href="impressum.html">Impressum</a>
-        <a href="datenschutz.html">Datenschutz</a>
-        <a href="risikohinweis.html">Risikohinweis</a>
-      </div>
-    </footer>
+      </footer>
+    </div>
   </div>
-
-  <script>
-    const etfAlloc = document.getElementById("etfAlloc");
-    const stockAlloc = document.getElementById("stockAlloc");
-    const cryptoAlloc = document.getElementById("cryptoAlloc");
-    const commodityAlloc = document.getElementById("commodityAlloc");
-    const updateAllocationBtn = document.getElementById("updateAllocationBtn");
-    const allocationTotal = document.getElementById("allocationTotal");
-
-    const startCapital = document.getElementById("startCapital");
-    const monthlyRate = document.getElementById("monthlyRate");
-    const years = document.getElementById("years");
-    const returnRate = document.getElementById("returnRate");
-    const calcCompoundBtn = document.getElementById("calcCompoundBtn");
-    const compoundResult = document.getElementById("compoundResult");
-    const compoundText = document.getElementById("compoundText");
-
-    function money(value){
-      return new Intl.NumberFormat("de-DE", {
-        style:"currency",
-        currency:"EUR"
-      }).format(Number(value || 0));
-    }
-
-    const chartCtx = document.getElementById("allocationChart");
-
-    const allocationChart = new Chart(chartCtx, {
-      type: "doughnut",
-      data: {
-        labels: ["ETFs", "Aktien", "Crypto", "Rohstoffe"],
-        datasets: [{
-          data: [40, 25, 20, 15],
-          backgroundColor: [
-            "#f3d21b",
-            "#ffffff",
-            "#2bbf78",
-            "#8b8b8b"
-          ],
-          borderColor: "#080808",
-          borderWidth: 4,
-          hoverOffset: 10
-        }]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        cutout: "72%",
-        plugins: {
-          legend: {
-            position: "bottom",
-            labels: {
-              color: "#ffffff",
-              usePointStyle: true,
-              pointStyle: "circle",
-              padding: 18,
-              font: {
-                weight: "bold",
-                size: 13
-              }
-            }
-          },
-          tooltip: {
-            callbacks: {
-              label: function(context) {
-                return context.label + ": " + context.raw + "%";
-              }
-            }
-          }
-        }
-      }
-    });
-
-    function updateChart(){
-      const etf = Number(etfAlloc.value || 0);
-      const stocks = Number(stockAlloc.value || 0);
-      const crypto = Number(cryptoAlloc.value || 0);
-      const commodities = Number(commodityAlloc.value || 0);
-      const total = etf + stocks + crypto + commodities;
-
-      allocationChart.data.datasets[0].data = [etf, stocks, crypto, commodities];
-      allocationChart.update();
-
-      allocationTotal.textContent = "Gesamt: " + total + "%";
-
-      if (total === 100) {
-        allocationTotal.style.color = "var(--gold)";
-        allocationTotal.style.borderColor = "rgba(243,210,27,0.28)";
-        allocationTotal.style.background = "rgba(243,210,27,0.06)";
-      } else {
-        allocationTotal.style.color = "#ff5c5c";
-        allocationTotal.style.borderColor = "rgba(255,92,92,0.35)";
-        allocationTotal.style.background = "rgba(255,92,92,0.06)";
-      }
-    }
-
-    function calculateCompound(){
-      const start = Number(startCapital.value || 0);
-      const monthly = Number(monthlyRate.value || 0);
-      const yearsValue = Number(years.value || 0);
-      const rate = Number(returnRate.value || 0) / 100 / 12;
-      const months = yearsValue * 12;
-
-      let value = start;
-
-      for(let i = 0; i < months; i++){
-        value = value * (1 + rate) + monthly;
-      }
-
-      const invested = start + monthly * months;
-      const gain = value - invested;
-
-      compoundResult.textContent = money(value);
-      compoundText.textContent = "Eingezahlt: " + money(invested) + " | Moeglicher Zuwachs: " + money(gain);
-    }
-
-    updateAllocationBtn.addEventListener("click", updateChart);
-    calcCompoundBtn.addEventListener("click", calculateCompound);
-
-    [etfAlloc, stockAlloc, cryptoAlloc, commodityAlloc].forEach((input) => {
-      input.addEventListener("input", updateChart);
-    });
-
-    [startCapital, monthlyRate, years, returnRate].forEach((input) => {
-      input.addEventListener("input", calculateCompound);
-    });
-
-    updateChart();
-    calculateCompound();
-
-    document.addEventListener("DOMContentLoaded", async () => {
-      const loginBtn = document.getElementById("loginNavBtn");
-      const logoutBtn = document.getElementById("logoutBtn");
-      const authBadge = document.getElementById("authBadge");
-
-      try {
-        const res = await fetch("/api/access", {
-          credentials: "include",
-          cache: "no-store"
-        });
-
-        const data = await res.json();
-
-        if (data.role === "admin" || data.role === "premium") {
-          if (loginBtn) loginBtn.style.display = "none";
-          if (logoutBtn) logoutBtn.style.display = "inline-flex";
-          if (authBadge) {
-            authBadge.style.display = "inline-flex";
-            authBadge.textContent = data.role === "admin" ? "Admin" : "Premium";
-            authBadge.classList.remove("status-loading");
-            authBadge.classList.add(data.role === "admin" ? "status-admin" : "status-premium");
-          }
-        }
-      } catch {}
-    });
-  </script>
 </body>
 </html>
