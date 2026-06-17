@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
   <title>BullProsperity | Mitgliederverwaltung</title>
-   <link rel="icon" type="image/png" href="/favicon.png">
-<link rel="manifest" href="/manifest.json">
-<link rel="apple-touch-icon" href="/favicon.png">
-<meta name="theme-color" content="#050505">
+
+  <link rel="icon" type="image/png" href="/favicon.png" />
+  <link rel="manifest" href="/manifest.json" />
+  <link rel="apple-touch-icon" href="/favicon.png" />
+  <meta name="theme-color" content="#050505" />
 
   <link rel="stylesheet" href="/theme.css" />
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -35,101 +35,302 @@
   </script>
 
   <style>
-    .admin-layout{
+    .admin-page{
+      background:
+        linear-gradient(135deg, rgba(243,210,27,.07), transparent 30%),
+        radial-gradient(circle at 78% 8%, rgba(255,255,255,.045), transparent 22%),
+        radial-gradient(circle at 16% 28%, rgba(243,210,27,.08), transparent 24%),
+        #050505;
+    }
+
+    .admin-topbar{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:18px;
+      margin-bottom:22px;
+      padding:18px 24px;
+      border:1px solid rgba(243,210,27,.16);
+      border-radius:28px;
+      background:rgba(8,8,8,.86);
+      box-shadow:0 18px 40px rgba(0,0,0,.32);
+    }
+
+    .admin-brand{
+      color:var(--gold);
+      font-size:22px;
+      font-weight:950;
+      text-decoration:none;
+      white-space:nowrap;
+    }
+
+    .admin-toplinks{
+      display:flex;
+      align-items:center;
+      justify-content:flex-end;
+      gap:22px;
+      flex-wrap:wrap;
+    }
+
+    .admin-toplinks a{
+      color:#fff;
+      text-decoration:none;
+      font-size:15px;
+      font-weight:850;
+      transition:.2s ease;
+    }
+
+    .admin-toplinks a:hover{
+      color:var(--gold);
+    }
+
+    .admin-hero{
+      border:1px solid rgba(243,210,27,.16);
+      border-radius:30px;
+      background:
+        linear-gradient(135deg, rgba(255,255,255,.055), rgba(255,255,255,.015)),
+        linear-gradient(180deg, rgba(18,18,18,.92), rgba(7,7,7,.98));
+      padding:36px;
+      margin-bottom:26px;
+      min-height:270px;
       display:grid;
-      grid-template-columns:320px 1fr;
+      align-content:end;
+      overflow:hidden;
+      position:relative;
+    }
+
+    .admin-hero::before{
+      content:"";
+      position:absolute;
+      right:-140px;
+      top:-120px;
+      width:420px;
+      height:420px;
+      background:radial-gradient(circle, rgba(243,210,27,.14), transparent 68%);
+      pointer-events:none;
+    }
+
+    .admin-hero-content{
+      position:relative;
+      z-index:1;
+      max-width:980px;
+    }
+
+    .admin-title{
+      margin:0 0 18px;
+      color:#fff;
+      font-size:62px;
+      line-height:.96;
+      font-weight:950;
+      letter-spacing:0;
+    }
+
+    .admin-title span{
+      color:var(--gold);
+    }
+
+    .admin-text{
+      max-width:860px;
+      color:#e8e8e8;
+      font-size:18px;
+      line-height:1.7;
+      margin:0;
+      font-weight:700;
+    }
+
+    .admin-shell{
+      display:grid;
+      grid-template-columns:300px 1fr;
       gap:24px;
-      margin-top:24px;
       align-items:start;
     }
 
     .admin-sidebar,
-    .admin-card{
-      border:1px solid var(--line);
-      border-radius:28px;
-      background:linear-gradient(180deg,var(--panel),var(--panel-2));
-      padding:24px;
+    .admin-panel{
+      border:1px solid rgba(243,210,27,.15);
+      border-radius:26px;
+      background:linear-gradient(180deg, rgba(18,18,18,.90), rgba(9,9,9,.97));
+      box-shadow:0 18px 38px rgba(0,0,0,.30);
     }
 
     .admin-sidebar{
+      padding:22px;
       position:sticky;
       top:20px;
+      display:grid;
+      gap:18px;
+    }
+
+    .admin-sidebar-title{
+      margin:0;
+      color:#fff;
+      font-size:26px;
+      line-height:1.1;
+      font-weight:950;
     }
 
     .admin-nav{
       display:grid;
-      gap:12px;
-      margin-top:20px;
+      gap:10px;
     }
 
-    .admin-link{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
+    .admin-nav a{
+      min-height:54px;
       padding:14px 16px;
       border-radius:18px;
-      background:#111;
-      border:1px solid #252525;
-      color:#fff;
+      border:1px solid rgba(255,255,255,.08);
+      background:rgba(255,255,255,.025);
+      color:#f5f5f5;
       text-decoration:none;
-      font-weight:800;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      font-size:15px;
+      font-weight:900;
       transition:.2s ease;
     }
 
-    .admin-link:hover,
-    .admin-link.active{
-      border-color:#ffd700;
-      color:#ffd700;
-      transform:translateX(4px);
+    .admin-nav a:hover,
+    .admin-nav a.active{
+      border-color:rgba(243,210,27,.48);
+      color:var(--gold);
+      background:rgba(243,210,27,.055);
+      transform:translateX(3px);
+    }
+
+    .admin-nav small{
+      color:inherit;
+      opacity:.72;
+      font-size:12px;
+      font-weight:950;
+    }
+
+    .admin-panel{
+      padding:26px;
+    }
+
+    .panel-head{
+      display:flex;
+      justify-content:space-between;
+      gap:18px;
+      align-items:flex-start;
+      margin-bottom:22px;
+    }
+
+    .panel-title{
+      margin:0 0 8px;
+      color:#fff;
+      font-size:34px;
+      line-height:1.05;
+      font-weight:950;
+      letter-spacing:0;
+    }
+
+    .panel-title span{
+      color:var(--gold);
+    }
+
+    .panel-copy{
+      margin:0;
+      color:#bdbdbd;
+      font-size:15px;
+      line-height:1.7;
+      font-weight:700;
+      max-width:760px;
+          }
+
+    .member-stats{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:16px;
+      margin-bottom:22px;
+    }
+
+    .member-stat-box{
+      min-height:128px;
+      border:1px solid rgba(243,210,27,.13);
+      border-radius:22px;
+      background:
+        linear-gradient(135deg, rgba(243,210,27,.06), transparent 60%),
+        rgba(255,255,255,.025);
+      padding:20px;
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+    }
+
+    .member-stat-label{
+      color:#a8a8a8;
+      font-size:12px;
+      text-transform:uppercase;
+      letter-spacing:.08em;
+      font-weight:950;
+      line-height:1.35;
+    }
+
+    .member-stat-value{
+      color:var(--gold);
+      font-size:36px;
+      line-height:1;
+      font-weight:950;
+      margin-top:18px;
     }
 
     .member-tools{
       display:flex;
       gap:12px;
       flex-wrap:wrap;
-      margin-top:20px;
+      margin:22px 0;
     }
 
     .member-search{
       flex:1;
       min-width:260px;
-      border-radius:16px;
-      border:1px solid rgba(255,215,0,.18);
-      background:#111;
+      min-height:52px;
+      border-radius:18px;
+      border:1px solid rgba(243,210,27,.18);
+      background:rgba(255,255,255,.03);
       color:#fff;
       padding:14px 16px;
       outline:none;
-      font-weight:700;
+      font-weight:800;
+      font-size:15px;
+    }
+
+    .member-search:focus{
+      border-color:rgba(243,210,27,.55);
+      box-shadow:0 0 0 3px rgba(243,210,27,.08);
     }
 
     .members-grid{
       display:grid;
       gap:14px;
-      margin-top:22px;
     }
 
     .member-card{
-      border:1px solid rgba(255,215,0,.12);
-      background:rgba(255,255,255,.02);
+      border:1px solid rgba(255,255,255,.08);
+      background:rgba(255,255,255,.025);
       border-radius:20px;
       padding:18px;
       display:grid;
-      grid-template-columns:1.2fr .7fr .8fr .8fr .8fr;
+      grid-template-columns:1.25fr .62fr .7fr .86fr .86fr;
       gap:14px;
       align-items:center;
     }
 
     .member-email{
       color:#fff;
-      font-weight:900;
+      font-weight:950;
       word-break:break-word;
     }
 
     .member-meta{
-      color:#9f9f9f;
+      color:#a8a8a8;
       font-size:13px;
       margin-top:6px;
       line-height:1.5;
+      font-weight:700;
     }
 
     .member-badge,
@@ -139,18 +340,18 @@
       align-items:center;
       padding:8px 12px;
       border-radius:999px;
-      border:1px solid rgba(255,215,0,.22);
-      color:#ffd700;
-      background:rgba(255,215,0,.06);
+      border:1px solid rgba(243,210,27,.24);
+      color:var(--gold);
+      background:rgba(243,210,27,.06);
       font-size:12px;
-      font-weight:900;
+      font-weight:950;
       width:max-content;
     }
 
     .online-badge.online{
-      color:#22c55e;
-      border-color:rgba(34,197,94,.35);
-      background:rgba(34,197,94,.08);
+      color:#41e08b;
+      border-color:rgba(65,224,139,.35);
+      background:rgba(65,224,139,.08);
     }
 
     .online-badge.offline{
@@ -161,50 +362,22 @@
 
     .member-value{
       color:#fff;
-      font-weight:900;
-    }
-
-    .member-stats{
-      display:grid;
-      grid-template-columns:repeat(3,1fr);
-      gap:14px;
-      margin-top:22px;
-    }
-
-    .member-stat-box{
-      background:#111;
-      border:1px solid #252525;
-      border-radius:20px;
-      padding:18px;
-    }
-
-    .member-stat-label{
-      color:#8f8f8f;
-      font-size:12px;
-      text-transform:uppercase;
-      letter-spacing:.08em;
-      margin-bottom:8px;
-      font-weight:800;
-    }
-
-    .member-stat-value{
-      color:#ffd700;
-      font-size:32px;
       font-weight:950;
+      line-height:1.35;
     }
 
     .empty-state{
-      border:1px dashed rgba(255,215,0,.18);
+      border:1px dashed rgba(243,210,27,.22);
       border-radius:20px;
       padding:24px;
       text-align:center;
       color:#bdbdbd;
-      margin-top:20px;
       background:rgba(255,255,255,.02);
+      font-weight:800;
     }
 
-    @media(max-width:1100px){
-      .admin-layout{
+    @media(max-width:1180px){
+      .admin-shell{
         grid-template-columns:1fr;
       }
 
@@ -216,6 +389,27 @@
       .member-card{
         grid-template-columns:1fr;
       }
+    }
+
+    @media(max-width:760px){
+      .admin-topbar{
+        align-items:flex-start;
+      }
+
+      .admin-title{
+        font-size:46px;
+      }
+
+      .admin-hero,
+      .admin-panel,
+      .admin-sidebar{
+        padding:22px;
+        border-radius:22px;
+      }
+
+      .panel-head{
+        display:grid;
+      }
 
       .member-stats{
         grid-template-columns:1fr;
@@ -224,66 +418,74 @@
   </style>
 </head>
 
-<body>
+<body class="admin-page">
   <div class="page">
+    <nav class="admin-topbar">
+      <a href="/admin/dashboard.html" class="admin-brand">BullProsperity Admin</a>
 
-    <nav class="navbar">
-      <a href="/index.html" class="logo">BullProsperity | Admin</a>
-      <div class="nav-links">
+      <div class="admin-toplinks">
         <a href="/hub.html">Hub</a>
-        <a href="/admin/dashboard.html">Dashboard</a>
+        <a href="/course.html">Course</a>
+        <a href="/tools.html">Tools</a>
+        <a href="/setup-room.html">Setup Room</a>
+        <a href="/community.html">Community</a>
+        <a href="/api/logout">Logout</a>
       </div>
     </nav>
 
-    <section class="hero-shell">
-      <div class="badge">Admin System</div>
-      <h1 class="hero-title">Mitglieder <span class="gold">Verwaltung</span></h1>
-      <p class="hero-text">
-        Sieh aktive Mitglieder, Rollen, Online Status, letzte Aktivität und Plattform-Nutzung auf einen Blick.
-      </p>
+    <section class="admin-hero">
+      <div class="admin-hero-content">
+        <div class="badge">Admin System</div>
+        <h1 class="admin-title">Mitglieder <span>Verwaltung</span></h1>
+        <p class="admin-text">
+          Sieh aktive Mitglieder, Rollen, Online-Status, letzte Aktivität und Plattform-Nutzung auf einen Blick.
+        </p>
+      </div>
     </section>
 
-    <section class="admin-layout">
-
+    <main class="admin-shell">
       <aside class="admin-sidebar">
-        <div class="badge">Verwaltung</div>
-        <h2 class="section-heading" style="font-size:34px;margin-bottom:8px;">
-          Control Center
-        </h2>
+        <div>
+          <div class="badge">Verwaltung</div>
+          <h2 class="admin-sidebar-title">Control Center</h2>
+        </div>
 
         <div class="admin-nav">
-          <a href="/admin/dashboard.html" class="admin-link"><span>📊 Dashboard</span><span>→</span></a>
-          <a href="/admin/members.html" class="admin-link active"><span>👥 Mitglieder</span><span>→</span></a>
-          <a href="/admin/course-analytics.html" class="admin-link"><span>🎬 Course Analytics</span><span>→</span></a>
-          <a href="/admin/sr-analytics.html" class="admin-link"><span>🎳 SR Analytics</span><span>→</span></a>
-          <a href="/admin/dashboard.html" class="admin-link"><span>💰 Affiliate</span><span>→</span></a>
-          <a href="/admin/security.html" class="admin-link"><span>🛡 Security</span><span>→</span></a>
+          <a href="/admin/dashboard.html"><span>📊 Dashboard</span><small>LIVE</small></a>
+          <a href="/admin/members.html" class="active"><span>👥 Mitglieder</span><small>USER</small></a>
+          <a href="/admin/course-analytics.html"><span>🎬 Course Analytics</span><small>WATCH</small></a>
+          <a href="/admin/sr-analytics.html"><span>🎯 Setup Room Analytics</span><small>SMC</small></a>
+          <a href="/admin/notifications.html"><span>🔔 Notifications</span><small>PUSH</small></a>
+          <a href="/admin/security.html"><span>🛡️ Security</span><small>ADMIN</small></a>
+          <a href="/admin/ai-journal.html"><span>🧠 AI Journal</span><small>REVIEW</small></a>
+          <a href="/admin-signals.html"><span>📡 Admin Signals</span><small>POST</small></a>
         </div>
       </aside>
 
-      <div class="admin-card">
-        <div class="badge">Live Daten</div>
-        <h2 class="section-heading" style="font-size:38px;margin-bottom:10px;">
-          Mitglieder Übersicht
-        </h2>
-
-        <p class="section-subtext">
-          Online Status wird anhand der letzten Aktivität berechnet. Aktiv innerhalb der letzten 5 Minuten = Online.
-        </p>
+      <section class="admin-panel">
+        <div class="panel-head">
+          <div>
+            <h2 class="panel-title">Mitglieder <span>Übersicht</span></h2>
+            <p class="panel-copy">
+              Online-Status wird anhand der letzten Aktivität berechnet.
+              Aktiv innerhalb der letzten 5 Minuten bedeutet online.
+            </p>
+          </div>
+        </div>
 
         <div class="member-stats">
           <div class="member-stat-box">
-            <div class="member-stat-label">Mitglieder</div>
+            <div class="member-stat-label">👥 Mitglieder</div>
             <div class="member-stat-value" id="totalMembers">0</div>
           </div>
-
+          
           <div class="member-stat-box">
-            <div class="member-stat-label">Gerade Online</div>
+            <div class="member-stat-label">🟢 Gerade online</div>
             <div class="member-stat-value" id="onlineMembers">0</div>
           </div>
 
           <div class="member-stat-box">
-            <div class="member-stat-label">Letzte Aktivität</div>
+            <div class="member-stat-label">🕘 Letzte Aktivität</div>
             <div class="member-stat-value" id="latestActivity">-</div>
           </div>
         </div>
@@ -298,194 +500,191 @@
         <div id="emptyState" class="empty-state" style="display:none;">
           Noch keine Mitgliederaktivität vorhanden.
         </div>
-      </div>
-
-    </section>
+      </section>
+    </main>
 
     <div class="footer-note">
       BullProsperity Admin System.
     </div>
-
   </div>
 
-<script>
-const membersList = document.getElementById("membersList");
-const emptyState = document.getElementById("emptyState");
-const memberSearch = document.getElementById("memberSearch");
-const reloadMembersBtn = document.getElementById("reloadMembersBtn");
-const totalMembers = document.getElementById("totalMembers");
-const onlineMembers = document.getElementById("onlineMembers");
-const latestActivity = document.getElementById("latestActivity");
+  <script>
+    const membersList = document.getElementById("membersList");
+    const emptyState = document.getElementById("emptyState");
+    const memberSearch = document.getElementById("memberSearch");
+    const reloadMembersBtn = document.getElementById("reloadMembersBtn");
+    const totalMembers = document.getElementById("totalMembers");
+    const onlineMembers = document.getElementById("onlineMembers");
+    const latestActivity = document.getElementById("latestActivity");
 
-let allMembers = [];
+    let allMembers = [];
 
-function formatDate(value) {
-  if (!value) return "-";
+    function formatDate(value) {
+      if (!value) return "-";
 
-  return new Date(value).toLocaleString("de-DE", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "2-digit",
-    hour: "2-digit",
-    minute: "2-digit"
-  });
-}
-
-function formatTimeOnly(value) {
-  if (!value) return "-";
-
-  return new Date(value).toLocaleTimeString("de-DE", {
-    hour: "2-digit",
-    minute: "2-digit"
-  });
-}
-
-function isOnline(lastActivity) {
-  if (!lastActivity) return false;
-
-  const now = new Date();
-  const last = new Date(lastActivity);
-  const diffMinutes = (now - last) / 1000 / 60;
-
-  return diffMinutes <= 5;
-}
-
-function buildMembersFromActivity(activity) {
-  const map = {};
-
-  activity.forEach(item => {
-    const email = item.email || "unknown@bullprosperity.local";
-
-    if (!map[email]) {
-      map[email] = {
-        email,
-        role: item.role || "unknown",
-        lastPage: item.page || "-",
-        lastAction: item.action || "-",
-        lastActivity: item.created_at,
-        count: 0,
-        online: false
-      };
+      return new Date(value).toLocaleString("de-DE", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit"
+      });
     }
 
-    map[email].count += 1;
+    function formatTimeOnly(value) {
+      if (!value) return "-";
 
-    if (
-      item.created_at &&
-      (!map[email].lastActivity || new Date(item.created_at) > new Date(map[email].lastActivity))
-    ) {
-      map[email].lastActivity = item.created_at;
-      map[email].lastPage = item.page || "-";
-      map[email].lastAction = item.action || "-";
-      map[email].role = item.role || map[email].role;
-    }
-  });
-
-  const members = Object.values(map).map(member => {
-    member.online = isOnline(member.lastActivity);
-    return member;
-  });
-
-  return members.sort((a,b) => new Date(b.lastActivity) - new Date(a.lastActivity));
-}
-
-function renderMembers(list) {
-  membersList.innerHTML = "";
-
-  if (!list.length) {
-    emptyState.style.display = "block";
-    return;
-  }
-
-  emptyState.style.display = "none";
-
-  list.forEach(member => {
-    const card = document.createElement("div");
-    card.className = "member-card";
-
-    const onlineClass = member.online ? "online" : "offline";
-    const onlineText = member.online ? "Online" : "Offline";
-
-    card.innerHTML = `
-      <div>
-        <div class="member-email">${member.email}</div>
-        <div class="member-meta">Letzte Aktion: ${member.lastAction}</div>
-      </div>
-
-      <div>
-        <div class="member-badge">${member.role}</div>
-      </div>
-
-      <div>
-        <div class="online-badge ${onlineClass}">${onlineText}</div>
-        <div class="member-meta">Status</div>
-      </div>
-
-      <div>
-        <div class="member-value">${formatDate(member.lastActivity)}</div>
-        <div class="member-meta">Letzte Aktivität</div>
-      </div>
-
-      <div>
-        <div class="member-value">${member.count}</div>
-        <div class="member-meta">Aktivitäten • letzte Seite: ${member.lastPage}</div>
-      </div>
-    `;
-
-    membersList.appendChild(card);
-  });
-}
-
-function renderStats(list) {
-  totalMembers.textContent = list.length;
-  onlineMembers.textContent = list.filter(member => member.online).length;
-
-  if (list[0]?.lastActivity) {
-    latestActivity.textContent = formatTimeOnly(list[0].lastActivity);
-  } else {
-    latestActivity.textContent = "-";
-  }
-}
-
-async function loadMembers() {
-  try {
-    const { data, error } = await supabaseClient
-      .from("member_activity")
-      .select("*")
-      .order("created_at", { ascending: false })
-      .limit(500);
-
-    if (error) {
-      console.log("Mitglieder Fehler:", error);
-      return;
+      return new Date(value).toLocaleTimeString("de-DE", {
+        hour: "2-digit",
+        minute: "2-digit"
+      });
     }
 
-    allMembers = buildMembersFromActivity(data || []);
-    renderStats(allMembers);
-    renderMembers(allMembers);
+    function isOnline(lastActivity) {
+      if (!lastActivity) return false;
 
-  } catch (err) {
-    console.log("Mitglieder Dashboard Fehler:", err);
-  }
-}
+      const now = new Date();
+      const last = new Date(lastActivity);
+      const diffMinutes = (now - last) / 1000 / 60;
 
-memberSearch.addEventListener("input", () => {
-  const q = memberSearch.value.toLowerCase().trim();
+      return diffMinutes <= 5;
+    }
 
-  const filtered = allMembers.filter(member =>
-    member.email.toLowerCase().includes(q) ||
-    member.role.toLowerCase().includes(q) ||
-    member.lastPage.toLowerCase().includes(q) ||
-    member.lastAction.toLowerCase().includes(q)
-  );
+    function buildMembersFromActivity(activity) {
+      const map = {};
 
-  renderMembers(filtered);
-});
+      activity.forEach(item => {
+        const email = item.email || "unknown@bullprosperity.local";
 
-reloadMembersBtn.addEventListener("click", loadMembers);
+        if (!map[email]) {
+          map[email] = {
+            email,
+            role: item.role || "unknown",
+            lastPage: item.page || "-",
+            lastAction: item.action || "-",
+            lastActivity: item.created_at,
+            count: 0,
+            online: false
+          };
+        }
 
-loadMembers();
-</script>
+        map[email].count += 1;
 
+        if (
+          item.created_at &&
+          (!map[email].lastActivity || new Date(item.created_at) > new Date(map[email].lastActivity))
+        ) {
+          map[email].lastActivity = item.created_at;
+          map[email].lastPage = item.page || "-";
+          map[email].lastAction = item.action || "-";
+          map[email].role = item.role || map[email].role;
+        }
+      });
+
+      const members = Object.values(map).map(member => {
+        member.online = isOnline(member.lastActivity);
+        return member;
+      });
+
+      return members.sort((a,b) => new Date(b.lastActivity) - new Date(a.lastActivity));
+    }
+
+    function renderMembers(list) {
+      membersList.innerHTML = "";
+
+      if (!list.length) {
+        emptyState.style.display = "block";
+        return;
+      }
+
+      emptyState.style.display = "none";
+
+      list.forEach(member => {
+        const card = document.createElement("div");
+        card.className = "member-card";
+
+        const onlineClass = member.online ? "online" : "offline";
+        const onlineText = member.online ? "Online" : "Offline";
+
+        card.innerHTML = `
+          <div>
+            <div class="member-email">${member.email}</div>
+            <div class="member-meta">Letzte Aktion: ${member.lastAction}</div>
+          </div>
+
+          <div>
+            <div class="member-badge">${member.role}</div>
+          </div>
+
+          <div>
+            <div class="online-badge ${onlineClass}">${onlineText}</div>
+            <div class="member-meta">Status</div>
+          </div>
+
+          <div>
+            <div class="member-value">${formatDate(member.lastActivity)}</div>
+            <div class="member-meta">Letzte Aktivität</div>
+          </div>
+
+          <div>
+            <div class="member-value">${member.count}</div>
+            <div class="member-meta">Aktivitäten · letzte Seite: ${member.lastPage}</div>
+          </div>
+        `;
+
+        membersList.appendChild(card);
+      });
+    }
+
+    function renderStats(list) {
+      totalMembers.textContent = list.length;
+      onlineMembers.textContent = list.filter(member => member.online).length;
+
+      if (list[0]?.lastActivity) {
+        latestActivity.textContent = formatTimeOnly(list[0].lastActivity);
+      } else {
+        latestActivity.textContent = "-";
+      }
+    }
+
+    async function loadMembers() {
+      try {
+        const { data, error } = await supabaseClient
+          .from("member_activity")
+          .select("*")
+          .order("created_at", { ascending: false })
+          .limit(500);
+
+        if (error) {
+          console.log("Mitglieder Fehler:", error);
+          return;
+        }
+
+        allMembers = buildMembersFromActivity(data || []);
+        renderStats(allMembers);
+        renderMembers(allMembers);
+
+      } catch (err) {
+        console.log("Mitglieder Dashboard Fehler:", err);
+      }
+    }
+
+    memberSearch.addEventListener("input", () => {
+      const q = memberSearch.value.toLowerCase().trim();
+
+      const filtered = allMembers.filter(member =>
+        member.email.toLowerCase().includes(q) ||
+        member.role.toLowerCase().includes(q) ||
+        member.lastPage.toLowerCase().includes(q) ||
+        member.lastAction.toLowerCase().includes(q)
+      );
+
+      renderMembers(filtered);
+    });
+
+    reloadMembersBtn.addEventListener("click", loadMembers);
+
+    loadMembers();
+  </script>
 </body>
 </html>
