@@ -11,13 +11,13 @@ export default async function handler(req, res) {
     }
 
     const resendApiKey = process.env.RESEND_API_KEY;
-    const adminEmail = process.env.WAITLIST_ADMIN_EMAIL;
+    const adminEmail = process.env.WAITLIST_ADMIN_EMAIL || "bullprosperityfx@gmail.com";
 
-    if (!resendApiKey || !adminEmail) {
+    if (!resendApiKey) {
       return res.status(500).json({ error: "Server nicht richtig konfiguriert." });
     }
 
-    // 👉 ADMIN MAIL
+    // ADMIN MAIL
     const adminResponse = await fetch("https://api.resend.com/emails", {
       method: "POST",
       headers: {
@@ -26,7 +26,7 @@ export default async function handler(req, res) {
       },
       body: JSON.stringify({
         from: "onboarding@resend.dev",
-        to: ["bullprosperityfx@gmail.com"],
+        to: [adminEmail],
         subject: "Neue Waitlist Anfrage",
         html: `
           <h2>Neue Waitlist Anfrage</h2>
@@ -44,7 +44,7 @@ export default async function handler(req, res) {
       return res.status(500).json({ error: "Admin-Mail Fehler" });
     }
 
-    // 👉 USER MAIL
+    // USER MAIL
     await fetch("https://api.resend.com/emails", {
       method: "POST",
       headers: {
