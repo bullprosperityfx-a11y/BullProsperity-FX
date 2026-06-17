@@ -5,69 +5,165 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>BullProsperity | Zugang gesperrt</title>
   <link rel="icon" type="image/png" href="/favicon.png">
-<link rel="manifest" href="/manifest.json">
-<link rel="apple-touch-icon" href="/favicon.png">
-<meta name="theme-color" content="#050505">
+  <link rel="manifest" href="/manifest.json">
+  <link rel="apple-touch-icon" href="/favicon.png">
+  <meta name="theme-color" content="#050505">
   <link rel="stylesheet" href="theme.css" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <script>
-  document.addEventListener("DOMContentLoaded", () => {
-    const loginBtn = document.getElementById("loginNavBtn");
-    const authStatus = document.getElementById("authStatus");
-    const statusDot = document.getElementById("statusDot");
-
-    if (loginBtn) loginBtn.style.display = "inline-flex";
-
-    if (authStatus) {
-      authStatus.textContent = "Kein Zugang";
-    }
-
-    if (statusDot) {
-      statusDot.className = "status-dot status-locked";
-    }
-  });
-</script>
- 
 
   <style>
-    .auth-box{
-      display:flex;
+    .locked-page{
+      background:
+        linear-gradient(135deg, rgba(243,210,27,0.07), transparent 30%),
+        radial-gradient(circle at 82% 14%, rgba(255,255,255,0.055), transparent 22%),
+        radial-gradient(circle at 16% 34%, rgba(243,210,27,0.10), transparent 24%),
+        #050505;
+    }
+
+    .locked-page .navbar{
+      position:sticky;
+      top:14px;
+      z-index:50;
+      padding:14px 16px;
+      border:1px solid rgba(243,210,27,0.14);
+      border-radius:24px;
+      background:rgba(7,7,7,0.78);
+      backdrop-filter:blur(18px);
+      box-shadow:0 18px 60px rgba(0,0,0,0.28);
+    }
+
+    .locked-card{
+      max-width:960px;
+      margin:64px auto 28px;
+      text-align:center;
+      padding:42px;
+      border:1px solid rgba(243,210,27,0.16);
+      border-radius:34px;
+      background:
+        linear-gradient(145deg, rgba(255,255,255,0.052), transparent 38%),
+        radial-gradient(circle at 76% 20%, rgba(243,210,27,0.15), transparent 31%),
+        linear-gradient(180deg, rgba(18,18,18,0.92), rgba(5,5,5,0.98));
+      box-shadow:
+        inset 0 0 0 1px rgba(255,255,255,0.025),
+        0 22px 60px rgba(0,0,0,0.30);
+      overflow:hidden;
+      position:relative;
+    }
+
+    .locked-card::after{
+      content:"";
+      position:absolute;
+      left:0;
+      right:0;
+      bottom:0;
+      height:1px;
+      background:linear-gradient(90deg, transparent, rgba(243,210,27,0.82), transparent);
+      opacity:.65;
+    }
+
+    .locked-page .hero-title{
+      max-width:none;
+      margin-left:auto;
+      margin-right:auto;
+      font-size:clamp(44px, 5vw, 74px);
+      letter-spacing:0;
+      line-height:.92;
+    }
+
+    .locked-page .hero-text{
+      margin-left:auto;
+      margin-right:auto;
+      max-width:760px;
+    }
+
+    .access-pill{
+      display:inline-flex;
       align-items:center;
       gap:10px;
-      padding:8px 14px;
+      padding:10px 16px;
       border-radius:999px;
-      background:rgba(255,255,255,0.04);
-      border:1px solid rgba(255,255,255,0.06);
+      border:1px solid rgba(255,92,92,0.28);
+      background:rgba(255,92,92,0.08);
+      color:#fff;
       font-size:13px;
-      font-weight:700;
-      white-space:nowrap;
+      font-weight:900;
+      margin-bottom:18px;
     }
 
-    .status-dot{
+    .access-dot{
       width:10px;
       height:10px;
-      border-radius:50%;
-      background:#999;
+      border-radius:999px;
+      background:#ff5c5c;
+      box-shadow:0 0 14px rgba(255,92,92,0.42);
     }
 
-    .status-premium{ background:#00d26a; }
-    .status-admin{ background:#ffd700; }
-    .status-locked{ background:#ff4d4d; }
+    .locked-list{
+      max-width:820px;
+      margin:26px auto 0;
+      display:grid;
+      grid-template-columns:repeat(3, 1fr);
+      gap:14px;
+      text-align:left;
+    }
 
-    @media(max-width:860px){
-      .auth-box{
-        margin-top:10px;
+    .locked-item{
+      border:1px solid rgba(243,210,27,0.13);
+      border-radius:18px;
+      background:rgba(255,255,255,0.024);
+      color:#e8e8e8;
+      padding:15px 16px;
+      font-size:14px;
+      font-weight:750;
+      line-height:1.55;
+    }
+
+    .locked-item strong{
+      display:block;
+      color:var(--gold);
+      margin-bottom:6px;
+    }
+
+    .footer-clean{
+      max-width:960px;
+      margin:0 auto;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:18px;
+      flex-wrap:wrap;
+      border:1px solid rgba(243,210,27,0.14);
+      border-radius:24px;
+      padding:20px 24px;
+      background:rgba(8,8,8,0.76);
+      color:#d8d8d8;
+      font-weight:800;
+    }
+
+    .footer-clean a{
+      color:var(--gold);
+      text-decoration:none;
+      margin-right:12px;
+    }
+
+    @media(max-width:760px){
+      .locked-card{
+        padding:30px 22px;
+        margin-top:34px;
+      }
+
+      .locked-list{
+        grid-template-columns:1fr;
       }
     }
   </style>
 </head>
-<body>
-  <div class="page">
 
+<body class="locked-page">
+  <div class="page">
     <nav class="navbar">
       <a href="index.html" class="logo">BullProsperity</a>
-
       <div class="nav-links">
         <a href="index.html">Home</a>
         <a href="hub.html">Hub</a>
@@ -75,40 +171,56 @@
         <a href="tools.html">Tools</a>
         <a href="setup-room.html">Setup Room</a>
         <a href="community.html">Community</a>
-      </div>
-
-      <div class="auth-box">
-        <span class="status-dot" id="statusDot"></span>
-        <span id="authStatus">Status wird geprüft...</span>
+        <a href="/api/whop/login">Login</a>
       </div>
     </nav>
 
-    <section class="hero-shell" style="max-width:900px; margin:60px auto; text-align:center;">
-      <div class="badge">Mitgliederbereich</div>
+    <section class="locked-card">
+      <div class="access-pill">
+        <span class="access-dot"></span>
+        Kein aktiver Zugang
+      </div>
 
-      <h1 class="hero-title">
-        Zugang <span class="gold">gesperrt</span>
-      </h1>
+      <h1 class="hero-title">Zugang <span class="gold">gesperrt</span></h1>
 
-      <p class="hero-text" style="margin-left:auto; margin-right:auto;">
+      <p class="hero-text">
         Dieser Bereich ist nur für Mitglieder mit aktiver BullProsperity Membership verfügbar.
         Logge dich mit Whop ein oder werde Mitglied, um Zugriff auf Hub, Course, Tools,
         Setup Room und Community zu erhalten.
       </p>
 
       <div class="hero-buttons" style="justify-content:center;">
-       <a href="/api/whop/login" class="btn primary">Login mit Whop</a>
-        <a href="https://whop.com/bullprosperity-fx/bullprosperity-fx/" class="btn secondary">
-  Mitglied werden
-</a>
-        <a href="index.html" class="btn secondary">Zurück zur Landing Page</a>
+        <a href="/api/whop/login" class="btn primary">Login mit Whop</a>
+        <a href="https://whop.com/bullprosperity-fx/bullprosperity-fx/" class="btn secondary">Mitglied werden</a>
+        <a href="index.html" class="btn secondary">Zurück zur Startseite</a>
+      </div>
+
+      <div class="locked-list">
+        <div class="locked-item">
+          <strong>Premium Hub</strong>
+          Zugriff auf Kurs, Tools, Setup Room und Community.
+        </div>
+        <div class="locked-item">
+          <strong>Whop Login</strong>
+          Melde dich mit deinem aktiven Membership-Konto an.
+        </div>
+        <div class="locked-item">
+          <strong>Bildungsplattform</strong>
+          Trading Education ohne Gewinnversprechen.
+        </div>
       </div>
     </section>
 
-    <div class="footer-note">
-      BullProsperity dient ausschließlich Bildungs- und Informationszwecken
-    </div>
-
+    <footer class="footer-clean">
+      <div>
+        <strong>BullProsperity</strong> dient ausschließlich Bildungszwecken und ersetzt keine Anlageberatung.
+      </div>
+      <div>
+        <a href="impressum.html">Impressum</a>
+        <a href="datenschutz.html">Datenschutz</a>
+        <a href="risikohinweis.html">Risikohinweis</a>
+      </div>
+    </footer>
   </div>
 </body>
 </html>
