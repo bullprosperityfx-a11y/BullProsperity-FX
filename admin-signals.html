@@ -8,7 +8,8 @@
 <link rel="manifest" href="/manifest.json">
 <link rel="apple-touch-icon" href="/favicon.png">
 <meta name="theme-color" content="#050505">
-  <link rel="stylesheet" href="theme.css" />
+  <link rel="stylesheet" href="/theme.css" />
+  <link rel="stylesheet" href="/admin/admin.css" />
   <script src="/login.js" defer></script>
 
   <script>
@@ -22,15 +23,23 @@
         const data = await res.json();
 
         if (data.role !== "admin") {
-          window.location.href = "locked.html";
+          window.location.href = "/locked.html";
         }
       } catch {
-        window.location.href = "locked.html";
+        window.location.href = "/locked.html";
       }
     })();
   </script>
 
   <style>
+    .admin-layout{
+      display:grid;
+      grid-template-columns:300px 1fr;
+      gap:24px;
+      margin-top:24px;
+      align-items:start;
+    }
+
     .signal-layout{
       display:grid;
       grid-template-columns:1.05fr 0.95fr;
@@ -40,9 +49,9 @@
 
     .signal-panel{
       border:1px solid var(--line);
-      border-radius:28px;
-      background:linear-gradient(180deg, var(--panel), var(--panel-2));
-      box-shadow:0 0 0 1px rgba(255,255,255,0.02) inset;
+      border-radius:26px;
+      background:linear-gradient(180deg, rgba(18,18,18,.90), rgba(9,9,9,.97));
+      box-shadow:0 18px 38px rgba(0,0,0,.30);
       padding:24px;
     }
 
@@ -64,9 +73,9 @@
     }
 
     .field label{
-      color:#f1f1f1;
+      color:var(--gold);
       font-size:14px;
-      font-weight:800;
+      font-weight:900;
     }
 
     .field input,
@@ -97,7 +106,7 @@
     .signal-preview{
       border:1px solid rgba(243,210,27,0.18);
       border-radius:24px;
-      background:#0b0b0b;
+      background:rgba(255,255,255,.025);
       padding:24px;
       white-space:pre-wrap;
       color:#fff;
@@ -129,50 +138,117 @@
       font-weight:700;
     }
 
+    .signal-side{
+      display:grid;
+      gap:24px;
+    }
+
+    .signal-mini-grid{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:14px;
+    }
+
+    .signal-mini{
+      border:1px solid rgba(243,210,27,.13);
+      border-radius:20px;
+      background:rgba(255,255,255,.025);
+      padding:18px;
+    }
+
+    .signal-mini strong{
+      display:block;
+      color:var(--gold);
+      font-size:22px;
+      font-weight:950;
+      margin-bottom:6px;
+    }
+
+    .signal-mini span{
+      color:#a8a8a8;
+      font-size:12px;
+      line-height:1.5;
+      font-weight:800;
+    }
+
     @media(max-width:1100px){
+      .admin-layout,
       .signal-layout{
         grid-template-columns:1fr;
       }
     }
 
     @media(max-width:760px){
-      .form-grid{
+      .form-grid,
+      .signal-mini-grid{
         grid-template-columns:1fr;
       }
     }
   </style>
 </head>
 
-<body>
+<body class="admin-page">
   <div class="page">
 
-    <nav class="navbar">
-      <a href="index.html" class="logo">BullProsperity</a>
+    <nav class="admin-topbar">
+      <a href="/admin/dashboard.html" class="admin-brand">BullProsperity Admin</a>
 
-      <div class="nav-links">
-        <a href="index.html">Home</a>
-        <a href="hub.html">Hub</a>
-        <a href="course.html">Course</a>
-        <a href="tools.html">Tools</a>
-        <a href="setup-room.html">Setup Room</a>
-        <a href="community.html">Community</a>
-        <a id="loginNavBtn" href="/api/whop/login">Login</a>
+      <div class="admin-toplinks">
+        <a href="/hub.html">Hub</a>
+        <a href="/course.html">Course</a>
+        <a href="/tools.html">Tools</a>
+        <a href="/setup-room.html">Setup Room</a>
+        <a href="/community.html">Community</a>
+        <a href="/api/logout">Logout</a>
       </div>
     </nav>
 
     <section class="hero-shell">
-      <div class="badge">Admin Bereich</div>
+      <div class="badge">Admin Signal Center</div>
       <h1 class="hero-title">BullProsperity <span class="gold">Signal Panel</span></h1>
       <p class="hero-text">
         Erstelle professionelle Trading Signale im BullProsperity Design und sende sie direkt in deinen Discord Signal Channel.
       </p>
       <div class="hero-buttons">
-        <a href="hub.html" class="btn secondary">Zurück zum Hub</a>
+        <a href="/admin/dashboard.html" class="btn secondary">Zurück zum Dashboard</a>
         <a href="#signal-form" class="btn primary">Signal erstellen</a>
       </div>
     </section>
 
-    <section class="signal-layout">
+    <main class="admin-layout">
+      <aside class="admin-sidebar">
+        <div class="badge">Verwaltung</div>
+                <h2 class="admin-sidebar-title">Control Center</h2>
+
+        <div class="admin-nav">
+          <a href="/admin/dashboard.html" class="admin-link"><span>📊 Dashboard</span><small>LIVE</small></a>
+          <a href="/admin/members.html" class="admin-link"><span>👥 Mitglieder</span><small>USER</small></a>
+          <a href="/admin/course-analytics.html" class="admin-link"><span>🎬 Course Analytics</span><small>WATCH</small></a>
+          <a href="/admin/sr-analytics.html" class="admin-link"><span>🎯 Setup Room Analytics</span><small>SMC</small></a>
+          <a href="/admin/notifications.html" class="admin-link"><span>🔔 Notifications</span><small>PUSH</small></a>
+          <a href="/admin/security.html" class="admin-link"><span>🛡️ Security</span><small>ADMIN</small></a>
+          <a href="/admin/ai-journal.html" class="admin-link"><span>🧠 AI Journal</span><small>REVIEW</small></a>
+          <a href="/admin-signals.html" class="admin-link active"><span>📡 Admin Signals</span><small>POST</small></a>
+        </div>
+      </aside>
+
+      <section class="signal-side">
+        <div class="signal-mini-grid">
+          <div class="signal-mini">
+            <strong>📡</strong>
+            <span>Discord Signal Versand</span>
+          </div>
+          <div class="signal-mini">
+            <strong>🎯</strong>
+            <span>Entry, SL und TP Struktur</span>
+          </div>
+          <div class="signal-mini">
+            <strong>🖼️</strong>
+            <span>Chart-Bild Upload möglich</span>
+          </div>
+        </div>
+
+        <div class="signal-layout">
 
       <div class="signal-panel" id="signal-form">
         <div class="badge">Neues Signal</div>
@@ -282,7 +358,9 @@
         <div class="signal-preview" id="signalPreview">Signal Vorschau wird hier angezeigt.</div>
       </div>
 
-    </section>
+        </div>
+      </section>
+    </main>
 
     <div class="footer-note">
       BullProsperity dient ausschließlich Bildungszwecken und stellt keine Finanzberatung dar.
@@ -360,7 +438,7 @@ function buildSignalText() {
 
   const tps = [
     fields.tp1.value.trim(),
-    fields.tp2.value.trim(),
+        fields.tp2.value.trim(),
     fields.tp3.value.trim(),
     fields.tp4.value.trim()
   ].filter(Boolean);
