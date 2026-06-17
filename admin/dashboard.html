@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BullProsperity | Admin Dashboard</title>
 
-  <title>BullProsperity | Founder Control Center</title>
-   <link rel="icon" type="image/png" href="/favicon.png">
-<link rel="manifest" href="/manifest.json">
-<link rel="apple-touch-icon" href="/favicon.png">
-<meta name="theme-color" content="#050505">
+  <link rel="icon" type="image/png" href="/favicon.png" />
+  <link rel="manifest" href="/manifest.json" />
+  <link rel="apple-touch-icon" href="/favicon.png" />
+  <meta name="theme-color" content="#050505" />
 
   <link rel="stylesheet" href="/theme.css" />
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -35,25 +35,186 @@
   </script>
 
   <style>
-    .admin-layout{
+    .admin-page{
+      background:
+        linear-gradient(135deg, rgba(243,210,27,0.07), transparent 30%),
+        radial-gradient(circle at 78% 8%, rgba(255,255,255,0.045), transparent 22%),
+        radial-gradient(circle at 16% 28%, rgba(243,210,27,0.08), transparent 24%),
+        #050505;
+    }
+
+    .admin-topbar{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:18px;
+      margin-bottom:22px;
+      padding:18px 24px;
+      border:1px solid rgba(243,210,27,.16);
+      border-radius:28px;
+      background:rgba(8,8,8,.86);
+      box-shadow:0 18px 40px rgba(0,0,0,.32);
+    }
+
+    .admin-brand{
+      color:var(--gold);
+      font-size:22px;
+      font-weight:950;
+      text-decoration:none;
+      white-space:nowrap;
+    }
+
+    .admin-toplinks{
+      display:flex;
+      align-items:center;
+      justify-content:flex-end;
+      gap:22px;
+      flex-wrap:wrap;
+    }
+
+    .admin-toplinks a{
+      color:#fff;
+      text-decoration:none;
+      font-size:15px;
+      font-weight:850;
+      transition:.2s ease;
+    }
+
+    .admin-toplinks a:hover,
+    .admin-toplinks a.active{
+      color:var(--gold);
+    }
+
+    .admin-hero{
+      border:1px solid rgba(243,210,27,.16);
+      border-radius:30px;
+      background:
+        linear-gradient(135deg, rgba(255,255,255,.055), rgba(255,255,255,.015)),
+        linear-gradient(180deg, rgba(18,18,18,.92), rgba(7,7,7,.98));
+      padding:36px;
+      margin-bottom:26px;
+      overflow:hidden;
+      position:relative;
+      min-height:300px;
       display:grid;
-      grid-template-columns:320px 1fr;
+      align-content:end;
+    }
+
+    .admin-hero::before{
+      content:"";
+      position:absolute;
+      right:-140px;
+      top:-120px;
+      width:420px;
+      height:420px;
+      background:radial-gradient(circle, rgba(243,210,27,.14), transparent 68%);
+      pointer-events:none;
+    }
+
+    .admin-hero::after{
+      content:"";
+      position:absolute;
+      left:36px;
+      right:36px;
+      bottom:0;
+      height:1px;
+      background:linear-gradient(90deg, transparent, rgba(243,210,27,.82), transparent);
+    }
+
+    .admin-hero-content{
+      position:relative;
+      z-index:1;
+      max-width:980px;
+    }
+
+    .admin-title{
+      margin:0 0 18px;
+      color:#fff;
+      font-size:64px;
+      line-height:.96;
+      font-weight:950;
+      letter-spacing:0;
+    }
+
+    .admin-title span{
+      color:var(--gold);
+    }
+
+    .admin-text{
+      max-width:860px;
+      color:#e8e8e8;
+      font-size:18px;
+      line-height:1.7;
+      margin:0;
+      font-weight:700;
+    }
+
+    .admin-shell{
+      display:grid;
+      grid-template-columns:300px 1fr;
       gap:24px;
-      margin-top:24px;
       align-items:start;
     }
 
     .admin-sidebar,
-    .admin-card{
-      border:1px solid var(--line);
-      border-radius:28px;
-      background:linear-gradient(180deg,var(--panel),var(--panel-2));
-      padding:24px;
+    .admin-panel{
+      border:1px solid rgba(243,210,27,.15);
+      border-radius:26px;
+      background:linear-gradient(180deg, rgba(18,18,18,.90), rgba(9,9,9,.97));
+      box-shadow:0 18px 38px rgba(0,0,0,.30);
     }
 
     .admin-sidebar{
+      padding:22px;
       position:sticky;
       top:20px;
+      display:grid;
+      gap:18px;
+    }
+
+    .admin-sidebar-title{
+      margin:0;
+      color:#fff;
+      font-size:26px;
+      line-height:1.1;
+      font-weight:950;
+    }
+
+    .admin-nav{
+      display:grid;
+      gap:10px;
+    }
+
+    .admin-nav a{
+      min-height:54px;
+      padding:14px 16px;
+      border-radius:18px;
+      border:1px solid rgba(255,255,255,.08);
+      background:rgba(255,255,255,.025);
+      color:#f5f5f5;
+      text-decoration:none;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      font-size:15px;
+      font-weight:900;
+      transition:.2s ease;
+    }
+
+    .admin-nav a:hover,
+    .admin-nav a.active{
+      border-color:rgba(243,210,27,.48);
+      color:var(--gold);
+      background:rgba(243,210,27,.055);
+      transform:translateX(3px);
+    }
+
+    .admin-nav small{
+      color:inherit;
+      opacity:.72;
+      font-size:12px;
+      font-weight:950;
     }
 
     .admin-content{
@@ -61,262 +222,254 @@
       gap:24px;
     }
 
-    .admin-nav{
-      display:grid;
-      gap:12px;
-      margin-top:20px;
+    .admin-panel{
+      padding:26px;
     }
 
-    .admin-link{
+    .panel-head{
       display:flex;
       justify-content:space-between;
-      align-items:center;
-      gap:12px;
-      padding:14px 16px;
-      border-radius:18px;
-      background:#111;
-      border:1px solid #252525;
+      gap:18px;
+      align-items:flex-start;
+      margin-bottom:22px;
+    }
+
+    .panel-title{
+      margin:0 0 8px;
       color:#fff;
-      text-decoration:none;
-      font-weight:800;
-      transition:.2s ease;
+      font-size:34px;
+      line-height:1.05;
+      font-weight:950;
+      letter-spacing:0;
     }
 
-    .admin-link:hover,
-    .admin-link.active{
-      border-color:#ffd700;
-      color:#ffd700;
-      transform:translateX(4px);
+    .panel-title span{
+      color:var(--gold);
     }
 
-    .admin-stats{
+    .panel-copy{
+      margin:0;
+      color:#bdbdbd;
+      font-size:15px;
+      line-height:1.7;
+      font-weight:700;
+      max-width:720px;
+    }
+
+    .admin-status{
+      display:inline-flex;
+            align-items:center;
+      gap:8px;
+      padding:9px 13px;
+      border-radius:999px;
+      border:1px solid rgba(34,197,94,.28);
+      background:rgba(34,197,94,.08);
+      color:#41e08b;
+      font-size:12px;
+      font-weight:950;
+      white-space:nowrap;
+    }
+
+    .admin-status::before{
+      content:"";
+      width:8px;
+      height:8px;
+      border-radius:50%;
+      background:#41e08b;
+      box-shadow:0 0 16px rgba(65,224,139,.50);
+    }
+
+    .stats-grid{
       display:grid;
       grid-template-columns:repeat(4,1fr);
       gap:16px;
-      margin-top:20px;
     }
 
-    .stat-box{
-      background:#111;
-      border:1px solid #252525;
+    .stat-card{
+      min-height:150px;
+      border:1px solid rgba(243,210,27,.13);
       border-radius:22px;
-      padding:18px;
-      position:relative;
-      overflow:hidden;
-      min-height:128px;
-    }
-
-    .stat-box::after{
-      content:"";
-      position:absolute;
-      right:-40px;
-      top:-40px;
-      width:120px;
-      height:120px;
-      background:radial-gradient(circle,rgba(255,215,0,.10),transparent 70%);
-      pointer-events:none;
-    }
-
-    .stat-icon{
-      width:36px;
-      height:36px;
-      border-radius:50%;
+      background:
+        linear-gradient(135deg, rgba(243,210,27,.06), transparent 60%),
+        rgba(255,255,255,.025);
+      padding:20px;
       display:flex;
-      align-items:center;
-      justify-content:center;
-      background:rgba(255,215,0,.08);
-      border:1px solid rgba(255,215,0,.20);
-      color:#ffd700;
-      margin-bottom:12px;
+      flex-direction:column;
+      justify-content:space-between;
     }
 
     .stat-label{
-      color:#8f8f8f;
+      color:#a8a8a8;
       font-size:12px;
+      line-height:1.35;
+      font-weight:950;
       text-transform:uppercase;
-      margin-bottom:10px;
       letter-spacing:.08em;
-      font-weight:800;
     }
 
     .stat-value{
-      color:#ffd700;
-      font-size:34px;
+      margin-top:18px;
+      color:var(--gold);
+      font-size:38px;
+      line-height:1;
       font-weight:950;
-      line-height:1.05;
       word-break:break-word;
     }
 
-    .stat-sub{
-      margin-top:8px;
-      color:#8f8f8f;
-      font-size:12px;
-      line-height:1.5;
+    .stat-note{
+      margin-top:10px;
+      color:#d8d8d8;
+      font-size:13px;
+      line-height:1.45;
+      font-weight:700;
     }
 
-    .overview-grid{
+    .admin-grid{
       display:grid;
       grid-template-columns:1.1fr .9fr;
-      gap:18px;
+      gap:24px;
+      align-items:stretch;
     }
 
     .system-grid{
       display:grid;
-      grid-template-columns:repeat(4,1fr);
-      gap:16px;
-      margin-top:20px;
+      grid-template-columns:repeat(2,1fr);
+      gap:14px;
     }
 
-    .system-box{
-      background:#111;
-      border:1px solid rgba(255,215,0,.12);
+    .system-card{
+      min-height:150px;
+      border:1px solid rgba(255,255,255,.08);
       border-radius:20px;
+      background:rgba(255,255,255,.025);
       padding:18px;
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
     }
 
-    .system-title{
+    .system-name{
       color:#fff;
+      font-size:18px;
       font-weight:950;
-      margin-bottom:8px;
+      margin-bottom:6px;
     }
 
     .system-value{
-      color:#ffd700;
-      font-size:30px;
+      color:var(--gold);
+      font-size:32px;
+      line-height:1;
+      font-weight:950;
+      margin:12px 0 8px;
+    }
+
+    .system-copy{
+      color:#a8a8a8;
+      font-size:13px;
+      line-height:1.55;
+      font-weight:700;
+      margin:0;
+    }
+
+    .quick-list{
+      display:grid;
+      gap:12px;
+    }
+
+    .quick-link{
+      min-height:88px;
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:20px;
+      background:rgba(255,255,255,.025);
+      padding:18px;
+      text-decoration:none;
+      display:grid;
+      gap:8px;
+      transition:.2s ease;
+    }
+
+    .quick-link:hover{
+      border-color:rgba(243,210,27,.48);
+      background:rgba(243,210,27,.05);
+      transform:translateY(-2px);
+    }
+
+    .quick-link strong{
+      color:#fff;
+      font-size:18px;
       font-weight:950;
     }
 
-    .system-sub{
-      color:#9f9f9f;
+    .quick-link span{
+      color:#aaa;
       font-size:13px;
-      margin-top:8px;
-      line-height:1.5;
+      line-height:1.55;
+      font-weight:700;
     }
 
     .activity-feed{
       display:grid;
       gap:12px;
-      margin-top:20px;
     }
 
-   .activity-item{
-  border:1px solid rgba(255,215,0,.10);
-  border-radius:18px;
-  padding:18px;
-  background:rgba(255,255,255,.02);
+    .activity-item{
+      min-height:78px;
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:20px;
+      background:rgba(255,255,255,.025);
+      padding:16px;
+      display:grid;
+      grid-template-columns:46px 1fr auto;
+      gap:14px;
+      align-items:center;
+    }
 
-  display:flex;
-  align-items:center;
-  gap:14px;
-
-  flex-wrap:wrap;
-}
-    .activity-item > div:nth-child(2){
-  flex:1;
-  min-width:240px;
-}
-
-.activity-time{
-  margin-left:auto;
-  white-space:nowrap;
-}
     .avatar{
-      width:38px;
-      height:38px;
+      width:46px;
+      height:46px;
       border-radius:50%;
       display:flex;
       align-items:center;
       justify-content:center;
-      background:linear-gradient(135deg,rgba(255,215,0,.20),rgba(255,255,255,.06));
-      border:1px solid rgba(255,215,0,.22);
-      color:#ffd700;
-      font-weight:950;
+      border:1px solid rgba(243,210,27,.24);
+      background:rgba(243,210,27,.07);
+      color:var(--gold);
       font-size:13px;
+      font-weight:950;
       text-transform:uppercase;
     }
 
-    .activity-item strong{
-      color:#fff;
+    .activity-main strong{
       display:block;
-      margin-bottom:5px;
+      color:#fff;
+      font-size:15px;
       font-weight:950;
+      margin-bottom:5px;
     }
 
-    .activity-item p{
+    .activity-main p{
       margin:0;
-      color:#a8a8a8;
-      line-height:1.5;
+      color:#aaa;
       font-size:13px;
+      line-height:1.5;
+      font-weight:700;
+      word-break:break-word;
     }
 
     .activity-time{
-      color:#ffd700;
-      font-size:13px;
-      font-weight:900;
+      color:var(--gold);
+      font-size:12px;
+      font-weight:950;
       white-space:nowrap;
     }
 
-    .quick-grid{
-  display:grid;
-  grid-template-columns:1fr;
-  gap:14px;
-  margin-top:20px;
-  align-items:stretch;
-}
-
-    .quick-card{
-      background:#111;
-      border:1px solid rgba(255,215,0,.12);
-      border-radius:20px;
-      padding:20px;
-      text-decoration:none;
-      transition:.2s ease;
-      display:block;
+    .footer-note{
+      margin-top:24px;
     }
 
-    .quick-card:hover{
-      border-color:#ffd700;
-      transform:translateY(-2px);
-    }
-
-    .quick-card h3{
-      margin:0 0 8px;
-      color:#ffd700;
-      font-size:20px;
-    }
-
-    .quick-card p{
-      margin:0;
-      color:#a8a8a8;
-      line-height:1.5;
-      font-size:13px;
-    }
-
-    .status-pill{
-      display:inline-flex;
-      align-items:center;
-      gap:7px;
-      padding:8px 12px;
-      border-radius:999px;
-      color:#22c55e;
-      background:rgba(34,197,94,.08);
-      border:1px solid rgba(34,197,94,.25);
-      font-size:12px;
-      font-weight:900;
-      margin-top:12px;
-    }
-
-    .status-pill::before{
-      content:"";
-      width:8px;
-      height:8px;
-      border-radius:50%;
-      background:#22c55e;
-    }
-
-    @media(max-width:1200px){
-      .admin-layout,
-      .overview-grid{
+    @media(max-width:1180px){
+      .admin-shell,
+      .admin-grid{
         grid-template-columns:1fr;
       }
 
@@ -325,508 +478,439 @@
         top:0;
       }
 
-      .admin-stats,
-      .system-grid{
-        grid-template-columns:1fr 1fr;
-      }
-
-      .quick-grid{
-        grid-template-columns:1fr;
+      .stats-grid{
+        grid-template-columns:repeat(2,1fr);
       }
     }
 
     @media(max-width:760px){
-      .admin-stats,
+      .admin-topbar{
+        align-items:flex-start;
+      }
+
+      .admin-title{
+        font-size:46px;
+      }
+
+      .admin-hero,
+      .admin-panel,
+      .admin-sidebar{
+        padding:22px;
+        border-radius:22px;
+      }
+
+      .panel-head{
+        display:grid;
+      }
+
+      .stats-grid,
       .system-grid{
         grid-template-columns:1fr;
       }
 
       .activity-item{
-        grid-template-columns:auto 1fr;
+        grid-template-columns:46px 1fr;
       }
 
       .activity-time{
         grid-column:2;
       }
     }
-    /* ---------- FEINSCHLIFF DASHBOARD ---------- */
-
-.admin-content{
-  display:grid;
-  gap:28px;
-}
-
-.admin-card{
-  padding:28px;
-}
-
-.admin-stats{
-  margin-top:24px;
-  gap:18px;
-}
-
-.stat-box{
-  min-height:140px;
-  padding:22px;
-}
-
-.overview-grid{
-  align-items:stretch;
-}
-
-.system-grid{
-  gap:18px;
-  align-items:stretch;
-}
-
-.system-box{
-  min-height:180px;
-  display:flex;
-  flex-direction:column;
-  justify-content:space-between;
-}
-
-.quick-grid{
-  gap:18px;
-  align-items:stretch;
-}
-
-.quick-card{
-  min-height:110px;
-  display:flex;
-  flex-direction:column;
-  justify-content:space-between;
-}
-
-.quick-card h3{
-  font-size:22px;
-}
-
-.quick-card p{
-  margin-top:10px;
-  line-height:1.7;
-}
-
-.activity-feed{
-  gap:14px;
-}
-
-.activity-item{
-  min-height:88px;
-  padding:18px;
-}
-
-.activity-item strong{
-  font-size:15px;
-}
-
-.activity-item p{
-  font-size:13px;
-  line-height:1.7;
-}
-
-.activity-time{
-  font-size:12px;
-}
-
-.admin-sidebar{
-  min-height:calc(100vh - 120px);
-}
-
-.admin-nav{
-  margin-top:24px;
-}
-
-.admin-link{
-  min-height:58px;
-  font-size:15px;
-  font-weight:850;
-}
-
-.section-subtext{
-  max-width:760px;
-}
-
-.hero-text{
-  max-width:900px;
-}
   </style>
 </head>
 
-<body>
+<body class="admin-page">
+  <div class="page">
+    <nav class="admin-topbar">
+      <a href="/admin/dashboard.html" class="admin-brand">BullProsperity Admin</a>
 
-<div class="page">
-
-  <nav class="navbar">
-    <a href="/index.html" class="logo">BullProsperity | Admin</a>
-
-    <div class="nav-links">
-      <a href="/hub.html">Hub</a>
-      <a href="/course.html">Course</a>
-      <a href="/tools.html">Tools</a>
-      <a href="/community.html">Community</a>
-    </div>
-  </nav>
-
-  <section class="hero-shell">
-    <div class="badge">Founder Control Center</div>
-
-    <h1 class="hero-title">
-      BullProsperity
-      <span class="gold">Admin Dashboard</span>
-    </h1>
-
-    <p class="hero-text">
-      Zentrale Übersicht über Mitglieder, Course Analytics, Watchtime, Setup Room, Security und Systemaktivität.
-    </p>
-  </section>
-
-  <section class="admin-layout">
-
-    <aside class="admin-sidebar">
-      <div class="badge">Verwaltung</div>
-
-      <h2 class="section-heading" style="font-size:34px;margin-bottom:8px;">
-        Control Center
-      </h2>
-
-      <div class="admin-nav">
-        <a href="/admin/dashboard.html" class="admin-link active"><span>📊 Dashboard</span><span>→</span></a>
-        <a href="/admin/members.html" class="admin-link"><span>👥 Mitglieder</span><span>→</span></a>
-        <a href="/admin/course-analytics.html" class="admin-link"><span>🎬 Course Analytics</span><span>→</span></a>
-        <a href="/admin/sr-analytics.html" class="admin-link"><span>🎳 SR Analytics</span><span>→</span></a>
-        <a href="#" class="admin-link"><span>💰 Affiliate</span><span>→</span></a>
-        <a href="/admin/notifications.html" class="admin-link"><span>🔔 Notifications</span><span>→</span></a>
-        <a href="/admin/security.html" class="admin-link"><span>🛡 Security</span><span>→</span></a>
+      <div class="admin-toplinks">
+        <a href="/hub.html">Hub</a>
+        <a href="/course.html">Course</a>
+        <a href="/tools.html">Tools</a>
+        <a href="/setup-room.html">Setup Room</a>
+        <a href="/community.html">Community</a>
+        <a href="/api/logout">Logout</a>
       </div>
-    </aside>
+    </nav>
 
-    <div class="admin-content">
-
-      <div class="admin-card">
-        <div class="badge">Live Übersicht</div>
-
-        <h2 class="section-heading" style="font-size:38px;margin-bottom:10px;">
-          Plattform Snapshot
-        </h2>
-
-        <p class="section-subtext">
-          Echtzeit Überblick über die wichtigsten BullProsperity Systeme.
+    <section class="admin-hero">
+      <div class="admin-hero-content">
+        <div class="badge">Founder Control Center</div>
+        <h1 class="admin-title">BullProsperity <span>Admin Dashboard</span></h1>
+        <p class="admin-text">
+          Zentrale Übersicht für Mitglieder, Kursaktivität, Watchtime, Setup Room,
+          Sicherheit und Plattform-Status.
         </p>
-
-        <div class="admin-stats">
-          <div class="stat-box">
-            <div class="stat-icon">👥</div>
-            <div class="stat-label">Mitglieder</div>
-            <div class="stat-value" id="activeMembers">0</div>
-            <div class="stat-sub">Einzigartige User</div>
-          </div>
-
-          <div class="stat-box">
-            <div class="stat-icon">⚡</div>
-            <div class="stat-label">Gesamtaktivität</div>
-            <div class="stat-value" id="totalActivities">0</div>
-            <div class="stat-sub">Alle getrackten Events</div>
-          </div>
-
-          <div class="stat-box">
-            <div class="stat-icon">🎬</div>
-            <div class="stat-label">Watchtime</div>
-            <div class="stat-value" id="totalWatchtime">0m</div>
-            <div class="stat-sub">Gesamte Kurs-Watchtime</div>
-          </div>
-
-          <div class="stat-box">
-            <div class="stat-icon">🕘</div>
-            <div class="stat-label">Letzte Aktivität</div>
-            <div class="stat-value" id="lastActivity">-</div>
-            <div class="stat-sub">Neuester Systemeintrag</div>
-          </div>
-        </div>
       </div>
+    </section>
 
-      <div class="overview-grid">
-        <div class="admin-card">
-          <div class="badge">System Snapshot</div>
-
-          <h2 class="section-heading" style="font-size:34px;margin-bottom:10px;">
-            BullProsperity Systeme
-          </h2>
-
-          <p class="section-subtext">
-            Kurzer Status über alle aktiven Plattformbereiche.
-          </p>
-
-          <div class="system-grid">
-            <div class="system-box">
-              <div class="system-title">Hub</div>
-              <div class="system-value" id="hubOpens">0</div>
-              <div class="system-sub">Hub Öffnungen</div>
-              <div class="status-pill">Aktiv</div>
-            </div>
-
-            <div class="system-box">
-              <div class="system-title">Course</div>
-              <div class="system-value" id="lessonOpens">0</div>
-              <div class="system-sub">Lesson Opens</div>
-              <div class="status-pill">Tracking</div>
-            </div>
-
-            <div class="system-box">
-              <div class="system-title">Setup Room</div>
-              <div class="system-value" id="srActions">0</div>
-              <div class="system-sub">SR Aktivitäten</div>
-              <div class="status-pill">Live</div>
-            </div>
-
-            <div class="system-box">
-              <div class="system-title">Security</div>
-              <div class="system-value">OK</div>
-              <div class="system-sub">Admin Schutz aktiv</div>
-              <div class="status-pill">Sicher</div>
-            </div>
-          </div>
+    <main class="admin-shell">
+      <aside class="admin-sidebar">
+        <div>
+          <div class="badge">Verwaltung</div>
+          <h2 class="admin-sidebar-title">Control Center</h2>
         </div>
 
-        <div class="admin-card">
-          <div class="badge">Quick Access</div>
-
-          <h2 class="section-heading" style="font-size:34px;margin-bottom:10px;">
-            Schnellzugriff
-          </h2>
-
-          <p class="section-subtext">
-            Direkter Zugriff auf die wichtigsten Admin-Bereiche.
-          </p>
-
-          <div class="quick-grid">
-            <a href="/admin/members.html" class="quick-card">
-              <h3>👥 Mitglieder</h3>
-              <p>Online Status, letzte Aktivität und Nutzerübersicht.</p>
-            </a>
-
-            <a href="/admin/course-analytics.html" class="quick-card">
-              <h3>🎬 Course</h3>
-              <p>Watchtime, Top Lessons und Kurs-Engagement.</p>
-            </a>
-
-            <a href="/admin/sr-analytics.html" class="quick-card">
-              <h3>🎳 SR Analytics</h3>
-              <p>Setup Room Kategorien, Klicks und Aktivitätsfeed.</p>
-            </a>
-          </div>
+        <div class="admin-nav">
+          <a href="/admin/dashboard.html" class="active"><span>📊 Dashboard</span><small>LIVE</small></a>
+          <a href="/admin/members.html"><span>👥 Mitglieder</span><small>USER</small></a>
+          <a href="/admin/course-analytics.html"><span>🎬 Course Analytics</span><small>WATCH</small></a>
+          <a href="/admin/sr-analytics.html"><span>🎯 Setup Room Analytics</span><small>SMC</small></a>
+          <a href="/admin/notifications.html"><span>🔔 Notifications</span><small>PUSH</small></a>
+          <a href="/admin/security.html"><span>🛡️ Security</span><small>ADMIN</small></a>
+          <a href="/admin/ai-journal.html"><span>🧠 AI Journal</span><small>REVIEW</small></a>
+          <a href="/admin-signals.html"><span>📡 Admin Signals</span><small>POST</small></a>
         </div>
-      </div>
+      </aside>
 
-      <div class="admin-card">
-        <div class="badge">Live Feed</div>
-
-        <h2 class="section-heading" style="font-size:36px;margin-bottom:10px;">
-          Neueste Plattform Aktivität
-        </h2>
-
-        <p class="section-subtext">
-          Kombinierter Feed aus Hub, Course und Setup Room.
-        </p>
-
-        <div class="activity-feed" id="activityFeed">
-          <div class="activity-item">
-            <div class="avatar">BP</div>
+      <section class="admin-content">
+        <div class="admin-panel">
+          <div class="panel-head">
             <div>
-              <strong>Keine Daten geladen</strong>
-              <p>Aktivitäten erscheinen hier automatisch.</p>
+              <h2 class="panel-title">Plattform <span>Snapshot</span></h2>
+              <p class="panel-copy">
+                Die wichtigsten Kennzahlen aus Hub, Course, Watchtime und Setup Room
+                in einer klaren Übersicht.
+              </p>
             </div>
-            <div class="activity-time">-</div>
+            <div class="admin-status">Admin aktiv</div>
+          </div>
+
+          <div class="stats-grid">
+            <div class="stat-card">
+              <div>
+                <div class="stat-label">👥 Mitglieder</div>
+                <div class="stat-value" id="activeMembers">0</div>
+              </div>
+              <div class="stat-note">Einzigartige User mit Aktivität.</div>
+            </div>
+
+            <div class="stat-card">
+              <div>
+                <div class="stat-label">⚡ Gesamtaktivität</div>
+                <div class="stat-value" id="totalActivities">0</div>
+              </div>
+              <div class="stat-note">Alle getrackten Events.</div>
+            </div>
+
+            <div class="stat-card">
+              <div>
+                <div class="stat-label">🎬 Watchtime</div>
+                <div class="stat-value" id="totalWatchtime">0m</div>
+              </div>
+              <div class="stat-note">Kumulierte Kurs-Watchtime.</div>
+            </div>
+
+            <div class="stat-card">
+              <div>
+                <div class="stat-label">🕘 Letzte Aktivität</div>
+                <div class="stat-value" id="lastActivity">-</div>
+              </div>
+              <div class="stat-note">Neuester Plattform-Eintrag.</div>
+            </div>
           </div>
         </div>
-      </div>
 
+        <div class="admin-grid">
+          <div class="admin-panel">
+            <div class="panel-head">
+              <div>
+                <h2 class="panel-title">Systeme</h2>
+                <p class="panel-copy">Kurzer Status über die aktiven Plattformbereiche.</p>
+              </div>
+            </div>
+
+            <div class="system-grid">
+              <div class="system-card">
+                <div>
+                  <div class="system-name">🏠 Hub</div>
+                  <div class="system-value" id="hubOpens">0</div>
+                </div>
+                <p class="system-copy">Hub-Öffnungen und Mitgliederbewegung.</p>
+              </div>
+
+              <div class="system-card">
+                <div>
+                  <div class="system-name">🎬 Course</div>
+                  <div class="system-value" id="lessonOpens">0</div>
+                </div>
+                <p class="system-copy">Lektionsstarts und Kurs-Engagement.</p>
+              </div>
+
+              <div class="system-card">
+                <div>
+                  <div class="system-name">🎯 Setup Room</div>
+                  <div class="system-value" id="srActions">0</div>
+                </div>
+                <p class="system-copy">Klicks auf Kategorien und Setups.</p>
+              </div>
+
+              <div class="system-card">
+                <div>
+                  <div class="system-name">🛡️ Security</div>
+                  <div class="system-value">OK</div>
+                </div>
+                <p class="system-copy">Admin-Zugriff ist geschützt.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="admin-panel">
+            <div class="panel-head">
+              <div>
+                <h2 class="panel-title">Schnellzugriff</h2>
+                <p class="panel-copy">Direkt zu den wichtigsten Admin-Bereichen.</p>
+              </div>
+            </div>
+
+            <div class="quick-list">
+              <a href="/admin/members.html" class="quick-link">
+                <strong>👥 Mitglieder verwalten</strong>
+                <span>Online-Status, Rollen und letzte Aktivität prüfen.</span>
+              </a>
+
+              <a href="/admin/course-analytics.html" class="quick-link">
+                <strong>🎬 Course Analytics öffnen</strong>
+                <span>Watchtime, Lektionen und Lernaktivität auswerten.</span>
+              </a>
+
+              <a href="/admin/notifications.html" class="quick-link">
+                <strong>🔔 Notification senden</strong>
+                <span>Updates, Hinweise oder neue Inhalte an Mitglieder schicken.</span>
+              </a>
+
+              <a href="/admin/security.html" class="quick-link">
+                <strong>🛡️ Security prüfen</strong>
+                <span>Admin-Zugriffe und geschützte Bereiche kontrollieren.</span>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="admin-panel">
+          <div class="panel-head">
+            <div>
+              <h2 class="panel-title">Neueste <span>Aktivität</span></h2>
+              <p class="panel-copy">
+                Kombinierter Feed aus Hub, Course und Setup Room. Dezenter Überblick,
+                ohne das Dashboard unnötig voll wirken zu lassen.
+              </p>
+            </div>
+          </div>
+
+          <div class="activity-feed" id="activityFeed">
+            <div class="activity-item">
+              <div class="avatar">BP</div>
+              <div class="activity-main">
+                <strong>Daten werden geladen</strong>
+                <p>Aktivitäten erscheinen hier automatisch.</p>
+              </div>
+              <div class="activity-time">-</div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <div class="footer-note">
+      BullProsperity Founder Control Center.
     </div>
-  </section>
-
-  <div class="footer-note">
-    BullProsperity Founder Control Center.
   </div>
-</div>
 
-<script>
-function formatSeconds(seconds){
-  const total = Number(seconds || 0);
-  const h = Math.floor(total / 3600);
-  const m = Math.floor((total % 3600) / 60);
+  <script>
+    function formatSeconds(seconds){
+      const total = Number(seconds || 0);
+      const h = Math.floor(total / 3600);
+      const m = Math.floor((total % 3600) / 60);
 
-  if(h > 0) return `${h}h ${m}m`;
-  return `${m}m`;
-}
+      if(h > 0) return `${h}h ${m}m`;
+      return `${m}m`;
+    }
 
-function getInitials(email){
-  if(!email) return "BP";
+    function getInitials(email){
+      if(!email) return "BP";
 
-  const name = email.split("@")[0] || email;
-  const parts = name
-    .replace(/[^a-zA-Z0-9._-]/g, "")
-    .split(/[._-]/)
-    .filter(Boolean);
+      const name = email.split("@")[0] || email;
+      const parts = name
+        .replace(/[^a-zA-Z0-9._-]/g, "")
+        .split(/[._-]/)
+        .filter(Boolean);
 
-  if(parts.length >= 2){
-    return (parts[0][0] + parts[1][0]).toUpperCase();
-  }
-
-  return name.slice(0,2).toUpperCase();
-}
-
-function formatDateTime(value){
-  if(!value) return "-";
-
-  return new Date(value).toLocaleString("de-DE", {
-    day:"2-digit",
-    month:"2-digit",
-    hour:"2-digit",
-    minute:"2-digit"
-  });
-}
-
-function formatTime(value){
-  if(!value) return "-";
-
-  return new Date(value).toLocaleTimeString("de-DE", {
-    hour:"2-digit",
-    minute:"2-digit"
-  });
-}
-
-async function loadFounderDashboard(){
-  try{
-    const [
-      memberResult,
-      lessonResult,
-      watchResult,
-      srResult
-    ] = await Promise.all([
-      supabaseClient.from("member_activity").select("*").order("created_at", { ascending:false }).limit(200),
-      supabaseClient.from("lesson_activity").select("*").order("created_at", { ascending:false }).limit(200),
-      supabaseClient.from("video_watchtime").select("*").order("created_at", { ascending:false }).limit(500),
-      supabaseClient.from("setup_room_activity").select("*").order("created_at", { ascending:false }).limit(200)
-    ]);
-
-    const memberActivity = memberResult.data || [];
-    const lessonActivity = lessonResult.data || [];
-    const watchtime = watchResult.data || [];
-    const srActivity = srResult.data || [];
-
-    const allEmails = [
-      ...memberActivity.map(x => x.email),
-      ...lessonActivity.map(x => x.email),
-      ...watchtime.map(x => x.email),
-      ...srActivity.map(x => x.email)
-    ].filter(Boolean);
-
-    const uniqueMembers = new Set(allEmails);
-
-    const hubOpens = memberActivity.filter(x => x.action === "hub_opened").length;
-    const lessonOpens = lessonActivity.length;
-    const srActions = srActivity.length;
-
-    const totalEvents =
-      memberActivity.length +
-      lessonActivity.length +
-      watchtime.length +
-      srActivity.length;
-
-    const latestByUserLesson = {};
-    watchtime.forEach(item => {
-      const key = `${item.email || "unknown"}_${item.lesson || "unknown"}`;
-      const existing = latestByUserLesson[key];
-
-      if(!existing || Number(item.current_seconds || 0) > Number(existing.current_seconds || 0)){
-        latestByUserLesson[key] = item;
+      if(parts.length >= 2){
+        return (parts[0][0] + parts[1][0]).toUpperCase();
       }
-    });
 
-    const cleanWatchRows = Object.values(latestByUserLesson);
-
-    const totalWatchSeconds = cleanWatchRows.reduce((sum,item) => {
-      return sum + Number(item.current_seconds || 0);
-    }, 0);
-
-    document.getElementById("activeMembers").textContent = uniqueMembers.size;
-    document.getElementById("totalActivities").textContent = totalEvents;
-    document.getElementById("totalWatchtime").textContent = formatSeconds(totalWatchSeconds);
-    document.getElementById("hubOpens").textContent = hubOpens;
-    document.getElementById("lessonOpens").textContent = lessonOpens;
-    document.getElementById("srActions").textContent = srActions;
-
-    const combined = [
-      ...memberActivity.map(item => ({
-        email:item.email,
-        role:item.role,
-        label:"Hub",
-        title:item.action || "Hub Aktivität",
-        detail:item.page || "hub",
-        created_at:item.created_at
-      })),
-      ...lessonActivity.map(item => ({
-        email:item.email,
-        role:item.role,
-        label:"Course",
-        title:item.lesson || "Lesson",
-        detail:item.action || "lesson_opened",
-        created_at:item.created_at
-      })),
-      ...srActivity.map(item => ({
-        email:item.email,
-        role:item.role,
-        label:"Setup Room",
-        title:item.category || "Setup Room",
-        detail:item.action || "activity",
-        created_at:item.created_at
-      }))
-    ].filter(x => x.created_at)
-     .sort((a,b) => new Date(b.created_at) - new Date(a.created_at));
-
-    if(combined[0]?.created_at){
-      document.getElementById("lastActivity").textContent = formatTime(combined[0].created_at);
+      return name.slice(0,2).toUpperCase();
     }
 
-    const feed = document.getElementById("activityFeed");
-    feed.innerHTML = "";
+    function formatDateTime(value){
+      if(!value) return "-";
 
-    if(!combined.length){
-      feed.innerHTML = `
-        <div class="activity-item">
-          <div class="avatar">BP</div>
-          <div>
-            <strong>Noch keine Aktivität</strong>
-            <p>Neue Aktivitäten erscheinen automatisch.</p>
-          </div>
-          <div class="activity-time">-</div>
-        </div>
-      `;
-      return;
+      return new Date(value).toLocaleString("de-DE", {
+        day:"2-digit",
+        month:"2-digit",
+        hour:"2-digit",
+        minute:"2-digit"
+      });
     }
 
-    combined.slice(0,12).forEach(item => {
-      const email = item.email || "Unknown User";
+    function formatTime(value){
+      if(!value) return "-";
+            return new Date(value).toLocaleTimeString("de-DE", {
+        hour:"2-digit",
+        minute:"2-digit"
+      });
+    }
 
-      feed.innerHTML += `
-        <div class="activity-item">
-          <div class="avatar">${getInitials(email)}</div>
-          <div>
-            <strong>${item.label} • ${item.title}</strong>
-            <p>${email} • ${item.role || "unknown"} • ${item.detail || "-"}</p>
-          </div>
-          <div class="activity-time">${formatDateTime(item.created_at)}</div>
-        </div>
-      `;
-    });
+    function setText(id, value){
+      const el = document.getElementById(id);
+      if(el) el.textContent = value;
+    }
 
-  } catch(err){
-    console.log("Founder Dashboard Fehler:", err);
-  }
-}
+    async function loadFounderDashboard(){
+      try{
+        const [
+          memberResult,
+          lessonResult,
+          watchResult,
+          srResult
+        ] = await Promise.all([
+          supabaseClient.from("member_activity").select("*").order("created_at", { ascending:false }).limit(200),
+          supabaseClient.from("lesson_activity").select("*").order("created_at", { ascending:false }).limit(200),
+          supabaseClient.from("video_watchtime").select("*").order("created_at", { ascending:false }).limit(500),
+          supabaseClient.from("setup_room_activity").select("*").order("created_at", { ascending:false }).limit(200)
+        ]);
 
-loadFounderDashboard();
-</script>
+        const memberActivity = memberResult.data || [];
+        const lessonActivity = lessonResult.data || [];
+        const watchtime = watchResult.data || [];
+        const srActivity = srResult.data || [];
 
+        const allEmails = [
+          ...memberActivity.map(item => item.email),
+          ...lessonActivity.map(item => item.email),
+          ...watchtime.map(item => item.email),
+          ...srActivity.map(item => item.email)
+        ].filter(Boolean);
+
+        const uniqueMembers = new Set(allEmails);
+        const hubOpens = memberActivity.filter(item => item.action === "hub_opened").length;
+        const lessonOpens = lessonActivity.length;
+        const srActions = srActivity.length;
+
+        const totalEvents =
+          memberActivity.length +
+          lessonActivity.length +
+          watchtime.length +
+          srActivity.length;
+
+        const latestByUserLesson = {};
+        watchtime.forEach(item => {
+          const key = `${item.email || "unknown"}_${item.lesson || "unknown"}`;
+          const existing = latestByUserLesson[key];
+
+          if(!existing || Number(item.current_seconds || 0) > Number(existing.current_seconds || 0)){
+            latestByUserLesson[key] = item;
+          }
+        });
+
+        const cleanWatchRows = Object.values(latestByUserLesson);
+        const totalWatchSeconds = cleanWatchRows.reduce((sum, item) => {
+          return sum + Number(item.current_seconds || 0);
+        }, 0);
+
+        setText("activeMembers", uniqueMembers.size);
+        setText("totalActivities", totalEvents);
+        setText("totalWatchtime", formatSeconds(totalWatchSeconds));
+        setText("hubOpens", hubOpens);
+        setText("lessonOpens", lessonOpens);
+        setText("srActions", srActions);
+
+        const combined = [
+          ...memberActivity.map(item => ({
+            email:item.email,
+            role:item.role,
+            label:"Hub",
+            title:item.action || "Hub Aktivität",
+            detail:item.page || "hub",
+            created_at:item.created_at
+          })),
+          ...lessonActivity.map(item => ({
+            email:item.email,
+            role:item.role,
+            label:"Course",
+            title:item.lesson || "Lektion",
+            detail:item.action || "lesson_opened",
+            created_at:item.created_at
+          })),
+          ...srActivity.map(item => ({
+            email:item.email,
+            role:item.role,
+            label:"Setup Room",
+            title:item.category || "Setup Room",
+            detail:item.action || "activity",
+            created_at:item.created_at
+          }))
+        ].filter(item => item.created_at)
+         .sort((a,b) => new Date(b.created_at) - new Date(a.created_at));
+
+        if(combined[0]?.created_at){
+          setText("lastActivity", formatTime(combined[0].created_at));
+        }
+
+        const feed = document.getElementById("activityFeed");
+        if(!feed) return;
+
+        if(!combined.length){
+          feed.innerHTML = `
+            <div class="activity-item">
+              <div class="avatar">BP</div>
+              <div class="activity-main">
+                <strong>Noch keine Aktivität</strong>
+                <p>Neue Aktivitäten erscheinen hier automatisch.</p>
+              </div>
+              <div class="activity-time">-</div>
+            </div>
+          `;
+          return;
+        }
+
+        feed.innerHTML = combined.slice(0,12).map(item => {
+          const email = item.email || "Unbekannter User";
+
+          return `
+            <div class="activity-item">
+              <div class="avatar">${getInitials(email)}</div>
+              <div class="activity-main">
+                <strong>${item.label} · ${item.title}</strong>
+                <p>${email} · ${item.role || "unknown"} · ${item.detail || "-"}</p>
+              </div>
+              <div class="activity-time">${formatDateTime(item.created_at)}</div>
+            </div>
+          `;
+        }).join("");
+
+      } catch(err){
+        console.log("Founder Dashboard Fehler:", err);
+
+        const feed = document.getElementById("activityFeed");
+        if(feed){
+          feed.innerHTML = `
+            <div class="activity-item">
+              <div class="avatar">BP</div>
+              <div class="activity-main">
+                <strong>Daten konnten nicht geladen werden</strong>
+                <p>Prüfe Supabase Tabellen und Verbindung.</p>
+              </div>
+              <div class="activity-time">-</div>
+            </div>
+          `;
+        }
+      }
+    }
+
+    loadFounderDashboard();
+  </script>
 </body>
 </html>
