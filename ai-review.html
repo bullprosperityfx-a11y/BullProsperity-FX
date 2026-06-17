@@ -169,7 +169,8 @@
       resize:vertical;
       line-height:1.6;
     }
-        .upload-box{
+
+    .upload-box{
       border:1px dashed rgba(243,210,27,.32);
       background:rgba(243,210,27,.04);
       border-radius:22px;
@@ -465,7 +466,8 @@
         Nur Admin sichtbar - noch nicht veröffentlicht
       </div>
     </section>
-        <section class="ai-grid">
+
+    <section class="ai-grid">
 
       <div class="ai-card">
         <div class="badge">AI Trade Review</div>
@@ -696,7 +698,8 @@ const historyList = document.getElementById("historyList");
 
 let imageBase64 = "";
 let latestReviewText = "";
-  document.addEventListener("DOMContentLoaded", async () => {
+
+document.addEventListener("DOMContentLoaded", async () => {
   try {
     const res = await fetch("/api/access", {
       credentials: "include",
@@ -906,7 +909,7 @@ aiForm.addEventListener("submit", async (e) => {
 
     if (!res.ok) {
       const fallback = fallbackReview(result.error || "AI Analyse konnte nicht durchgeführt werden.");
-      setResult("AI Fehler - Local Review aktiv", fallback);
+      setResult("AI Fehler • Local Review aktiv", fallback);
       return;
     }
 
@@ -942,7 +945,7 @@ ${result.analysis || "Keine Analyse erhalten."}
 
   } catch (err) {
     const fallback = fallbackReview("Server Fehler oder API nicht erreichbar.");
-    setResult("Server Fehler - Local Review aktiv", fallback);
+    setResult("Server Fehler • Local Review aktiv", fallback);
   } finally {
     aiSubmitBtn.disabled = false;
     aiSubmitBtn.textContent = "BullProsperity AI Analyse starten";
@@ -1012,7 +1015,7 @@ function loadHistory(){
 
     historyList.innerHTML += `
       <div class="history-item" onclick="openHistory(${index})">
-        <strong>${item.market} - ${item.direction}</strong>
+        <strong>${item.market} • ${item.direction}</strong>
         <span>${date}</span>
       </div>
     `;

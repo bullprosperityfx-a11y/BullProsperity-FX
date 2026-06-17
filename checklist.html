@@ -4,10 +4,10 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>BullProsperity | Trading Checkliste</title>
-  <link rel="icon" type="image/png" href="/favicon.png">
-  <link rel="manifest" href="/manifest.json">
-  <link rel="apple-touch-icon" href="/favicon.png">
-  <meta name="theme-color" content="#050505">
+   <link rel="icon" type="image/png" href="/favicon.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="apple-touch-icon" href="/favicon.png">
+<meta name="theme-color" content="#050505">
   <link rel="stylesheet" href="theme.css" />
   <script src="/login.js" defer></script>
 
@@ -216,7 +216,8 @@
         rgba(255,255,255,0.02);
       padding:18px;
     }
-        .stat-card .label{
+
+    .stat-card .label{
       color:#bdbdbd;
       font-size:13px;
       font-weight:700;
@@ -536,7 +537,8 @@
           <button class="btn secondary action-btn" id="resetChecklistBtn">Alles zurücksetzen</button>
         </div>
       </div>
-            <div class="checklist-panel">
+
+      <div class="checklist-panel">
         <div class="badge">Auswertung</div>
         <h2 class="section-heading" style="font-size:36px; margin-bottom:10px;">Dein Check Status</h2>
         <p class="section-subtext" style="margin-bottom:0;">
@@ -564,7 +566,7 @@
 
         <div class="helper-list">
           <div class="helper-item">Eine starke Checkliste schützt dich vor impulsiven Trades.</div>
-          <div class="helper-item">Nicht jeder Markt muss gehandelt werden - Qualität vor Aktivität.</div>
+          <div class="helper-item">Nicht jeder Markt muss gehandelt werden – Qualität vor Aktivität.</div>
           <div class="helper-item">Wenn wichtige Punkte fehlen, ist Warten oft die professionellere Entscheidung.</div>
           <div class="helper-item">Disziplin zeigt sich oft genau dann, wenn du einen schlechten Trade nicht nimmst.</div>
         </div>
@@ -660,54 +662,52 @@
     loadChecklist();
     updateStatus();
   </script>
-
   <script>
-    document.addEventListener("DOMContentLoaded", async () => {
-      try {
-        const res = await fetch("/api/access", {
-          credentials: "include"
-        });
+  document.addEventListener("DOMContentLoaded", async () => {
+    try {
+      const res = await fetch("/api/access", {
+        credentials: "include"
+      });
 
-        const data = await res.json();
-        const role = data?.role || "guest";
+      const data = await res.json();
+      const role = data?.role || "guest";
 
-        if (role !== "admin" && role !== "premium") {
-          window.location.href = "locked.html";
-          return;
-        }
-
-        document.body.classList.add("access-ready");
-
-        if (role === "admin") {
-          authBadge.textContent = "Admin";
-          authBadge.className = "auth-badge status-admin";
-          authBadge.style.display = "inline-flex";
-        }
-
-        if (role === "premium") {
-          authBadge.textContent = "Premium";
-          authBadge.className = "auth-badge status-premium";
-          authBadge.style.display = "inline-flex";
-        }
-
-        if (loginNavBtn) loginNavBtn.style.display = "none";
-        if (logoutBtn) logoutBtn.style.display = "inline-flex";
-      } catch (err) {
+      if (role !== "admin" && role !== "premium") {
         window.location.href = "locked.html";
+        return;
       }
-    });
-  </script>
 
+      document.body.classList.add("access-ready");
+
+      if (role === "admin") {
+        authBadge.textContent = "Admin";
+        authBadge.className = "auth-badge status-admin";
+        authBadge.style.display = "inline-flex";
+      }
+
+      if (role === "premium") {
+        authBadge.textContent = "Premium";
+        authBadge.className = "auth-badge status-premium";
+        authBadge.style.display = "inline-flex";
+      }
+
+      if (loginNavBtn) loginNavBtn.style.display = "none";
+      if (logoutBtn) logoutBtn.style.display = "inline-flex";
+    } catch (err) {
+      window.location.href = "locked.html";
+    }
+  });
+</script>
   <script>
-    window.addEventListener("load", () => {
-      const loader = document.getElementById("bpLoader");
+  window.addEventListener("load", () => {
+    const loader = document.getElementById("bpLoader");
 
-      setTimeout(() => {
-        if(loader){
-          loader.classList.add("hide");
-        }
-      }, 700);
-    });
-  </script>
+    setTimeout(() => {
+      if(loader){
+        loader.classList.add("hide");
+      }
+    }, 700);
+  });
+</script>
 </body>
 </html>

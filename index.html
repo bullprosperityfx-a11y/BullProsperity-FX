@@ -5,9 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>BullProsperity | Home</title>
   <link rel="icon" type="image/png" href="/favicon.png">
-  <link rel="manifest" href="/manifest.json">
-  <link rel="apple-touch-icon" href="/favicon.png">
-  <meta name="theme-color" content="#050505">
+<link rel="manifest" href="/manifest.json">
+<link rel="apple-touch-icon" href="/favicon.png">
+<meta name="theme-color" content="#050505">
   <link rel="stylesheet" href="theme.css" />
   <script src="/login.js" defer></script>
 
@@ -32,7 +32,9 @@
       box-shadow:0 18px 60px rgba(0,0,0,0.28);
     }
 
-    .home-page .logo{ letter-spacing:0; }
+    .home-page .logo{
+      letter-spacing:0;
+    }
 
     .hero-shell.home-hero{
       min-height:calc(100vh - 128px);
@@ -102,7 +104,9 @@
       margin-right:0;
     }
 
-    .hero-center .hero-buttons{ justify-content:flex-start; }
+    .hero-center .hero-buttons{
+      justify-content:flex-start;
+    }
 
     .hero-kicker{
       display:flex;
@@ -388,7 +392,9 @@
       margin-bottom:18px;
     }
 
-    .access-card .card-link{ margin-top:0; }
+    .access-card .card-link{
+      margin-top:0;
+    }
 
     .auth-box{
       display:flex;
@@ -403,7 +409,9 @@
       white-space:nowrap;
     }
 
-    .section.feature-band{ padding:28px 0 4px; }
+    .section.feature-band{
+      padding:28px 0 4px;
+    }
 
     .flow-strip{
       display:grid;
@@ -443,7 +451,9 @@
       font-weight:700;
     }
 
-    .home-page .section{ margin-bottom:34px; }
+    .home-page .section{
+      margin-bottom:34px;
+    }
 
     .home-page .grid-2{
       display:grid;
@@ -491,7 +501,9 @@
       font-weight:800;
     }
 
-    .home-page .trust-section .section-card{ padding:30px; }
+    .home-page .trust-section .section-card{
+      padding:30px;
+    }
 
     .home-page .trust-grid{
       display:grid;
@@ -585,13 +597,26 @@
       background:#999;
     }
 
-    .status-premium{ background:#00d26a; }
-    .status-admin{ background:#ffd700; }
-    .status-locked{ background:#ff4d4d; }
+    .status-premium{
+      background:#00d26a;
+    }
+
+    .status-admin{
+      background:#ffd700;
+    }
+
+    .status-locked{
+      background:#ff4d4d;
+    }
 
     @media(max-width:1200px){
-      .hero-grid{ grid-template-columns:1fr; }
-      .market-panel{ min-height:440px; }
+      .hero-grid{
+        grid-template-columns:1fr;
+      }
+
+      .market-panel{
+        min-height:440px;
+      }
 
       .feature-grid,
       .access-grid,
@@ -603,18 +628,34 @@
     }
 
     @media(max-width:860px){
-      .auth-box{ margin-top:10px; }
-      .home-page .navbar{ top:0; }
-      .hero-shell.home-hero{ min-height:auto; }
-      .hero-grid{ padding:24px; }
-      .market-panel{ min-height:390px; }
+      .auth-box{
+        margin-top:10px;
+      }
+
+      .home-page .navbar{
+        top:0;
+      }
+
+      .hero-shell.home-hero{
+        min-height:auto;
+      }
+
+      .hero-grid{
+        padding:24px;
+      }
+
+      .market-panel{
+        min-height:390px;
+      }
 
       .market-topbar{
         align-items:flex-start;
         flex-direction:column;
       }
 
-      .note-entry{ display:none; }
+      .note-entry{
+        display:none;
+      }
 
       .hero-kicker{
         display:grid;
@@ -684,6 +725,7 @@
               <span>Gewinnversprechen</span>
             </div>
           </div>
+
         </div>
 
         <div class="market-panel" aria-label="Animierte Marktstruktur Vorschau">
@@ -864,25 +906,23 @@
     </footer>
 
   </div>
-
   <script>
-    document.getElementById("learnMoreBtn")?.addEventListener("click", () => {
-      document.getElementById("zugang")?.scrollIntoView({
-        behavior: "smooth"
-      });
-    });
-  </script>
-
+document.getElementById("learnMoreBtn")?.addEventListener("click", () => {
+  document.getElementById("zugang")?.scrollIntoView({
+    behavior: "smooth"
+  });
+});
+</script>
   <script>
-    window.addEventListener("load", () => {
-      const loader = document.getElementById("bpLoader");
+  window.addEventListener("load", () => {
+    const loader = document.getElementById("bpLoader");
 
-      setTimeout(() => {
-        if(loader){
-          loader.classList.add("hide");
-        }
-      }, 700);
-    });
-  </script>
+    setTimeout(() => {
+      if(loader){
+        loader.classList.add("hide");
+      }
+    }, 700);
+  });
+</script>
 </body>
 </html>

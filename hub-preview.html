@@ -2,24 +2,20 @@
 <html lang="de">
 <head>
   <script>
-    (async () => {
-      try {
-        const res = await fetch("/api/access", {
-          credentials: "include",
-          cache: "no-store"
-        });
-
-        const data = await res.json();
-
-        if (data.role !== "admin" && data.role !== "premium") {
-          window.location.href = "/locked.html";
-        }
-
-      } catch (err) {
-        window.location.href = "/locked.html";
-      }
-    })();
+    document.addEventListener("DOMContentLoaded", () => {
+      document.body.classList.add("access-ready");
+    });
   </script>
+
+  <style>
+    body[data-protected="true"]{
+      visibility:hidden;
+    }
+
+    body[data-protected="true"].access-ready{
+      visibility:visible;
+    }
+  </style>
 
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -935,145 +931,15 @@
     }
 
     .hub-page .footer-note{
-      display:flex;
-      flex-wrap:wrap;
-      align-items:center;
-      justify-content:space-between;
-      gap:16px;
       border:1px solid rgba(243,210,27,0.14);
       border-radius:24px;
       background:rgba(255,255,255,0.025);
-      padding:22px 26px;
+      padding:18px 22px;
       margin:0 0 10px;
       color:#bdbdbd;
       font-size:14px;
       font-weight:800;
-      text-align:left;
-    }
-
-    .hub-page .footer-note strong{
-      display:block;
-      color:var(--gold);
-      font-size:16px;
-      margin-bottom:2px;
-    }
-
-    .hub-page .footer-note span{
-      color:#d2d2d2;
-      font-weight:700;
-    }
-
-    .hub-page .footer-note nav{
-      display:flex;
-      flex-wrap:wrap;
-      gap:10px;
-    }
-
-    .hub-page .footer-note a{
-      color:#fff;
-      text-decoration:none;
-      font-weight:900;
-      padding:9px 12px;
-      border-radius:999px;
-      background:rgba(255,255,255,0.035);
-      border:1px solid rgba(255,255,255,0.07);
-    }
-
-    .hub-page .footer-note a:hover{
-      color:var(--gold);
-      border-color:rgba(243,210,27,0.34);
-    }
-
-    .hub-page .footer-note p{
-      flex-basis:100%;
-      margin:0;
-      color:#aaa;
-      font-weight:700;
-    }
-
-    .hub-page .hub-longterm-card{
-      padding:34px;
-      margin-bottom:8px;
-    }
-
-    .hub-page .hub-longterm-card::before{
-      width:360px;
-      height:360px;
-      right:-150px;
-      bottom:-150px;
-      opacity:.65;
-    }
-
-    .hub-page .hub-longterm-card .hub-title{
-      max-width:980px;
-      font-size:clamp(36px, 3.8vw, 54px);
-      line-height:.98;
-      margin:24px 0 14px;
-    }
-
-    .hub-page .hub-longterm-card > .hub-text{
-      max-width:1040px;
-      font-size:16px;
-    }
-
-    .hub-page .hub-longterm-grid{
-      grid-template-columns:minmax(0, 1.05fr) minmax(360px, .75fr);
-      align-items:stretch;
-      gap:28px;
-      margin-top:26px;
-    }
-
-    .hub-page .hub-longterm-grid > div{
-      display:flex;
-      flex-direction:column;
-      min-width:0;
-    }
-
-    .hub-page .hub-longterm-grid > div:first-child{
-      gap:18px;
-    }
-
-    .hub-page .hub-longterm-grid > div:first-child .hub-badges{
-      margin-top:0;
-    }
-
-    .hub-page .hub-longterm-list{
-      gap:12px;
-      margin-top:0;
-      flex:1;
-    }
-
-    .hub-page .hub-longterm-item{
-      min-height:0;
-      padding:16px 18px;
-      border-radius:18px;
-    }
-
-    .hub-page .hub-longterm-grid > div:last-child .hub-card{
-      position:relative;
-      top:auto;
-      height:100%;
-      min-height:100%;
-      display:flex;
-      flex-direction:column;
-      justify-content:center;
-      padding:26px !important;
-      border-radius:24px;
-      background:
-        linear-gradient(145deg, rgba(255,255,255,0.04), transparent 44%),
-        rgba(12,12,12,0.92) !important;
-      border-color:rgba(243,210,27,0.16) !important;
-      box-shadow:0 20px 54px rgba(0,0,0,0.32);
-    }
-
-    .hub-page .hub-longterm-grid > div:last-child .hub-subtitle{
-      font-size:28px !important;
-      line-height:1.08;
-      margin-top:18px;
-    }
-
-    .hub-page .hub-longterm-grid > div:last-child .hub-actions{
-      margin-top:28px;
+      text-align:center;
     }
 
     @keyframes notificationEnter{
@@ -1165,25 +1031,11 @@
       .hub-page .notification-btn{
         min-width:auto;
       }
-
-      .hub-page .hub-longterm-grid{
-        grid-template-columns:1fr;
-      }
-
-      .hub-page .hub-longterm-grid > div:last-child .hub-card{
-        position:relative;
-        top:auto;
-      }
-
-      .hub-page .footer-note{
-        align-items:flex-start;
-        flex-direction:column;
-      }
     }
   </style>
 </head>
 
-<body class="hub-page">
+<body class="hub-page access-ready">
   <div class="page">
 
     <nav class="navbar">
@@ -1200,7 +1052,7 @@
         <a id="loginNavBtn" href="/api/whop/login">Login</a>
         <a id="logoutBtn" href="/api/logout" class="logout-btn" style="display:none;">Logout</a>
 
-        <div id="authBadge" class="auth-badge status-loading" style="display:none;">Zugang</div>
+        <div id="authBadge" class="auth-badge status-loading">Prüfe Zugang...</div>
 
         <div class="notification-wrap">
           <button class="notification-btn" id="notificationBtn" type="button" aria-label="Notifications öffnen">
@@ -1506,17 +1358,7 @@
       </section>
 
       <div class="footer-note">
-        <div>
-          <strong>BullProsperity</strong>
-          <span>Premium Hub für Struktur, Analyse und Trading Education.</span>
-        </div>
-        <nav>
-          <a href="impressum.html">Impressum</a>
-          <a href="datenschutz.html">Datenschutz</a>
-          <a href="risikohinweis.html">Risikohinweis</a>
-          <a href="community.html">Kontakt</a>
-        </nav>
-        <p>BullProsperity dient ausschließlich Bildungs- und Informationszwecken. Es werden keine Gewinne garantiert.</p>
+        BullProsperity dient ausschließlich Bildungszwecken
       </div>
     </div>
   </div>
@@ -1578,69 +1420,26 @@
     bpUpdateSession();
     setInterval(bpUpdateSession, 60000);
 
-    (async () => {
-      try {
-        const res = await fetch("/api/access", {
-          credentials: "include",
-          cache: "no-store"
-        });
+    (() => {
+      document.body.classList.add("access-ready");
 
-        if (!res.ok) {
-          window.location.href = "locked.html";
-          return;
-        }
+      if (authBadge) {
+        authBadge.textContent = "Premium Preview";
+        authBadge.className = "auth-badge status-premium";
+      }
 
-        const data = await res.json();
-        const role = data?.role || "guest";
+      if (statusValue) statusValue.textContent = "Premium";
+      if (heroAccessValue) heroAccessValue.textContent = "Premium";
+      if (loginNavBtn) loginNavBtn.style.display = "none";
+      if (logoutBtn) logoutBtn.style.display = "inline-flex";
 
-        if (role !== "admin" && role !== "premium") {
-          window.location.href = "locked.html";
-          return;
-        }
+      if (longtermBtn) {
+        longtermBtn.href = "longterm.html";
+        longtermBtn.textContent = "Longterm Bereich öffnen";
+      }
 
-        document.body.classList.add("access-ready");
-
-        if (role === "admin") {
-          authBadge.textContent = "Admin";
-          authBadge.className = "auth-badge status-admin";
-          authBadge.style.display = "inline-flex";
-
-          if (statusValue) statusValue.textContent = "Admin";
-          if (heroAccessValue) heroAccessValue.textContent = "Admin";
-
-          if (adminSignalsCard) adminSignalsCard.style.display = "block";
-          if (adminSignalsTopBtn) adminSignalsTopBtn.style.display = "inline-flex";
-          if (adminSignalsHeroBtn) adminSignalsHeroBtn.style.display = "inline-flex";
-
-          if (adminDashboardCard) adminDashboardCard.style.display = "block";
-          if (adminDashboardTopBtn) adminDashboardTopBtn.style.display = "inline-flex";
-          if (adminDashboardHeroBtn) adminDashboardHeroBtn.style.display = "inline-flex";
-        }
-
-        if (role === "premium") {
-          authBadge.textContent = "Premium";
-          authBadge.className = "auth-badge status-premium";
-          authBadge.style.display = "inline-flex";
-
-          if (statusValue) statusValue.textContent = "Premium";
-          if (heroAccessValue) heroAccessValue.textContent = "Premium";
-        }
-
-        if (loginNavBtn) loginNavBtn.style.display = "none";
-        if (logoutBtn) logoutBtn.style.display = "inline-flex";
-
-        if (role === "admin" || role === "premium" || role === "longterm") {
-          longtermBtn.href = "longterm.html";
-          longtermBtn.textContent = "Longterm Bereich öffnen";
-          longtermText.textContent = "Du hast Zugriff auf die Longterm Pro Unterseite mit Watchlist, DCA Rechner, Portfolio Tracker und Investment Journal.";
-        } else {
-          longtermBtn.href = "longterm-sales.html";
-          longtermBtn.textContent = "Longterm freischalten 🔒";
-          longtermText.textContent = "Entdecke die Longterm Pro Unterseite im BullProsperity Design mit vielen Features für strukturierten Vermögensaufbau.";
-        }
-
-      } catch (err) {
-        window.location.href = "locked.html";
+      if (longtermText) {
+        longtermText.textContent = "Du hast Zugriff auf die Longterm Pro Unterseite mit Watchlist, DCA Rechner, Portfolio Tracker und Investment Journal.";
       }
     })();
   </script>

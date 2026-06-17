@@ -20,23 +20,14 @@
   }
 })();
 </script>
-  <style>
-  body[data-protected="true"]{
-    visibility:hidden;
-  }
-
-  body[data-protected="true"].access-ready{
-    visibility:visible;
-  }
-</style>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <title>BullProsperity | Setup Room</title>
-  <link rel="icon" type="image/png" href="/favicon.png">
-  <link rel="manifest" href="/manifest.json">
-  <link rel="apple-touch-icon" href="/favicon.png">
-  <meta name="theme-color" content="#050505">
+ <link rel="icon" type="image/png" href="/favicon.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="apple-touch-icon" href="/favicon.png">
+<meta name="theme-color" content="#050505">
   <link rel="stylesheet" href="theme.css" />
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="/supabase.js"></script>
@@ -305,7 +296,7 @@
   </style>
 </head>
 
-<body class="setup-page" data-protected="true">
+<body class="setup-page">
   <div class="page">
 
     <nav class="navbar">
@@ -320,7 +311,7 @@
         <a href="community.html">Community</a>
         <a id="loginNavBtn" href="/api/whop/login">Login</a>
         <a id="logoutBtn" href="/api/logout" class="logout-btn" style="display:none;">Logout</a>
-        <div id="authBadge" class="auth-badge status-loading">Prüfe Zugang...</div>
+        <div id="authBadge" class="auth-badge status-loading" style="display:none;">Zugang</div>
       </div>
     </nav>
 
@@ -480,28 +471,29 @@ async function trackSetupRoom(action, category, targetUrl) {
       window.location.href = "locked.html";
       return;
     }
-
     document.body.classList.add("access-ready");
 
-    if (role === "admin") {
-      authBadge.textContent = "Admin";
-      authBadge.className = "auth-badge status-admin";
-    }
+if (role === "admin") {
+  authBadge.textContent = "Admin";
+  authBadge.className = "auth-badge status-admin";
+  authBadge.style.display = "inline-flex";
+}
 
-    if (role === "premium") {
-      authBadge.textContent = "Premium";
-      authBadge.className = "auth-badge status-premium";
-    }
+if (role === "premium") {
+  authBadge.textContent = "Premium";
+  authBadge.className = "auth-badge status-premium";
+  authBadge.style.display = "inline-flex";
+}
 
     if (loginNavBtn) {
-      loginNavBtn.style.display = "none";
-    }
+  loginNavBtn.style.display = "none";
+}
 
-    const logoutBtn = document.getElementById("logoutBtn");
+const logoutBtn = document.getElementById("logoutBtn");
 
-    if (logoutBtn && (role === "admin" || role === "premium")) {
-      logoutBtn.style.display = "inline-flex";
-    }
+if (logoutBtn && (role === "admin" || role === "premium")) {
+  logoutBtn.style.display = "inline-flex";
+}
 
     await trackSetupRoom("setup_room_opened", "Setup Room", window.location.pathname);
 
@@ -519,18 +511,17 @@ document.querySelectorAll(".setup-link").forEach(link => {
   });
 });
 </script>
-
   <script>
-    window.addEventListener("load", () => {
-      const loader = document.getElementById("bpLoader");
+  window.addEventListener("load", () => {
+    const loader = document.getElementById("bpLoader");
 
-      setTimeout(() => {
-        if(loader){
-          loader.classList.add("hide");
-        }
-      }, 700);
-    });
-  </script>
+    setTimeout(() => {
+      if(loader){
+        loader.classList.add("hide");
+      }
+    }, 700);
+  });
+</script>
 
 </body>
 </html>

@@ -5,14 +5,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <title>BullProsperity | Lesson</title>
-  <link rel="icon" type="image/png" href="/favicon.png">
+   <link rel="icon" type="image/png" href="/favicon.png">
 <link rel="manifest" href="/manifest.json">
 <link rel="apple-touch-icon" href="/favicon.png">
 <meta name="theme-color" content="#050505">
   <link rel="stylesheet" href="theme.css" />
+  <meta name="theme-color" content="#050505" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  
+
+  <link rel="stylesheet" href="theme.css" />
   <script src="/login.js" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="/supabase.js"></script>
@@ -24,10 +26,10 @@
         const data = await res.json();
 
         if (data.role !== "admin" && data.role !== "premium") {
-          window.location.href = "/locked";
+          window.location.href = "/locked.html";
         }
       } catch (err) {
-        window.location.href = "/locked";
+        window.location.href = "/locked.html";
       }
     })();
   </script>
@@ -214,22 +216,25 @@
       }
     }
   </style>
+  <link rel="stylesheet" href="/lesson.css" />
 </head>
 
-<body>
+<body class="lesson-page">
   <div class="page">
 
     <nav class="navbar">
-      <a href="/course" class="logo">BullProsperity | Course</a>
+      <a href="/course.html" class="logo">BullProsperity | Course</a>
 
       <div class="nav-links">
-        <a href="/index">Home</a>
-        <a href="/hub">Hub</a>
-        <a href="/course" class="active">Course</a>
-        <a href="/tools">Tools</a>
-        <a href="/setup-room">Setup Room</a>
-        <a href="/community">Community</a>
+        <a href="/index.html">Home</a>
+        <a href="/hub.html">Hub</a>
+        <a href="/course.html" class="active">Course</a>
+        <a href="/tools.html">Tools</a>
+        <a href="/setup-room.html">Setup Room</a>
+        <a href="/community.html">Community</a>
         <a id="loginNavBtn" href="/api/whop/login">Login</a>
+        <a id="logoutBtn" href="/api/logout" class="logout-btn" style="display:none;">Logout</a>
+        <div id="authBadge" class="auth-badge" style="display:none;">Zugang</div>
       </div>
     </nav>
 
@@ -254,8 +259,8 @@
 
         <div class="lesson-main-card">
           <div class="button-row" style="justify-content:flex-end; margin-bottom:18px;">
-            <a href="/course" class="btn secondary" id="backTopBtn">Zurück zum Kurs</a>
-            <a href="/lesson2#lesson-video" class="btn primary" id="nextTopBtn">Nächste Lektion</a>
+            <a href="/course.html" class="btn secondary" id="backTopBtn">Zurück zum Kurs</a>
+            <a href="/lesson2.html#lesson-video" class="btn primary" id="nextTopBtn">Nächste Lektion</a>
           </div>
 
           <div class="badge" id="lessonBadge">Pflichtlektion</div>
@@ -295,8 +300,8 @@
           <textarea id="lessonNotes" class="notes-box" placeholder="Schreibe hier deine Notizen..."></textarea>
 
           <div class="lesson-nav">
-            <a href="/course" class="btn secondary" id="prevBottomBtn">Zurück</a>
-            <a href="/lesson2#lesson-video" class="btn primary" id="nextBottomBtn">Weiter</a>
+            <a href="/course.html" class="btn secondary" id="prevBottomBtn">Zurück</a>
+            <a href="/lesson2.html#lesson-video" class="btn primary" id="nextBottomBtn">Weiter</a>
           </div>
         </div>
 
@@ -600,7 +605,7 @@ sidebarModulesData.forEach(module => {
 
   module.lessons.forEach(([num, title]) => {
     const a = document.createElement("a");
-    a.href = `/lesson${num}#lesson-video`;
+    a.href = `/lesson${num}.html#lesson-video`;
     a.className = "lesson" + (num === lessonNumber ? " active" : "");
     a.textContent = `Lesson ${num} — ${title}`;
     moduleDiv.appendChild(a);
@@ -613,10 +618,10 @@ const progress = Math.round((lessonNumber / totalLessons) * 100);
 document.getElementById("progressText").textContent = `${progress}%`;
 document.getElementById("progressFill").style.width = `${progress}%`;
 
-const prevLink = lessonNumber > 1 ? `/lesson${lessonNumber - 1}#lesson-video` : "/course";
-const nextLink = lessonNumber < totalLessons ? `/lesson${lessonNumber + 1}#lesson-video` : "/course";
+const prevLink = lessonNumber > 1 ? `/lesson${lessonNumber - 1}.html#lesson-video` : "/course.html";
+const nextLink = lessonNumber < totalLessons ? `/lesson${lessonNumber + 1}.html#lesson-video` : "/course.html";
 
-document.getElementById("backTopBtn").href = "/course";
+document.getElementById("backTopBtn").href = "/course.html";
 document.getElementById("nextTopBtn").href = nextLink;
 document.getElementById("prevBottomBtn").href = prevLink;
 document.getElementById("nextBottomBtn").href = nextLink;
@@ -669,13 +674,30 @@ notesBox.addEventListener("input", () => {
 
 document.addEventListener("DOMContentLoaded", async () => {
   const loginBtn = document.getElementById("loginNavBtn");
+  const logoutBtn = document.getElementById("logoutBtn");
+  const authBadge = document.getElementById("authBadge");
 
   try {
     const res = await fetch("/api/access", { credentials: "include" });
     const data = await res.json();
 
-    if (data.role === "admin" || data.role === "premium") {
+    if (!authBadge) return;
+
+    if (data.role === "admin") {
+      authBadge.textContent = "Admin";
+      authBadge.classList.add("status-admin");
+      authBadge.style.display = "inline-flex";
       if (loginBtn) loginBtn.style.display = "none";
+      if (logoutBtn) logoutBtn.style.display = "inline-flex";
+      return;
+    }
+
+    if (data.role === "premium") {
+      authBadge.textContent = "Premium";
+      authBadge.classList.add("status-premium");
+      authBadge.style.display = "inline-flex";
+      if (loginBtn) loginBtn.style.display = "none";
+      if (logoutBtn) logoutBtn.style.display = "inline-flex";
     }
   } catch (err) {}
 });

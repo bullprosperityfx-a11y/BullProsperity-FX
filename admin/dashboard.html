@@ -258,7 +258,7 @@
 
     .admin-status{
       display:inline-flex;
-            align-items:center;
+      align-items:center;
       gap:8px;
       padding:9px 13px;
       border-radius:999px;
@@ -757,7 +757,8 @@
 
     function formatTime(value){
       if(!value) return "-";
-            return new Date(value).toLocaleTimeString("de-DE", {
+
+      return new Date(value).toLocaleTimeString("de-DE", {
         hour:"2-digit",
         minute:"2-digit"
       });

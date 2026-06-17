@@ -218,7 +218,7 @@
   <div class="page">
 
     <nav class="admin-topbar">
-            <a href="/admin/dashboard.html" class="admin-brand">BullProsperity Admin</a>
+      <a href="/admin/dashboard.html" class="admin-brand">BullProsperity Admin</a>
 
       <div class="admin-toplinks">
         <a href="/hub.html">Hub</a>
@@ -437,7 +437,8 @@ function calculateStats(reviews){
 
     if(review.result === "WIN") wins++;
     if(review.result === "LOSS") losses++;
-        if(review.pnl){
+
+    if(review.pnl){
       totalPnl += Number(review.pnl);
     }
   });

@@ -20,15 +20,6 @@
   }
 })();
 </script>
-  <style>
-  body[data-protected="true"]{
-    visibility:hidden;
-  }
-
-  body[data-protected="true"].access-ready{
-    visibility:visible;
-  }
-</style>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>BullProsperity | Tools</title>
@@ -564,7 +555,7 @@
     }
   </style>
 </head>
-<body class="tools-page" data-protected="true">
+<body class="tools-page">
   <div class="page">
 
     <nav class="navbar">
@@ -578,7 +569,7 @@
         <a href="community.html">Community</a>
         <a id="loginNavBtn" href="/api/whop/login">Login</a>
         <a id="logoutBtn" href="/api/logout" class="logout-btn" style="display:none;">Logout</a>
-        <div id="authBadge" class="auth-badge status-loading">Prüfe Zugang...</div>
+        <div id="authBadge" class="auth-badge status-loading" style="display:none;">Zugang</div>
       </div>
     </nav>
 
@@ -592,7 +583,6 @@
       <div class="hero-buttons">
         <a href="#tools" class="btn primary">Tools öffnen</a>
         <a href="course.html" class="btn secondary">Zurück zum Kurs</a>
-        <a href="broker.html" class="tool-link">Broker öffnen</a>
       </div>
     </section>
 
@@ -638,6 +628,15 @@
             <p>Greife direkt auf Charts und Analysen innerhalb deiner Plattform zu.</p>
           </div>
           <a href="#charts" class="tool-link">Charts öffnen</a>
+        </div>
+
+        <div class="tool-card">
+          <div>
+            <div class="badge">Broker Setup</div>
+            <h3>Partner Broker</h3>
+            <p>Richte Broker, MT5, Fokusmärkte und deinen Trading-Workflow sauber an einem Ort ein.</p>
+          </div>
+          <a href="broker.html" class="tool-link">Broker öffnen</a>
         </div>
       </div>
     </section>
@@ -968,25 +967,25 @@
           window.location.href = "locked.html";
           return;
         }
-        document.body.classList.add("access-ready");
-
         if (role === "admin") {
-          authBadge.textContent = "Admin";
-          authBadge.className = "auth-badge status-admin";
-        } else if (role === "premium") {
-          authBadge.textContent = "Premium";
-          authBadge.className = "auth-badge status-premium";
-        }
+  authBadge.textContent = "Admin";
+  authBadge.className = "auth-badge status-admin";
+  authBadge.style.display = "inline-flex";
+} else if (role === "premium") {
+  authBadge.textContent = "Premium";
+  authBadge.className = "auth-badge status-premium";
+  authBadge.style.display = "inline-flex";
+}
 
         if (loginNavBtn) {
-          loginNavBtn.style.display = "none";
-        }
+  loginNavBtn.style.display = "none";
+}
 
-        const logoutBtn = document.getElementById("logoutBtn");
+const logoutBtn = document.getElementById("logoutBtn");
 
-        if (logoutBtn && (role === "admin" || role === "premium")) {
-          logoutBtn.style.display = "inline-flex";
-        }
+if (logoutBtn && (role === "admin" || role === "premium")) {
+  logoutBtn.style.display = "inline-flex";
+}
 
         loadChart(activeSymbol, activeLabel);
         renderJournal();
@@ -995,5 +994,16 @@
       }
     })();
   </script>
+  <script>
+  window.addEventListener("load", () => {
+    const loader = document.getElementById("bpLoader");
+
+    setTimeout(() => {
+      if(loader){
+        loader.classList.add("hide");
+      }
+    }, 700);
+  });
+</script>
 </body>
 </html>

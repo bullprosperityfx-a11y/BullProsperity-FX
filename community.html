@@ -20,22 +20,13 @@
   }
 })();
 </script>
-  <style>
-  body[data-protected="true"]{
-    visibility:hidden;
-  }
-
-  body[data-protected="true"].access-ready{
-    visibility:visible;
-  }
-</style>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>BullProsperity | Community</title>
-  <link rel="icon" type="image/png" href="/favicon.png">
-  <link rel="manifest" href="/manifest.json">
-  <link rel="apple-touch-icon" href="/favicon.png">
-  <meta name="theme-color" content="#050505">
+   <link rel="icon" type="image/png" href="/favicon.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="apple-touch-icon" href="/favicon.png">
+<meta name="theme-color" content="#050505">
   <link rel="stylesheet" href="theme.css" />
 
   <style>
@@ -308,7 +299,7 @@
   </style>
 </head>
 
-<body class="community-page" data-protected="true">
+<body class="community-page">
   <div class="page">
     <nav class="navbar">
       <a href="index.html" class="logo">BullProsperity</a>
@@ -321,7 +312,7 @@
         <a href="community.html" class="active">Community</a>
         <a id="loginNavBtn" href="/api/whop/login">Login</a>
         <a id="logoutBtn" href="/api/logout" class="logout-btn" style="display:none;">Logout</a>
-        <div id="authBadge" class="auth-badge status-loading">Prüfe Zugang...</div>
+        <div id="authBadge" class="auth-badge status-loading" style="display:none;">Zugang</div>
       </div>
     </nav>
 
@@ -447,32 +438,43 @@
           window.location.href = "locked.html";
           return;
         }
+document.body.classList.add("access-ready");
+if (role === "admin") {
+  authBadge.textContent = "Admin";
+  authBadge.className = "auth-badge status-admin";
+  authBadge.style.display = "inline-flex";
+}
 
-        document.body.classList.add("access-ready");
+if (role === "premium") {
+  authBadge.textContent = "Premium";
+  authBadge.className = "auth-badge status-premium";
+  authBadge.style.display = "inline-flex";
+}
 
-        if (role === "admin") {
-          authBadge.textContent = "Admin";
-          authBadge.className = "auth-badge status-admin";
-        }
+       if (loginNavBtn) {
+  loginNavBtn.style.display = "none";
+}
 
-        if (role === "premium") {
-          authBadge.textContent = "Premium";
-          authBadge.className = "auth-badge status-premium";
-        }
+const logoutBtn = document.getElementById("logoutBtn");
 
-        if (loginNavBtn) {
-          loginNavBtn.style.display = "none";
-        }
-
-        const logoutBtn = document.getElementById("logoutBtn");
-
-        if (logoutBtn && (role === "admin" || role === "premium")) {
-          logoutBtn.style.display = "inline-flex";
-        }
+if (logoutBtn && (role === "admin" || role === "premium")) {
+  logoutBtn.style.display = "inline-flex";
+}
       } catch (err) {
         window.location.href = "locked.html";
       }
     })();
   </script>
+ <script>
+  window.addEventListener("load", () => {
+    const loader = document.getElementById("bpLoader");
+
+    setTimeout(() => {
+      if(loader){
+        loader.classList.add("hide");
+      }
+    }, 700);
+  });
+</script>
 </body>
 </html>

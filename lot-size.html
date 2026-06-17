@@ -4,10 +4,10 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>BullProsperity | Lot Size Rechner</title>
-  <link rel="icon" type="image/png" href="/favicon.png">
-  <link rel="manifest" href="/manifest.json">
-  <link rel="apple-touch-icon" href="/favicon.png">
-  <meta name="theme-color" content="#050505">
+   <link rel="icon" type="image/png" href="/favicon.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="apple-touch-icon" href="/favicon.png">
+<meta name="theme-color" content="#050505">
   <link rel="stylesheet" href="theme.css" />
   <script src="/login.js" defer></script>
 
@@ -29,14 +29,6 @@
   </script>
 
   <style>
-    body[data-protected="true"]{
-      visibility:hidden;
-    }
-
-    body[data-protected="true"].access-ready{
-      visibility:visible;
-    }
-
     .lot-page{
       background:
         linear-gradient(135deg, rgba(243,210,27,0.07), transparent 28%),
@@ -384,7 +376,7 @@
     }
   </style>
 </head>
-<body class="lot-page" data-protected="true">
+<body class="lot-page">
   <div class="page">
 
     <nav class="navbar">
@@ -399,7 +391,7 @@
         <a href="community.html">Community</a>
         <a id="loginNavBtn" href="/api/whop/login">Login</a>
         <a id="logoutBtn" href="/api/logout" class="logout-btn" style="display:none;">Logout</a>
-        <div id="authBadge" class="auth-badge status-loading">Prüfe Zugang...</div>
+        <div id="authBadge" class="auth-badge status-loading" style="display:none;">Zugang</div>
       </div>
     </nav>
 
@@ -608,40 +600,41 @@
       resultText.textContent = "Gib oben deine Werte ein und berechne deine Positionsgröße.";
     });
   </script>
-
   <script>
-    document.addEventListener("DOMContentLoaded", async () => {
-      try {
-        const res = await fetch("/api/access", {
-          credentials: "include"
-        });
+  document.addEventListener("DOMContentLoaded", async () => {
+    try {
+      const res = await fetch("/api/access", {
+        credentials: "include"
+      });
 
-        const data = await res.json();
-        const role = data?.role || "guest";
+      const data = await res.json();
+      const role = data?.role || "guest";
 
-        if (role !== "admin" && role !== "premium") {
-          window.location.href = "locked.html";
-          return;
-        }
-
-        document.body.classList.add("access-ready");
-
-        if (role === "admin") {
-          authBadge.textContent = "Admin";
-          authBadge.className = "auth-badge status-admin";
-        }
-
-        if (role === "premium") {
-          authBadge.textContent = "Premium";
-          authBadge.className = "auth-badge status-premium";
-        }
-
-        if (loginNavBtn) loginNavBtn.style.display = "none";
-        if (logoutBtn) logoutBtn.style.display = "inline-flex";
-      } catch (err) {
+      if (role !== "admin" && role !== "premium") {
         window.location.href = "locked.html";
+        return;
       }
-    });
-  </script>
+
+      document.body.classList.add("access-ready");
+
+      if (role === "admin") {
+        authBadge.textContent = "Admin";
+        authBadge.className = "auth-badge status-admin";
+        authBadge.style.display = "inline-flex";
+      }
+
+      if (role === "premium") {
+        authBadge.textContent = "Premium";
+        authBadge.className = "auth-badge status-premium";
+        authBadge.style.display = "inline-flex";
+      }
+
+      if (loginNavBtn) loginNavBtn.style.display = "none";
+      if (logoutBtn) logoutBtn.style.display = "inline-flex";
+    } catch (err) {
+      window.location.href = "locked.html";
+    }
+  });
+</script>
 </body>
 </html>
