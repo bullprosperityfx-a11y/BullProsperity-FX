@@ -1,184 +1,230 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>BullProsperity | Longterm Pro</title>
-   <link rel="icon" type="image/png" href="/favicon.png">
-<link rel="manifest" href="/manifest.json">
-<link rel="apple-touch-icon" href="/favicon.png">
-<meta name="theme-color" content="#050505">
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <link rel="manifest" href="/manifest.json">
+  <link rel="apple-touch-icon" href="/favicon.png">
+  <meta name="theme-color" content="#050505">
   <link rel="stylesheet" href="theme.css" />
- 
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 
   <style>
-    .sales-shell{
-      display:grid;
-      gap:22px;
-      margin-top:24px;
+    .longterm-sales-page{
+      background:
+        linear-gradient(135deg, rgba(243,210,27,0.075), transparent 30%),
+        radial-gradient(circle at 82% 12%, rgba(255,255,255,0.055), transparent 22%),
+        radial-gradient(circle at 16% 32%, rgba(243,210,27,0.11), transparent 24%),
+        #050505;
     }
 
-    .sales-hero-card,
-    .sales-card,
-    .sales-panel,
-    .sales-price-card{
-      background:#0c0c0c;
-      border:1px solid var(--line);
+    .longterm-sales-page .navbar{
+      position:sticky;
+      top:14px;
+      z-index:50;
+      padding:14px 16px;
+      border:1px solid rgba(243,210,27,0.14);
       border-radius:24px;
-      padding:24px;
+      background:rgba(7,7,7,0.78);
+      backdrop-filter:blur(18px);
+      box-shadow:0 18px 60px rgba(0,0,0,0.28);
     }
 
-    .sales-hero-card{
-      position:relative;
+    .longterm-sales-page .logo,
+    .longterm-sales-page .section-heading{
+      letter-spacing:0;
+    }
+
+    .sales-hero{
+      margin-top:14px;
+      padding:42px;
+      border:1px solid rgba(243,210,27,0.16);
+      border-radius:34px;
+      background:
+        linear-gradient(145deg, rgba(255,255,255,0.052), transparent 40%),
+        radial-gradient(circle at 78% 22%, rgba(243,210,27,0.16), transparent 32%),
+        linear-gradient(180deg, rgba(18,18,18,0.92), rgba(5,5,5,0.98));
+      box-shadow:
+        inset 0 0 0 1px rgba(255,255,255,0.025),
+        0 22px 60px rgba(0,0,0,0.30);
       overflow:hidden;
-      text-align:center;
-      padding:70px 24px 54px;
+      position:relative;
     }
 
-    .sales-hero-card::before{
+    .sales-hero::after{
       content:"";
       position:absolute;
-      right:-100px;
-      bottom:-100px;
-      width:260px;
-      height:260px;
-      background:radial-gradient(circle, rgba(255,215,0,.16), transparent 70%);
-      pointer-events:none;
+      left:0;
+      right:0;
+      bottom:0;
+      height:1px;
+      background:linear-gradient(90deg, transparent, rgba(243,210,27,0.82), transparent);
+      opacity:.65;
     }
 
     .sales-title{
-      font-size:54px;
-      line-height:1.03;
+      max-width:1080px;
+      margin:0;
       color:#fff;
-      margin:16px auto 0;
-      max-width:980px;
+      font-size:clamp(44px, 5.2vw, 78px);
+      line-height:.92;
+      font-weight:950;
+      letter-spacing:0;
+    }
+
+    .sales-title .gold{
+      color:var(--gold);
     }
 
     .sales-sub{
-      max-width:820px;
-      margin:20px auto 0;
-      color:rgba(255,255,255,.72);
-      line-height:1.75;
-      font-size:18px;
+      max-width:920px;
+      margin:20px 0 0;
+      color:#ededed;
+      font-size:17px;
+      font-weight:700;
+      line-height:1.7;
     }
 
-    .sales-cta-row{
+    .sales-actions{
       display:flex;
-      gap:12px;
-      justify-content:center;
       flex-wrap:wrap;
-      margin-top:28px;
-    }
-
-    .sales-btn{
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      text-decoration:none;
-      padding:14px 22px;
-      border-radius:14px;
-      font-weight:800;
-      border:1px solid transparent;
-    }
-
-    .sales-btn.primary{
-      background:#ffd700;
-      color:#111;
-    }
-
-    .sales-btn.secondary{
-      background:#111;
-      color:#fff;
-      border-color:#252525;
-    }
-
-    .sales-btn.secondary:hover{
-      border-color:#ffd700;
-      color:#ffd700;
+      gap:14px;
+      margin-top:26px;
     }
 
     .sales-proof{
       margin-top:20px;
-      color:rgba(255,255,255,.56);
-      font-size:14px;
+      color:#a8a8a8;
+      font-size:13px;
+      font-weight:800;
+      line-height:1.6;
     }
 
     .sales-stats{
       display:grid;
-      grid-template-columns:repeat(4,1fr);
+      grid-template-columns:repeat(4, 1fr);
       gap:14px;
-      margin-top:26px;
-      text-align:left;
+      margin-top:28px;
+      position:relative;
+      z-index:2;
+    }
+
+    .sales-stat,
+    .sales-card,
+    .sales-panel,
+    .sales-price-card,
+    .sales-faq-item{
+      border:1px solid rgba(243,210,27,0.15);
+      border-radius:24px;
+      background:
+        linear-gradient(145deg, rgba(255,255,255,0.034), transparent 44%),
+        linear-gradient(180deg, rgba(17,17,17,0.90), rgba(7,7,7,0.96));
+      box-shadow:
+        inset 0 0 0 1px rgba(255,255,255,0.022),
+        0 20px 54px rgba(0,0,0,0.25);
     }
 
     .sales-stat{
-      background:#111;
-      border:1px solid #252525;
-      border-radius:18px;
-      padding:16px;
+      padding:17px;
     }
 
     .sales-stat-label{
-      color:rgba(255,255,255,.56);
+      color:#9f9f9f;
       font-size:12px;
+      font-weight:850;
       text-transform:uppercase;
       letter-spacing:.08em;
       margin-bottom:8px;
     }
 
     .sales-stat-value{
-      color:#ffd700;
-      font-size:26px;
-      font-weight:900;
+      color:var(--gold);
+      font-size:28px;
+      font-weight:950;
+      line-height:1;
     }
 
     .sales-stat-sub{
-      margin-top:6px;
-      color:rgba(255,255,255,.55);
+      margin-top:8px;
+      color:#cfcfcf;
       font-size:12px;
+      font-weight:750;
+      line-height:1.45;
+    }
+
+    .sales-shell{
+      display:grid;
+      gap:28px;
+      margin-top:28px;
+    }
+
+    .sales-grid-4,
+    .sales-grid-3,
+    .sales-market-grid{
+      display:grid;
+      gap:18px;
     }
 
     .sales-grid-4{
-      display:grid;
-      grid-template-columns:repeat(4,1fr);
-      gap:16px;
+      grid-template-columns:repeat(4, 1fr);
     }
 
     .sales-grid-3{
-      display:grid;
-      grid-template-columns:repeat(3,1fr);
-      gap:16px;
+      grid-template-columns:repeat(3, 1fr);
     }
 
-    .sales-grid-2{
+    .sales-grid-2,
+    .sales-price-grid{
       display:grid;
       grid-template-columns:1fr 1fr;
       gap:22px;
+      align-items:stretch;
     }
 
-    .sales-card h3{
-      margin:10px 0 8px;
+    .sales-market-grid{
+      grid-template-columns:repeat(5, 1fr);
+      margin-top:18px;
+    }
+
+    .sales-card,
+    .sales-panel,
+    .sales-price-card{
+      padding:24px;
+      min-height:100%;
+    }
+
+    .sales-card h3,
+    .sales-faq-item h3{
       color:#fff;
       font-size:22px;
-    }
-
-    .sales-card p{
-      margin:0;
-      color:rgba(255,255,255,.68);
-      line-height:1.65;
+      line-height:1.15;
+      font-weight:950;
+      margin:0 0 10px;
     }
 
     .sales-panel h2,
-    .sales-price-card h2{
-      margin:10px 0 10px;
+    .sales-price-card h2,
+    .sales-final h2{
+            margin:0 0 12px;
       color:#fff;
-      font-size:34px;
+      font-size:clamp(28px, 3vw, 42px);
+      line-height:1.05;
+      font-weight:950;
+      letter-spacing:0;
     }
 
+    .sales-card p,
     .sales-panel p,
-    .sales-price-card p{
+    .sales-price-card p,
+    .sales-faq-item p,
+    .sales-final p{
       margin:0;
-      color:rgba(255,255,255,.72);
+      color:#dedede;
+      font-size:15px;
+      font-weight:700;
       line-height:1.7;
     }
 
@@ -188,63 +234,50 @@
       margin-top:18px;
     }
 
-    .sales-list-item{
-      background:#111;
-      border:1px solid #252525;
-      border-radius:16px;
-      padding:15px 16px;
+    .sales-list-item,
+    .sales-market{
+      border:1px solid rgba(243,210,27,0.13);
+      border-radius:18px;
+      background:rgba(255,255,255,0.024);
       color:#fff;
+      padding:15px 16px;
+      font-size:14px;
+      font-weight:750;
       line-height:1.55;
     }
 
-    .sales-list-item strong{
-      color:#ffd700;
-    }
-
-    .sales-market-grid{
-      display:grid;
-      grid-template-columns:repeat(5,1fr);
-      gap:12px;
-      margin-top:18px;
-    }
-
-    .sales-market{
-      background:#111;
-      border:1px solid #252525;
-      border-radius:16px;
-      padding:16px;
-      color:#fff;
+    .sales-list-item strong,
+    .sales-market strong{
+      color:var(--gold);
     }
 
     .sales-market strong{
       display:block;
-      color:#ffd700;
-      margin-bottom:6px;
+      margin-bottom:7px;
+      font-size:15px;
     }
 
     .sales-market span{
-      color:rgba(255,255,255,.64);
+      display:block;
+      color:#d8d8d8;
       font-size:13px;
-      line-height:1.45;
-    }
-
-    .sales-price-grid{
-      display:grid;
-      grid-template-columns:1.1fr .9fr;
-      gap:22px;
+      line-height:1.5;
+      font-weight:700;
     }
 
     .sales-price{
-      font-size:46px;
-      font-weight:900;
-      color:#ffd700;
-      margin-top:10px;
+      margin:10px 0 10px;
+      color:var(--gold);
+      font-size:42px;
+      font-weight:950;
+      line-height:1;
     }
 
     .sales-note{
-      margin-top:10px;
-      color:rgba(255,255,255,.56);
+      margin-top:14px;
+      color:#a8a8a8;
       font-size:13px;
+      font-weight:750;
       line-height:1.65;
     }
 
@@ -255,40 +288,42 @@
     }
 
     .sales-faq-item{
-      background:#111;
-      border:1px solid #252525;
-      border-radius:16px;
       padding:18px;
-    }
-
-    .sales-faq-item h3{
-      margin:0 0 8px;
-      color:#fff;
-      font-size:19px;
-    }
-
-    .sales-faq-item p{
-      margin:0;
-      color:rgba(255,255,255,.7);
-      line-height:1.65;
     }
 
     .sales-final{
       text-align:center;
-      padding:20px 10px 6px;
-    }
-
-    .sales-final h2{
-      margin:10px 0 0;
-      font-size:42px;
-      color:#fff;
+      border:1px solid rgba(243,210,27,0.16);
+      border-radius:28px;
+      padding:34px 24px;
+      background:
+        radial-gradient(circle at 50% 0%, rgba(243,210,27,0.12), transparent 34%),
+        linear-gradient(180deg, rgba(17,17,17,0.90), rgba(7,7,7,0.96));
     }
 
     .sales-final p{
-      max-width:780px;
-      margin:16px auto 0;
-      color:rgba(255,255,255,.7);
-      line-height:1.75;
+      max-width:820px;
+      margin:0 auto;
+    }
+
+    .footer-clean{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:18px;
+      flex-wrap:wrap;
+      border:1px solid rgba(243,210,27,0.14);
+      border-radius:24px;
+      padding:20px 24px;
+      background:rgba(8,8,8,0.76);
+      color:#d8d8d8;
+      font-weight:800;
+    }
+
+    .footer-clean a{
+      color:var(--gold);
+      text-decoration:none;
+      margin-right:12px;
     }
 
     @media(max-width:1100px){
@@ -300,13 +335,13 @@
       .sales-stats{
         grid-template-columns:1fr 1fr;
       }
-
-      .sales-title{
-        font-size:42px;
-      }
     }
 
     @media(max-width:780px){
+      .sales-hero{
+        padding:30px 22px;
+      }
+
       .sales-grid-4,
       .sales-grid-3,
       .sales-market-grid,
@@ -316,25 +351,15 @@
         grid-template-columns:1fr;
       }
 
-      .sales-title{
-        font-size:34px;
-      }
-
-      .sales-panel h2,
-      .sales-price-card h2,
-      .sales-final h2{
-        font-size:28px;
-      }
-
       .sales-price{
-        font-size:36px;
+        font-size:34px;
       }
     }
   </style>
 </head>
-<body>
-  <div class="page">
 
+<body class="longterm-sales-page">
+  <div class="page">
     <nav class="navbar">
       <a href="index.html" class="logo">BullProsperity</a>
       <div class="nav-links">
@@ -342,77 +367,72 @@
         <a href="hub.html">Hub</a>
         <a href="course.html">Course</a>
         <a href="tools.html">Tools</a>
+        <a href="setup-room.html">Setup Room</a>
+        <a href="community.html">Community</a>
         <a href="longterm-sales.html" class="active">Longterm</a>
-        <a href="https://whop.com/bullprosperity-fx/bullprosperity-fx/">Login</a>
+        <a href="/api/whop/login">Login</a>
       </div>
     </nav>
 
-    <div class="sales-shell">
+    <section class="sales-hero">
+      <div class="badge">BullProsperity Longterm Pro</div>
+      <h1 class="sales-title">
+        Langfristiger <span class="gold">Vermögensaufbau</span> als Premium-Modul.
+      </h1>
+      <p class="sales-sub">
+        Longterm Pro erweitert BullProsperity um eine hochwertige Investment-Unterseite
+        mit ETFs, Crypto, Indices, bekannten Aktien, Rohstoffen, Portfolio Tracker,
+        DCA Rechner und Investment Journal - alles im cleanen Plattform-Design.
+      </p>
 
-      <section class="sales-hero-card">
-        <div class="badge">BullProsperity Longterm Pro</div>
-        <h1 class="sales-title">
-          Langfristiger <span class="gold">Vermögensaufbau</span>
-          als echte Premium-Unterseite
-        </h1>
-        <p class="sales-sub">
-          Longterm Pro ergänzt BullProsperity um eine hochwertige Investment-Unterseite
-          mit ETFs, Cryptos, Indices, bekannten Aktien, Rohstoffen, Portfolio Tracker,
-          DCA Rechner und Investment Journal — alles in deinem Plattform-Design.
-        </p>
+      <div class="sales-actions">
+        <a href="https://whop.com/bullprosperity-fx/longterm" class="btn primary">Jetzt freischalten</a>
+        <a href="#features" class="btn secondary">Features ansehen</a>
+      </div>
 
-        <div class="sales-cta-row">
-          <a href="https://whop.com/bullprosperity-fx/longterm" class="sales-btn primary">
-            Jetzt freischalten
-          </a>
-          <a href="#features" class="sales-btn secondary">
-            Features ansehen
-          </a>
+      <div class="sales-proof">
+        Educational only. Keine Finanzberatung. Entwickelt als ruhige Ergänzung zu deinem BullProsperity System.
+      </div>
+
+      <div class="sales-stats">
+        <div class="sales-stat">
+          <div class="sales-stat-label">Asset Klassen</div>
+          <div class="sales-stat-value">5</div>
+          <div class="sales-stat-sub">ETFs, Crypto, Indices, Aktien und Rohstoffe.</div>
         </div>
-
-        <div class="sales-proof">
-          Educational only · keine Finanzberatung · entwickelt als Ergänzung zu deinem BullProsperity System
+        <div class="sales-stat">
+          <div class="sales-stat-label">Premium Tools</div>
+          <div class="sales-stat-value">4</div>
+          <div class="sales-stat-sub">Watchlist, Portfolio, DCA und Journal.</div>
         </div>
-
-        <div class="sales-stats">
-          <div class="sales-stat">
-            <div class="sales-stat-label">Asset Klassen</div>
-            <div class="sales-stat-value">5</div>
-            <div class="sales-stat-sub">ETFs · Cryptos · Indices · Aktien · Rohstoffe</div>
-          </div>
-          <div class="sales-stat">
-            <div class="sales-stat-label">Premium Features</div>
-            <div class="sales-stat-value">4</div>
-            <div class="sales-stat-sub">Watchlist · Portfolio · DCA · Journal</div>
-          </div>
-          <div class="sales-stat">
-            <div class="sales-stat-label">Modus</div>
-            <div class="sales-stat-value">Pro</div>
-            <div class="sales-stat-sub">Eigene BullProsperity Unterseite</div>
-          </div>
-          <div class="sales-stat">
-            <div class="sales-stat-label">Fokus</div>
-            <div class="sales-stat-value">Longterm</div>
-            <div class="sales-stat-sub">Struktur statt Hektik</div>
-          </div>
+        <div class="sales-stat">
+          <div class="sales-stat-label">Modus</div>
+          <div class="sales-stat-value">Pro</div>
+          <div class="sales-stat-sub">Eigene Unterseite im Mitgliederbereich.</div>
         </div>
-      </section>
-
+        <div class="sales-stat">
+          <div class="sales-stat-label">Fokus</div>
+          <div class="sales-stat-value">Longterm</div>
+          <div class="sales-stat-sub">Struktur statt Hektik.</div>
+        </div>
+      </div>
+    </section>
+        <div class="sales-shell">
       <section class="sales-grid-4" id="features">
         <div class="sales-card">
           <div class="badge">Feature</div>
           <h3>Pro Watchlist</h3>
-          <p>Filterbare Marktübersicht mit ETFs, Cryptos, Indices, bekannten Aktien und Rohstoffen.</p>
+          <p>Filterbare Marktübersicht mit ETFs, Crypto, Indices, bekannten Aktien und Rohstoffen.</p>
         </div>
         <div class="sales-card">
           <div class="badge">Feature</div>
           <h3>Portfolio Tracker</h3>
-          <p>Dokumentiere deine Ideen, Kategorien, Aufbaupläne und strukturiere dein Longterm-Denken.</p>
+          <p>Dokumentiere Ideen, Kategorien, Aufbaupläne und deine Longterm-Gewichtung sauber.</p>
         </div>
         <div class="sales-card">
           <div class="badge">Feature</div>
           <h3>DCA Rechner</h3>
-          <p>Simuliere deinen regelmäßigen Aufbau über Monate und Jahre — inklusive optionaler Rendite-Annahme.</p>
+          <p>Simuliere regelmäßigen Aufbau über Monate und Jahre mit optionaler Rendite-Annahme.</p>
         </div>
         <div class="sales-card">
           <div class="badge">Feature</div>
@@ -426,13 +446,13 @@
           <div class="badge">Warum Longterm Pro?</div>
           <h2>Nicht nur traden. Auch systematisch aufbauen.</h2>
           <p>
-            Viele konzentrieren sich nur auf kurzfristige Setups. Longterm Pro ergänzt
-            dein BullProsperity System um eine langfristige Ebene — mit mehr Ruhe,
-            mehr Struktur und einem klareren Gesamtbild für Kapitalaufbau.
+            Viele fokussieren sich nur auf kurzfristige Setups. Longterm Pro gibt deinem
+            BullProsperity System eine langfristige Ebene mit mehr Ruhe, mehr Struktur
+            und einem klareren Gesamtbild für Kapitalaufbau.
           </p>
 
           <div class="sales-list">
-            <div class="sales-list-item"><strong>Trading</strong> kann Chancen liefern — aber Longterm schafft Stabilität.</div>
+            <div class="sales-list-item"><strong>Trading</strong> kann Chancen liefern, Longterm schafft Stabilität.</div>
             <div class="sales-list-item"><strong>Struktur</strong> hilft dir, weniger impulsiv und wiederholbarer zu handeln.</div>
             <div class="sales-list-item"><strong>Geduld</strong> wird zu einer Stärke, statt nur auf Bewegung zu reagieren.</div>
             <div class="sales-list-item"><strong>BullProsperity</strong> wird damit zu einem ganzheitlicheren System.</div>
@@ -441,37 +461,37 @@
 
         <div class="sales-panel">
           <div class="badge">Für wen das ist</div>
-          <h2>Passt perfekt, wenn du …</h2>
+          <h2>Passt perfekt, wenn du langfristig klarer denken willst.</h2>
 
           <div class="sales-list">
-            <div class="sales-list-item">… neben Trading auch langfristig Vermögen aufbauen willst.</div>
-            <div class="sales-list-item">… ETFs, Aktien, Cryptos und Rohstoffe in einer klaren Struktur sehen willst.</div>
-            <div class="sales-list-item">… eine Premium-Unterseite im BullProsperity Stil suchst.</div>
-            <div class="sales-list-item">… nicht nur aktiv traden, sondern nachhaltig denken willst.</div>
+            <div class="sales-list-item">Du willst neben Trading auch langfristig Vermögen aufbauen.</div>
+            <div class="sales-list-item">Du willst ETFs, Aktien, Crypto und Rohstoffe in einer klaren Struktur sehen.</div>
+            <div class="sales-list-item">Du willst eine Premium-Unterseite, die optisch zur Plattform passt.</div>
+            <div class="sales-list-item">Du willst nicht nur aktiv traden, sondern nachhaltiger planen.</div>
           </div>
         </div>
       </section>
 
       <section class="sales-panel">
         <div class="badge">Asset Klassen</div>
-        <h2>Diese Bereiche sind im Modul enthalten</h2>
+        <h2>Diese Bereiche sind im Modul enthalten.</h2>
         <p>
           Longterm Pro ist nicht nur ein Chart-Bereich, sondern eine strukturierte Investment-Unterseite
-          mit mehreren Klassen und hochwertigen Longterm-Märkten.
+          mit mehreren Klassen und bekannten Longterm-Märkten.
         </p>
 
         <div class="sales-market-grid">
           <div class="sales-market">
             <strong>ETFs</strong>
-            <span>SPY, QQQ und breit gedachte Marktteilnahme als langfristige Basis.</span>
+            <span>MSCI World, S&P 500, NASDAQ 100 und breite Marktteilnahme als langfristige Basis.</span>
           </div>
           <div class="sales-market">
-            <strong>Cryptos</strong>
+            <strong>Crypto</strong>
             <span>Bitcoin und Ethereum als bekannte Longterm-Märkte mit Wachstumskomponente.</span>
           </div>
           <div class="sales-market">
             <strong>Indices</strong>
-            <span>S&amp;P 500 und Nasdaq für Makro-Struktur und Gesamtmarkt-Kontext.</span>
+            <span>S&P 500 und Nasdaq für Makro-Struktur und Gesamtmarkt-Kontext.</span>
           </div>
           <div class="sales-market">
             <strong>Aktien</strong>
@@ -479,7 +499,7 @@
           </div>
           <div class="sales-market">
             <strong>Rohstoffe</strong>
-            <span>Gold und Öl als klassische Sachwerte und Diversifikations-Bausteine.</span>
+            <span>Gold, Silber und Commodity Exposure als defensive Beimischung.</span>
           </div>
         </div>
       </section>
@@ -488,7 +508,7 @@
         <div class="sales-card">
           <div class="badge">Design</div>
           <h3>Eigene Unterseite</h3>
-          <p>Longterm Pro fühlt sich wie ein echter Premium-Bereich deiner Plattform an — nicht wie ein angehängtes Extra.</p>
+          <p>Longterm Pro fühlt sich wie ein echter Premium-Bereich an, nicht wie ein angehängtes Extra.</p>
         </div>
         <div class="sales-card">
           <div class="badge">Struktur</div>
@@ -514,7 +534,7 @@
 
           <div class="sales-list">
             <div class="sales-list-item">Pro Watchlist mit Kategorien</div>
-            <div class="sales-list-item">Bekannte Aktien wie NVIDIA, Apple, Microsoft, Amazon, Tesla, Meta</div>
+            <div class="sales-list-item">Bekannte Aktien wie NVIDIA, Apple, Microsoft, Amazon, Tesla und Meta</div>
             <div class="sales-list-item">Portfolio Tracker im Plattform-Stil</div>
             <div class="sales-list-item">DCA Rechner für strukturierten Aufbau</div>
             <div class="sales-list-item">Investment Journal für deine These</div>
@@ -527,16 +547,15 @@
 
         <div class="sales-price-card">
           <div class="badge">Jetzt starten</div>
-          <h2>Mach BullProsperity noch stärker</h2>
+          <h2>Mach BullProsperity noch runder.</h2>
           <p>
-            Wenn du aus BullProsperity mehr als nur eine Trading-Plattform machen willst,
+            Wenn BullProsperity mehr als nur eine Trading-Plattform sein soll,
             ist Longterm Pro der logische nächste Schritt.
           </p>
 
-          <div class="sales-cta-row" style="justify-content:flex-start;margin-top:22px;">
-            <a href="https://whop.com/bullprosperity-fx/longterm" class="sales-btn primary">
-              Jetzt freischalten
-            </a>
+          <div class="sales-actions">
+            <a href="https://whop.com/bullprosperity-fx/longterm" class="btn primary">Jetzt freischalten</a>
+            <a href="hub.html" class="btn secondary">Zurück zum Hub</a>
           </div>
 
           <div class="sales-note">
@@ -552,11 +571,11 @@
         <div class="sales-faq">
           <div class="sales-faq-item">
             <h3>Ist Longterm Pro statt Trading gedacht?</h3>
-            <p>Nein. Es ist als Ergänzung gedacht — Trading für Aktivität, Longterm für Struktur und Vermögensaufbau.</p>
+            <p>Nein. Es ist als Ergänzung gedacht: Trading für Aktivität, Longterm für Struktur und Vermögensaufbau.</p>
           </div>
           <div class="sales-faq-item">
             <h3>Welche Märkte sind enthalten?</h3>
-            <p>ETFs, Cryptos, Indices, bekannte Aktien und Rohstoffe innerhalb einer Pro Watchlist mit Kategorien.</p>
+            <p>ETFs, Crypto, Indices, bekannte Aktien und Rohstoffe innerhalb einer Pro Watchlist mit Kategorien.</p>
           </div>
           <div class="sales-faq-item">
             <h3>Ist das Finanzberatung?</h3>
@@ -574,22 +593,25 @@
         <h2>Weniger Hektik. Mehr Struktur. Mehr Perspektive.</h2>
         <p>
           Longterm Pro bringt eine hochwertige Investment-Ebene in deine Plattform
-          und macht BullProsperity größer, runder und wertiger — für dich und deine Mitglieder.
+          und macht BullProsperity größer, runder und wertiger.
         </p>
 
-        <div class="sales-cta-row" style="margin-top:24px;">
-          <a href="https://whop.com/bullprosperity-fx/longterm" class="sales-btn primary">
-            Jetzt Zugang sichern
-          </a>
-          <a href="hub.html" class="sales-btn secondary">
-            Zurück zum Hub
-          </a>
+        <div class="sales-actions" style="justify-content:center;">
+          <a href="https://whop.com/bullprosperity-fx/longterm" class="btn primary">Jetzt Zugang sichern</a>
+          <a href="longterm.html" class="btn secondary">Longterm ansehen</a>
         </div>
       </section>
 
-      <div class="footer-note">
-        BullProsperity dient ausschließlich Bildungszwecken und stellt keine Finanzberatung dar.
-      </div>
+      <footer class="footer-clean">
+        <div>
+          <strong>BullProsperity</strong> dient ausschließlich Bildungszwecken und ersetzt keine Anlageberatung.
+        </div>
+        <div>
+          <a href="impressum.html">Impressum</a>
+          <a href="datenschutz.html">Datenschutz</a>
+          <a href="risikohinweis.html">Risikohinweis</a>
+        </div>
+      </footer>
     </div>
   </div>
 </body>
