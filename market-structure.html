@@ -25,10 +25,10 @@
         const data = await res.json();
 
         if (data.role !== "admin" && data.role !== "premium") {
-          window.location.href = "/locked.html";
+          window.location.href = "/locked";
         }
       } catch (err) {
-        window.location.href = "/locked.html";
+        window.location.href = "/locked";
       }
     })();
   </script>
@@ -353,15 +353,15 @@
   <div class="page">
 
     <nav class="navbar">
-      <a href="/index.html" class="logo">BullProsperity</a>
+      <a href="/index" class="logo">BullProsperity</a>
 
       <div class="nav-links">
-        <a href="/index.html">Home</a>
-        <a href="/hub.html">Hub</a>
-        <a href="/course.html">Course</a>
-        <a href="/tools.html">Tools</a>
-        <a href="/setup-room.html" class="active">Setup Room</a>
-        <a href="/community.html">Community</a>
+        <a href="/index">Home</a>
+        <a href="/hub">Hub</a>
+        <a href="/course">Course</a>
+        <a href="/tools">Tools</a>
+        <a href="/setup-room" class="active">Setup Room</a>
+        <a href="/community">Community</a>
         <a id="loginNavBtn" href="/api/whop/login">Login</a>
         <a id="logoutBtn" href="/api/logout" class="logout-btn" style="display:none;">Logout</a>
         <div id="authBadge" class="auth-badge status-loading" style="display:none;">Zugang</div>
@@ -382,8 +382,8 @@
       </p>
 
       <div class="hero-buttons">
-        <a href="/setup-room.html" class="btn primary">Zurück zum Setup Room</a>
-        <a href="/course.html" class="btn secondary">Zum Kurs</a>
+        <a href="/setup-room" class="btn primary">Zurück zum Setup Room</a>
+        <a href="/course" class="btn secondary">Zum Kurs</a>
       </div>
     </section>
 
@@ -445,10 +445,10 @@
         <span>Marktstruktur, BOS, CHoCH, HH/HL und Trading Education.</span>
       </div>
       <nav>
-        <a href="/impressum.html">Impressum</a>
-        <a href="/datenschutz.html">Datenschutz</a>
-        <a href="/risikohinweis.html">Risikohinweis</a>
-        <a href="/community.html">Kontakt</a>
+        <a href="/impressum">Impressum</a>
+        <a href="/datenschutz">Datenschutz</a>
+        <a href="/risikohinweis">Risikohinweis</a>
+        <a href="/community">Kontakt</a>
       </nav>
       <p>BullProsperity dient ausschließlich Bildungs- und Informationszwecken. Es werden keine Gewinne garantiert.</p>
     </div>
@@ -491,7 +491,7 @@
         const role = data?.role || "guest";
 
         if (role !== "admin" && role !== "premium") {
-          window.location.href = "/locked.html";
+          window.location.href = "/locked";
           return;
         }
 
@@ -510,7 +510,7 @@
         if (loginNavBtn) loginNavBtn.style.display = "none";
         if (logoutBtn) logoutBtn.style.display = "inline-flex";
       } catch (err) {
-        window.location.href = "/locked.html";
+        window.location.href = "/locked";
       }
     });
   </script>

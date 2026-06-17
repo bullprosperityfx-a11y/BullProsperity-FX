@@ -12,11 +12,11 @@
     const data = await res.json();
 
     if (data.role !== "admin" && data.role !== "premium") {
-      window.location.href = "/locked.html";
+      window.location.href = "/locked";
     }
 
   } catch (err) {
-    window.location.href = "/locked.html";
+    window.location.href = "/locked";
   }
 })();
 </script>
@@ -559,14 +559,14 @@
   <div class="page">
 
     <nav class="navbar">
-      <a href="index.html" class="logo">BullProsperity</a>
+      <a href="index" class="logo">BullProsperity</a>
       <div class="nav-links">
-        <a href="index.html">Home</a>
-        <a href="hub.html">Hub</a>
-        <a href="course.html">Course</a>
-        <a href="tools.html" class="active">Tools</a>
-        <a href="setup-room.html">Setup Room</a>
-        <a href="community.html">Community</a>
+        <a href="index">Home</a>
+        <a href="hub">Hub</a>
+        <a href="course">Course</a>
+        <a href="tools" class="active">Tools</a>
+        <a href="setup-room">Setup Room</a>
+        <a href="community">Community</a>
         <a id="loginNavBtn" href="/api/whop/login">Login</a>
         <a id="logoutBtn" href="/api/logout" class="logout-btn" style="display:none;">Logout</a>
         <div id="authBadge" class="auth-badge status-loading" style="display:none;">Zugang</div>
@@ -582,7 +582,7 @@
       </p>
       <div class="hero-buttons">
         <a href="#tools" class="btn primary">Tools öffnen</a>
-        <a href="course.html" class="btn secondary">Zurück zum Kurs</a>
+        <a href="course" class="btn secondary">Zurück zum Kurs</a>
       </div>
     </section>
 
@@ -600,7 +600,7 @@
             <h3>Lot Size Rechner</h3>
             <p>Berechne deine Positionsgröße anhand von Kontogröße, Risiko in Prozent und Stop Loss Distanz.</p>
           </div>
-          <a href="lot-size.html" class="tool-link">Tool öffnen</a>
+          <a href="lot-size" class="tool-link">Tool öffnen</a>
         </div>
 
         <div class="tool-card">
@@ -609,7 +609,7 @@
             <h3>Trading Journal</h3>
             <p>Dokumentiere deine Trades, Emotionen und Erkenntnisse um dich langfristig zu verbessern.</p>
           </div>
-          <a href="journal.html" class="tool-link">Journal öffnen</a>
+          <a href="journal" class="tool-link">Journal öffnen</a>
         </div>
 
         <div class="tool-card">
@@ -618,7 +618,7 @@
             <h3>Trading Checkliste</h3>
             <p>Überprüfe vor jedem Trade Struktur, Liquidität, Confirmation und Risiko.</p>
           </div>
-          <a href="checklist.html" class="tool-link">Checkliste öffnen</a>
+          <a href="checklist" class="tool-link">Checkliste öffnen</a>
         </div>
 
         <div class="tool-card">
@@ -636,7 +636,7 @@
             <h3>Partner Broker</h3>
             <p>Richte Broker, MT5, Fokusmärkte und deinen Trading-Workflow sauber an einem Ort ein.</p>
           </div>
-          <a href="broker.html" class="tool-link">Broker öffnen</a>
+          <a href="broker" class="tool-link">Broker öffnen</a>
         </div>
       </div>
     </section>
@@ -800,10 +800,10 @@
         <span>Tools für Risiko, Analyse, Journal und Trading Education.</span>
       </div>
       <nav>
-        <a href="impressum.html">Impressum</a>
-        <a href="datenschutz.html">Datenschutz</a>
-        <a href="risikohinweis.html">Risikohinweis</a>
-        <a href="community.html">Kontakt</a>
+        <a href="impressum">Impressum</a>
+        <a href="datenschutz">Datenschutz</a>
+        <a href="risikohinweis">Risikohinweis</a>
+        <a href="community">Kontakt</a>
       </nav>
       <p>BullProsperity dient ausschließlich Bildungs- und Informationszwecken. Es werden keine Gewinne garantiert.</p>
     </div>
@@ -956,7 +956,7 @@
         });
 
         if (!res.ok) {
-          window.location.href = "locked.html";
+          window.location.href = "locked";
           return;
         }
 
@@ -964,7 +964,7 @@
         const role = data?.role || "guest";
 
         if (role !== "admin" && role !== "premium") {
-          window.location.href = "locked.html";
+          window.location.href = "locked";
           return;
         }
         if (role === "admin") {
@@ -990,7 +990,7 @@ if (logoutBtn && (role === "admin" || role === "premium")) {
         loadChart(activeSymbol, activeLabel);
         renderJournal();
       } catch (err) {
-        window.location.href = "locked.html";
+        window.location.href = "locked";
       }
     })();
   </script>

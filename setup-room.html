@@ -12,11 +12,11 @@
     const data = await res.json();
 
     if (data.role !== "admin" && data.role !== "premium") {
-      window.location.href = "/locked.html";
+      window.location.href = "/locked";
     }
 
   } catch (err) {
-    window.location.href = "/locked.html";
+    window.location.href = "/locked";
   }
 })();
 </script>
@@ -300,15 +300,15 @@
   <div class="page">
 
     <nav class="navbar">
-      <a href="index.html" class="logo">BullProsperity</a>
+      <a href="index" class="logo">BullProsperity</a>
 
       <div class="nav-links">
-        <a href="index.html">Home</a>
-        <a href="hub.html">Hub</a>
-        <a href="course.html">Course</a>
-        <a href="tools.html">Tools</a>
-        <a href="setup-room.html" class="active">Setup Room</a>
-        <a href="community.html">Community</a>
+        <a href="index">Home</a>
+        <a href="hub">Hub</a>
+        <a href="course">Course</a>
+        <a href="tools">Tools</a>
+        <a href="setup-room" class="active">Setup Room</a>
+        <a href="community">Community</a>
         <a id="loginNavBtn" href="/api/whop/login">Login</a>
         <a id="logoutBtn" href="/api/logout" class="logout-btn" style="display:none;">Logout</a>
         <div id="authBadge" class="auth-badge status-loading" style="display:none;">Zugang</div>
@@ -330,8 +330,8 @@
       </p>
 
       <div class="hero-buttons">
-        <a href="course.html" class="btn primary">Zum Kurs</a>
-        <a href="tools.html" class="btn secondary">Zu den Tools</a>
+        <a href="course" class="btn primary">Zum Kurs</a>
+        <a href="tools" class="btn secondary">Zu den Tools</a>
       </div>
     </section>
 
@@ -351,7 +351,7 @@
             <h3>Liquidity Setups</h3>
             <p>Beispiele für Liquidity Sweeps, Stop Hunts und institutionelle Bewegungen rund um Equal Highs und Equal Lows.</p>
           </div>
-          <a href="liquidity.html" class="setup-link" data-category="Liquidity Setups">Setups ansehen</a>
+          <a href="liquidity" class="setup-link" data-category="Liquidity Setups">Setups ansehen</a>
         </div>
 
         <div class="setup-card">
@@ -360,7 +360,7 @@
             <h3>Entry Modelle</h3>
             <p>BullProsperity Entry Modelle mit Confirmation, Struktur, Timing und sauberer Ausführung.</p>
           </div>
-          <a href="entry-models.html" class="setup-link" data-category="Entry Modelle">Beispiele ansehen</a>
+          <a href="entry-models" class="setup-link" data-category="Entry Modelle">Beispiele ansehen</a>
         </div>
 
         <div class="setup-card">
@@ -369,7 +369,7 @@
             <h3>Marktstruktur</h3>
             <p>BOS, CHoCH, Strukturwechsel und Trendverständnis im Chart mit klarer visueller Erklärung.</p>
           </div>
-          <a href="market-structure.html" class="setup-link" data-category="Marktstruktur">Charts öffnen</a>
+          <a href="market-structure" class="setup-link" data-category="Marktstruktur">Charts öffnen</a>
         </div>
 
         <div class="setup-card">
@@ -378,7 +378,7 @@
             <h3>Replay Analyse</h3>
             <p>Trainiere dein Auge mit Replay Analysen und markiere eigene Setups zur besseren Routineentwicklung.</p>
           </div>
-          <a href="replay.html" class="setup-link" data-category="Replay Analyse">Analyse starten</a>
+          <a href="replay" class="setup-link" data-category="Replay Analyse">Analyse starten</a>
         </div>
 
         <div class="setup-card">
@@ -387,7 +387,7 @@
             <h3>Live Beispiele</h3>
             <p>Beispiele aus echten Marktbewegungen erklärt, damit du Timing, Struktur und Bestätigung besser verstehst.</p>
           </div>
-          <a href="live-setups.html" class="setup-link" data-category="Live Beispiele">Beispiele ansehen</a>
+          <a href="live-setups" class="setup-link" data-category="Live Beispiele">Beispiele ansehen</a>
         </div>
 
         <div class="setup-card">
@@ -396,7 +396,7 @@
             <h3>Community Setups</h3>
             <p>Setup-Ideen und Beispiele aus dem Mitgliederbereich für mehr Austausch und mehrere Perspektiven.</p>
           </div>
-          <a href="community.html" class="setup-link" data-category="Community Setups">Community öffnen</a>
+          <a href="community" class="setup-link" data-category="Community Setups">Community öffnen</a>
         </div>
 
       </div>
@@ -408,10 +408,10 @@
         <span>Setup Room für Marktstruktur, Praxisbeispiele und Trading Education.</span>
       </div>
       <nav>
-        <a href="impressum.html">Impressum</a>
-        <a href="datenschutz.html">Datenschutz</a>
-        <a href="risikohinweis.html">Risikohinweis</a>
-        <a href="community.html">Kontakt</a>
+        <a href="impressum">Impressum</a>
+        <a href="datenschutz">Datenschutz</a>
+        <a href="risikohinweis">Risikohinweis</a>
+        <a href="community">Kontakt</a>
       </nav>
       <p>BullProsperity dient ausschließlich Bildungs- und Informationszwecken. Es werden keine Gewinne garantiert.</p>
     </div>
@@ -455,7 +455,7 @@ async function trackSetupRoom(action, category, targetUrl) {
     });
 
     if (!res.ok) {
-      window.location.href = "locked.html";
+      window.location.href = "locked";
       return;
     }
 
@@ -468,7 +468,7 @@ async function trackSetupRoom(action, category, targetUrl) {
     };
 
     if (role !== "admin" && role !== "premium") {
-      window.location.href = "locked.html";
+      window.location.href = "locked";
       return;
     }
     document.body.classList.add("access-ready");
@@ -498,7 +498,7 @@ if (logoutBtn && (role === "admin" || role === "premium")) {
     await trackSetupRoom("setup_room_opened", "Setup Room", window.location.pathname);
 
   } catch (err) {
-    window.location.href = "locked.html";
+    window.location.href = "locked";
   }
 })();
 

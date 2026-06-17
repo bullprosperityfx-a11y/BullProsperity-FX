@@ -12,11 +12,11 @@
     const data = await res.json();
 
     if (data.role !== "admin" && data.role !== "premium") {
-      window.location.href = "/locked.html";
+      window.location.href = "/locked";
     }
 
   } catch (err) {
-    window.location.href = "/locked.html";
+    window.location.href = "/locked";
   }
 })();
 </script>
@@ -302,14 +302,14 @@
 <body class="community-page">
   <div class="page">
     <nav class="navbar">
-      <a href="index.html" class="logo">BullProsperity</a>
+      <a href="index" class="logo">BullProsperity</a>
       <div class="nav-links">
-        <a href="index.html">Home</a>
-        <a href="hub.html">Hub</a>
-        <a href="course.html">Course</a>
-        <a href="tools.html">Tools</a>
-        <a href="setup-room.html">Setup Room</a>
-        <a href="community.html" class="active">Community</a>
+        <a href="index">Home</a>
+        <a href="hub">Hub</a>
+        <a href="course">Course</a>
+        <a href="tools">Tools</a>
+        <a href="setup-room">Setup Room</a>
+        <a href="community" class="active">Community</a>
         <a id="loginNavBtn" href="/api/whop/login">Login</a>
         <a id="logoutBtn" href="/api/logout" class="logout-btn" style="display:none;">Logout</a>
         <div id="authBadge" class="auth-badge status-loading" style="display:none;">Zugang</div>
@@ -325,9 +325,9 @@
         und voneinander zu lernen.
       </p>
       <div class="hero-buttons">
-        <a href="setup-room.html" class="btn primary">Zum Setup Room</a>
+        <a href="setup-room" class="btn primary">Zum Setup Room</a>
         <a href="https://discord.gg/QsGaq6mB7" target="_blank" class="btn primary">Discord Community öffnen</a>
-        <a href="hub.html" class="btn secondary">Zum Hub</a>
+        <a href="hub" class="btn secondary">Zum Hub</a>
       </div>
     </section>
 
@@ -344,7 +344,7 @@
             <h3>Setup Austausch</h3>
             <p>Mitglieder teilen ihre Setups, Gedanken zu Liquidität, Struktur und mögliche Ausführungen im Markt.</p>
           </div>
-          <a href="setup-austausch.html" class="community-link">Bereich öffnen</a>
+          <a href="setup-austausch" class="community-link">Bereich öffnen</a>
         </div>
 
         <div class="community-card">
@@ -353,7 +353,7 @@
             <h3>Motivation & Disziplin</h3>
             <p>Austausch über Psychologie, Routinen, Rückschläge und alles, was langfristig starke Trader formt.</p>
           </div>
-          <a href="motivation-disziplin.html" class="community-link">Bereich öffnen</a>
+          <a href="motivation-disziplin" class="community-link">Bereich öffnen</a>
         </div>
 
         <div class="community-card">
@@ -362,7 +362,7 @@
             <h3>Trade Review</h3>
             <p>Mitglieder können Trades reflektieren, Feedback bekommen und gemeinsam aus Fehlern und guten Entscheidungen lernen.</p>
           </div>
-          <a href="trade-review.html" class="community-link">Bereich öffnen</a>
+          <a href="trade-review" class="community-link">Bereich öffnen</a>
         </div>
       </div>
 
@@ -406,10 +406,10 @@
         <span>Community für Setups, Reviews, Disziplin und Trading Education.</span>
       </div>
       <nav>
-        <a href="impressum.html">Impressum</a>
-        <a href="datenschutz.html">Datenschutz</a>
-        <a href="risikohinweis.html">Risikohinweis</a>
-        <a href="community.html">Kontakt</a>
+        <a href="impressum">Impressum</a>
+        <a href="datenschutz">Datenschutz</a>
+        <a href="risikohinweis">Risikohinweis</a>
+        <a href="community">Kontakt</a>
       </nav>
       <p>BullProsperity dient ausschließlich Bildungs- und Informationszwecken. Es werden keine Gewinne garantiert.</p>
     </div>
@@ -427,7 +427,7 @@
         });
 
         if (!res.ok) {
-          window.location.href = "locked.html";
+          window.location.href = "locked";
           return;
         }
 
@@ -435,7 +435,7 @@
         const role = data?.role || "guest";
 
         if (role !== "admin" && role !== "premium") {
-          window.location.href = "locked.html";
+          window.location.href = "locked";
           return;
         }
 document.body.classList.add("access-ready");
@@ -461,7 +461,7 @@ if (logoutBtn && (role === "admin" || role === "premium")) {
   logoutBtn.style.display = "inline-flex";
 }
       } catch (err) {
-        window.location.href = "locked.html";
+        window.location.href = "locked";
       }
     })();
   </script>
