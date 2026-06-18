@@ -1,4 +1,5 @@
 document.addEventListener("DOMContentLoaded", async () => {
+  const isProtectedPage = document.documentElement.classList.contains("bp-auth-checking");
   const loginBtn = document.getElementById("loginNavBtn");
   const logoutBtn = document.getElementById("logoutBtn");
 
@@ -21,6 +22,15 @@ document.addEventListener("DOMContentLoaded", async () => {
     accessData = data;
 
     const isLoggedIn = data.role === "admin" || data.role === "premium";
+
+    if (isProtectedPage && !isLoggedIn) {
+      window.location.replace("/locked");
+      return;
+    }
+
+    if (isProtectedPage) {
+      document.documentElement.classList.remove("bp-auth-checking");
+    }
 
     if (authStatus) authStatus.textContent = "Kein Zugang";
     if (statusDot) statusDot.className = "status-dot status-locked";
@@ -53,6 +63,11 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   } catch (err) {
     console.log("Auth Fehler");
+
+    if (isProtectedPage) {
+      window.location.replace("/locked");
+      return;
+    }
 
     if (authStatus) authStatus.textContent = "Fehler";
     if (statusDot) statusDot.className = "status-dot status-locked";
