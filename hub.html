@@ -179,6 +179,118 @@
       font-weight:950;
     }
 
+    .whop-welcome{
+      display:none;
+      position:relative;
+      overflow:hidden;
+      margin:0 0 24px;
+      padding:22px;
+      border:1px solid rgba(255,215,0,.22);
+      border-radius:26px;
+      background:
+        linear-gradient(135deg, rgba(255,215,0,.14), transparent 38%),
+        linear-gradient(180deg, rgba(255,255,255,.045), rgba(255,255,255,.015)),
+        rgba(9,9,9,.94);
+      box-shadow:
+        0 22px 60px rgba(0,0,0,.42),
+        inset 0 0 0 1px rgba(255,255,255,.035);
+    }
+
+    .whop-welcome.is-visible{
+      display:grid;
+      grid-template-columns:1fr auto;
+      gap:18px;
+      align-items:center;
+    }
+
+    .whop-welcome::before{
+      content:"";
+      position:absolute;
+      right:-80px;
+      top:-100px;
+      width:260px;
+      height:260px;
+      background:radial-gradient(circle, rgba(255,215,0,.18), transparent 68%);
+      pointer-events:none;
+    }
+
+    .whop-welcome-content{
+      position:relative;
+      z-index:1;
+    }
+
+    .whop-welcome-kicker{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:9px 13px;
+      border:1px solid rgba(255,215,0,.25);
+      border-radius:999px;
+      background:rgba(255,215,0,.08);
+      color:#ffd700;
+      font-size:12px;
+      font-weight:950;
+      text-transform:uppercase;
+      letter-spacing:.08em;
+    }
+
+    .whop-welcome-kicker::before{
+      content:"";
+      width:8px;
+      height:8px;
+      border-radius:50%;
+      background:#22c55e;
+      box-shadow:0 0 16px rgba(34,197,94,.65);
+    }
+
+    .whop-welcome-title{
+      margin:14px 0 8px;
+      color:#fff;
+      font-size:28px;
+      line-height:1.05;
+      letter-spacing:-.03em;
+    }
+
+    .whop-welcome-title span{
+      color:#ffd700;
+    }
+
+    .whop-welcome-text{
+      max-width:820px;
+      color:rgba(255,255,255,.72);
+      line-height:1.7;
+      margin:0;
+    }
+
+    .whop-welcome-actions{
+      position:relative;
+      z-index:1;
+      display:flex;
+      align-items:center;
+      gap:10px;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+    }
+
+    .whop-welcome-close{
+      width:42px;
+      height:42px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(255,255,255,.04);
+      color:#fff;
+      font-size:20px;
+      font-weight:800;
+      cursor:pointer;
+      transition:.2s ease;
+    }
+
+    .whop-welcome-close:hover{
+      border-color:rgba(255,215,0,.34);
+      color:#ffd700;
+      transform:translateY(-1px);
+    }
+
     .bp-command-center{
       display:grid;
       grid-template-columns:repeat(3,1fr);
@@ -1181,6 +1293,18 @@
         min-width:auto;
       }
 
+      .whop-welcome.is-visible{
+        grid-template-columns:1fr;
+      }
+
+      .whop-welcome-title{
+        font-size:24px;
+      }
+
+      .whop-welcome-actions{
+        justify-content:flex-start;
+      }
+
       .hub-page .hub-longterm-grid{
         grid-template-columns:1fr;
       }
@@ -1238,6 +1362,24 @@
         </div>
       </div>
     </nav>
+
+    <section class="whop-welcome" id="whopWelcomeBanner" aria-live="polite">
+      <div class="whop-welcome-content">
+        <div class="whop-welcome-kicker" id="whopWelcomeRole">Whop Login bestätigt</div>
+        <h2 class="whop-welcome-title">
+          Willkommen im <span>BullProsperity Hub</span>
+        </h2>
+        <p class="whop-welcome-text" id="whopWelcomeText">
+          Dein Zugang ist aktiv. Starte mit dem Course, öffne die Tools oder speichere deine ersten Notizen im Hub.
+        </p>
+      </div>
+
+      <div class="whop-welcome-actions">
+        <a href="course" class="hub-btn primary">Course starten</a>
+        <a href="tools" class="hub-btn secondary">Tools öffnen</a>
+        <button class="whop-welcome-close" id="whopWelcomeClose" type="button" aria-label="Welcome Banner schließen">×</button>
+      </div>
+    </section>
 
     <section class="hero-shell">
       <div class="badge">Premium Members Hub</div>
@@ -1553,6 +1695,10 @@
     const adminDashboardHeroBtn = document.getElementById("adminDashboardHeroBtn");
     const statusValue = document.getElementById("statusValue");
     const heroAccessValue = document.getElementById("heroAccessValue");
+    const whopWelcomeBanner = document.getElementById("whopWelcomeBanner");
+    const whopWelcomeRole = document.getElementById("whopWelcomeRole");
+    const whopWelcomeText = document.getElementById("whopWelcomeText");
+    const whopWelcomeClose = document.getElementById("whopWelcomeClose");
 
     const savedHubNotes = localStorage.getItem("bp_hub_notes");
 
@@ -1593,6 +1739,43 @@
     bpUpdateSession();
     setInterval(bpUpdateSession, 60000);
 
+    function getMemberName(email){
+      if(!email) return "Trader";
+
+      const rawName = email.split("@")[0] || "Trader";
+      return rawName
+        .replace(/[._-]+/g, " ")
+        .replace(/\b\w/g, char => char.toUpperCase())
+        .trim() || "Trader";
+    }
+
+    function showWhopWelcome(data){
+      if(!whopWelcomeBanner || !whopWelcomeText) return;
+
+      const role = data?.role || "premium";
+      const email = data?.email || "";
+      const storageKey = `bp_whop_welcome_seen_${email || role}`;
+
+      if(sessionStorage.getItem(storageKey) === "true") return;
+
+      const memberName = getMemberName(email);
+      const roleLabel = role === "admin" ? "Admin Zugang bestätigt" : "Whop Zugang bestätigt";
+
+      if(whopWelcomeRole) whopWelcomeRole.textContent = roleLabel;
+
+      whopWelcomeText.textContent =
+        `Schön, dass du da bist, ${memberName}. Dein BullProsperity Zugang ist aktiv. Starte mit dem Course, öffne die Tools oder speichere dir deine ersten Fokus-Notizen im Hub.`;
+
+      whopWelcomeBanner.classList.add("is-visible");
+
+      if(whopWelcomeClose){
+        whopWelcomeClose.addEventListener("click", () => {
+          sessionStorage.setItem(storageKey, "true");
+          whopWelcomeBanner.classList.remove("is-visible");
+        }, { once:true });
+      }
+    }
+
     (async () => {
       try {
         const res = await fetch("/api/access", {
@@ -1614,6 +1797,7 @@
         }
 
         document.body.classList.add("access-ready");
+        showWhopWelcome(data);
 
         if (role === "admin") {
           authBadge.textContent = "Admin";
