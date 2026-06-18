@@ -10,10 +10,13 @@
   <meta property="og:title" content="BullProsperity | Waitlist" />
   <meta property="og:description" content="Bewirb dich für Zugang zu Trading Education, Marktanalysen, Community und strukturierten Tools." />
   <meta property="og:url" content="https://bullprosperity.online/waitlist" />
-  <meta property="og:image" content="https://bullprosperity.online/favicon.png" />
-  <meta name="twitter:card" content="summary" />
+  <meta property="og:image" content="https://bullprosperity.online/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="BullProsperity | Waitlist" />
   <meta name="twitter:description" content="Bewirb dich für Zugang zu Trading Education, Marktanalysen, Community und strukturierten Tools." />
+  <meta name="twitter:image" content="https://bullprosperity.online/og-image.png" />
   <link rel="icon" type="image/png" href="/favicon.png">
   <link rel="manifest" href="/manifest.json">
   <link rel="apple-touch-icon" href="/favicon.png">
@@ -255,9 +258,17 @@
     }
 
     .error{
-      background:rgba(255,80,80,0.09);
-      border:1px solid rgba(255,80,80,0.28);
-      color:#ff9b9b;
+      background:rgba(243,210,27,0.08);
+      border:1px solid rgba(243,210,27,0.24);
+      color:#f6e68a;
+    }
+
+    .form-note{
+      color:#bdbdbd;
+      font-size:13px;
+      line-height:1.55;
+      font-weight:750;
+      margin-top:2px;
     }
 
     .benefit-grid{
@@ -346,11 +357,10 @@
       <div class="waitlist-hero-grid">
         <div>
           <div class="badge">Private Zugangsliste</div>
-          <h1 class="hero-title">Early Access für <span class="gold">BullProsperity</span></h1>
+          <h1 class="hero-title">Bewirb dich für <span class="gold">Early Access</span></h1>
           <p class="hero-text">
-            Trage dich in die private Waitlist ein und sichere dir die Chance auf bevorzugten Early Access,
-            bevor BullProsperity offiziell öffnet. Fokus: Struktur, Trading Education,
-            Smart Money Concepts, Community und langfristiges Wachstum.
+            BullProsperity ist für Trader, die ernsthaft Struktur aufbauen möchten: Education,
+            Marktstruktur, Risiko, Journal und Community in einem ruhigen Premium-Umfeld.
           </p>
           <div class="hero-buttons">
             <a href="#waitlist" class="btn primary">Waitlist beitreten</a>
@@ -371,19 +381,19 @@
       <div>
         <div class="waitlist-card">
           <div class="badge">Private Access</div>
-          <h3>Early Access</h3>
+          <h3>Bewusst limitiert</h3>
           <p>
             Die Waitlist ist für Menschen, die BullProsperity ernsthaft nutzen möchten.
-            Die ersten ausgewählten Mitglieder erhalten bevorzugten Zugang.
+            Neue Zugänge werden kontrolliert freigeschaltet, damit Qualität vor Masse bleibt.
           </p>
         </div>
 
         <div class="waitlist-card">
           <div class="badge">Education First</div>
-          <h3>Keine Massen-Plattform</h3>
+          <h3>Education statt Hype</h3>
           <p>
-            BullProsperity ist auf Qualität, Struktur und Community ausgelegt.
-            Der Zugang soll bewusst exklusiv und kontrolliert bleiben.
+            Der Fokus liegt auf Marktverständnis, Risiko, Disziplin und sauberem Review.
+            Keine Gewinnversprechen, keine hektischen Versprechen.
           </p>
         </div>
       </div>
@@ -392,8 +402,8 @@
         <div class="badge">Bewerbung</div>
         <h2>Bewirb dich für Early Access</h2>
         <p>
-          Fülle das Formular aus. Wir speichern deine Anfrage und melden uns,
-          sobald der nächste Zugang geöffnet wird.
+          Fülle das Formular aus. Deine Anfrage wird geprüft und du bekommst Rückmeldung,
+          sobald ein passender Zugang geöffnet wird.
         </p>
 
         <form id="waitlistForm" class="waitlist-form">
@@ -408,15 +418,16 @@
           </select>
 
           <textarea id="reason" placeholder="Warum möchtest du BullProsperity beitreten?" required></textarea>
+          <p class="form-note">Kurze, ehrliche Antworten reichen. Wichtig ist, dass du ernsthaft lernen und sauber arbeiten möchtest.</p>
 
           <button class="btn primary submit" id="submitBtn" type="submit">Platz sichern</button>
 
           <div class="success" id="successMessage">
-            Deine Waitlist-Anfrage wurde erfolgreich gesendet. Du wirst weitergeleitet.
+            Deine Anfrage wurde gespeichert. Du wirst gleich zur Bestätigungsseite weitergeleitet.
           </div>
 
           <div class="error" id="errorMessage">
-            Es gab einen Fehler. Bitte versuche es später erneut.
+            Die Anfrage konnte gerade nicht gesendet werden. Bitte prüfe deine Angaben oder versuche es gleich nochmal.
           </div>
         </form>
       </div>
@@ -494,7 +505,7 @@
         const result = await response.json();
 
         if (!response.ok) {
-          errorMessage.textContent = result.error || "Es gab einen Fehler. Bitte versuche es erneut.";
+          errorMessage.textContent = result.error || "Die Anfrage konnte gerade nicht gesendet werden. Bitte prüfe deine Angaben oder versuche es gleich nochmal.";
           errorMessage.style.display = "block";
           submitBtn.disabled = false;
           submitBtn.textContent = "Platz sichern";
@@ -508,7 +519,7 @@
           window.location.href = "thank-you";
         }, 1200);
       } catch {
-        errorMessage.textContent = "Serverfehler. Bitte versuche es später erneut.";
+        errorMessage.textContent = "Die Verbindung ist gerade nicht verfügbar. Bitte versuche es in einem Moment nochmal.";
         errorMessage.style.display = "block";
         submitBtn.disabled = false;
         submitBtn.textContent = "Platz sichern";
