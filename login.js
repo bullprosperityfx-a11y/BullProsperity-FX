@@ -61,9 +61,124 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (learnMoreBtn) learnMoreBtn.style.margin = "0";
   }
 
+  await trackPageOpen(accessData);
   await trackLessonOpen(accessData);
+  setupClickTracking(accessData);
   setupVimeoWatchtimeTracking(accessData);
 });
+
+function hasTrackableAccess(accessData) {
+  return ["admin", "premium", "longterm"].includes(accessData?.role);
+}
+
+function getTrackingEmail(accessData) {
+  return accessData?.email || "admin@bullprosperity.local";
+}
+
+function getCleanPageName() {
+  const path = window.location.pathname
+    .replace(/\/+/g, "/")
+    .replace(/^\/|\/$/g, "")
+    .replace(/\.html$/i, "");
+
+  return path || "home";
+}
+
+function getReadableClickLabel(element) {
+  const rawText = element.textContent || element.getAttribute("aria-label") || element.title || "";
+  return rawText.replace(/\s+/g, " ").trim().slice(0, 60) || "Unbenannter Klick";
+}
+
+function loadScriptOnce(src) {
+  return new Promise((resolve, reject) => {
+    const existingScript = document.querySelector(`script[src="${src}"]`);
+
+    if (existingScript) {
+      if (existingScript.dataset.loaded === "true") {
+        resolve();
+        return;
+      }
+
+      existingScript.addEventListener("load", resolve, { once: true });
+      existingScript.addEventListener("error", reject, { once: true });
+      return;
+    }
+
+    const script = document.createElement("script");
+    script.src = src;
+    script.dataset.bpDynamic = "true";
+    script.onload = () => {
+      script.dataset.loaded = "true";
+      resolve();
+    };
+    script.onerror = reject;
+    document.head.appendChild(script);
+  });
+}
+
+async function ensureSupabaseClient() {
+  if (window.supabaseClient) return true;
+
+  try {
+    if (!window.supabase) {
+      await loadScriptOnce("https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2");
+    }
+
+    if (!window.supabaseClient) {
+      await loadScriptOnce("/supabase.js");
+    }
+
+    return Boolean(window.supabaseClient);
+  } catch (err) {
+    console.log("Supabase konnte nicht geladen werden:", err);
+    return false;
+  }
+}
+
+async function trackMemberActivity(accessData, action, page) {
+  try {
+    if (!hasTrackableAccess(accessData)) return;
+
+    const ready = await ensureSupabaseClient();
+    if (!ready) return;
+
+    const { error } = await supabaseClient
+      .from("member_activity")
+      .insert({
+        email: getTrackingEmail(accessData),
+        role: accessData.role,
+        action,
+        page: page || getCleanPageName()
+      });
+
+    if (error) {
+      console.log("Member Tracking Fehler:", error);
+    }
+  } catch (err) {
+    console.log("Member Tracking System Fehler:", err);
+  }
+}
+
+async function trackPageOpen(accessData) {
+  const page = getCleanPageName();
+
+  await trackMemberActivity(accessData, "page_opened", page);
+}
+
+function setupClickTracking(accessData) {
+  if (!hasTrackableAccess(accessData)) return;
+
+  document.addEventListener("click", (event) => {
+    const target = event.target.closest("a, button, [data-track]");
+    if (!target) return;
+
+    const label = getReadableClickLabel(target);
+    const href = target.getAttribute("href") || target.dataset.track || "";
+    const page = `${getCleanPageName()} · ${label}${href ? " → " + href : ""}`.slice(0, 180);
+
+    trackMemberActivity(accessData, "click", page);
+  }, true);
+}
 
 async function trackLessonOpen(accessData) {
   try {
@@ -73,13 +188,16 @@ async function trackLessonOpen(accessData) {
 
     if (!isLessonPage) return;
 
-    if (!window.supabaseClient) {
+    if (!hasTrackableAccess(accessData)) return;
+
+    const ready = await ensureSupabaseClient();
+
+    if (!ready) {
       console.log("Supabase Client nicht geladen");
       return;
     }
 
-    const userEmail =
-      accessData?.email || "admin@bullprosperity.local";
+    const userEmail = getTrackingEmail(accessData);
 
     const lessonTitle =
       document.querySelector("h1")?.textContent?.trim() ||
@@ -107,14 +225,18 @@ async function trackLessonOpen(accessData) {
   }
 }
 
-function setupVimeoWatchtimeTracking(accessData) {
+async function setupVimeoWatchtimeTracking(accessData) {
   try {
     const path = window.location.pathname.toLowerCase();
     const isLessonPage = path.includes("lesson");
 
     if (!isLessonPage) return;
 
-    if (!window.supabaseClient) {
+    if (!hasTrackableAccess(accessData)) return;
+
+    const ready = await ensureSupabaseClient();
+
+    if (!ready) {
       console.log("Watchtime: Supabase Client nicht geladen");
       return;
     }
@@ -136,8 +258,7 @@ function setupVimeoWatchtimeTracking(accessData) {
           let lastSavedSecond = 0;
           let durationSeconds = 0;
 
-          const userEmail =
-            accessData?.email || "admin@bullprosperity.local";
+          const userEmail = getTrackingEmail(accessData);
 
           const lessonTitle =
             document.querySelector("h1")?.textContent?.trim() ||

@@ -570,7 +570,7 @@
             <div>
               <h2 class="panel-title">Plattform <span>Snapshot</span></h2>
               <p class="panel-copy">
-                Die wichtigsten Kennzahlen aus Hub, Course, Watchtime und Setup Room
+                Die wichtigsten Kennzahlen aus Seitenaufrufen, Klicks, Course, Watchtime und Setup Room
                 in einer klaren Übersicht.
               </p>
             </div>
@@ -624,10 +624,10 @@
             <div class="system-grid">
               <div class="system-card">
                 <div>
-                  <div class="system-name">🏠 Hub</div>
-                  <div class="system-value" id="hubOpens">0</div>
+                  <div class="system-name">👁️ Page Views</div>
+                  <div class="system-value" id="pageOpens">0</div>
                 </div>
-                <p class="system-copy">Hub-Öffnungen und Mitgliederbewegung.</p>
+                <p class="system-copy">Getrackte Seitenaufrufe eingeloggter Mitglieder.</p>
               </div>
 
               <div class="system-card">
@@ -648,10 +648,10 @@
 
               <div class="system-card">
                 <div>
-                  <div class="system-name">🛡️ Security</div>
-                  <div class="system-value">OK</div>
+                  <div class="system-name">🖱️ Klicks</div>
+                  <div class="system-value" id="trackedClicks">0</div>
                 </div>
-                <p class="system-copy">Admin-Zugriff ist geschützt.</p>
+                <p class="system-copy">CTA-, Button- und Navigationsklicks.</p>
               </div>
             </div>
           </div>
@@ -693,7 +693,7 @@
             <div>
               <h2 class="panel-title">Neueste <span>Aktivität</span></h2>
               <p class="panel-copy">
-                Kombinierter Feed aus Hub, Course und Setup Room. Dezenter Überblick,
+                Kombinierter Feed aus Seitenaufrufen, Klicks, Course und Setup Room. Dezenter Überblick,
                 ohne das Dashboard unnötig voll wirken zu lassen.
               </p>
             </div>
@@ -796,7 +796,10 @@
         ].filter(Boolean);
 
         const uniqueMembers = new Set(allEmails);
-        const hubOpens = memberActivity.filter(item => item.action === "hub_opened").length;
+        const pageOpens = memberActivity.filter(item => {
+          return item.action === "page_opened" || item.action === "hub_opened";
+        }).length;
+        const trackedClicks = memberActivity.filter(item => item.action === "click").length;
         const lessonOpens = lessonActivity.length;
         const srActions = srActivity.length;
 
@@ -824,7 +827,8 @@
         setText("activeMembers", uniqueMembers.size);
         setText("totalActivities", totalEvents);
         setText("totalWatchtime", formatSeconds(totalWatchSeconds));
-        setText("hubOpens", hubOpens);
+        setText("pageOpens", pageOpens);
+        setText("trackedClicks", trackedClicks);
         setText("lessonOpens", lessonOpens);
         setText("srActions", srActions);
 
