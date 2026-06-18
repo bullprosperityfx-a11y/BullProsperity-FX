@@ -252,6 +252,18 @@
       box-shadow:0 0 18px rgba(243,210,27,.08);
     }
 
+    .lesson.is-completed{
+      border-color:rgba(34,197,94,.34);
+      background:rgba(34,197,94,.055);
+    }
+
+    .lesson.is-completed::after{
+      content:"✓";
+      margin-left:auto;
+      color:#22c55e;
+      font-weight:950;
+    }
+
     .course-main{
       display:grid;
       gap:22px;
@@ -495,11 +507,11 @@
 
         <div class="progress-head">
           <span>Gesamtfortschritt</span>
-          <span>18%</span>
+          <span id="courseProgressText">0 / 33</span>
         </div>
 
         <div class="progress-bar">
-          <div class="progress-fill"></div>
+          <div class="progress-fill" id="courseProgressFill" style="width:0%;"></div>
         </div>
 
         <div class="course-scroll">
@@ -700,6 +712,34 @@
     const authBadge = document.getElementById("authBadge");
     const loginNavBtn = document.getElementById("loginNavBtn");
     const logoutBtn = document.getElementById("logoutBtn");
+    const courseProgressText = document.getElementById("courseProgressText");
+    const courseProgressFill = document.getElementById("courseProgressFill");
+    const totalLessons = 33;
+
+    function getCompletedLessons(){
+      try{
+        return JSON.parse(localStorage.getItem("bp_completed_lessons")) || {};
+      } catch(err){
+        return {};
+      }
+    }
+
+    function updateCourseProgress(){
+      const completed = getCompletedLessons();
+      const count = Object.keys(completed).filter(key => completed[key]).length;
+      const percent = Math.round((count / totalLessons) * 100);
+
+      if(courseProgressText) courseProgressText.textContent = `${count} / ${totalLessons}`;
+      if(courseProgressFill) courseProgressFill.style.width = `${percent}%`;
+
+      document.querySelectorAll(".lesson").forEach(link => {
+        const match = link.getAttribute("href")?.match(/lesson(\d+)/i);
+        if(!match) return;
+        link.classList.toggle("is-completed", Boolean(completed[match[1]]));
+      });
+    }
+
+    updateCourseProgress();
 
     (async () => {
       try {

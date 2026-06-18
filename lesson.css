@@ -181,6 +181,37 @@
   box-shadow:0 0 18px rgba(243,210,27,0.08);
 }
 
+.lesson-page .lesson.is-completed::after{
+  content:"✓";
+  margin-left:auto;
+  color:#22c55e;
+  font-weight:950;
+}
+
+.lesson-page .lesson-complete-panel{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:14px;
+  flex-wrap:wrap;
+  margin-top:18px;
+  padding:16px;
+  border:1px solid rgba(34,197,94,0.20);
+  border-radius:18px;
+  background:rgba(34,197,94,0.055);
+}
+
+.lesson-page .lesson-complete-panel strong{
+  color:#fff;
+  display:block;
+  margin-bottom:4px;
+}
+
+.lesson-page .lesson-complete-panel span{
+  color:rgba(255,255,255,0.64);
+  font-size:13px;
+}
+
 .lesson-page .lesson-main{
   display:grid;
   gap:22px;

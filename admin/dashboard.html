@@ -464,6 +464,45 @@
       white-space:nowrap;
     }
 
+    .signal-archive{
+      display:grid;
+      gap:12px;
+    }
+
+    .signal-archive-item{
+      display:grid;
+      grid-template-columns:1fr auto;
+      gap:14px;
+      align-items:center;
+      padding:16px;
+      border:1px solid rgba(243,210,27,.14);
+      border-radius:18px;
+      background:rgba(255,255,255,.025);
+    }
+
+    .signal-archive-item strong{
+      color:#fff;
+      display:block;
+      margin-bottom:6px;
+    }
+
+    .signal-archive-item span{
+      color:rgba(255,255,255,.62);
+      font-size:13px;
+      line-height:1.5;
+    }
+
+    .signal-pill{
+      padding:8px 11px;
+      border-radius:999px;
+      border:1px solid rgba(243,210,27,.22);
+      color:var(--gold);
+      background:rgba(243,210,27,.06);
+      font-size:12px;
+      font-weight:950;
+      white-space:nowrap;
+    }
+
     .footer-note{
       margin-top:24px;
     }
@@ -515,6 +554,10 @@
 
       .activity-time{
         grid-column:2;
+      }
+
+      .signal-archive-item{
+        grid-template-columns:1fr;
       }
     }
   </style>
@@ -711,6 +754,28 @@
             </div>
           </div>
         </div>
+
+        <div class="admin-panel">
+          <div class="panel-head">
+            <div>
+              <h2 class="panel-title">Signal <span>Archiv</span></h2>
+              <p class="panel-copy">
+                Schneller Überblick über signal- und setupnahe Aktivitäten aus Admin Signals, Setup Room
+                und relevanten Klicks.
+              </p>
+            </div>
+          </div>
+
+          <div class="signal-archive" id="signalArchive">
+            <div class="signal-archive-item">
+              <div>
+                <strong>Archiv wird geladen</strong>
+                <span>Relevante Signal- und Setup-Aktivitäten erscheinen hier automatisch.</span>
+              </div>
+              <div class="signal-pill">Live</div>
+            </div>
+          </div>
+        </div>
       </section>
     </main>
 
@@ -866,6 +931,7 @@
         }
 
         const feed = document.getElementById("activityFeed");
+        const signalArchive = document.getElementById("signalArchive");
         if(!feed) return;
 
         if(!combined.length){
@@ -879,6 +945,19 @@
               <div class="activity-time">-</div>
             </div>
           `;
+
+          if(signalArchive){
+            signalArchive.innerHTML = `
+              <div class="signal-archive-item">
+                <div>
+                  <strong>Noch keine Signal-Aktivität</strong>
+                  <span>Sobald Admin Signals oder Setup Room genutzt werden, wird das Archiv gefüllt.</span>
+                </div>
+                <div class="signal-pill">Wartet</div>
+              </div>
+            `;
+          }
+
           return;
         }
 
@@ -896,6 +975,39 @@
             </div>
           `;
         }).join("");
+
+        if(signalArchive){
+          const signalItems = combined.filter(item => {
+            const text = `${item.label || ""} ${item.title || ""} ${item.detail || ""}`.toLowerCase();
+            return text.includes("signal") ||
+              text.includes("setup") ||
+              text.includes("bias") ||
+              text.includes("entry") ||
+              text.includes("admin-signals");
+          });
+
+          if(!signalItems.length){
+            signalArchive.innerHTML = `
+              <div class="signal-archive-item">
+                <div>
+                  <strong>Noch keine Signal-Aktivität</strong>
+                  <span>Sobald Admin Signals oder Setup Room genutzt werden, wird das Archiv gefüllt.</span>
+                </div>
+                <div class="signal-pill">Wartet</div>
+              </div>
+            `;
+          } else {
+            signalArchive.innerHTML = signalItems.slice(0,8).map(item => `
+              <div class="signal-archive-item">
+                <div>
+                  <strong>${item.label} · ${item.title}</strong>
+                  <span>${item.email || "Unbekannter User"} · ${item.detail || "-"}</span>
+                </div>
+                <div class="signal-pill">${formatDateTime(item.created_at)}</div>
+              </div>
+            `).join("");
+          }
+        }
 
       } catch(err){
         console.log("Founder Dashboard Fehler:", err);

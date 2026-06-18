@@ -179,6 +179,141 @@
       font-weight:950;
     }
 
+    .feature-grid{
+      display:grid;
+      grid-template-columns:1.05fr .95fr;
+      gap:22px;
+    }
+
+    .onboarding-list,
+    .setup-library,
+    .glossary-list{
+      display:grid;
+      gap:12px;
+      margin-top:18px;
+    }
+
+    .onboarding-item,
+    .setup-item,
+    .glossary-item,
+    .member-metric{
+      border:1px solid rgba(255,215,0,.14);
+      background:rgba(255,255,255,.035);
+      border-radius:18px;
+      padding:14px;
+    }
+
+    .onboarding-item{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      cursor:pointer;
+      transition:.2s ease;
+    }
+
+    .onboarding-item:hover{
+      border-color:rgba(255,215,0,.28);
+      transform:translateY(-1px);
+    }
+
+    .onboarding-item input{
+      width:18px;
+      height:18px;
+      accent-color:#ffd700;
+      flex:0 0 auto;
+    }
+
+    .onboarding-item strong,
+    .setup-item strong,
+    .glossary-item strong{
+      display:block;
+      color:#fff;
+      font-size:15px;
+      margin-bottom:4px;
+    }
+
+    .onboarding-item span,
+    .setup-item span,
+    .glossary-item span,
+    .member-metric span{
+      color:rgba(255,255,255,.62);
+      font-size:13px;
+      line-height:1.5;
+    }
+
+    .member-dashboard-grid{
+      display:grid;
+      grid-template-columns:repeat(2,1fr);
+      gap:12px;
+      margin-top:18px;
+    }
+
+    .member-metric strong{
+      display:block;
+      color:#ffd700;
+      font-size:24px;
+      line-height:1.05;
+      margin-bottom:6px;
+    }
+
+    .setup-form{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
+      margin-top:18px;
+    }
+
+    .setup-form input,
+    .setup-form textarea,
+    .glossary-search{
+      width:100%;
+      border:1px solid rgba(255,215,0,.18);
+      border-radius:14px;
+      background:#090909;
+      color:#fff;
+      padding:13px 14px;
+      font-size:14px;
+      outline:none;
+    }
+
+    .setup-form textarea{
+      grid-column:1 / -1;
+      min-height:96px;
+      resize:vertical;
+      line-height:1.6;
+    }
+
+    .setup-form input:focus,
+    .setup-form textarea:focus,
+    .glossary-search:focus{
+      border-color:rgba(255,215,0,.42);
+      box-shadow:0 0 0 3px rgba(255,215,0,.08);
+    }
+
+    .setup-actions{
+      grid-column:1 / -1;
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
+    .glossary-item{
+      display:none;
+    }
+
+    .glossary-item.is-visible{
+      display:block;
+    }
+
+    .notes-sync-row{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      flex-wrap:wrap;
+      margin-top:12px;
+    }
+
     .whop-welcome{
       display:none;
       position:relative;
@@ -1216,6 +1351,7 @@
       .hub-top-grid,
       .hub-mid-grid,
       .hub-bottom-grid,
+      .feature-grid,
       .hub-longterm-grid{
         grid-template-columns:1fr;
       }
@@ -1233,7 +1369,9 @@
 
     @media(max-width:760px){
       .hub-links-grid,
-      .hub-stats{
+      .hub-stats,
+      .member-dashboard-grid,
+      .setup-form{
         grid-template-columns:1fr;
       }
 
@@ -1428,7 +1566,80 @@
       </div>
     </section>
 
-    <div class="hub-shell">
+      <div class="hub-shell">
+
+      <section class="feature-grid">
+        <div class="hub-card">
+          <div class="badge">Onboarding</div>
+          <h2 class="hub-subtitle">Dein Startplan</h2>
+          <p class="hub-text">
+            Arbeite diese Schritte nach dem Whop Login durch, damit dein BullProsperity Setup direkt sauber steht.
+          </p>
+
+          <div class="progress-head" style="margin-top:18px;">
+            <span>Setup Fortschritt</span>
+            <span id="onboardingProgressText">0%</span>
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill" id="onboardingProgressFill" style="width:0%;"></div>
+          </div>
+
+          <div class="onboarding-list" id="onboardingList">
+            <label class="onboarding-item">
+              <input type="checkbox" data-onboarding="profile" />
+              <span><strong>Profil prüfen</strong> Zugang, E-Mail und Rolle kontrollieren.</span>
+            </label>
+            <label class="onboarding-item">
+              <input type="checkbox" data-onboarding="course" />
+              <span><strong>Course starten</strong> Mit Lektion 1 beginnen und Struktur verstehen.</span>
+            </label>
+            <label class="onboarding-item">
+              <input type="checkbox" data-onboarding="journal" />
+              <span><strong>Journal einrichten</strong> Tagesnotizen, Bias und Review vorbereiten.</span>
+            </label>
+            <label class="onboarding-item">
+              <input type="checkbox" data-onboarding="discord" />
+              <span><strong>Discord beitreten</strong> Community und Updates verbinden.</span>
+            </label>
+            <label class="onboarding-item">
+              <input type="checkbox" data-onboarding="broker" />
+              <span><strong>Broker Setup öffnen</strong> Infrastruktur, MT5 und Risiko sauber prüfen.</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="hub-card">
+          <div class="badge">Member Dashboard</div>
+          <h2 class="hub-subtitle">Deine Übersicht</h2>
+          <p class="hub-text">
+            Persönliche Kennzahlen aus deinem Browser. Ideal als schneller Überblick für deinen Workflow.
+          </p>
+
+          <div class="member-dashboard-grid">
+            <div class="member-metric">
+              <strong id="memberProgressValue">0%</strong>
+              <span>Onboarding Fortschritt</span>
+            </div>
+            <div class="member-metric">
+              <strong id="memberLessonValue">-</strong>
+              <span>Letzte Lesson</span>
+            </div>
+            <div class="member-metric">
+              <strong id="memberSetupsValue">0</strong>
+              <span>Gespeicherte Setups</span>
+            </div>
+            <div class="member-metric">
+              <strong id="memberNotesValue">0</strong>
+              <span>Notiz-Zeichen</span>
+            </div>
+          </div>
+
+          <div class="hub-actions">
+            <a href="course" class="hub-btn primary">Weiterlernen</a>
+            <a href="journal" class="hub-btn secondary">Journal öffnen</a>
+          </div>
+        </div>
+      </section>
 
       <section id="hub-dashboard" class="hub-top-grid">
         <div class="hub-hero-card">
@@ -1609,7 +1820,73 @@
             <button id="saveHubNotes" class="hub-btn primary" type="button">Notizen speichern</button>
           </div>
 
+          <div class="notes-sync-row">
+            <span class="hub-note-status" id="hubNotesSyncStatus">Browser Sync aktiv.</span>
+            <button id="clearHubNotes" class="hub-btn secondary" type="button">Notizen leeren</button>
+          </div>
+
           <div id="hubNoteStatus" class="hub-note-status">Noch keine Notizen gespeichert.</div>
+        </div>
+      </section>
+
+      <section class="feature-grid">
+        <div class="hub-card">
+          <div class="badge">Setup Library</div>
+          <h2 class="hub-subtitle">Eigene Setups speichern</h2>
+          <p class="hub-text">
+            Sammle Marktideen, Bias, Entry-Gründe und Learnings als kleine Setup-Bibliothek.
+          </p>
+
+          <div class="setup-form">
+            <input id="setupMarket" placeholder="Markt, z. B. XAUUSD" />
+            <input id="setupBias" placeholder="Bias, z. B. Bullish" />
+            <input id="setupResult" placeholder="Status, z. B. Beobachten" />
+            <input id="setupImage" placeholder="Screenshot-Link optional" />
+            <textarea id="setupLearning" placeholder="Setup-Idee, Entry-Grund, Liquidity, POI, Learning..."></textarea>
+            <div class="setup-actions">
+              <button id="saveSetupIdea" class="hub-btn primary" type="button">Setup speichern</button>
+              <button id="clearSetupIdeas" class="hub-btn secondary" type="button">Library leeren</button>
+            </div>
+          </div>
+
+          <div class="setup-library" id="setupLibrary"></div>
+        </div>
+
+        <div class="hub-card">
+          <div class="badge">SMC Glossar</div>
+          <h2 class="hub-subtitle">Begriffe schnell finden</h2>
+          <p class="hub-text">
+            Dezente Begriffshilfe für Smart Money Konzepte, ohne den Hub zu überladen.
+          </p>
+
+          <input id="glossarySearch" class="glossary-search" placeholder="Begriff suchen, z. B. FVG, BOS, Liquidity..." />
+
+          <div class="glossary-list" id="glossaryList">
+            <div class="glossary-item is-visible" data-term="bos break of structure marktstruktur">
+              <strong>BOS</strong>
+              <span>Break of Structure. Strukturbruch in Richtung des dominanten Marktflusses.</span>
+            </div>
+            <div class="glossary-item is-visible" data-term="choch change of character trendwechsel">
+              <strong>CHoCH</strong>
+              <span>Change of Character. Früher Hinweis, dass sich der Charakter des Marktes ändern kann.</span>
+            </div>
+            <div class="glossary-item is-visible" data-term="fvg fair value gap imbalance">
+              <strong>FVG</strong>
+              <span>Fair Value Gap. Ungleichgewicht im Preis, das später als Reaktionsbereich dienen kann.</span>
+            </div>
+            <div class="glossary-item is-visible" data-term="liquidity liquidität highs lows stops">
+              <strong>Liquidity</strong>
+              <span>Bereiche, in denen viele Orders oder Stops vermutet werden, oft über Highs oder unter Lows.</span>
+            </div>
+            <div class="glossary-item is-visible" data-term="poi point of interest zone">
+              <strong>POI</strong>
+              <span>Point of Interest. Zone, in der man nach Kontext und Bestätigung sucht.</span>
+            </div>
+            <div class="glossary-item is-visible" data-term="hh hl lh ll higher high higher low">
+              <strong>HH / HL</strong>
+              <span>Higher High und Higher Low. Dezente Strukturbegriffe für einen aufwärtsgerichteten Markt.</span>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -1699,13 +1976,128 @@
     const whopWelcomeRole = document.getElementById("whopWelcomeRole");
     const whopWelcomeText = document.getElementById("whopWelcomeText");
     const whopWelcomeClose = document.getElementById("whopWelcomeClose");
+    const onboardingList = document.getElementById("onboardingList");
+    const onboardingProgressText = document.getElementById("onboardingProgressText");
+    const onboardingProgressFill = document.getElementById("onboardingProgressFill");
+    const memberProgressValue = document.getElementById("memberProgressValue");
+    const memberLessonValue = document.getElementById("memberLessonValue");
+    const memberSetupsValue = document.getElementById("memberSetupsValue");
+    const memberNotesValue = document.getElementById("memberNotesValue");
+    const clearHubNotes = document.getElementById("clearHubNotes");
+    const setupMarket = document.getElementById("setupMarket");
+    const setupBias = document.getElementById("setupBias");
+    const setupResult = document.getElementById("setupResult");
+    const setupImage = document.getElementById("setupImage");
+    const setupLearning = document.getElementById("setupLearning");
+    const saveSetupIdea = document.getElementById("saveSetupIdea");
+    const clearSetupIdeas = document.getElementById("clearSetupIdeas");
+    const setupLibrary = document.getElementById("setupLibrary");
+    const glossarySearch = document.getElementById("glossarySearch");
+    const glossaryItems = Array.from(document.querySelectorAll(".glossary-item"));
 
     const savedHubNotes = localStorage.getItem("bp_hub_notes");
+    const onboardingKey = "bp_onboarding_steps";
+    const setupLibraryKey = "bp_setup_library";
 
     if (savedHubNotes && hubNotes) {
       hubNotes.value = savedHubNotes;
       hubNoteStatus.textContent = "Gespeichert im Browser.";
     }
+
+    function readJsonStorage(key, fallback){
+      try{
+        return JSON.parse(localStorage.getItem(key)) || fallback;
+      } catch(err){
+        return fallback;
+      }
+    }
+
+    function writeJsonStorage(key, value){
+      localStorage.setItem(key, JSON.stringify(value));
+    }
+
+    function escapeHtml(value){
+      return String(value || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    function updateMemberDashboard(){
+      const checked = onboardingList
+        ? onboardingList.querySelectorAll("input:checked").length
+        : 0;
+      const total = onboardingList
+        ? onboardingList.querySelectorAll("input").length
+        : 0;
+      const progress = total ? Math.round((checked / total) * 100) : 0;
+      const setups = readJsonStorage(setupLibraryKey, []);
+      const notesLength = hubNotes ? hubNotes.value.trim().length : 0;
+      const lastLesson = localStorage.getItem("bp_last_lesson") || "Noch offen";
+
+      if(onboardingProgressText) onboardingProgressText.textContent = `${progress}%`;
+      if(onboardingProgressFill) onboardingProgressFill.style.width = `${progress}%`;
+      if(memberProgressValue) memberProgressValue.textContent = `${progress}%`;
+      if(memberLessonValue) memberLessonValue.textContent = lastLesson.replace("Lesson ", "L");
+      if(memberSetupsValue) memberSetupsValue.textContent = setups.length;
+      if(memberNotesValue) memberNotesValue.textContent = notesLength;
+    }
+
+    function initOnboarding(){
+      if(!onboardingList) return;
+
+      const saved = readJsonStorage(onboardingKey, {});
+      const inputs = Array.from(onboardingList.querySelectorAll("input"));
+
+      inputs.forEach(input => {
+        input.checked = Boolean(saved[input.dataset.onboarding]);
+        input.addEventListener("change", () => {
+          const next = readJsonStorage(onboardingKey, {});
+          next[input.dataset.onboarding] = input.checked;
+          writeJsonStorage(onboardingKey, next);
+          updateMemberDashboard();
+        });
+      });
+    }
+
+    function renderSetupLibrary(){
+      if(!setupLibrary) return;
+
+      const setups = readJsonStorage(setupLibraryKey, []);
+
+      if(!setups.length){
+        setupLibrary.innerHTML = `
+          <div class="setup-item">
+            <strong>Noch keine Setups gespeichert</strong>
+            <span>Speichere deine erste Marktidee, damit sie hier erscheint.</span>
+          </div>
+        `;
+        updateMemberDashboard();
+        return;
+      }
+
+      setupLibrary.innerHTML = setups.slice().reverse().map(setup => `
+        <div class="setup-item">
+          <strong>${escapeHtml(setup.market || "Markt")} · ${escapeHtml(setup.bias || "Bias offen")}</strong>
+          <span>${escapeHtml(setup.result || "Beobachten")} · ${escapeHtml(setup.learning || "Keine Notiz")}</span>
+          ${setup.image ? `<span>Chart: ${escapeHtml(setup.image)}</span>` : ""}
+        </div>
+      `).join("");
+
+      updateMemberDashboard();
+    }
+
+    function clearSetupForm(){
+      [setupMarket, setupBias, setupResult, setupImage, setupLearning].forEach(field => {
+        if(field) field.value = "";
+      });
+    }
+
+    initOnboarding();
+    renderSetupLibrary();
+    updateMemberDashboard();
 
     if (saveHubNotes) {
       saveHubNotes.addEventListener("click", () => {
@@ -1714,6 +2106,62 @@
         hubNoteStatus.textContent = value
           ? "Notizen erfolgreich gespeichert."
           : "Leere Notiz gespeichert.";
+        updateMemberDashboard();
+      });
+    }
+
+    if(hubNotes){
+      hubNotes.addEventListener("input", updateMemberDashboard);
+    }
+
+    if(clearHubNotes && hubNotes){
+      clearHubNotes.addEventListener("click", () => {
+        hubNotes.value = "";
+        localStorage.removeItem("bp_hub_notes");
+        hubNoteStatus.textContent = "Notizen geleert.";
+        updateMemberDashboard();
+      });
+    }
+
+    if(saveSetupIdea){
+      saveSetupIdea.addEventListener("click", () => {
+        const setups = readJsonStorage(setupLibraryKey, []);
+        const nextSetup = {
+          market: setupMarket?.value.trim() || "",
+          bias: setupBias?.value.trim() || "",
+          result: setupResult?.value.trim() || "",
+          image: setupImage?.value.trim() || "",
+          learning: setupLearning?.value.trim() || "",
+          created_at: new Date().toISOString()
+        };
+
+        if(!nextSetup.market && !nextSetup.learning){
+          if(setupLearning) setupLearning.focus();
+          return;
+        }
+
+        setups.push(nextSetup);
+        writeJsonStorage(setupLibraryKey, setups.slice(-20));
+        clearSetupForm();
+        renderSetupLibrary();
+      });
+    }
+
+    if(clearSetupIdeas){
+      clearSetupIdeas.addEventListener("click", () => {
+        localStorage.removeItem(setupLibraryKey);
+        renderSetupLibrary();
+      });
+    }
+
+    if(glossarySearch){
+      glossarySearch.addEventListener("input", () => {
+        const query = glossarySearch.value.toLowerCase().trim();
+
+        glossaryItems.forEach(item => {
+          const text = `${item.dataset.term || ""} ${item.textContent || ""}`.toLowerCase();
+          item.classList.toggle("is-visible", !query || text.includes(query));
+        });
       });
     }
 

@@ -9,10 +9,15 @@ export default function handler(req, res) {
 
   const email = decodeURIComponent(getCookie("bp_email") || "");
   const role = decodeURIComponent(getCookie("bp_role") || "guest");
+  const name = decodeURIComponent(getCookie("bp_name") || "");
+  const firstName = decodeURIComponent(getCookie("bp_first_name") || "");
 
   return res.json({
     ok: true,
     role,
-    email
+    email,
+    name,
+    firstName,
+    first_name: firstName
   });
 }

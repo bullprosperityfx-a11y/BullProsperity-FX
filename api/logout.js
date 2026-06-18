@@ -2,6 +2,8 @@ export default async function handler(req, res) {
   const cookiesToClear = [
     "bp_role",
     "bp_email",
+    "bp_name",
+    "bp_first_name",
     "whop_access_token",
     "whop_state",
     "whop_verifier"

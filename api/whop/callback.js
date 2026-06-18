@@ -82,6 +82,24 @@ export default async function handler(req, res) {
 
     console.log("EMAIL FINAL:", email);
 
+    const fullName = (
+      meData?.name ||
+      meData?.username ||
+      meData?.user?.name ||
+      meData?.user?.username ||
+      meData?.account?.name ||
+      ""
+    ).trim();
+
+    const firstName = (
+      meData?.first_name ||
+      meData?.firstName ||
+      meData?.user?.first_name ||
+      meData?.user?.firstName ||
+      fullName.split(/\s+/)[0] ||
+      ""
+    ).trim();
+
     // 🎯 ROLE LOGIC
     let role = "guest";
 
@@ -104,6 +122,8 @@ export default async function handler(req, res) {
     res.setHeader("Set-Cookie", [
       `bp_email=${encodeURIComponent(email)}; Path=/; HttpOnly; SameSite=Lax`,
       `bp_role=${role}; Path=/; HttpOnly; SameSite=Lax`,
+      `bp_name=${encodeURIComponent(fullName)}; Path=/; HttpOnly; SameSite=Lax`,
+      `bp_first_name=${encodeURIComponent(firstName)}; Path=/; HttpOnly; SameSite=Lax`,
       `whop_verifier=; Path=/; HttpOnly; SameSite=Lax; Max-Age=0`,
       `whop_state=; Path=/; HttpOnly; SameSite=Lax; Max-Age=0`
     ]);

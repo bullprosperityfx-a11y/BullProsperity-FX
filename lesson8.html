@@ -300,6 +300,14 @@
           <div class="badge">Deine Notizen</div>
           <textarea id="lessonNotes" class="notes-box" placeholder="Schreibe hier deine Notizen..."></textarea>
 
+          <div class="lesson-complete-panel">
+            <div>
+              <strong>Lesson Fortschritt</strong>
+              <span id="lessonCompleteStatus">Noch nicht abgeschlossen.</span>
+            </div>
+            <button id="completeLessonBtn" class="btn primary" type="button">Als abgeschlossen markieren</button>
+          </div>
+
           <div class="lesson-nav">
             <a href="/course" class="btn secondary" id="prevBottomBtn">Zurück</a>
             <a href="/lesson2#lesson-video" class="btn primary" id="nextBottomBtn">Weiter</a>
@@ -672,6 +680,58 @@ if (savedNotes) {
 notesBox.addEventListener("input", () => {
   localStorage.setItem(notesStorageKey, notesBox.value);
 });
+
+const completedLessonsKey = "bp_completed_lessons";
+const completeLessonBtn = document.getElementById("completeLessonBtn");
+const lessonCompleteStatus = document.getElementById("lessonCompleteStatus");
+
+function getCompletedLessons(){
+  try {
+    return JSON.parse(localStorage.getItem(completedLessonsKey)) || {};
+  } catch (err) {
+    return {};
+  }
+}
+
+function saveCompletedLessons(value){
+  localStorage.setItem(completedLessonsKey, JSON.stringify(value));
+}
+
+function updateLessonProgressUi(){
+  const completed = getCompletedLessons();
+  const isCompleted = Boolean(completed[lessonNumber]);
+
+  if(lessonCompleteStatus){
+    lessonCompleteStatus.textContent = isCompleted
+      ? "Diese Lesson ist abgeschlossen."
+      : "Noch nicht abgeschlossen.";
+  }
+
+  if(completeLessonBtn){
+    completeLessonBtn.textContent = isCompleted
+      ? "Abgeschlossen ✓"
+      : "Als abgeschlossen markieren";
+  }
+
+  document.querySelectorAll(".lesson").forEach(link => {
+    const match = link.getAttribute("href")?.match(/lesson(\d+)/i);
+    if(!match) return;
+    link.classList.toggle("is-completed", Boolean(completed[match[1]]));
+  });
+}
+
+if(completeLessonBtn){
+  completeLessonBtn.addEventListener("click", () => {
+    const completed = getCompletedLessons();
+    completed[lessonNumber] = !completed[lessonNumber];
+    saveCompletedLessons(completed);
+    localStorage.setItem("bp_last_lesson", `Lesson `);
+    updateLessonProgressUi();
+  });
+}
+
+localStorage.setItem("bp_last_lesson", `Lesson `);
+updateLessonProgressUi();
 
 document.addEventListener("DOMContentLoaded", async () => {
   const loginBtn = document.getElementById("loginNavBtn");
