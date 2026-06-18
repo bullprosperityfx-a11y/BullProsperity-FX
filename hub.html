@@ -1739,14 +1739,24 @@
     bpUpdateSession();
     setInterval(bpUpdateSession, 60000);
 
-    function getMemberName(email){
-      if(!email) return "Trader";
+    function getMemberFirstName(data){
+      const whopName =
+        data?.first_name ||
+        data?.firstName ||
+        data?.name ||
+        data?.username ||
+        "";
 
-      const rawName = email.split("@")[0] || "Trader";
-      return rawName
+      const emailName = (data?.email || "").split("@")[0] || "";
+      const rawName = whopName || emailName;
+
+      const firstName = rawName
         .replace(/[._-]+/g, " ")
-        .replace(/\b\w/g, char => char.toUpperCase())
-        .trim() || "Trader";
+        .replace(/\d+/g, "")
+        .trim()
+        .split(/\s+/)[0] || "Trader";
+
+      return firstName.charAt(0).toUpperCase() + firstName.slice(1).toLowerCase();
     }
 
     function showWhopWelcome(data){
@@ -1758,7 +1768,7 @@
 
       if(sessionStorage.getItem(storageKey) === "true") return;
 
-      const memberName = getMemberName(email);
+      const memberName = getMemberFirstName(data);
       const roleLabel = role === "admin" ? "Admin Zugang bestätigt" : "Whop Zugang bestätigt";
 
       if(whopWelcomeRole) whopWelcomeRole.textContent = roleLabel;
