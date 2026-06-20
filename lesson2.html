@@ -723,14 +723,18 @@ function updateLessonProgressUi(){
 if(completeLessonBtn){
   completeLessonBtn.addEventListener("click", () => {
     const completed = getCompletedLessons();
-    completed[lessonNumber] = !completed[lessonNumber];
+    if (completed[lessonNumber]) {
+      delete completed[lessonNumber];
+    } else {
+      completed[lessonNumber] = new Date().toISOString();
+    }
     saveCompletedLessons(completed);
-    localStorage.setItem("bp_last_lesson", `Lesson `);
+    localStorage.setItem("bp_last_lesson", `Lesson ${lessonNumber}`);
     updateLessonProgressUi();
   });
 }
 
-localStorage.setItem("bp_last_lesson", `Lesson `);
+localStorage.setItem("bp_last_lesson", `Lesson ${lessonNumber}`);
 updateLessonProgressUi();
 
 document.addEventListener("DOMContentLoaded", async () => {

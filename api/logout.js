@@ -4,6 +4,8 @@ export default async function handler(req, res) {
     "bp_email",
     "bp_name",
     "bp_first_name",
+    "bp_member_id",
+    "bp_session",
     "whop_access_token",
     "whop_state",
     "whop_verifier"

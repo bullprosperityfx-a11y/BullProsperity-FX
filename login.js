@@ -39,6 +39,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (logoutBtn) logoutBtn.style.display = isLoggedIn ? "inline-flex" : "none";
 
     if (isLoggedIn) {
+      window.BP_ACCESS = data;
       if (authStatus) {
         authStatus.textContent =
           data.role === "admin" ? "Admin" : "Premium";
@@ -55,6 +56,8 @@ document.addEventListener("DOMContentLoaded", async () => {
       if (learnMoreBtn) learnMoreBtn.style.margin = "0 auto";
 
       startInactivityLogout(accessData);
+
+      loadMemberPlatform();
     } else {
       if (startBtn) startBtn.style.display = "inline-flex";
       if (homeHeroButtons) homeHeroButtons.style.justifyContent = "center";
@@ -81,6 +84,22 @@ document.addEventListener("DOMContentLoaded", async () => {
   setupClickTracking(accessData);
   setupVimeoWatchtimeTracking(accessData);
 });
+
+function loadMemberPlatform() {
+  if (!document.querySelector('link[href="/member-platform.css"]')) {
+    const stylesheet = document.createElement("link");
+    stylesheet.rel = "stylesheet";
+    stylesheet.href = "/member-platform.css";
+    document.head.appendChild(stylesheet);
+  }
+
+  if (!document.querySelector('script[src="/member-platform.js"]')) {
+    const script = document.createElement("script");
+    script.src = "/member-platform.js";
+    script.defer = true;
+    document.head.appendChild(script);
+  }
+}
 
 function hasTrackableAccess(accessData) {
   return ["admin", "premium", "longterm"].includes(accessData?.role);

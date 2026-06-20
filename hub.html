@@ -248,6 +248,47 @@
       margin-top:18px;
     }
 
+    .weekly-report-card{
+      grid-column:1 / -1;
+    }
+
+    .weekly-report-grid{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:12px;
+      margin-top:18px;
+    }
+
+    .weekly-report-stat{
+      min-height:112px;
+      padding:16px;
+      border:1px solid rgba(255,215,0,.14);
+      border-radius:18px;
+      background:rgba(255,255,255,.03);
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+    }
+
+    .weekly-report-stat strong{
+      color:#ffd700;
+      font-size:28px;
+      line-height:1;
+    }
+
+    .weekly-report-stat span{
+      color:rgba(255,255,255,.62);
+      font-size:13px;
+      line-height:1.45;
+    }
+
+    .weekly-report-summary{
+      margin-top:14px;
+      color:#dedede;
+      font-size:14px;
+      line-height:1.65;
+    }
+
     .member-metric strong{
       display:block;
       color:#ffd700;
@@ -1371,6 +1412,7 @@
       .hub-links-grid,
       .hub-stats,
       .member-dashboard-grid,
+      .weekly-report-grid,
       .setup-form{
         grid-template-columns:1fr;
       }
@@ -1638,6 +1680,20 @@
             <a href="course" class="hub-btn primary">Weiterlernen</a>
             <a href="journal" class="hub-btn secondary">Journal öffnen</a>
           </div>
+        </div>
+
+        <div class="hub-card weekly-report-card">
+          <div class="badge">Wochenreport</div>
+          <h2 class="hub-subtitle">Deine letzten 7 Tage</h2>
+          <p class="hub-text">Ein kompakter Überblick über Lernen, Plattform-Nutzung und gespeicherte Trading-Arbeit.</p>
+
+          <div class="weekly-report-grid">
+            <div class="weekly-report-stat"><strong id="weeklyLessons">0</strong><span>Lessons abgeschlossen</span></div>
+            <div class="weekly-report-stat"><strong id="weeklyActivity">0</strong><span>Aktivitäten im Hub</span></div>
+            <div class="weekly-report-stat"><strong id="weeklySetups">0</strong><span>Setups dokumentiert</span></div>
+            <div class="weekly-report-stat"><strong id="weeklyFocus">Start</strong><span>Nächster sinnvoller Fokus</span></div>
+          </div>
+          <p class="weekly-report-summary" id="weeklySummary">Dein persönlicher Report wird geladen.</p>
         </div>
       </section>
 
@@ -1994,6 +2050,11 @@
     const setupLibrary = document.getElementById("setupLibrary");
     const glossarySearch = document.getElementById("glossarySearch");
     const glossaryItems = Array.from(document.querySelectorAll(".glossary-item"));
+    const weeklyLessons = document.getElementById("weeklyLessons");
+    const weeklyActivity = document.getElementById("weeklyActivity");
+    const weeklySetups = document.getElementById("weeklySetups");
+    const weeklyFocus = document.getElementById("weeklyFocus");
+    const weeklySummary = document.getElementById("weeklySummary");
 
     const savedHubNotes = localStorage.getItem("bp_hub_notes");
     const onboardingKey = "bp_onboarding_steps";
@@ -2043,6 +2104,46 @@
       if(memberLessonValue) memberLessonValue.textContent = lastLesson.replace("Lesson ", "L");
       if(memberSetupsValue) memberSetupsValue.textContent = setups.length;
       if(memberNotesValue) memberNotesValue.textContent = notesLength;
+    }
+
+    async function updateWeeklyReport(){
+      const weekStart = Date.now() - (7 * 24 * 60 * 60 * 1000);
+      const completed = readJsonStorage("bp_completed_lessons", {});
+      const completedValues = Object.values(completed).filter(Boolean);
+      const completedCount = completedValues.filter(value => {
+        if(value === true) return true;
+        const timestamp = new Date(value).getTime();
+        return Number.isFinite(timestamp) && timestamp >= weekStart;
+      }).length;
+      const setups = readJsonStorage(setupLibraryKey, []);
+      const recentSetups = setups.filter(setup => !setup.created_at || new Date(setup.created_at).getTime() >= weekStart).length;
+
+      if(weeklyLessons) weeklyLessons.textContent = completedCount;
+      if(weeklySetups) weeklySetups.textContent = recentSetups;
+      if(weeklyFocus) weeklyFocus.textContent = completedCount < 5 ? "Course" : recentSetups < 2 ? "Setups" : "Review";
+
+      let activityCount = 0;
+      try{
+        const accessResponse = await fetch("/api/access", { credentials:"include", cache:"no-store" });
+        const access = await accessResponse.json();
+        const ready = typeof ensureSupabaseClient === "function" ? await ensureSupabaseClient() : Boolean(window.supabaseClient);
+        if(ready && access.email){
+          const { count } = await supabaseClient
+            .from("member_activity")
+            .select("id", { count:"exact", head:true })
+            .eq("email", access.email)
+            .gte("created_at", new Date(weekStart).toISOString());
+          activityCount = count || 0;
+        }
+      } catch(err){
+        activityCount = 0;
+      }
+
+      if(weeklyActivity) weeklyActivity.textContent = activityCount;
+      if(weeklySummary){
+        const lessonText = completedCount === 1 ? "eine abgeschlossene Lesson" : `${completedCount} abgeschlossene Lessons`;
+        weeklySummary.textContent = `Diese Woche stehen ${lessonText}, ${recentSetups} dokumentierte Setups und ${activityCount} Plattform-Aktivitäten in deinem Report. Konzentriere dich als Nächstes auf ${weeklyFocus?.textContent || "deinen Prozess"}.`;
+      }
     }
 
     function initOnboarding(){
@@ -2098,6 +2199,14 @@
     initOnboarding();
     renderSetupLibrary();
     updateMemberDashboard();
+    updateWeeklyReport();
+
+    window.addEventListener("bp:cloud-ready", () => {
+      initOnboarding();
+      renderSetupLibrary();
+      updateMemberDashboard();
+      updateWeeklyReport();
+    });
 
     if (saveHubNotes) {
       saveHubNotes.addEventListener("click", () => {

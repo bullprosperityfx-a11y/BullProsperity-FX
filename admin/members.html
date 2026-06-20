@@ -403,6 +403,14 @@
       grid-template-columns:1.25fr .62fr .7fr .86fr .86fr;
       gap:14px;
       align-items:center;
+      cursor:pointer;
+      transition:border-color .2s ease,transform .2s ease,background .2s ease;
+    }
+
+    .member-card:hover{
+      border-color:rgba(243,210,27,.34);
+      background:rgba(243,210,27,.035);
+      transform:translateY(-2px);
     }
 
     .member-email{
@@ -462,6 +470,22 @@
       font-weight:800;
     }
 
+    .member-modal{position:fixed;inset:0;z-index:10000;display:grid;place-items:center;padding:20px;background:rgba(0,0,0,.76);backdrop-filter:blur(12px);opacity:0;visibility:hidden;transition:.2s ease}
+    .member-modal.is-open{opacity:1;visibility:visible}
+    .member-modal-dialog{width:min(760px,100%);max-height:86vh;overflow:auto;border:1px solid rgba(243,210,27,.22);border-radius:8px;background:#0b0b0c;box-shadow:0 30px 90px rgba(0,0,0,.7);padding:24px}
+    .member-modal-head{display:flex;justify-content:space-between;align-items:flex-start;gap:18px;padding-bottom:18px;border-bottom:1px solid rgba(255,255,255,.08)}
+    .member-modal-head h3{margin:6px 0 0;color:#fff;font-size:27px;word-break:break-word}
+    .member-modal-close{width:40px;height:40px;border:1px solid rgba(255,255,255,.12);border-radius:6px;background:transparent;color:#fff;font-size:24px;cursor:pointer}
+    .member-profile-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:18px 0}
+    .member-profile-stat{padding:14px;border:1px solid rgba(243,210,27,.13);border-radius:7px;background:rgba(255,255,255,.025)}
+    .member-profile-stat strong{display:block;color:var(--gold);font-size:22px}
+    .member-profile-stat span{display:block;margin-top:6px;color:#96969b;font-size:12px;font-weight:800}
+    .member-timeline{display:grid;gap:8px}
+    .member-timeline-item{display:grid;grid-template-columns:1fr auto;gap:12px;padding:13px 14px;border:1px solid rgba(255,255,255,.07);border-radius:6px;background:rgba(255,255,255,.02)}
+    .member-timeline-item strong{color:#fff;font-size:13px}
+    .member-timeline-item span{display:block;margin-top:4px;color:#97979c;font-size:12px}
+    .member-timeline-item time{color:#77777d;font-size:11px;white-space:nowrap}
+
     @media(max-width:1180px){
       .admin-shell{
         grid-template-columns:1fr;
@@ -500,6 +524,10 @@
       .member-stats{
         grid-template-columns:1fr;
       }
+
+      .member-profile-stats{grid-template-columns:1fr}
+      .member-modal{padding:0}
+      .member-modal-dialog{height:100%;max-height:none;border:0;border-radius:0}
     }
   </style>
 </head>
@@ -598,6 +626,20 @@
     </div>
   </div>
 
+  <div class="member-modal" id="memberModal" aria-hidden="true">
+    <section class="member-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="memberModalTitle">
+      <div class="member-modal-head">
+        <div>
+          <div class="badge">Mitgliederprofil</div>
+          <h3 id="memberModalTitle">Profil</h3>
+        </div>
+        <button class="member-modal-close" id="memberModalClose" type="button" aria-label="Profil schließen">×</button>
+      </div>
+      <div class="member-profile-stats" id="memberProfileStats"></div>
+      <div class="member-timeline" id="memberTimeline"></div>
+    </section>
+  </div>
+
   <script>
     const membersList = document.getElementById("membersList");
     const emptyState = document.getElementById("emptyState");
@@ -606,8 +648,18 @@
     const totalMembers = document.getElementById("totalMembers");
     const onlineMembers = document.getElementById("onlineMembers");
     const latestActivity = document.getElementById("latestActivity");
+    const memberModal = document.getElementById("memberModal");
+    const memberModalClose = document.getElementById("memberModalClose");
+    const memberModalTitle = document.getElementById("memberModalTitle");
+    const memberProfileStats = document.getElementById("memberProfileStats");
+    const memberTimeline = document.getElementById("memberTimeline");
 
     let allMembers = [];
+    let allActivity = [];
+
+    function escapeHtml(value) {
+      return String(value || "").replace(/[&<>\"]/g, character => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;" })[character]);
+    }
 
     function formatDate(value) {
       if (!value) return "-";
@@ -698,12 +750,12 @@
 
         card.innerHTML = `
           <div>
-            <div class="member-email">${member.email}</div>
-            <div class="member-meta">Letzte Aktion: ${member.lastAction}</div>
+            <div class="member-email">${escapeHtml(member.email)}</div>
+            <div class="member-meta">Letzte Aktion: ${escapeHtml(member.lastAction)}</div>
           </div>
 
           <div>
-            <div class="member-badge">${member.role}</div>
+            <div class="member-badge">${escapeHtml(member.role)}</div>
           </div>
 
           <div>
@@ -718,12 +770,37 @@
 
           <div>
             <div class="member-value">${member.count}</div>
-            <div class="member-meta">Aktivitäten · letzte Seite: ${member.lastPage}</div>
+            <div class="member-meta">Aktivitäten · letzte Seite: ${escapeHtml(member.lastPage)}</div>
           </div>
         `;
 
+        card.addEventListener("click", () => openMemberProfile(member));
+
         membersList.appendChild(card);
       });
+    }
+
+    function openMemberProfile(member) {
+      const activity = allActivity.filter(item => (item.email || "unknown@bullprosperity.local") === member.email).slice(0, 30);
+      memberModalTitle.textContent = member.email;
+      memberProfileStats.innerHTML = `
+        <div class="member-profile-stat"><strong>${escapeHtml(member.role)}</strong><span>Aktuelle Rolle</span></div>
+        <div class="member-profile-stat"><strong>${member.count}</strong><span>Erfasste Aktivitäten</span></div>
+        <div class="member-profile-stat"><strong>${member.online ? "Online" : "Offline"}</strong><span>Mitgliederstatus</span></div>
+      `;
+      memberTimeline.innerHTML = activity.length ? activity.map(item => `
+        <article class="member-timeline-item">
+          <div><strong>${escapeHtml(item.action || "Aktivität")}</strong><span>${escapeHtml(item.page || "-")}</span></div>
+          <time>${formatDate(item.created_at)}</time>
+        </article>
+      `).join("") : '<div class="empty-state">Für dieses Mitglied liegen noch keine Details vor.</div>';
+      memberModal.classList.add("is-open");
+      memberModal.setAttribute("aria-hidden", "false");
+    }
+
+    function closeMemberProfile() {
+      memberModal.classList.remove("is-open");
+      memberModal.setAttribute("aria-hidden", "true");
     }
 
     function renderStats(list) {
@@ -750,7 +827,8 @@
           return;
         }
 
-        allMembers = buildMembersFromActivity(data || []);
+        allActivity = data || [];
+        allMembers = buildMembersFromActivity(allActivity);
         renderStats(allMembers);
         renderMembers(allMembers);
 
@@ -773,12 +851,15 @@
     });
 
     reloadMembersBtn.addEventListener("click", loadMembers);
+    memberModalClose.addEventListener("click", closeMemberProfile);
+    memberModal.addEventListener("click", event => { if(event.target === memberModal) closeMemberProfile(); });
 
     document.addEventListener("keydown", event => {
       if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k") {
         event.preventDefault();
         memberSearch.focus();
       }
+      if (event.key === "Escape") closeMemberProfile();
     });
 
     loadMembers();

@@ -1,3 +1,5 @@
+import crypto from "crypto";
+
 export default async function handler(req, res) {
   try {
     const { code, state, error, error_description } = req.query;
@@ -65,7 +67,6 @@ export default async function handler(req, res) {
     });
 
     const meData = await meRes.json();
-    console.log("WHOP ME:", meData);
 
     // 📧 EMAIL ROBUST HOLEN
     let email = "";
@@ -80,7 +81,6 @@ export default async function handler(req, res) {
 
     email = (email || "").toLowerCase().trim();
 
-    console.log("EMAIL FINAL:", email);
 
     const fullName = (
       meData?.name ||
@@ -100,36 +100,61 @@ export default async function handler(req, res) {
       ""
     ).trim();
 
+    const memberId = String(
+      meData?.id ||
+      meData?.user?.id ||
+      meData?.account?.id ||
+      ""
+    ).trim();
+
     // 🎯 ROLE LOGIC
     let role = "guest";
 
-    // 🔥 ADMIN (funktioniert IMMER)
-    if (email.includes("bullprosperityfx") || !email) {
+    const adminEmails = String(process.env.ADMIN_EMAILS || "")
+      .split(",")
+      .map(value => value.trim().toLowerCase())
+      .filter(Boolean);
+
+    const memberships = [
+      ...(Array.isArray(meData?.access_passes) ? meData.access_passes : []),
+      ...(Array.isArray(meData?.memberships) ? meData.memberships : []),
+      ...(Array.isArray(meData?.user?.memberships) ? meData.user.memberships : [])
+    ];
+
+    const hasActiveMembership = memberships.some(item => {
+      const status = String(item?.status || item?.membership_status || "active").toLowerCase();
+      return !["expired", "canceled", "cancelled", "inactive", "past_due"].includes(status);
+    });
+
+    if (email && (adminEmails.includes(email) || email.includes("bullprosperityfx"))) {
       role = "admin";
     }
-
-    // 💰 PREMIUM USER
-    else if (
-      Array.isArray(meData?.access_passes) &&
-      meData.access_passes.length > 0
-    ) {
+    else if (email && hasActiveMembership) {
       role = "premium";
     }
 
-    console.log("ROLE:", role);
 
-    // 🍪 COOKIES SETZEN (WICHTIG: OHNE Secure)
+    const secure = process.env.NODE_ENV === "production" ? "; Secure" : "";
+    const cookieOptions = `Path=/; HttpOnly; SameSite=Lax; Max-Age=604800${secure}`;
+    const sessionSecret = process.env.SESSION_SECRET || process.env.WHOP_CLIENT_SECRET;
+    const sessionPayload = `${email}|${role}|${memberId}`;
+    const sessionSignature = sessionSecret
+      ? crypto.createHmac("sha256", sessionSecret).update(sessionPayload).digest("hex")
+      : "";
+
     res.setHeader("Set-Cookie", [
-      `bp_email=${encodeURIComponent(email)}; Path=/; HttpOnly; SameSite=Lax`,
-      `bp_role=${role}; Path=/; HttpOnly; SameSite=Lax`,
-      `bp_name=${encodeURIComponent(fullName)}; Path=/; HttpOnly; SameSite=Lax`,
-      `bp_first_name=${encodeURIComponent(firstName)}; Path=/; HttpOnly; SameSite=Lax`,
-      `whop_verifier=; Path=/; HttpOnly; SameSite=Lax; Max-Age=0`,
-      `whop_state=; Path=/; HttpOnly; SameSite=Lax; Max-Age=0`
+      `bp_email=${encodeURIComponent(email)}; ${cookieOptions}`,
+      `bp_role=${role}; ${cookieOptions}`,
+      `bp_name=${encodeURIComponent(fullName)}; ${cookieOptions}`,
+      `bp_first_name=${encodeURIComponent(firstName)}; ${cookieOptions}`,
+      `bp_member_id=${encodeURIComponent(memberId)}; ${cookieOptions}`,
+      `bp_session=${encodeURIComponent(sessionSignature)}; ${cookieOptions}`,
+      `whop_verifier=; Path=/; HttpOnly; SameSite=Lax; Max-Age=0${secure}`,
+      `whop_state=; Path=/; HttpOnly; SameSite=Lax; Max-Age=0${secure}`
     ]);
 
     // ✅ Weiter in Hub
-    return res.redirect("/hub.html");
+    return res.redirect("/hub");
 
   } catch (err) {
     console.error("CALLBACK ERROR:", err);

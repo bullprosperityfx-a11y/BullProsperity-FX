@@ -11,6 +11,7 @@ export default function handler(req, res) {
   const role = decodeURIComponent(getCookie("bp_role") || "guest");
   const name = decodeURIComponent(getCookie("bp_name") || "");
   const firstName = decodeURIComponent(getCookie("bp_first_name") || "");
+  const memberId = decodeURIComponent(getCookie("bp_member_id") || "");
 
   return res.json({
     ok: true,
@@ -18,6 +19,7 @@ export default function handler(req, res) {
     email,
     name,
     firstName,
-    first_name: firstName
+    first_name: firstName,
+    memberId
   });
 }
