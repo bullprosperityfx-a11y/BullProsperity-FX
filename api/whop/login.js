@@ -33,7 +33,7 @@ export default function handler(req, res) {
         response_type: "code",
         client_id: clientId,
         redirect_uri: redirectUri,
-        scope: "openid email",
+        scope: "openid profile email",
         state,
         nonce,
         code_challenge: codeChallenge,

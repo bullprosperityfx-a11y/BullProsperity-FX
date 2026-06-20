@@ -59,19 +59,21 @@ export default async function handler(req, res) {
 
     const accessToken = tokenData.access_token;
 
-    // 👤 User Daten holen
-    const meRes = await fetch("https://api.whop.com/v5/me", {
-      headers: {
-        Authorization: `Bearer ${accessToken}`
-      }
-    });
+    const authHeaders = { Authorization: `Bearer ${accessToken}` };
+    const [userinfoRes, legacyMeRes] = await Promise.all([
+      fetch("https://api.whop.com/oauth/userinfo", { headers: authHeaders }),
+      fetch("https://api.whop.com/v5/me", { headers: authHeaders })
+    ]);
 
-    const meData = await meRes.json();
+    const userinfo = userinfoRes.ok ? await userinfoRes.json() : {};
+    const meData = legacyMeRes.ok ? await legacyMeRes.json() : {};
 
     // 📧 EMAIL ROBUST HOLEN
     let email = "";
 
-    if (meData?.email) {
+    if (userinfo?.email) {
+      email = userinfo.email;
+    } else if (meData?.email) {
       email = meData.email;
     } else if (meData?.user?.email) {
       email = meData.user.email;
@@ -83,6 +85,8 @@ export default async function handler(req, res) {
 
 
     const fullName = (
+      userinfo?.name ||
+      userinfo?.preferred_username ||
       meData?.name ||
       meData?.username ||
       meData?.user?.name ||
@@ -92,6 +96,7 @@ export default async function handler(req, res) {
     ).trim();
 
     const firstName = (
+      userinfo?.given_name ||
       meData?.first_name ||
       meData?.firstName ||
       meData?.user?.first_name ||
@@ -101,11 +106,16 @@ export default async function handler(req, res) {
     ).trim();
 
     const memberId = String(
+      userinfo?.sub ||
       meData?.id ||
       meData?.user?.id ||
       meData?.account?.id ||
       ""
     ).trim();
+
+    if (!email) {
+      return res.redirect("/?error=whop_email_missing");
+    }
 
     // 🎯 ROLE LOGIC
     let role = "guest";
