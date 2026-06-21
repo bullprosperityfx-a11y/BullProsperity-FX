@@ -7,7 +7,19 @@ const allowedKeys = new Set([
   "bp_global_notes",
   "bp_setup_library",
   "bp_onboarding_steps",
-  "bp_favorites"
+  "bp_favorites",
+  "bullprosperity_trading_journal",
+  "bullprosperity_start_balance",
+  "bp_pretrade_plans",
+  "bp_readiness_history",
+  "bp_process_reviews",
+  "bp_replay_drills",
+  "bp_setup_certifications",
+  "bp_personal_rulebook",
+  "bp_squad_profile",
+  "bp_decision_timeline",
+  "bp_coach_history",
+  "bp_public_process_profile"
 ]);
 
 function readCookie(req, name) {
@@ -21,7 +33,7 @@ function cleanState(input) {
   return Object.fromEntries(Object.entries(input).filter(([key, value]) =>
     (allowedKeys.has(key) || /^bullprosperity_notes_([1-9]|[12]\d|3[0-3])$/.test(key)) &&
     typeof value === "string" &&
-    value.length <= 50000
+    value.length <= 500000
   ));
 }
 

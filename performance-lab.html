@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <script>document.documentElement.classList.add("bp-auth-checking");</script>
+  <script src="/access-guard.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>BullProsperity | Performance Lab</title>
+  <meta name="description" content="BullProsperity Performance Lab für Prozessqualität, Trading-DNA, Drills, Readiness und Mentoring." />
+  <link rel="icon" href="/favicon.png" />
+  <link rel="stylesheet" href="/theme.css" />
+  <link rel="stylesheet" href="/performance-lab.css" />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="/supabase.js"></script>
+  <script src="/login.js" defer></script>
+  <script src="/performance-lab.js" defer></script>
+</head>
+<body class="performance-page">
+  <div class="lab-page">
+    <nav class="lab-nav">
+      <a class="lab-brand" href="/hub">BullProsperity</a>
+      <div class="lab-links">
+        <a href="/hub">Hub</a><a href="/course">Course</a><a href="/tools">Tools</a><a href="/journal">Journal</a><a class="active" href="/performance-lab">Performance Lab</a><a href="/api/logout">Logout</a>
+      </div>
+    </nav>
+
+    <header class="lab-hero">
+      <div>
+        <div class="lab-badge">Trading Operating System</div>
+        <h1 class="lab-title">Dein Prozess. <span>Messbar.</span></h1>
+        <p class="lab-copy">BullProsperity bewertet nicht nur Ergebnisse. Das Performance Lab verbindet Vorbereitung, Ausführung, Psychologie, Lernfortschritt und Reviews zu einem persönlichen Trainingssystem.</p>
+      </div>
+      <div class="score-ring" id="processScoreRing">
+        <div class="score-ring-content"><strong id="processScore">0</strong><span>Process Score</span></div>
+      </div>
+    </header>
+
+    <div class="lab-tabs" role="tablist">
+      <button class="lab-tab is-active" data-view="cockpit" type="button">Cockpit</button>
+      <button class="lab-tab" data-view="gatekeeper" type="button">Gatekeeper</button>
+      <button class="lab-tab" data-view="dna" type="button">DNA & Coach</button>
+      <button class="lab-tab" data-view="academy" type="button">Drills & Academy</button>
+      <button class="lab-tab" data-view="community" type="button">Squad & Profil</button>
+    </div>
+
+    <main>
+      <section class="lab-view is-active" data-panel="cockpit">
+        <div class="lab-grid">
+          <article class="lab-card span-8">
+            <div class="lab-badge">Process Score</div><h2>Qualität vor Ergebnis</h2><p class="lab-text">Der Score kombiniert Vorbereitung, Risiko, Reviews, Journalqualität und Lernfortschritt. Ein Gewinn durch Regelbruch verbessert ihn nicht.</p>
+            <div class="metric-grid">
+              <div class="metric"><strong id="scorePreparation">0%</strong><span>Vorbereitung</span></div>
+              <div class="metric"><strong id="scoreDiscipline">0%</strong><span>Regelkonformität</span></div>
+              <div class="metric"><strong id="scoreJournal">0%</strong><span>Journalqualität</span></div>
+              <div class="metric"><strong id="scoreLearning">0%</strong><span>Lernfortschritt</span></div>
+            </div>
+          </article>
+          <article class="lab-card">
+            <div class="lab-badge">Readiness</div><h2 id="readinessHeadline">Noch offen</h2><p class="lab-text" id="readinessCopy">Bewerte deinen Zustand vor der Session.</p>
+            <div class="lab-actions"><button class="lab-btn primary" data-open-view="gatekeeper" type="button">Session vorbereiten</button></div>
+          </article>
+          <article class="lab-card span-6">
+            <div class="lab-badge">Weekly Trader Report</div><h2>Die letzten sieben Tage</h2><div class="metric-grid"><div class="metric"><strong id="weeklyTrades">0</strong><span>Trades</span></div><div class="metric"><strong id="weeklyClean">0%</strong><span>Saubere Prozesse</span></div><div class="metric"><strong id="weeklyLessons">0</strong><span>Lessons</span></div><div class="metric"><strong id="weeklyDrills">0</strong><span>Drills abgeschlossen</span></div></div><div class="status-box" id="weeklyReportText">Noch nicht genug Daten für einen Wochenreport.</div>
+          </article>
+          <article class="lab-card span-6">
+            <div class="lab-badge">Decision Timeline</div><h2>Deine Entscheidungen</h2><p class="lab-text">Planänderungen und Reviews bleiben chronologisch nachvollziehbar.</p><div class="timeline" id="decisionTimeline"></div>
+          </article>
+        </div>
+      </section>
+
+      <section class="lab-view" data-panel="gatekeeper">
+        <div class="lab-grid">
+          <article class="lab-card span-8">
+            <div class="lab-badge">Pre-Trade Gatekeeper</div><h2>Erst planen, dann entscheiden</h2><p class="lab-text">Der Gatekeeper erteilt keine Handelsfreigabe. Er prüft ausschließlich, ob deine eigene Vorbereitung vollständig und regelkonform dokumentiert ist.</p>
+            <form class="lab-form" id="gatekeeperForm">
+              <div class="form-grid">
+                <div class="lab-field"><label for="planMarket">Markt</label><input id="planMarket" required placeholder="z. B. XAUUSD" /></div>
+                <div class="lab-field"><label for="planBias">Bias</label><select id="planBias" required><option value="">Auswählen</option><option>Bullish</option><option>Bearish</option><option>Neutral</option></select></div>
+                <div class="lab-field"><label for="planSession">Session</label><select id="planSession"><option>London</option><option>New York</option><option>Asia</option><option>Swing</option></select></div>
+                <div class="lab-field"><label for="planRisk">Geplantes Risiko in %</label><input id="planRisk" type="number" min="0.1" max="10" step="0.1" value="1" /></div>
+                <div class="lab-field full"><label for="planContext">Marktkontext und POI</label><textarea id="planContext" required placeholder="Struktur, Liquidity, POI und erwartete Reaktion"></textarea></div>
+                <div class="lab-field full"><label for="planInvalidation">Invalidation</label><input id="planInvalidation" required placeholder="Wann ist die Idee objektiv ungültig?" /></div>
+              </div>
+              <div class="check-list">
+                <label class="check-item"><input type="checkbox" data-gate="structure" /><span>Höherer Timeframe und Marktstruktur sind dokumentiert.</span></label>
+                <label class="check-item"><input type="checkbox" data-gate="liquidity" /><span>Relevante Liquidität und Zielbereich sind identifiziert.</span></label>
+                <label class="check-item"><input type="checkbox" data-gate="entry" /><span>Entry-Modell und Bestätigung sind klar definiert.</span></label>
+                <label class="check-item"><input type="checkbox" data-gate="risk" /><span>Stop Loss, Risiko und maximale Tagesgrenze sind geprüft.</span></label>
+                <label class="check-item"><input type="checkbox" data-gate="news" /><span>News und Session-Timing wurden kontrolliert.</span></label>
+              </div>
+              <div class="lab-actions"><button class="lab-btn primary" type="submit">Plan prüfen und speichern</button><button class="lab-btn" id="resetGatekeeper" type="button">Zurücksetzen</button></div>
+              <div class="status-box" id="gatekeeperStatus">Fülle den Plan vollständig aus.</div>
+            </form>
+          </article>
+          <article class="lab-card">
+            <div class="lab-badge">Readiness Score</div><h2>Tageszustand</h2><form class="lab-form" id="readinessForm">
+              <label class="range-row"><span>Schlaf</span><input type="range" id="readySleep" min="1" max="10" value="7" /><b id="readySleepValue">7</b></label>
+              <label class="range-row"><span>Fokus</span><input type="range" id="readyFocus" min="1" max="10" value="7" /><b id="readyFocusValue">7</b></label>
+              <label class="range-row"><span>Stress</span><input type="range" id="readyStress" min="1" max="10" value="4" /><b id="readyStressValue">4</b></label>
+              <label class="range-row"><span>Vertrauen</span><input type="range" id="readyConfidence" min="1" max="10" value="7" /><b id="readyConfidenceValue">7</b></label>
+              <button class="lab-btn primary" type="submit">Readiness speichern</button>
+            </form><div class="status-box" id="readinessStatus">Noch kein Check-in für heute.</div>
+          </article>
+          <article class="lab-card span-12"><div class="lab-badge">Plan-Historie</div><h2>Vorbereitete Entscheidungen</h2><div class="stack-list" id="planHistory"></div></article>
+        </div>
+      </section>
+
+      <section class="lab-view" data-panel="dna">
+        <div class="lab-grid">
+          <article class="lab-card span-6"><div class="lab-badge">Trading DNA</div><h2>Deine Verhaltensmuster</h2><p class="lab-text">Aus deinen Journal-Einträgen werden wiederkehrende Sessions, Emotionen, Fehler und Dokumentationslücken sichtbar.</p><div class="metric-grid"><div class="metric"><strong id="dnaTopMarket">-</strong><span>Häufigster Markt</span></div><div class="metric"><strong id="dnaRiskSession">-</strong><span>Schwächste Session</span></div><div class="metric"><strong id="dnaEmotion">-</strong><span>Häufigster Zustand</span></div><div class="metric"><strong id="dnaQuality">0%</strong><span>Dokumentationsqualität</span></div></div><div class="tag-row" id="dnaTags"></div></article>
+          <article class="lab-card span-6"><div class="lab-badge">AI Rulebook Coach</div><h2>Coaching aus deinen Regeln</h2><p class="lab-text">Der Coach analysiert Prozessdaten und macht keine Kursprognosen oder Gewinnversprechen.</p><div class="lab-field" style="margin-top:16px"><label for="personalRulebook">Dein persönliches Rulebook</label><textarea id="personalRulebook" placeholder="Meine Märkte, Sessions, Risikolimits, Entry-Regeln und No-Trade-Bedingungen"></textarea></div><div class="lab-actions"><button class="lab-btn primary" id="runCoach" type="button">Coaching erstellen</button></div><div class="coach-output" id="coachOutput">Speichere dein Rulebook und starte anschließend das persönliche Prozess-Coaching.</div></article>
+          <article class="lab-card span-12"><div class="lab-badge">Decision Review</div><h2>Ausführung bewerten</h2><form class="lab-form" id="reviewForm"><div class="form-grid"><div class="lab-field"><label for="reviewPlan">Vorbereiteter Plan</label><select id="reviewPlan"></select></div><div class="lab-field"><label for="reviewAdherence">Regelkonformität 0–100</label><input id="reviewAdherence" type="number" min="0" max="100" value="80" /></div><div class="lab-field full"><label for="reviewLearning">Learning oder Regelbruch</label><textarea id="reviewLearning" required></textarea></div></div><button class="lab-btn primary" type="submit">Review speichern</button></form></article>
+        </div>
+      </section>
+
+      <section class="lab-view" data-panel="academy">
+        <div class="lab-grid">
+          <article class="lab-card span-6"><div class="lab-badge">Mistake-to-Drill</div><h2>Fehler werden zu Übungen</h2><p class="lab-text">Verlusttrades und schwache Reviews werden in konkrete Reflexionsaufgaben umgewandelt.</p><div class="lab-actions"><button class="lab-btn primary" id="generateDrills" type="button">Drills generieren</button></div><div class="stack-list" id="drillList"></div></article>
+          <article class="lab-card span-6"><div class="lab-badge">Adaptive Academy</div><h2>Dein nächster Lernfokus</h2><div id="academyRecommendation" class="status-box">Die Empfehlung wird aus Journal, Drills und Lesson-Fortschritt berechnet.</div><div class="stack-list" id="replayPlaylist"></div></article>
+          <article class="lab-card span-12"><div class="lab-badge">Setup-Zertifizierung</div><h2>Ein Modell durch Belege beherrschen</h2><p class="lab-text">Fünf sauber dokumentierte Beispiele und vollständiger Kontext schalten die interne Prozess-Zertifizierung frei.</p><form class="lab-form" id="certificationForm"><div class="form-grid"><div class="lab-field"><label for="certSetup">Setup-Name</label><input id="certSetup" required placeholder="z. B. Liquidity Sweep + FVG" /></div><div class="lab-field"><label for="certMarket">Beispielmarkt</label><input id="certMarket" required placeholder="z. B. EURUSD" /></div><div class="lab-field full"><label for="certEvidence">Warum war dieses Beispiel valide?</label><textarea id="certEvidence" required></textarea></div></div><div class="check-list"><label class="check-item"><input type="checkbox" data-cert="context" /><span>Kontext korrekt erklärt</span></label><label class="check-item"><input type="checkbox" data-cert="liquidity" /><span>Liquidity nachvollziehbar markiert</span></label><label class="check-item"><input type="checkbox" data-cert="entry" /><span>Entry und Invalidation definiert</span></label><label class="check-item"><input type="checkbox" data-cert="risk" /><span>Risiko dokumentiert</span></label></div><button class="lab-btn primary" type="submit">Beispiel einreichen</button></form><div class="stack-list" id="certificationList"></div></article>
+        </div>
+      </section>
+
+      <section class="lab-view" data-panel="community">
+        <div class="lab-grid">
+          <article class="lab-card span-6"><div class="lab-badge">Accountability Squad</div><h2>Prozess gemeinsam halten</h2><form class="lab-form" id="squadForm"><div class="form-grid"><div class="lab-field"><label for="squadAlias">Anzeigename</label><input id="squadAlias" required maxlength="24" /></div><div class="lab-field"><label for="squadCode">Squad-Code</label><input id="squadCode" required maxlength="20" placeholder="z. B. LONDON-A" /></div><div class="lab-field full"><label for="squadGoal">Wochenziel</label><input id="squadGoal" required placeholder="z. B. fünf vollständige Pre-Trade-Pläne" /></div></div><label class="check-item"><input id="shareProcessProfile" type="checkbox" /><span>Meinen Anzeigenamen und Process Score freiwillig in der Rangliste teilen. P&L und Kontodaten werden nie veröffentlicht.</span></label><button class="lab-btn primary" type="submit">Squad-Profil speichern</button></form><div class="lab-actions"><button class="lab-btn" id="squadCheckin" type="button">Wochen-Check-in</button></div><div class="status-box" id="squadStatus">Noch keinem Squad beigetreten.</div></article>
+          <article class="lab-card span-6"><div class="lab-badge">Process Leaderboard</div><h2>Disziplin statt Profit</h2><p class="lab-text">Die Rangliste zeigt ausschließlich Prozessqualität. P&L und Kontogröße bleiben privat.</p><div id="leaderboard"></div></article>
+          <article class="lab-card span-12"><div class="lab-badge">Verified Progress Profile</div><h2 id="profileName">Dein Kompetenzprofil</h2><p class="lab-text">Ein privater Nachweis aus Lernfortschritt, Prozessstabilität, Drills und Setup-Zertifizierungen.</p><div class="profile-badges" id="profileBadges"></div><div class="lab-actions"><button class="lab-btn" id="exportProfile" type="button">Profil exportieren</button></div></article>
+        </div>
+      </section>
+    </main>
+
+    <footer class="lab-footer">BullProsperity ist eine Bildungs- und Prozessplattform. Das Performance Lab gibt keine Anlageberatung, Handelssignale oder Gewinnversprechen.</footer>
+  </div>
+</body>
+</html>

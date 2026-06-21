@@ -11,6 +11,18 @@
     "bp_setup_library",
     "bp_onboarding_steps",
     "bp_favorites",
+    "bullprosperity_trading_journal",
+    "bullprosperity_start_balance",
+    "bp_pretrade_plans",
+    "bp_readiness_history",
+    "bp_process_reviews",
+    "bp_replay_drills",
+    "bp_setup_certifications",
+    "bp_personal_rulebook",
+    "bp_squad_profile",
+    "bp_decision_timeline",
+    "bp_coach_history",
+    "bp_public_process_profile",
     ...Array.from({ length:33 }, (_, index) => `bullprosperity_notes_${index + 1}`)
   ];
   const catalog = [
@@ -33,6 +45,7 @@
     ["Buy Side", "/buy-side", "Buy-Side-Liquidity verstehen", "SMC"],
     ["Motivation & Disziplin", "/motivation-disziplin", "Psychologie und Konstanz", "Mindset"],
     ["Trade Review", "/trade-review", "Trades sauber nachbereiten", "Tool"],
+    ["Performance Lab", "/performance-lab", "Process Score, Trading-DNA und persönliche Drills", "Training"],
     ["Longterm", "/longterm", "Langfristiger Vermögensaufbau", "Bereich"],
     ...Array.from({ length: 33 }, (_, index) => [
       `Lesson ${index + 1}`,
