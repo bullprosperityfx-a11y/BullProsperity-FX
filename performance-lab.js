@@ -94,16 +94,31 @@
   }
 
   function setupTabs() {
-    function openView(name) {
-      $$(".lab-tab").forEach(tab => tab.classList.toggle("is-active", tab.dataset.view === name));
-      $$(".lab-view").forEach(panel => panel.classList.toggle("is-active", panel.dataset.panel === name));
+    const tabs = $$(".lab-tab");
+    function openView(name, shouldScroll = false) {
+      const currentIndex = tabs.findIndex(tab => tab.classList.contains("is-active"));
+      const nextIndex = tabs.findIndex(tab => tab.dataset.view === name);
+      const direction = nextIndex < currentIndex ? "-22px" : "22px";
+      tabs.forEach(tab => {
+        const active = tab.dataset.view === name;
+        tab.classList.toggle("is-active", active);
+        tab.setAttribute("aria-selected", String(active));
+        tab.tabIndex = active ? 0 : -1;
+      });
+      $$(".lab-view").forEach(panel => {
+        const active = panel.dataset.panel === name;
+        panel.classList.toggle("is-active", active);
+        panel.hidden = !active;
+        if (active) panel.style.setProperty("--lab-slide-x", direction);
+      });
       history.replaceState(null, "", `#${name}`);
-      window.scrollTo({ top:$(".lab-tabs").offsetTop - 20, behavior:"smooth" });
+      if (shouldScroll) window.scrollTo({ top:$(".lab-tabs").offsetTop - 18, behavior:"smooth" });
     }
-    $$(".lab-tab").forEach(tab => tab.addEventListener("click", () => openView(tab.dataset.view)));
-    $$('[data-open-view]').forEach(button => button.addEventListener("click", () => openView(button.dataset.openView)));
+    tabs.forEach(tab => tab.addEventListener("click", () => openView(tab.dataset.view)));
+    $$('[data-open-view]').forEach(button => button.addEventListener("click", () => openView(button.dataset.openView, true)));
     const requested = location.hash.slice(1);
     if ($(`[data-panel="${requested}"]`)) openView(requested);
+    else openView("cockpit");
   }
 
   function setupReadiness() {

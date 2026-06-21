@@ -1,4 +1,5 @@
 document.addEventListener("DOMContentLoaded", async () => {
+  setupElegantMotion();
   const isProtectedPage = document.documentElement.classList.contains("bp-auth-checking");
   const loginBtn = document.getElementById("loginNavBtn");
   const logoutBtn = document.getElementById("logoutBtn");
@@ -88,6 +89,41 @@ document.addEventListener("DOMContentLoaded", async () => {
   setupClickTracking(accessData);
   setupVimeoWatchtimeTracking(accessData);
 });
+
+function setupElegantMotion() {
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+  const selectors = [
+    ".hero-shell", ".section", ".section-card", ".card", ".tool-card",
+    ".community-card", ".hub-card", ".hub-link-card", ".module",
+    ".course-panel", ".lesson-content", ".lab-hero", ".lab-tabs",
+    ".lab-card", ".admin-card", ".analytics-card"
+  ].join(",");
+
+  const elements = Array.from(document.querySelectorAll(selectors)).filter(element =>
+    !element.parentElement?.closest(".bp-reveal")
+  );
+
+  elements.forEach((element, index) => {
+    element.classList.add("bp-reveal");
+    element.style.setProperty("--bp-reveal-delay", `${Math.min(index % 4, 3) * 55}ms`);
+  });
+
+  if (!("IntersectionObserver" in window)) {
+    elements.forEach(element => element.classList.add("bp-in-view"));
+    return;
+  }
+
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      entry.target.classList.add("bp-in-view");
+      observer.unobserve(entry.target);
+    });
+  }, { threshold:.08, rootMargin:"0px 0px -5% 0px" });
+
+  elements.forEach(element => observer.observe(element));
+}
 
 function loadMemberPlatform() {
   const loadScript = () => {
