@@ -90,19 +90,30 @@ document.addEventListener("DOMContentLoaded", async () => {
 });
 
 function loadMemberPlatform() {
-  if (!document.querySelector('link[href="/member-platform.css"]')) {
-    const stylesheet = document.createElement("link");
-    stylesheet.rel = "stylesheet";
-    stylesheet.href = "/member-platform.css";
-    document.head.appendChild(stylesheet);
-  }
-
-  if (!document.querySelector('script[src="/member-platform.js"]')) {
+  const loadScript = () => {
+    if (document.querySelector('script[src="/member-platform.js"]')) return;
     const script = document.createElement("script");
     script.src = "/member-platform.js";
     script.defer = true;
     document.head.appendChild(script);
+  };
+
+  const existingStylesheet = document.querySelector('link[href="/member-platform.css"]');
+  if (existingStylesheet) {
+    if (existingStylesheet.sheet) loadScript();
+    else {
+      existingStylesheet.addEventListener("load", loadScript, { once:true });
+      existingStylesheet.addEventListener("error", loadScript, { once:true });
+    }
+    return;
   }
+
+  const stylesheet = document.createElement("link");
+  stylesheet.rel = "stylesheet";
+  stylesheet.href = "/member-platform.css";
+  stylesheet.addEventListener("load", loadScript, { once:true });
+  stylesheet.addEventListener("error", loadScript, { once:true });
+  document.head.appendChild(stylesheet);
 }
 
 function hasTrackableAccess(accessData) {
