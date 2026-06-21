@@ -3,6 +3,17 @@
 <head>
   <script>document.documentElement.classList.add("bp-auth-checking");</script>
   <script>
+    try {
+      const onboarding = JSON.parse(localStorage.getItem("bp_onboarding_steps") || "{}");
+      const onboardingSteps = ["profile", "course", "journal", "discord", "broker"];
+      if (onboardingSteps.every(step => onboarding[step] === true)) {
+        document.documentElement.classList.add("bp-onboarding-complete");
+      }
+    } catch (err) {
+      // Der Hub zeigt das Onboarding normal an, falls der lokale Speicher nicht lesbar ist.
+    }
+  </script>
+  <script>
     (async () => {
       try {
         const res = await fetch("/api/access", {
@@ -183,6 +194,14 @@
       display:grid;
       grid-template-columns:1.05fr .95fr;
       gap:22px;
+    }
+
+    .bp-onboarding-complete #onboardingCard{
+      display:none;
+    }
+
+    .bp-onboarding-complete #memberFeatureGrid{
+      grid-template-columns:1fr;
     }
 
     .onboarding-list,
@@ -1610,8 +1629,8 @@
 
       <div class="hub-shell">
 
-      <section class="feature-grid">
-        <div class="hub-card">
+      <section class="feature-grid" id="memberFeatureGrid">
+        <div class="hub-card" id="onboardingCard">
           <div class="badge">Onboarding</div>
           <h2 class="hub-subtitle">Dein Startplan</h2>
           <p class="hub-text">
@@ -2033,6 +2052,8 @@
     const whopWelcomeText = document.getElementById("whopWelcomeText");
     const whopWelcomeClose = document.getElementById("whopWelcomeClose");
     const onboardingList = document.getElementById("onboardingList");
+    const onboardingCard = document.getElementById("onboardingCard");
+    const memberFeatureGrid = document.getElementById("memberFeatureGrid");
     const onboardingProgressText = document.getElementById("onboardingProgressText");
     const onboardingProgressFill = document.getElementById("onboardingProgressFill");
     const memberProgressValue = document.getElementById("memberProgressValue");
@@ -2104,6 +2125,11 @@
       if(memberLessonValue) memberLessonValue.textContent = lastLesson.replace("Lesson ", "L");
       if(memberSetupsValue) memberSetupsValue.textContent = setups.length;
       if(memberNotesValue) memberNotesValue.textContent = notesLength;
+
+      const isComplete = total > 0 && checked === total;
+      document.documentElement.classList.toggle("bp-onboarding-complete", isComplete);
+      if(onboardingCard) onboardingCard.setAttribute("aria-hidden", String(isComplete));
+      if(memberFeatureGrid) memberFeatureGrid.dataset.onboarding = isComplete ? "complete" : "active";
     }
 
     async function updateWeeklyReport(){
