@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
+  <script>document.documentElement.classList.add("bp-home-access-pending");</script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>BullProsperity | Trading Education & Community</title>
@@ -25,6 +26,13 @@
   <script src="/login.js" defer></script>
 
   <style>
+    html.bp-home-access-pending #startBtn,
+    html.bp-home-access-pending #loginNavBtn,
+    html.bp-home-access-pending #waitlistNavBtn,
+    html.bp-home-access-pending .auth-box{
+      visibility:hidden;
+    }
+
     body{
       background:
         linear-gradient(135deg, rgba(243,210,27,0.07), transparent 28%),
@@ -691,7 +699,7 @@
         <a href="setup-room">Setup Room</a>
         <a href="community">Community</a>
         <a href="risikohinweis">Risikohinweis</a>
-        <a href="/waitlist">Waitlist beitreten</a>
+        <a id="waitlistNavBtn" href="/waitlist">Waitlist beitreten</a>
         <a id="loginNavBtn" href="/api/whop/login">Login</a>
         <a id="logoutBtn" href="/api/logout"class="logout-btn"style="display:none;">Logout</a>
       </div>

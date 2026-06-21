@@ -2,6 +2,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   const isProtectedPage = document.documentElement.classList.contains("bp-auth-checking");
   const loginBtn = document.getElementById("loginNavBtn");
   const logoutBtn = document.getElementById("logoutBtn");
+  const waitlistNavBtn = document.getElementById("waitlistNavBtn");
 
   const authStatus = document.getElementById("authStatus");
   const statusDot = document.getElementById("statusDot");
@@ -21,7 +22,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const data = await res.json();
     accessData = data;
 
-    const isLoggedIn = data.role === "admin" || data.role === "premium";
+    const isLoggedIn = ["admin", "premium", "longterm"].includes(data.role);
 
     if (isProtectedPage && !isLoggedIn) {
       window.location.replace("/locked");
@@ -37,6 +38,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     if (loginBtn) loginBtn.style.display = isLoggedIn ? "none" : "inline-flex";
     if (logoutBtn) logoutBtn.style.display = isLoggedIn ? "inline-flex" : "none";
+    if (waitlistNavBtn) waitlistNavBtn.style.display = isLoggedIn ? "none" : "inline-flex";
 
     if (isLoggedIn) {
       window.BP_ACCESS = data;
@@ -77,6 +79,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     if (startBtn) startBtn.style.display = "inline-flex";
     if (learnMoreBtn) learnMoreBtn.style.margin = "0";
+  } finally {
+    document.documentElement.classList.remove("bp-home-access-pending");
   }
 
   await trackPageOpen(accessData);
