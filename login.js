@@ -134,7 +134,7 @@ function loadMemberPlatform() {
     document.head.appendChild(script);
   };
 
-  const existingStylesheet = document.querySelector('link[href="/member-platform.css"]');
+  const existingStylesheet = document.querySelector('link[href^="/member-platform.css"]');
   if (existingStylesheet) {
     if (existingStylesheet.sheet) loadScript();
     else {
@@ -146,7 +146,7 @@ function loadMemberPlatform() {
 
   const stylesheet = document.createElement("link");
   stylesheet.rel = "stylesheet";
-  stylesheet.href = "/member-platform.css";
+  stylesheet.href = "/member-platform.css?v=20260621-2";
   stylesheet.addEventListener("load", loadScript, { once:true });
   stylesheet.addEventListener("error", loadScript, { once:true });
   document.head.appendChild(stylesheet);
