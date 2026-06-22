@@ -33,6 +33,12 @@
     "bp_public_setup_library",
     "bp_risk_profile",
     "bp_replay_queue",
+    "bp_session_plans",
+    "bp_rulebook_locks",
+    "bp_market_templates",
+    "bp_screenshot_timeline",
+    "bp_weekly_ai_reviews",
+    "bp_accountability_partner",
     ...Array.from({ length:33 }, (_, index) => `bullprosperity_notes_${index + 1}`)
   ];
   const catalog = [
@@ -41,6 +47,7 @@
     ["Tools", "/tools", "Rechner, Journal und Trading-Werkzeuge", "Bereich"],
     ["Setup Room", "/setup-room", "Setups und Marktvorbereitung", "Bereich"],
     ["Community", "/community", "Austausch und Discord", "Community"],
+    ["Mentor Office Hours", "/office-hours", "Live Mentoring über Discord buchen", "Mentoring"],
     ["Trading Journal", "/journal", "Trades dokumentieren und auswerten", "Tool"],
     ["Lot-Size-Rechner", "/lot-size", "Positionsgröße und Risiko berechnen", "Tool"],
     ["Checkliste", "/checklist", "Trading-Checkliste vor dem Entry", "Tool"],

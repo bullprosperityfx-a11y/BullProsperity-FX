@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <script>document.documentElement.classList.add("bp-auth-checking");</script>
+  <script src="/access-guard.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>BullProsperity | Mentor Office Hours</title>
+  <meta name="description" content="Buche deine BullProsperity Mentor Office Hours und nimm über Discord teil." />
+  <meta name="theme-color" content="#050505" />
+  <link rel="icon" href="/favicon.png" />
+  <link rel="manifest" href="/manifest.json" />
+  <link rel="stylesheet" href="/theme.css" />
+  <link rel="stylesheet" href="/office-hours.css" />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="/supabase.js"></script>
+  <script src="/login.js?v=20260621-3" defer></script>
+  <script src="/office-hours.js" defer></script>
+</head>
+<body class="office-page">
+  <div class="office-shell">
+    <nav class="office-nav">
+      <a class="office-brand" href="/hub">BullProsperity</a>
+      <div class="office-links"><a href="/hub">Hub</a><a href="/performance-lab">Operating System</a><a href="/community">Community</a><a class="active" href="/office-hours">Office Hours</a><a href="/api/logout">Logout</a></div>
+    </nav>
+
+    <header class="office-head">
+      <div><div class="office-kicker">Mentor Office Hours</div><h1>Dein nächstes <span>Live Mentoring</span></h1><p>Wähle einen Termin und reiche deine konkrete Frage vorab ein. Das Gespräch findet im BullProsperity Discord statt.</p></div>
+      <a class="office-btn secondary" id="discordTopLink" href="https://discord.gg/qJaeBkTn3n" target="_blank" rel="noopener noreferrer">Discord öffnen</a>
+    </header>
+
+    <main class="office-layout">
+      <section class="office-main" aria-labelledby="availableTitle">
+        <div class="section-heading-row"><div><div class="office-kicker">Termine</div><h2 id="availableTitle">Verfügbare Sessions</h2></div><button class="icon-refresh" id="refreshSlots" type="button" title="Termine aktualisieren" aria-label="Termine aktualisieren">↻</button></div>
+        <div class="slot-grid" id="slotGrid"><div class="office-empty">Termine werden geladen …</div></div>
+      </section>
+
+      <aside class="booking-panel" aria-labelledby="bookingTitle">
+        <div class="office-kicker">Buchung</div><h2 id="bookingTitle">Platz reservieren</h2>
+        <form id="bookingForm" class="office-form">
+          <label><span>Termin</span><select id="slotSelect" required><option value="">Termin auswählen</option></select></label>
+          <label><span>Vorname</span><input id="memberName" required maxlength="80" autocomplete="given-name" /></label>
+          <label><span>Discord-Benutzername</span><input id="discordUsername" required maxlength="80" placeholder="z. B. ryantrades" autocomplete="off" /></label>
+          <label><span>Deine konkrete Frage</span><textarea id="officeQuestion" required minlength="8" maxlength="2000" placeholder="Welche Entscheidung, Regel oder Marktsituation möchtest du besprechen?"></textarea></label>
+          <label class="consent-row"><input id="discordConsent" type="checkbox" required /><span>Discord-Name, Frage und Termin dürfen für diese Buchung an den privaten Mentor-Discord übermittelt werden.</span></label>
+          <button class="office-btn primary" id="bookSlot" type="submit">Verbindlich buchen</button>
+        </form>
+        <div class="office-status" id="bookingStatus" aria-live="polite">Wähle zuerst einen verfügbaren Termin.</div>
+      </aside>
+    </main>
+
+    <section class="my-bookings" aria-labelledby="bookingsTitle">
+      <div class="section-heading-row"><div><div class="office-kicker">Deine Termine</div><h2 id="bookingsTitle">Nächste Buchungen</h2></div><a class="office-btn secondary" id="discordBookingLink" href="https://discord.gg/qJaeBkTn3n" target="_blank" rel="noopener noreferrer">Zum Mentor-Discord</a></div>
+      <div id="bookingList" class="booking-list"><div class="office-empty">Buchungen werden geladen …</div></div>
+    </section>
+
+    <footer class="office-footer">Die Office Hours dienen Education, Prozessreflexion und allgemeinem Feedback. Sie enthalten keine Anlageberatung, Handelssignale oder Gewinnversprechen.</footer>
+  </div>
+</body>
+</html>
+

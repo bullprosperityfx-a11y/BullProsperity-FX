@@ -29,7 +29,13 @@ const allowedKeys = new Set([
   "bp_mentor_submissions",
   "bp_public_setup_library",
   "bp_risk_profile",
-  "bp_replay_queue"
+  "bp_replay_queue",
+  "bp_session_plans",
+  "bp_rulebook_locks",
+  "bp_market_templates",
+  "bp_screenshot_timeline",
+  "bp_weekly_ai_reviews",
+  "bp_accountability_partner"
 ]);
 
 function readCookie(req, name) {

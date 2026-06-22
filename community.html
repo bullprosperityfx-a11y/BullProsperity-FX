@@ -114,8 +114,15 @@
     }
 
     .community-page .grid-3,
+    .community-page .grid-4,
     .community-page .grid-2{
       align-items:stretch;
+    }
+
+    .community-page .grid-4{
+      display:grid;
+      grid-template-columns:repeat(4,minmax(0,1fr));
+      gap:18px;
     }
 
     .community-page .community-card,
@@ -294,9 +301,19 @@
         padding:24px !important;
       }
 
+      .community-page .grid-4{
+        grid-template-columns:repeat(2,minmax(0,1fr));
+      }
+
       .community-page .footer-note{
         align-items:flex-start;
         flex-direction:column;
+      }
+    }
+
+    @media(max-width:560px){
+      .community-page .grid-4{
+        grid-template-columns:1fr;
       }
     }
   </style>
@@ -329,6 +346,7 @@
       </p>
       <div class="hero-buttons">
         <a href="setup-room" class="btn primary">Zum Setup Room</a>
+        <a href="office-hours" class="btn primary">Mentor Office Hours</a>
         <a href="https://discord.gg/qJaeBkTn3n" target="_blank" rel="noopener noreferrer" class="btn primary">Discord Community öffnen</a>
         <a href="hub" class="btn secondary">Zum Hub</a>
       </div>
@@ -337,10 +355,10 @@
     <section class="section">
       <h2 class="section-heading">Community Bereiche</h2>
       <p class="section-subtext">
-        Diese Bereiche kannst du später mit Discord, Telegram, Chat-Bereichen oder eigenen Mitgliederseiten verbinden.
+        Wähle den passenden Bereich für Austausch, Mentoring und gemeinsame Prozessarbeit.
       </p>
 
-      <div class="grid-3">
+      <div class="grid-4">
         <div class="community-card">
           <div>
             <div class="badge">Setups</div>
@@ -367,6 +385,15 @@
           </div>
           <a href="trade-review" class="community-link">Bereich öffnen</a>
         </div>
+
+        <div class="community-card">
+          <div>
+            <div class="badge">Live Mentoring</div>
+            <h3>Mentor Office Hours</h3>
+            <p>Buche deinen Platz, reiche deine Frage vorher ein und besprich deinen Prozess live im Discord.</p>
+          </div>
+          <a href="office-hours" class="community-link">Termin buchen</a>
+        </div>
       </div>
 
       <div class="discord-card">
@@ -376,7 +403,7 @@
           Verbinde dich mit der BullProsperity Community im Discord. Dort findest du Austausch,
           Setup-Bereiche, Trade Reviews, Motivation und wichtige Updates für Premium Mitglieder.
         </p>
-        <a href="https://discord.gg/qJaeBkTn3n" target="_blank" rel="noopener noreferrer" class="btn primary">Discord beitreten</a>
+        <div class="hero-buttons"><a href="https://discord.gg/qJaeBkTn3n" target="_blank" rel="noopener noreferrer" class="btn primary">Discord beitreten</a><a href="office-hours" class="btn secondary">Office Hours buchen</a></div>
       </div>
     </section>
 
