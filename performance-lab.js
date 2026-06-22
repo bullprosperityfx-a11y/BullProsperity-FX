@@ -18,6 +18,7 @@
   function write(key, value) {
     localStorage.setItem(key, JSON.stringify(value));
     setTimeout(() => window.BullProsperity?.sync?.(), 50);
+    window.dispatchEvent(new CustomEvent("bp:performance-updated", { detail:{ key } }));
   }
 
   function escapeHtml(value) {

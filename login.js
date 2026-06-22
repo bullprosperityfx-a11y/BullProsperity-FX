@@ -572,6 +572,9 @@ async function bpLogoutNow() {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("/sw.js").catch(() => {});
+  }
   const logoutBtn = document.getElementById("logoutBtn");
 
   if (logoutBtn) {

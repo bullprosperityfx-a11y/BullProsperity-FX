@@ -23,6 +23,16 @@
     "bp_decision_timeline",
     "bp_coach_history",
     "bp_public_process_profile",
+    "bp_daily_os",
+    "bp_broker_connections",
+    "bp_capture_history",
+    "bp_voice_entries",
+    "bp_playbooks",
+    "bp_challenges",
+    "bp_mentor_submissions",
+    "bp_public_setup_library",
+    "bp_risk_profile",
+    "bp_replay_queue",
     ...Array.from({ length:33 }, (_, index) => `bullprosperity_notes_${index + 1}`)
   ];
   const catalog = [
@@ -45,7 +55,7 @@
     ["Buy Side", "/buy-side", "Buy-Side-Liquidity verstehen", "SMC"],
     ["Motivation & Disziplin", "/motivation-disziplin", "Psychologie und Konstanz", "Mindset"],
     ["Trade Review", "/trade-review", "Trades sauber nachbereiten", "Tool"],
-    ["Performance Lab", "/performance-lab", "Process Score, Trading-DNA und persönliche Drills", "Training"],
+    ["Operating System", "/performance-lab", "Tagesplan, Capture, Coach, Replay und Fortschritt", "Training"],
     ["Longterm", "/longterm", "Langfristiger Vermögensaufbau", "Bereich"],
     ...Array.from({ length: 33 }, (_, index) => [
       `Lesson ${index + 1}`,
@@ -350,7 +360,8 @@
     if (!window.supabaseClient && typeof window.ensureSupabaseClient === "function") await window.ensureSupabaseClient();
     await Promise.allSettled([syncFromCloud(), loadNotifications()]);
     setInterval(syncToCloud, 12000);
-    document.addEventListener("visibilitychange", () => { if (document.hidden) syncToCloud(); });
+    setInterval(syncFromCloud, 30000);
+    document.addEventListener("visibilitychange", () => { if (document.hidden) syncToCloud(); else syncFromCloud(); });
     window.addEventListener("beforeunload", syncToCloud);
     window.BullProsperity = { sync:syncToCloud, openSearch:openCommand, catalog };
   }

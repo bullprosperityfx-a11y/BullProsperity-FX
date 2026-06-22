@@ -19,7 +19,17 @@ const allowedKeys = new Set([
   "bp_squad_profile",
   "bp_decision_timeline",
   "bp_coach_history",
-  "bp_public_process_profile"
+  "bp_public_process_profile",
+  "bp_daily_os",
+  "bp_broker_connections",
+  "bp_capture_history",
+  "bp_voice_entries",
+  "bp_playbooks",
+  "bp_challenges",
+  "bp_mentor_submissions",
+  "bp_public_setup_library",
+  "bp_risk_profile",
+  "bp_replay_queue"
 ]);
 
 function readCookie(req, name) {
@@ -35,6 +45,23 @@ function cleanState(input) {
     typeof value === "string" &&
     value.length <= 500000
   ));
+}
+
+function parseJson(value, fallback) {
+  try { return typeof value === "string" ? JSON.parse(value) : value ?? fallback; }
+  catch { return fallback; }
+}
+
+function preserveMentorAnswers(incoming, current) {
+  if (!Object.prototype.hasOwnProperty.call(incoming, "bp_mentor_submissions")) return incoming;
+  const localItems = parseJson(incoming.bp_mentor_submissions, []);
+  const remoteItems = parseJson(current?.bp_mentor_submissions, []);
+  if (!Array.isArray(localItems) || !Array.isArray(remoteItems)) return incoming;
+  const answered = new Map(remoteItems.filter(item => item?.status === "answered" && item.id).map(item => [item.id, item]));
+  const merged = localItems.map(item => answered.get(item?.id) || item);
+  answered.forEach((item, id) => { if (!merged.some(entry => entry?.id === id)) merged.push(item); });
+  incoming.bp_mentor_submissions = JSON.stringify(merged);
+  return incoming;
 }
 
 export default async function handler(req, res) {
@@ -81,6 +108,9 @@ export default async function handler(req, res) {
 
     if (req.method === "POST") {
       const state = cleanState(req.body?.state);
+      const currentResponse = await fetch(`${endpoint}?email=eq.${encodeURIComponent(email)}&select=state&limit=1`, { headers });
+      const currentRows = currentResponse.ok ? await currentResponse.json() : [];
+      preserveMentorAnswers(state, currentRows[0]?.state || {});
       const response = await fetch(`${endpoint}?on_conflict=email`, {
         method:"POST",
         headers:{ ...headers, Prefer:"resolution=merge-duplicates,return=minimal" },
