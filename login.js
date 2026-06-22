@@ -126,10 +126,11 @@ function setupElegantMotion() {
 }
 
 function loadMemberPlatform() {
+  const memberPlatformSrc = "/member-platform.js?v=20260622-1";
   const loadScript = () => {
-    if (document.querySelector('script[src="/member-platform.js"]')) return;
+    if (document.querySelector('script[src^="/member-platform.js"]')) return;
     const script = document.createElement("script");
-    script.src = "/member-platform.js";
+    script.src = memberPlatformSrc;
     script.defer = true;
     document.head.appendChild(script);
   };

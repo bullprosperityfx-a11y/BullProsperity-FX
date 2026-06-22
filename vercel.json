@@ -1,9 +1,37 @@
 {
   "cleanUrls": true,
-  "rewrites": [
+  "trailingSlash": false,
+  "redirects": [
+    { "source": "/dashboard", "destination": "/hub", "permanent": true },
+    { "source": "/test", "destination": "/", "permanent": true }
+  ],
+  "headers": [
     {
       "source": "/(.*)",
-      "destination": "/$1.html"
+      "headers": [
+        { "key": "X-Content-Type-Options", "value": "nosniff" },
+        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" },
+        { "key": "Permissions-Policy", "value": "camera=(), geolocation=(), payment=(), usb=()" },
+        { "key": "Cache-Control", "value": "no-cache, must-revalidate" }
+      ]
+    },
+    {
+      "source": "/(.*).(css|js|png|jpg|jpeg|webp|svg|json|xml|txt)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=300, must-revalidate" }
+      ]
+    },
+    {
+      "source": "/api/(.*)",
+      "headers": [
+        { "key": "Cache-Control", "value": "no-store, private" }
+      ]
+    },
+    {
+      "source": "/access-guard.js",
+      "headers": [
+        { "key": "Cache-Control", "value": "no-cache, must-revalidate" }
+      ]
     }
   ]
 }

@@ -1,4 +1,4 @@
-import crypto from "crypto";
+import { getVerifiedSession } from "./_session.js";
 
 const allowedKeys = new Set([
   "bp_completed_lessons",
@@ -38,12 +38,6 @@ const allowedKeys = new Set([
   "bp_accountability_partner"
 ]);
 
-function readCookie(req, name) {
-  const cookies = req.headers.cookie || "";
-  const value = cookies.split("; ").find(cookie => cookie.startsWith(`${name}=`))?.split("=").slice(1).join("=");
-  return decodeURIComponent(value || "");
-}
-
 function cleanState(input) {
   if (!input || typeof input !== "object" || Array.isArray(input)) return {};
   return Object.fromEntries(Object.entries(input).filter(([key, value]) =>
@@ -82,24 +76,11 @@ function preserveCompletedOnboarding(incoming, current) {
 }
 
 export default async function handler(req, res) {
-  const role = readCookie(req, "bp_role");
-  const email = readCookie(req, "bp_email").trim().toLowerCase();
-  const memberId = readCookie(req, "bp_member_id");
-  const sessionSignature = readCookie(req, "bp_session");
-  const sessionSecret = process.env.SESSION_SECRET || process.env.WHOP_CLIENT_SECRET;
-  const expectedSignature = sessionSecret
-    ? crypto.createHmac("sha256", sessionSecret).update(`${email}|${role}|${memberId}`).digest("hex")
-    : "";
-  const hasValidSession = Boolean(
-    expectedSignature &&
-    sessionSignature &&
-    expectedSignature.length === sessionSignature.length &&
-    crypto.timingSafeEqual(Buffer.from(expectedSignature), Buffer.from(sessionSignature))
-  );
-
-  if (!email || !hasValidSession || !["admin", "premium", "longterm"].includes(role)) {
+  const session = getVerifiedSession(req);
+  if (!session.valid || !["admin", "premium", "longterm"].includes(session.role)) {
     return res.status(401).json({ ok:false, error:"Kein Zugriff" });
   }
+  const email = session.email;
 
   const supabaseUrl = process.env.SUPABASE_URL || "https://bygrocbckwjcatrgdook.supabase.co";
   const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;

@@ -3,6 +3,32 @@
 
   const nativeFetch = window.fetch.bind(window);
   const originalAccessUrl = "/api/access";
+  const accessCacheKey = "bp_verified_access";
+  const accessCacheMaxAge = 30 * 60 * 1000;
+  const memberRoles = new Set(["admin", "premium", "longterm"]);
+
+  function readCachedAccess() {
+    try {
+      const cached = JSON.parse(sessionStorage.getItem(accessCacheKey) || "null");
+      if (!cached || !memberRoles.has(cached.role) || !cached.email) return null;
+      if (Date.now() - Number(cached.cachedAt || 0) > accessCacheMaxAge) return null;
+      return { ...cached, cached:true };
+    } catch {
+      return null;
+    }
+  }
+
+  function storeAccess(data) {
+    try {
+      if (memberRoles.has(data?.role) && data.email) {
+        sessionStorage.setItem(accessCacheKey, JSON.stringify({ ...data, cachedAt:Date.now() }));
+      } else {
+        sessionStorage.removeItem(accessCacheKey);
+      }
+    } catch {
+      // Session Storage darf die Zugriffskontrolle nicht blockieren.
+    }
+  }
 
   function isAccessRequest(input) {
     try {
@@ -26,11 +52,18 @@
       const data = await response.json();
       if (!data || typeof data.role !== "string") throw new Error("Invalid access response");
 
+      storeAccess(data);
+      document.documentElement.dataset.bpAccessSource = "live";
       return data;
     } catch (error) {
-      if (attempt < 2) {
-        await new Promise(resolve => setTimeout(resolve, 250 * (attempt + 1)));
+      if (attempt < 3) {
+        await new Promise(resolve => setTimeout(resolve, 300 * (2 ** attempt)));
         return requestAccess(attempt + 1);
+      }
+      const cached = readCachedAccess();
+      if (cached) {
+        document.documentElement.dataset.bpAccessSource = "session-cache";
+        return cached;
       }
       throw error;
     }
@@ -38,6 +71,10 @@
 
   window.bpAccessPromise = requestAccess();
   window.bpGetAccess = () => window.bpAccessPromise;
+  window.bpRefreshAccess = () => {
+    window.bpAccessPromise = requestAccess();
+    return window.bpAccessPromise;
+  };
 
   window.fetch = async function patchedFetch(input, options) {
     if (!isAccessRequest(input)) return nativeFetch(input, options);

@@ -1,21 +1,13 @@
+import { getVerifiedSession } from "./_session.js";
+
 export default async function handler(req, res) {
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Method not allowed" });
   }
 
   try {
-    const host = req.headers.host;
-    const protocol = host?.includes("localhost") ? "http" : "https";
-
-    const accessRes = await fetch(`${protocol}://${host}/api/access`, {
-      headers: {
-        cookie: req.headers.cookie || ""
-      }
-    });
-
-    const accessData = await accessRes.json();
-
-    if (accessData.role !== "admin") {
+    const session = getVerifiedSession(req);
+    if (!session.valid || session.role !== "admin") {
       return res.status(403).json({
         error: "Nur Admin darf BullProsperity AI nutzen."
       });

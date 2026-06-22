@@ -1,5 +1,12 @@
+import { getVerifiedSession } from "./_session.js";
+
 export default async function handler(req, res) {
   try {
+    const session = getVerifiedSession(req);
+    if (!session.valid || !["admin", "premium", "longterm"].includes(session.role)) {
+      return res.status(401).json({ events:[], error:"Kein Zugriff" });
+    }
+
     const apiKey = process.env.FINNHUB_API_KEY;
 
     if (!apiKey) {

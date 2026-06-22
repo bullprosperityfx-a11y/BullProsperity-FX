@@ -1,3 +1,5 @@
+import { getVerifiedSession } from "./_session.js";
+
 export const config = {
   api: {
     bodyParser: {
@@ -12,6 +14,11 @@ export default async function handler(req, res) {
   }
 
   try {
+    const session = getVerifiedSession(req);
+    if (!session.valid || session.role !== "admin") {
+      return res.status(403).json({ error: "Nur Admins dürfen Signale veröffentlichen." });
+    }
+
     const webhookUrl = process.env.DISCORD_SIGNALS_WEBHOOK_URL;
 
     if (!webhookUrl) {

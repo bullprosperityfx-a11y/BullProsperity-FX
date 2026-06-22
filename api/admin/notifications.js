@@ -1,17 +1,9 @@
+import { getVerifiedSession } from "../_session.js";
+
 export default async function handler(req, res) {
   try {
-    const host = req.headers.host;
-    const protocol = host?.includes("localhost") ? "http" : "https";
-
-    const accessRes = await fetch(`${protocol}://${host}/api/access`, {
-      headers: {
-        cookie: req.headers.cookie || ""
-      }
-    });
-
-    const accessData = await accessRes.json();
-
-    if (accessData.role !== "admin") {
+    const session = getVerifiedSession(req);
+    if (!session.valid || session.role !== "admin") {
       return res.status(403).json({
         error: "Nur Admins dürfen Notifications verwalten."
       });

@@ -131,15 +131,34 @@ export default async function handler(req, res) {
       ...(Array.isArray(meData?.user?.memberships) ? meData.user.memberships : [])
     ];
 
-    const hasActiveMembership = memberships.some(item => {
-      const status = String(item?.status || item?.membership_status || "active").toLowerCase();
-      return !["expired", "canceled", "cancelled", "inactive", "past_due"].includes(status);
-    });
+    const hasLegacyMembership = memberships.some(item =>
+      ["active", "trialing", "completed"].includes(String(item?.status || item?.membership_status || "").toLowerCase())
+    );
 
-    if (email && (adminEmails.includes(email) || email.includes("bullprosperityfx"))) {
+    let hasVerifiedAccess = false;
+    const resourceId = String(process.env.WHOP_RESOURCE_ID || "").trim();
+    const apiKey = String(process.env.WHOP_API_KEY || "").trim();
+    if (memberId && resourceId && apiKey) {
+      try {
+        const accessRes = await fetch(`https://api.whop.com/api/v1/users/${encodeURIComponent(memberId)}/access/${encodeURIComponent(resourceId)}`, {
+          headers: { Authorization:`Bearer ${apiKey}` }
+        });
+        const accessData = accessRes.ok ? await accessRes.json() : {};
+        hasVerifiedAccess = accessData?.has_access === true;
+      } catch (accessError) {
+        console.error("WHOP ACCESS CHECK ERROR:", accessError);
+      }
+    }
+
+    const adminUserIds = String(process.env.ADMIN_WHOP_USER_IDS || "")
+      .split(",")
+      .map(value => value.trim())
+      .filter(Boolean);
+
+    if (email && (adminEmails.includes(email) || adminUserIds.includes(memberId))) {
       role = "admin";
     }
-    else if (email && hasActiveMembership) {
+    else if (email && (hasVerifiedAccess || hasLegacyMembership)) {
       role = "premium";
     }
 

@@ -4,9 +4,16 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { name, email, experience, reason } = req.body;
+    const clean = (value, max) => String(value || "").trim().slice(0, max);
+    const escapeHtml = value => value.replace(/[&<>"']/g, character => ({
+      "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;"
+    })[character]);
+    const name = clean(req.body?.name, 100);
+    const email = clean(req.body?.email, 254).toLowerCase();
+    const experience = clean(req.body?.experience, 120);
+    const reason = clean(req.body?.reason, 2000);
 
-    if (!name || !email || !experience || !reason) {
+    if (!name || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || !experience || reason.length < 10) {
       return res.status(400).json({ error: "Bitte alle Felder ausfüllen." });
     }
 
@@ -30,10 +37,10 @@ export default async function handler(req, res) {
         subject: "Neue Waitlist Anfrage",
         html: `
           <h2>Neue Waitlist Anfrage</h2>
-          <p><strong>Name:</strong> ${name}</p>
-          <p><strong>Email:</strong> ${email}</p>
-          <p><strong>Erfahrung:</strong> ${experience}</p>
-          <p><strong>Grund:</strong> ${reason}</p>
+          <p><strong>Name:</strong> ${escapeHtml(name)}</p>
+          <p><strong>Email:</strong> ${escapeHtml(email)}</p>
+          <p><strong>Erfahrung:</strong> ${escapeHtml(experience)}</p>
+          <p><strong>Grund:</strong> ${escapeHtml(reason)}</p>
         `
       })
     });

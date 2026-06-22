@@ -1,3 +1,5 @@
+import { getVerifiedSession } from "./_session.js";
+
 export const config = {
   api: {
     bodyParser: {
@@ -12,6 +14,11 @@ export default async function handler(req, res) {
   }
 
   try {
+    const session = getVerifiedSession(req);
+    if (!session.valid || !["admin", "premium"].includes(session.role)) {
+      return res.status(401).json({ error: "Kein Zugriff." });
+    }
+
     const {
       name,
       market,

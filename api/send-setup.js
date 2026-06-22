@@ -1,3 +1,5 @@
+import { getVerifiedSession } from "./_session.js";
+
 export const config = {
   api: {
     bodyParser: {
@@ -12,18 +14,8 @@ export default async function handler(req, res) {
   }
 
   try {
-    const protocol = req.headers["x-forwarded-proto"] || "https";
-    const host = req.headers.host;
-
-    const accessRes = await fetch(`${protocol}://${host}/api/access`, {
-      headers: {
-        cookie: req.headers.cookie || ""
-      }
-    });
-
-    const accessData = await accessRes.json();
-
-    if (accessData.role !== "admin" && accessData.role !== "premium") {
+    const session = getVerifiedSession(req);
+    if (!session.valid || !["admin", "premium"].includes(session.role)) {
       return res.status(403).json({ error: "Kein Premium Zugang." });
     }
 

@@ -1,9 +1,16 @@
+import { getVerifiedSession } from "./_session.js";
+
 export default async function handler(req, res) {
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Method not allowed" });
   }
 
   try {
+    const session = getVerifiedSession(req);
+    if (!session.valid || !["admin", "premium"].includes(session.role)) {
+      return res.status(401).json({ error: "Kein Zugriff." });
+    }
+
     const { title, category, text, date } = req.body;
 
     if (!title || !text) {

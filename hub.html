@@ -2,7 +2,7 @@
 <html lang="de">
 <head>
   <script>document.documentElement.classList.add("bp-auth-checking");</script>
-  <script src="/access-guard.js"></script>
+  <script src="/access-guard.js?v=20260622-1"></script>
   <script>
     try {
       const storedOnboarding = localStorage.getItem("bp_onboarding_steps");
@@ -64,7 +64,7 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="/supabase.js"></script>
-  <script src="/login.js?v=20260621-3" defer></script>
+  <script src="/login.js?v=20260622-1" defer></script>
 
   <style>
     body{
@@ -2535,6 +2535,12 @@
       });
     }
 
+    function bpEscapeNotification(value){
+      return String(value || "").replace(/[&<>"']/g, character => ({
+        "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;"
+      })[character]);
+    }
+
     async function bpLoadBellNotifications(){
       if(!notificationList) return;
 
@@ -2572,16 +2578,16 @@
           notificationList.innerHTML += `
             <div class="notification-item">
               <div class="notification-top">
-                <div class="notification-badge">${item.type || "SYSTEM"}</div>
+                <div class="notification-badge">${bpEscapeNotification(item.type || "SYSTEM")}</div>
                 <div class="notification-time">${bpNotificationTime(item.created_at)}</div>
               </div>
 
               <div class="notification-heading">
-                ${item.title || "BullProsperity Update"}
+                ${bpEscapeNotification(item.title || "BullProsperity Update")}
               </div>
 
               <div class="notification-text">
-                ${item.message || ""}
+                ${bpEscapeNotification(item.message || "")}
               </div>
             </div>
           `;
@@ -2608,15 +2614,15 @@
 
       card.innerHTML = `
         <div class="bp-notification-title">
-          ${notification.title || "BullProsperity"}
+          ${bpEscapeNotification(notification.title || "BullProsperity")}
         </div>
 
         <div class="bp-notification-message">
-          ${notification.message || ""}
+          ${bpEscapeNotification(notification.message || "")}
         </div>
 
         <div class="bp-notification-type">
-          ${notification.type || "SYSTEM"}
+          ${bpEscapeNotification(notification.type || "SYSTEM")}
         </div>
       `;
 
@@ -2660,8 +2666,8 @@
     bpLoadBellNotifications();
     bpLoadPopupNotification();
 
-    setInterval(bpLoadBellNotifications, 10000);
-    setInterval(bpLoadPopupNotification, 10000);
+    setInterval(bpLoadBellNotifications, 60000);
+    setInterval(bpLoadPopupNotification, 60000);
   </script>
 
   <script>
