@@ -527,6 +527,12 @@ let bpInactivityTimer;
 
 async function bpClearSessionAndLock() {
   try {
+    await window.BullProsperity?.sync?.();
+  } catch (err) {
+    console.log("Cloud-Speicherung vor Logout nicht erreichbar:", err);
+  }
+
+  try {
     await fetch("/api/logout", {
       method: "POST",
       credentials: "include",
@@ -555,6 +561,12 @@ function bpResetInactivityTimer() {
 
 bpResetInactivityTimer();
 async function bpLogoutNow() {
+  try {
+    await window.BullProsperity?.sync?.();
+  } catch (err) {
+    console.log("Cloud-Speicherung vor Logout nicht erreichbar:", err);
+  }
+
   try {
     await fetch("/api/logout", {
       method: "POST",

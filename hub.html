@@ -5,10 +5,13 @@
   <script src="/access-guard.js"></script>
   <script>
     try {
-      const onboarding = JSON.parse(localStorage.getItem("bp_onboarding_steps") || "{}");
+      const storedOnboarding = localStorage.getItem("bp_onboarding_steps");
+      const onboarding = JSON.parse(storedOnboarding || "{}");
       const onboardingSteps = ["profile", "course", "journal", "discord", "broker"];
       if (onboardingSteps.every(step => onboarding[step] === true)) {
         document.documentElement.classList.add("bp-onboarding-complete");
+      } else if (storedOnboarding === null) {
+        document.documentElement.classList.add("bp-onboarding-pending");
       }
     } catch (err) {
       // Der Hub zeigt das Onboarding normal an, falls der lokale Speicher nicht lesbar ist.
@@ -199,6 +202,11 @@
 
     .bp-onboarding-complete #onboardingCard{
       display:none;
+    }
+
+    .bp-onboarding-pending #onboardingCard{
+      visibility:hidden;
+      pointer-events:none;
     }
 
     .bp-onboarding-complete #memberFeatureGrid{
@@ -2104,6 +2112,7 @@
 
     function writeJsonStorage(key, value){
       localStorage.setItem(key, JSON.stringify(value));
+      window.BullProsperity?.sync?.();
     }
 
     function escapeHtml(value){
@@ -2135,6 +2144,13 @@
       if(memberNotesValue) memberNotesValue.textContent = notesLength;
 
       const isComplete = total > 0 && checked === total;
+      if(isComplete){
+        const completed = readJsonStorage(onboardingKey, {});
+        if(!completed.completedAt){
+          completed.completedAt = new Date().toISOString();
+          writeJsonStorage(onboardingKey, completed);
+        }
+      }
       document.documentElement.classList.toggle("bp-onboarding-complete", isComplete);
       if(onboardingCard) onboardingCard.setAttribute("aria-hidden", String(isComplete));
       if(memberFeatureGrid) memberFeatureGrid.dataset.onboarding = isComplete ? "complete" : "active";
@@ -2188,6 +2204,8 @@
 
       inputs.forEach(input => {
         input.checked = Boolean(saved[input.dataset.onboarding]);
+        if(input.dataset.onboardingBound === "true") return;
+        input.dataset.onboardingBound = "true";
         input.addEventListener("change", () => {
           const next = readJsonStorage(onboardingKey, {});
           next[input.dataset.onboarding] = input.checked;
@@ -2240,7 +2258,14 @@
       renderSetupLibrary();
       updateMemberDashboard();
       updateWeeklyReport();
+      document.documentElement.classList.remove("bp-onboarding-pending");
     });
+
+    setTimeout(() => {
+      initOnboarding();
+      updateMemberDashboard();
+      document.documentElement.classList.remove("bp-onboarding-pending");
+    }, 2500);
 
     if (saveHubNotes) {
       saveHubNotes.addEventListener("click", () => {

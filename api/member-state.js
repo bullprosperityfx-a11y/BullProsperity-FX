@@ -64,6 +64,17 @@ function preserveMentorAnswers(incoming, current) {
   return incoming;
 }
 
+function preserveCompletedOnboarding(incoming, current) {
+  const steps = ["profile", "course", "journal", "discord", "broker"];
+  const remote = parseJson(current?.bp_onboarding_steps, {});
+  if (!steps.every(step => remote?.[step] === true)) return incoming;
+  const local = parseJson(incoming.bp_onboarding_steps, {});
+  if (!steps.every(step => local?.[step] === true)) {
+    incoming.bp_onboarding_steps = JSON.stringify(remote);
+  }
+  return incoming;
+}
+
 export default async function handler(req, res) {
   const role = readCookie(req, "bp_role");
   const email = readCookie(req, "bp_email").trim().toLowerCase();
@@ -111,6 +122,7 @@ export default async function handler(req, res) {
       const currentResponse = await fetch(`${endpoint}?email=eq.${encodeURIComponent(email)}&select=state&limit=1`, { headers });
       const currentRows = currentResponse.ok ? await currentResponse.json() : [];
       preserveMentorAnswers(state, currentRows[0]?.state || {});
+      preserveCompletedOnboarding(state, currentRows[0]?.state || {});
       const response = await fetch(`${endpoint}?on_conflict=email`, {
         method:"POST",
         headers:{ ...headers, Prefer:"resolution=merge-duplicates,return=minimal" },
