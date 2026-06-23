@@ -5,7 +5,7 @@ const premiumRoutes = new Set([
   "performance-lab", "office-hours", "checklist", "replay", "setup",
   "setup-austausch", "trade-review", "tradingview", "lot-size",
   "live-setups", "motivation-disziplin", "market-structure", "liquidity",
-  "entry-models", "buy-side", "broker", "ai-review", "admin-signals", "hub-preview"
+  "entry-models", "buy-side", "broker", "ai-review", "admin-signals", "hub-preview", "status"
 ]);
 
 function cookiesFrom(request) {
@@ -38,26 +38,33 @@ function allowedRole(path, role) {
 }
 
 async function validSignature(cookies) {
-  const secret = process.env.SESSION_SECRET || process.env.WHOP_CLIENT_SECRET;
+  const secrets = [...new Set([
+    process.env.SESSION_SECRET,
+    process.env.WHOP_CLIENT_SECRET
+  ].filter(Boolean))];
   const email = String(cookies.bp_email || "").trim().toLowerCase();
   const role = String(cookies.bp_role || "");
   const memberId = String(cookies.bp_member_id || "");
   const signature = String(cookies.bp_session || "");
-  if (!secret || !email || !signature) return false;
+  if (!secrets.length || !email || !signature) return false;
 
-  const key = await crypto.subtle.importKey(
-    "raw",
-    new TextEncoder().encode(secret),
-    { name:"HMAC", hash:"SHA-256" },
-    false,
-    ["sign"]
-  );
-  const digest = await crypto.subtle.sign("HMAC", key, new TextEncoder().encode(`${email}|${role}|${memberId}`));
-  const expected = Array.from(new Uint8Array(digest), byte => byte.toString(16).padStart(2, "0")).join("");
-  if (expected.length !== signature.length) return false;
-  let mismatch = 0;
-  for (let index = 0; index < expected.length; index += 1) mismatch |= expected.charCodeAt(index) ^ signature.charCodeAt(index);
-  return mismatch === 0;
+  for (const secret of secrets) {
+    const key = await crypto.subtle.importKey(
+      "raw",
+      new TextEncoder().encode(secret),
+      { name:"HMAC", hash:"SHA-256" },
+      false,
+      ["sign"]
+    );
+    const digest = await crypto.subtle.sign("HMAC", key, new TextEncoder().encode(`${email}|${role}|${memberId}`));
+    const expected = Array.from(new Uint8Array(digest), byte => byte.toString(16).padStart(2, "0")).join("");
+    if (expected.length !== signature.length) continue;
+    let mismatch = 0;
+    for (let index = 0; index < expected.length; index += 1) mismatch |= expected.charCodeAt(index) ^ signature.charCodeAt(index);
+    if (mismatch === 0) return true;
+  }
+
+  return false;
 }
 
 export default async function middleware(request) {

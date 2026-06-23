@@ -21,10 +21,14 @@ export default function handler(req, res) {
 
     const state = crypto.randomBytes(16).toString("hex");
     const nonce = crypto.randomBytes(16).toString("hex");
+    const requestHost = String(req.headers.host || "").split(":")[0].toLowerCase();
+    const sharedDomain = requestHost === "bullprosperity.online" || requestHost.endsWith(".bullprosperity.online")
+      ? "; Domain=.bullprosperity.online"
+      : "";
 
     res.setHeader("Set-Cookie", [
-      `whop_verifier=${codeVerifier}; Path=/; HttpOnly; Secure; SameSite=Lax`,
-      `whop_state=${state}; Path=/; HttpOnly; Secure; SameSite=Lax`
+      `whop_verifier=${codeVerifier}; Path=/; HttpOnly; Secure; SameSite=Lax${sharedDomain}`,
+      `whop_state=${state}; Path=/; HttpOnly; Secure; SameSite=Lax${sharedDomain}`
     ]);
 
     const url =

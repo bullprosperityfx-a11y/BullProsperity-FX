@@ -164,7 +164,11 @@ export default async function handler(req, res) {
 
 
     const secure = process.env.NODE_ENV === "production" ? "; Secure" : "";
-    const cookieOptions = `Path=/; HttpOnly; SameSite=Lax; Max-Age=604800${secure}`;
+    const requestHost = String(req.headers.host || "").split(":")[0].toLowerCase();
+    const sharedDomain = requestHost === "bullprosperity.online" || requestHost.endsWith(".bullprosperity.online")
+      ? "; Domain=.bullprosperity.online"
+      : "";
+    const cookieOptions = `Path=/; HttpOnly; SameSite=Lax; Max-Age=604800${secure}${sharedDomain}`;
     const sessionSecret = process.env.SESSION_SECRET || process.env.WHOP_CLIENT_SECRET;
     const sessionPayload = `${email}|${role}|${memberId}`;
     const sessionSignature = sessionSecret
@@ -178,8 +182,8 @@ export default async function handler(req, res) {
       `bp_first_name=${encodeURIComponent(firstName)}; ${cookieOptions}`,
       `bp_member_id=${encodeURIComponent(memberId)}; ${cookieOptions}`,
       `bp_session=${encodeURIComponent(sessionSignature)}; ${cookieOptions}`,
-      `whop_verifier=; Path=/; HttpOnly; SameSite=Lax; Max-Age=0${secure}`,
-      `whop_state=; Path=/; HttpOnly; SameSite=Lax; Max-Age=0${secure}`
+      `whop_verifier=; Path=/; HttpOnly; SameSite=Lax; Max-Age=0${secure}${sharedDomain}`,
+      `whop_state=; Path=/; HttpOnly; SameSite=Lax; Max-Age=0${secure}${sharedDomain}`
     ]);
 
     // ✅ Weiter in Hub

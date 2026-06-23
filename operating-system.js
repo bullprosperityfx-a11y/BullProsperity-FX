@@ -202,11 +202,66 @@
 
   function renderViolations() { const issues=detectViolations(); $("#violationList").innerHTML=issues.length?issues.map(issue=>`<article class="stack-item ${issue.level==='high'?'violation-high':''}"><strong>${escapeHtml(issue.title)}</strong><span>${escapeHtml(issue.detail)}</span></article>`).join(""):'<div class="status-box good">Keine dokumentierten Regelverstöße erkannt.</div>'; }
 
-  function setupMentorInbox() {
-    $("#mentorRequestForm").addEventListener("submit",event=>{event.preventDefault();const items=read(KEYS.mentor,[]);items.unshift({id:uid(),trade:$("#mentorTrade").value.trim(),question:$("#mentorQuestion").value.trim(),status:"open",createdAt:new Date().toISOString(),feedback:"",videoUrl:""});write(KEYS.mentor,items.slice(0,50));event.target.reset();renderMentorInbox();}); renderMentorInbox();
+  function compressMentorChart(file) {
+    if (!file) return Promise.resolve("");
+    if (!/^image\/(png|jpe?g|webp)$/i.test(file.type) || file.size > 6 * 1024 * 1024) {
+      return Promise.reject(new Error("Bitte nutze PNG, JPG oder WebP mit maximal 6 MB."));
+    }
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onerror = () => reject(new Error("Chart konnte nicht gelesen werden."));
+      reader.onload = () => {
+        const image = new Image();
+        image.onerror = () => reject(new Error("Chart konnte nicht verarbeitet werden."));
+        image.onload = () => {
+          const scale = Math.min(1, 900 / Math.max(image.width, image.height));
+          const canvas = document.createElement("canvas");
+          canvas.width = Math.max(1, Math.round(image.width * scale));
+          canvas.height = Math.max(1, Math.round(image.height * scale));
+          canvas.getContext("2d").drawImage(image, 0, 0, canvas.width, canvas.height);
+          resolve(canvas.toDataURL("image/jpeg", .58));
+        };
+        image.src = reader.result;
+      };
+      reader.readAsDataURL(file);
+    });
   }
 
-  function renderMentorInbox() { const items=read(KEYS.mentor,[]); $("#mentorInbox").innerHTML=items.length?items.slice(0,8).map(item=>{const safeVideo=/^https?:\/\//i.test(item.videoUrl||"")?item.videoUrl:"";return`<article class="stack-item ${item.status==='answered'?'is-complete':''}"><strong>${escapeHtml(item.trade)} · ${item.status==='answered'?'Beantwortet':'Offen'}</strong><span>${escapeHtml(item.question)}</span>${item.feedback?`<div class="mentor-answer">${escapeHtml(item.feedback)}${safeVideo?`<a class="lab-btn" href="${escapeHtml(safeVideo)}" target="_blank" rel="noopener">Video Review öffnen</a>`:""}</div>`:""}</article>`;}).join(""):'<div class="status-box">Noch keine Mentor-Anfragen.</div>'; }
+  function setupMentorInbox() {
+    const chartInput = $("#mentorChart");
+    chartInput?.addEventListener("change", event => {
+      const file = event.target.files[0];
+      const preview = $("#mentorChartPreview");
+      if (!file || !preview) return;
+      preview.style.backgroundImage = `url("${URL.createObjectURL(file)}")`;
+      preview.classList.add("has-image");
+    });
+    $("#mentorRequestForm").addEventListener("submit", async event => {
+      event.preventDefault();
+      const button = event.submitter;
+      button.disabled = true;
+      button.textContent = "Wird vorbereitet …";
+      try {
+        const chart = await compressMentorChart(chartInput?.files?.[0]);
+        const items = read(KEYS.mentor, []);
+        items.unshift({ id:uid(), trade:$("#mentorTrade").value.trim(), question:$("#mentorQuestion").value.trim(), chart, status:"open", createdAt:new Date().toISOString(), feedback:"", videoUrl:"" });
+        while (JSON.stringify(items).length > 450000 || items.length > 30) items.pop();
+        write(KEYS.mentor, items);
+        event.target.reset();
+        $("#mentorChartPreview")?.classList.remove("has-image");
+        if ($("#mentorChartPreview")) $("#mentorChartPreview").style.backgroundImage = "";
+        renderMentorInbox();
+      } catch (error) {
+        alert(error.message);
+      } finally {
+        button.disabled = false;
+        button.textContent = "An Mentor senden";
+      }
+    });
+    renderMentorInbox();
+  }
+
+  function renderMentorInbox() { const items=read(KEYS.mentor,[]); $("#mentorInbox").innerHTML=items.length?items.slice(0,8).map(item=>{const safeVideo=/^https?:\/\//i.test(item.videoUrl||"")?item.videoUrl:"";const chart=/^data:image\//.test(item.chart||"")?`<img class="mentor-chart-thumb" src="${item.chart}" alt="Chart zur Mentor-Anfrage" />`:"";return`<article class="stack-item ${item.status==='answered'?'is-complete':''}">${chart}<strong>${escapeHtml(item.trade)} · ${item.status==='answered'?'Beantwortet':'Offen'}</strong><span>${escapeHtml(item.question)}</span>${item.feedback?`<div class="mentor-answer">${escapeHtml(item.feedback)}${safeVideo?`<a class="lab-btn" href="${escapeHtml(safeVideo)}" target="_blank" rel="noopener">Video Review öffnen</a>`:""}</div>`:""}</article>`;}).join(""):'<div class="status-box">Noch keine Mentor-Anfragen.</div>'; }
 
   function setupReplay() {
     const values=[38,62,48,74,56,85,67,92,71,58,80,64]; $("#osReplayBars").innerHTML=values.map((height,index)=>`<span class="os-replay-bar ${index%3===1?'bear':''}" style="height:${height}%"></span>`).join(""); let step=0; const render=()=>{$("#osReplayCover").style.width=`${Math.max(0,100-step/values.length*100)}%`;$("#osReplayCover").textContent=step?`${step}/${values.length} Kerzen sichtbar`:"Nächsten Schritt aufdecken";}; $("#replayNext").addEventListener("click",()=>{step=Math.min(values.length,step+1);render();}); $("#replayReset").addEventListener("click",()=>{step=0;render();}); render();

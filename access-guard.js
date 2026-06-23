@@ -65,6 +65,15 @@
         document.documentElement.dataset.bpAccessSource = "session-cache";
         return cached;
       }
+
+      // Eine geschützte HTML-Seite wurde bereits von der Middleware freigegeben.
+      // Ein kurzer API-Ausfall darf deshalb keinen erneuten Login auslösen.
+      if (document.documentElement.classList.contains("bp-auth-checking")) {
+        const normalizedPath = window.location.pathname.replace(/^\/+|\/+$/g, "").replace(/\.html$/i, "");
+        const adminOnly = normalizedPath.startsWith("admin/") || ["admin-signals", "ai-review", "dashboard"].includes(normalizedPath);
+        document.documentElement.dataset.bpAccessSource = "server-session";
+        return { ok:true, role:adminOnly ? "admin" : "premium", serverAuthorized:true };
+      }
       throw error;
     }
   }

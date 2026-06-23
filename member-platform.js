@@ -39,6 +39,8 @@
     "bp_screenshot_timeline",
     "bp_weekly_ai_reviews",
     "bp_accountability_partner",
+    "bp_prop_challenge",
+    "bp_notification_preferences",
     ...Array.from({ length:33 }, (_, index) => `bullprosperity_notes_${index + 1}`)
   ];
   const catalog = [
@@ -63,6 +65,7 @@
     ["Motivation & Disziplin", "/motivation-disziplin", "Psychologie und Konstanz", "Mindset"],
     ["Trade Review", "/trade-review", "Trades sauber nachbereiten", "Tool"],
     ["Operating System", "/performance-lab", "Tagesplan, Capture, Coach, Replay und Fortschritt", "Training"],
+    ["Systemstatus", "/status", "Whop, Cloud, KI und Community prüfen", "Plattform"],
     ["Longterm", "/longterm", "Langfristiger Vermögensaufbau", "Bereich"],
     ...Array.from({ length: 33 }, (_, index) => [
       `Lesson ${index + 1}`,

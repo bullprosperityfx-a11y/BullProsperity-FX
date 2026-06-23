@@ -30,6 +30,7 @@ export default async function handler(req, res) {
         email:row.email,
         trade:String(item.trade || "Trade Review").slice(0,160),
         question:String(item.question || "").slice(0,3000),
+        chart:/^data:image\//.test(String(item.chart || "")) ? String(item.chart) : "",
         createdAt:item.createdAt || row.updated_at
       }));
       const lessons = Object.keys(parse(state.bp_completed_lessons, {})).length;

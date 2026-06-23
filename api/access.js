@@ -1,3 +1,4 @@
+import crypto from "crypto";
 import { getVerifiedSession } from "./_session.js";
 
 export default function handler(req, res) {
@@ -15,6 +16,19 @@ export default function handler(req, res) {
   const name = decodeURIComponent(getCookie("bp_name") || "");
   const firstName = decodeURIComponent(getCookie("bp_first_name") || "");
   const memberId = decodeURIComponent(getCookie("bp_member_id") || "");
+
+  if (session.valid && session.needsRefresh && process.env.SESSION_SECRET) {
+    const signature = crypto
+      .createHmac("sha256", process.env.SESSION_SECRET)
+      .update(`${session.email}|${session.role}|${session.memberId}`)
+      .digest("hex");
+    const requestHost = String(req.headers.host || "").split(":")[0].toLowerCase();
+    const domain = requestHost === "bullprosperity.online" || requestHost.endsWith(".bullprosperity.online")
+      ? "; Domain=.bullprosperity.online"
+      : "";
+    const secure = process.env.NODE_ENV === "production" ? "; Secure" : "";
+    res.setHeader("Set-Cookie", `bp_session=${encodeURIComponent(signature)}; Path=/; HttpOnly; SameSite=Lax; Max-Age=604800${secure}${domain}`);
+  }
 
   res.setHeader("Cache-Control", "no-store, private");
   return res.json({

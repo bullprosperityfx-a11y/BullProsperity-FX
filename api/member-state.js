@@ -35,7 +35,9 @@ const allowedKeys = new Set([
   "bp_market_templates",
   "bp_screenshot_timeline",
   "bp_weekly_ai_reviews",
-  "bp_accountability_partner"
+  "bp_accountability_partner",
+  "bp_prop_challenge",
+  "bp_notification_preferences"
 ]);
 
 function cleanState(input) {

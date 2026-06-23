@@ -149,6 +149,17 @@
   color:var(--gold);
 }
 
+.mentor-request-chart{
+  display:block;
+  width:min(100%,720px);
+  max-height:420px;
+  object-fit:contain;
+  margin:14px 0;
+  border:1px solid rgba(243,210,27,.2);
+  border-radius:8px;
+  background:#050505;
+}
+
 @media(max-width:1180px){
   .admin-page .admin-layout{
     grid-template-columns:1fr;
