@@ -33,7 +33,7 @@ export function getVerifiedSession(req) {
 }
 
 export function getSupabaseAdmin() {
-  const url = process.env.SUPABASE_URL || "https://bygrocbckwjcatrgdook.supabase.co";
-  const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.SUPABASE_URL || "https://bygrocbckwjcatrgdook.supabase.co";
+  const key = process.env.SUPABASE_SECRET_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY;
   return { url, key, headers:key ? { apikey:key, Authorization:`Bearer ${key}`, "Content-Type":"application/json" } : null };
 }

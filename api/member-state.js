@@ -1,4 +1,4 @@
-import { getVerifiedSession } from "./_session.js";
+import { getVerifiedSession, getSupabaseAdmin } from "./_session.js";
 
 const allowedKeys = new Set([
   "bp_completed_lessons",
@@ -84,20 +84,13 @@ export default async function handler(req, res) {
   }
   const email = session.email;
 
-  const supabaseUrl = process.env.SUPABASE_URL || "https://bygrocbckwjcatrgdook.supabase.co";
-  const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  const { url:supabaseUrl, key:serviceKey, headers } = getSupabaseAdmin();
 
   if (!serviceKey) {
     return res.status(503).json({ ok:false, error:"Cloud-Speicher ist noch nicht konfiguriert" });
   }
 
   const endpoint = `${supabaseUrl}/rest/v1/member_state`;
-  const headers = {
-    apikey:serviceKey,
-    Authorization:`Bearer ${serviceKey}`,
-    "Content-Type":"application/json"
-  };
-
   try {
     if (req.method === "GET") {
       const response = await fetch(`${endpoint}?email=eq.${encodeURIComponent(email)}&select=state,updated_at&limit=1`, { headers });

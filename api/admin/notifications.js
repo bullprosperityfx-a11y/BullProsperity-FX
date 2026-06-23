@@ -1,4 +1,4 @@
-import { getVerifiedSession } from "../_session.js";
+import { getVerifiedSession, getSupabaseAdmin } from "../_session.js";
 
 export default async function handler(req, res) {
   try {
@@ -9,8 +9,7 @@ export default async function handler(req, res) {
       });
     }
 
-    const supabaseUrl = process.env.SUPABASE_URL;
-    const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+    const { url:supabaseUrl, key:serviceRoleKey, headers:supabaseHeaders } = getSupabaseAdmin();
 
     if (!supabaseUrl || !serviceRoleKey) {
       return res.status(500).json({
@@ -29,12 +28,7 @@ export default async function handler(req, res) {
 
       const insertRes = await fetch(`${supabaseUrl}/rest/v1/notifications`, {
         method: "POST",
-        headers: {
-          apikey: serviceRoleKey,
-          Authorization: `Bearer ${serviceRoleKey}`,
-          "Content-Type": "application/json",
-          Prefer: "return=minimal"
-        },
+        headers: { ...supabaseHeaders, Prefer: "return=minimal" },
         body: JSON.stringify({
           title,
           message,
@@ -71,12 +65,7 @@ export default async function handler(req, res) {
 
       const updateRes = await fetch(`${supabaseUrl}/rest/v1/notifications?id=eq.${id}`, {
         method: "PATCH",
-        headers: {
-          apikey: serviceRoleKey,
-          Authorization: `Bearer ${serviceRoleKey}`,
-          "Content-Type": "application/json",
-          Prefer: "return=minimal"
-        },
+        headers: { ...supabaseHeaders, Prefer: "return=minimal" },
         body: JSON.stringify(payload)
       });
 
