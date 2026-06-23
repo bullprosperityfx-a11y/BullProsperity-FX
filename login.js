@@ -546,7 +546,7 @@ async function bpClearSessionAndLock() {
   localStorage.clear();
   sessionStorage.clear();
 
-  window.location.href = "/locked.html?reason=inactive";
+  window.location.replace("/locked?reason=inactive");
 }
 function bpResetInactivityTimer() {
   clearTimeout(bpInactivityTimer);
@@ -581,7 +581,7 @@ async function bpLogoutNow() {
   localStorage.clear();
   sessionStorage.clear();
 
-  window.location.href = "/locked.html?reason=logout";
+  window.location.replace("/locked?reason=logout");
 }
 
 document.addEventListener("DOMContentLoaded", () => {
