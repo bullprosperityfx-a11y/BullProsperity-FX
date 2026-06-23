@@ -174,8 +174,13 @@ export default async function handler(req, res) {
     const sessionSignature = sessionSecret
       ? crypto.createHmac("sha256", sessionSecret).update(sessionPayload).digest("hex")
       : "";
+    const staleHostCookies = sharedDomain
+      ? ["bp_email", "bp_role", "bp_name", "bp_first_name", "bp_member_id", "bp_session"]
+          .map(name => `${name}=; Path=/; HttpOnly; SameSite=Lax; Max-Age=0${secure}`)
+      : [];
 
     res.setHeader("Set-Cookie", [
+      ...staleHostCookies,
       `bp_email=${encodeURIComponent(email)}; ${cookieOptions}`,
       `bp_role=${role}; ${cookieOptions}`,
       `bp_name=${encodeURIComponent(fullName)}; ${cookieOptions}`,

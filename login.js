@@ -527,26 +527,9 @@ function startInactivityLogout(accessData) {
 let bpInactivityTimer;
 
 async function bpClearSessionAndLock() {
-  try {
-    await window.BullProsperity?.sync?.();
-  } catch (err) {
-    console.log("Cloud-Speicherung vor Logout nicht erreichbar:", err);
-  }
-
-  try {
-    await fetch("/api/logout", {
-      method: "POST",
-      credentials: "include",
-      cache: "no-store"
-    });
-  } catch (err) {
-    console.log("Logout Fehler:", err);
-  }
-
   localStorage.clear();
   sessionStorage.clear();
-
-  window.location.replace("/locked?reason=inactive");
+  window.location.replace("/api/logout?reason=inactive");
 }
 function bpResetInactivityTimer() {
   clearTimeout(bpInactivityTimer);
@@ -562,26 +545,9 @@ function bpResetInactivityTimer() {
 
 bpResetInactivityTimer();
 async function bpLogoutNow() {
-  try {
-    await window.BullProsperity?.sync?.();
-  } catch (err) {
-    console.log("Cloud-Speicherung vor Logout nicht erreichbar:", err);
-  }
-
-  try {
-    await fetch("/api/logout", {
-      method: "POST",
-      credentials: "include",
-      cache: "no-store"
-    });
-  } catch (err) {
-    console.log("Logout Fehler:", err);
-  }
-
   localStorage.clear();
   sessionStorage.clear();
-
-  window.location.replace("/locked?reason=logout");
+  window.location.replace("/api/logout?reason=logout");
 }
 
 document.addEventListener("DOMContentLoaded", () => {

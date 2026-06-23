@@ -2,7 +2,8 @@ import crypto from "crypto";
 
 export function readCookie(req, name) {
   const cookies = req.headers.cookie || "";
-  const value = cookies.split("; ").find(cookie => cookie.startsWith(`${name}=`))?.split("=").slice(1).join("=");
+  const matches = cookies.split("; ").filter(cookie => cookie.startsWith(`${name}=`));
+  const value = matches[matches.length - 1]?.split("=").slice(1).join("=");
   return decodeURIComponent(value || "");
 }
 
