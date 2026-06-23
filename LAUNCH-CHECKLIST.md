@@ -8,6 +8,7 @@
 - Die Admin-E-Mail in `ADMIN_EMAILS` oder die Whop User-ID in `ADMIN_WHOP_USER_IDS` hinterlegen.
 - Whop Redirect URL exakt auf `https://bullprosperity.online/api/whop/callback` setzen.
 - `supabase-member-platform.sql` und `supabase-office-hours.sql` im Supabase SQL Editor ausführen.
+- `supabase-trade-results.sql` im Supabase SQL Editor ausführen und `TRADE_RESULT_SECRET` in Vercel setzen.
 - Discord-Webhooks und `DISCORD_INVITE_URL` prüfen.
 - Domain-Weiterleitung zwischen `www` und Apex-Domain festlegen, damit Cookies immer auf demselben Host bleiben.
 
