@@ -41,6 +41,7 @@
     "bp_accountability_partner",
     "bp_prop_challenge",
     "bp_notification_preferences",
+    "bp_welcome_email_sent",
     ...Array.from({ length:33 }, (_, index) => `bullprosperity_notes_${index + 1}`)
   ];
   const catalog = [
@@ -140,6 +141,7 @@
             <button class="bp-command-tab" data-tab="favorites" type="button">Favoriten</button>
             <button class="bp-command-tab" data-tab="notifications" type="button">Mitteilungen</button>
             <button class="bp-command-tab" data-tab="notes" type="button">Notizen</button>
+            <button class="bp-command-tab" data-tab="feedback" type="button">Feedback</button>
           </div>
           <div class="bp-command-content" id="bpCommandContent"></div>
         </section>
@@ -235,6 +237,27 @@
       return;
     }
 
+    if (activeTab === "feedback") {
+      content.innerHTML = `
+        <form class="bp-feedback-form" id="bpFeedbackForm">
+          <label for="bpFeedbackCategory">Kategorie</label>
+          <select id="bpFeedbackCategory" required>
+            <option value="Verbesserung">Verbesserung</option>
+            <option value="Fehler">Fehler melden</option>
+            <option value="Inhalt">Inhalt</option>
+            <option value="Sonstiges">Sonstiges</option>
+          </select>
+          <label for="bpFeedbackMessage">Beschreibung</label>
+          <textarea id="bpFeedbackMessage" minlength="8" maxlength="3000" placeholder="Was ist passiert oder was würde dir helfen?" required></textarea>
+          <div class="bp-feedback-actions">
+            <span id="bpFeedbackStatus" aria-live="polite"></span>
+            <button type="submit">Senden</button>
+          </div>
+        </form>`;
+      document.getElementById("bpFeedbackForm")?.addEventListener("submit", submitFeedback);
+      return;
+    }
+
     if (activeTab === "notifications") {
       content.innerHTML = notifications.length ? notifications.map(item => `
         <article class="bp-notification-item">
@@ -258,6 +281,35 @@
     content.querySelectorAll("[data-favorite]").forEach(button => {
       button.addEventListener("click", () => toggleFavorite(button.dataset.favorite));
     });
+  }
+
+  async function submitFeedback(event) {
+    event.preventDefault();
+    const form = event.currentTarget;
+    const button = form.querySelector('button[type="submit"]');
+    const status = document.getElementById("bpFeedbackStatus");
+    button.disabled = true;
+    status.textContent = "Wird gesendet …";
+    try {
+      const response = await fetch("/api/feedback", {
+        method:"POST",
+        credentials:"include",
+        headers:{ "Content-Type":"application/json" },
+        body:JSON.stringify({
+          category:document.getElementById("bpFeedbackCategory").value,
+          message:document.getElementById("bpFeedbackMessage").value,
+          page:location.pathname
+        })
+      });
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.error || "Feedback konnte nicht gesendet werden");
+      form.reset();
+      status.textContent = "Danke. Dein Feedback wurde gespeichert.";
+    } catch (error) {
+      status.textContent = error.message;
+    } finally {
+      button.disabled = false;
+    }
   }
 
   function updatePageFavorite() {
@@ -367,6 +419,7 @@
   async function initialize() {
     createInterface();
     optimizeMedia();
+    fetch("/api/welcome", { method:"POST", credentials:"include", keepalive:true }).catch(() => {});
     if (!window.supabaseClient && typeof window.ensureSupabaseClient === "function") await window.ensureSupabaseClient();
     await Promise.allSettled([syncFromCloud(), loadNotifications()]);
     setInterval(syncToCloud, 12000);

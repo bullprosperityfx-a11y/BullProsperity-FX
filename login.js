@@ -90,6 +90,23 @@ document.addEventListener("DOMContentLoaded", async () => {
   setupVimeoWatchtimeTracking(accessData);
 });
 
+(() => {
+  let reports = 0;
+  function report(type, detail) {
+    if (reports >= 3 || !window.BP_ACCESS) return;
+    reports += 1;
+    fetch("/api/telemetry", {
+      method:"POST",
+      credentials:"include",
+      keepalive:true,
+      headers:{ "Content-Type":"application/json" },
+      body:JSON.stringify({ type, page:location.pathname, detail:String(detail || "Unbekannter Fehler") })
+    }).catch(() => {});
+  }
+  window.addEventListener("error", event => report("client_error", event.message));
+  window.addEventListener("unhandledrejection", event => report("unhandled_rejection", event.reason?.message || event.reason));
+})();
+
 function setupElegantMotion() {
   if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
@@ -126,7 +143,7 @@ function setupElegantMotion() {
 }
 
 function loadMemberPlatform() {
-  const memberPlatformSrc = "/member-platform.js?v=20260624-1";
+  const memberPlatformSrc = "/member-platform.js?v=20260624-2";
   const loadScript = () => {
     if (document.querySelector('script[src^="/member-platform.js"]')) return;
     const script = document.createElement("script");
@@ -147,7 +164,7 @@ function loadMemberPlatform() {
 
   const stylesheet = document.createElement("link");
   stylesheet.rel = "stylesheet";
-  stylesheet.href = "/member-platform.css?v=20260621-2";
+  stylesheet.href = "/member-platform.css?v=20260624-1";
   stylesheet.addEventListener("load", loadScript, { once:true });
   stylesheet.addEventListener("error", loadScript, { once:true });
   document.head.appendChild(stylesheet);

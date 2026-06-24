@@ -50,7 +50,16 @@ export default async function handler(req, res) {
   }
 
   checks.push(item("ai", "AI Coaching", process.env.OPENAI_API_KEY ? "configured" : "degraded", process.env.OPENAI_API_KEY ? "KI-Funktionen sind konfiguriert." : "OpenAI-Schlüssel fehlt."));
-  checks.push(item("mail", "E-Mail-System", process.env.RESEND_API_KEY ? "configured" : "degraded", process.env.RESEND_API_KEY ? "E-Mail-Versand ist konfiguriert." : "Resend-Schlüssel fehlt."));
+  const mailReady = Boolean(process.env.RESEND_API_KEY && process.env.RESEND_FROM_EMAIL);
+  checks.push(item("mail", "E-Mail-System", mailReady ? "configured" : "degraded", mailReady ? "Willkommensmails sind konfiguriert." : "RESEND_API_KEY oder RESEND_FROM_EMAIL fehlt."));
+
+  try {
+    if (!supabase.headers) throw new Error("Nicht konfiguriert");
+    const response = await timedFetch(`${supabase.url}/rest/v1/feedback_reports?select=id&limit=1`, { headers:supabase.headers });
+    checks.push(item("feedback", "Feedback-System", response.ok ? "operational" : "degraded", response.ok ? "Feedback-Tabelle und API sind erreichbar." : "Feedback-Migration muss geprüft werden."));
+  } catch {
+    checks.push(item("feedback", "Feedback-System", "degraded", "Feedback-Tabelle ist nicht erreichbar."));
+  }
   checks.unshift(item("platform", "BullProsperity Plattform", "operational", "Webseite und geschützte API sind erreichbar."));
 
   const degraded = checks.filter(check => check.state === "degraded").length;

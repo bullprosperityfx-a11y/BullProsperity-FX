@@ -9,6 +9,9 @@
 - Whop Redirect URL exakt auf `https://bullprosperity.online/api/whop/callback` setzen.
 - `supabase-member-platform.sql` und `supabase-office-hours.sql` im Supabase SQL Editor ausführen.
 - `supabase-trade-results.sql` im Supabase SQL Editor ausführen und `TRADE_RESULT_SECRET` in Vercel setzen.
+- `supabase-launch-readiness.sql` im Supabase SQL Editor ausführen.
+- `RESEND_FROM_EMAIL` auf eine bei Resend verifizierte Absenderadresse setzen.
+- Optional `DISCORD_FEEDBACK_WEBHOOK_URL` für sofortige Feedback-Meldungen setzen.
 - Discord-Webhooks und `DISCORD_INVITE_URL` prüfen.
 - Domain-Weiterleitung zwischen `www` und Apex-Domain festlegen, damit Cookies immer auf demselben Host bleiben.
 
@@ -22,6 +25,7 @@
 6. Tagesplan, Journal-Eintrag und Onboarding speichern, neu anmelden und Cloud-Sync prüfen.
 7. AI-Wochenreview, Wirtschaftskalender und Discord-Formulare einmal produktiv testen.
 8. Mobile Prüfung auf iPhone und Android sowie Desktop in Safari, Chrome und Firefox durchführen.
+9. Lokal `npm test` ausführen und nur mit bestandener Launch-Prüfung deployen.
 
 ## Betrieb
 

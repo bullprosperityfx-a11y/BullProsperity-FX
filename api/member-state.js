@@ -37,7 +37,8 @@ const allowedKeys = new Set([
   "bp_weekly_ai_reviews",
   "bp_accountability_partner",
   "bp_prop_challenge",
-  "bp_notification_preferences"
+  "bp_notification_preferences",
+  "bp_welcome_email_sent"
 ]);
 
 function cleanState(input) {

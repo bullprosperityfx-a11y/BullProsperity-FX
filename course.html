@@ -46,7 +46,7 @@
   <meta name="theme-color" content="#050505" />
 
   <link rel="stylesheet" href="theme.css" />
-  <script src="/login.js?v=20260624-1" defer></script>
+  <script src="/login.js?v=20260624-2" defer></script>
 
   <style>
     .course-page{
@@ -264,6 +264,20 @@
       color:#22c55e;
       font-weight:950;
     }
+
+    .lesson-status{
+      margin-left:auto;
+      padding:4px 7px;
+      border:1px solid rgba(243,210,27,.18);
+      border-radius:999px;
+      color:#bdbdbd;
+      font-size:10px;
+      font-weight:900;
+      white-space:nowrap;
+    }
+
+    .lesson.is-upcoming{color:#d2d2d2}
+    .lesson.is-completed .lesson-status{display:none}
 
     .course-main{
       display:grid;
@@ -716,6 +730,7 @@
     const courseProgressText = document.getElementById("courseProgressText");
     const courseProgressFill = document.getElementById("courseProgressFill");
     const totalLessons = 33;
+    const publishedVideos = new Set([5]);
 
     function getCompletedLessons(){
       try{
@@ -736,7 +751,12 @@
       document.querySelectorAll(".lesson").forEach(link => {
         const match = link.getAttribute("href")?.match(/lesson(\d+)/i);
         if(!match) return;
+        const number = Number(match[1]);
         link.classList.toggle("is-completed", Boolean(completed[match[1]]));
+        link.classList.toggle("is-upcoming", !publishedVideos.has(number));
+        if (!publishedVideos.has(number) && !link.querySelector(".lesson-status")) {
+          link.insertAdjacentHTML("beforeend", '<span class="lesson-status">Video folgt</span>');
+        }
       });
     }
 
