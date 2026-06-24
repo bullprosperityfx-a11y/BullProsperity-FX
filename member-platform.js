@@ -372,7 +372,6 @@
     setInterval(syncToCloud, 12000);
     setInterval(syncFromCloud, 120000);
     document.addEventListener("visibilitychange", () => { if (document.hidden) syncToCloud(); else syncFromCloud(); });
-    window.addEventListener("beforeunload", syncToCloud);
     window.BullProsperity = { sync:syncToCloud, openSearch:openCommand, catalog };
   }
 

@@ -1,6 +1,22 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
+  <script>
+    (() => {
+      const params = new URLSearchParams(window.location.search);
+      if (params.get("logout") !== "pending") return;
+      fetch("/api/logout", {
+        method: "POST",
+        credentials: "include",
+        cache: "no-store",
+        keepalive: true
+      }).finally(() => {
+        params.delete("logout");
+        const query = params.toString();
+        history.replaceState(null, "", `/locked${query ? `?${query}` : ""}`);
+      });
+    })();
+  </script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>BullProsperity | Zugang gesperrt</title>

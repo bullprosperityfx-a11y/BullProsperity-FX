@@ -126,7 +126,7 @@ function setupElegantMotion() {
 }
 
 function loadMemberPlatform() {
-  const memberPlatformSrc = "/member-platform.js?v=20260623-1";
+  const memberPlatformSrc = "/member-platform.js?v=20260624-1";
   const loadScript = () => {
     if (document.querySelector('script[src^="/member-platform.js"]')) return;
     const script = document.createElement("script");
@@ -423,11 +423,7 @@ function startInactivityLogout(accessData) {
   let vimeoIsPlaying = false;
 
   function logoutUser() {
-    document.cookie = "bp_role=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-    document.cookie = "bp_email=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-    document.cookie = "whop_access_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-
-    window.location.href = "/locked.html?session=expired";
+    bpLogoutNow("inactive");
   }
 
   function isHtmlVideoPlaying() {
@@ -520,46 +516,26 @@ function startInactivityLogout(accessData) {
   setupVimeoInactivityTracking();
   resetTimer();
 }
-// ===============================
-// AUTO LOGOUT BEI INAKTIVITÄT
-// ===============================
-
-let bpInactivityTimer;
-
-async function bpClearSessionAndLock() {
+function bpLogoutNow(reason = "logout") {
   localStorage.clear();
   sessionStorage.clear();
-  window.location.replace("/api/logout?reason=inactive");
-}
-function bpResetInactivityTimer() {
-  clearTimeout(bpInactivityTimer);
-
-  bpInactivityTimer = setTimeout(() => {
-    bpClearSessionAndLock();
-  }, 15 * 60 * 1000);
-}
-
-["click", "mousemove", "keydown", "scroll", "touchstart"].forEach((event) => {
-  document.addEventListener(event, bpResetInactivityTimer);
-});
-
-bpResetInactivityTimer();
-async function bpLogoutNow() {
-  localStorage.clear();
-  sessionStorage.clear();
-  window.location.replace("/api/logout?reason=logout");
+  fetch("/api/logout", {
+    method: "POST",
+    credentials: "include",
+    cache: "no-store",
+    keepalive: true
+  }).catch(() => {});
+  window.location.replace(`/locked?reason=${encodeURIComponent(reason)}&logout=pending`);
 }
 
 document.addEventListener("DOMContentLoaded", () => {
   if ("serviceWorker" in navigator) {
     navigator.serviceWorker.register("/sw.js").catch(() => {});
   }
-  const logoutBtn = document.getElementById("logoutBtn");
-
-  if (logoutBtn) {
-    logoutBtn.addEventListener("click", (e) => {
-      e.preventDefault();
-      bpLogoutNow();
-    });
-  }
+  document.addEventListener("click", (event) => {
+    const logoutLink = event.target.closest('#logoutBtn, a[href^="/api/logout"]');
+    if (!logoutLink) return;
+    event.preventDefault();
+    bpLogoutNow();
+  });
 });

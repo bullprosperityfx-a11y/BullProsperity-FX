@@ -21,7 +21,6 @@ export default async function handler(req, res) {
   });
 
   res.setHeader("Cache-Control", "no-store, private");
-  res.setHeader("Clear-Site-Data", '"cache"');
   res.setHeader("Set-Cookie", clearCookies);
 
   // Wenn Button/Browser direkt auf /api/logout geht:
