@@ -68,6 +68,33 @@
       margin-top:22px;
     }
 
+    .legal-grid{
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:16px;
+      margin:22px 0;
+    }
+
+    .legal-box{
+      border:1px solid rgba(243,210,27,0.14);
+      border-radius:20px;
+      background:rgba(255,255,255,0.025);
+      padding:18px;
+    }
+
+    .legal-box strong{
+      display:block;
+      color:var(--gold);
+      font-size:15px;
+      margin-bottom:8px;
+    }
+
+    .legal-card-clean a{
+      color:var(--gold);
+      text-decoration:none;
+      font-weight:900;
+    }
+
     .footer-clean{
       max-width:980px;
       margin:0 auto;
@@ -95,6 +122,10 @@
         padding:26px 20px;
         margin-top:28px;
       }
+
+      .legal-grid{
+        grid-template-columns:1fr;
+      }
     }
   </style>
 </head>
@@ -118,7 +149,7 @@
       <p>
         Betreiber: [Bitte vollständigen Namen oder Firmennamen eintragen]<br>
         Anschrift: [Bitte ladungsfähige Anschrift eintragen]<br>
-        E-Mail: [Bitte Kontakt-E-Mail eintragen]
+        E-Mail: <a href="mailto:Bullprosperityfx@gmail.com">Bullprosperityfx@gmail.com</a>
       </p>
 
       <h2>Verantwortlich für Inhalte</h2>
@@ -127,10 +158,41 @@
         [Bitte Namen und Anschrift eintragen]
       </p>
 
+      <h2>Kontaktwege</h2>
+      <p>
+        Allgemeine Anfragen können per E-Mail an Bullprosperityfx@gmail.com gestellt werden.
+        Community-bezogene Fragen, Setup-Themen, Office-Hours-Anfragen und Mitgliederkommunikation
+        werden im BullProsperity Discord bearbeitet, damit Antworten nachvollziehbar und strukturiert bleiben.
+      </p>
+
+      <div class="legal-grid">
+        <div class="legal-box">
+          <strong>Community & Support</strong>
+          <p>
+            Fragen aus der Community werden in den passenden BullProsperity Discord-Kanälen gebündelt.
+            Dort werden allgemeine Anliegen, Updates und organisatorische Themen beantwortet.
+          </p>
+        </div>
+        <div class="legal-box">
+          <strong>Vertrauliche Anfragen</strong>
+          <p>
+            Private oder sensible Anliegen werden nicht öffentlich geteilt. Sie gehen per E-Mail oder über
+            einen privaten Admin-Kanal direkt an BullProsperity.
+          </p>
+        </div>
+      </div>
+
+      <h2>Keine Gewinnversprechen</h2>
+      <p>
+        BullProsperity ist eine Bildungs-, Struktur- und Community-Plattform. Inhalte, Beispiele und Analysen
+        dienen der Weiterbildung und Prozessverbesserung. Es werden keine Gewinne, Renditen oder konkreten
+        Handelsergebnisse zugesichert.
+      </p>
+
       <div class="legal-note">
         <p>
-          Hinweis: Diese Seite ist eine Vorlage. Bitte ersetze die Platzhalter vor der Veröffentlichung
-          durch deine echten Betreiber- und Kontaktdaten.
+          Hinweis vor dem Launch: Vollständiger Name/Firma und ladungsfähige Anschrift müssen noch mit den
+          echten Betreiberangaben ergänzt werden. Die Kontakt-E-Mail ist bereits gesetzt.
         </p>
       </div>
     </main>

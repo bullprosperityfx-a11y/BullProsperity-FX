@@ -68,6 +68,33 @@
       margin-top:22px;
     }
 
+    .legal-grid{
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:16px;
+      margin:22px 0;
+    }
+
+    .legal-box{
+      border:1px solid rgba(243,210,27,0.14);
+      border-radius:20px;
+      background:rgba(255,255,255,0.025);
+      padding:18px;
+    }
+
+    .legal-box strong{
+      display:block;
+      color:var(--gold);
+      font-size:15px;
+      margin-bottom:8px;
+    }
+
+    .legal-card-clean a{
+      color:var(--gold);
+      text-decoration:none;
+      font-weight:900;
+    }
+
     .footer-clean{
       max-width:980px;
       margin:0 auto;
@@ -94,6 +121,10 @@
       .legal-card-clean{
         padding:26px 20px;
         margin-top:28px;
+      }
+
+      .legal-grid{
+        grid-template-columns:1fr;
       }
     }
   </style>
@@ -122,7 +153,7 @@
       <h2>Verantwortlicher</h2>
       <p>
         Verantwortlich: [Bitte vollständigen Namen oder Firmennamen eintragen]<br>
-        E-Mail: [Bitte Kontakt-E-Mail eintragen]
+        E-Mail: <a href="mailto:Bullprosperityfx@gmail.com">Bullprosperityfx@gmail.com</a>
       </p>
 
       <h2>Zugriffsdaten</h2>
@@ -139,11 +170,44 @@
         verarbeitet werden.
       </p>
 
+      <h2>Kommunikation über Discord</h2>
+      <p>
+        BullProsperity nutzt Discord für Community-Kommunikation, Updates, Office Hours, Support und interne
+        Weiterleitung von Anfragen. Allgemeine Community-Anliegen können in passenden Discord-Kanälen
+        bearbeitet werden. Vertrauliche oder private Anliegen werden nicht öffentlich geteilt und können per
+        E-Mail oder über einen privaten Admin-Kanal an BullProsperity weitergeleitet werden.
+      </p>
+
+      <div class="legal-grid">
+        <div class="legal-box">
+          <strong>Öffentliche Community-Kanäle</strong>
+          <p>
+            Inhalte, die Nutzer freiwillig in Community-Kanälen posten, können für andere Mitglieder sichtbar sein.
+            Bitte teile dort keine sensiblen personenbezogenen Daten.
+          </p>
+        </div>
+        <div class="legal-box">
+          <strong>Private Admin-Kommunikation</strong>
+          <p>
+            Support-, Feedback-, Office-Hours- oder Formularanfragen können intern an einen privaten
+            BullProsperity Admin-Kanal weitergeleitet werden, damit sie strukturiert bearbeitet werden können.
+          </p>
+        </div>
+      </div>
+
       <h2>Drittanbieter</h2>
       <p>
-        Die Website kann Dienste wie Hosting, Zahlungs-/Mitgliederverwaltung, Analyse- oder Login-Dienste
-        verwenden. Bitte ergänze hier konkret alle Anbieter, die tatsächlich genutzt werden, zum Beispiel
-        Vercel, Whop, Supabase oder weitere Tools.
+        Für Betrieb, Login, Mitgliederzugang, Datenverarbeitung, E-Mail, Community-Kommunikation und
+        technische Sicherheit können unter anderem Vercel, Supabase, Whop, Discord, Resend und OpenAI
+        eingesetzt werden. Die Verarbeitung erfolgt nur soweit sie für Plattformbetrieb, Zugang,
+        Kommunikation, Sicherheit, Support oder gewünschte Funktionen erforderlich ist.
+      </p>
+
+      <h2>Feedback, Journal und Plattformdaten</h2>
+      <p>
+        Wenn Nutzer freiwillig Feedback, Journal-Einträge, Setup-Informationen, Office-Hours-Fragen,
+        Checklisten oder andere Inhalte speichern, können diese Daten zur Bereitstellung der Funktionen,
+        Verbesserung der Plattform, Support-Bearbeitung und persönlichen Übersicht verarbeitet werden.
       </p>
 
       <h2>Betroffenenrechte</h2>
@@ -155,8 +219,9 @@
 
       <div class="legal-note">
         <p>
-          Hinweis: Diese Seite ist eine Vorlage und sollte vor der Veröffentlichung mit den tatsächlich
-          genutzten Diensten und vollständigen Betreiberangaben ergänzt werden.
+          Hinweis vor dem Launch: Vollständiger Name/Firma und ladungsfähige Anschrift müssen noch mit den
+          echten Betreiberangaben ergänzt werden. Die wichtigsten Plattformdienste und Kontaktwege sind jetzt
+          transparent genannt.
         </p>
       </div>
     </main>
