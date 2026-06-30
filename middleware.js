@@ -1,4 +1,4 @@
-import { next } from "@vercel/functions";
+import { NextResponse } from "next/server";
 
 const premiumRoutes = new Set([
   "hub", "course", "tools", "setup-room", "community", "journal",
@@ -27,6 +27,7 @@ function normalizePath(pathname) {
 
 function isProtected(path) {
   if (/^admin(?:\/|$)/.test(path)) return true;
+  if (/^lesson(?:\/|$)/.test(path)) return true;
   if (/^lesson\d+$/.test(path)) return true;
   return premiumRoutes.has(path) || path === "longterm" || path === "dashboard";
 }
@@ -70,10 +71,10 @@ async function validSignature(cookies) {
 export default async function middleware(request) {
   const url = new URL(request.url);
   const path = normalizePath(url.pathname);
-  if (!isProtected(path)) return next();
+  if (!isProtected(path)) return NextResponse.next();
 
   const cookies = cookiesFrom(request);
-  if (await validSignature(cookies) && allowedRole(path, cookies.bp_role)) return next();
+  if (await validSignature(cookies) && allowedRole(path, cookies.bp_role)) return NextResponse.next();
 
   const lockedUrl = new URL("/locked", request.url);
   lockedUrl.searchParams.set("from", `/${path}`);

@@ -2,12 +2,26 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "test": "npm run test:syntax && npm run test:api && npm run test:pages",
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "typecheck": "tsc --noEmit",
+    "test": "npm run test:syntax && npm run test:api && npm run test:pages && npm run typecheck",
     "test:syntax": "node --check login.js && node --check member-platform.js && node --check access-guard.js && node --check sw.js",
     "test:api": "node scripts/test-api.mjs",
-    "test:pages": "node scripts/validate-pages.mjs"
+    "test:pages": "node scripts/validate-pages.mjs",
+    "validate:migration": "node next-migration/scripts/validate-migration.mjs"
   },
   "dependencies": {
-    "@vercel/functions": "^3.6.2"
+    "@supabase/supabase-js": "^2.45.4",
+    "next": "^15.0.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.6.2",
+    "@types/node": "^22.7.4",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0"
   }
 }
