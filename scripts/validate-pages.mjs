@@ -3,7 +3,7 @@ import path from "node:path";
 import vm from "node:vm";
 
 const root = process.cwd();
-const ignoredDirectories = new Set([".git", "node_modules"]);
+const ignoredDirectories = new Set([".git", ".next", "node_modules", "next-migration"]);
 
 function walk(directory) {
   return fs.readdirSync(directory, { withFileTypes:true }).flatMap(entry => {
