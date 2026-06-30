@@ -1,4 +1,6 @@
 {
+  "installCommand": "pnpm install",
+  "buildCommand": "pnpm build",
   "cleanUrls": true,
   "trailingSlash": false,
   "redirects": [
