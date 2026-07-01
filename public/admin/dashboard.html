@@ -1,0 +1,1037 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <script>document.documentElement.classList.add("bp-auth-checking");</script>
+  <script src="/access-guard.js?v=20260623-3"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BullProsperity | Admin Dashboard</title>
+
+  <link rel="icon" type="image/png" href="/favicon.png" />
+  <link rel="manifest" href="/manifest.json" />
+  <link rel="apple-touch-icon" href="/favicon.png" />
+  <meta name="theme-color" content="#050505" />
+
+  <link rel="stylesheet" href="/theme.css" />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="/supabase.js"></script>
+  <script src="/login.js?v=20260624-2" defer></script>
+
+  <script>
+    (async () => {
+      try {
+        const res = await fetch("/api/access", {
+          credentials: "include",
+          cache: "no-store"
+        });
+
+        const data = await res.json();
+
+        if (data.role !== "admin") {
+          window.location.href = "/locked";
+        }
+      } catch {
+        window.location.href = "/locked";
+      }
+    })();
+  </script>
+
+  <style>
+    .admin-page{
+      background:
+        linear-gradient(135deg, rgba(243,210,27,0.07), transparent 30%),
+        radial-gradient(circle at 78% 8%, rgba(255,255,255,0.045), transparent 22%),
+        radial-gradient(circle at 16% 28%, rgba(243,210,27,0.08), transparent 24%),
+        #050505;
+    }
+
+    .admin-topbar{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:18px;
+      margin-bottom:22px;
+      padding:18px 24px;
+      border:1px solid rgba(243,210,27,.16);
+      border-radius:28px;
+      background:rgba(8,8,8,.86);
+      box-shadow:0 18px 40px rgba(0,0,0,.32);
+    }
+
+    .admin-brand{
+      color:var(--gold);
+      font-size:22px;
+      font-weight:950;
+      text-decoration:none;
+      white-space:nowrap;
+    }
+
+    .admin-toplinks{
+      display:flex;
+      align-items:center;
+      justify-content:flex-end;
+      gap:22px;
+      flex-wrap:wrap;
+    }
+
+    .admin-toplinks a{
+      color:#fff;
+      text-decoration:none;
+      font-size:15px;
+      font-weight:850;
+      transition:.2s ease;
+    }
+
+    .admin-toplinks a:hover,
+    .admin-toplinks a.active{
+      color:var(--gold);
+    }
+
+    .admin-hero{
+      border:1px solid rgba(243,210,27,.16);
+      border-radius:30px;
+      background:
+        linear-gradient(135deg, rgba(255,255,255,.055), rgba(255,255,255,.015)),
+        linear-gradient(180deg, rgba(18,18,18,.92), rgba(7,7,7,.98));
+      padding:36px;
+      margin-bottom:26px;
+      overflow:hidden;
+      position:relative;
+      min-height:300px;
+      display:grid;
+      align-content:end;
+    }
+
+    .admin-hero::before{
+      content:"";
+      position:absolute;
+      right:-140px;
+      top:-120px;
+      width:420px;
+      height:420px;
+      background:radial-gradient(circle, rgba(243,210,27,.14), transparent 68%);
+      pointer-events:none;
+    }
+
+    .admin-hero::after{
+      content:"";
+      position:absolute;
+      left:36px;
+      right:36px;
+      bottom:0;
+      height:1px;
+      background:linear-gradient(90deg, transparent, rgba(243,210,27,.82), transparent);
+    }
+
+    .admin-hero-content{
+      position:relative;
+      z-index:1;
+      max-width:980px;
+    }
+
+    .admin-title{
+      margin:0 0 18px;
+      color:#fff;
+      font-size:64px;
+      line-height:.96;
+      font-weight:950;
+      letter-spacing:0;
+    }
+
+    .admin-title span{
+      color:var(--gold);
+    }
+
+    .admin-text{
+      max-width:860px;
+      color:#e8e8e8;
+      font-size:18px;
+      line-height:1.7;
+      margin:0;
+      font-weight:700;
+    }
+
+    .admin-shell{
+      display:grid;
+      grid-template-columns:300px 1fr;
+      gap:24px;
+      align-items:start;
+    }
+
+    .admin-sidebar,
+    .admin-panel{
+      border:1px solid rgba(243,210,27,.15);
+      border-radius:26px;
+      background:linear-gradient(180deg, rgba(18,18,18,.90), rgba(9,9,9,.97));
+      box-shadow:0 18px 38px rgba(0,0,0,.30);
+    }
+
+    .admin-sidebar{
+      padding:22px;
+      position:sticky;
+      top:20px;
+      display:grid;
+      gap:18px;
+    }
+
+    .admin-sidebar-title{
+      margin:0;
+      color:#fff;
+      font-size:26px;
+      line-height:1.1;
+      font-weight:950;
+    }
+
+    .admin-nav{
+      display:grid;
+      gap:10px;
+    }
+
+    .admin-nav a{
+      min-height:54px;
+      padding:14px 16px;
+      border-radius:18px;
+      border:1px solid rgba(255,255,255,.08);
+      background:rgba(255,255,255,.025);
+      color:#f5f5f5;
+      text-decoration:none;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      font-size:15px;
+      font-weight:900;
+      transition:.2s ease;
+    }
+
+    .admin-nav a:hover,
+    .admin-nav a.active{
+      border-color:rgba(243,210,27,.48);
+      color:var(--gold);
+      background:rgba(243,210,27,.055);
+      transform:translateX(3px);
+    }
+
+    .admin-nav small{
+      color:inherit;
+      opacity:.72;
+      font-size:12px;
+      font-weight:950;
+    }
+
+    .admin-content{
+      display:grid;
+      gap:24px;
+    }
+
+    .admin-panel{
+      padding:26px;
+    }
+
+    .panel-head{
+      display:flex;
+      justify-content:space-between;
+      gap:18px;
+      align-items:flex-start;
+      margin-bottom:22px;
+    }
+
+    .panel-title{
+      margin:0 0 8px;
+      color:#fff;
+      font-size:34px;
+      line-height:1.05;
+      font-weight:950;
+      letter-spacing:0;
+    }
+
+    .panel-title span{
+      color:var(--gold);
+    }
+
+    .panel-copy{
+      margin:0;
+      color:#bdbdbd;
+      font-size:15px;
+      line-height:1.7;
+      font-weight:700;
+      max-width:720px;
+    }
+
+    .admin-status{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:9px 13px;
+      border-radius:999px;
+      border:1px solid rgba(34,197,94,.28);
+      background:rgba(34,197,94,.08);
+      color:#41e08b;
+      font-size:12px;
+      font-weight:950;
+      white-space:nowrap;
+    }
+
+    .admin-status::before{
+      content:"";
+      width:8px;
+      height:8px;
+      border-radius:50%;
+      background:#41e08b;
+      box-shadow:0 0 16px rgba(65,224,139,.50);
+    }
+
+    .stats-grid{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:16px;
+    }
+
+    .stat-card{
+      min-height:150px;
+      border:1px solid rgba(243,210,27,.13);
+      border-radius:22px;
+      background:
+        linear-gradient(135deg, rgba(243,210,27,.06), transparent 60%),
+        rgba(255,255,255,.025);
+      padding:20px;
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+    }
+
+    .stat-label{
+      color:#a8a8a8;
+      font-size:12px;
+      line-height:1.35;
+      font-weight:950;
+      text-transform:uppercase;
+      letter-spacing:.08em;
+    }
+
+    .stat-value{
+      margin-top:18px;
+      color:var(--gold);
+      font-size:38px;
+      line-height:1;
+      font-weight:950;
+      word-break:break-word;
+    }
+
+    .stat-note{
+      margin-top:10px;
+      color:#d8d8d8;
+      font-size:13px;
+      line-height:1.45;
+      font-weight:700;
+    }
+
+    .admin-grid{
+      display:grid;
+      grid-template-columns:1.1fr .9fr;
+      gap:24px;
+      align-items:stretch;
+    }
+
+    .system-grid{
+      display:grid;
+      grid-template-columns:repeat(2,1fr);
+      gap:14px;
+    }
+
+    .system-card{
+      min-height:150px;
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:20px;
+      background:rgba(255,255,255,.025);
+      padding:18px;
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+    }
+
+    .system-name{
+      color:#fff;
+      font-size:18px;
+      font-weight:950;
+      margin-bottom:6px;
+    }
+
+    .system-value{
+      color:var(--gold);
+      font-size:32px;
+      line-height:1;
+      font-weight:950;
+      margin:12px 0 8px;
+    }
+
+    .system-copy{
+      color:#a8a8a8;
+      font-size:13px;
+      line-height:1.55;
+      font-weight:700;
+      margin:0;
+    }
+
+    .quick-list{
+      display:grid;
+      gap:12px;
+    }
+
+    .quick-link{
+      min-height:88px;
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:20px;
+      background:rgba(255,255,255,.025);
+      padding:18px;
+      text-decoration:none;
+      display:grid;
+      gap:8px;
+      transition:.2s ease;
+    }
+
+    .quick-link:hover{
+      border-color:rgba(243,210,27,.48);
+      background:rgba(243,210,27,.05);
+      transform:translateY(-2px);
+    }
+
+    .quick-link strong{
+      color:#fff;
+      font-size:18px;
+      font-weight:950;
+    }
+
+    .quick-link span{
+      color:#aaa;
+      font-size:13px;
+      line-height:1.55;
+      font-weight:700;
+    }
+
+    .activity-feed{
+      display:grid;
+      gap:12px;
+    }
+
+    .activity-item{
+      min-height:78px;
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:20px;
+      background:rgba(255,255,255,.025);
+      padding:16px;
+      display:grid;
+      grid-template-columns:46px 1fr auto;
+      gap:14px;
+      align-items:center;
+    }
+
+    .avatar{
+      width:46px;
+      height:46px;
+      border-radius:50%;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      border:1px solid rgba(243,210,27,.24);
+      background:rgba(243,210,27,.07);
+      color:var(--gold);
+      font-size:13px;
+      font-weight:950;
+      text-transform:uppercase;
+    }
+
+    .activity-main strong{
+      display:block;
+      color:#fff;
+      font-size:15px;
+      font-weight:950;
+      margin-bottom:5px;
+    }
+
+    .activity-main p{
+      margin:0;
+      color:#aaa;
+      font-size:13px;
+      line-height:1.5;
+      font-weight:700;
+      word-break:break-word;
+    }
+
+    .activity-time{
+      color:var(--gold);
+      font-size:12px;
+      font-weight:950;
+      white-space:nowrap;
+    }
+
+    .signal-archive{
+      display:grid;
+      gap:12px;
+    }
+
+    .signal-archive-item{
+      display:grid;
+      grid-template-columns:1fr auto;
+      gap:14px;
+      align-items:center;
+      padding:16px;
+      border:1px solid rgba(243,210,27,.14);
+      border-radius:18px;
+      background:rgba(255,255,255,.025);
+    }
+
+    .signal-archive-item strong{
+      color:#fff;
+      display:block;
+      margin-bottom:6px;
+    }
+
+    .signal-archive-item span{
+      color:rgba(255,255,255,.62);
+      font-size:13px;
+      line-height:1.5;
+    }
+
+    .signal-pill{
+      padding:8px 11px;
+      border-radius:999px;
+      border:1px solid rgba(243,210,27,.22);
+      color:var(--gold);
+      background:rgba(243,210,27,.06);
+      font-size:12px;
+      font-weight:950;
+      white-space:nowrap;
+    }
+
+    .footer-note{
+      margin-top:24px;
+    }
+
+    @media(max-width:1180px){
+      .admin-shell,
+      .admin-grid{
+        grid-template-columns:1fr;
+      }
+
+      .admin-sidebar{
+        position:relative;
+        top:0;
+      }
+
+      .stats-grid{
+        grid-template-columns:repeat(2,1fr);
+      }
+    }
+
+    @media(max-width:760px){
+      .admin-topbar{
+        align-items:flex-start;
+      }
+
+      .admin-title{
+        font-size:46px;
+      }
+
+      .admin-hero,
+      .admin-panel,
+      .admin-sidebar{
+        padding:22px;
+        border-radius:22px;
+      }
+
+      .panel-head{
+        display:grid;
+      }
+
+      .stats-grid,
+      .system-grid{
+        grid-template-columns:1fr;
+      }
+
+      .activity-item{
+        grid-template-columns:46px 1fr;
+      }
+
+      .activity-time{
+        grid-column:2;
+      }
+
+      .signal-archive-item{
+        grid-template-columns:1fr;
+      }
+    }
+  </style>
+</head>
+
+<body class="admin-page">
+  <div class="page">
+    <nav class="admin-topbar">
+      <a href="/admin/dashboard" class="admin-brand">BullProsperity Admin</a>
+
+      <div class="admin-toplinks">
+        <a href="/hub">Hub</a>
+        <a href="/course">Course</a>
+        <a href="/tools">Tools</a>
+        <a href="/setup-room">Setup Room</a>
+        <a href="/community">Community</a>
+        <a href="/api/logout">Logout</a>
+      </div>
+    </nav>
+
+    <section class="admin-hero">
+      <div class="admin-hero-content">
+        <div class="badge">Founder Control Center</div>
+        <h1 class="admin-title">BullProsperity <span>Admin Dashboard</span></h1>
+        <p class="admin-text">
+          Zentrale Übersicht für Mitglieder, Kursaktivität, Watchtime, Setup Room,
+          Sicherheit und Plattform-Status.
+        </p>
+      </div>
+    </section>
+
+    <main class="admin-shell">
+      <aside class="admin-sidebar">
+        <div>
+          <div class="badge">Verwaltung</div>
+          <h2 class="admin-sidebar-title">Control Center</h2>
+        </div>
+
+        <div class="admin-nav">
+          <a href="/admin/dashboard" class="active"><span>📊 Dashboard</span><small>LIVE</small></a>
+          <a href="/admin/members"><span>👥 Mitglieder</span><small>USER</small></a>
+          <a href="/admin/course-analytics"><span>🎬 Course Analytics</span><small>WATCH</small></a>
+          <a href="/admin/sr-analytics"><span>🎯 Setup Room Analytics</span><small>SMC</small></a>
+          <a href="/admin/notifications"><span>🔔 Notifications</span><small>PUSH</small></a>
+          <a href="/admin/security"><span>🛡️ Security</span><small>ADMIN</small></a>
+          <a href="/admin/ai-journal"><span>🧠 AI Journal</span><small>REVIEW</small></a>
+          <a href="/admin/mentor-radar"><span>🧭 Mentor Radar</span><small>COACH</small></a>
+          <a href="/admin/office-hours"><span>🗓️ Office Hours</span><small>DISCORD</small></a>
+          <a href="/admin-signals"><span>📡 Admin Signals</span><small>POST</small></a>
+        </div>
+      </aside>
+
+      <section class="admin-content">
+        <div class="admin-panel">
+          <div class="panel-head">
+            <div>
+              <h2 class="panel-title">Plattform <span>Snapshot</span></h2>
+              <p class="panel-copy">
+                Die wichtigsten Kennzahlen aus Seitenaufrufen, Klicks, Course, Watchtime und Setup Room
+                in einer klaren Übersicht.
+              </p>
+            </div>
+            <div class="admin-status">Admin aktiv</div>
+          </div>
+
+          <div class="stats-grid">
+            <div class="stat-card">
+              <div>
+                <div class="stat-label">👥 Mitglieder</div>
+                <div class="stat-value" id="activeMembers">0</div>
+              </div>
+              <div class="stat-note">Einzigartige User mit Aktivität.</div>
+            </div>
+
+            <div class="stat-card">
+              <div>
+                <div class="stat-label">⚡ Gesamtaktivität</div>
+                <div class="stat-value" id="totalActivities">0</div>
+              </div>
+              <div class="stat-note">Alle getrackten Events.</div>
+            </div>
+
+            <div class="stat-card">
+              <div>
+                <div class="stat-label">🎬 Watchtime</div>
+                <div class="stat-value" id="totalWatchtime">0m</div>
+              </div>
+              <div class="stat-note">Kumulierte Kurs-Watchtime.</div>
+            </div>
+
+            <div class="stat-card">
+              <div>
+                <div class="stat-label">🕘 Letzte Aktivität</div>
+                <div class="stat-value" id="lastActivity">-</div>
+              </div>
+              <div class="stat-note">Neuester Plattform-Eintrag.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="admin-grid">
+          <div class="admin-panel">
+            <div class="panel-head">
+              <div>
+                <h2 class="panel-title">Systeme</h2>
+                <p class="panel-copy">Kurzer Status über die aktiven Plattformbereiche.</p>
+              </div>
+            </div>
+
+            <div class="system-grid">
+              <div class="system-card">
+                <div>
+                  <div class="system-name">👁️ Page Views</div>
+                  <div class="system-value" id="pageOpens">0</div>
+                </div>
+                <p class="system-copy">Getrackte Seitenaufrufe eingeloggter Mitglieder.</p>
+              </div>
+
+              <div class="system-card">
+                <div>
+                  <div class="system-name">🎬 Course</div>
+                  <div class="system-value" id="lessonOpens">0</div>
+                </div>
+                <p class="system-copy">Lektionsstarts und Kurs-Engagement.</p>
+              </div>
+
+              <div class="system-card">
+                <div>
+                  <div class="system-name">🎯 Setup Room</div>
+                  <div class="system-value" id="srActions">0</div>
+                </div>
+                <p class="system-copy">Klicks auf Kategorien und Setups.</p>
+              </div>
+
+              <div class="system-card">
+                <div>
+                  <div class="system-name">🖱️ Klicks</div>
+                  <div class="system-value" id="trackedClicks">0</div>
+                </div>
+                <p class="system-copy">CTA-, Button- und Navigationsklicks.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="admin-panel">
+            <div class="panel-head">
+              <div>
+                <h2 class="panel-title">Schnellzugriff</h2>
+                <p class="panel-copy">Direkt zu den wichtigsten Admin-Bereichen.</p>
+              </div>
+            </div>
+
+            <div class="quick-list">
+              <a href="/admin/members" class="quick-link">
+                <strong>👥 Mitglieder verwalten</strong>
+                <span>Online-Status, Rollen und letzte Aktivität prüfen.</span>
+              </a>
+
+              <a href="/admin/course-analytics" class="quick-link">
+                <strong>🎬 Course Analytics öffnen</strong>
+                <span>Watchtime, Lektionen und Lernaktivität auswerten.</span>
+              </a>
+
+              <a href="/admin/notifications" class="quick-link">
+                <strong>🔔 Notification senden</strong>
+                <span>Updates, Hinweise oder neue Inhalte an Mitglieder schicken.</span>
+              </a>
+
+              <a href="/admin/security" class="quick-link">
+                <strong>🛡️ Security prüfen</strong>
+                <span>Admin-Zugriffe und geschützte Bereiche kontrollieren.</span>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="admin-panel">
+          <div class="panel-head">
+            <div>
+              <h2 class="panel-title">Neueste <span>Aktivität</span></h2>
+              <p class="panel-copy">
+                Kombinierter Feed aus Seitenaufrufen, Klicks, Course und Setup Room. Dezenter Überblick,
+                ohne das Dashboard unnötig voll wirken zu lassen.
+              </p>
+            </div>
+          </div>
+
+          <div class="activity-feed" id="activityFeed">
+            <div class="activity-item">
+              <div class="avatar">BP</div>
+              <div class="activity-main">
+                <strong>Daten werden geladen</strong>
+                <p>Aktivitäten erscheinen hier automatisch.</p>
+              </div>
+              <div class="activity-time">-</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="admin-panel">
+          <div class="panel-head">
+            <div>
+              <h2 class="panel-title">Signal <span>Archiv</span></h2>
+              <p class="panel-copy">
+                Schneller Überblick über signal- und setupnahe Aktivitäten aus Admin Signals, Setup Room
+                und relevanten Klicks.
+              </p>
+            </div>
+          </div>
+
+          <div class="signal-archive" id="signalArchive">
+            <div class="signal-archive-item">
+              <div>
+                <strong>Archiv wird geladen</strong>
+                <span>Relevante Signal- und Setup-Aktivitäten erscheinen hier automatisch.</span>
+              </div>
+              <div class="signal-pill">Live</div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <div class="footer-note">
+      BullProsperity Founder Control Center.
+    </div>
+  </div>
+
+  <script>
+    function formatSeconds(seconds){
+      const total = Number(seconds || 0);
+      const h = Math.floor(total / 3600);
+      const m = Math.floor((total % 3600) / 60);
+
+      if(h > 0) return `${h}h ${m}m`;
+      return `${m}m`;
+    }
+
+    function getInitials(email){
+      if(!email) return "BP";
+
+      const name = email.split("@")[0] || email;
+      const parts = name
+        .replace(/[^a-zA-Z0-9._-]/g, "")
+        .split(/[._-]/)
+        .filter(Boolean);
+
+      if(parts.length >= 2){
+        return (parts[0][0] + parts[1][0]).toUpperCase();
+      }
+
+      return name.slice(0,2).toUpperCase();
+    }
+
+    function formatDateTime(value){
+      if(!value) return "-";
+
+      return new Date(value).toLocaleString("de-DE", {
+        day:"2-digit",
+        month:"2-digit",
+        hour:"2-digit",
+        minute:"2-digit"
+      });
+    }
+
+    function formatTime(value){
+      if(!value) return "-";
+
+      return new Date(value).toLocaleTimeString("de-DE", {
+        hour:"2-digit",
+        minute:"2-digit"
+      });
+    }
+
+    function setText(id, value){
+      const el = document.getElementById(id);
+      if(el) el.textContent = value;
+    }
+
+    async function loadFounderDashboard(){
+      try{
+        const [
+          memberResult,
+          lessonResult,
+          watchResult,
+          srResult
+        ] = await Promise.all([
+          supabaseClient.from("member_activity").select("*").order("created_at", { ascending:false }).limit(200),
+          supabaseClient.from("lesson_activity").select("*").order("created_at", { ascending:false }).limit(200),
+          supabaseClient.from("video_watchtime").select("*").order("created_at", { ascending:false }).limit(500),
+          supabaseClient.from("setup_room_activity").select("*").order("created_at", { ascending:false }).limit(200)
+        ]);
+
+        const memberActivity = memberResult.data || [];
+        const lessonActivity = lessonResult.data || [];
+        const watchtime = watchResult.data || [];
+        const srActivity = srResult.data || [];
+
+        const allEmails = [
+          ...memberActivity.map(item => item.email),
+          ...lessonActivity.map(item => item.email),
+          ...watchtime.map(item => item.email),
+          ...srActivity.map(item => item.email)
+        ].filter(Boolean);
+
+        const uniqueMembers = new Set(allEmails);
+        const pageOpens = memberActivity.filter(item => {
+          return item.action === "page_opened" || item.action === "hub_opened";
+        }).length;
+        const trackedClicks = memberActivity.filter(item => item.action === "click").length;
+        const lessonOpens = lessonActivity.length;
+        const srActions = srActivity.length;
+
+        const totalEvents =
+          memberActivity.length +
+          lessonActivity.length +
+          watchtime.length +
+          srActivity.length;
+
+        const latestByUserLesson = {};
+        watchtime.forEach(item => {
+          const key = `${item.email || "unknown"}_${item.lesson || "unknown"}`;
+          const existing = latestByUserLesson[key];
+
+          if(!existing || Number(item.current_seconds || 0) > Number(existing.current_seconds || 0)){
+            latestByUserLesson[key] = item;
+          }
+        });
+
+        const cleanWatchRows = Object.values(latestByUserLesson);
+        const totalWatchSeconds = cleanWatchRows.reduce((sum, item) => {
+          return sum + Number(item.current_seconds || 0);
+        }, 0);
+
+        setText("activeMembers", uniqueMembers.size);
+        setText("totalActivities", totalEvents);
+        setText("totalWatchtime", formatSeconds(totalWatchSeconds));
+        setText("pageOpens", pageOpens);
+        setText("trackedClicks", trackedClicks);
+        setText("lessonOpens", lessonOpens);
+        setText("srActions", srActions);
+
+        const combined = [
+          ...memberActivity.map(item => ({
+            email:item.email,
+            role:item.role,
+            label:"Hub",
+            title:item.action || "Hub Aktivität",
+            detail:item.page || "hub",
+            created_at:item.created_at
+          })),
+          ...lessonActivity.map(item => ({
+            email:item.email,
+            role:item.role,
+            label:"Course",
+            title:item.lesson || "Lektion",
+            detail:item.action || "lesson_opened",
+            created_at:item.created_at
+          })),
+          ...srActivity.map(item => ({
+            email:item.email,
+            role:item.role,
+            label:"Setup Room",
+            title:item.category || "Setup Room",
+            detail:item.action || "activity",
+            created_at:item.created_at
+          }))
+        ].filter(item => item.created_at)
+         .sort((a,b) => new Date(b.created_at) - new Date(a.created_at));
+
+        if(combined[0]?.created_at){
+          setText("lastActivity", formatTime(combined[0].created_at));
+        }
+
+        const feed = document.getElementById("activityFeed");
+        const signalArchive = document.getElementById("signalArchive");
+        if(!feed) return;
+
+        if(!combined.length){
+          feed.innerHTML = `
+            <div class="activity-item">
+              <div class="avatar">BP</div>
+              <div class="activity-main">
+                <strong>Noch keine Aktivität</strong>
+                <p>Neue Aktivitäten erscheinen hier automatisch.</p>
+              </div>
+              <div class="activity-time">-</div>
+            </div>
+          `;
+
+          if(signalArchive){
+            signalArchive.innerHTML = `
+              <div class="signal-archive-item">
+                <div>
+                  <strong>Noch keine Signal-Aktivität</strong>
+                  <span>Sobald Admin Signals oder Setup Room genutzt werden, wird das Archiv gefüllt.</span>
+                </div>
+                <div class="signal-pill">Wartet</div>
+              </div>
+            `;
+          }
+
+          return;
+        }
+
+        feed.innerHTML = combined.slice(0,12).map(item => {
+          const email = item.email || "Unbekannter User";
+
+          return `
+            <div class="activity-item">
+              <div class="avatar">${getInitials(email)}</div>
+              <div class="activity-main">
+                <strong>${item.label} · ${item.title}</strong>
+                <p>${email} · ${item.role || "unknown"} · ${item.detail || "-"}</p>
+              </div>
+              <div class="activity-time">${formatDateTime(item.created_at)}</div>
+            </div>
+          `;
+        }).join("");
+
+        if(signalArchive){
+          const signalItems = combined.filter(item => {
+            const text = `${item.label || ""} ${item.title || ""} ${item.detail || ""}`.toLowerCase();
+            return text.includes("signal") ||
+              text.includes("setup") ||
+              text.includes("bias") ||
+              text.includes("entry") ||
+              text.includes("admin-signals");
+          });
+
+          if(!signalItems.length){
+            signalArchive.innerHTML = `
+              <div class="signal-archive-item">
+                <div>
+                  <strong>Noch keine Signal-Aktivität</strong>
+                  <span>Sobald Admin Signals oder Setup Room genutzt werden, wird das Archiv gefüllt.</span>
+                </div>
+                <div class="signal-pill">Wartet</div>
+              </div>
+            `;
+          } else {
+            signalArchive.innerHTML = signalItems.slice(0,8).map(item => `
+              <div class="signal-archive-item">
+                <div>
+                  <strong>${item.label} · ${item.title}</strong>
+                  <span>${item.email || "Unbekannter User"} · ${item.detail || "-"}</span>
+                </div>
+                <div class="signal-pill">${formatDateTime(item.created_at)}</div>
+              </div>
+            `).join("");
+          }
+        }
+
+      } catch(err){
+        console.log("Founder Dashboard Fehler:", err);
+
+        const feed = document.getElementById("activityFeed");
+        if(feed){
+          feed.innerHTML = `
+            <div class="activity-item">
+              <div class="avatar">BP</div>
+              <div class="activity-main">
+                <strong>Daten konnten nicht geladen werden</strong>
+                <p>Prüfe Supabase Tabellen und Verbindung.</p>
+              </div>
+              <div class="activity-time">-</div>
+            </div>
+          `;
+        }
+      }
+    }
+
+    loadFounderDashboard();
+  </script>
+</body>
+</html>

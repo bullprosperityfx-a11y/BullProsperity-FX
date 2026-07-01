@@ -1,0 +1,1033 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <script>document.documentElement.classList.add("bp-auth-checking");</script>
+  <script src="/access-guard.js?v=20260623-3"></script>
+  <script>
+(async () => {
+  try {
+    const res = await fetch("/api/access", {
+      credentials: "include",
+      cache: "no-store"
+    });
+
+    const data = await res.json();
+
+    if (data.role !== "admin" && data.role !== "premium") {
+      window.location.href = "/locked";
+    }
+
+  } catch (err) {
+    window.location.href = "/locked";
+  }
+})();
+</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BullProsperity | Trading Tools</title>
+  <meta name="description" content="BullProsperity Tools für Lot Size, Trading Journal, Broker Setup, Checklisten und strukturierte Trading-Routinen." />
+  <link rel="canonical" href="https://bullprosperity.online/tools" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="BullProsperity | Trading Tools" />
+  <meta property="og:description" content="Lot Size, Trading Journal, Broker Setup, Checklisten und strukturierte Trading-Routinen." />
+  <meta property="og:url" content="https://bullprosperity.online/tools" />
+  <meta property="og:image" content="https://bullprosperity.online/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="BullProsperity | Trading Tools" />
+  <meta name="twitter:description" content="Lot Size, Trading Journal, Broker Setup, Checklisten und strukturierte Trading-Routinen." />
+  <meta name="twitter:image" content="https://bullprosperity.online/og-image.png" />
+   <link rel="icon" type="image/png" href="/favicon.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="apple-touch-icon" href="/favicon.png">
+<meta name="theme-color" content="#050505">
+  <link rel="stylesheet" href="theme.css" />
+  <script src="/login.js?v=20260624-2" defer></script>
+
+  <style>
+    .tools-page{
+      background:
+        linear-gradient(135deg, rgba(243,210,27,0.07), transparent 28%),
+        radial-gradient(circle at 78% 8%, rgba(43,191,120,0.10), transparent 24%),
+        radial-gradient(circle at 12% 26%, rgba(243,210,27,0.10), transparent 22%),
+        #050505;
+    }
+
+    .tools-page .navbar{
+      position:sticky;
+      top:14px;
+      z-index:50;
+      padding:14px 16px;
+      border:1px solid rgba(243,210,27,0.14);
+      border-radius:24px;
+      background:rgba(7,7,7,0.78);
+      backdrop-filter:blur(18px);
+      box-shadow:0 18px 60px rgba(0,0,0,0.28);
+    }
+
+    .tools-page .logo{
+      letter-spacing:0;
+    }
+
+    .tools-page .hero-shell{
+      margin-top:14px;
+      padding:40px;
+      border-radius:34px;
+      background:
+        linear-gradient(145deg, rgba(255,255,255,0.055), transparent 38%),
+        radial-gradient(circle at 76% 20%, rgba(243,210,27,0.14), transparent 30%),
+        linear-gradient(180deg, rgba(18,18,18,0.92), rgba(5,5,5,0.98));
+      overflow:hidden;
+    }
+
+    .tools-page .hero-shell::before{
+      width:520px;
+      height:520px;
+      top:-220px;
+      right:-160px;
+      background:radial-gradient(circle, rgba(243,210,27,0.16), transparent 66%);
+    }
+
+    .tools-page .hero-title{
+      max-width:1050px;
+      font-size:clamp(44px, 5vw, 74px);
+      letter-spacing:0;
+      line-height:.92;
+    }
+
+    .tools-page .hero-text{
+      max-width:900px;
+    }
+
+    .tools-page .badge,
+    .tools-page .bp-smc-tags span{
+      border-color:rgba(243,210,27,0.18);
+      background:rgba(243,210,27,0.065);
+      color:var(--gold);
+      box-shadow:none;
+    }
+
+    .tools-page .section{
+      margin-bottom:34px;
+    }
+
+    .tools-page .section-heading{
+      letter-spacing:0;
+    }
+
+    .tools-page .section-subtext{
+      max-width:900px;
+    }
+
+    .tools-page .grid-4{
+      display:grid;
+      grid-template-columns:repeat(4, minmax(0, 1fr));
+      gap:18px;
+    }
+
+    .tools-page .grid-2{
+      display:grid;
+      grid-template-columns:repeat(2, minmax(0, 1fr));
+      gap:22px;
+    }
+
+    .tools-page .tool-card,
+    .tools-page .section-card,
+    .tools-page .chart-frame,
+    .tools-page .bp-quick-journal{
+      border:1px solid rgba(243,210,27,0.16);
+      border-radius:26px;
+      background:
+        linear-gradient(145deg, rgba(255,255,255,0.035), transparent 44%),
+        linear-gradient(180deg, rgba(17,17,17,0.9), rgba(7,7,7,0.96));
+      box-shadow:
+        inset 0 0 0 1px rgba(255,255,255,0.025),
+        0 22px 58px rgba(0,0,0,0.28);
+    }
+
+    .tools-page .tool-card{
+      position:relative;
+      overflow:hidden;
+      padding:26px;
+      min-height:245px;
+      display:flex;
+      flex-direction:column;
+      gap:18px;
+      transition:transform .25s ease, border-color .25s ease, box-shadow .25s ease;
+    }
+
+    .tools-page .tool-card > div{
+      position:relative;
+      z-index:1;
+    }
+
+    .tools-page .tool-card::before{
+      content:"";
+      position:absolute;
+      inset:auto -70px -90px auto;
+      width:190px;
+      height:190px;
+      background:radial-gradient(circle, rgba(243,210,27,0.12), transparent 70%);
+      opacity:.65;
+      pointer-events:none;
+    }
+
+    .tools-page .tool-card:hover{
+      transform:translateY(-6px);
+      border-color:rgba(243,210,27,0.5);
+      box-shadow:0 22px 58px rgba(0,0,0,0.34);
+    }
+
+    .tools-page .tool-card h3,
+    .tools-page .section-card h3{
+      color:#fff;
+      letter-spacing:0;
+    }
+
+    .tools-page .tool-card p,
+    .tools-page .section-card p{
+      color:#d9d9d9;
+      font-weight:700;
+    }
+
+    .tools-page .tool-link,
+    .tools-page .btn,
+    .tools-page .bp-save-btn{
+      border-radius:999px;
+      min-height:46px;
+    }
+
+    .tools-page .tool-link{
+      align-self:flex-start;
+      margin-top:auto;
+      position:relative;
+      z-index:1;
+    }
+
+    .tools-page .tool-link,
+    .tools-page .btn.primary,
+    .tools-page .bp-save-btn{
+      background:var(--gold);
+      color:#111;
+      box-shadow:0 0 24px rgba(243,210,27,0.16);
+      z-index:1;
+    }
+
+    .tools-page .btn.secondary{
+      color:#fff;
+      border-color:rgba(255,255,255,0.14);
+      background:rgba(255,255,255,0.025);
+    }
+
+    .tools-page .section-card{
+      padding:28px;
+    }
+
+    .tools-page .list-box{
+      margin-top:16px;
+    }
+
+    .chart-frame{
+      overflow:hidden;
+      margin-top:20px;
+    }
+
+    .bp-toolbar{
+      padding:14px 14px 0;
+    }
+
+    .bp-watchlist{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
+    .bp-watchlist button{
+      background:rgba(255,255,255,0.035);
+      border:1px solid rgba(255,255,255,0.08);
+      color:#fff;
+      padding:8px 14px;
+      border-radius:999px;
+      cursor:pointer;
+      font-weight:800;
+    }
+
+    .bp-watchlist button:hover,
+    .bp-watchlist button.active{
+      color:var(--gold);
+      border-color:rgba(243,210,27,0.5);
+      box-shadow:0 0 0 1px rgba(243,210,27,.15) inset;
+    }
+
+    .bp-market-info{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:14px;
+      padding:14px;
+      flex-wrap:wrap;
+    }
+
+    .bp-market-title{
+      font-size:12px;
+      color:rgba(255,255,255,.6);
+      text-transform:uppercase;
+      letter-spacing:.08em;
+    }
+
+    .bp-market-symbol{
+      font-size:22px;
+      font-weight:900;
+      color:var(--gold);
+      margin-top:4px;
+    }
+
+    .bp-smc-tags{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+    }
+
+    .bp-smc-tags span{
+      border:1px solid rgba(255,215,0,.25);
+      background:rgba(255,215,0,.06);
+      color:#ffd700;
+      padding:6px 10px;
+      border-radius:999px;
+      font-size:12px;
+      font-weight:600;
+    }
+
+    .bp-chart-layout{
+      display:grid;
+      grid-template-columns:minmax(0,1fr) 260px;
+      gap:14px;
+      padding:0 14px 14px;
+    }
+
+    #tv_chart_container{
+      width:100%;
+      height:560px;
+      min-width:0;
+    }
+
+    .bp-sidepanel{
+      background:rgba(255,255,255,0.025);
+      border:1px solid rgba(243,210,27,0.13);
+      border-radius:18px;
+      padding:14px;
+    }
+
+    .bp-side-title{
+      font-size:13px;
+      text-transform:uppercase;
+      letter-spacing:.08em;
+      color:rgba(255,255,255,.6);
+      margin-bottom:12px;
+    }
+
+    .bp-side-list{
+      display:grid;
+      gap:10px;
+    }
+
+    .bp-side-item{
+      width:100%;
+      text-align:left;
+      background:rgba(255,255,255,0.025);
+      border:1px solid rgba(255,255,255,0.08);
+      border-radius:14px;
+      padding:12px;
+      color:#fff;
+      cursor:pointer;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+    }
+
+    .bp-side-item strong{
+      display:block;
+      color:var(--gold);
+      font-size:14px;
+    }
+
+    .bp-side-item span{
+      color:rgba(255,255,255,.58);
+      font-size:12px;
+      white-space:nowrap;
+    }
+
+    .bp-side-item:hover,
+    .bp-side-item.active{
+      border-color:rgba(243,210,27,0.5);
+      box-shadow:0 0 0 1px rgba(243,210,27,.12) inset;
+    }
+
+    .bp-quick-journal{
+      margin-top:22px;
+      padding:20px;
+    }
+
+    .bp-journal-head h3{
+      margin:10px 0 0;
+      font-size:28px;
+      color:#fff;
+    }
+
+    .bp-journal-grid{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:12px;
+      margin-top:18px;
+    }
+
+    .bp-quick-journal input,
+    .bp-quick-journal select,
+    .bp-quick-journal textarea{
+      width:100%;
+      background:rgba(255,255,255,0.025);
+      color:#fff;
+      border:1px solid rgba(243,210,27,0.14);
+      border-radius:14px;
+      padding:12px 14px;
+      box-sizing:border-box;
+    }
+
+    .bp-quick-journal textarea{
+      margin-top:12px;
+      resize:vertical;
+    }
+
+    .bp-save-btn{
+      margin-top:12px;
+      border:none;
+      padding:12px 16px;
+      font-weight:800;
+      cursor:pointer;
+    }
+
+    .bp-journal-list{
+      margin-top:16px;
+      display:grid;
+      gap:10px;
+    }
+
+    .bp-journal-entry{
+      background:rgba(255,255,255,0.025);
+      border:1px solid rgba(243,210,27,0.13);
+      border-radius:14px;
+      padding:14px;
+    }
+
+    .bp-journal-entry-top{
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-bottom:8px;
+    }
+
+    .bp-journal-entry strong{
+      color:var(--gold);
+    }
+
+    .bp-journal-entry small{
+      color:rgba(255,255,255,.55);
+    }
+
+    .auth-badge{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:10px 14px;
+      border-radius:999px;
+      font-size:13px;
+      font-weight:700;
+      border:1px solid #252525;
+      background:#111;
+      color:#fff;
+      white-space:nowrap;
+    }
+
+    .auth-badge::before{
+      content:"";
+      width:10px;
+      height:10px;
+      border-radius:50%;
+      display:inline-block;
+      background:#666;
+    }
+
+    .auth-badge.status-admin::before{background:#ffd700;}
+    .auth-badge.status-premium::before{background:#22c55e;}
+    .auth-badge.status-longterm::before{background:#3b82f6;}
+    .auth-badge.status-locked::before{background:#ef4444;}
+
+    .tools-page .auth-badge,
+    .tools-page .logout-btn{
+      border-color:rgba(255,255,255,0.08);
+      background:rgba(255,255,255,0.04);
+    }
+
+    .tools-page .footer-note{
+      display:flex;
+      flex-wrap:wrap;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+      border:1px solid rgba(243,210,27,0.14);
+      border-radius:24px;
+      background:rgba(255,255,255,0.025);
+      padding:22px 26px;
+      margin:0 0 10px;
+      color:#bdbdbd;
+      font-size:14px;
+      font-weight:800;
+      text-align:left;
+    }
+
+    .tools-page .footer-note strong{
+      display:block;
+      color:var(--gold);
+      font-size:16px;
+      margin-bottom:2px;
+    }
+
+    .tools-page .footer-note span{
+      color:#d2d2d2;
+      font-weight:700;
+    }
+
+    .tools-page .footer-note nav{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+    }
+
+    .tools-page .footer-note a{
+      color:#fff;
+      text-decoration:none;
+      font-weight:900;
+      padding:9px 12px;
+      border-radius:999px;
+      background:rgba(255,255,255,0.035);
+      border:1px solid rgba(255,255,255,0.07);
+    }
+
+    .tools-page .footer-note a:hover{
+      color:var(--gold);
+      border-color:rgba(243,210,27,0.34);
+    }
+
+    .tools-page .footer-note p{
+      flex-basis:100%;
+      margin:0;
+      color:#aaa;
+      font-weight:700;
+    }
+
+    @media(max-width:1100px){
+      .tools-page .grid-4{
+        grid-template-columns:1fr 1fr;
+      }
+
+      .tools-page .grid-2{
+        grid-template-columns:1fr;
+      }
+
+      .bp-chart-layout{
+        grid-template-columns:1fr;
+      }
+
+      .bp-sidepanel{
+        order:-1;
+      }
+    }
+
+    @media(max-width:860px){
+      #tv_chart_container{
+        height:430px;
+      }
+
+      .bp-journal-grid{
+        grid-template-columns:1fr;
+      }
+
+      .tools-page .hero-shell{
+        padding:24px !important;
+      }
+
+      .tools-page .grid-4{
+        grid-template-columns:1fr;
+      }
+
+      .tools-page .footer-note{
+        align-items:flex-start;
+        flex-direction:column;
+      }
+    }
+  </style>
+</head>
+<body class="tools-page">
+  <div class="page">
+
+    <nav class="navbar">
+      <a href="index" class="logo">BullProsperity</a>
+      <div class="nav-links">
+        <a href="index">Home</a>
+        <a href="hub">Hub</a>
+        <a href="course">Course</a>
+        <a href="tools" class="active">Tools</a>
+        <a href="setup-room">Setup Room</a>
+        <a href="community">Community</a>
+        <a id="loginNavBtn" href="/api/whop/login">Login</a>
+        <a id="logoutBtn" href="/api/logout" class="logout-btn" style="display:none;">Logout</a>
+        <div id="authBadge" class="auth-badge status-loading" style="display:none;">Zugang</div>
+      </div>
+    </nav>
+
+    <section class="hero-shell">
+      <div class="badge">Trading Tools</div>
+      <h1 class="hero-title">BullProsperity <span class="gold">Trading Tools</span></h1>
+      <p class="hero-text">
+        Diese Tools helfen dir deine Trades professioneller vorzubereiten.
+        Von Risiko-Berechnung über Journal bis zur Chart Analyse – alles an einem Ort.
+      </p>
+      <div class="hero-buttons">
+        <a href="#tools" class="btn primary">Tools öffnen</a>
+        <a href="course" class="btn secondary">Zurück zum Kurs</a>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="section-heading">Tool Bereiche</h2>
+      <p class="section-subtext">
+        Diese Bereiche helfen Mitgliedern dabei Wissen richtig umzusetzen
+        und strukturierter zu traden.
+      </p>
+
+      <div id="tools" class="grid-4">
+        <div class="tool-card">
+          <div>
+            <div class="badge">Risk Tool</div>
+            <h3>Lot Size Rechner</h3>
+            <p>Berechne deine Positionsgröße anhand von Kontogröße, Risiko in Prozent und Stop Loss Distanz.</p>
+          </div>
+          <a href="lot-size" class="tool-link">Tool öffnen</a>
+        </div>
+
+        <div class="tool-card">
+          <div>
+            <div class="badge">Journal</div>
+            <h3>Trading Journal</h3>
+            <p>Dokumentiere deine Trades, Emotionen und Erkenntnisse um dich langfristig zu verbessern.</p>
+          </div>
+          <a href="journal" class="tool-link">Journal öffnen</a>
+        </div>
+
+        <div class="tool-card">
+          <div>
+            <div class="badge">Routine</div>
+            <h3>Trading Checkliste</h3>
+            <p>Überprüfe vor jedem Trade Struktur, Liquidität, Confirmation und Risiko.</p>
+          </div>
+          <a href="checklist" class="tool-link">Checkliste öffnen</a>
+        </div>
+
+        <div class="tool-card">
+          <div>
+            <div class="badge">Charts</div>
+            <h3>TradingView Bereich</h3>
+            <p>Greife direkt auf Charts und Analysen innerhalb deiner Plattform zu.</p>
+          </div>
+          <a href="#charts" class="tool-link">Charts öffnen</a>
+        </div>
+
+        <div class="tool-card">
+          <div>
+            <div class="badge">Broker Setup</div>
+            <h3>Partner Broker</h3>
+            <p>Richte Broker, MT5, Fokusmärkte und deinen Trading-Workflow sauber an einem Ort ein.</p>
+          </div>
+          <a href="broker" class="tool-link">Broker öffnen</a>
+        </div>
+
+        <div class="tool-card">
+          <div>
+            <div class="badge">Trading Operating System</div>
+            <h3>Process Intelligence</h3>
+            <p>Verbinde Vorbereitung, Journal, Risiko, Replay, Mentor-Feedback und Lernfortschritt in deinem täglichen System.</p>
+          </div>
+          <a href="performance-lab" class="tool-link">Operating System öffnen</a>
+        </div>
+      </div>
+    </section>
+
+    <section id="charts" class="section-card">
+      <div class="badge">Live Charts</div>
+      <h2 class="section-heading" style="font-size:36px;margin-bottom:10px">TradingView Chart Analyse</h2>
+      <p class="section-subtext">
+        Hier kannst du direkt innerhalb deiner Plattform Charts analysieren ohne eine externe Seite zu öffnen.
+      </p>
+
+      <div class="chart-frame">
+        <div class="bp-toolbar">
+          <div class="bp-watchlist">
+            <button class="active" data-symbol="FX:EURUSD" data-label="EURUSD">EURUSD</button>
+            <button data-symbol="OANDA:XAUUSD" data-label="XAUUSD">XAUUSD</button>
+            <button data-symbol="NASDAQ:NDX" data-label="NASDAQ">NASDAQ</button>
+            <button data-symbol="FOREXCOM:DJI" data-label="US30">US30</button>
+            <button data-symbol="FX:GBPJPY" data-label="GBPJPY">GBPJPY</button>
+            <button data-symbol="BITSTAMP:BTCUSD" data-label="BTCUSD">BTCUSD</button>
+            <button data-symbol="TVC:USOIL" data-label="USOUSD">USOUSD</button>
+            <button data-symbol="OANDA:XAGUSD" data-label="XAGUSD">XAGUSD</button>
+            <button data-symbol="SP:SPX" data-label="SPXUSD">SPXUSD</button>
+          </div>
+        </div>
+
+        <div class="bp-market-info">
+          <div class="bp-market-left">
+            <div class="bp-market-title">Aktiver Markt</div>
+            <div class="bp-market-symbol" id="activeMarketLabel">EURUSD</div>
+          </div>
+
+          <div class="bp-smc-tags">
+            <span>POI</span>
+            <span>BOS</span>
+            <span>CHoCH</span>
+            <span>Liquidity</span>
+            <span>FVG</span>
+          </div>
+        </div>
+
+        <div class="bp-chart-layout">
+          <div id="tv_chart_container"></div>
+
+          <aside class="bp-sidepanel">
+            <div class="bp-side-title">Market Watch</div>
+
+            <div class="bp-side-list">
+              <button class="bp-side-item active" data-symbol="FX:EURUSD" data-label="EURUSD">
+                <strong>EURUSD</strong>
+                <span>Forex</span>
+              </button>
+
+              <button class="bp-side-item" data-symbol="OANDA:XAUUSD" data-label="XAUUSD">
+                <strong>XAUUSD</strong>
+                <span>Gold</span>
+              </button>
+
+              <button class="bp-side-item" data-symbol="NASDAQ:NDX" data-label="NASDAQ">
+                <strong>NASDAQ</strong>
+                <span>Index</span>
+              </button>
+
+              <button class="bp-side-item" data-symbol="FOREXCOM:DJI" data-label="US30">
+                <strong>US30</strong>
+                <span>Dow Jones</span>
+              </button>
+
+              <button class="bp-side-item" data-symbol="FX:GBPJPY" data-label="GBPJPY">
+                <strong>GBPJPY</strong>
+                <span>Forex</span>
+              </button>
+
+              <button class="bp-side-item" data-symbol="BITSTAMP:BTCUSD" data-label="BTCUSD">
+                <strong>BTCUSD</strong>
+                <span>Crypto</span>
+              </button>
+
+              <button class="bp-side-item" data-symbol="TVC:USOIL" data-label="USOUSD">
+                <strong>USOUSD</strong>
+                <span>Oil</span>
+              </button>
+
+              <button class="bp-side-item" data-symbol="OANDA:XAGUSD" data-label="XAGUSD">
+                <strong>XAGUSD</strong>
+                <span>Silver</span>
+              </button>
+
+              <button class="bp-side-item" data-symbol="SP:SPX" data-label="SPXUSD">
+                <strong>SPXUSD</strong>
+                <span>S&amp;P 500</span>
+              </button>
+            </div>
+          </aside>
+        </div>
+      </div>
+
+      <div class="bp-quick-journal">
+        <div class="bp-journal-head">
+          <div>
+            <div class="badge">Quick Journal</div>
+            <h3>Trade Notiz direkt im Tools Bereich</h3>
+          </div>
+        </div>
+
+        <div class="bp-journal-grid">
+          <input type="text" id="jSymbol" placeholder="Markt">
+
+          <select id="jBias">
+            <option value="Bullish">Bullish</option>
+            <option value="Bearish">Bearish</option>
+            <option value="Neutral">Neutral</option>
+          </select>
+
+          <select id="jSetup">
+            <option value="BOS Retest">BOS Retest</option>
+            <option value="CHoCH Reversal">CHoCH Reversal</option>
+            <option value="POI Reaction">POI Reaction</option>
+            <option value="Liquidity Sweep">Liquidity Sweep</option>
+            <option value="FVG Entry">FVG Entry</option>
+          </select>
+        </div>
+
+        <textarea id="jNote" rows="5" placeholder="Warum ist das ein valider Trade? Wo liegt die POI? Was ist die Confirmation?"></textarea>
+
+        <button id="saveTrade" class="bp-save-btn">Trade speichern</button>
+
+        <div id="journalList" class="bp-journal-list"></div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="grid-2">
+        <div class="section-card">
+          <div class="badge">Warum Tools wichtig sind</div>
+          <h2 class="section-heading" style="font-size:36px;margin-bottom:10px">Von Wissen zu Umsetzung</h2>
+          <div class="list-box">
+            <div class="list-item">Weniger emotionale Entscheidungen</div>
+            <div class="list-item">Saubere Positionsgrößen</div>
+            <div class="list-item">Strukturierte Vorbereitung</div>
+            <div class="list-item">Bessere Lernkurve</div>
+          </div>
+        </div>
+
+        <div class="section-card">
+          <div class="badge">BullProsperity Workflow</div>
+          <h2 class="section-heading" style="font-size:36px;margin-bottom:10px">So nutzt du die Tools</h2>
+          <div class="list-box">
+            <div class="list-item">1. Chart Analyse</div>
+            <div class="list-item">2. Setup prüfen</div>
+            <div class="list-item">3. Risiko berechnen</div>
+            <div class="list-item">4. Trade dokumentieren</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="footer-note">
+      <div>
+        <strong>BullProsperity</strong>
+        <span>Tools für Risiko, Analyse, Journal und Trading Education.</span>
+      </div>
+      <nav>
+        <a href="impressum">Impressum</a>
+        <a href="datenschutz">Datenschutz</a>
+        <a href="risikohinweis">Risikohinweis</a>
+        <a href="community">Kontakt</a>
+      </nav>
+      <p>BullProsperity dient ausschließlich Bildungs- und Informationszwecken. Es werden keine Gewinne garantiert.</p>
+    </div>
+
+  </div>
+
+  <script src="https://s3.tradingview.com/tv.js"></script>
+
+  <script>
+    const authBadge = document.getElementById("authBadge");
+    const loginNavBtn = document.getElementById("loginNavBtn");
+
+    let widget;
+    let activeSymbol = localStorage.getItem("bp_active_symbol") || "FX:EURUSD";
+    let activeLabel = localStorage.getItem("bp_active_label") || "EURUSD";
+
+    function updateActiveButtons(symbol){
+      document.querySelectorAll(".bp-watchlist button").forEach(btn => {
+        btn.classList.toggle("active", btn.dataset.symbol === symbol);
+      });
+
+      document.querySelectorAll(".bp-side-item").forEach(btn => {
+        btn.classList.toggle("active", btn.dataset.symbol === symbol);
+      });
+    }
+
+    function updateMarketLabel(label){
+      const marketLabel = document.getElementById("activeMarketLabel");
+      const journalSymbol = document.getElementById("jSymbol");
+
+      if (marketLabel) marketLabel.textContent = label;
+      if (journalSymbol) journalSymbol.value = label;
+    }
+
+    function loadChart(symbol, label){
+      const container = document.getElementById("tv_chart_container");
+      if (!container) return;
+
+      container.innerHTML = "";
+
+      widget = new TradingView.widget({
+        container_id: "tv_chart_container",
+        width: "100%",
+        height: 560,
+        symbol: symbol,
+        interval: "15",
+        timezone: "Europe/Berlin",
+        theme: "dark",
+        style: "1",
+        locale: "de",
+        allow_symbol_change: true,
+        withdateranges: true,
+        hide_side_toolbar: false,
+        details: true,
+        hotlist: true,
+        calendar: true,
+        studies: [
+          "Volume@tv-basicstudies",
+          "RSI@tv-basicstudies"
+        ]
+      });
+
+      activeSymbol = symbol;
+      activeLabel = label;
+
+      localStorage.setItem("bp_active_symbol", symbol);
+      localStorage.setItem("bp_active_label", label);
+
+      updateActiveButtons(symbol);
+      updateMarketLabel(label);
+    }
+
+    document.querySelectorAll(".bp-watchlist button").forEach(btn => {
+      btn.addEventListener("click", () => {
+        loadChart(btn.dataset.symbol, btn.dataset.label);
+      });
+    });
+
+    document.querySelectorAll(".bp-side-item").forEach(btn => {
+      btn.addEventListener("click", () => {
+        loadChart(btn.dataset.symbol, btn.dataset.label);
+      });
+    });
+
+    function renderJournal(){
+      const list = document.getElementById("journalList");
+      if (!list) return;
+
+      const trades = JSON.parse(localStorage.getItem("bpJournal") || "[]");
+      list.innerHTML = "";
+
+      if (!trades.length) {
+        list.innerHTML = `
+          <div class="bp-journal-entry">
+            Noch keine Quick-Journal Einträge gespeichert.
+          </div>
+        `;
+        return;
+      }
+
+      trades.slice().reverse().forEach(t => {
+        const item = document.createElement("div");
+        item.className = "bp-journal-entry";
+        item.innerHTML = `
+          <div class="bp-journal-entry-top">
+            <strong>${t.symbol} · ${t.bias}</strong>
+            <small>${t.date}</small>
+          </div>
+          <div><strong>Setup:</strong> ${t.setup}</div>
+          <div style="margin-top:8px;">${t.note}</div>
+        `;
+        list.appendChild(item);
+      });
+    }
+
+    const saveTradeBtn = document.getElementById("saveTrade");
+    if (saveTradeBtn) {
+      saveTradeBtn.addEventListener("click", () => {
+        const symbol = document.getElementById("jSymbol").value.trim();
+        const bias = document.getElementById("jBias").value;
+        const setup = document.getElementById("jSetup").value;
+        const note = document.getElementById("jNote").value.trim();
+
+        if (!symbol || !note) {
+          alert("Bitte Markt und Notiz eintragen.");
+          return;
+        }
+
+        const trades = JSON.parse(localStorage.getItem("bpJournal") || "[]");
+
+        trades.push({
+          symbol,
+          bias,
+          setup,
+          note,
+          date: new Date().toLocaleString("de-DE")
+        });
+
+        localStorage.setItem("bpJournal", JSON.stringify(trades));
+        document.getElementById("jNote").value = "";
+        renderJournal();
+      });
+    }
+
+    (async () => {
+      try {
+        const res = await fetch("/api/access", {
+          credentials: "include",
+          cache: "no-store"
+        });
+
+        if (!res.ok) {
+          window.location.href = "locked";
+          return;
+        }
+
+        const data = await res.json();
+        const role = data?.role || "guest";
+
+        if (role !== "admin" && role !== "premium") {
+          window.location.href = "locked";
+          return;
+        }
+        if (role === "admin") {
+  authBadge.textContent = "Admin";
+  authBadge.className = "auth-badge status-admin";
+  authBadge.style.display = "inline-flex";
+} else if (role === "premium") {
+  authBadge.textContent = "Premium";
+  authBadge.className = "auth-badge status-premium";
+  authBadge.style.display = "inline-flex";
+}
+
+        if (loginNavBtn) {
+  loginNavBtn.style.display = "none";
+}
+
+const logoutBtn = document.getElementById("logoutBtn");
+
+if (logoutBtn && (role === "admin" || role === "premium")) {
+  logoutBtn.style.display = "inline-flex";
+}
+
+        loadChart(activeSymbol, activeLabel);
+        renderJournal();
+      } catch (err) {
+        window.location.href = "locked";
+      }
+    })();
+  </script>
+  <script>
+  window.addEventListener("load", () => {
+    const loader = document.getElementById("bpLoader");
+
+    setTimeout(() => {
+      if(loader){
+        loader.classList.add("hide");
+      }
+    }, 700);
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <script>document.documentElement.classList.add("bp-auth-checking");</script>
+  <script src="/access-guard.js?v=20260623-3"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>BullProsperity | Systemstatus</title>
+  <meta name="description" content="Technischer Systemstatus der BullProsperity Mitgliederplattform." />
+  <meta name="robots" content="noindex,nofollow" />
+  <link rel="icon" href="/favicon.png" />
+  <link rel="stylesheet" href="/theme.css" />
+  <script src="/login.js?v=20260624-2" defer></script>
+  <style>
+    body{margin:0;background:#050505;color:#fff;font-family:Arial,sans-serif}
+    .status-page{width:min(1180px,calc(100% - 32px));margin:auto;padding:18px 0 40px}
+    .status-nav{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:18px 20px;border:1px solid rgba(243,210,27,.18);border-radius:8px;background:rgba(8,8,8,.92)}
+    .status-brand{color:#f3d21b;font-size:21px;font-weight:950;text-decoration:none}.status-links{display:flex;gap:18px;flex-wrap:wrap}.status-links a{color:#fff;text-decoration:none;font-weight:850}.status-links a:hover{color:#f3d21b}
+    .status-hero{margin-top:18px;padding:40px;border:1px solid rgba(243,210,27,.18);border-radius:8px;background:linear-gradient(145deg,rgba(255,255,255,.05),transparent 42%),#0a0a0a}
+    .status-badge{display:inline-flex;padding:8px 14px;border:1px solid rgba(243,210,27,.22);border-radius:999px;color:#f3d21b;font-size:12px;font-weight:900}.status-hero h1{margin:18px 0 10px;font-size:clamp(40px,6vw,70px);letter-spacing:0}.status-hero p{max-width:760px;color:#bbb;line-height:1.7}
+    .overall{display:flex;align-items:center;gap:10px;margin-top:24px;font-weight:900}.status-dot{width:12px;height:12px;border-radius:50%;background:#f3d21b;box-shadow:0 0 18px rgba(243,210,27,.4)}.overall.operational .status-dot,.status-item.operational .status-dot{background:#45d486}.overall.degraded .status-dot,.status-item.degraded .status-dot{background:#ff6767}
+    .status-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-top:18px}.status-item{min-height:150px;padding:22px;border:1px solid rgba(255,255,255,.1);border-radius:8px;background:#0b0b0b}.status-head{display:flex;align-items:center;gap:10px}.status-item h2{margin:0;font-size:20px}.status-item p{margin:16px 0 0;color:#aaa;line-height:1.55}.status-item small{display:block;margin-top:14px;color:#777;text-transform:uppercase;font-weight:900}.status-footer{margin-top:18px;padding:18px;text-align:center;color:#888;border-top:1px solid rgba(255,255,255,.08);font-size:12px}
+    @media(max-width:700px){.status-nav{align-items:flex-start;flex-direction:column}.status-hero{padding:26px}.status-grid{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <main class="status-page">
+    <nav class="status-nav"><a class="status-brand" href="/hub">BullProsperity</a><div class="status-links"><a href="/hub">Hub</a><a href="/performance-lab">Operating System</a><a href="/tools">Tools</a></div></nav>
+    <header class="status-hero"><span class="status-badge">Platform Status</span><h1>Systeme im Blick.</h1><p>Diese Seite prüft die wichtigsten Verbindungen der Mitgliederplattform. Geheime Schlüssel und interne Kontodaten werden niemals angezeigt.</p><div class="overall" id="overallStatus"><span class="status-dot"></span><span>Systemstatus wird geprüft …</span></div></header>
+    <section class="status-grid" id="statusGrid" aria-live="polite"></section>
+    <footer class="status-footer">Letzte Prüfung: <span id="checkedAt">–</span></footer>
+  </main>
+  <script>
+    const escapeHtml = value => String(value ?? "").replace(/[&<>"']/g, char => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[char]));
+    async function loadStatus(){
+      const overall=document.getElementById("overallStatus"),grid=document.getElementById("statusGrid");
+      try{
+        const response=await fetch("/api/status",{credentials:"include",cache:"no-store"});
+        const data=await response.json();
+        if(!response.ok)throw new Error(data.error||"Status nicht verfügbar");
+        overall.className=`overall ${data.overall}`;
+        overall.querySelector("span:last-child").textContent=data.overall==="operational"?"Alle Kernsysteme funktionieren":"Mindestens ein Dienst benötigt Aufmerksamkeit";
+        grid.innerHTML=data.checks.map(item=>`<article class="status-item ${escapeHtml(item.state)}"><div class="status-head"><span class="status-dot"></span><h2>${escapeHtml(item.label)}</h2></div><p>${escapeHtml(item.detail)}</p><small>${item.state==="operational"?"Operational":item.state==="configured"?"Konfiguriert":"Prüfung erforderlich"}</small></article>`).join("");
+        document.getElementById("checkedAt").textContent=new Date(data.checkedAt).toLocaleString("de-DE");
+      }catch(error){overall.className="overall degraded";overall.querySelector("span:last-child").textContent=error.message;grid.innerHTML='<article class="status-item degraded"><div class="status-head"><span class="status-dot"></span><h2>Statusprüfung</h2></div><p>Die Status-API ist momentan nicht erreichbar.</p></article>';}
+    }
+    loadStatus();
+  </script>
+</body>
+</html>

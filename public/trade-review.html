@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <script>document.documentElement.classList.add("bp-auth-checking");</script>
+  <script src="/access-guard.js?v=20260623-3"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BullProsperity | Trade Review</title>
+  <link rel="icon" type="image/png" href="/favicon.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="apple-touch-icon" href="/favicon.png">
+<meta name="theme-color" content="#050505">
+  <link rel="stylesheet" href="theme.css" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <script src="/login.js?v=20260624-2" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+  <script>
+    (async () => {
+      try {
+        const res = await fetch("/api/access", { credentials: "include" });
+        const data = await res.json();
+
+        if (data.role !== "admin" && data.role !== "premium") {
+          window.location.href = "locked";
+        }
+      } catch (err) {
+        window.location.href = "locked";
+      }
+    })();
+  </script>
+
+  <style>
+    .trade-review-page{
+      background:
+        linear-gradient(135deg, rgba(243,210,27,0.07), transparent 28%),
+        radial-gradient(circle at 78% 8%, rgba(43,191,120,0.10), transparent 24%),
+        radial-gradient(circle at 12% 26%, rgba(243,210,27,0.10), transparent 22%),
+        #050505;
+    }
+
+    .trade-review-page .navbar{
+      position:sticky;
+      top:14px;
+      z-index:50;
+      padding:14px 16px;
+      border:1px solid rgba(243,210,27,0.14);
+      border-radius:24px;
+      background:rgba(7,7,7,0.78);
+      backdrop-filter:blur(18px);
+      box-shadow:0 18px 60px rgba(0,0,0,0.28);
+    }
+
+    .trade-review-page .logo,
+    .trade-review-page .section-heading{
+      letter-spacing:0;
+    }
+
+    .trade-review-page .hero-shell{
+      margin-top:14px;
+      padding:40px;
+      border-radius:34px;
+      background:
+        linear-gradient(145deg, rgba(255,255,255,0.055), transparent 38%),
+        radial-gradient(circle at 76% 20%, rgba(243,210,27,0.14), transparent 30%),
+        linear-gradient(180deg, rgba(18,18,18,0.92), rgba(5,5,5,0.98));
+      overflow:hidden;
+    }
+
+    .trade-review-page .hero-shell::before{
+      width:520px;
+      height:520px;
+      top:-220px;
+      right:-160px;
+      background:radial-gradient(circle, rgba(243,210,27,0.16), transparent 66%);
+    }
+
+    .trade-review-page .hero-title{
+      max-width:1050px;
+      font-size:clamp(44px, 5vw, 74px);
+      letter-spacing:0;
+      line-height:.92;
+    }
+
+    .trade-review-page .hero-text{
+      max-width:900px;
+    }
+
+    .trade-review-page .badge{
+      border-color:rgba(243,210,27,0.18);
+      background:rgba(243,210,27,0.065);
+      color:var(--gold);
+      box-shadow:none;
+    }
+
+    .review-layout{
+      display:grid;
+      grid-template-columns:1.05fr 0.95fr;
+      gap:24px;
+      align-items:start;
+    }
+
+    .review-panel{
+      border:1px solid rgba(243,210,27,0.16);
+      border-radius:26px;
+      background:
+        linear-gradient(145deg, rgba(255,255,255,0.035), transparent 44%),
+        linear-gradient(180deg, rgba(17,17,17,0.9), rgba(7,7,7,0.96));
+      box-shadow:
+        inset 0 0 0 1px rgba(255,255,255,0.025),
+        0 22px 58px rgba(0,0,0,0.28);
+      padding:28px;
+    }
+
+    .form-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:16px;
+      margin-top:18px;
+    }
+
+    .field{
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+    }
+
+    .field.full{
+      grid-column:1 / -1;
+    }
+
+    .field label{
+      color:#f1f1f1;
+      font-size:14px;
+      font-weight:800;
+    }
+
+    .field input,
+    .field textarea,
+    .field select{
+      width:100%;
+      border-radius:16px;
+      border:1px solid rgba(243,210,27,0.18);
+      background:rgba(255,255,255,0.03);
+      color:#fff;
+      padding:14px 16px;
+      font-size:15px;
+      outline:none;
+    }
+
+    .field textarea{
+      min-height:140px;
+      resize:vertical;
+    }
+
+    .field input:focus,
+    .field textarea:focus,
+    .field select:focus{
+      border-color:rgba(243,210,27,0.48);
+      box-shadow:0 0 0 3px rgba(243,210,27,0.08);
+    }
+
+    .actions{
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+      margin-top:20px;
+    }
+
+    .action-btn{
+      border:none;
+      cursor:pointer;
+    }
+
+    .review-list{
+      display:grid;
+      gap:14px;
+      margin-top:18px;
+    }
+
+    .review-card{
+      border:1px solid rgba(243,210,27,0.14);
+      border-radius:22px;
+      background:rgba(255,255,255,0.02);
+      padding:18px;
+    }
+
+    .review-top{
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      flex-wrap:wrap;
+      margin-bottom:12px;
+    }
+
+    .review-title{
+      color:var(--gold);
+      font-size:20px;
+      font-weight:900;
+    }
+
+    .review-badge{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding:8px 14px;
+      border-radius:999px;
+      border:1px solid var(--gold-soft);
+      color:var(--gold);
+      background:rgba(243,210,27,0.06);
+      font-size:12px;
+      font-weight:800;
+    }
+
+    .review-meta{
+      color:#bdbdbd;
+      font-size:14px;
+      margin-bottom:12px;
+    }
+
+    .review-text{
+      color:#ededed;
+      line-height:1.7;
+      font-size:15px;
+      white-space:pre-wrap;
+      margin-bottom:14px;
+    }
+
+    .review-img{
+      width:100%;
+      border-radius:18px;
+      border:1px solid rgba(243,210,27,0.14);
+      margin:10px 0 14px;
+    }
+
+    .small-btn{
+      border:none;
+      cursor:pointer;
+      padding:10px 14px;
+      border-radius:12px;
+      font-weight:800;
+      font-size:14px;
+      background:rgba(255,255,255,0.03);
+      color:#fff;
+      border:1px solid rgba(255,255,255,0.14);
+      margin-right:8px;
+      margin-top:8px;
+    }
+
+    .helper-list{
+      display:grid;
+      gap:12px;
+      margin-top:18px;
+    }
+
+    .helper-item{
+      border:1px solid rgba(243,210,27,0.12);
+      border-radius:16px;
+      background:rgba(255,255,255,0.02);
+      padding:14px 16px;
+      color:#efefef;
+      line-height:1.6;
+      font-size:14px;
+      font-weight:700;
+    }
+
+    .empty-state{
+      border:1px dashed rgba(243,210,27,0.18);
+      border-radius:20px;
+      padding:24px;
+      text-align:center;
+      color:#bdbdbd;
+      line-height:1.7;
+      margin-top:18px;
+      background:rgba(255,255,255,0.02);
+    }
+
+    .auth-badge{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:10px 14px;
+      border-radius:999px;
+      font-size:13px;
+      font-weight:700;
+      border:1px solid rgba(255,255,255,0.08);
+      background:rgba(255,255,255,0.04);
+      color:#fff;
+      white-space:nowrap;
+    }
+
+    .auth-badge::before{
+      content:"";
+      width:10px;
+      height:10px;
+      border-radius:50%;
+      display:inline-block;
+      background:#666;
+    }
+
+    .auth-badge.status-admin::before{background:#ffd700;}
+    .auth-badge.status-premium::before{background:#22c55e;}
+
+    .trade-review-page .logout-btn{
+      border-color:rgba(255,255,255,0.08);
+      background:rgba(255,255,255,0.04);
+    }
+
+    .trade-review-page .footer-note{
+      display:flex;
+      flex-wrap:wrap;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+      border:1px solid rgba(243,210,27,0.14);
+      border-radius:24px;
+      background:rgba(255,255,255,0.025);
+      padding:22px 26px;
+      margin:28px 0 10px;
+      color:#bdbdbd;
+      font-size:14px;
+      font-weight:800;
+      text-align:left;
+    }
+
+    .trade-review-page .footer-note strong{
+      display:block;
+      color:var(--gold);
+      font-size:16px;
+      margin-bottom:2px;
+    }
+
+    .trade-review-page .footer-note span{
+      color:#d2d2d2;
+      font-weight:700;
+    }
+
+    .trade-review-page .footer-note nav{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+    }
+
+    .trade-review-page .footer-note a{
+      color:#fff;
+      text-decoration:none;
+      font-weight:900;
+      padding:9px 12px;
+      border-radius:999px;
+      background:rgba(255,255,255,0.035);
+      border:1px solid rgba(255,255,255,0.07);
+    }
+
+    .trade-review-page .footer-note a:hover{
+      color:var(--gold);
+      border-color:rgba(243,210,27,0.34);
+    }
+
+    .trade-review-page .footer-note p{
+      flex-basis:100%;
+      margin:0;
+      color:#aaa;
+      font-weight:700;
+    }
+
+    @media(max-width:1100px){
+      .review-layout{
+        grid-template-columns:1fr;
+      }
+    }
+
+    @media(max-width:760px){
+      .form-grid{
+        grid-template-columns:1fr;
+      }
+    }
+  </style>
+</head>
+<body class="trade-review-page">
+  <div class="page">
+
+    <nav class="navbar">
+      <a href="index" class="logo">BullProsperity</a>
+      <div class="nav-links">
+        <a href="index">Home</a>
+        <a href="hub">Hub</a>
+        <a href="course">Course</a>
+        <a href="tools">Tools</a>
+        <a href="setup-room">Setup Room</a>
+        <a href="community" class="active">Community</a>
+        <a id="loginNavBtn" href="/api/whop/login">Login</a>
+        <a id="logoutBtn" href="/api/logout" class="logout-btn" style="display:none;">Logout</a>
+        <div id="authBadge" class="auth-badge status-loading" style="display:none;">Zugang</div>
+      </div>
+    </nav>
+
+    <section class="hero-shell">
+      <div class="badge">Feedback</div>
+      <h1 class="hero-title">Trade <span class="gold">Review</span></h1>
+      <p class="hero-text">
+        Mitglieder können Trades reflektieren, Feedback geben und gemeinsam aus Fehlern und guten Entscheidungen lernen.
+      </p>
+      <div class="hero-buttons">
+        <a href="community" class="btn primary">Zurück zur Community</a>
+        <a href="#review-form" class="btn secondary">Review posten</a>
+      </div>
+    </section>
+
+    <section class="review-layout">
+      <div class="review-panel" id="review-form">
+        <div class="badge">Neues Review</div>
+        <h2 class="section-heading" style="font-size:36px; margin-bottom:10px;">Trade reflektieren</h2>
+        <p class="section-subtext" style="margin-bottom:0;">
+          Teile Markt, Ergebnis, Fehler oder gute Entscheidungen aus deinem Trade.
+        </p>
+
+        <div class="form-grid">
+          <div class="field full">
+            <label for="reviewName">Name</label>
+            <input type="text" id="reviewName" placeholder="Dein Name" />
+          </div>
+
+          <div class="field">
+            <label for="reviewMarket">Markt</label>
+            <input type="text" id="reviewMarket" placeholder="z. B. EURUSD / XAUUSD / NAS100" />
+          </div>
+
+          <div class="field">
+            <label for="reviewResult">Ergebnis</label>
+            <select id="reviewResult">
+              <option value="">Bitte wählen</option>
+              <option value="Gewinn">Gewinn</option>
+              <option value="Verlust">Verlust</option>
+              <option value="Break Even">Break Even</option>
+            </select>
+          </div>
+
+          <div class="field full">
+            <label for="reviewTitle">Titel</label>
+            <input type="text" id="reviewTitle" placeholder="z. B. Zu früh geentered / Sauberer London Move genutzt" />
+          </div>
+
+          <div class="field full">
+            <label for="reviewText">Review / Erkenntnis</label>
+            <textarea id="reviewText" placeholder="Was war gut? Was war schlecht? Was hast du daraus gelernt?"></textarea>
+          </div>
+
+          <div class="field">
+            <label for="tradingViewShot">TradingView Screenshot</label>
+            <input type="file" id="tradingViewShot" accept="image/png,image/jpeg,image/webp" />
+          </div>
+
+          <div class="field">
+            <label for="metaTraderShot">MetaTrader Screenshot</label>
+            <input type="file" id="metaTraderShot" accept="image/png,image/jpeg,image/webp" />
+          </div>
+        </div>
+
+        <div class="actions">
+          <button class="btn primary action-btn" id="saveReviewBtn">Review speichern</button>
+          <button class="btn secondary action-btn" id="resetReviewBtn">Felder leeren</button>
+        </div>
+      </div>
+
+      <div class="review-panel">
+        <div class="badge">BullProsperity Fokus</div>
+        <h2 class="section-heading" style="font-size:36px; margin-bottom:10px;">Warum Trade Review?</h2>
+        <p class="section-subtext" style="margin-bottom:0;">
+          Review ist einer der stärksten Hebel für Entwicklung. Wer Trades reflektiert,
+          erkennt eigene Muster schneller und verbessert seine Ausführung langfristig.
+        </p>
+
+        <div class="helper-list">
+          <div class="helper-item">Fehler werden sichtbar statt wiederholt.</div>
+          <div class="helper-item">Gute Entscheidungen werden bewusst verstärkt.</div>
+          <div class="helper-item">Trades werden nicht nur bewertet, sondern verstanden.</div>
+          <div class="helper-item">Die Community lernt gemeinsam aus echten Situationen.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="review-panel">
+        <div class="badge">Lokale Reviews</div>
+        <h2 class="section-heading" style="font-size:36px; margin-bottom:10px;">Meine Reviews</h2>
+        <p class="section-subtext" style="margin-bottom:0;">
+          Diese Reviews werden lokal gespeichert und können als BullProsperity PDF heruntergeladen werden.
+        </p>
+        <div id="reviewList" class="review-list"></div>
+        <div id="reviewEmpty" class="empty-state">
+          Noch keine Reviews vorhanden.<br>
+          Erstelle oben den ersten Review-Beitrag.
+        </div>
+      </div>
+    </section>
+
+    <div class="footer-note">
+      <div>
+        <strong>BullProsperity</strong>
+        <span>Trade Review für Ausführung, Fehleranalyse, Feedback und Trading Education.</span>
+      </div>
+      <nav>
+        <a href="impressum">Impressum</a>
+        <a href="datenschutz">Datenschutz</a>
+        <a href="risikohinweis">Risikohinweis</a>
+        <a href="community">Kontakt</a>
+      </nav>
+      <p>BullProsperity dient ausschließlich Bildungs- und Informationszwecken. Es werden keine Gewinne garantiert.</p>
+    </div>
+  </div>
+
+  <script>
+    const storageKey = "bullprosperity_review_posts";
+    const authBadge = document.getElementById("authBadge");
+    const loginNavBtn = document.getElementById("loginNavBtn");
+    const logoutBtn = document.getElementById("logoutBtn");
+
+    const reviewName = document.getElementById("reviewName");
+    const reviewMarket = document.getElementById("reviewMarket");
+    const reviewResult = document.getElementById("reviewResult");
+    const reviewTitle = document.getElementById("reviewTitle");
+    const reviewText = document.getElementById("reviewText");
+    const tradingViewShot = document.getElementById("tradingViewShot");
+    const metaTraderShot = document.getElementById("metaTraderShot");
+
+    const saveReviewBtn = document.getElementById("saveReviewBtn");
+    const resetReviewBtn = document.getElementById("resetReviewBtn");
+    const reviewList = document.getElementById("reviewList");
+    const reviewEmpty = document.getElementById("reviewEmpty");
+
+    function getPosts() {
+      const raw = localStorage.getItem(storageKey);
+      return raw ? JSON.parse(raw) : [];
+    }
+
+    function savePosts(posts) {
+      localStorage.setItem(storageKey, JSON.stringify(posts));
+    }
+
+    function resetForm() {
+      reviewName.value = "";
+      reviewMarket.value = "";
+      reviewResult.value = "";
+      reviewTitle.value = "";
+      reviewText.value = "";
+      tradingViewShot.value = "";
+      metaTraderShot.value = "";
+    }
+
+    function fileToBase64(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      });
+    }
+
+    function renderPosts() {
+      const posts = getPosts();
+      reviewList.innerHTML = "";
+
+      if (posts.length === 0) {
+        reviewEmpty.style.display = "block";
+        return;
+      }
+
+      reviewEmpty.style.display = "none";
+
+      posts.forEach((post, index) => {
+        const card = document.createElement("div");
+        card.className = "review-card";
+
+        card.innerHTML = `
+          <div class="review-top">
+            <div class="review-title">${post.title}</div>
+            <div class="review-badge">${post.result || "Review"}</div>
+          </div>
+          <div class="review-meta">${post.name || "Unbekannt"} • ${post.market || "-"} • ${post.date}</div>
+          <div class="review-text">${post.text}</div>
+          ${post.tradingViewImage ? `<img class="review-img" src="${post.tradingViewImage}" alt="TradingView Screenshot">` : ""}
+          ${post.metaTraderImage ? `<img class="review-img" src="${post.metaTraderImage}" alt="MetaTrader Screenshot">` : ""}
+          <button class="small-btn" onclick="downloadReviewPDF(${index})">PDF herunterladen</button>
+          <button class="small-btn" onclick="deleteReviewPost(${index})">Review löschen</button>
+        `;
+
+        reviewList.appendChild(card);
+      });
+    }
+
+    async function downloadReviewPDF(index) {
+      const post = getPosts()[index];
+
+      if (!window.jspdf) {
+        alert("PDF Tool konnte nicht geladen werden.");
+        return;
+      }
+
+      const { jsPDF } = window.jspdf;
+      const pdf = new jsPDF("p", "mm", "a4");
+
+      const pageWidth = 210;
+      const pageHeight = 297;
+      const gold = [243, 210, 27];
+      const white = [245, 245, 245];
+      const muted = [170, 170, 170];
+      const dark = [5, 5, 5];
+      const panel = [14, 14, 14];
+
+      function paintBackground() {
+        pdf.setFillColor(...dark);
+        pdf.rect(0, 0, pageWidth, pageHeight, "F");
+
+        pdf.setDrawColor(...gold);
+        pdf.setLineWidth(0.35);
+        pdf.roundedRect(10, 10, 190, 277, 6, 6);
+
+        pdf.setFillColor(...panel);
+        pdf.roundedRect(15, 15, 180, 267, 5, 5, "F");
+      }
+
+      function addFooter() {
+        pdf.setFont("helvetica", "normal");
+        pdf.setFontSize(8);
+        pdf.setTextColor(130, 130, 130);
+        pdf.text(
+          "BullProsperity vermittelt Bildungsinhalte, Marktverständnis und Risikobewusstsein.",
+          18,
+          275
+        );
+      }
+
+      function addHeader() {
+        pdf.setFont("helvetica", "bold");
+        pdf.setFontSize(22);
+        pdf.setTextColor(...gold);
+        pdf.text("BullProsperity", 18, 29);
+
+        pdf.setFont("helvetica", "normal");
+        pdf.setFontSize(10);
+        pdf.setTextColor(...muted);
+        pdf.text("Trade Review Dokumentation", 18, 36);
+
+        pdf.setFont("helvetica", "bold");
+        pdf.setFontSize(25);
+        pdf.setTextColor(...white);
+        pdf.text("Trade Review", 18, 54);
+
+        pdf.setDrawColor(...gold);
+        pdf.setLineWidth(0.25);
+        pdf.line(18, 60, 192, 60);
+      }
+
+      paintBackground();
+      addHeader();
+
+      let y = 74;
+
+      function newPage() {
+        addFooter();
+        pdf.addPage();
+        paintBackground();
+        addHeader();
+        y = 74;
+      }
+
+      function addInfo(label, value) {
+        if (y > 245) newPage();
+
+        pdf.setFont("helvetica", "bold");
+        pdf.setFontSize(10);
+        pdf.setTextColor(...gold);
+        pdf.text(label, 18, y);
+
+        pdf.setFont("helvetica", "normal");
+        pdf.setFontSize(12);
+        pdf.setTextColor(...white);
+
+        const lines = pdf.splitTextToSize(value || "-", 172);
+        pdf.text(lines, 18, y + 7);
+
+        y += 14 + (lines.length * 5);
+      }
+
+      function addImageBlock(label, image) {
+        if (!image) return;
+
+        if (y > 160) newPage();
+
+        pdf.setFont("helvetica", "bold");
+        pdf.setFontSize(12);
+        pdf.setTextColor(...gold);
+        pdf.text(label, 18, y);
+
+        y += 8;
+
+        try {
+          const props = pdf.getImageProperties(image);
+          const imgWidth = 174;
+          let imgHeight = (props.height * imgWidth) / props.width;
+
+          if (imgHeight > 105) imgHeight = 105;
+
+          pdf.addImage(image, props.fileType || "JPEG", 18, y, imgWidth, imgHeight);
+          y += imgHeight + 10;
+        } catch {
+          pdf.setTextColor(...white);
+          pdf.setFontSize(11);
+          pdf.text("Screenshot konnte nicht eingebunden werden.", 18, y);
+          y += 10;
+        }
+      }
+
+      addInfo("Name", post.name || "Nicht angegeben");
+      addInfo("Markt", post.market || "-");
+      addInfo("Ergebnis", post.result || "-");
+      addInfo("Titel", post.title);
+      addInfo("Datum", post.date);
+      addInfo("Review / Erkenntnis", post.text);
+
+      addImageBlock("TradingView Screenshot", post.tradingViewImage);
+      addImageBlock("MetaTrader Screenshot", post.metaTraderImage);
+
+      addFooter();
+
+      const cleanTitle = (post.title || "Trade-Review")
+        .replace(/[^\wäöüÄÖÜß-]+/g, "-")
+        .replace(/-+/g, "-");
+
+      pdf.save("BullProsperity-Trade-Review-" + cleanTitle + ".pdf");
+    }
+
+    saveReviewBtn.addEventListener("click", async () => {
+      if (!reviewName.value.trim() || !reviewTitle.value.trim() || !reviewText.value.trim()) {
+        alert("Bitte mindestens Name, Titel und Review ausfüllen.");
+        return;
+      }
+
+      const tvFile = tradingViewShot.files[0];
+      const mtFile = metaTraderShot.files[0];
+
+      if (tvFile && tvFile.size > 1500000) {
+        alert("TradingView Screenshot ist zu groß. Bitte maximal 1,5 MB.");
+        return;
+      }
+
+      if (mtFile && mtFile.size > 1500000) {
+        alert("MetaTrader Screenshot ist zu groß. Bitte maximal 1,5 MB.");
+        return;
+      }
+
+      let tradingViewImage = "";
+      let metaTraderImage = "";
+
+      if (tvFile) tradingViewImage = await fileToBase64(tvFile);
+      if (mtFile) metaTraderImage = await fileToBase64(mtFile);
+
+      const post = {
+        name: reviewName.value.trim(),
+        market: reviewMarket.value.trim(),
+        result: reviewResult.value,
+        title: reviewTitle.value.trim(),
+        text: reviewText.value.trim(),
+        tradingViewImage,
+        metaTraderImage,
+        date: new Date().toLocaleString("de-DE")
+      };
+
+      const posts = getPosts();
+      posts.unshift(post);
+      savePosts(posts);
+      renderPosts();
+
+      try {
+        const res = await fetch("/api/send-review", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          credentials: "include",
+          body: JSON.stringify(post)
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) {
+          alert(data.error || "Review lokal gespeichert, aber nicht an Discord gesendet.");
+          return;
+        }
+
+        alert("Review wurde gespeichert und an Discord Results gesendet.");
+        resetForm();
+
+      } catch (err) {
+        alert("Review lokal gespeichert, aber Discord Fehler.");
+      }
+    });
+
+    resetReviewBtn.addEventListener("click", resetForm);
+
+    function deleteReviewPost(index) {
+      const posts = getPosts();
+      posts.splice(index, 1);
+      savePosts(posts);
+      renderPosts();
+    }
+
+    window.deleteReviewPost = deleteReviewPost;
+    window.downloadReviewPDF = downloadReviewPDF;
+
+    renderPosts();
+
+    document.addEventListener("DOMContentLoaded", async () => {
+      try {
+        const res = await fetch("/api/access", { credentials: "include" });
+        const data = await res.json();
+        const role = data?.role || "guest";
+
+        if (role !== "admin" && role !== "premium") {
+          window.location.href = "locked";
+          return;
+        }
+
+        if (role === "admin") {
+          authBadge.textContent = "Admin";
+          authBadge.className = "auth-badge status-admin";
+          authBadge.style.display = "inline-flex";
+        }
+
+        if (role === "premium") {
+          authBadge.textContent = "Premium";
+          authBadge.className = "auth-badge status-premium";
+          authBadge.style.display = "inline-flex";
+        }
+
+        if (loginNavBtn) loginNavBtn.style.display = "none";
+        if (logoutBtn) logoutBtn.style.display = "inline-flex";
+      } catch (err) {
+        window.location.href = "locked";
+      }
+    });
+  </script>
+  <script>
+  window.addEventListener("load", () => {
+    const loader = document.getElementById("bpLoader");
+
+    setTimeout(() => {
+      if(loader){
+        loader.classList.add("hide");
+      }
+    }, 700);
+  });
+</script>
+</body>
+</html>

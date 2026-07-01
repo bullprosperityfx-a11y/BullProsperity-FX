@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <script>document.documentElement.classList.add("bp-auth-checking");</script>
+  <script src="/access-guard.js?v=20260623-3"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BullProsperity | Setup Austausch</title>
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <link rel="manifest" href="/manifest.json">
+  <link rel="apple-touch-icon" href="/favicon.png">
+  <meta name="theme-color" content="#050505">
+  <link rel="stylesheet" href="theme.css" />
+  <script src="/login.js?v=20260624-2" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+  <script>
+    (async () => {
+      try {
+        const res = await fetch("/api/access", { credentials: "include" });
+        const data = await res.json();
+
+        if (data.role !== "admin" && data.role !== "premium") {
+          window.location.href = "locked";
+        }
+      } catch (err) {
+        window.location.href = "locked";
+      }
+    })();
+  </script>
+
+  <style>
+    .setup-exchange-page{
+      background:
+        linear-gradient(135deg, rgba(243,210,27,0.07), transparent 28%),
+        radial-gradient(circle at 78% 8%, rgba(43,191,120,0.10), transparent 24%),
+        radial-gradient(circle at 12% 26%, rgba(243,210,27,0.10), transparent 22%),
+        #050505;
+    }
+
+    .setup-exchange-page .navbar{
+      position:sticky;
+      top:14px;
+      z-index:50;
+      padding:14px 16px;
+      border:1px solid rgba(243,210,27,0.14);
+      border-radius:24px;
+      background:rgba(7,7,7,0.78);
+      backdrop-filter:blur(18px);
+      box-shadow:0 18px 60px rgba(0,0,0,0.28);
+    }
+
+    .setup-exchange-page .logo,
+    .setup-exchange-page .section-heading{
+      letter-spacing:0;
+    }
+
+    .setup-exchange-page .hero-shell{
+      margin-top:14px;
+      padding:40px;
+      border-radius:34px;
+      background:
+        linear-gradient(145deg, rgba(255,255,255,0.055), transparent 38%),
+        radial-gradient(circle at 76% 20%, rgba(243,210,27,0.14), transparent 30%),
+        linear-gradient(180deg, rgba(18,18,18,0.92), rgba(5,5,5,0.98));
+      overflow:hidden;
+    }
+
+    .setup-exchange-page .hero-shell::before{
+      width:520px;
+      height:520px;
+      top:-220px;
+      right:-160px;
+      background:radial-gradient(circle, rgba(243,210,27,0.16), transparent 66%);
+    }
+
+    .setup-exchange-page .hero-title{
+      max-width:1050px;
+      font-size:clamp(44px, 5vw, 74px);
+      letter-spacing:0;
+      line-height:.92;
+    }
+
+    .setup-exchange-page .hero-text{
+      max-width:900px;
+    }
+
+    .setup-exchange-page .badge{
+      border-color:rgba(243,210,27,0.18);
+      background:rgba(243,210,27,0.065);
+      color:var(--gold);
+      box-shadow:none;
+    }
+
+    .setup-layout {
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 24px;
+      align-items: start;
+    }
+
+    .setup-panel {
+      border:1px solid rgba(243,210,27,0.16);
+      border-radius:26px;
+      background:
+        linear-gradient(145deg, rgba(255,255,255,0.035), transparent 44%),
+        linear-gradient(180deg, rgba(17,17,17,0.9), rgba(7,7,7,0.96));
+      box-shadow:
+        inset 0 0 0 1px rgba(255,255,255,0.025),
+        0 22px 58px rgba(0,0,0,0.28);
+      padding:28px;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 18px;
+    }
+
+    .field label {
+      color: #f1f1f1;
+      font-size: 14px;
+      font-weight: 800;
+    }
+
+    .field input,
+    .field textarea,
+    .field select {
+      width: 100%;
+      border-radius: 16px;
+      border: 1px solid rgba(243,210,27,0.18);
+      background: rgba(255,255,255,0.03);
+      color: #fff;
+      padding: 14px 16px;
+      font-size: 15px;
+      outline: none;
+    }
+
+    .field textarea {
+      min-height: 140px;
+      resize: vertical;
+    }
+
+    .field-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 20px;
+    }
+
+    .action-btn {
+      border: none;
+      cursor: pointer;
+    }
+
+    .helper-list {
+      display: grid;
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .helper-item {
+      border: 1px solid rgba(243,210,27,0.12);
+      border-radius: 16px;
+      background: rgba(255,255,255,0.02);
+      padding: 14px 16px;
+      color: #efefef;
+      line-height: 1.6;
+      font-size: 14px;
+      font-weight: 700;
+    }
+        .setup-list {
+      display: grid;
+      gap: 14px;
+      margin-top: 18px;
+    }
+
+    .setup-card {
+      border: 1px solid rgba(243,210,27,0.14);
+      border-radius: 22px;
+      background: rgba(255,255,255,0.02);
+      padding: 18px;
+    }
+
+    .setup-title {
+      color: var(--gold);
+      font-size: 20px;
+      font-weight: 900;
+      margin-bottom: 8px;
+    }
+
+    .setup-meta {
+      color: #bdbdbd;
+      font-size: 14px;
+      margin-bottom: 12px;
+    }
+
+    .setup-text {
+      color: #ededed;
+      line-height: 1.7;
+      font-size: 15px;
+      white-space: pre-wrap;
+      margin-bottom: 14px;
+    }
+
+    .setup-img {
+      width: 100%;
+      border-radius: 18px;
+      border: 1px solid rgba(243,210,27,0.14);
+      margin: 10px 0 14px;
+    }
+
+    .small-btn {
+      border: none;
+      cursor: pointer;
+      padding: 10px 14px;
+      border-radius: 12px;
+      font-weight: 800;
+      font-size: 14px;
+      background: rgba(255,255,255,0.03);
+      color: #fff;
+      border: 1px solid rgba(255,255,255,0.14);
+      margin-right: 8px;
+      margin-top: 8px;
+    }
+
+    .empty-state {
+      border: 1px dashed rgba(243,210,27,0.18);
+      border-radius: 20px;
+      padding: 24px;
+      text-align: center;
+      color: #bdbdbd;
+      line-height: 1.7;
+      margin-top: 18px;
+      background: rgba(255,255,255,0.02);
+    }
+
+    .auth-badge{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:10px 14px;
+      border-radius:999px;
+      font-size:13px;
+      font-weight:700;
+      border:1px solid rgba(255,255,255,0.08);
+      background:rgba(255,255,255,0.04);
+      color:#fff;
+      white-space:nowrap;
+    }
+
+    .auth-badge::before{
+      content:"";
+      width:10px;
+      height:10px;
+      border-radius:50%;
+      display:inline-block;
+      background:#666;
+    }
+
+    .auth-badge.status-admin::before{background:#ffd700;}
+    .auth-badge.status-premium::before{background:#22c55e;}
+
+    .setup-exchange-page .logout-btn{
+      border-color:rgba(255,255,255,0.08);
+      background:rgba(255,255,255,0.04);
+    }
+
+    .setup-exchange-page .footer-note{
+      display:flex;
+      flex-wrap:wrap;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+      border:1px solid rgba(243,210,27,0.14);
+      border-radius:24px;
+      background:rgba(255,255,255,0.025);
+      padding:22px 26px;
+      margin:28px 0 10px;
+      color:#bdbdbd;
+      font-size:14px;
+      font-weight:800;
+      text-align:left;
+    }
+
+    .setup-exchange-page .footer-note strong{
+      display:block;
+      color:var(--gold);
+      font-size:16px;
+      margin-bottom:2px;
+    }
+
+    .setup-exchange-page .footer-note span{
+      color:#d2d2d2;
+      font-weight:700;
+    }
+
+    .setup-exchange-page .footer-note nav{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+    }
+
+    .setup-exchange-page .footer-note a{
+      color:#fff;
+      text-decoration:none;
+      font-weight:900;
+      padding:9px 12px;
+      border-radius:999px;
+      background:rgba(255,255,255,0.035);
+      border:1px solid rgba(255,255,255,0.07);
+    }
+
+    .setup-exchange-page .footer-note a:hover{
+      color:var(--gold);
+      border-color:rgba(243,210,27,0.34);
+    }
+
+    .setup-exchange-page .footer-note p{
+      flex-basis:100%;
+      margin:0;
+      color:#aaa;
+      font-weight:700;
+    }
+
+    @media(max-width:1100px) {
+      .setup-layout,
+      .field-row {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body class="setup-exchange-page">
+  <div class="page">
+
+    <nav class="navbar">
+      <a href="index" class="logo">BullProsperity</a>
+      <div class="nav-links">
+        <a href="index">Home</a>
+        <a href="hub">Hub</a>
+        <a href="course">Course</a>
+        <a href="tools">Tools</a>
+        <a href="setup-room">Setup Room</a>
+        <a href="community" class="active">Community</a>
+        <a id="loginNavBtn" href="/api/whop/login">Login</a>
+        <a id="logoutBtn" href="/api/logout" class="logout-btn" style="display:none;">Logout</a>
+        <div id="authBadge" class="auth-badge status-loading" style="display:none;">Zugang</div>
+      </div>
+    </nav>
+
+    <section class="hero-shell">
+      <div class="badge">Setups</div>
+      <h1 class="hero-title">Setup <span class="gold">Austausch</span></h1>
+      <p class="hero-text">
+        Teile deine Trading Setups, Marktideen, Liquiditätsbereiche und mögliche Entry-Szenarien mit BullProsperity.
+      </p>
+      <div class="hero-buttons">
+        <a href="community" class="btn primary">Zurück zur Community</a>
+        <a href="#setupForm" class="btn secondary">Setup posten</a>
+      </div>
+    </section>
+
+    <section class="setup-layout">
+      <div class="setup-panel" id="setupForm">
+        <div class="badge">Neuer Setup Beitrag</div>
+        <h2 class="section-heading" style="font-size:36px; margin-bottom:10px;">Setup teilen</h2>
+        <p class="section-subtext" style="margin-bottom:0;">
+          Teile Markt, Bias, Setup-Typ, Beschreibung und optional einen TradingView Screenshot.
+        </p>
+                <form id="setupSubmitForm">
+          <div class="field-row">
+            <div class="field">
+              <label for="name">Name</label>
+              <input id="name" placeholder="Dein Name" />
+            </div>
+
+            <div class="field">
+              <label for="email">Email</label>
+              <input id="email" placeholder="Deine Email" />
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="title">Titel</label>
+            <input id="title" placeholder="z. B. London Sweep auf EURUSD" required />
+          </div>
+
+          <div class="field">
+            <label for="market">Markt</label>
+            <input id="market" placeholder="z. B. EURUSD / XAUUSD / NAS100" required />
+          </div>
+
+          <div class="field-row">
+            <div class="field">
+              <label for="bias">Bias</label>
+              <select id="bias" required>
+                <option value="">Bitte wählen</option>
+                <option>Bullish</option>
+                <option>Bearish</option>
+                <option>Neutral</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="setupType">Setup Typ</label>
+              <input id="setupType" placeholder="z. B. Liquidity Sweep + BOS" required />
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="description">Beschreibung</label>
+            <textarea id="description" placeholder="Beschreibe Entry-Idee, SL, TP, Liquidität, Struktur..." required></textarea>
+          </div>
+
+          <div class="field">
+            <label for="screenshot">TradingView Screenshot hochladen</label>
+            <input id="screenshot" type="file" accept="image/png,image/jpeg,image/webp" />
+          </div>
+
+          <div class="actions">
+            <button class="btn primary action-btn" type="submit">Setup posten</button>
+            <button class="btn secondary action-btn" type="button" id="resetSetupBtn">Felder leeren</button>
+          </div>
+        </form>
+      </div>
+
+      <div class="setup-panel">
+        <div class="badge">BullProsperity Fokus</div>
+        <h2 class="section-heading" style="font-size:36px; margin-bottom:10px;">Warum Setup Austausch?</h2>
+        <p class="section-subtext" style="margin-bottom:0;">
+          Der Austausch über Setups hilft Mitgliedern, Märkte aus mehreren Blickwinkeln zu betrachten und ihre Analyse zu verbessern.
+        </p>
+
+        <div class="helper-list">
+          <div class="helper-item">Mehr Perspektiven auf denselben Markt.</div>
+          <div class="helper-item">Besseres Verständnis für Struktur, Liquidität und Timing.</div>
+          <div class="helper-item">Lernen durch reale Marktsituationen statt nur Theorie.</div>
+          <div class="helper-item">Setups werden lokal gespeichert und an den Admin-Discord gesendet.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="setup-panel">
+        <div class="badge">Lokale Speicherung</div>
+        <h2 class="section-heading" style="font-size:36px; margin-bottom:10px;">Meine gespeicherten Setups</h2>
+        <p class="section-subtext" style="margin-bottom:0;">
+          Diese Setups werden zusätzlich auf deinem Gerät gespeichert und können als BullProsperity PDF heruntergeladen werden.
+        </p>
+
+        <div id="savedSetups" class="setup-list"></div>
+
+        <div id="setupEmpty" class="empty-state">
+          Noch keine Setups gespeichert.<br>
+          Erstelle oben dein erstes Setup.
+        </div>
+      </div>
+    </section>
+
+    <div class="footer-note">
+      <div>
+        <strong>BullProsperity</strong>
+        <span>Setup Austausch für Struktur, Liquidität, Bias und Trading Education.</span>
+      </div>
+      <nav>
+        <a href="impressum">Impressum</a>
+        <a href="datenschutz">Datenschutz</a>
+        <a href="risikohinweis">Risikohinweis</a>
+        <a href="community">Kontakt</a>
+      </nav>
+      <p>BullProsperity dient ausschließlich Bildungs- und Informationszwecken. Es werden keine Gewinne garantiert.</p>
+    </div>
+
+  </div>
+
+<script>
+const storageKey = "bp_setups";
+const authBadge = document.getElementById("authBadge");
+const loginNavBtn = document.getElementById("loginNavBtn");
+const logoutBtn = document.getElementById("logoutBtn");
+
+const form = document.getElementById("setupSubmitForm");
+const resetSetupBtn = document.getElementById("resetSetupBtn");
+const savedSetups = document.getElementById("savedSetups");
+const setupEmpty = document.getElementById("setupEmpty");
+
+function getSetups() {
+  const raw = localStorage.getItem(storageKey);
+  return raw ? JSON.parse(raw) : [];
+}
+
+function saveSetups(data) {
+  localStorage.setItem(storageKey, JSON.stringify(data));
+}
+
+function resetForm() {
+  form.reset();
+}
+
+function fileToBase64(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+
+function renderSetups() {
+  const setups = getSetups();
+  savedSetups.innerHTML = "";
+
+  if (setups.length === 0) {
+    setupEmpty.style.display = "block";
+    return;
+  }
+
+  setupEmpty.style.display = "none";
+
+  setups.forEach((setup, index) => {
+    const card = document.createElement("div");
+    card.className = "setup-card";
+
+    card.innerHTML = `
+      <div class="setup-title">${setup.title}</div>
+      <div class="setup-meta">
+        ${setup.market} • ${setup.bias} • ${setup.setupType} • ${setup.date}
+      </div>
+      <div class="setup-text">${setup.description}</div>
+      ${setup.image ? `<img class="setup-img" src="${setup.image}" alt="Setup Screenshot">` : ""}
+      <button class="small-btn" onclick="downloadSetup(${index})">PDF herunterladen</button>
+      <button class="small-btn" onclick="deleteSetup(${index})">Setup löschen</button>
+    `;
+
+    savedSetups.appendChild(card);
+  });
+}
+
+function deleteSetup(index) {
+  const setups = getSetups();
+  setups.splice(index, 1);
+  saveSetups(setups);
+  renderSetups();
+}
+
+async function downloadSetup(index) {
+  const setup = getSetups()[index];
+
+  if (!window.jspdf) {
+    alert("PDF Tool konnte nicht geladen werden.");
+    return;
+  }
+
+  const { jsPDF } = window.jspdf;
+  const pdf = new jsPDF("p", "mm", "a4");
+
+  const pageWidth = 210;
+  const pageHeight = 297;
+  const gold = [243, 210, 27];
+  const white = [245, 245, 245];
+  const muted = [170, 170, 170];
+  const dark = [5, 5, 5];
+  const panel = [14, 14, 14];
+
+  function paintBackground() {
+    pdf.setFillColor(...dark);
+    pdf.rect(0, 0, pageWidth, pageHeight, "F");
+
+    pdf.setDrawColor(...gold);
+    pdf.setLineWidth(0.35);
+    pdf.roundedRect(10, 10, 190, 277, 6, 6);
+
+    pdf.setFillColor(...panel);
+    pdf.roundedRect(15, 15, 180, 267, 5, 5, "F");
+  }
+
+  function addFooter() {
+    pdf.setFont("helvetica", "normal");
+    pdf.setFontSize(8);
+    pdf.setTextColor(130, 130, 130);
+    pdf.text(
+      "BullProsperity vermittelt Bildungsinhalte, Marktverständnis und Risikobewusstsein.",
+      18,
+      275
+    );
+  }
+
+  function addHeader() {
+    pdf.setFont("helvetica", "bold");
+    pdf.setFontSize(22);
+    pdf.setTextColor(...gold);
+    pdf.text("BullProsperity", 18, 29);
+
+    pdf.setFont("helvetica", "normal");
+    pdf.setFontSize(10);
+    pdf.setTextColor(...muted);
+    pdf.text("Trading Education Platform", 18, 36);
+
+    pdf.setFont("helvetica", "bold");
+    pdf.setFontSize(25);
+    pdf.setTextColor(...white);
+    pdf.text("Setup Austausch", 18, 54);
+
+    pdf.setDrawColor(...gold);
+    pdf.setLineWidth(0.25);
+    pdf.line(18, 60, 192, 60);
+  }
+
+  paintBackground();
+  addHeader();
+
+  let y = 74;
+
+  function addInfo(label, value) {
+    if (y > 245) {
+      addFooter();
+      pdf.addPage();
+      paintBackground();
+      addHeader();
+      y = 74;
+    }
+
+    pdf.setFont("helvetica", "bold");
+    pdf.setFontSize(10);
+    pdf.setTextColor(...gold);
+    pdf.text(label, 18, y);
+
+    pdf.setFont("helvetica", "normal");
+    pdf.setFontSize(12);
+    pdf.setTextColor(...white);
+
+    const lines = pdf.splitTextToSize(value || "-", 172);
+    pdf.text(lines, 18, y + 7);
+
+    y += 14 + (lines.length * 5);
+  }
+
+  addInfo("Name", setup.name || "Nicht angegeben");
+  addInfo("Email", setup.email || "Nicht angegeben");
+  addInfo("Titel", setup.title);
+  addInfo("Markt", setup.market);
+  addInfo("Bias", setup.bias);
+  addInfo("Setup Typ", setup.setupType);
+  addInfo("Datum", setup.date);
+  addInfo("Beschreibung", setup.description);
+
+  if (setup.image) {
+    if (y > 165) {
+      addFooter();
+      pdf.addPage();
+      paintBackground();
+      addHeader();
+      y = 74;
+    }
+
+    pdf.setFont("helvetica", "bold");
+    pdf.setFontSize(12);
+    pdf.setTextColor(...gold);
+    pdf.text("TradingView Screenshot", 18, y);
+
+    y += 8;
+
+    try {
+      const props = pdf.getImageProperties(setup.image);
+      const imgWidth = 174;
+      let imgHeight = (props.height * imgWidth) / props.width;
+
+      if (imgHeight > 105) {
+        imgHeight = 105;
+      }
+
+      pdf.addImage(setup.image, props.fileType || "JPEG", 18, y, imgWidth, imgHeight);
+      y += imgHeight + 10;
+    } catch (err) {
+      pdf.setTextColor(...white);
+      pdf.setFontSize(11);
+      pdf.text("Screenshot konnte nicht eingebunden werden.", 18, y);
+    }
+  }
+
+  addFooter();
+
+  const cleanTitle = (setup.title || "Setup")
+    .replace(/[^\wäöüÄÖÜß-]+/g, "-")
+    .replace(/-+/g, "-");
+
+  pdf.save("BullProsperity-Setup-" + cleanTitle + ".pdf");
+}
+
+form.addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const file = document.getElementById("screenshot").files[0];
+
+  if (file && file.size > 3000000) {
+    alert("Bild ist zu groß. Bitte maximal 3 MB hochladen.");
+    return;
+  }
+
+  let image = "";
+
+  if (file) {
+    image = await fileToBase64(file);
+  }
+
+  const setup = {
+    name: document.getElementById("name").value.trim(),
+    email: document.getElementById("email").value.trim(),
+    title: document.getElementById("title").value.trim(),
+    market: document.getElementById("market").value.trim(),
+    bias: document.getElementById("bias").value,
+    setupType: document.getElementById("setupType").value.trim(),
+    description: document.getElementById("description").value.trim(),
+    image,
+    date: new Date().toLocaleString("de-DE")
+  };
+
+  if (!setup.title || !setup.market || !setup.bias || !setup.setupType || !setup.description) {
+    alert("Bitte alle Pflichtfelder ausfüllen.");
+    return;
+  }
+
+  const setups = getSetups();
+  setups.unshift(setup);
+  saveSetups(setups);
+  renderSetups();
+
+  try {
+    const res = await fetch("/api/send-setup", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      credentials: "include",
+      body: JSON.stringify(setup)
+    });
+
+    const result = await res.json();
+
+    if (!res.ok) {
+      alert(result.error || "Setup lokal gespeichert, aber nicht an Discord gesendet.");
+      return;
+    }
+
+    alert("Setup wurde gespeichert und an Discord gesendet.");
+    resetForm();
+
+  } catch {
+    alert("Setup lokal gespeichert, aber Discord Fehler.");
+  }
+});
+
+resetSetupBtn.addEventListener("click", resetForm);
+
+window.downloadSetup = downloadSetup;
+window.deleteSetup = deleteSetup;
+
+renderSetups();
+
+document.addEventListener("DOMContentLoaded", async () => {
+  try {
+    const res = await fetch("/api/access", { credentials: "include" });
+    const data = await res.json();
+    const role = data?.role || "guest";
+
+    if (role !== "admin" && role !== "premium") {
+      window.location.href = "locked";
+      return;
+    }
+
+    if (role === "admin") {
+      authBadge.textContent = "Admin";
+      authBadge.className = "auth-badge status-admin";
+      authBadge.style.display = "inline-flex";
+    }
+
+    if (role === "premium") {
+      authBadge.textContent = "Premium";
+      authBadge.className = "auth-badge status-premium";
+      authBadge.style.display = "inline-flex";
+    }
+
+    if (loginNavBtn) loginNavBtn.style.display = "none";
+    if (logoutBtn) logoutBtn.style.display = "inline-flex";
+  } catch (err) {
+    window.location.href = "locked";
+  }
+});
+</script>
+
+<script>
+  window.addEventListener("load", () => {
+    const loader = document.getElementById("bpLoader");
+
+    setTimeout(() => {
+      if(loader){
+        loader.classList.add("hide");
+      }
+    }, 700);
+  });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <script>document.documentElement.classList.add("bp-auth-checking");</script>
+  <script src="/access-guard.js?v=20260623-3"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BullProsperity | TradingView Bereich</title>
+  <link rel="icon" type="image/png" href="/favicon.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="apple-touch-icon" href="/favicon.png">
+<meta name="theme-color" content="#050505">
+  <link rel="stylesheet" href="theme.css" />
+  <script src="/login.js?v=20260624-2" defer></script>
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+  <script>
+    (async () => {
+      try {
+        const res = await fetch("/api/access", {
+          credentials: "include"
+        });
+        const data = await res.json();
+
+        if (data.role !== "admin" && data.role !== "premium") {
+          window.location.href = "locked";
+        }
+      } catch (err) {
+        window.location.href = "locked";
+      }
+    })();
+  </script>
+
+  <style>
+    .tradingview-page{
+      background:
+        linear-gradient(135deg, rgba(243,210,27,0.07), transparent 28%),
+        radial-gradient(circle at 78% 8%, rgba(43,191,120,0.10), transparent 24%),
+        radial-gradient(circle at 12% 26%, rgba(243,210,27,0.10), transparent 22%),
+        #050505;
+    }
+
+    .tradingview-page .navbar{
+      position:sticky;
+      top:14px;
+      z-index:50;
+      padding:14px 16px;
+      border:1px solid rgba(243,210,27,0.14);
+      border-radius:24px;
+      background:rgba(7,7,7,0.78);
+      backdrop-filter:blur(18px);
+      box-shadow:0 18px 60px rgba(0,0,0,0.28);
+    }
+
+    .tradingview-page .logo,
+    .tradingview-page .section-heading{
+      letter-spacing:0;
+    }
+
+    .tradingview-page .hero-shell{
+      margin-top:14px;
+      padding:40px;
+      border-radius:34px;
+      background:
+        linear-gradient(145deg, rgba(255,255,255,0.055), transparent 38%),
+        radial-gradient(circle at 76% 20%, rgba(243,210,27,0.14), transparent 30%),
+        linear-gradient(180deg, rgba(18,18,18,0.92), rgba(5,5,5,0.98));
+      overflow:hidden;
+    }
+
+    .tradingview-page .hero-shell::before{
+      width:520px;
+      height:520px;
+      top:-220px;
+      right:-160px;
+      background:radial-gradient(circle, rgba(243,210,27,0.16), transparent 66%);
+    }
+
+    .tradingview-page .hero-title{
+      max-width:1050px;
+      font-size:clamp(44px, 5vw, 74px);
+      letter-spacing:0;
+      line-height:.92;
+    }
+
+    .tradingview-page .hero-text{
+      max-width:900px;
+    }
+
+    .tradingview-page .badge{
+      border-color:rgba(243,210,27,0.18);
+      background:rgba(243,210,27,0.065);
+      color:var(--gold);
+      box-shadow:none;
+    }
+
+    .tv-layout{
+      display:grid;
+      grid-template-columns:1.1fr 0.9fr;
+      gap:24px;
+      align-items:start;
+    }
+
+    .tv-panel{
+      border:1px solid rgba(243,210,27,0.16);
+      border-radius:26px;
+      background:
+        linear-gradient(145deg, rgba(255,255,255,0.035), transparent 44%),
+        linear-gradient(180deg, rgba(17,17,17,0.9), rgba(7,7,7,0.96));
+      box-shadow:
+        inset 0 0 0 1px rgba(255,255,255,0.025),
+        0 22px 58px rgba(0,0,0,0.28);
+      padding:28px;
+    }
+
+    .tv-frame{
+      border:1px solid rgba(243,210,27,0.18);
+      border-radius:22px;
+      overflow:hidden;
+      background:#0c0c0c;
+      margin-top:18px;
+      min-height:620px;
+      box-shadow:0 18px 48px rgba(0,0,0,0.26);
+    }
+
+    .tv-frame iframe{
+      width:100%;
+      height:680px;
+      border:none;
+      display:block;
+      background:#0c0c0c;
+    }
+
+    .symbol-grid{
+      display:grid;
+      grid-template-columns:repeat(2,1fr);
+      gap:12px;
+      margin-top:18px;
+    }
+
+    .symbol-btn{
+      border:1px solid rgba(243,210,27,0.16);
+      background:rgba(255,255,255,0.03);
+      color:#fff;
+      border-radius:16px;
+      padding:14px 16px;
+      font-size:15px;
+      font-weight:800;
+      cursor:pointer;
+      transition:0.2s ease;
+      text-align:left;
+    }
+
+    .symbol-btn:hover{
+      transform:translateY(-1px);
+      border-color:rgba(243,210,27,0.42);
+      color:var(--gold);
+    }
+
+    .symbol-btn.active{
+      background:rgba(243,210,27,0.10);
+      border-color:rgba(243,210,27,0.42);
+      color:var(--gold);
+      box-shadow:0 0 14px rgba(243,210,27,0.10);
+    }
+
+    .helper-text{
+      color:#d8d8d8;
+      line-height:1.7;
+      font-size:15px;
+    }
+
+    .quick-box{
+      margin-top:18px;
+      border:1px solid rgba(243,210,27,0.14);
+      border-radius:20px;
+      background:
+        radial-gradient(circle at top right, rgba(243,210,27,0.055), transparent 58%),
+        rgba(255,255,255,0.02);
+      padding:18px;
+    }
+
+    .quick-title{
+      color:var(--gold);
+      font-size:18px;
+      font-weight:900;
+      margin-bottom:10px;
+    }
+
+    .quick-sub{
+      color:#e6e6e6;
+      font-size:14px;
+      line-height:1.7;
+    }
+
+    .watchlist{
+      display:grid;
+      gap:12px;
+      margin-top:18px;
+    }
+
+    .watch-item{
+      border:1px solid rgba(243,210,27,0.12);
+      border-radius:16px;
+      background:rgba(255,255,255,0.025);
+      padding:14px 16px;
+    }
+
+    .watch-item .name{
+      color:#fff;
+      font-size:15px;
+      font-weight:900;
+      margin-bottom:6px;
+    }
+
+    .watch-item .desc{
+      color:#d6d6d6;
+      font-size:14px;
+      line-height:1.6;
+    }
+
+    .note-box{
+      margin-top:18px;
+      width:100%;
+      min-height:180px;
+      border-radius:18px;
+      border:1px solid rgba(243,210,27,0.16);
+      background:rgba(255,255,255,0.03);
+      color:#fff;
+      padding:16px;
+      resize:vertical;
+      outline:none;
+      font-size:15px;
+      box-sizing:border-box;
+    }
+
+    .tradingview-page .btn{
+      border-radius:999px;
+      min-height:46px;
+    }
+
+    .tradingview-page .btn.primary{
+      background:var(--gold);
+      color:#111;
+      box-shadow:0 0 24px rgba(243,210,27,0.16);
+    }
+
+    .tradingview-page .btn.secondary{
+      color:#fff;
+      border-color:rgba(255,255,255,0.14);
+      background:rgba(255,255,255,0.025);
+    }
+
+    .auth-badge{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:10px 14px;
+      border-radius:999px;
+      font-size:13px;
+      font-weight:700;
+      border:1px solid rgba(255,255,255,0.08);
+      background:rgba(255,255,255,0.04);
+      color:#fff;
+      white-space:nowrap;
+    }
+
+    .auth-badge::before{
+      content:"";
+      width:10px;
+      height:10px;
+      border-radius:50%;
+      display:inline-block;
+      background:#666;
+    }
+
+    .auth-badge.status-admin::before{background:#ffd700;}
+    .auth-badge.status-premium::before{background:#22c55e;}
+    .auth-badge.status-locked::before{background:#ef4444;}
+
+    .tradingview-page .logout-btn{
+      border-color:rgba(255,255,255,0.08);
+      background:rgba(255,255,255,0.04);
+    }
+
+    .tradingview-page .footer-note{
+      display:flex;
+      flex-wrap:wrap;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+      border:1px solid rgba(243,210,27,0.14);
+      border-radius:24px;
+      background:rgba(255,255,255,0.025);
+      padding:22px 26px;
+      margin:28px 0 10px;
+      color:#bdbdbd;
+      font-size:14px;
+      font-weight:800;
+      text-align:left;
+    }
+
+    .tradingview-page .footer-note strong{
+      display:block;
+      color:var(--gold);
+      font-size:16px;
+      margin-bottom:2px;
+    }
+
+    .tradingview-page .footer-note span{
+      color:#d2d2d2;
+      font-weight:700;
+    }
+
+    .tradingview-page .footer-note nav{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+    }
+
+    .tradingview-page .footer-note a{
+      color:#fff;
+      text-decoration:none;
+      font-weight:900;
+      padding:9px 12px;
+      border-radius:999px;
+      background:rgba(255,255,255,0.035);
+      border:1px solid rgba(255,255,255,0.07);
+    }
+
+    .tradingview-page .footer-note a:hover{
+      color:var(--gold);
+      border-color:rgba(243,210,27,0.34);
+    }
+
+    .tradingview-page .footer-note p{
+      flex-basis:100%;
+      margin:0;
+      color:#aaa;
+      font-weight:700;
+    }
+
+    @media(max-width:1100px){
+      .tv-layout{
+        grid-template-columns:1fr;
+      }
+    }
+
+    @media(max-width:760px){
+      .tradingview-page .hero-shell{
+        padding:24px !important;
+      }
+
+      .symbol-grid{
+        grid-template-columns:1fr;
+      }
+
+      .tv-frame{
+        min-height:420px;
+      }
+
+      .tv-frame iframe{
+        height:460px;
+      }
+
+      .tv-panel{
+        padding:20px;
+      }
+
+      .tradingview-page .footer-note{
+        align-items:flex-start;
+        flex-direction:column;
+      }
+    }
+  </style>
+</head>
+<body class="tradingview-page">
+  <div class="page">
+
+    <nav class="navbar">
+      <a href="index" class="logo">BullProsperity</a>
+
+      <div class="nav-links">
+        <a href="index">Home</a>
+        <a href="hub">Hub</a>
+        <a href="course">Course</a>
+        <a href="tools" class="active">Tools</a>
+        <a href="setup-room">Setup Room</a>
+        <a href="community">Community</a>
+        <a id="loginNavBtn" href="/api/whop/login">Login</a>
+        <a id="logoutBtn" href="/api/logout" class="logout-btn" style="display:none;">Logout</a>
+        <div id="authBadge" class="auth-badge status-loading" style="display:none;">Zugang</div>
+      </div>
+    </nav>
+
+    <section class="hero-shell">
+      <div class="badge">Charts</div>
+
+      <h1 class="hero-title">
+        BullProsperity
+        <span class="gold">TradingView Bereich</span>
+      </h1>
+
+      <p class="hero-text">
+        Analysiere deine Märkte direkt innerhalb deiner Plattform. Wechsle schnell zwischen
+        Forex, Gold und Indizes und halte deine Beobachtungen direkt daneben fest.
+      </p>
+
+      <div class="hero-buttons">
+        <a href="tools" class="btn primary">Zurück zu den Tools</a>
+        <a href="#chartbereich" class="btn secondary">Zum Chart</a>
+      </div>
+    </section>
+
+    <section id="chartbereich" class="tv-layout">
+
+      <div class="tv-panel">
+        <div class="badge">Live Chart</div>
+        <h2 class="section-heading" style="font-size:36px; margin-bottom:10px;">Chart Analyse</h2>
+        <p class="section-subtext" style="margin-bottom:0;">
+          Nutze diesen Bereich für Marktstruktur, Liquidität, Sessions und deine tägliche Vorbereitung.
+        </p>
+
+        <div class="tv-frame">
+          <iframe
+            id="tvFrame"
+            src="https://www.tradingview.com/widgetembed/?symbol=FX%3AEURUSD&interval=60&theme=dark&style=1&locale=de_DE&toolbarbg=0C0C0C&enable_publishing=false&hide_side_toolbar=false&allow_symbol_change=true"
+            allowfullscreen>
+          </iframe>
+        </div>
+      </div>
+
+      <div class="tv-panel">
+        <div class="badge">Schnellzugriff</div>
+        <h2 class="section-heading" style="font-size:36px; margin-bottom:10px;">Märkte wechseln</h2>
+        <p class="helper-text">
+          Öffne mit einem Klick deine wichtigsten Märkte und bleibe direkt in deinem BullProsperity Workflow.
+        </p>
+
+        <div class="symbol-grid">
+          <button class="symbol-btn active" data-symbol="FX:EURUSD">EURUSD</button>
+          <button class="symbol-btn" data-symbol="FX:GBPUSD">GBPUSD</button>
+          <button class="symbol-btn" data-symbol="FX:USDJPY">USDJPY</button>
+          <button class="symbol-btn" data-symbol="OANDA:XAUUSD">XAUUSD</button>
+          <button class="symbol-btn" data-symbol="CAPITALCOM:US100">NAS100</button>
+          <button class="symbol-btn" data-symbol="CAPITALCOM:US30">US30</button>
+        </div>
+
+        <div class="quick-box">
+          <div class="quick-title">BullProsperity Hinweis</div>
+          <div class="quick-sub">
+            Nutze den Chart nicht nur zum Anschauen. Markiere deine Struktur, prüfe Liquidität,
+            warte auf Confirmation und notiere dir anschließend deine Gedanken sauber im Journal.
+          </div>
+        </div>
+
+        <div class="watchlist">
+          <div class="watch-item">
+            <div class="name">Forex Fokus</div>
+            <div class="desc">EURUSD, GBPUSD und USDJPY eignen sich stark für Struktur, Sessions und Liquiditätskonzepte.</div>
+          </div>
+
+          <div class="watch-item">
+            <div class="name">Gold Fokus</div>
+            <div class="desc">XAUUSD bewegt sich oft dynamisch und eignet sich gut für Reaktionszonen, Sweeps und starke Impulse.</div>
+          </div>
+
+          <div class="watch-item">
+            <div class="name">Index Fokus</div>
+            <div class="desc">NAS100 und US30 sind interessant für schnelle Moves, Session Plays und klare Momentum-Bewegungen.</div>
+          </div>
+        </div>
+
+        <textarea id="chartNotes" class="note-box" placeholder="Deine Chart-Beobachtungen, Bias, Zonen oder Session-Notizen..."></textarea>
+      </div>
+
+    </section>
+
+    <div class="footer-note">
+      <div>
+        <strong>BullProsperity</strong>
+        <span>TradingView Bereich für Chartanalyse, Bias, Liquidität und Trading Education.</span>
+      </div>
+      <nav>
+        <a href="impressum">Impressum</a>
+        <a href="datenschutz">Datenschutz</a>
+        <a href="risikohinweis">Risikohinweis</a>
+        <a href="community">Kontakt</a>
+      </nav>
+      <p>BullProsperity dient ausschließlich Bildungs- und Informationszwecken. Es werden keine Gewinne garantiert.</p>
+    </div>
+
+  </div>
+
+  <script>
+    const authBadge = document.getElementById("authBadge");
+    const loginNavBtn = document.getElementById("loginNavBtn");
+    const logoutBtn = document.getElementById("logoutBtn");
+    const buttons = document.querySelectorAll(".symbol-btn");
+    const tvFrame = document.getElementById("tvFrame");
+    const chartNotes = document.getElementById("chartNotes");
+    const notesKey = "bullprosperity_chart_notes";
+
+    function updateChart(symbol) {
+      const encoded = encodeURIComponent(symbol);
+      tvFrame.src = `https://www.tradingview.com/widgetembed/?symbol=${encoded}&interval=60&theme=dark&style=1&locale=de_DE&toolbarbg=0C0C0C&enable_publishing=false&hide_side_toolbar=false&allow_symbol_change=true`;
+    }
+
+    buttons.forEach(button => {
+      button.addEventListener("click", () => {
+        buttons.forEach(btn => btn.classList.remove("active"));
+        button.classList.add("active");
+
+        const symbol = button.getAttribute("data-symbol");
+        updateChart(symbol);
+      });
+    });
+
+    const savedNotes = localStorage.getItem(notesKey);
+    if (savedNotes) {
+      chartNotes.value = savedNotes;
+    }
+
+    chartNotes.addEventListener("input", () => {
+      localStorage.setItem(notesKey, chartNotes.value);
+    });
+
+    document.addEventListener("DOMContentLoaded", async () => {
+      try {
+        const res = await fetch("/api/access", {
+          credentials: "include"
+        });
+
+        const data = await res.json();
+        const role = data?.role || "guest";
+
+        if (role !== "admin" && role !== "premium") {
+          window.location.href = "locked";
+          return;
+        }
+
+        if (role === "admin") {
+          authBadge.textContent = "Admin";
+          authBadge.className = "auth-badge status-admin";
+          authBadge.style.display = "inline-flex";
+        }
+
+        if (role === "premium") {
+          authBadge.textContent = "Premium";
+          authBadge.className = "auth-badge status-premium";
+          authBadge.style.display = "inline-flex";
+        }
+
+        if (loginNavBtn) loginNavBtn.style.display = "none";
+        if (logoutBtn) logoutBtn.style.display = "inline-flex";
+      } catch (err) {
+        window.location.href = "locked";
+      }
+    });
+  </script>
+  <script>
+  window.addEventListener("load", () => {
+    const loader = document.getElementById("bpLoader");
+
+    setTimeout(() => {
+      if(loader){
+        loader.classList.add("hide");
+      }
+    }, 700);
+  });
+</script>
+</body>
+</html>

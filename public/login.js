@@ -1,0 +1,558 @@
+document.addEventListener("DOMContentLoaded", async () => {
+  setupElegantMotion();
+  const isProtectedPage = document.documentElement.classList.contains("bp-auth-checking");
+  const loginBtn = document.getElementById("loginNavBtn");
+  const logoutBtn = document.getElementById("logoutBtn");
+  const waitlistNavBtn = document.getElementById("waitlistNavBtn");
+
+  const authStatus = document.getElementById("authStatus");
+  const statusDot = document.getElementById("statusDot");
+
+  const startBtn = document.getElementById("startBtn");
+  const learnMoreBtn = document.getElementById("learnMoreBtn");
+  const homeHeroButtons = document.getElementById("homeHeroButtons");
+
+  let accessData = null;
+
+  try {
+    const res = await fetch("/api/access", {
+      credentials: "include",
+      cache: "no-store"
+    });
+
+    const data = await res.json();
+    accessData = data;
+
+    const isLoggedIn = ["admin", "premium", "longterm"].includes(data.role);
+
+    if (isProtectedPage && !isLoggedIn) {
+      window.location.replace("/locked");
+      return;
+    }
+
+    if (isProtectedPage) {
+      document.documentElement.classList.remove("bp-auth-checking");
+    }
+
+    if (authStatus) authStatus.textContent = "Kein Zugang";
+    if (statusDot) statusDot.className = "status-dot status-locked";
+
+    if (loginBtn) loginBtn.style.display = isLoggedIn ? "none" : "inline-flex";
+    if (logoutBtn) logoutBtn.style.display = isLoggedIn ? "inline-flex" : "none";
+    if (waitlistNavBtn) waitlistNavBtn.style.display = isLoggedIn ? "none" : "inline-flex";
+
+    if (isLoggedIn) {
+      window.BP_ACCESS = data;
+      if (authStatus) {
+        authStatus.textContent =
+          data.role === "admin" ? "Admin" : "Premium";
+      }
+
+      if (statusDot) {
+        statusDot.className =
+          "status-dot " +
+          (data.role === "admin" ? "status-admin" : "status-premium");
+      }
+
+      if (startBtn) startBtn.style.display = "none";
+      if (homeHeroButtons) homeHeroButtons.style.justifyContent = "center";
+      if (learnMoreBtn) learnMoreBtn.style.margin = "0 auto";
+
+      startInactivityLogout(accessData);
+
+      loadMemberPlatform();
+    } else {
+      if (startBtn) startBtn.style.display = "inline-flex";
+      if (homeHeroButtons) homeHeroButtons.style.justifyContent = "center";
+      if (learnMoreBtn) learnMoreBtn.style.margin = "0";
+    }
+
+  } catch (err) {
+    console.log("Auth Fehler");
+
+    if (isProtectedPage) {
+      window.location.replace("/locked");
+      return;
+    }
+
+    if (authStatus) authStatus.textContent = "Fehler";
+    if (statusDot) statusDot.className = "status-dot status-locked";
+
+    if (startBtn) startBtn.style.display = "inline-flex";
+    if (learnMoreBtn) learnMoreBtn.style.margin = "0";
+  } finally {
+    document.documentElement.classList.remove("bp-home-access-pending");
+  }
+
+  await trackPageOpen(accessData);
+  await trackLessonOpen(accessData);
+  setupClickTracking(accessData);
+  setupVimeoWatchtimeTracking(accessData);
+});
+
+(() => {
+  let reports = 0;
+  function report(type, detail) {
+    if (reports >= 3 || !window.BP_ACCESS) return;
+    reports += 1;
+    fetch("/api/telemetry", {
+      method:"POST",
+      credentials:"include",
+      keepalive:true,
+      headers:{ "Content-Type":"application/json" },
+      body:JSON.stringify({ type, page:location.pathname, detail:String(detail || "Unbekannter Fehler") })
+    }).catch(() => {});
+  }
+  window.addEventListener("error", event => report("client_error", event.message));
+  window.addEventListener("unhandledrejection", event => report("unhandled_rejection", event.reason?.message || event.reason));
+})();
+
+function setupElegantMotion() {
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+  const selectors = [
+    ".hero-shell", ".section", ".section-card", ".card", ".tool-card",
+    ".community-card", ".hub-card", ".hub-link-card", ".module",
+    ".course-panel", ".lesson-content", ".lab-hero", ".lab-tabs",
+    ".lab-card", ".admin-card", ".analytics-card"
+  ].join(",");
+
+  const elements = Array.from(document.querySelectorAll(selectors)).filter(element =>
+    !element.parentElement?.closest(".bp-reveal")
+  );
+
+  elements.forEach((element, index) => {
+    element.classList.add("bp-reveal");
+    element.style.setProperty("--bp-reveal-delay", `${Math.min(index % 4, 3) * 55}ms`);
+  });
+
+  if (!("IntersectionObserver" in window)) {
+    elements.forEach(element => element.classList.add("bp-in-view"));
+    return;
+  }
+
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      entry.target.classList.add("bp-in-view");
+      observer.unobserve(entry.target);
+    });
+  }, { threshold:.08, rootMargin:"0px 0px -5% 0px" });
+
+  elements.forEach(element => observer.observe(element));
+}
+
+function loadMemberPlatform() {
+  const memberPlatformSrc = "/member-platform.js?v=20260624-2";
+  const loadScript = () => {
+    if (document.querySelector('script[src^="/member-platform.js"]')) return;
+    const script = document.createElement("script");
+    script.src = memberPlatformSrc;
+    script.defer = true;
+    document.head.appendChild(script);
+  };
+
+  const existingStylesheet = document.querySelector('link[href^="/member-platform.css"]');
+  if (existingStylesheet) {
+    if (existingStylesheet.sheet) loadScript();
+    else {
+      existingStylesheet.addEventListener("load", loadScript, { once:true });
+      existingStylesheet.addEventListener("error", loadScript, { once:true });
+    }
+    return;
+  }
+
+  const stylesheet = document.createElement("link");
+  stylesheet.rel = "stylesheet";
+  stylesheet.href = "/member-platform.css?v=20260624-1";
+  stylesheet.addEventListener("load", loadScript, { once:true });
+  stylesheet.addEventListener("error", loadScript, { once:true });
+  document.head.appendChild(stylesheet);
+}
+
+function hasTrackableAccess(accessData) {
+  return ["admin", "premium", "longterm"].includes(accessData?.role);
+}
+
+function getTrackingEmail(accessData) {
+  return accessData?.email || "admin@bullprosperity.local";
+}
+
+function getCleanPageName() {
+  const path = window.location.pathname
+    .replace(/\/+/g, "/")
+    .replace(/^\/|\/$/g, "")
+    .replace(/\.html$/i, "");
+
+  return path || "home";
+}
+
+function getReadableClickLabel(element) {
+  const rawText = element.textContent || element.getAttribute("aria-label") || element.title || "";
+  return rawText.replace(/\s+/g, " ").trim().slice(0, 60) || "Unbenannter Klick";
+}
+
+function loadScriptOnce(src) {
+  return new Promise((resolve, reject) => {
+    const existingScript = document.querySelector(`script[src="${src}"]`);
+
+    if (existingScript) {
+      if (existingScript.dataset.loaded === "true") {
+        resolve();
+        return;
+      }
+
+      existingScript.addEventListener("load", resolve, { once: true });
+      existingScript.addEventListener("error", reject, { once: true });
+      return;
+    }
+
+    const script = document.createElement("script");
+    script.src = src;
+    script.dataset.bpDynamic = "true";
+    script.onload = () => {
+      script.dataset.loaded = "true";
+      resolve();
+    };
+    script.onerror = reject;
+    document.head.appendChild(script);
+  });
+}
+
+async function ensureSupabaseClient() {
+  if (window.supabaseClient) return true;
+
+  try {
+    if (!window.supabase) {
+      await loadScriptOnce("https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2");
+    }
+
+    if (!window.supabaseClient) {
+      await loadScriptOnce("/supabase.js");
+    }
+
+    return Boolean(window.supabaseClient);
+  } catch (err) {
+    console.log("Supabase konnte nicht geladen werden:", err);
+    return false;
+  }
+}
+
+async function trackMemberActivity(accessData, action, page) {
+  try {
+    if (!hasTrackableAccess(accessData)) return;
+
+    const ready = await ensureSupabaseClient();
+    if (!ready) return;
+
+    const { error } = await supabaseClient
+      .from("member_activity")
+      .insert({
+        email: getTrackingEmail(accessData),
+        role: accessData.role,
+        action,
+        page: page || getCleanPageName()
+      });
+
+    if (error) {
+      console.log("Member Tracking Fehler:", error);
+    }
+  } catch (err) {
+    console.log("Member Tracking System Fehler:", err);
+  }
+}
+
+async function trackPageOpen(accessData) {
+  const page = getCleanPageName();
+
+  await trackMemberActivity(accessData, "page_opened", page);
+}
+
+function setupClickTracking(accessData) {
+  if (!hasTrackableAccess(accessData)) return;
+
+  document.addEventListener("click", (event) => {
+    const target = event.target.closest("a, button, [data-track]");
+    if (!target) return;
+
+    const label = getReadableClickLabel(target);
+    const href = target.getAttribute("href") || target.dataset.track || "";
+    const page = `${getCleanPageName()} · ${label}${href ? " → " + href : ""}`.slice(0, 180);
+
+    trackMemberActivity(accessData, "click", page);
+  }, true);
+}
+
+async function trackLessonOpen(accessData) {
+  try {
+    const path = window.location.pathname.toLowerCase();
+
+    const isLessonPage = path.includes("lesson");
+
+    if (!isLessonPage) return;
+
+    if (!hasTrackableAccess(accessData)) return;
+
+    const ready = await ensureSupabaseClient();
+
+    if (!ready) {
+      console.log("Supabase Client nicht geladen");
+      return;
+    }
+
+    const userEmail = getTrackingEmail(accessData);
+
+    const lessonTitle =
+      document.querySelector("h1")?.textContent?.trim() ||
+      document.title ||
+      "Unbekannte Lesson";
+
+    const { error } = await supabaseClient
+      .from("lesson_activity")
+      .insert({
+        email: userEmail,
+        role: accessData?.role || "guest",
+        lesson: lessonTitle,
+        lesson_url: window.location.pathname,
+        action: "lesson_opened"
+      });
+
+    if (error) {
+      console.log("Lesson Tracking Fehler:", error);
+    } else {
+      console.log("Lesson Tracking gespeichert");
+    }
+
+  } catch (err) {
+    console.log("Lesson Tracking System Fehler:", err);
+  }
+}
+
+async function setupVimeoWatchtimeTracking(accessData) {
+  try {
+    const path = window.location.pathname.toLowerCase();
+    const isLessonPage = path.includes("lesson");
+
+    if (!isLessonPage) return;
+
+    if (!hasTrackableAccess(accessData)) return;
+
+    const ready = await ensureSupabaseClient();
+
+    if (!ready) {
+      console.log("Watchtime: Supabase Client nicht geladen");
+      return;
+    }
+
+    const vimeoIframes = document.querySelectorAll(
+      'iframe[src*="player.vimeo.com"]'
+    );
+
+    if (!vimeoIframes.length) {
+      console.log("Watchtime: Kein Vimeo Video gefunden");
+      return;
+    }
+
+    loadVimeoApi(() => {
+      vimeoIframes.forEach((iframe) => {
+        try {
+          const player = new Vimeo.Player(iframe);
+
+          let lastSavedSecond = 0;
+          let durationSeconds = 0;
+
+          const userEmail = getTrackingEmail(accessData);
+
+          const lessonTitle =
+            document.querySelector("h1")?.textContent?.trim() ||
+            document.title ||
+            "Unbekannte Lesson";
+
+          player.getDuration().then((duration) => {
+            durationSeconds = Math.floor(duration || 0);
+          });
+
+          player.on("timeupdate", async (event) => {
+            const currentSeconds = Math.floor(event.seconds || 0);
+
+            if (currentSeconds < 1) return;
+            if (currentSeconds - lastSavedSecond < 15) return;
+
+            lastSavedSecond = currentSeconds;
+
+            const progressPercent = durationSeconds > 0
+              ? Math.min(100, Math.floor((currentSeconds / durationSeconds) * 100))
+              : Math.floor(event.percent * 100 || 0);
+
+            const { error } = await supabaseClient
+              .from("video_watchtime")
+              .insert({
+                email: userEmail,
+                role: accessData?.role || "guest",
+                lesson: lessonTitle,
+                current_seconds: currentSeconds,
+                duration_seconds: durationSeconds,
+                progress_percent: progressPercent
+              });
+
+            if (error) {
+              console.log("Watchtime Fehler:", error);
+            } else {
+              console.log("Watchtime gespeichert:", progressPercent + "%");
+            }
+          });
+
+        } catch (err) {
+          console.log("Watchtime Vimeo Fehler:", err);
+        }
+      });
+    });
+
+  } catch (err) {
+    console.log("Watchtime System Fehler:", err);
+  }
+}
+
+function loadVimeoApi(callback) {
+  if (window.Vimeo && window.Vimeo.Player) {
+    callback();
+    return;
+  }
+
+  const existingScript = document.querySelector(
+    'script[src="https://player.vimeo.com/api/player.js"]'
+  );
+
+  if (existingScript) {
+    existingScript.addEventListener("load", callback);
+    return;
+  }
+
+  const script = document.createElement("script");
+  script.src = "https://player.vimeo.com/api/player.js";
+  script.onload = callback;
+  document.body.appendChild(script);
+}
+
+function startInactivityLogout(accessData) {
+  const INACTIVITY_LIMIT = 45 * 60 * 1000;
+  let inactivityTimer;
+  let vimeoIsPlaying = false;
+
+  function logoutUser() {
+    bpLogoutNow("inactive");
+  }
+
+  function isHtmlVideoPlaying() {
+    const videos = document.querySelectorAll("video");
+
+    for (const video of videos) {
+      if (!video.paused && !video.ended && video.readyState > 2) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  function checkActivity() {
+    if (isHtmlVideoPlaying() || vimeoIsPlaying) {
+      resetTimer();
+      return;
+    }
+
+    logoutUser();
+  }
+
+  function resetTimer() {
+    clearTimeout(inactivityTimer);
+    inactivityTimer = setTimeout(checkActivity, INACTIVITY_LIMIT);
+  }
+
+  [
+    "mousemove",
+    "mousedown",
+    "keydown",
+    "scroll",
+    "touchstart",
+    "click"
+  ].forEach((eventName) => {
+    document.addEventListener(eventName, resetTimer, true);
+  });
+
+  document.querySelectorAll("video").forEach((video) => {
+    ["play", "pause", "seeking", "timeupdate"].forEach((eventName) => {
+      video.addEventListener(eventName, resetTimer);
+    });
+  });
+
+  function setupVimeoInactivityTracking() {
+    const vimeoIframes = document.querySelectorAll(
+      'iframe[src*="player.vimeo.com"]'
+    );
+
+    if (!vimeoIframes.length) return;
+
+    loadVimeoApi(() => {
+      vimeoIframes.forEach((iframe) => {
+        try {
+          const player = new Vimeo.Player(iframe);
+
+          player.on("play", () => {
+            vimeoIsPlaying = true;
+            resetTimer();
+          });
+
+          player.on("playing", () => {
+            vimeoIsPlaying = true;
+            resetTimer();
+          });
+
+          player.on("timeupdate", () => {
+            vimeoIsPlaying = true;
+            resetTimer();
+          });
+
+          player.on("pause", () => {
+            vimeoIsPlaying = false;
+            resetTimer();
+          });
+
+          player.on("ended", () => {
+            vimeoIsPlaying = false;
+            resetTimer();
+          });
+
+        } catch (err) {
+          console.log("Vimeo Tracking Fehler");
+        }
+      });
+    });
+  }
+
+  setupVimeoInactivityTracking();
+  resetTimer();
+}
+function bpLogoutNow(reason = "logout") {
+  localStorage.clear();
+  sessionStorage.clear();
+  fetch("/api/logout", {
+    method: "POST",
+    credentials: "include",
+    cache: "no-store",
+    keepalive: true
+  }).catch(() => {});
+  window.location.replace(`/locked?reason=${encodeURIComponent(reason)}&logout=pending`);
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("/sw.js").catch(() => {});
+  }
+  document.addEventListener("click", (event) => {
+    const logoutLink = event.target.closest('#logoutBtn, a[href^="/api/logout"]');
+    if (!logoutLink) return;
+    event.preventDefault();
+    bpLogoutNow();
+  });
+});

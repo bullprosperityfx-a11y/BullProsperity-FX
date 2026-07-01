@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <script>document.documentElement.classList.add("bp-auth-checking");</script>
+  <script src="/access-guard.js?v=20260623-3"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BullProsperity | Mentor Radar</title>
+  <meta name="description" content="Mentor Radar für Prozessqualität, Readiness und Lernfortschritt." />
+  <link rel="stylesheet" href="/theme.css" />
+  <link rel="stylesheet" href="/admin/admin.css" />
+  <script src="/login.js?v=20260624-2" defer></script>
+  <style>
+    .radar-layout{display:grid;grid-template-columns:300px minmax(0,1fr);gap:24px;align-items:start}
+    .radar-main{display:grid;gap:20px;min-width:0}
+    .radar-card{padding:24px;border:1px solid rgba(243,210,27,.15);border-radius:8px;background:linear-gradient(180deg,rgba(18,18,18,.94),rgba(8,8,8,.98));box-shadow:0 18px 38px rgba(0,0,0,.3)}
+    .radar-heading{margin:8px 0 4px;font-size:30px;color:#fff}
+    .radar-copy{margin:0;color:#aaa;line-height:1.65}
+    .radar-metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+    .radar-metric{padding:18px;border:1px solid rgba(255,255,255,.08);border-radius:8px;background:rgba(255,255,255,.025)}
+    .radar-metric strong{display:block;margin-bottom:7px;color:var(--gold);font-size:32px;line-height:1}
+    .radar-metric span{color:#999;font-size:13px;font-weight:800}
+    .radar-toolbar{display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+    .radar-search{width:min(100%,420px);height:48px;padding:0 16px;border:1px solid rgba(255,255,255,.12);border-radius:8px;background:#0b0b0b;color:#fff;font:inherit;outline:none}
+    .radar-search:focus{border-color:rgba(243,210,27,.55);box-shadow:0 0 0 3px rgba(243,210,27,.08)}
+    .radar-filter{display:flex;gap:8px}
+    .radar-filter button{height:42px;padding:0 15px;border:1px solid rgba(255,255,255,.1);border-radius:8px;background:#111;color:#ddd;font-weight:850;cursor:pointer}
+    .radar-filter button.active{border-color:var(--gold);color:var(--gold);background:rgba(243,210,27,.06)}
+    .member-list{display:grid;gap:12px}
+    .member-row{display:grid;grid-template-columns:minmax(180px,1.4fr) repeat(5,minmax(76px,.55fr));gap:12px;align-items:center;padding:17px;border:1px solid rgba(255,255,255,.08);border-radius:8px;background:rgba(255,255,255,.022)}
+    .member-name{min-width:0}
+    .member-name strong,.member-name span{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .member-name strong{color:#fff;font-size:16px}.member-name span{margin-top:4px;color:#777;font-size:12px}
+    .member-stat small{display:block;margin-bottom:4px;color:#777;font-size:10px;font-weight:900;text-transform:uppercase}.member-stat strong{color:#f4f4f4;font-size:17px}
+    .member-alerts{grid-column:1/-1;display:flex;gap:7px;flex-wrap:wrap}
+    .alert-pill{padding:6px 9px;border:1px solid rgba(255,93,93,.25);border-radius:999px;background:rgba(255,75,75,.07);color:#ff9a9a;font-size:11px;font-weight:900}
+    .stable-pill{border-color:rgba(75,220,135,.2);background:rgba(75,220,135,.06);color:#7ee2a7}
+    .mentor-queue{display:grid;gap:14px;margin-top:18px}
+    .mentor-request{padding:20px;border:1px solid rgba(243,210,27,.14);border-radius:8px;background:rgba(255,255,255,.022)}
+    .mentor-request-head{display:flex;align-items:flex-start;justify-content:space-between;gap:14px}
+    .mentor-request h3{margin:0;color:#fff;font-size:18px}.mentor-request time{color:#777;font-size:12px;font-weight:800;white-space:nowrap}
+    .mentor-question{margin:12px 0 0;color:#c8c8c8;line-height:1.6;white-space:pre-wrap}
+    .mentor-form{display:grid;grid-template-columns:minmax(0,1fr) minmax(220px,.55fr) auto;gap:10px;margin-top:16px}
+    .mentor-form textarea,.mentor-form input{width:100%;min-height:48px;padding:12px 14px;border:1px solid rgba(255,255,255,.12);border-radius:8px;background:#090909;color:#fff;font:inherit;outline:none}.mentor-form textarea{min-height:82px;resize:vertical}
+    .mentor-form textarea:focus,.mentor-form input:focus{border-color:rgba(243,210,27,.5)}
+    .mentor-submit{min-height:48px;padding:0 18px;border:0;border-radius:8px;background:var(--gold);color:#111;font-weight:900;cursor:pointer}.mentor-submit:disabled{opacity:.55;cursor:wait}
+    .empty-state{padding:36px;text-align:center;color:#888;border:1px dashed rgba(255,255,255,.1);border-radius:8px}
+    .loading-line{color:#888;font-weight:800}
+    @media(max-width:1180px){.radar-layout{grid-template-columns:1fr}.admin-sidebar{position:relative!important;top:0!important}.radar-metrics{grid-template-columns:repeat(2,1fr)}}
+    @media(max-width:760px){.radar-metrics{grid-template-columns:1fr 1fr}.member-row{grid-template-columns:1fr 1fr}.member-name{grid-column:1/-1}.radar-toolbar{align-items:stretch}.radar-search{width:100%}.radar-filter{overflow:auto}.radar-filter button{white-space:nowrap}.mentor-request-head{display:block}.mentor-request time{display:block;margin-top:6px}.mentor-form{grid-template-columns:1fr}.mentor-submit{width:100%}}
+  </style>
+</head>
+<body class="admin-page">
+  <div class="page-wrap">
+    <nav class="admin-topbar">
+      <a class="admin-brand" href="/hub">BullProsperity</a>
+      <div class="admin-toplinks">
+        <a href="/hub">Hub</a><a href="/admin/dashboard">Dashboard</a><a href="/api/logout">Logout</a>
+      </div>
+    </nav>
+
+    <section class="hero-shell">
+      <div class="badge">Mentor Intelligence</div>
+      <h1 class="hero-title">Mentor <span class="gold">Radar</span></h1>
+      <p class="hero-text">Erkenne früh, wer Unterstützung bei Vorbereitung, Regelkonformität oder Readiness benötigt. Ohne Rankings nach Gewinn und Verlust.</p>
+    </section>
+
+    <section class="radar-layout">
+      <aside class="admin-sidebar">
+        <div class="badge">Verwaltung</div>
+        <h2 class="admin-sidebar-title">Control Center</h2>
+        <div class="admin-nav">
+          <a href="/admin/dashboard" class="admin-link"><span>📊 Dashboard</span><small>LIVE</small></a>
+          <a href="/admin/members" class="admin-link"><span>👥 Mitglieder</span><small>USER</small></a>
+          <a href="/admin/course-analytics" class="admin-link"><span>🎬 Course Analytics</span><small>WATCH</small></a>
+          <a href="/admin/sr-analytics" class="admin-link"><span>🎯 Setup Room Analytics</span><small>SMC</small></a>
+          <a href="/admin/notifications" class="admin-link"><span>🔔 Notifications</span><small>PUSH</small></a>
+          <a href="/admin/security" class="admin-link"><span>🛡️ Security</span><small>ADMIN</small></a>
+          <a href="/admin/ai-journal" class="admin-link"><span>🧠 AI Journal</span><small>REVIEW</small></a>
+          <a href="/admin/mentor-radar" class="admin-link active"><span>🧭 Mentor Radar</span><small>COACH</small></a>
+          <a href="/admin/office-hours" class="admin-link"><span>🗓️ Office Hours</span><small>DISCORD</small></a>
+          <a href="/admin-signals" class="admin-link"><span>📡 Admin Signals</span><small>POST</small></a>
+        </div>
+      </aside>
+
+      <main class="radar-main">
+        <section class="radar-card">
+          <div class="badge">Live Prozessdaten</div>
+          <h2 class="radar-heading">Teamübersicht</h2>
+          <p class="radar-copy">Der Radar bewertet Lern- und Prozessdaten. Kontostände, Gewinne und Verluste werden hier bewusst nicht angezeigt.</p>
+          <div class="radar-metrics" style="margin-top:20px">
+            <div class="radar-metric"><strong id="metricMembers">–</strong><span>Aktive Profile</span></div>
+            <div class="radar-metric"><strong id="metricAlerts">–</strong><span>Offene Mentor-Anfragen</span></div>
+            <div class="radar-metric"><strong id="metricScore">–</strong><span>Ø Process Score</span></div>
+            <div class="radar-metric"><strong id="metricReadiness">–</strong><span>Niedrige Readiness</span></div>
+          </div>
+        </section>
+
+        <section class="radar-card">
+          <div class="radar-toolbar">
+            <input id="memberSearch" class="radar-search" type="search" placeholder="Mitglied oder Alias suchen" autocomplete="off" />
+            <div class="radar-filter" aria-label="Mitglieder filtern">
+              <button type="button" class="active" data-filter="all">Alle</button>
+              <button type="button" data-filter="alerts">Mit Hinweis</button>
+              <button type="button" data-filter="stable">Stabil</button>
+            </div>
+          </div>
+          <div id="memberList" class="member-list" style="margin-top:18px"><div class="loading-line">Prozessdaten werden geladen …</div></div>
+        </section>
+
+        <section class="radar-card">
+          <div class="badge">Mentor Inbox</div>
+          <h2 class="radar-heading">Feedback & Video Reviews</h2>
+          <p class="radar-copy">Beantworte konkrete Fragen schriftlich oder ergänze einen persönlichen Video-Link. Die Antwort erscheint direkt im Operating System des Mitglieds.</p>
+          <div id="mentorQueue" class="mentor-queue"><div class="loading-line">Mentor-Anfragen werden geladen …</div></div>
+        </section>
+      </main>
+    </section>
+  </div>
+
+  <script>
+    const radarState = { members: [], mentorRequests: [], filter: "all", query: "" };
+    const escapeHtml = value => String(value ?? "").replace(/[&<>'"]/g, char => ({"&":"&amp;","<":"&lt;",">":"&gt;","'":"&#39;",'"':"&quot;"}[char]));
+    const formatDate = value => value ? new Intl.DateTimeFormat("de-DE", { dateStyle:"medium" }).format(new Date(value)) : "–";
+
+    function renderMetrics(){
+      const members = radarState.members;
+      const alertCount = radarState.mentorRequests.length;
+      const average = members.length ? Math.round(members.reduce((sum, member) => sum + member.score, 0) / members.length) : 0;
+      document.getElementById("metricMembers").textContent = members.length;
+      document.getElementById("metricAlerts").textContent = alertCount;
+      document.getElementById("metricScore").textContent = `${average}%`;
+      document.getElementById("metricReadiness").textContent = members.filter(member => member.readiness > 0 && member.readiness < 50).length;
+    }
+
+    function renderMentorQueue(){
+      const queue = document.getElementById("mentorQueue");
+      if (!radarState.mentorRequests.length){ queue.innerHTML = '<div class="empty-state">Alle Mentor-Anfragen sind beantwortet.</div>'; return; }
+      queue.innerHTML = radarState.mentorRequests.map(item => `
+        <article class="mentor-request">
+          <div class="mentor-request-head"><div><h3>${escapeHtml(item.trade)}</h3><span>${escapeHtml(item.email)}</span></div><time>${formatDate(item.createdAt)}</time></div>
+          <p class="mentor-question">${escapeHtml(item.question)}</p>
+          ${/^data:image\//.test(item.chart || "") ? `<a href="${item.chart}" target="_blank" rel="noopener"><img class="mentor-request-chart" src="${item.chart}" alt="Chart des Mitglieds" /></a>` : ""}
+          <form class="mentor-form" data-mentor-form data-email="${escapeHtml(item.email)}" data-id="${escapeHtml(item.id)}">
+            <textarea name="feedback" required placeholder="Konkretes Mentor-Feedback"></textarea>
+            <input name="videoUrl" type="url" placeholder="Video-Link (optional)" />
+            <button class="mentor-submit" type="submit">Antwort senden</button>
+          </form>
+        </article>`).join("");
+      queue.querySelectorAll("[data-mentor-form]").forEach(form => form.addEventListener("submit", submitMentorFeedback));
+    }
+
+    async function submitMentorFeedback(event){
+      event.preventDefault();
+      const form = event.currentTarget; const button = form.querySelector("button"); const formData = new FormData(form);
+      button.disabled = true; button.textContent = "Wird gesendet …";
+      try{
+        const response = await fetch("/api/admin/mentor-feedback", { method:"POST", credentials:"include", headers:{"Content-Type":"application/json"}, body:JSON.stringify({ email:form.dataset.email, submissionId:form.dataset.id, feedback:formData.get("feedback"), videoUrl:formData.get("videoUrl") }) });
+        const data = await response.json(); if (!response.ok) throw new Error(data.error || "Feedback konnte nicht gesendet werden");
+        await loadRadar();
+      }catch(error){ button.disabled = false; button.textContent = "Erneut senden"; alert(error.message); }
+    }
+
+    function renderMembers(){
+      const list = document.getElementById("memberList");
+      const query = radarState.query.toLowerCase();
+      const members = radarState.members.filter(member => {
+        const matchesQuery = `${member.alias} ${member.email}`.toLowerCase().includes(query);
+        const matchesFilter = radarState.filter === "all" || (radarState.filter === "alerts" ? member.alerts.length : !member.alerts.length);
+        return matchesQuery && matchesFilter;
+      });
+      if (!members.length){ list.innerHTML = '<div class="empty-state">Keine passenden Prozessprofile gefunden.</div>'; return; }
+      list.innerHTML = members.map(member => `
+        <article class="member-row">
+          <div class="member-name"><strong>${escapeHtml(member.alias)}</strong><span>${escapeHtml(member.email)} · Stand ${formatDate(member.updatedAt)}</span></div>
+          <div class="member-stat"><small>Score</small><strong>${member.score}%</strong></div>
+          <div class="member-stat"><small>Vorbereitung</small><strong>${member.approved}%</strong></div>
+          <div class="member-stat"><small>Regeln</small><strong>${member.adherence}%</strong></div>
+          <div class="member-stat"><small>Readiness</small><strong>${member.readiness || "–"}${member.readiness ? "%" : ""}</strong></div>
+          <div class="member-stat"><small>Drills</small><strong>${member.drillsOpen}</strong></div>
+          <div class="member-alerts">${member.alerts.length ? member.alerts.map(alert => `<span class="alert-pill">${escapeHtml(alert)}</span>`).join("") : '<span class="alert-pill stable-pill">Prozess stabil</span>'}</div>
+        </article>`).join("");
+    }
+
+    async function loadRadar(){
+      try{
+        const response = await fetch("/api/admin/performance", { credentials:"include", cache:"no-store" });
+        const contentType = response.headers.get("content-type") || "";
+        const data = contentType.includes("application/json") ? await response.json() : {};
+        if (!response.ok) throw new Error(data.error || "Daten konnten nicht geladen werden");
+        radarState.members = (data.members || []).sort((a,b) => b.alerts.length - a.alerts.length || a.score - b.score);
+        radarState.mentorRequests = data.mentorRequests || [];
+        renderMetrics(); renderMembers(); renderMentorQueue();
+      }catch(error){
+        document.getElementById("memberList").innerHTML = `<div class="empty-state">${escapeHtml(error.message)}</div>`;
+        document.getElementById("mentorQueue").innerHTML = `<div class="empty-state">${escapeHtml(error.message)}</div>`;
+      }
+    }
+
+    document.getElementById("memberSearch").addEventListener("input", event => { radarState.query = event.target.value.trim(); renderMembers(); });
+    document.querySelectorAll("[data-filter]").forEach(button => button.addEventListener("click", () => {
+      document.querySelectorAll("[data-filter]").forEach(item => item.classList.remove("active"));
+      button.classList.add("active"); radarState.filter = button.dataset.filter; renderMembers();
+    }));
+    loadRadar();
+  </script>
+</body>
+</html>

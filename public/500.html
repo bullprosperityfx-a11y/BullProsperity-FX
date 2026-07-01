@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BullProsperity | Verbindung unterbrochen</title>
+  <link rel="icon" type="image/png" href="/favicon.png" />
+  <meta name="theme-color" content="#050505" />
+  <link rel="stylesheet" href="/theme.css" />
+  <style>
+    body{background:linear-gradient(135deg,rgba(243,210,27,.08),transparent 32%),#050505}
+    .server-page{min-height:100vh;display:grid;place-items:center;padding:24px}
+    .server-card{width:min(840px,100%);padding:42px;border:1px solid rgba(243,210,27,.18);border-radius:8px;background:linear-gradient(145deg,rgba(255,255,255,.05),transparent 42%),#0a0a0b;box-shadow:0 30px 90px rgba(0,0,0,.55)}
+    .server-code{color:var(--gold);font-size:14px;font-weight:950;text-transform:uppercase}
+    .server-title{margin:18px 0 14px;color:#fff;font-size:clamp(38px,7vw,72px);line-height:.98;letter-spacing:0}
+    .server-title span{color:var(--gold)}
+    .server-text{max-width:680px;margin:0;color:#cfcfd2;font-size:17px;line-height:1.7;font-weight:700}
+    .server-actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:28px}
+    .server-status{display:flex;align-items:center;gap:9px;margin-top:28px;padding-top:20px;border-top:1px solid rgba(255,255,255,.08);color:#929297;font-size:13px;font-weight:800}
+    .server-status::before{content:"";width:8px;height:8px;border-radius:50%;background:#f3d21b;box-shadow:0 0 0 5px rgba(243,210,27,.09)}
+    @media(max-width:600px){.server-page{padding:0}.server-card{min-height:100vh;padding:28px 20px;border:0}.server-actions .btn{width:100%}}
+  </style>
+</head>
+<body>
+  <main class="server-page">
+    <section class="server-card">
+      <div class="server-code">Technischer Hinweis · 500</div>
+      <h1 class="server-title">Die Verbindung braucht <span>einen Moment.</span></h1>
+      <p class="server-text">
+        Deine Eingaben bleiben nach Möglichkeit im Browser erhalten. Lade die Seite erneut oder kehre in den Hub zurück.
+      </p>
+      <div class="server-actions">
+        <button class="btn primary" type="button" onclick="window.location.reload()">Erneut versuchen</button>
+        <a class="btn secondary" href="/hub">Zum Hub</a>
+        <a class="btn secondary" href="/">Startseite</a>
+      </div>
+      <div class="server-status">BullProsperity prüft die Verbindung beim nächsten Aufruf erneut.</div>
+    </section>
+  </main>
+</body>
+</html>

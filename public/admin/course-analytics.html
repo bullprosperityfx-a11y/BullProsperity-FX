@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <script>document.documentElement.classList.add("bp-auth-checking");</script>
+  <script src="/access-guard.js?v=20260623-3"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+  <title>BullProsperity | Course Analytics</title>
+   <link rel="icon" type="image/png" href="/favicon.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="apple-touch-icon" href="/favicon.png">
+<meta name="theme-color" content="#050505">
+
+  <link rel="stylesheet" href="/theme.css" />
+  <link rel="stylesheet" href="/admin/admin.css" />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="/supabase.js"></script>
+  <script src="/login.js?v=20260624-2" defer></script>
+
+  <script>
+    (async () => {
+      try{
+        const res = await fetch("/api/access", {
+          credentials:"include",
+          cache:"no-store"
+        });
+
+        const data = await res.json();
+
+        if(data.role !== "admin"){
+          window.location.href = "/locked";
+        }
+
+      } catch(err){
+        window.location.href = "/locked";
+      }
+    })();
+  </script>
+
+  <style>
+    .admin-layout{
+      display:grid;
+      grid-template-columns:320px 1fr;
+      gap:24px;
+      margin-top:24px;
+      align-items:start;
+    }
+
+    .admin-sidebar,
+    .analytics-card{
+      border:1px solid var(--line);
+      border-radius:28px;
+      background:linear-gradient(180deg,var(--panel),var(--panel-2));
+      padding:24px;
+    }
+
+    .admin-sidebar{
+      position:sticky;
+      top:20px;
+    }
+
+    .admin-nav{
+      display:grid;
+      gap:12px;
+      margin-top:20px;
+    }
+
+    .admin-link{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      padding:14px 16px;
+      border-radius:18px;
+      background:#111;
+      border:1px solid #252525;
+      color:#fff;
+      text-decoration:none;
+      font-weight:800;
+      transition:.2s ease;
+    }
+
+    .admin-link:hover,
+    .admin-link.active{
+      border-color:#ffd700;
+      color:#ffd700;
+      transform:translateX(4px);
+    }
+
+    .analytics-content{
+      display:grid;
+      gap:24px;
+    }
+
+    .analytics-grid{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:16px;
+      margin-top:20px;
+    }
+
+    .analytics-box{
+      background:#111;
+      border:1px solid #252525;
+      border-radius:22px;
+      padding:18px;
+      min-height:120px;
+    }
+
+    .analytics-label{
+      color:#8f8f8f;
+      font-size:12px;
+      text-transform:uppercase;
+      margin-bottom:10px;
+      letter-spacing:.08em;
+      font-weight:800;
+    }
+
+    .analytics-value{
+      color:#ffd700;
+      font-size:26px;
+      font-weight:950;
+      line-height:1.1;
+      word-break:break-word;
+      display:-webkit-box;
+      -webkit-line-clamp:2;
+      -webkit-box-orient:vertical;
+      overflow:hidden;
+    }
+
+    .analytics-sub{
+      margin-top:8px;
+      color:#8f8f8f;
+      font-size:12px;
+      line-height:1.5;
+    }
+
+    #topLesson,
+    #topWatchLesson{
+      font-size:22px !important;
+      line-height:1.1;
+    }
+
+    .course-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:18px;
+      margin-top:20px;
+    }
+
+    .ranking-list,
+    .feed{
+      display:grid;
+      gap:12px;
+      margin-top:18px;
+    }
+
+    .ranking-item,
+    .feed-item{
+      background:#111;
+      border:1px solid rgba(255,215,0,.12);
+      border-radius:18px;
+      padding:16px;
+    }
+
+    .ranking-item{
+      display:grid;
+      grid-template-columns:auto 1fr auto;
+      gap:14px;
+      align-items:center;
+    }
+
+    .rank-num{
+      width:34px;
+      height:34px;
+      border-radius:50%;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background:rgba(255,215,0,.08);
+      border:1px solid rgba(255,215,0,.22);
+      color:#ffd700;
+      font-weight:950;
+    }
+
+    .ranking-title,
+    .feed-item strong{
+      color:#fff;
+      font-weight:950;
+      display:block;
+      margin-bottom:5px;
+    }
+
+    .ranking-meta,
+    .feed-item p{
+      margin:0;
+      color:#a8a8a8;
+      line-height:1.55;
+      font-size:13px;
+    }
+
+    .ranking-count{
+      color:#ffd700;
+      font-weight:950;
+      font-size:18px;
+    }
+
+    .progress-bar-admin{
+      width:100%;
+      height:8px;
+      border-radius:999px;
+      background:#252525;
+      overflow:hidden;
+      margin-top:10px;
+    }
+
+    .progress-fill-admin{
+      height:100%;
+      border-radius:999px;
+      background:linear-gradient(90deg,#ffd700,#fff1a8);
+      width:0%;
+    }
+
+    .empty-state{
+      border:1px dashed rgba(255,215,0,.18);
+      border-radius:20px;
+      padding:24px;
+      text-align:center;
+      color:#bdbdbd;
+      background:rgba(255,255,255,.02);
+      margin-top:18px;
+    }
+
+    @media(max-width:1200px){
+      .admin-layout{
+        grid-template-columns:1fr;
+      }
+
+      .admin-sidebar{
+        position:relative;
+        top:0;
+              }
+
+      .analytics-grid{
+        grid-template-columns:1fr 1fr;
+      }
+
+      .course-grid{
+        grid-template-columns:1fr;
+      }
+    }
+
+    @media(max-width:760px){
+      .analytics-grid{
+        grid-template-columns:1fr;
+      }
+
+      .analytics-value{
+        font-size:28px;
+      }
+
+      #topLesson,
+      #topWatchLesson{
+        font-size:22px !important;
+        line-height:1.1;
+      }
+    }
+  </style>
+</head>
+
+<body class="admin-page">
+<div class="page">
+
+  <nav class="admin-topbar">
+    <a href="/admin/dashboard" class="admin-brand">BullProsperity Admin</a>
+
+    <div class="admin-toplinks">
+      <a href="/hub">Hub</a>
+      <a href="/course">Course</a>
+      <a href="/tools">Tools</a>
+      <a href="/setup-room">Setup Room</a>
+      <a href="/community">Community</a>
+      <a href="/api/logout">Logout</a>
+    </div>
+  </nav>
+
+  <section class="hero-shell">
+    <div class="badge">Course System</div>
+
+    <h1 class="hero-title">
+      Course <span class="gold">Analytics</span>
+    </h1>
+
+    <p class="hero-text">
+      Live Übersicht über Lesson Aktivität, Video Watchtime, Kurs Nutzung und Mitglieder Engagement.
+    </p>
+  </section>
+
+  <section class="admin-layout">
+
+    <aside class="admin-sidebar">
+      <div class="badge">Verwaltung</div>
+
+      <h2 class="admin-sidebar-title">Control Center</h2>
+
+      <div class="admin-nav">
+        <a href="/admin/dashboard" class="admin-link"><span>📊 Dashboard</span><small>LIVE</small></a>
+        <a href="/admin/members" class="admin-link"><span>👥 Mitglieder</span><small>USER</small></a>
+        <a href="/admin/course-analytics" class="admin-link active"><span>🎬 Course Analytics</span><small>WATCH</small></a>
+        <a href="/admin/sr-analytics" class="admin-link"><span>🎯 Setup Room Analytics</span><small>SMC</small></a>
+        <a href="/admin/notifications" class="admin-link"><span>🔔 Notifications</span><small>PUSH</small></a>
+        <a href="/admin/security" class="admin-link"><span>🛡️ Security</span><small>ADMIN</small></a>
+        <a href="/admin/ai-journal" class="admin-link"><span>🧠 AI Journal</span><small>REVIEW</small></a>
+        <a href="/admin/mentor-radar" class="admin-link"><span>🧭 Mentor Radar</span><small>COACH</small></a>
+        <a href="/admin-signals" class="admin-link"><span>📡 Admin Signals</span><small>POST</small></a>
+      </div>
+    </aside>
+
+    <div class="analytics-content">
+
+      <div class="analytics-card">
+        <div class="badge">Live Statistik</div>
+
+        <h2 class="section-heading" style="font-size:38px;margin-bottom:10px;">
+          Course Übersicht
+        </h2>
+
+        <p class="section-subtext">
+          Sauberer Überblick über Lesson Opens, Watchtime, Fortschritt und aktive Kursmitglieder.
+        </p>
+
+        <div class="analytics-grid">
+          <div class="analytics-box">
+            <div class="analytics-label">Lesson Opens</div>
+            <div class="analytics-value" id="totalLessons">0</div>
+            <div class="analytics-sub">Gesamte Lesson-Aufrufe</div>
+          </div>
+
+          <div class="analytics-box">
+            <div class="analytics-label">Aktive Mitglieder</div>
+            <div class="analytics-value" id="activeMembers">0</div>
+            <div class="analytics-sub">Einzigartige User</div>
+          </div>
+
+          <div class="analytics-box">
+            <div class="analytics-label">Gesamt Watchtime</div>
+            <div class="analytics-value" id="totalWatchtime">0m</div>
+            <div class="analytics-sub">Geschaute Videodauer</div>
+          </div>
+
+          <div class="analytics-box">
+            <div class="analytics-label">Ø Fortschritt</div>
+            <div class="analytics-value" id="avgProgress">0%</div>
+            <div class="analytics-sub">Durchschnittlicher Videofortschritt</div>
+          </div>
+
+          <div class="analytics-box">
+            <div class="analytics-label">Top Lesson</div>
+            <div class="analytics-value" id="topLesson">-</div>
+            <div class="analytics-sub">Meistgeöffnete Lesson</div>
+          </div>
+
+          <div class="analytics-box">
+            <div class="analytics-label">Top Watchtime</div>
+            <div class="analytics-value" id="topWatchLesson">-</div>
+            <div class="analytics-sub">Stärkstes Video Engagement</div>
+          </div>
+
+          <div class="analytics-box">
+            <div class="analytics-label">Watchtime Events</div>
+            <div class="analytics-value" id="watchEvents">0</div>
+            <div class="analytics-sub">Gespeicherte Video Updates</div>
+          </div>
+
+          <div class="analytics-box">
+            <div class="analytics-label">Letzte Aktivität</div>
+            <div class="analytics-value" id="lastActivity">-</div>
+            <div class="analytics-sub">Neuester Course Eintrag</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="course-grid">
+
+        <div class="analytics-card">
+          <div class="badge">Ranking</div>
+
+          <h2 class="section-heading" style="font-size:32px;margin-bottom:10px;">
+            Top Lessons
+          </h2>
+
+          <p class="section-subtext">
+            Welche Inhalte aktuell am meisten geöffnet werden.
+          </p>
+
+          <div class="ranking-list" id="topLessonsList">
+            <div class="empty-state">Noch keine Lesson Daten geladen.</div>
+          </div>
+        </div>
+
+        <div class="analytics-card">
+          <div class="badge">Watchtime</div>
+
+          <h2 class="section-heading" style="font-size:32px;margin-bottom:10px;">
+            Video Engagement
+          </h2>
+
+          <p class="section-subtext">
+            Welche Videos die stärkste Watchtime und den höchsten Fortschritt haben.
+          </p>
+
+          <div class="ranking-list" id="watchtimeList">
+            <div class="empty-state">Noch keine Watchtime Daten geladen.</div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="analytics-card">
+        <div class="badge">Members</div>
+
+        <h2 class="section-heading" style="font-size:32px;margin-bottom:10px;">
+          Most Active Members
+        </h2>
+
+        <p class="section-subtext">
+          Mitglieder mit der höchsten Watchtime und Lesson Aktivität.
+        </p>
+
+        <div class="ranking-list" id="memberRanking">
+          <div class="empty-state">
+            Noch keine Mitglieder Daten vorhanden.
+          </div>
+        </div>
+      </div>
+
+      <div class="course-grid">
+
+        <div class="analytics-card">
+          <div class="badge">Activity Feed</div>
+
+          <h2 class="section-heading" style="font-size:32px;margin-bottom:10px;">
+            Letzte Course Aktivität
+          </h2>
+
+          <p class="section-subtext">
+            Die neuesten Lesson Opens deiner Mitglieder.
+          </p>
+
+          <div class="feed" id="lessonFeed">
+            <div class="empty-state">Noch keine Aktivität vorhanden.</div>
+          </div>
+        </div>
+
+        <div class="analytics-card">
+          <div class="badge">Watchtime Feed</div>
+
+          <h2 class="section-heading" style="font-size:32px;margin-bottom:10px;">
+            Letzte Video Aktivität
+          </h2>
+
+          <p class="section-subtext">
+            Die neuesten gespeicherten Vimeo Watchtime Updates.
+          </p>
+
+          <div class="feed" id="watchtimeFeed">
+            <div class="empty-state">Noch keine Watchtime vorhanden.</div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <div class="footer-note">
+    BullProsperity Admin System.
+  </div>
+
+</div>
+
+<script>
+  function formatSeconds(seconds){
+  const total = Number(seconds || 0);
+  const h = Math.floor(total / 3600);
+  const m = Math.floor((total % 3600) / 60);
+
+  if(h > 0) return `${h}h ${m}m`;
+  return `${m}m`;
+}
+
+async function loadCourseAnalytics(){
+  const { data: lessonData, error: lessonError } = await supabaseClient
+    .from("lesson_activity")
+    .select("*")
+    .order("created_at", { ascending:false });
+
+  const { data: watchData, error: watchError } = await supabaseClient
+    .from("video_watchtime")
+    .select("*")
+    .order("created_at", { ascending:false });
+
+  if(lessonError){
+    console.log("Course Analytics Fehler:", lessonError);
+    return;
+  }
+
+  if(watchError){
+    console.log("Watchtime Fehler:", watchError);
+  }
+
+  const activities = lessonData || [];
+  const watchtime = watchData || [];
+
+  document.getElementById("totalLessons").textContent = activities.length;
+  document.getElementById("watchEvents").textContent = watchtime.length;
+
+  const uniqueMembers = [...new Set(
+    activities.map(x => x.email).filter(Boolean)
+  )];
+
+  document.getElementById("activeMembers").textContent = uniqueMembers.length;
+
+  const latestDates = [
+    ...activities.map(x => x.created_at).filter(Boolean),
+    ...watchtime.map(x => x.created_at).filter(Boolean)
+  ].sort((a,b) => new Date(b) - new Date(a));
+
+  if(latestDates[0]){
+    document.getElementById("lastActivity").textContent =
+      new Date(latestDates[0]).toLocaleTimeString("de-DE", {
+        hour:"2-digit",
+        minute:"2-digit"
+      });
+  }
+
+  const lessonCount = {};
+  activities.forEach(item => {
+    const lesson = item.lesson || "Unbekannte Lesson";
+    lessonCount[lesson] = (lessonCount[lesson] || 0) + 1;
+  });
+
+  const sortedLessons = Object.entries(lessonCount)
+    .sort((a,b) => b[1] - a[1]);
+
+  document.getElementById("topLesson").textContent =
+    sortedLessons[0]?.[0] || "-";
+
+  const topLessonsList = document.getElementById("topLessonsList");
+  topLessonsList.innerHTML = "";
+
+  if(!sortedLessons.length){
+    topLessonsList.innerHTML = `<div class="empty-state">Noch keine Lesson Daten vorhanden.</div>`;
+  } else {
+    sortedLessons.slice(0,8).forEach(([lesson,count], index) => {
+      topLessonsList.innerHTML += `
+        <div class="ranking-item">
+          <div class="rank-num">${index + 1}</div>
+          <div>
+            <div class="ranking-title">${lesson}</div>
+            <div class="ranking-meta">Lesson Opens</div>
+          </div>
+          <div class="ranking-count">${count}</div>
+        </div>
+      `;
+    });
+  }
+
+  const latestByUserLesson = {};
+  watchtime.forEach(item => {
+    const key = `${item.email || "unknown"}_${item.lesson || "unknown"}`;
+    const existing = latestByUserLesson[key];
+
+    if(!existing || Number(item.current_seconds || 0) > Number(existing.current_seconds || 0)){
+      latestByUserLesson[key] = item;
+    }
+  });
+
+  const cleanWatchRows = Object.values(latestByUserLesson);
+
+  const totalWatchSeconds = cleanWatchRows.reduce((sum,item) => {
+    return sum + Number(item.current_seconds || 0);
+  }, 0);
+
+  document.getElementById("totalWatchtime").textContent =
+    formatSeconds(totalWatchSeconds);
+
+  const avgProgress = cleanWatchRows.length
+    ? Math.round(
+        cleanWatchRows.reduce((sum,item) => sum + Number(item.progress_percent || 0), 0) / cleanWatchRows.length
+      )
+    : 0;
+
+  document.getElementById("avgProgress").textContent = `${avgProgress}%`;
+
+  const watchByLesson = {};
+
+  cleanWatchRows.forEach(item => {
+    const lesson = item.lesson || "Unbekannte Lesson";
+
+    if(!watchByLesson[lesson]){
+      watchByLesson[lesson] = {
+        lesson,
+        seconds:0,
+        progressTotal:0,
+        users:0
+      };
+    }
+
+    watchByLesson[lesson].seconds += Number(item.current_seconds || 0);
+    watchByLesson[lesson].progressTotal += Number(item.progress_percent || 0);
+    watchByLesson[lesson].users += 1;
+  });
+
+  const sortedWatchLessons = Object.values(watchByLesson)
+    .sort((a,b) => b.seconds - a.seconds);
+
+  document.getElementById("topWatchLesson").textContent =
+    sortedWatchLessons[0]?.lesson || "-";
+
+  const watchtimeList = document.getElementById("watchtimeList");
+  watchtimeList.innerHTML = "";
+
+  if(!sortedWatchLessons.length){
+    watchtimeList.innerHTML = `<div class="empty-state">Noch keine Watchtime Daten vorhanden.</div>`;
+  } else {
+    sortedWatchLessons.slice(0,8).forEach((item,index) => {
+      const avg = item.users
+        ? Math.round(item.progressTotal / item.users)
+        : 0;
+
+      watchtimeList.innerHTML += `
+        <div class="ranking-item">
+          <div class="rank-num">${index + 1}</div>
+          <div>
+            <div class="ranking-title">${item.lesson}</div>
+            <div class="ranking-meta">${formatSeconds(item.seconds)} Watchtime • Ø ${avg}% Fortschritt</div>
+            <div class="progress-bar-admin">
+              <div class="progress-fill-admin" style="width:${avg}%"></div>
+            </div>
+          </div>
+          <div class="ranking-count">${item.users}</div>
+        </div>
+      `;
+    });
+  }
+
+  const memberRanking = document.getElementById("memberRanking");
+  const memberStats = {};
+
+  activities.forEach(item => {
+    const email = item.email || "Unknown User";
+
+    if(!memberStats[email]){
+      memberStats[email] = {
+        email,
+        opens:0,
+        watchSeconds:0,
+        progressTotal:0,
+        progressCount:0
+      };
+    }
+
+    memberStats[email].opens++;
+  });
+
+  cleanWatchRows.forEach(item => {
+    const email = item.email || "Unknown User";
+
+    if(!memberStats[email]){
+      memberStats[email] = {
+        email,
+        opens:0,
+        watchSeconds:0,
+        progressTotal:0,
+        progressCount:0
+      };
+    }
+
+    memberStats[email].watchSeconds += Number(item.current_seconds || 0);
+    memberStats[email].progressTotal += Number(item.progress_percent || 0);
+    memberStats[email].progressCount++;
+  });
+
+  const sortedMembers = Object.values(memberStats)
+    .sort((a,b) => {
+      if(b.watchSeconds !== a.watchSeconds) return b.watchSeconds - a.watchSeconds;
+      return b.opens - a.opens;
+    });
+
+  memberRanking.innerHTML = "";
+
+  if(!sortedMembers.length){
+    memberRanking.innerHTML = `<div class="empty-state">Noch keine Mitglieder Daten vorhanden.</div>`;
+  } else {
+    sortedMembers.slice(0,8).forEach((member,index) => {
+      const avgProgress = member.progressCount
+        ? Math.round(member.progressTotal / member.progressCount)
+        : 0;
+
+      memberRanking.innerHTML += `
+        <div class="ranking-item">
+          <div class="rank-num">${index + 1}</div>
+          <div>
+            <div class="ranking-title">${member.email}</div>
+            <div class="ranking-meta">${member.opens} Lesson Opens • ${formatSeconds(member.watchSeconds)} Watchtime • Ø ${avgProgress}% Fortschritt</div>
+            <div class="progress-bar-admin">
+              <div class="progress-fill-admin" style="width:${avgProgress}%"></div>
+            </div>
+          </div>
+          <div class="ranking-count">🔥</div>
+        </div>
+      `;
+    });
+  }
+
+  const feed = document.getElementById("lessonFeed");
+  feed.innerHTML = "";
+
+  if(!activities.length){
+    feed.innerHTML = `<div class="empty-state">Noch keine Aktivität vorhanden.</div>`;
+  } else {
+        activities.slice(0,12).forEach(item => {
+      const date = item.created_at
+        ? new Date(item.created_at).toLocaleString("de-DE", {
+            day:"2-digit",
+            month:"2-digit",
+            hour:"2-digit",
+            minute:"2-digit"
+          })
+        : "-";
+
+      feed.innerHTML += `
+        <div class="feed-item">
+          <strong>${item.lesson || "Unbekannte Lesson"}</strong>
+          <p>${item.email || "Unbekannter User"} • ${item.role || "unknown"} • ${date}</p>
+        </div>
+      `;
+    });
+  }
+
+  const watchFeed = document.getElementById("watchtimeFeed");
+  watchFeed.innerHTML = "";
+
+  if(!watchtime.length){
+    watchFeed.innerHTML = `<div class="empty-state">Noch keine Watchtime vorhanden.</div>`;
+  } else {
+    watchtime.slice(0,12).forEach(item => {
+      const date = item.created_at
+        ? new Date(item.created_at).toLocaleString("de-DE", {
+            day:"2-digit",
+            month:"2-digit",
+            hour:"2-digit",
+            minute:"2-digit"
+          })
+        : "-";
+
+      watchFeed.innerHTML += `
+        <div class="feed-item">
+          <strong>${item.lesson || "Unbekannte Lesson"} • ${item.progress_percent || 0}%</strong>
+          <p>${item.email || "Unbekannter User"} • ${formatSeconds(item.current_seconds)} von ${formatSeconds(item.duration_seconds)} • ${date}</p>
+        </div>
+      `;
+    });
+  }
+}
+
+loadCourseAnalytics();
+</script>
+
+</body>
+</html>

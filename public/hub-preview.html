@@ -1,0 +1,1657 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <script>document.documentElement.classList.add("bp-auth-checking");</script>
+  <script src="/access-guard.js?v=20260623-3"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      document.body.classList.add("access-ready");
+    });
+  </script>
+
+  <style>
+    body[data-protected="true"]{
+      visibility:hidden;
+    }
+
+    body[data-protected="true"].access-ready{
+      visibility:visible;
+    }
+  </style>
+
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>BullProsperity | Premium Hub</title>
+
+  <link rel="icon" type="image/png" href="/favicon.png" />
+  <link rel="manifest" href="/manifest.json" />
+  <link rel="apple-touch-icon" href="/favicon.png" />
+  <meta name="theme-color" content="#050505" />
+
+  <link rel="stylesheet" href="theme.css" />
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="/supabase.js"></script>
+  <script src="/login.js?v=20260624-2" defer></script>
+
+  <style>
+    body{
+      background:
+        radial-gradient(circle at top left, rgba(255,215,0,.10), transparent 34%),
+        radial-gradient(circle at 80% 10%, rgba(255,215,0,.06), transparent 28%),
+        linear-gradient(180deg,#030303,#080808 45%,#020202);
+    }
+
+    .auth-badge{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:10px 14px;
+      border-radius:999px;
+      font-size:13px;
+      font-weight:800;
+      border:1px solid #252525;
+      background:#111;
+      color:#fff;
+      white-space:nowrap;
+    }
+
+    .auth-badge::before{
+      content:"";
+      width:10px;
+      height:10px;
+      border-radius:50%;
+      display:inline-block;
+      background:#666;
+    }
+
+    .auth-badge.status-admin::before{background:#ffd700;}
+    .auth-badge.status-premium::before{background:#22c55e;}
+    .auth-badge.status-locked::before{background:#ef4444;}
+
+    .hub-shell{
+      display:grid;
+      gap:22px;
+      margin-top:24px;
+    }
+
+    .hub-top-grid,
+    .hub-mid-grid,
+    .hub-bottom-grid{
+      display:grid;
+      grid-template-columns:1.15fr .85fr;
+      gap:22px;
+    }
+
+    .hub-card,
+    .hub-hero-card,
+    .hub-link-card,
+    .hub-note-card,
+    .hub-longterm-card{
+      background:
+        linear-gradient(180deg, rgba(255,215,0,.045), rgba(255,255,255,.015)),
+        rgba(10,10,10,.92);
+      border:1px solid var(--line);
+      border-radius:26px;
+      padding:24px;
+      backdrop-filter:blur(18px);
+      box-shadow:
+        0 22px 60px rgba(0,0,0,.45),
+        inset 0 0 0 1px rgba(255,255,255,.025);
+    }
+
+    .hub-hero-card,
+    .hub-longterm-card{
+      position:relative;
+      overflow:hidden;
+    }
+
+    .hub-hero-card::before,
+    .hub-longterm-card::before{
+      content:"";
+      position:absolute;
+      right:-90px;
+      bottom:-90px;
+      width:270px;
+      height:270px;
+      background:radial-gradient(circle, rgba(255,215,0,.16), transparent 70%);
+      pointer-events:none;
+    }
+
+    .hub-hero-card::after,
+    .hub-longterm-card::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:linear-gradient(120deg, transparent 0%, rgba(255,215,0,.08) 50%, transparent 100%);
+      transform:translateX(-120%);
+      animation:bpShine 7s infinite;
+      pointer-events:none;
+    }
+
+    @keyframes bpShine{
+      0%{transform:translateX(-120%);}
+      45%{transform:translateX(120%);}
+      100%{transform:translateX(120%);}
+    }
+
+    .hub-title{
+      margin:10px 0 10px;
+      font-size:38px;
+      line-height:1.04;
+      color:#fff;
+      letter-spacing:-.04em;
+      text-shadow:0 0 34px rgba(255,215,0,.08);
+    }
+
+    .hub-subtitle{
+      margin:10px 0 0;
+      font-size:28px;
+      color:#fff;
+      letter-spacing:-.03em;
+    }
+
+    .hub-text{
+      color:rgba(255,255,255,.72);
+      line-height:1.7;
+      margin:0;
+    }
+
+    .hub-highlight{
+      color:#ffd700;
+      font-weight:950;
+    }
+
+    .bp-command-center{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:14px;
+      margin-top:22px;
+    }
+
+    .bp-command-card{
+      border:1px solid rgba(255,215,0,.18);
+      background:linear-gradient(180deg,rgba(255,215,0,.08),rgba(255,255,255,.02));
+      border-radius:20px;
+      padding:18px;
+      min-height:112px;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+    }
+
+    .bp-command-label{
+      color:rgba(255,255,255,.55);
+      font-size:12px;
+      text-transform:uppercase;
+      letter-spacing:.10em;
+      margin-bottom:8px;
+    }
+
+    .bp-command-value{
+      color:#fff;
+      font-size:22px;
+      font-weight:950;
+    }
+
+    .bp-command-value.gold{
+      color:#ffd700;
+    }
+
+    .bp-live-dot{
+      width:9px;
+      height:9px;
+      background:#22c55e;
+      border-radius:50%;
+      display:inline-block;
+      box-shadow:0 0 16px rgba(34,197,94,.7);
+      margin-right:8px;
+    }
+
+    .bp-workflow-row{
+      display:flex;
+      flex-direction:row;
+      align-items:center;
+      flex-wrap:wrap;
+      gap:12px;
+      margin-top:24px;
+      margin-bottom:28px;
+      width:100%;
+    }
+
+    .bp-workflow-pill{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding:11px 18px;
+      border-radius:999px;
+      border:1px solid rgba(255,215,0,.25);
+      background:linear-gradient(180deg,rgba(255,215,0,.12),rgba(255,255,255,.03));
+      color:#ffd700;
+      font-size:12px;
+      font-weight:900;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      line-height:1;
+      box-shadow:0 0 20px rgba(255,215,0,.06);
+      white-space:nowrap;
+    }
+
+    .bp-workflow-text{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding:11px 18px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(255,255,255,.03);
+      color:rgba(255,255,255,.78);
+      font-size:13px;
+      font-weight:800;
+      line-height:1;
+      white-space:nowrap;
+    }
+
+    .hub-stats{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:14px;
+      margin-top:20px;
+    }
+
+    .hub-stat{
+      background:#111;
+      border:1px solid #252525;
+      border-radius:18px;
+      padding:16px;
+    }
+
+    .hub-stat-label{
+      color:rgba(255,255,255,.56);
+      font-size:12px;
+      text-transform:uppercase;
+      letter-spacing:.08em;
+      margin-bottom:8px;
+    }
+
+    .hub-stat-value{
+      color:#ffd700;
+      font-size:26px;
+      font-weight:950;
+    }
+
+    .hub-stat-sub{
+      margin-top:6px;
+      color:rgba(255,255,255,.55);
+      font-size:12px;
+    }
+
+    .hub-actions{
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+      margin-top:22px;
+    }
+
+    .hub-btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      text-decoration:none;
+      padding:12px 16px;
+      border-radius:14px;
+      font-weight:850;
+      border:1px solid transparent;
+      cursor:pointer;
+    }
+
+    .hub-btn.primary{
+      background:#ffd700;
+      color:#111;
+    }
+
+    .hub-btn.secondary{
+      background:#111;
+      color:#fff;
+      border-color:#252525;
+    }
+
+    .hub-btn.secondary:hover{
+      border-color:#ffd700;
+      color:#ffd700;
+    }
+
+    .hub-checklist,
+    .hub-flow,
+    .hub-watchlist{
+      display:grid;
+      gap:12px;
+      margin-top:18px;
+    }
+
+    .hub-check-item,
+    .hub-flow-item,
+    .hub-watch-item{
+      background:#111;
+      border:1px solid #252525;
+      border-radius:16px;
+      padding:14px 16px;
+      color:#fff;
+      line-height:1.55;
+    }
+
+    .hub-check-item strong,
+    .hub-longterm-item strong{
+      color:#ffd700;
+    }
+
+    .hub-links-grid{
+      display:grid;
+      grid-template-columns:repeat(2,1fr);
+      gap:16px;
+      margin-top:18px;
+    }
+
+    .hub-link-card{
+      position:relative;
+      overflow:hidden;
+      text-decoration:none;
+      color:#fff;
+      transition:.25s ease;
+      display:block;
+    }
+
+    .hub-link-card::before{
+      content:"";
+      position:absolute;
+      inset:auto -40px -70px auto;
+      width:150px;
+      height:150px;
+      background:radial-gradient(circle, rgba(255,215,0,.15), transparent 70%);
+      opacity:0;
+      transition:.25s ease;
+    }
+
+    .hub-link-card:hover::before{
+      opacity:1;
+    }
+
+    .hub-link-card:hover{
+      border-color:#ffd700;
+      transform:translateY(-5px) scale(1.01);
+      box-shadow:0 18px 40px rgba(255,215,0,.08);
+    }
+
+    .hub-link-card h3{
+      margin:10px 0 8px;
+      font-size:24px;
+      color:#fff;
+    }
+
+    .hub-link-card p{
+      margin:0;
+      color:rgba(255,255,255,.68);
+      line-height:1.6;
+    }
+
+    .hub-link-meta{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+      margin-top:18px;
+      color:#ffd700;
+      font-size:13px;
+      font-weight:800;
+    }
+
+    .admin-glow{
+      border-color:rgba(255,215,0,.28);
+      background:linear-gradient(180deg, rgba(255,215,0,.08), #0c0c0c);
+    }
+
+    .hub-watch-item{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+    }
+
+    .hub-watch-item strong{
+      display:block;
+      color:#ffd700;
+      font-size:15px;
+    }
+
+    .hub-watch-item span{
+      color:rgba(255,255,255,.58);
+      font-size:12px;
+    }
+
+    .hub-watch-item a{
+      text-decoration:none;
+      border:1px solid #333;
+      color:#fff;
+      padding:8px 12px;
+      border-radius:999px;
+      font-size:12px;
+      font-weight:800;
+    }
+
+    .hub-watch-item a:hover{
+      border-color:#ffd700;
+      color:#ffd700;
+    }
+
+    .hub-flow-item{
+      display:flex;
+      gap:14px;
+      align-items:flex-start;
+    }
+
+    .hub-flow-num{
+      width:34px;
+      height:34px;
+      min-width:34px;
+      border-radius:50%;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background:#17130a;
+      border:1px solid rgba(255,215,0,.2);
+      color:#ffd700;
+      font-weight:950;
+    }
+
+    .hub-flow-item strong{
+      display:block;
+      color:#fff;
+      margin-bottom:4px;
+    }
+
+    .hub-flow-item p{
+      margin:0;
+      color:rgba(255,255,255,.68);
+      line-height:1.55;
+    }
+
+    .hub-note-card textarea{
+      width:100%;
+      min-height:180px;
+      margin-top:16px;
+      background:#111;
+      color:#fff;
+      border:1px solid #252525;
+      border-radius:16px;
+      padding:14px;
+      box-sizing:border-box;
+      resize:vertical;
+    }
+
+    .hub-note-status{
+      margin-top:10px;
+      color:rgba(255,255,255,.58);
+      font-size:13px;
+    }
+
+    .hub-longterm-grid{
+      display:grid;
+      grid-template-columns:1.1fr .9fr;
+      gap:20px;
+      margin-top:18px;
+    }
+
+    .hub-longterm-list{
+      display:grid;
+      gap:12px;
+      margin-top:16px;
+    }
+
+    .hub-longterm-item{
+      background:#111;
+      border:1px solid #252525;
+      border-radius:16px;
+      padding:14px 16px;
+      color:#fff;
+      line-height:1.55;
+    }
+
+    .hub-badges{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      margin-top:16px;
+    }
+
+    .hub-badges span{
+      border:1px solid rgba(255,215,0,.24);
+      background:rgba(255,215,0,.06);
+      color:#ffd700;
+      padding:7px 10px;
+      border-radius:999px;
+      font-size:12px;
+      font-weight:800;
+    }
+
+    .notification-wrap{
+      position:relative;
+      display:inline-flex;
+      align-items:center;
+      z-index:9999;
+    }
+
+    .notification-btn{
+      width:48px;
+      height:48px;
+      border-radius:18px;
+      border:1px solid rgba(255,215,0,.28);
+      background:linear-gradient(180deg, rgba(255,215,0,.12), rgba(255,215,0,.03));
+      color:#ffd700;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      cursor:pointer;
+      position:relative;
+      box-shadow:0 0 22px rgba(255,215,0,.10);
+      transition:.25s ease;
+    }
+
+    .notification-btn:hover{
+      border-color:#ffd700;
+      transform:translateY(-2px);
+      box-shadow:0 0 28px rgba(255,215,0,.18);
+    }
+
+    .notification-icon{
+      font-size:20px;
+    }
+
+    .notification-count{
+      position:absolute;
+      top:-7px;
+      right:-7px;
+      min-width:22px;
+      height:22px;
+      padding:0 6px;
+      border-radius:999px;
+      background:#ffd700;
+      color:#111;
+      font-size:11px;
+      font-weight:950;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      box-shadow:0 0 18px rgba(255,215,0,.45);
+    }
+
+    .notification-panel{
+      position:absolute;
+      top:62px;
+      right:0;
+      width:390px;
+      max-height:520px;
+      overflow:auto;
+      border-radius:26px;
+      border:1px solid rgba(255,215,0,.20);
+      background:linear-gradient(180deg, rgba(14,14,14,.98), rgba(5,5,5,.98));
+      box-shadow:0 30px 90px rgba(0,0,0,.65), 0 0 35px rgba(255,215,0,.08);
+      backdrop-filter:blur(18px);
+      display:none;
+      padding:0;
+      z-index:99999;
+    }
+
+    .notification-panel.active{
+      display:block;
+    }
+
+    .notification-header{
+      padding:22px;
+      border-bottom:1px solid rgba(255,255,255,.06);
+    }
+
+    .notification-title{
+      color:#fff;
+      font-size:20px;
+      font-weight:950;
+    }
+
+    .notification-sub{
+      color:#8f8f8f;
+      font-size:13px;
+      margin-top:5px;
+    }
+
+    .notification-list{
+      display:grid;
+      gap:12px;
+      padding:16px;
+    }
+
+    .notification-item{
+      background:#101010;
+      border:1px solid rgba(255,215,0,.14);
+      border-radius:20px;
+      padding:16px;
+    }
+
+    .notification-top{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      margin-bottom:10px;
+    }
+
+    .notification-badge{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding:6px 11px;
+      border-radius:999px;
+      background:#ffd700;
+      color:#111;
+      font-size:11px;
+      font-weight:950;
+      letter-spacing:.08em;
+    }
+
+    .notification-time{
+      color:#777;
+      font-size:12px;
+      font-weight:800;
+      white-space:nowrap;
+    }
+
+    .notification-heading{
+      color:#ffd700;
+      font-size:15px;
+      font-weight:950;
+      margin-bottom:6px;
+      line-height:1.35;
+    }
+
+    .notification-text{
+      color:rgba(255,255,255,.78);
+      line-height:1.55;
+      font-size:14px;
+    }
+
+    #bpNotifications{
+      position:fixed;
+      top:24px;
+      right:24px;
+      z-index:999999;
+      display:flex;
+      flex-direction:column;
+      gap:14px;
+      width:360px;
+      pointer-events:none;
+    }
+
+    .bp-notification{
+      background:linear-gradient(180deg,#111,#090909);
+      border:1px solid rgba(255,215,0,.18);
+      border-radius:22px;
+      padding:18px;
+      color:#fff;
+      position:relative;
+      overflow:hidden;
+      animation:notificationEnter .45s ease;
+      box-shadow:0 0 25px rgba(255,215,0,.10), inset 0 0 0 1px rgba(255,255,255,.02);
+      backdrop-filter:blur(10px);
+    }
+
+    .bp-notification-title{
+      font-size:16px;
+      font-weight:900;
+      color:#ffd700;
+      margin-bottom:6px;
+    }
+
+    .bp-notification-message{
+      color:rgba(255,255,255,.82);
+      line-height:1.6;
+      font-size:14px;
+    }
+
+    .bp-notification-type{
+      margin-top:12px;
+      display:inline-flex;
+      padding:6px 10px;
+      border-radius:999px;
+      background:rgba(255,215,0,.08);
+      border:1px solid rgba(255,215,0,.18);
+      color:#ffd700;
+      font-size:11px;
+      font-weight:800;
+      letter-spacing:.08em;
+    }
+
+    .hub-page{
+      background:
+        linear-gradient(135deg, rgba(243,210,27,0.07), transparent 28%),
+        radial-gradient(circle at 78% 8%, rgba(43,191,120,0.10), transparent 24%),
+        radial-gradient(circle at 12% 26%, rgba(243,210,27,0.10), transparent 22%),
+        #050505;
+    }
+
+    .hub-page .navbar{
+      position:sticky;
+      top:14px;
+      z-index:50;
+      padding:14px 16px;
+      border:1px solid rgba(243,210,27,0.14);
+      border-radius:24px;
+      background:rgba(7,7,7,0.78);
+      backdrop-filter:blur(18px);
+      box-shadow:0 18px 60px rgba(0,0,0,0.28);
+    }
+
+    .hub-page .logo{
+      letter-spacing:0;
+    }
+
+    .hub-page .hero-shell{
+      margin-top:14px;
+      padding:40px;
+      border-radius:34px;
+      background:
+        linear-gradient(145deg, rgba(255,255,255,0.055), transparent 38%),
+        radial-gradient(circle at 76% 20%, rgba(243,210,27,0.14), transparent 30%),
+        linear-gradient(180deg, rgba(18,18,18,0.92), rgba(5,5,5,0.98));
+      overflow:hidden;
+    }
+
+    .hub-page .hero-shell::before{
+      width:520px;
+      height:520px;
+      top:-220px;
+      right:-160px;
+      background:radial-gradient(circle, rgba(243,210,27,0.16), transparent 66%);
+    }
+
+    .hub-page .hero-title{
+      font-size:clamp(44px, 5vw, 74px);
+      letter-spacing:0;
+      line-height:.92;
+      max-width:980px;
+    }
+
+    .hub-page .hero-text{
+      max-width:860px;
+    }
+
+    .hub-page .badge,
+    .hub-page .bp-workflow-pill,
+    .hub-page .bp-workflow-text,
+    .hub-page .hub-badges span{
+      border-color:rgba(243,210,27,0.18);
+      background:rgba(243,210,27,0.065);
+      color:var(--gold);
+      box-shadow:none;
+    }
+
+    .hub-page .bp-workflow-text{
+      color:#e5e5e5;
+      border-color:rgba(255,255,255,0.09);
+      background:rgba(255,255,255,0.035);
+    }
+
+    .hub-page .hub-card,
+    .hub-page .hub-hero-card,
+    .hub-page .hub-link-card,
+    .hub-page .hub-note-card,
+    .hub-page .hub-longterm-card{
+      border:1px solid rgba(243,210,27,0.16);
+      border-radius:26px;
+      background:
+        linear-gradient(145deg, rgba(255,255,255,0.035), transparent 44%),
+        linear-gradient(180deg, rgba(17,17,17,0.9), rgba(7,7,7,0.96));
+      box-shadow:
+        inset 0 0 0 1px rgba(255,255,255,0.025),
+        0 22px 58px rgba(0,0,0,0.28);
+    }
+
+    .hub-page .hub-hero-card::after,
+    .hub-page .hub-longterm-card::after{
+      opacity:.45;
+    }
+
+    .hub-page .bp-command-card,
+    .hub-page .hub-stat,
+    .hub-page .hub-check-item,
+    .hub-page .hub-flow-item,
+    .hub-page .hub-watch-item,
+    .hub-page .hub-longterm-item{
+      border:1px solid rgba(243,210,27,0.13);
+      border-radius:18px;
+      background:rgba(255,255,255,0.025);
+    }
+
+    .hub-page .bp-command-card{
+      min-height:118px;
+      box-shadow:0 18px 48px rgba(0,0,0,0.18);
+    }
+
+    .hub-page .hub-title,
+    .hub-page .hub-subtitle{
+      letter-spacing:0;
+    }
+
+    .hub-page .hub-highlight,
+    .hub-page .hub-stat-value,
+    .hub-page .hub-check-item strong,
+    .hub-page .hub-longterm-item strong,
+    .hub-page .hub-watch-item strong,
+    .hub-page .hub-link-meta,
+    .hub-page .notification-heading,
+    .hub-page .bp-notification-title{
+      color:var(--gold);
+    }
+
+    .hub-page .hub-text,
+    .hub-page .hub-link-card p,
+    .hub-page .hub-flow-item p,
+    .hub-page .hub-stat-sub{
+      color:#d9d9d9;
+    }
+
+    .hub-page .hub-btn,
+    .hub-page .btn{
+      border-radius:999px;
+      min-height:46px;
+    }
+
+    .hub-page .hub-btn.primary,
+    .hub-page .btn.primary{
+      background:var(--gold);
+      color:#111;
+      box-shadow:0 0 24px rgba(243,210,27,0.16);
+    }
+
+    .hub-page .hub-btn.secondary,
+    .hub-page .btn.secondary{
+      color:#fff;
+      border-color:rgba(255,255,255,0.14);
+      background:rgba(255,255,255,0.025);
+    }
+
+    .hub-page .hub-link-card:hover{
+      border-color:rgba(243,210,27,0.5);
+      transform:translateY(-6px);
+      box-shadow:0 22px 58px rgba(0,0,0,0.34);
+    }
+
+    .hub-page .hub-flow-num{
+      background:rgba(243,210,27,0.08);
+      border-color:rgba(243,210,27,0.18);
+      color:var(--gold);
+    }
+
+    .hub-page .hub-note-card textarea{
+      border-color:rgba(243,210,27,0.14);
+      background:rgba(255,255,255,0.025);
+      border-radius:18px;
+      outline:none;
+    }
+
+    .hub-page .hub-note-card textarea:focus{
+      border-color:rgba(243,210,27,0.46);
+      box-shadow:0 0 0 3px rgba(243,210,27,0.08);
+    }
+
+    .hub-page .auth-badge,
+    .hub-page .logout-btn{
+      border-color:rgba(255,255,255,0.08);
+      background:rgba(255,255,255,0.04);
+    }
+
+    .hub-page .notification-btn{
+      width:auto;
+      min-width:96px;
+      height:46px;
+      padding:0 14px;
+      border-radius:999px;
+      background:rgba(255,255,255,0.035);
+      border-color:rgba(243,210,27,0.18);
+      gap:8px;
+    }
+
+    .hub-page .notification-icon{
+      font-size:13px;
+      font-weight:900;
+      color:var(--gold);
+      letter-spacing:.02em;
+    }
+
+    .hub-page .notification-count{
+      position:static;
+      min-width:24px;
+      height:24px;
+      box-shadow:none;
+    }
+
+    .hub-page .footer-note{
+      border:1px solid rgba(243,210,27,0.14);
+      border-radius:24px;
+      background:rgba(255,255,255,0.025);
+      padding:18px 22px;
+      margin:0 0 10px;
+      color:#bdbdbd;
+      font-size:14px;
+      font-weight:800;
+      text-align:center;
+    }
+
+    @keyframes notificationEnter{
+      from{opacity:0;transform:translateX(40px) scale(.96);}
+      to{opacity:1;transform:translateX(0) scale(1);}
+    }
+
+    @keyframes notificationExit{
+      to{opacity:0;transform:translateX(60px);}
+    }
+
+    @media(max-width:1100px){
+      .hub-top-grid,
+      .hub-mid-grid,
+      .hub-bottom-grid,
+      .hub-longterm-grid{
+        grid-template-columns:1fr;
+      }
+
+      .hub-stats{
+        grid-template-columns:1fr 1fr;
+      }
+    }
+
+    @media(max-width:900px){
+      .bp-command-center{
+        grid-template-columns:1fr;
+      }
+    }
+
+    @media(max-width:760px){
+      .hub-links-grid,
+      .hub-stats{
+        grid-template-columns:1fr;
+      }
+
+      .hub-title{
+        font-size:30px;
+      }
+
+      .hub-subtitle{
+        font-size:24px;
+      }
+
+      .notification-panel{
+        right:-20px;
+        width:calc(100vw - 36px);
+      }
+
+      #bpNotifications{
+        width:calc(100vw - 28px);
+        left:14px;
+        right:14px;
+        top:14px;
+      }
+
+      .hero-shell{
+        padding:28px !important;
+      }
+
+      .navbar{
+        margin-bottom:24px !important;
+      }
+
+      .hero-title{
+        max-width:1050px !important;
+      }
+
+      .bp-workflow-row{
+        gap:10px;
+        margin-top:22px;
+        margin-bottom:24px;
+      }
+
+      .bp-workflow-pill,
+      .bp-workflow-text{
+        width:100%;
+        justify-content:center;
+      }
+
+      .hero-buttons{
+        margin-top:8px;
+      }
+
+      .hub-page .hero-shell{
+        padding:24px !important;
+      }
+
+      .hub-page .notification-btn{
+        min-width:auto;
+      }
+    }
+  </style>
+</head>
+
+<body class="hub-page access-ready">
+  <div class="page">
+
+    <nav class="navbar">
+      <a href="index" class="logo">BullProsperity</a>
+
+      <div class="nav-links">
+        <a href="index">Home</a>
+        <a href="hub" class="active">Hub</a>
+        <a href="course">Course</a>
+        <a href="tools">Tools</a>
+        <a href="setup-room">Setup Room</a>
+        <a href="community">Community</a>
+
+        <a id="loginNavBtn" href="/api/whop/login">Login</a>
+        <a id="logoutBtn" href="/api/logout" class="logout-btn" style="display:none;">Logout</a>
+
+        <div id="authBadge" class="auth-badge status-loading">Prüfe Zugang...</div>
+
+        <div class="notification-wrap">
+          <button class="notification-btn" id="notificationBtn" type="button" aria-label="Notifications öffnen">
+            <span class="notification-icon">Alerts</span>
+            <span class="notification-count" id="notificationCount">0</span>
+          </button>
+
+          <div class="notification-panel" id="notificationPanel">
+            <div class="notification-header">
+              <div class="notification-title">BullProsperity Alerts</div>
+              <div class="notification-sub">Neue Updates & Marktinformationen</div>
+            </div>
+
+            <div class="notification-list" id="notificationList">
+              <div class="notification-item">
+                <div class="notification-text">Lade Notifications...</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <section class="hero-shell">
+      <div class="badge">Premium Members Hub</div>
+
+      <h1 class="hero-title">
+        BullProsperity <span class="gold">Command Center</span>
+      </h1>
+
+      <p class="hero-text">
+        Dein privater Trading-Bereich für Smart Money Analyse, Kursfortschritt,
+        Setups, Tools, Journal, Community und langfristigen Vermögensaufbau.
+      </p>
+
+      <div class="bp-command-center">
+        <div class="bp-command-card">
+          <div class="bp-command-label">Access</div>
+          <div class="bp-command-value gold" id="heroAccessValue">Premium</div>
+        </div>
+
+        <div class="bp-command-card">
+          <div class="bp-command-label">Market Status</div>
+          <div class="bp-command-value">
+            <span class="bp-live-dot"></span>Live
+          </div>
+        </div>
+
+        <div class="bp-command-card">
+          <div class="bp-command-label">Session</div>
+          <div class="bp-command-value" id="bpSessionValue">Loading...</div>
+        </div>
+      </div>
+
+      <div class="bp-workflow-row">
+        <div class="bp-workflow-pill">Discipline</div>
+        <div class="bp-workflow-pill">Structure</div>
+        <div class="bp-workflow-pill">Execution</div>
+        <div class="bp-workflow-text">Dein BullProsperity Workflow</div>
+      </div>
+
+      <div class="hero-buttons">
+        <a href="course" class="btn primary">Kurs fortsetzen</a>
+        <a href="tools" class="btn secondary">Market Tools öffnen</a>
+        <a href="setup-room" class="btn secondary">Setup Room</a>
+        <a id="adminSignalsHeroBtn" href="/admin-signals" class="btn primary" style="display:none;">Admin Signals</a>
+        <a id="adminDashboardHeroBtn" href="/admin/dashboard" class="btn secondary" style="display:none;">Admin Dashboard</a>
+      </div>
+    </section>
+
+    <div class="hub-shell">
+
+      <section id="hub-dashboard" class="hub-top-grid">
+        <div class="hub-hero-card">
+          <div class="badge">Dashboard</div>
+
+          <h2 class="hub-title">
+            Dein <span class="hub-highlight">BullProsperity System</span> an einem Ort
+          </h2>
+
+          <p class="hub-text">
+            Nutze den Hub als Zentrale für deinen Workflow:
+            Kurs lernen, Charts analysieren, Setups prüfen, Risiko berechnen,
+            Trades dokumentieren und Longterm-Struktur aufbauen.
+          </p>
+
+          <div class="hub-stats">
+            <div class="hub-stat">
+              <div class="hub-stat-label">Status</div>
+              <div class="hub-stat-value" id="statusValue">Premium</div>
+              <div class="hub-stat-sub">Mitgliederbereich aktiv</div>
+            </div>
+
+            <div class="hub-stat">
+              <div class="hub-stat-label">Module</div>
+              <div class="hub-stat-value">5+</div>
+              <div class="hub-stat-sub">Course, Tools, Community, Setups, Longterm</div>
+            </div>
+
+            <div class="hub-stat">
+              <div class="hub-stat-label">Fokus</div>
+              <div class="hub-stat-value">SMC</div>
+              <div class="hub-stat-sub">Smart Money Konzept</div>
+            </div>
+
+            <div class="hub-stat">
+              <div class="hub-stat-label">Extra</div>
+              <div class="hub-stat-value">Pro</div>
+              <div class="hub-stat-sub">Premium Erweiterungen</div>
+            </div>
+          </div>
+
+          <div class="hub-actions">
+            <a href="course" class="hub-btn primary">Zum Kurs</a>
+            <a href="tools" class="hub-btn secondary">Tools öffnen</a>
+            <a id="adminSignalsTopBtn" href="/admin-signals" class="hub-btn primary" style="display:none;">Admin Signals</a>
+            <a id="adminDashboardTopBtn" href="/admin/dashboard" class="hub-btn secondary" style="display:none;">Admin Dashboard</a>
+          </div>
+        </div>
+
+        <div class="hub-card">
+          <div class="badge">BullProsperity Workflow</div>
+
+          <h2 class="hub-subtitle">So nutzt du den Hub richtig</h2>
+
+          <div class="hub-checklist">
+            <div class="hub-check-item"><strong>1. Analyse:</strong> Starte mit Marktstruktur, Liquidity, BOS, CHoCH und Fokusmärkten.</div>
+            <div class="hub-check-item"><strong>2. Setup:</strong> Prüfe, ob dein Trade wirklich in deinen Plan und deinen Kontext passt.</div>
+            <div class="hub-check-item"><strong>3. Risiko:</strong> Arbeite sauber mit Positionsgröße und kontrollierter Exponierung.</div>
+            <div class="hub-check-item"><strong>4. Dokumentation:</strong> Halte fest, was funktioniert — damit du systematisch besser wirst.</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="hub-mid-grid">
+        <div class="hub-card">
+          <div class="badge">Schnellzugriffe</div>
+
+          <h2 class="hub-subtitle">Deine wichtigsten Bereiche</h2>
+
+          <div class="hub-links-grid">
+            <a href="course" class="hub-link-card">
+              <div class="badge">Course</div>
+              <h3>Kursbereich</h3>
+              <p>Lerne die Inhalte strukturiert und arbeite deine Module Schritt für Schritt durch.</p>
+              <div class="hub-link-meta"><span>Weiter öffnen</span><span>→</span></div>
+            </a>
+
+            <a href="tools" class="hub-link-card">
+              <div class="badge">Tools</div>
+              <h3>Trading Tools</h3>
+              <p>Greife auf Watchlist, Chart Analyse, Quick Journal und weitere Trading-Tools zu.</p>
+              <div class="hub-link-meta"><span>Weiter öffnen</span><span>→</span></div>
+            </a>
+
+            <a href="setup-room" class="hub-link-card">
+              <div class="badge">Setup Room</div>
+              <h3>Setups & Ideen</h3>
+              <p>Nutze strukturierte Marktideen und beobachte Setups im BullProsperity Stil.</p>
+              <div class="hub-link-meta"><span>Weiter öffnen</span><span>→</span></div>
+            </a>
+
+            <a href="community" class="hub-link-card">
+              <div class="badge">Community</div>
+              <h3>Austausch & Netzwerk</h3>
+              <p>Bleibe verbunden, tausche Ideen aus und stärke dein System durch Wiederholung.</p>
+              <div class="hub-link-meta"><span>Weiter öffnen</span><span>→</span></div>
+            </a>
+
+            <a href="broker" class="hub-link-card">
+              <div class="badge">Broker</div>
+              <h3>Trading Infrastruktur</h3>
+              <p>Richte deinen Broker, MT5 Zugang und BullProsperity Workflow sauber ein.</p>
+              <div class="hub-link-meta"><span>Broker Setup öffnen</span><span>→</span></div>
+            </a>
+
+            <a id="adminSignalsCard" href="/admin-signals" class="hub-link-card admin-glow" style="display:none;">
+              <div class="badge">Admin</div>
+              <h3>Admin Signals</h3>
+              <p>Erstelle professionelle BullProsperity Signale mit Bild, Entry, SL, TPs und Analyse-Link.</p>
+              <div class="hub-link-meta"><span>Signal Panel öffnen</span><span>→</span></div>
+            </a>
+
+            <a id="adminDashboardCard" href="/admin/dashboard" class="hub-link-card admin-glow" style="display:none;">
+              <div class="badge">Admin Dashboard</div>
+              <h3>Control Center</h3>
+              <p>Mitglieder, Analytics, Watchtime, Sessions, Affiliate Daten, Security und Systemverwaltung.</p>
+              <div class="hub-link-meta"><span>Dashboard öffnen</span><span>→</span></div>
+            </a>
+          </div>
+        </div>
+
+        <div class="hub-card">
+          <div class="badge">Fokusmärkte</div>
+
+          <h2 class="hub-subtitle">Schneller Zugriff auf Märkte</h2>
+
+          <div class="hub-watchlist">
+            <div class="hub-watch-item"><div><strong>EURUSD</strong><span>Forex</span></div><a href="tools#charts">Öffnen</a></div>
+            <div class="hub-watch-item"><div><strong>XAUUSD</strong><span>Gold</span></div><a href="tools#charts">Öffnen</a></div>
+            <div class="hub-watch-item"><div><strong>NASDAQ</strong><span>Index</span></div><a href="tools#charts">Öffnen</a></div>
+            <div class="hub-watch-item"><div><strong>US30</strong><span>Dow Jones</span></div><a href="tools#charts">Öffnen</a></div>
+            <div class="hub-watch-item"><div><strong>BTCUSD</strong><span>Crypto</span></div><a href="tools#charts">Öffnen</a></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="hub-bottom-grid">
+        <div class="hub-card">
+          <div class="badge">Tagesstruktur</div>
+
+          <h2 class="hub-subtitle">Dein täglicher BullProsperity Ablauf</h2>
+
+          <div class="hub-flow">
+            <div class="hub-flow-item">
+              <div class="hub-flow-num">1</div>
+              <div><strong>Chart Analyse</strong><p>Beginne mit Struktur, höheren Timeframes und deinem Markt-Kontext.</p></div>
+            </div>
+
+            <div class="hub-flow-item">
+              <div class="hub-flow-num">2</div>
+              <div><strong>Setup filtern</strong><p>Nimm nur Trades, die sauber in deinen Plan und in deine Regeln passen.</p></div>
+            </div>
+
+            <div class="hub-flow-item">
+              <div class="hub-flow-num">3</div>
+              <div><strong>Risiko berechnen</strong><p>Nutze Lot Size, Regeln und Disziplin, statt impulsiv zu handeln.</p></div>
+            </div>
+
+            <div class="hub-flow-item">
+              <div class="hub-flow-num">4</div>
+              <div><strong>Trade dokumentieren</strong><p>Halte Bias, Ausführung und Gedanken fest, um langfristig besser zu werden.</p></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="hub-note-card">
+          <div class="badge">Quick Notes</div>
+
+          <h2 class="hub-subtitle">Deine Tagesnotizen</h2>
+
+          <p class="hub-text">
+            Nutze diesen Bereich für Bias, wichtige Levels, Session-Ideen oder kurze Erinnerungen.
+          </p>
+
+          <textarea id="hubNotes" placeholder="Schreibe hier deinen Tagesbias, wichtige Levels oder Erinnerungen für deine Session..."></textarea>
+
+          <div class="hub-actions" style="margin-top:12px;">
+            <button id="saveHubNotes" class="hub-btn primary" type="button">Notizen speichern</button>
+          </div>
+
+          <div id="hubNoteStatus" class="hub-note-status">Noch keine Notizen gespeichert.</div>
+        </div>
+      </section>
+
+      <section class="hub-longterm-card">
+        <div class="badge">BullProsperity Longterm</div>
+
+        <h2 class="hub-title">
+          Langfristiger <span class="hub-highlight">Vermögensaufbau</span>
+        </h2>
+
+        <p class="hub-text" id="longtermText">
+          Eigene Premium-Unterseite mit ETFs, Cryptos, Indices, bekannten Aktien, Rohstoffen,
+          Portfolio Tracker, DCA Rechner und Investment Journal.
+        </p>
+
+        <div class="hub-longterm-grid">
+          <div>
+            <div class="hub-badges">
+              <span>ETFs</span>
+              <span>Cryptos</span>
+              <span>Indices</span>
+              <span>Aktien</span>
+              <span>Rohstoffe</span>
+            </div>
+
+            <div class="hub-longterm-list">
+              <div class="hub-longterm-item"><strong>Pro Watchlist:</strong> Kategorisierte Marktübersicht mit bekannten Märkten und Unternehmen.</div>
+              <div class="hub-longterm-item"><strong>Portfolio Tracker:</strong> Dokumentiere deine Longterm-Ideen, Kategorien und Pläne.</div>
+              <div class="hub-longterm-item"><strong>DCA Rechner:</strong> Simuliere regelmäßigen Aufbau über Monate und Jahre.</div>
+              <div class="hub-longterm-item"><strong>Investment Journal:</strong> Halte deine langfristigen Thesen sauber fest.</div>
+            </div>
+          </div>
+
+          <div>
+            <div class="hub-card" style="padding:20px;background:#111;border-color:#252525;">
+              <div class="badge">Premium Modul</div>
+
+              <h2 class="hub-subtitle" style="font-size:26px;">Longterm Pro Bereich</h2>
+
+              <p class="hub-text" style="margin-top:10px;">
+                Öffne direkt die Longterm-Unterseite oder erfahre mehr über das Premium-Modul.
+              </p>
+
+              <div class="hub-actions">
+                <a id="longtermBtn" class="hub-btn primary" href="longterm">Longterm Bereich öffnen</a>
+                <a href="longterm-sales" class="hub-btn secondary">Mehr erfahren</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div class="footer-note">
+        BullProsperity dient ausschließlich Bildungszwecken
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const hubNotes = document.getElementById("hubNotes");
+    const hubNoteStatus = document.getElementById("hubNoteStatus");
+    const saveHubNotes = document.getElementById("saveHubNotes");
+    const authBadge = document.getElementById("authBadge");
+    const loginNavBtn = document.getElementById("loginNavBtn");
+    const logoutBtn = document.getElementById("logoutBtn");
+    const longtermBtn = document.getElementById("longtermBtn");
+    const longtermText = document.getElementById("longtermText");
+    const adminSignalsCard = document.getElementById("adminSignalsCard");
+    const adminSignalsTopBtn = document.getElementById("adminSignalsTopBtn");
+    const adminSignalsHeroBtn = document.getElementById("adminSignalsHeroBtn");
+    const adminDashboardCard = document.getElementById("adminDashboardCard");
+    const adminDashboardTopBtn = document.getElementById("adminDashboardTopBtn");
+    const adminDashboardHeroBtn = document.getElementById("adminDashboardHeroBtn");
+    const statusValue = document.getElementById("statusValue");
+    const heroAccessValue = document.getElementById("heroAccessValue");
+
+    const savedHubNotes = localStorage.getItem("bp_hub_notes");
+
+    if (savedHubNotes && hubNotes) {
+      hubNotes.value = savedHubNotes;
+      hubNoteStatus.textContent = "Gespeichert im Browser.";
+    }
+
+    if (saveHubNotes) {
+      saveHubNotes.addEventListener("click", () => {
+        const value = hubNotes.value.trim();
+        localStorage.setItem("bp_hub_notes", value);
+        hubNoteStatus.textContent = value
+          ? "Notizen erfolgreich gespeichert."
+          : "Leere Notiz gespeichert.";
+      });
+    }
+
+    function bpUpdateSession(){
+      const el = document.getElementById("bpSessionValue");
+      if(!el) return;
+
+      const hour = new Date().getHours();
+
+      if(hour >= 7 && hour < 10){
+        el.textContent = "London Open";
+      } else if(hour >= 10 && hour < 14){
+        el.textContent = "London Session";
+      } else if(hour >= 14 && hour < 17){
+        el.textContent = "NY Open";
+      } else if(hour >= 17 && hour < 22){
+        el.textContent = "NY Session";
+      } else {
+        el.textContent = "Preparation";
+      }
+    }
+
+    bpUpdateSession();
+    setInterval(bpUpdateSession, 60000);
+
+    (() => {
+      document.body.classList.add("access-ready");
+
+      if (authBadge) {
+        authBadge.textContent = "Premium Preview";
+        authBadge.className = "auth-badge status-premium";
+      }
+
+      if (statusValue) statusValue.textContent = "Premium";
+      if (heroAccessValue) heroAccessValue.textContent = "Premium";
+      if (loginNavBtn) loginNavBtn.style.display = "none";
+      if (logoutBtn) logoutBtn.style.display = "inline-flex";
+
+      if (longtermBtn) {
+        longtermBtn.href = "longterm";
+        longtermBtn.textContent = "Longterm Bereich öffnen";
+      }
+
+      if (longtermText) {
+        longtermText.textContent = "Du hast Zugriff auf die Longterm Pro Unterseite mit Watchlist, DCA Rechner, Portfolio Tracker und Investment Journal.";
+      }
+    })();
+  </script>
+
+  <script>
+    (async () => {
+      try {
+        const res = await fetch("/api/access", {
+          credentials: "include",
+          cache: "no-store"
+        });
+
+        const data = await res.json();
+        const userEmail = data.email || "admin@bullprosperity.local";
+
+        await supabaseClient
+          .from("member_activity")
+          .insert({
+            email: userEmail,
+            role: data.role || "guest",
+            action: "hub_opened",
+            page: "hub"
+          });
+
+      } catch(err) {
+        console.log("Supabase Fehler", err);
+      }
+    })();
+  </script>
+
+  <script>
+    const notificationBtn = document.getElementById("notificationBtn");
+    const notificationPanel = document.getElementById("notificationPanel");
+    const notificationList = document.getElementById("notificationList");
+    const notificationCount = document.getElementById("notificationCount");
+
+    if(notificationBtn && notificationPanel){
+      notificationBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        notificationPanel.classList.toggle("active");
+      });
+
+      document.addEventListener("click", (e) => {
+        if(
+          !notificationPanel.contains(e.target) &&
+          !notificationBtn.contains(e.target)
+        ){
+          notificationPanel.classList.remove("active");
+        }
+      });
+    }
+
+    function bpNotificationTime(value){
+      if(!value) return "Neu";
+
+      const date = new Date(value);
+      const now = new Date();
+      const diff = Math.floor((now - date) / 1000);
+
+      if(diff < 60) return "Jetzt";
+      if(diff < 3600) return Math.floor(diff / 60) + " min";
+      if(diff < 86400) return Math.floor(diff / 3600) + "h";
+
+      return date.toLocaleDateString("de-DE", {
+        day:"2-digit",
+        month:"2-digit"
+      });
+    }
+
+    async function bpLoadBellNotifications(){
+      if(!notificationList) return;
+
+      try{
+        const { data, error } = await supabaseClient
+          .from("notifications")
+          .select("*")
+          .eq("is_active", true)
+          .order("created_at", { ascending:false })
+          .limit(5);
+
+        if(error){
+          console.log("Notification Fehler:", error);
+          return;
+        }
+
+        if(!data || !data.length){
+          notificationList.innerHTML = `
+            <div class="notification-item">
+              <div class="notification-text">
+                Noch keine Notifications vorhanden.
+              </div>
+            </div>
+          `;
+
+          if(notificationCount) notificationCount.textContent = "0";
+          return;
+        }
+
+        if(notificationCount) notificationCount.textContent = data.length;
+
+        notificationList.innerHTML = "";
+
+        data.forEach(item => {
+          notificationList.innerHTML += `
+            <div class="notification-item">
+              <div class="notification-top">
+                <div class="notification-badge">${item.type || "SYSTEM"}</div>
+                <div class="notification-time">${bpNotificationTime(item.created_at)}</div>
+              </div>
+
+              <div class="notification-heading">
+                ${item.title || "BullProsperity Update"}
+              </div>
+
+              <div class="notification-text">
+                ${item.message || ""}
+              </div>
+            </div>
+          `;
+        });
+
+      }catch(err){
+        console.log("Notification System Fehler:", err);
+      }
+    }
+
+    const notificationContainer = document.createElement("div");
+    notificationContainer.id = "bpNotifications";
+    document.body.appendChild(notificationContainer);
+
+    function playNotificationSound(){
+      const audio = new Audio("https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3");
+      audio.volume = 0.35;
+      audio.play().catch(() => {});
+    }
+
+    function showNotification(notification){
+      const card = document.createElement("div");
+      card.className = "bp-notification";
+
+      card.innerHTML = `
+        <div class="bp-notification-title">
+          ${notification.title || "BullProsperity"}
+        </div>
+
+        <div class="bp-notification-message">
+          ${notification.message || ""}
+        </div>
+
+        <div class="bp-notification-type">
+          ${notification.type || "SYSTEM"}
+        </div>
+      `;
+
+      notificationContainer.prepend(card);
+      playNotificationSound();
+
+      setTimeout(() => {
+        card.style.animation = "notificationExit .4s ease forwards";
+
+        setTimeout(() => {
+          card.remove();
+        }, 400);
+
+      }, 7000);
+    }
+
+    async function bpLoadPopupNotification(){
+      try{
+        const { data, error } = await supabaseClient
+          .from("notifications")
+          .select("*")
+          .eq("is_active", true)
+          .order("created_at", { ascending:false })
+          .limit(1);
+
+        if(error || !data?.length) return;
+
+        const latest = data[0];
+        const alreadySeen = localStorage.getItem("bp_last_notification");
+
+        if(alreadySeen === latest.id) return;
+
+        localStorage.setItem("bp_last_notification", latest.id);
+        showNotification(latest);
+
+      }catch(err){
+        console.log("Popup Notification Fehler");
+      }
+    }
+
+    bpLoadBellNotifications();
+    bpLoadPopupNotification();
+
+    setInterval(bpLoadBellNotifications, 10000);
+    setInterval(bpLoadPopupNotification, 10000);
+  </script>
+
+  <script>
+    window.addEventListener("load", () => {
+      const loader = document.getElementById("bpLoader");
+
+      setTimeout(() => {
+        if(loader){
+          loader.classList.add("hide");
+        }
+      }, 700);
+    });
+  </script>
+
+</body>
+</html>

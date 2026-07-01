@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <script>document.documentElement.classList.add("bp-auth-checking");</script>
+  <script src="/access-guard.js?v=20260623-3"></script>
+ <script>
+(async () => {
+  try {
+    const res = await fetch("/api/access", {
+      credentials: "include",
+      cache: "no-store"
+    });
+
+    const data = await res.json();
+
+    if (data.role !== "admin" && data.role !== "premium") {
+      window.location.href = "/locked";
+    }
+
+  } catch (err) {
+    window.location.href = "/locked";
+  }
+})();
+</script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BullProsperity | Community</title>
+   <link rel="icon" type="image/png" href="/favicon.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="apple-touch-icon" href="/favicon.png">
+<meta name="theme-color" content="#050505">
+  <link rel="stylesheet" href="theme.css" />
+  <script src="/login.js?v=20260624-2" defer></script>
+
+  <style>
+    .community-page{
+      background:
+        linear-gradient(135deg, rgba(243,210,27,0.07), transparent 28%),
+        radial-gradient(circle at 78% 8%, rgba(43,191,120,0.10), transparent 24%),
+        radial-gradient(circle at 12% 26%, rgba(243,210,27,0.10), transparent 22%),
+        #050505;
+    }
+
+    .community-page .navbar{
+      position:sticky;
+      top:14px;
+      z-index:50;
+      padding:14px 16px;
+      border:1px solid rgba(243,210,27,0.14);
+      border-radius:24px;
+      background:rgba(7,7,7,0.78);
+      backdrop-filter:blur(18px);
+      box-shadow:0 18px 60px rgba(0,0,0,0.28);
+    }
+
+    .community-page .logo,
+    .community-page .section-heading{
+      letter-spacing:0;
+    }
+
+    .community-page .hero-shell{
+      margin-top:14px;
+      padding:40px;
+      border-radius:34px;
+      background:
+        linear-gradient(145deg, rgba(255,255,255,0.055), transparent 38%),
+        radial-gradient(circle at 76% 20%, rgba(243,210,27,0.14), transparent 30%),
+        linear-gradient(180deg, rgba(18,18,18,0.92), rgba(5,5,5,0.98));
+      overflow:hidden;
+    }
+
+    .community-page .hero-shell::before{
+      width:520px;
+      height:520px;
+      top:-220px;
+      right:-160px;
+      background:radial-gradient(circle, rgba(243,210,27,0.16), transparent 66%);
+    }
+
+    .community-page .hero-title{
+      max-width:1050px;
+      font-size:clamp(44px, 5vw, 74px);
+      letter-spacing:0;
+      line-height:.92;
+    }
+
+    .community-page .hero-text{
+      max-width:950px;
+    }
+
+    .community-page .badge{
+      border-color:rgba(243,210,27,0.18);
+      background:rgba(243,210,27,0.065);
+      color:var(--gold);
+      box-shadow:none;
+    }
+
+    .community-page .btn{
+      border-radius:999px;
+      min-height:46px;
+    }
+
+    .community-page .btn.primary,
+    .community-page .community-link{
+      background:var(--gold);
+      color:#111;
+      box-shadow:0 0 24px rgba(243,210,27,0.16);
+    }
+
+    .community-page .btn.secondary{
+      color:#fff;
+      border-color:rgba(255,255,255,0.14);
+      background:rgba(255,255,255,0.025);
+    }
+
+    .community-page .grid-3,
+    .community-page .grid-4,
+    .community-page .grid-2{
+      align-items:stretch;
+    }
+
+    .community-page .grid-4{
+      display:grid;
+      grid-template-columns:repeat(4,minmax(0,1fr));
+      gap:18px;
+    }
+
+    .community-page .community-card,
+    .community-page .section-card,
+    .community-page .discord-card{
+      border:1px solid rgba(243,210,27,0.16);
+      border-radius:26px;
+      background:
+        linear-gradient(145deg, rgba(255,255,255,0.035), transparent 44%),
+        linear-gradient(180deg, rgba(17,17,17,0.9), rgba(7,7,7,0.96));
+      box-shadow:
+        inset 0 0 0 1px rgba(255,255,255,0.025),
+        0 22px 58px rgba(0,0,0,0.28);
+    }
+
+    .community-page .community-card{
+      position:relative;
+      overflow:hidden;
+      padding:26px;
+      display:flex;
+      flex-direction:column;
+      gap:18px;
+      min-height:260px;
+      transition:transform .25s ease, border-color .25s ease, box-shadow .25s ease;
+    }
+
+    .community-page .community-card::before{
+      content:"";
+      position:absolute;
+      inset:auto -70px -90px auto;
+      width:190px;
+      height:190px;
+      background:radial-gradient(circle, rgba(243,210,27,0.12), transparent 70%);
+      opacity:.65;
+      pointer-events:none;
+    }
+
+    .community-page .community-card:hover{
+      transform:translateY(-6px);
+      border-color:rgba(243,210,27,0.5);
+      box-shadow:0 22px 58px rgba(0,0,0,0.34);
+    }
+
+    .community-page .community-card > div{
+      position:relative;
+      z-index:1;
+    }
+
+    .community-page .community-card h3,
+    .community-page .section-card h2,
+    .community-page .discord-card h2{
+      color:#fff;
+      letter-spacing:0;
+    }
+
+    .community-page .community-card p,
+    .community-page .section-card p{
+      color:#d9d9d9;
+      font-weight:700;
+    }
+
+    .community-page .community-link{
+      align-self:flex-start;
+      margin-top:auto;
+      border-radius:999px;
+      min-height:46px;
+      position:relative;
+      z-index:1;
+    }
+
+    .auth-badge{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:10px 14px;
+      border-radius:999px;
+      font-size:13px;
+      font-weight:700;
+      border:1px solid #252525;
+      background:#111;
+      color:#fff;
+      white-space:nowrap;
+    }
+
+    .auth-badge::before{
+      content:"";
+      width:10px;
+      height:10px;
+      border-radius:50%;
+      display:inline-block;
+      background:#666;
+    }
+
+    .auth-badge.status-admin::before{background:#ffd700;}
+    .auth-badge.status-premium::before{background:#22c55e;}
+    .auth-badge.status-longterm::before{background:#3b82f6;}
+    .auth-badge.status-locked::before{background:#ef4444;}
+
+    .community-page .auth-badge,
+    .community-page .logout-btn{
+      border-color:rgba(255,255,255,0.08);
+      background:rgba(255,255,255,0.04);
+    }
+
+    .discord-card{
+      padding:28px;
+      margin-top:24px;
+    }
+
+    .discord-card p{
+      color:#e6e6e6;
+      line-height:1.7;
+      font-size:16px;
+      margin-bottom:20px;
+    }
+
+    .community-page .footer-note{
+      display:flex;
+      flex-wrap:wrap;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+      border:1px solid rgba(243,210,27,0.14);
+      border-radius:24px;
+      background:rgba(255,255,255,0.025);
+      padding:22px 26px;
+      margin:0 0 10px;
+      color:#bdbdbd;
+      font-size:14px;
+      font-weight:800;
+      text-align:left;
+    }
+
+    .community-page .footer-note strong{
+      display:block;
+      color:var(--gold);
+      font-size:16px;
+      margin-bottom:2px;
+    }
+
+    .community-page .footer-note span{
+      color:#d2d2d2;
+      font-weight:700;
+    }
+
+    .community-page .footer-note nav{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+    }
+
+    .community-page .footer-note a{
+      color:#fff;
+      text-decoration:none;
+      font-weight:900;
+      padding:9px 12px;
+      border-radius:999px;
+      background:rgba(255,255,255,0.035);
+      border:1px solid rgba(255,255,255,0.07);
+    }
+
+    .community-page .footer-note a:hover{
+      color:var(--gold);
+      border-color:rgba(243,210,27,0.34);
+    }
+
+    .community-page .footer-note p{
+      flex-basis:100%;
+      margin:0;
+      color:#aaa;
+      font-weight:700;
+    }
+
+    @media(max-width:860px){
+      .community-page .hero-shell{
+        padding:24px !important;
+      }
+
+      .community-page .grid-4{
+        grid-template-columns:repeat(2,minmax(0,1fr));
+      }
+
+      .community-page .footer-note{
+        align-items:flex-start;
+        flex-direction:column;
+      }
+    }
+
+    @media(max-width:560px){
+      .community-page .grid-4{
+        grid-template-columns:1fr;
+      }
+    }
+  </style>
+</head>
+
+<body class="community-page">
+  <div class="page">
+    <nav class="navbar">
+      <a href="index" class="logo">BullProsperity</a>
+      <div class="nav-links">
+        <a href="index">Home</a>
+        <a href="hub">Hub</a>
+        <a href="course">Course</a>
+        <a href="tools">Tools</a>
+        <a href="setup-room">Setup Room</a>
+        <a href="community" class="active">Community</a>
+        <a id="loginNavBtn" href="/api/whop/login">Login</a>
+        <a id="logoutBtn" href="/api/logout" class="logout-btn" style="display:none;">Logout</a>
+        <div id="authBadge" class="auth-badge status-loading" style="display:none;">Zugang</div>
+      </div>
+    </nav>
+
+    <section class="hero-shell">
+      <div class="badge">Members Bereich</div>
+      <h1 class="hero-title">Die BullProsperity <span class="gold">Community</span></h1>
+      <p class="hero-text">
+        Hier kommt der Austausch der Mitglieder zusammen. Die Community ist dafür da,
+        Setups zu teilen, Gedanken zu Marktbewegungen auszutauschen, Motivation hochzuhalten
+        und voneinander zu lernen.
+      </p>
+      <div class="hero-buttons">
+        <a href="setup-room" class="btn primary">Zum Setup Room</a>
+        <a href="office-hours" class="btn primary">Mentor Office Hours</a>
+        <a href="https://discord.gg/qJaeBkTn3n" target="_blank" rel="noopener noreferrer" class="btn primary">Discord Community öffnen</a>
+        <a href="hub" class="btn secondary">Zum Hub</a>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="section-heading">Community Bereiche</h2>
+      <p class="section-subtext">
+        Wähle den passenden Bereich für Austausch, Mentoring und gemeinsame Prozessarbeit.
+      </p>
+
+      <div class="grid-4">
+        <div class="community-card">
+          <div>
+            <div class="badge">Setups</div>
+            <h3>Setup Austausch</h3>
+            <p>Mitglieder teilen ihre Setups, Gedanken zu Liquidität, Struktur und mögliche Ausführungen im Markt.</p>
+          </div>
+          <a href="setup-austausch" class="community-link">Bereich öffnen</a>
+        </div>
+
+        <div class="community-card">
+          <div>
+            <div class="badge">Mindset</div>
+            <h3>Motivation & Disziplin</h3>
+            <p>Austausch über Psychologie, Routinen, Rückschläge und alles, was langfristig starke Trader formt.</p>
+          </div>
+          <a href="motivation-disziplin" class="community-link">Bereich öffnen</a>
+        </div>
+
+        <div class="community-card">
+          <div>
+            <div class="badge">Feedback</div>
+            <h3>Trade Review</h3>
+            <p>Mitglieder können Trades reflektieren, Feedback bekommen und gemeinsam aus Fehlern und guten Entscheidungen lernen.</p>
+          </div>
+          <a href="trade-review" class="community-link">Bereich öffnen</a>
+        </div>
+
+        <div class="community-card">
+          <div>
+            <div class="badge">Live Mentoring</div>
+            <h3>Mentor Office Hours</h3>
+            <p>Buche deinen Platz, reiche deine Frage vorher ein und besprich deinen Prozess live im Discord.</p>
+          </div>
+          <a href="office-hours" class="community-link">Termin buchen</a>
+        </div>
+      </div>
+
+      <div class="discord-card">
+        <div class="badge">Live Community</div>
+        <h2 class="section-heading" style="font-size:36px; margin-bottom:10px;">BullProsperity Discord</h2>
+        <p>
+          Verbinde dich mit der BullProsperity Community im Discord. Dort findest du Austausch,
+          Setup-Bereiche, Trade Reviews, Motivation und wichtige Updates für Premium Mitglieder.
+        </p>
+        <div class="hero-buttons"><a href="https://discord.gg/qJaeBkTn3n" target="_blank" rel="noopener noreferrer" class="btn primary">Discord beitreten</a><a href="office-hours" class="btn secondary">Office Hours buchen</a></div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="grid-2">
+        <div class="section-card">
+          <div class="badge">Warum Community?</div>
+          <h2 class="section-heading" style="font-size:36px; margin-bottom:10px;">Warum dieser Bereich wichtig ist</h2>
+          <p class="section-subtext" style="margin-bottom:0;">
+            Eine starke Community erhöht den Wert deiner Plattform extrem. Mitglieder bleiben motivierter,
+            fühlen sich eingebunden und haben einen Ort, an dem sie nicht alleine mit ihren Fragen und Prozessen sind.
+          </p>
+        </div>
+
+        <div class="section-card">
+          <div class="badge">BullProsperity Fokus</div>
+          <div class="list-box">
+            <div class="list-item">Mehr Austausch statt isoliertem Lernen.</div>
+            <div class="list-item">Setups aus verschiedenen Blickwinkeln sehen.</div>
+            <div class="list-item">Motivation und Disziplin gemeinsam aufbauen.</div>
+            <div class="list-item">Die Plattform wirkt deutlich lebendiger und hochwertiger.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="footer-note">
+      <div>
+        <strong>BullProsperity</strong>
+        <span>Community für Setups, Reviews, Disziplin und Trading Education.</span>
+      </div>
+      <nav>
+        <a href="impressum">Impressum</a>
+        <a href="datenschutz">Datenschutz</a>
+        <a href="risikohinweis">Risikohinweis</a>
+        <a href="community">Kontakt</a>
+      </nav>
+      <p>BullProsperity dient ausschließlich Bildungs- und Informationszwecken. Es werden keine Gewinne garantiert.</p>
+    </div>
+  </div>
+
+  <script>
+    const authBadge = document.getElementById("authBadge");
+    const loginNavBtn = document.getElementById("loginNavBtn");
+
+    (async () => {
+      try {
+        const res = await fetch("/api/access", {
+          credentials: "include",
+          cache: "no-store"
+        });
+
+        if (!res.ok) {
+          window.location.href = "locked";
+          return;
+        }
+
+        const data = await res.json();
+        const role = data?.role || "guest";
+
+        if (role !== "admin" && role !== "premium") {
+          window.location.href = "locked";
+          return;
+        }
+document.body.classList.add("access-ready");
+if (role === "admin") {
+  authBadge.textContent = "Admin";
+  authBadge.className = "auth-badge status-admin";
+  authBadge.style.display = "inline-flex";
+}
+
+if (role === "premium") {
+  authBadge.textContent = "Premium";
+  authBadge.className = "auth-badge status-premium";
+  authBadge.style.display = "inline-flex";
+}
+
+       if (loginNavBtn) {
+  loginNavBtn.style.display = "none";
+}
+
+const logoutBtn = document.getElementById("logoutBtn");
+
+if (logoutBtn && (role === "admin" || role === "premium")) {
+  logoutBtn.style.display = "inline-flex";
+}
+      } catch (err) {
+        window.location.href = "locked";
+      }
+    })();
+  </script>
+ <script>
+  window.addEventListener("load", () => {
+    const loader = document.getElementById("bpLoader");
+
+    setTimeout(() => {
+      if(loader){
+        loader.classList.add("hide");
+      }
+    }, 700);
+  });
+</script>
+</body>
+</html>

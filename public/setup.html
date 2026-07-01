@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <script>document.documentElement.classList.add("bp-auth-checking");</script>
+  <script src="/access-guard.js?v=20260623-3"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BullProsperity | Setup Room</title>
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <link rel="manifest" href="/manifest.json">
+  <link rel="apple-touch-icon" href="/favicon.png">
+  <meta name="theme-color" content="#050505">
+  <link rel="stylesheet" href="theme.css" />
+  <script src="/login.js?v=20260624-2" defer></script>
+
+  <script>
+    (async () => {
+      try {
+        const res = await fetch("/api/access", {
+          credentials: "include",
+          cache: "no-store"
+        });
+        const data = await res.json();
+
+        if (data.role !== "admin" && data.role !== "premium") {
+          window.location.href = "locked";
+        }
+      } catch {
+        window.location.href = "locked";
+      }
+    })();
+  </script>
+
+  <style>
+    .setup-page{
+      background:
+        linear-gradient(135deg, rgba(243,210,27,0.07), transparent 30%),
+        radial-gradient(circle at 82% 14%, rgba(255,255,255,0.055), transparent 22%),
+        radial-gradient(circle at 16% 34%, rgba(243,210,27,0.10), transparent 24%),
+        #050505;
+    }
+
+    .setup-page .navbar{
+      position:sticky;
+      top:14px;
+      z-index:50;
+      padding:14px 16px;
+      border:1px solid rgba(243,210,27,0.14);
+      border-radius:24px;
+      background:rgba(7,7,7,0.78);
+      backdrop-filter:blur(18px);
+      box-shadow:0 18px 60px rgba(0,0,0,0.28);
+    }
+
+    .setup-page .hero-shell{
+      margin-top:14px;
+      padding:40px;
+      border-radius:34px;
+      background:
+        linear-gradient(145deg, rgba(255,255,255,0.052), transparent 38%),
+        radial-gradient(circle at 78% 20%, rgba(243,210,27,0.15), transparent 31%),
+        linear-gradient(180deg, rgba(18,18,18,0.92), rgba(5,5,5,0.98));
+      overflow:hidden;
+    }
+
+    .setup-page .hero-title{
+      max-width:1050px;
+      font-size:clamp(44px, 5vw, 74px);
+      letter-spacing:0;
+      line-height:.92;
+    }
+
+    .setup-page .logo,
+    .setup-page .section-heading{
+      letter-spacing:0;
+    }
+
+    .setup-grid,
+    .setup-grid-2{
+      display:grid;
+      gap:18px;
+      align-items:stretch;
+    }
+
+    .setup-grid{
+      grid-template-columns:repeat(3, 1fr);
+    }
+
+    .setup-grid-2{
+      grid-template-columns:1fr 1fr;
+    }
+
+    .setup-panel{
+      border:1px solid rgba(243,210,27,0.16);
+      border-radius:26px;
+      background:
+        linear-gradient(145deg, rgba(255,255,255,0.034), transparent 44%),
+        linear-gradient(180deg, rgba(17,17,17,0.90), rgba(7,7,7,0.96));
+      box-shadow:
+        inset 0 0 0 1px rgba(255,255,255,0.025),
+        0 22px 58px rgba(0,0,0,0.28);
+      padding:24px;
+      min-height:100%;
+      position:relative;
+      overflow:hidden;
+    }
+
+    .setup-panel::before{
+      content:"";
+      position:absolute;
+      right:-120px;
+      top:-140px;
+      width:260px;
+      height:260px;
+      background:radial-gradient(circle, rgba(243,210,27,0.10), transparent 70%);
+      pointer-events:none;
+    }
+
+    .setup-panel > *{
+      position:relative;
+      z-index:2;
+    }
+
+    .setup-panel h2{
+      color:var(--gold);
+      font-size:clamp(28px, 3vw, 42px);
+      line-height:1.02;
+      font-weight:950;
+      letter-spacing:0;
+      margin-bottom:10px;
+    }
+
+    .setup-panel h3{
+      color:var(--gold);
+      font-size:22px;
+      line-height:1.15;
+      font-weight:950;
+      margin:0 0 10px;
+    }
+
+    .setup-panel p{
+      color:#e8e8e8;
+      font-size:15px;
+      font-weight:700;
+      line-height:1.65;
+      margin:0;
+    }
+
+    .setup-list,
+    .check-list,
+    .entry-list{
+      display:grid;
+      gap:12px;
+      margin-top:18px;
+    }
+
+    .setup-list-item,
+    .check-list li,
+    .stat-box,
+    .entry-item{
+      border:1px solid rgba(243,210,27,0.13);
+      border-radius:18px;
+      background:rgba(255,255,255,0.024);
+      color:#fff;
+      padding:15px 16px;
+      font-size:14px;
+      font-weight:750;
+      line-height:1.55;
+    }
+
+    .check-list{
+      list-style:none;
+      padding:0;
+    }
+
+    .setup-list-item strong,
+    .entry-item strong,
+    .stat-box strong{
+      color:var(--gold);
+    }
+
+    .stats-grid{
+      display:grid;
+      grid-template-columns:repeat(4, 1fr);
+      gap:12px;
+      margin-top:18px;
+    }
+
+    .stat-box span{
+      display:block;
+      color:#a8a8a8;
+      font-size:12px;
+      font-weight:850;
+      text-transform:uppercase;
+      letter-spacing:.08em;
+      margin-bottom:8px;
+    }
+
+    .stat-box strong{
+      display:block;
+      font-size:18px;
+      font-weight:950;
+    }
+
+    .tv-chart{
+      margin-top:20px;
+      border:1px solid rgba(243,210,27,0.16);
+      border-radius:24px;
+      overflow:hidden;
+      background:#070707;
+      min-height:560px;
+    }
+
+    #tradingview_setup_chart{
+      width:100%;
+      height:600px;
+    }
+
+    .form-grid{
+      display:grid;
+      gap:14px;
+      margin-top:18px;
+    }
+
+    .form-row{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:14px;
+    }
+
+    input,
+    select,
+    textarea{
+      width:100%;
+      border:none;
+      outline:none;
+      border-radius:16px;
+      background:rgba(0,0,0,0.34);
+      border:1px solid rgba(243,210,27,0.18);
+      color:#fff;
+      padding:15px 16px;
+      font-size:15px;
+      font-weight:800;
+    }
+
+    select option{
+      background:#080808;
+      color:#fff;
+    }
+
+    textarea{
+      min-height:132px;
+      resize:vertical;
+      line-height:1.55;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus{
+      border-color:rgba(243,210,27,0.58);
+      box-shadow:0 0 0 3px rgba(243,210,27,0.08);
+    }
+
+    .btn-row{
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+      margin-top:18px;
+    }
+
+    .entry-item h4{
+      color:var(--gold);
+      font-size:17px;
+      margin-bottom:8px;
+      font-weight:950;
+    }
+
+    .entry-item p{
+      margin:4px 0;
+      color:#e8e8e8;
+      font-size:14px;
+    }
+
+    .footer-clean{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:18px;
+      flex-wrap:wrap;
+      border:1px solid rgba(243,210,27,0.14);
+      border-radius:24px;
+      padding:20px 24px;
+      background:rgba(8,8,8,0.76);
+      color:#d8d8d8;
+      font-weight:800;
+    }
+
+    .footer-clean a{
+      color:var(--gold);
+      text-decoration:none;
+      margin-right:12px;
+    }
+
+    @media(max-width:1100px){
+      .setup-grid,
+      .setup-grid-2,
+      .stats-grid{
+        grid-template-columns:1fr 1fr;
+      }
+    }
+
+    @media(max-width:760px){
+      .setup-page .hero-shell{
+        padding:28px 22px;
+      }
+
+      .setup-grid,
+      .setup-grid-2,
+      .stats-grid,
+      .form-row{
+        grid-template-columns:1fr;
+      }
+
+      #tradingview_setup_chart{
+        height:460px;
+      }
+
+      .tv-chart{
+        min-height:460px;
+      }
+    }
+  </style>
+</head>
+
+<body class="setup-page">
+  <div class="page">
+    <nav class="navbar">
+      <a href="index" class="logo">BullProsperity</a>
+      <div class="nav-links">
+        <a href="index">Home</a>
+        <a href="hub">Hub</a>
+        <a href="course">Course</a>
+        <a href="tools">Tools</a>
+        <a href="setup-room" class="active">Setup Room</a>
+        <a href="community">Community</a>
+        <a id="loginNavBtn" href="/api/whop/login">Login</a>
+        <a id="logoutBtn" href="/api/logout" class="logout-btn" style="display:none;">Logout</a>
+        <div id="authBadge" class="auth-badge status-loading" style="display:none;">Zugang</div>
+      </div>
+    </nav>
+
+    <section class="hero-shell">
+      <div class="badge">Setup Room</div>
+      <h1 class="hero-title">BullProsperity <span class="gold">Setup Room</span></h1>
+      <p class="hero-text">
+        Bereite deinen Trading-Tag strukturiert vor. Nutze Markt-Bias, Session-Fokus,
+        Liquidität, Checklisten und Notizen in einem zentralen Analysebereich.
+      </p>
+      <div class="hero-buttons">
+        <a href="#chart" class="btn primary">Chart öffnen</a>
+        <a href="#notes" class="btn secondary">Setup speichern</a>
+      </div>
+    </section>
+
+    <section class="section setup-grid">
+      <div class="setup-panel">
+        <div class="badge">Bias</div>
+        <h2>Marktrichtung</h2>
+        <div class="setup-list">
+          <div class="setup-list-item"><strong>Bullish Bias</strong> mit klarer Marktstruktur.</div>
+          <div class="setup-list-item">Buy Side Liquidity und Sell Side Liquidity markieren.</div>
+          <div class="setup-list-item">Pullback erst nach Bestätigung planen.</div>
+        </div>
+      </div>
+
+      <div class="setup-panel">
+        <div class="badge">Session</div>
+        <h2>Trading Fokus</h2>
+        <div class="setup-list">
+          <div class="setup-list-item">London Session beobachten.</div>
+          <div class="setup-list-item">New York Bestätigung abwarten.</div>
+          <div class="setup-list-item">Nur hochwertige A-Setups handeln.</div>
+        </div>
+      </div>
+
+      <div class="setup-panel">
+        <div class="badge">Risk</div>
+        <h2>Regeln</h2>
+        <div class="setup-list">
+          <div class="setup-list-item">Maximales Risiko pro Trade vorher festlegen.</div>
+          <div class="setup-list-item">Kein Einstieg ohne Bestätigung.</div>
+          <div class="setup-list-item">Emotionen nicht traden.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section setup-panel" id="chart">
+      <div class="badge">Live Analyse</div>
+      <h2>TradingView Setup Chart</h2>
+      <p>
+        Nutze den Chart direkt im Setup Room, um Marktstruktur, Liquidity, BOS, CHoCH und Entry-Zonen sauber vorzubereiten.
+      </p>
+
+      <div class="tv-chart">
+        <div id="tradingview_setup_chart"></div>
+      </div>
+    </section>
+
+    <section class="section setup-grid-2">
+      <div class="setup-panel">
+        <div class="badge">Checkliste</div>
+        <h2>Pre-Trade Check</h2>
+        <ul class="check-list">
+          <li>Bias klar definiert?</li>
+          <li>Liquidity sichtbar?</li>
+          <li>Session Timing passend?</li>
+          <li>News geprüft?</li>
+          <li>CRV sinnvoll?</li>
+          <li>Stop Loss logisch gesetzt?</li>
+        </ul>
+      </div>
+
+      <div class="setup-panel">
+        <div class="badge">Tagesplan</div>
+        <h2>Heute im Fokus</h2>
+        <p>Ein ruhiger Plan verhindert spontane Entscheidungen direkt am Chart.</p>
+        <div class="stats-grid">
+          <div class="stat-box">
+            <span>Markt</span>
+            <strong>XAUUSD</strong>
+          </div>
+          <div class="stat-box">
+            <span>Bias</span>
+            <strong>Bullish</strong>
+          </div>
+          <div class="stat-box">
+            <span>Session</span>
+            <strong>London</strong>
+          </div>
+          <div class="stat-box">
+            <span>News</span>
+            <strong>Prüfen</strong>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section setup-panel" id="notes">
+      <div class="badge">Setup Notizen</div>
+      <h2>Analyse speichern</h2>
+      <p>Speichere deine Setup-Idee direkt lokal im Browser.</p>
+
+      <div class="form-grid">
+        <div class="form-row">
+          <input type="text" id="setupMarket" placeholder="Markt, z. B. XAUUSD" />
+          <select id="setupBias">
+            <option value="">Bias wählen</option>
+            <option value="Bullish">Bullish</option>
+            <option value="Bearish">Bearish</option>
+            <option value="Neutral">Neutral</option>
+          </select>
+        </div>
+
+        <div class="form-row">
+          <input type="text" id="setupSession" placeholder="Session, z. B. London" />
+          <input type="text" id="setupType" placeholder="Setup Typ, z. B. Sweep + MSS" />
+        </div>
+
+        <textarea id="setupNotes" placeholder="Beschreibe hier deine Analyse, Entry-Idee und Bedingungen..."></textarea>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn primary" onclick="saveSetupEntry()">Setup speichern</button>
+        <button class="btn secondary" onclick="clearSetupEntries()">Alle löschen</button>
+      </div>
+
+      <div id="setupEntryList" class="entry-list"></div>
+    </section>
+
+    <section class="section setup-panel">
+      <div class="badge">Struktur</div>
+      <h2>Analyse mit System</h2>
+      <p>
+        Der Setup Room gibt dir einen festen Rahmen für deine Marktvorbereitung, damit du
+        disziplinierter, klarer und strukturierter arbeitest.
+      </p>
+    </section>
+
+    <footer class="footer-clean">
+      <div>
+        <strong>BullProsperity</strong> vermittelt Bildungsinhalte, Marktverständnis und Risikobewusstsein.
+      </div>
+      <div>
+        <a href="impressum">Impressum</a>
+        <a href="datenschutz">Datenschutz</a>
+        <a href="risikohinweis">Risikohinweis</a>
+      </div>
+    </footer>
+  </div>
+
+  <script src="https://s3.tradingview.com/tv.js"></script>
+  <script>
+    new TradingView.widget({
+      container_id: "tradingview_setup_chart",
+      width: "100%",
+      height: 600,
+      symbol: "OANDA:XAUUSD",
+      interval: "15",
+      timezone: "Europe/Berlin",
+      theme: "dark",
+      style: "1",
+      locale: "de",
+      toolbar_bg: "#0f0f0f",
+      enable_publishing: false,
+      allow_symbol_change: true,
+      hide_top_toolbar: false,
+      hide_legend: false,
+      save_image: false
+    });
+
+    const setupStorageKey = "bpSetupRoomEntries";
+
+    function escapeHtml(text) {
+      const div = document.createElement("div");
+      div.textContent = text || "";
+      return div.innerHTML;
+    }
+
+    function renderSetupEntries() {
+      const list = document.getElementById("setupEntryList");
+      const entries = JSON.parse(localStorage.getItem(setupStorageKey) || "[]");
+
+      list.innerHTML = "";
+
+      if (!entries.length) {
+        list.innerHTML = `
+          <div class="entry-item">
+            <h4>Noch keine Setups gespeichert</h4>
+            <p>Speichere deine erste Analyse direkt im Setup Room.</p>
+          </div>
+        `;
+        return;
+      }
+
+      entries.forEach((entry) => {
+        const item = document.createElement("div");
+        item.className = "entry-item";
+        item.innerHTML = `
+          <h4>${escapeHtml(entry.market)} - ${escapeHtml(entry.type)}</h4>
+          <p><strong>Bias:</strong> ${escapeHtml(entry.bias)}</p>
+          <p><strong>Session:</strong> ${escapeHtml(entry.session)}</p>
+          <p><strong>Notizen:</strong> ${escapeHtml(entry.notes)}</p>
+        `;
+        list.appendChild(item);
+      });
+    }
+
+    function saveSetupEntry() {
+      const market = document.getElementById("setupMarket").value.trim();
+      const bias = document.getElementById("setupBias").value;
+      const session = document.getElementById("setupSession").value.trim();
+      const type = document.getElementById("setupType").value.trim();
+      const notes = document.getElementById("setupNotes").value.trim();
+
+      if (!market || !bias || !session || !type) {
+        alert("Bitte fülle Markt, Bias, Session und Setup Typ aus.");
+        return;
+      }
+
+      const entries = JSON.parse(localStorage.getItem(setupStorageKey) || "[]");
+      entries.unshift({ market, bias, session, type, notes });
+      localStorage.setItem(setupStorageKey, JSON.stringify(entries));
+
+      document.getElementById("setupMarket").value = "";
+      document.getElementById("setupBias").value = "";
+      document.getElementById("setupSession").value = "";
+      document.getElementById("setupType").value = "";
+      document.getElementById("setupNotes").value = "";
+
+      renderSetupEntries();
+    }
+
+    function clearSetupEntries() {
+      const confirmed = confirm("Möchtest du wirklich alle Setups löschen?");
+      if (!confirmed) return;
+      localStorage.removeItem(setupStorageKey);
+      renderSetupEntries();
+    }
+
+    document.addEventListener("DOMContentLoaded", async () => {
+      renderSetupEntries();
+
+      const loginBtn = document.getElementById("loginNavBtn");
+      const logoutBtn = document.getElementById("logoutBtn");
+      const authBadge = document.getElementById("authBadge");
+
+      try {
+        const res = await fetch("/api/access", {
+          credentials: "include",
+          cache: "no-store"
+        });
+
+        const data = await res.json();
+
+        if (data.role === "admin" || data.role === "premium") {
+          if (loginBtn) loginBtn.style.display = "none";
+          if (logoutBtn) logoutBtn.style.display = "inline-flex";
+          if (authBadge) {
+            authBadge.style.display = "inline-flex";
+            authBadge.textContent = data.role === "admin" ? "Admin" : "Premium";
+            authBadge.classList.remove("status-loading");
+            authBadge.classList.add(data.role === "admin" ? "status-admin" : "status-premium");
+          }
+        }
+      } catch {}
+    });
+  </script>
+</body>
+</html>

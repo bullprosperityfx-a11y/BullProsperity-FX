@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <script>document.documentElement.classList.add("bp-auth-checking");</script>
+  <script src="/access-guard.js?v=20260623-3"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BullProsperity | Partner Broker & MT5 Setup</title>
+  <meta name="description" content="BullProsperity Partner Broker Seite mit QuoMarkets, MT5 Setup, Fokusmärkten, Trading Workflow und transparentem Risikohinweis." />
+  <link rel="canonical" href="https://bullprosperity.online/broker" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="BullProsperity | Partner Broker & MT5 Setup" />
+  <meta property="og:description" content="QuoMarkets, MT5 Setup, Fokusmärkte, Trading Workflow und transparenter Risikohinweis." />
+  <meta property="og:url" content="https://bullprosperity.online/broker" />
+  <meta property="og:image" content="https://bullprosperity.online/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="BullProsperity | Partner Broker & MT5 Setup" />
+  <meta name="twitter:description" content="QuoMarkets, MT5 Setup, Fokusmärkte, Trading Workflow und transparenter Risikohinweis." />
+  <meta name="twitter:image" content="https://bullprosperity.online/og-image.png" />
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <link rel="manifest" href="/manifest.json">
+  <link rel="apple-touch-icon" href="/favicon.png">
+  <meta name="theme-color" content="#050505">
+  <link rel="stylesheet" href="/theme.css" />
+  <script src="/login.js?v=20260624-2" defer></script>
+
+  <script>
+    (async () => {
+      try {
+        const res = await fetch("/api/access", {
+          credentials: "include",
+          cache: "no-store"
+        });
+
+        const data = await res.json();
+
+        if (data.role !== "admin" && data.role !== "premium") {
+          window.location.href = "locked";
+        }
+      } catch {
+        window.location.href = "locked";
+      }
+    })();
+  </script>
+
+  <style>
+    body.broker-page{
+      background:
+        linear-gradient(135deg, rgba(243,210,27,0.07), transparent 28%),
+        radial-gradient(circle at 78% 8%, rgba(43,191,120,0.10), transparent 24%),
+        radial-gradient(circle at 12% 26%, rgba(243,210,27,0.10), transparent 22%),
+        #050505;
+    }
+
+    .broker-page .navbar{
+      position:sticky;
+      top:14px;
+      z-index:50;
+      padding:14px 16px;
+      border:1px solid rgba(243,210,27,0.14);
+      border-radius:24px;
+      background:rgba(7,7,7,0.78);
+      backdrop-filter:blur(18px);
+      box-shadow:0 18px 60px rgba(0,0,0,0.28);
+    }
+
+    .broker-page .logo,
+    .broker-page .section-heading,
+    .broker-page .hero-title{
+      letter-spacing:0;
+    }
+
+    .broker-hero{
+      margin-top:14px;
+      min-height:560px;
+      display:grid;
+      grid-template-columns:minmax(0, 1fr) minmax(340px, .62fr);
+      gap:28px;
+      align-items:stretch;
+      padding:40px;
+      border-radius:34px;
+      border:1px solid rgba(243,210,27,0.16);
+      background:
+        linear-gradient(145deg, rgba(255,255,255,0.055), transparent 38%),
+        radial-gradient(circle at 74% 20%, rgba(243,210,27,0.16), transparent 30%),
+        linear-gradient(180deg, rgba(18,18,18,0.92), rgba(5,5,5,0.98));
+      box-shadow:
+        inset 0 0 0 1px rgba(255,255,255,0.025),
+        0 24px 70px rgba(0,0,0,0.34);
+      overflow:hidden;
+      position:relative;
+    }
+
+    .broker-hero::before{
+      content:"";
+      position:absolute;
+      width:560px;
+      height:560px;
+      top:-220px;
+      right:-160px;
+      background:radial-gradient(circle, rgba(243,210,27,0.17), transparent 66%);
+      pointer-events:none;
+    }
+
+    .broker-hero::after{
+      content:"";
+      position:absolute;
+      left:0;
+      right:0;
+      bottom:0;
+      height:2px;
+      background:linear-gradient(90deg, transparent, rgba(243,210,27,0.8), rgba(31,213,119,0.55), transparent);
+      opacity:.8;
+    }
+
+    .broker-hero-content,
+    .broker-hero-card{
+      position:relative;
+      z-index:1;
+    }
+
+    .broker-hero-content{
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+    }
+
+    .broker-page .hero-title{
+      max-width:1020px;
+      font-size:clamp(46px, 5.6vw, 86px);
+      line-height:.92;
+      margin-bottom:18px;
+    }
+
+    .broker-page .hero-text{
+      max-width:860px;
+      font-size:18px;
+      line-height:1.7;
+      font-weight:700;
+      color:#ededed;
+    }
+
+    .broker-page .badge{
+      border-color:rgba(243,210,27,0.18);
+      background:rgba(243,210,27,0.065);
+      color:var(--gold);
+      box-shadow:none;
+    }
+
+    .broker-hero-card{
+      align-self:center;
+      border:1px solid rgba(243,210,27,0.16);
+      border-radius:26px;
+      background:
+        linear-gradient(145deg, rgba(255,255,255,0.055), transparent 44%),
+        linear-gradient(180deg, rgba(14,14,14,0.92), rgba(7,7,7,0.96));
+      padding:26px;
+      box-shadow:0 24px 70px rgba(0,0,0,0.32);
+    }
+
+    .broker-card-top{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:18px;
+      margin-bottom:24px;
+    }
+
+    .broker-logo-mark{
+      width:64px;
+      height:64px;
+      border-radius:22px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      color:#111;
+      background:linear-gradient(135deg, #f3d21b, #fff0a0);
+      font-weight:950;
+      font-size:24px;
+      box-shadow:0 0 30px rgba(243,210,27,0.18);
+    }
+
+    .broker-status{
+      padding:9px 12px;
+      border-radius:999px;
+      color:#d9ffd9;
+      background:rgba(34,197,94,0.08);
+      border:1px solid rgba(34,197,94,0.18);
+      font-size:13px;
+      font-weight:900;
+      white-space:nowrap;
+    }
+
+    .broker-hero-card h2{
+      color:#fff;
+      font-size:32px;
+      line-height:1.05;
+      margin-bottom:10px;
+    }
+
+    .broker-hero-card h2 span{
+      color:var(--gold);
+    }
+
+    .broker-hero-card p{
+      color:#d8d8d8;
+      font-size:15px;
+      line-height:1.65;
+      font-weight:700;
+      margin-bottom:20px;
+    }
+
+    .mini-market-grid{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:10px;
+      margin-bottom:22px;
+    }
+
+    .mini-market{
+      min-height:58px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      text-align:center;
+      border-radius:16px;
+      border:1px solid rgba(243,210,27,0.13);
+      background:rgba(255,255,255,0.025);
+      color:#f4f4f4;
+      font-size:13px;
+      font-weight:900;
+    }
+
+    .broker-section{
+      margin-top:28px;
+    }
+
+    .broker-layout{
+      display:grid;
+      grid-template-columns:1.05fr .95fr;
+      gap:24px;
+      align-items:stretch;
+    }
+
+    .broker-panel{
+      border:1px solid rgba(243,210,27,0.16);
+      border-radius:28px;
+      background:
+        linear-gradient(145deg, rgba(255,255,255,0.035), transparent 44%),
+        linear-gradient(180deg, rgba(17,17,17,0.9), rgba(7,7,7,0.96));
+      box-shadow:
+        inset 0 0 0 1px rgba(255,255,255,0.025),
+        0 22px 58px rgba(0,0,0,0.28);
+      padding:28px;
+    }
+
+    .broker-panel .section-heading{
+      font-size:clamp(31px, 3vw, 42px);
+      margin-bottom:10px;
+    }
+
+    .broker-page .section-subtext{
+      font-weight:700;
+      color:#e7e7e7;
+    }
+
+    .broker-grid{
+      display:grid;
+      grid-template-columns:repeat(2,1fr);
+      gap:16px;
+      margin-top:22px;
+    }
+
+    .broker-item{
+      border:1px solid rgba(243,210,27,0.14);
+      border-radius:18px;
+      background:rgba(255,255,255,0.025);
+      padding:18px;
+      min-height:148px;
+    }
+
+    .broker-item h3{
+      color:var(--gold);
+      margin:0 0 8px;
+      font-size:20px;
+      line-height:1.15;
+    }
+
+    .broker-item p{
+      color:#d8d8d8;
+      line-height:1.6;
+      margin:0;
+      font-size:14px;
+      font-weight:700;
+    }
+
+    .broker-steps{
+      display:grid;
+      gap:14px;
+      margin-top:20px;
+    }
+
+    .broker-step{
+      display:grid;
+      grid-template-columns:42px 1fr;
+      gap:14px;
+      align-items:start;
+      border:1px solid rgba(243,210,27,0.12);
+      border-radius:18px;
+      background:rgba(255,255,255,0.025);
+      padding:16px;
+    }
+
+    .broker-step-num{
+      width:42px;
+      height:42px;
+      border-radius:50%;
+      background:rgba(243,210,27,0.10);
+      border:1px solid rgba(243,210,27,0.25);
+      color:var(--gold);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-weight:950;
+    }
+
+    .broker-step strong{
+      display:block;
+      color:#fff;
+      margin-bottom:5px;
+      font-size:17px;
+    }
+
+    .broker-step p{
+      margin:0;
+      color:#cfcfcf;
+      line-height:1.6;
+      font-size:14px;
+      font-weight:700;
+    }
+
+    .broker-cta{
+      margin-top:24px;
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+    }
+
+    .broker-note-grid{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:16px;
+      margin-top:28px;
+    }
+
+    .broker-note-card{
+      border:1px solid rgba(243,210,27,0.14);
+      border-radius:22px;
+      background:
+        linear-gradient(145deg, rgba(255,255,255,0.035), transparent 48%),
+        rgba(255,255,255,0.02);
+      padding:20px;
+      min-height:148px;
+    }
+
+    .broker-note-card strong{
+      display:block;
+      color:var(--gold);
+      font-size:18px;
+      margin-bottom:8px;
+    }
+
+    .broker-note-card p{
+      margin:0;
+      color:#d3d3d3;
+      font-size:14px;
+      font-weight:700;
+      line-height:1.6;
+    }
+
+    .broker-conversion{
+      margin-top:28px;
+      padding:28px;
+      border:1px solid rgba(243,210,27,.20);
+      border-radius:30px;
+      background:
+        linear-gradient(135deg, rgba(243,210,27,.12), transparent 38%),
+        linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.015)),
+        rgba(8,8,8,.95);
+      box-shadow:0 24px 70px rgba(0,0,0,.42);
+    }
+
+    .broker-conversion-grid{
+      display:grid;
+      grid-template-columns:1fr auto;
+      gap:22px;
+      align-items:center;
+    }
+
+    .broker-conversion h2{
+      margin:12px 0 10px;
+      color:#fff;
+      font-size:34px;
+      line-height:1.05;
+    }
+
+    .broker-conversion h2 span{
+      color:var(--gold);
+    }
+
+    .broker-conversion p{
+      color:#d5d5d5;
+      line-height:1.7;
+      margin:0;
+      max-width:820px;
+      font-weight:700;
+    }
+
+    .broker-conversion-list{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin-top:18px;
+    }
+
+    .broker-conversion-list span{
+      padding:9px 12px;
+      border-radius:999px;
+      border:1px solid rgba(243,210,27,.22);
+      background:rgba(243,210,27,.06);
+      color:var(--gold);
+      font-size:12px;
+      font-weight:950;
+    }
+
+    .broker-conversion-actions{
+      display:grid;
+      gap:10px;
+      min-width:240px;
+    }
+
+    .broker-risk{
+      margin-top:28px;
+      display:grid;
+      grid-template-columns:minmax(0, .8fr) minmax(320px, .42fr);
+      gap:24px;
+      align-items:stretch;
+    }
+
+    .risk-box{
+      border:1px solid rgba(255,255,255,0.11);
+      border-radius:28px;
+      background:
+        linear-gradient(145deg, rgba(255,255,255,0.035), transparent 44%),
+        rgba(255,255,255,0.02);
+      padding:26px;
+    }
+
+    .risk-box h2{
+      color:var(--gold);
+      font-size:30px;
+      line-height:1.08;
+      margin-bottom:10px;
+    }
+
+    .risk-box p{
+      color:#d7d7d7;
+      font-size:15px;
+      font-weight:700;
+      line-height:1.7;
+      margin:0;
+    }
+
+    .broker-page .footer-note{
+      display:flex;
+      flex-wrap:wrap;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+      border:1px solid rgba(243,210,27,0.14);
+      border-radius:24px;
+      background:rgba(255,255,255,0.025);
+      padding:22px 26px;
+      margin:28px 0 10px;
+      color:#bdbdbd;
+      font-size:14px;
+      font-weight:800;
+      text-align:left;
+    }
+
+    .broker-page .footer-note strong{
+      display:block;
+      color:var(--gold);
+      font-size:16px;
+      margin-bottom:2px;
+    }
+
+    .broker-page .footer-note span{
+      color:#d2d2d2;
+      font-weight:700;
+    }
+
+    .broker-page .footer-note nav{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+    }
+
+    .broker-page .footer-note a{
+      color:#fff;
+      text-decoration:none;
+      font-weight:900;
+      padding:9px 12px;
+      border-radius:999px;
+      background:rgba(255,255,255,0.035);
+      border:1px solid rgba(255,255,255,0.07);
+    }
+
+    .broker-page .footer-note a:hover{
+      color:var(--gold);
+      border-color:rgba(243,210,27,0.34);
+    }
+
+    .broker-page .footer-note p{
+      flex-basis:100%;
+      margin:0;
+      color:#aaa;
+      font-weight:700;
+    }
+
+    @media(max-width:1180px){
+      .broker-hero,
+      .broker-layout,
+      .broker-risk{
+        grid-template-columns:1fr;
+      }
+
+      .broker-note-grid{
+        grid-template-columns:repeat(2,1fr);
+      }
+    }
+
+    @media(max-width:760px){
+      .broker-hero{
+        min-height:auto;
+        padding:30px 22px;
+        border-radius:28px;
+      }
+
+      .broker-grid,
+      .broker-note-grid,
+      .broker-conversion-grid,
+      .mini-market-grid{
+        grid-template-columns:1fr;
+      }
+
+      .broker-panel,
+      .risk-box{
+        padding:22px;
+        border-radius:24px;
+      }
+
+      .broker-hero-card{
+        padding:22px;
+      }
+
+      .broker-cta .btn,
+      .broker-hero .btn,
+      .broker-conversion .btn{
+        width:100%;
+      }
+    }
+  </style>
+</head>
+
+<body class="broker-page">
+  <div class="page">
+    <nav class="navbar">
+      <a href="/" class="logo">BullProsperity</a>
+      <div class="nav-links">
+        <a href="/">Home</a>
+        <a href="/hub">Hub</a>
+        <a href="/course">Course</a>
+        <a href="/tools" class="active">Tools</a>
+        <a href="/setup-room">Setup Room</a>
+        <a href="/community">Community</a>
+        <a id="loginNavBtn" href="/api/whop/login">Login</a>
+        <a id="logoutBtn" href="/api/logout" class="logout-btn" style="display:none;">Logout</a>
+        <div id="authBadge" class="auth-badge status-loading" style="display:none;">Zugang</div>
+      </div>
+    </nav>
+
+    <section class="broker-hero">
+      <div class="broker-hero-content">
+        <div class="badge">Broker Setup</div>
+        <h1 class="hero-title">QuoMarkets für deinen <span class="gold">BullProsperity Workflow</span></h1>
+        <p class="hero-text">
+          Eine klare Trading-Umgebung für MT5, Gold, Forex, Indices und saubere Dokumentation.
+          Konto eröffnen, Plattform verbinden, Risiko festlegen und jeden Trade strukturiert nachhalten.
+        </p>
+        <div class="hero-buttons">
+          <a href="https://my.quomarkets.com/register?regnew=2770" target="_blank" rel="noopener noreferrer" class="btn primary">Konto eröffnen</a>
+          <a href="#broker-setup" class="btn secondary">Setup ansehen</a>
+        </div>
+      </div>
+
+      <aside class="broker-hero-card">
+        <div class="broker-card-top">
+          <div class="broker-logo-mark">QM</div>
+          <div class="broker-status">Partnerlink aktiv</div>
+        </div>
+        <h2>QuoMarkets <span>MT5</span></h2>
+        <p>
+          Nutze den Broker als technische Basis für Analyse, Ausführung und Review. Der Fokus bleibt auf Struktur,
+          Risiko und sauberer Umsetzung.
+        </p>
+        <div class="mini-market-grid">
+          <div class="mini-market">Gold</div>
+          <div class="mini-market">Forex</div>
+          <div class="mini-market">Indices</div>
+          <div class="mini-market">Crypto</div>
+          <div class="mini-market">Shares</div>
+          <div class="mini-market">Commodities</div>
+        </div>
+        <a href="https://my.quomarkets.com/register?regnew=2770" target="_blank" rel="noopener noreferrer" class="btn primary">QuoMarkets öffnen</a>
+      </aside>
+    </section>
+
+    <section class="broker-section broker-layout">
+      <div class="broker-panel">
+        <div class="badge">Infrastruktur</div>
+        <h2 class="section-heading">Broker, Plattform und Routine</h2>
+        <p class="section-subtext">
+          Die Broker-Seite soll nicht wie Werbung wirken. Sie ist dein sauberer Einstieg in die Trading-Umgebung:
+          Konto, MT5, Märkte, Journal und Risiko gehören zusammen.
+        </p>
+
+        <div class="broker-grid">
+          <div class="broker-item">
+            <h3>MT5 Zugang</h3>
+            <p>MetaTrader 5 für Charting, Orderausführung und technische Analyse mit klarer Kontoverbindung.</p>
+          </div>
+          <div class="broker-item">
+            <h3>Fokusmärkte</h3>
+            <p>Gold, Forex, Indices, Commodities, Crypto und Shares als Basis für verschiedene Setups.</p>
+          </div>
+          <div class="broker-item">
+            <h3>Journal Workflow</h3>
+            <p>Analyse planen, Trade ausführen, Ergebnis dokumentieren und Learnings konsequent festhalten.</p>
+          </div>
+          <div class="broker-item">
+            <h3>Risk First</h3>
+            <p>Lot Size, Kontostand und maximale Belastung vor dem Trade festlegen, nicht danach.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="broker-panel" id="broker-setup">
+        <div class="badge">Setup Anleitung</div>
+        <h2 class="section-heading">So richtest du es ein</h2>
+
+        <div class="broker-steps">
+          <div class="broker-step">
+            <div class="broker-step-num">1</div>
+            <div>
+              <strong>Konto über den Partnerlink eröffnen</strong>
+              <p>Nutze den BullProsperity Link und starte die Registrierung direkt bei QuoMarkets.</p>
+            </div>
+          </div>
+          <div class="broker-step">
+            <div class="broker-step-num">2</div>
+            <div>
+              <strong>Verifizierung abschließen</strong>
+              <p>Vervollständige deine Daten im Broker-Bereich und prüfe alle Angaben sorgfältig.</p>
+            </div>
+          </div>
+          <div class="broker-step">
+            <div class="broker-step-num">3</div>
+            <div>
+              <strong>MT5 verbinden</strong>
+              <p>Installiere MetaTrader 5, nutze deine Zugangsdaten und wähle den passenden Server.</p>
+            </div>
+          </div>
+          <div class="broker-step">
+            <div class="broker-step-num">4</div>
+            <div>
+              <strong>Journal und Risiko nutzen</strong>
+              <p>Dokumentiere Setups, Emotionen, Fehler und Ergebnisse direkt im BullProsperity Journal.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="broker-cta">
+          <a href="https://my.quomarkets.com/register?regnew=2770" target="_blank" rel="noopener noreferrer" class="btn primary">Konto eröffnen</a>
+          <a href="/lot-size" class="btn secondary">Lot Size Rechner</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="broker-conversion">
+      <div class="broker-conversion-grid">
+        <div>
+          <div class="badge">Optionaler Partnerbroker</div>
+          <h2>QuoMarkets sauber in deinen <span>Workflow</span> einbauen</h2>
+          <p>
+            Wenn du QuoMarkets nutzen möchtest, starte über den BullProsperity Partnerlink und richte danach
+            MT5, Lot Size, Journal und Risiko in einem klaren Ablauf ein. Der Fokus bleibt auf Struktur,
+            Kontrolle und sauberer Dokumentation.
+          </p>
+          <div class="broker-conversion-list">
+            <span>MT5 Setup</span>
+            <span>Gold & Forex</span>
+            <span>Lot Size prüfen</span>
+            <span>Journal verbinden</span>
+            <span>Partnerlink transparent</span>
+          </div>
+        </div>
+
+        <div class="broker-conversion-actions">
+          <a href="https://my.quomarkets.com/register?regnew=2770" target="_blank" rel="noopener noreferrer" class="btn primary">Mit Partnerlink öffnen</a>
+          <a href="/journal" class="btn secondary">Journal vorbereiten</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="broker-note-grid">
+      <div class="broker-note-card">
+        <strong>Regulierung prüfen</strong>
+        <p>Prüfe Broker-Informationen immer selbst und lies die aktuellen Bedingungen direkt beim Anbieter.</p>
+      </div>
+      <div class="broker-note-card">
+        <strong>Auszahlung testen</strong>
+        <p>Arbeite kontrolliert, teste Prozesse klein und führe keine übereilten Einzahlungen aus.</p>
+      </div>
+      <div class="broker-note-card">
+        <strong>Spread beachten</strong>
+        <p>Spread, Slippage und Session-Zeit gehören in deine Planung, besonders bei schnellen Märkten.</p>
+      </div>
+      <div class="broker-note-card">
+        <strong>Plan vor Trade</strong>
+        <p>Entry, Stop, Ziel, Risiko und Grund für den Trade müssen vorher klar sein.</p>
+      </div>
+    </section>
+
+    <section class="broker-risk">
+      <div class="risk-box">
+        <div class="badge">Transparenz</div>
+        <h2>Partnerlink & Risikohinweis</h2>
+        <p>
+          Der QuoMarkets-Link kann ein Affiliate- oder Partnerlink sein. BullProsperity kann dadurch eine Provision
+          erhalten. Für dich soll dadurch kein sauberer Entscheidungsprozess ersetzt werden: Prüfe den Anbieter,
+          Bedingungen, Gebühren und Risiken eigenständig.
+        </p>
+      </div>
+      <div class="risk-box">
+        <div class="badge">Wichtig</div>
+        <h2>Keine Gewinnversprechen</h2>
+        <p>
+          Trading ist riskant und kann zu Verlusten führen. BullProsperity ist Education, Struktur und Community,
+          macht keine Gewinnversprechen und gibt keine Garantie für Ergebnisse.
+        </p>
+      </div>
+    </section>
+
+    <div class="footer-note">
+      <div>
+        <strong>BullProsperity</strong>
+        <span>Broker Setup für MT5, Fokusmärkte, Workflow und Trading Education.</span>
+      </div>
+      <nav>
+        <a href="/impressum">Impressum</a>
+        <a href="/datenschutz">Datenschutz</a>
+        <a href="/risikohinweis">Risikohinweis</a>
+        <a href="/community">Kontakt</a>
+      </nav>
+      <p>BullProsperity dient ausschließlich Bildungs- und Informationszwecken. Es werden keine Gewinne garantiert.</p>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", async () => {
+      const authBadge = document.getElementById("authBadge");
+      const loginBtn = document.getElementById("loginNavBtn");
+      const logoutBtn = document.getElementById("logoutBtn");
+
+      try {
+        const res = await fetch("/api/access", {
+          credentials: "include",
+          cache: "no-store"
+        });
+
+        const data = await res.json();
+
+        if (data.role !== "admin" && data.role !== "premium") {
+          window.location.href = "locked";
+          return;
+        }
+
+        if (data.role === "admin") {
+          authBadge.textContent = "Admin";
+          authBadge.className = "auth-badge status-admin";
+          authBadge.style.display = "inline-flex";
+        }
+
+        if (data.role === "premium") {
+          authBadge.textContent = "Premium";
+          authBadge.className = "auth-badge status-premium";
+          authBadge.style.display = "inline-flex";
+        }
+
+        if (loginBtn) loginBtn.style.display = "none";
+        if (logoutBtn) logoutBtn.style.display = "inline-flex";
+      } catch {
+        window.location.href = "locked";
+      }
+    });
+  </script>
+</body>
+</html>

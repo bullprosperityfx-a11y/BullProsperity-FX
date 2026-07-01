@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <script>document.documentElement.classList.add("bp-auth-checking");</script>
+  <script src="/access-guard.js?v=20260623-3"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BullProsperity | Motivation & Disziplin</title>
+   <link rel="icon" type="image/png" href="/favicon.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="apple-touch-icon" href="/favicon.png">
+<meta name="theme-color" content="#050505">
+  <link rel="stylesheet" href="theme.css" />
+  <script src="/login.js?v=20260624-2" defer></script>
+
+  <script>
+    (async () => {
+      try {
+        const res = await fetch("/api/access", { credentials: "include" });
+        const data = await res.json();
+
+        if (data.role !== "admin" && data.role !== "premium") {
+          window.location.href = "locked";
+        }
+      } catch (err) {
+        window.location.href = "locked";
+      }
+    })();
+  </script>
+
+  <style>
+    .mind-page{
+      background:
+        linear-gradient(135deg, rgba(243,210,27,0.07), transparent 28%),
+        radial-gradient(circle at 78% 8%, rgba(43,191,120,0.10), transparent 24%),
+        radial-gradient(circle at 12% 26%, rgba(243,210,27,0.10), transparent 22%),
+        #050505;
+    }
+
+    .mind-page .navbar{
+      position:sticky;
+      top:14px;
+      z-index:50;
+      padding:14px 16px;
+      border:1px solid rgba(243,210,27,0.14);
+      border-radius:24px;
+      background:rgba(7,7,7,0.78);
+      backdrop-filter:blur(18px);
+      box-shadow:0 18px 60px rgba(0,0,0,0.28);
+    }
+
+    .mind-page .logo,
+    .mind-page .section-heading{
+      letter-spacing:0;
+    }
+
+    .mind-page .hero-shell{
+      margin-top:14px;
+      padding:40px;
+      border-radius:34px;
+      background:
+        linear-gradient(145deg, rgba(255,255,255,0.055), transparent 38%),
+        radial-gradient(circle at 76% 20%, rgba(243,210,27,0.14), transparent 30%),
+        linear-gradient(180deg, rgba(18,18,18,0.92), rgba(5,5,5,0.98));
+      overflow:hidden;
+    }
+
+    .mind-page .hero-shell::before{
+      width:520px;
+      height:520px;
+      top:-220px;
+      right:-160px;
+      background:radial-gradient(circle, rgba(243,210,27,0.16), transparent 66%);
+    }
+
+    .mind-page .hero-title{
+      max-width:1050px;
+      font-size:clamp(44px, 5vw, 74px);
+      letter-spacing:0;
+      line-height:.92;
+    }
+
+    .mind-page .hero-text{
+      max-width:900px;
+    }
+
+    .mind-page .badge{
+      border-color:rgba(243,210,27,0.18);
+      background:rgba(243,210,27,0.065);
+      color:var(--gold);
+      box-shadow:none;
+    }
+
+    .mind-layout{
+      display:grid;
+      grid-template-columns:1.05fr 0.95fr;
+      gap:24px;
+      align-items:start;
+    }
+
+    .mind-panel{
+      border:1px solid rgba(243,210,27,0.16);
+      border-radius:26px;
+      background:
+        linear-gradient(145deg, rgba(255,255,255,0.035), transparent 44%),
+        linear-gradient(180deg, rgba(17,17,17,0.9), rgba(7,7,7,0.96));
+      box-shadow:
+        inset 0 0 0 1px rgba(255,255,255,0.025),
+        0 22px 58px rgba(0,0,0,0.28);
+      padding:28px;
+    }
+
+    .field{
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+      margin-top:18px;
+    }
+
+    .field label{
+      color:#f1f1f1;
+      font-size:14px;
+      font-weight:800;
+    }
+
+    .field input,
+    .field textarea,
+    .field select{
+      width:100%;
+      border-radius:16px;
+      border:1px solid rgba(243,210,27,0.18);
+      background:rgba(255,255,255,0.03);
+      color:#fff;
+      padding:14px 16px;
+      font-size:15px;
+      outline:none;
+    }
+
+    .field textarea{
+      min-height:140px;
+      resize:vertical;
+    }
+
+    .field input:focus,
+    .field textarea:focus,
+    .field select:focus{
+      border-color:rgba(243,210,27,0.48);
+      box-shadow:0 0 0 3px rgba(243,210,27,0.08);
+    }
+
+    .actions{
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+      margin-top:20px;
+    }
+
+    .action-btn{
+      border:none;
+      cursor:pointer;
+    }
+
+    .entry-list{
+      display:grid;
+      gap:14px;
+      margin-top:18px;
+    }
+
+    .entry-card{
+      border:1px solid rgba(243,210,27,0.14);
+      border-radius:22px;
+      background:rgba(255,255,255,0.02);
+      padding:18px;
+    }
+
+    .entry-title{
+      color:var(--gold);
+      font-size:20px;
+      font-weight:900;
+      margin-bottom:8px;
+    }
+
+    .entry-meta{
+      color:#bdbdbd;
+      font-size:14px;
+      margin-bottom:12px;
+    }
+
+    .entry-text{
+      color:#ededed;
+      line-height:1.7;
+      font-size:15px;
+      white-space:pre-wrap;
+      margin-bottom:14px;
+    }
+
+    .small-btn{
+      border:none;
+      cursor:pointer;
+      padding:10px 14px;
+      border-radius:12px;
+      font-weight:800;
+      font-size:14px;
+      background:rgba(255,255,255,0.03);
+      color:#fff;
+      border:1px solid rgba(255,255,255,0.14);
+    }
+
+    .helper-list{
+      display:grid;
+      gap:12px;
+      margin-top:18px;
+    }
+
+    .helper-item{
+      border:1px solid rgba(243,210,27,0.12);
+      border-radius:16px;
+      background:rgba(255,255,255,0.02);
+      padding:14px 16px;
+      color:#efefef;
+      line-height:1.6;
+      font-size:14px;
+      font-weight:700;
+    }
+
+    .empty-state{
+      border:1px dashed rgba(243,210,27,0.18);
+      border-radius:20px;
+      padding:24px;
+      text-align:center;
+      color:#bdbdbd;
+      line-height:1.7;
+      margin-top:18px;
+      background:rgba(255,255,255,0.02);
+    }
+
+    .auth-badge{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:10px 14px;
+      border-radius:999px;
+      font-size:13px;
+      font-weight:700;
+      border:1px solid rgba(255,255,255,0.08);
+      background:rgba(255,255,255,0.04);
+      color:#fff;
+      white-space:nowrap;
+    }
+
+    .auth-badge::before{
+      content:"";
+      width:10px;
+      height:10px;
+      border-radius:50%;
+      display:inline-block;
+      background:#666;
+    }
+
+    .auth-badge.status-admin::before{background:#ffd700;}
+    .auth-badge.status-premium::before{background:#22c55e;}
+
+    .mind-page .logout-btn{
+      border-color:rgba(255,255,255,0.08);
+      background:rgba(255,255,255,0.04);
+    }
+
+    .mind-page .footer-note{
+      display:flex;
+      flex-wrap:wrap;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+      border:1px solid rgba(243,210,27,0.14);
+      border-radius:24px;
+      background:rgba(255,255,255,0.025);
+      padding:22px 26px;
+      margin:28px 0 10px;
+      color:#bdbdbd;
+      font-size:14px;
+      font-weight:800;
+      text-align:left;
+    }
+
+    .mind-page .footer-note strong{
+      display:block;
+      color:var(--gold);
+      font-size:16px;
+      margin-bottom:2px;
+    }
+
+    .mind-page .footer-note span{
+      color:#d2d2d2;
+      font-weight:700;
+    }
+
+    .mind-page .footer-note nav{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+    }
+
+    .mind-page .footer-note a{
+      color:#fff;
+      text-decoration:none;
+      font-weight:900;
+      padding:9px 12px;
+      border-radius:999px;
+      background:rgba(255,255,255,0.035);
+      border:1px solid rgba(255,255,255,0.07);
+    }
+
+    .mind-page .footer-note a:hover{
+      color:var(--gold);
+      border-color:rgba(243,210,27,0.34);
+    }
+
+    .mind-page .footer-note p{
+      flex-basis:100%;
+      margin:0;
+      color:#aaa;
+      font-weight:700;
+    }
+
+    @media(max-width:1100px){
+      .mind-layout{
+        grid-template-columns:1fr;
+      }
+    }
+  </style>
+</head>
+<body class="mind-page">
+  <div class="page">
+
+    <nav class="navbar">
+      <a href="index" class="logo">BullProsperity</a>
+      <div class="nav-links">
+        <a href="index">Home</a>
+        <a href="hub">Hub</a>
+        <a href="course">Course</a>
+        <a href="tools">Tools</a>
+        <a href="setup-room">Setup Room</a>
+        <a href="community" class="active">Community</a>
+        <a id="loginNavBtn" href="/api/whop/login">Login</a>
+        <a id="logoutBtn" href="/api/logout" class="logout-btn" style="display:none;">Logout</a>
+        <div id="authBadge" class="auth-badge status-loading" style="display:none;">Zugang</div>
+      </div>
+    </nav>
+
+    <section class="hero-shell">
+      <div class="badge">Mindset</div>
+      <h1 class="hero-title">Motivation & <span class="gold">Disziplin</span></h1>
+      <p class="hero-text">
+        Austausch über Psychologie, Routinen, Rückschläge und alles, was langfristig starke Trader formt.
+      </p>
+      <div class="hero-buttons">
+        <a href="community" class="btn primary">Zurück zur Community</a>
+        <a href="#mind-form" class="btn secondary">Beitrag schreiben</a>
+      </div>
+    </section>
+
+    <section class="mind-layout">
+      <div class="mind-panel" id="mind-form">
+        <div class="badge">Anonymer Mindset Beitrag</div>
+        <h2 class="section-heading" style="font-size:36px; margin-bottom:10px;">Gedanken teilen</h2>
+        <p class="section-subtext" style="margin-bottom:0;">
+          Dein Beitrag wird anonym an BullProsperity gesendet und zusätzlich lokal auf deinem Gerät gespeichert.
+        </p>
+
+        <div class="field">
+          <label for="mindTitle">Titel</label>
+          <input type="text" id="mindTitle" placeholder="z. B. Wie ich nach Verlusten wieder Fokus gefunden habe" />
+        </div>
+
+        <div class="field">
+          <label for="mindCategory">Kategorie</label>
+          <select id="mindCategory">
+            <option value="">Bitte wählen</option>
+            <option value="Motivation">Motivation</option>
+            <option value="Disziplin">Disziplin</option>
+            <option value="Routine">Routine</option>
+            <option value="Rückschlag">Rückschlag</option>
+            <option value="Mindset">Mindset</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="mindText">Beitrag</label>
+          <textarea id="mindText" placeholder="Was hast du gelernt? Was hat dir geholfen? Was würdest du anderen mitgeben?"></textarea>
+        </div>
+
+        <div class="actions">
+          <button class="btn primary action-btn" id="saveMindBtn">Anonym senden & speichern</button>
+          <button class="btn secondary action-btn" id="resetMindBtn">Felder leeren</button>
+        </div>
+      </div>
+
+      <div class="mind-panel">
+        <div class="badge">BullProsperity Fokus</div>
+        <h2 class="section-heading" style="font-size:36px; margin-bottom:10px;">Warum dieser Bereich?</h2>
+        <p class="section-subtext" style="margin-bottom:0;">
+          Trading wird nicht nur durch Chartwissen entschieden. Motivation, Disziplin und mentale Stabilität
+          sind oft der Unterschied zwischen Chaos und Konstanz.
+        </p>
+
+        <div class="helper-list">
+          <div class="helper-item">Disziplin hält dich im Plan, auch wenn Emotionen stark sind.</div>
+          <div class="helper-item">Motivation hilft zu starten, Routine hilft dranzubleiben.</div>
+          <div class="helper-item">Rückschläge sind nur dann wertvoll, wenn du daraus lernst.</div>
+          <div class="helper-item">Mentale Klarheit ist ein Teil professioneller Ausführung.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="mind-panel">
+        <div class="badge">Lokale Beiträge</div>
+        <h2 class="section-heading" style="font-size:36px; margin-bottom:10px;">Meine Mindset Beiträge</h2>
+        <p class="section-subtext" style="margin-bottom:0;">
+          Diese Beiträge sind nur lokal auf deinem Gerät gespeichert.
+        </p>
+        <div id="mindList" class="entry-list"></div>
+        <div id="mindEmpty" class="empty-state">
+          Noch keine Mindset-Beiträge vorhanden.<br>
+          Erstelle oben den ersten Beitrag.
+        </div>
+      </div>
+    </section>
+
+    <div class="footer-note">
+      <div>
+        <strong>BullProsperity</strong>
+        <span>Motivation, Disziplin, Routine und Trading Education.</span>
+      </div>
+      <nav>
+        <a href="impressum">Impressum</a>
+        <a href="datenschutz">Datenschutz</a>
+        <a href="risikohinweis">Risikohinweis</a>
+        <a href="community">Kontakt</a>
+      </nav>
+      <p>BullProsperity dient ausschließlich Bildungs- und Informationszwecken. Es werden keine Gewinne garantiert.</p>
+    </div>
+  </div>
+
+  <script>
+    const storageKey = "bullprosperity_mind_posts";
+    const authBadge = document.getElementById("authBadge");
+    const loginNavBtn = document.getElementById("loginNavBtn");
+    const logoutBtn = document.getElementById("logoutBtn");
+
+    const mindTitle = document.getElementById("mindTitle");
+    const mindCategory = document.getElementById("mindCategory");
+    const mindText = document.getElementById("mindText");
+
+    const saveMindBtn = document.getElementById("saveMindBtn");
+    const resetMindBtn = document.getElementById("resetMindBtn");
+    const mindList = document.getElementById("mindList");
+    const mindEmpty = document.getElementById("mindEmpty");
+
+    function getPosts() {
+      const raw = localStorage.getItem(storageKey);
+      return raw ? JSON.parse(raw) : [];
+    }
+
+    function savePosts(posts) {
+      localStorage.setItem(storageKey, JSON.stringify(posts));
+    }
+
+    function resetForm() {
+      mindTitle.value = "";
+      mindCategory.value = "";
+      mindText.value = "";
+    }
+
+    function renderPosts() {
+      const posts = getPosts();
+      mindList.innerHTML = "";
+
+      if (posts.length === 0) {
+        mindEmpty.style.display = "block";
+        return;
+      }
+
+      mindEmpty.style.display = "none";
+
+      posts.forEach((post, index) => {
+        const card = document.createElement("div");
+        card.className = "entry-card";
+
+        card.innerHTML = `
+          <div class="entry-title">${post.title}</div>
+          <div class="entry-meta">${post.category || "Allgemein"} • ${post.date}</div>
+          <div class="entry-text">${post.text}</div>
+          <button class="small-btn" onclick="deleteMindPost(${index})">Beitrag löschen</button>
+        `;
+
+        mindList.appendChild(card);
+      });
+    }
+
+    saveMindBtn.addEventListener("click", async () => {
+      if (!mindTitle.value.trim() || !mindText.value.trim()) {
+        alert("Bitte mindestens Titel und Beitrag ausfüllen.");
+        return;
+      }
+
+      const post = {
+        title: mindTitle.value.trim(),
+        category: mindCategory.value || "Allgemein",
+        text: mindText.value.trim(),
+        date: new Date().toLocaleString("de-DE")
+      };
+
+      const posts = getPosts();
+      posts.unshift(post);
+      savePosts(posts);
+      renderPosts();
+
+      try {
+        const res = await fetch("/api/send-mindset", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          credentials: "include",
+          body: JSON.stringify(post)
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) {
+          alert(data.error || "Beitrag lokal gespeichert, aber nicht an Discord gesendet.");
+          return;
+        }
+
+        alert("Beitrag wurde anonym gesendet und lokal gespeichert.");
+        resetForm();
+
+      } catch (err) {
+        alert("Beitrag lokal gespeichert, aber Discord Fehler.");
+      }
+    });
+
+    resetMindBtn.addEventListener("click", resetForm);
+
+    function deleteMindPost(index) {
+      const posts = getPosts();
+      posts.splice(index, 1);
+      savePosts(posts);
+      renderPosts();
+    }
+
+    window.deleteMindPost = deleteMindPost;
+
+    renderPosts();
+
+    document.addEventListener("DOMContentLoaded", async () => {
+      try {
+        const res = await fetch("/api/access", { credentials: "include" });
+        const data = await res.json();
+        const role = data?.role || "guest";
+
+        if (role !== "admin" && role !== "premium") {
+          window.location.href = "locked";
+          return;
+        }
+
+        if (role === "admin") {
+          authBadge.textContent = "Admin";
+          authBadge.className = "auth-badge status-admin";
+          authBadge.style.display = "inline-flex";
+        }
+
+        if (role === "premium") {
+          authBadge.textContent = "Premium";
+          authBadge.className = "auth-badge status-premium";
+          authBadge.style.display = "inline-flex";
+        }
+
+        if (loginNavBtn) loginNavBtn.style.display = "none";
+        if (logoutBtn) logoutBtn.style.display = "inline-flex";
+      } catch (err) {
+        window.location.href = "locked";
+      }
+    });
+  </script>
+  <script>
+  window.addEventListener("load", () => {
+    const loader = document.getElementById("bpLoader");
+
+    setTimeout(() => {
+      if(loader){
+        loader.classList.add("hide");
+      }
+    }, 700);
+  });
+</script>
+</body>
+</html>

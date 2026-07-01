@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <script>document.documentElement.classList.add("bp-auth-checking");</script>
+  <script src="/access-guard.js?v=20260623-3"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>BullProsperity | Notifications</title>
+
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <link rel="manifest" href="/manifest.json">
+  <link rel="apple-touch-icon" href="/favicon.png">
+  <meta name="theme-color" content="#050505">
+
+  <link rel="stylesheet" href="/theme.css" />
+  <link rel="stylesheet" href="/admin/admin.css" />
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="/supabase.js"></script>
+  <script src="/login.js?v=20260624-2" defer></script>
+
+  <script>
+    (async () => {
+      try {
+        const res = await fetch("/api/access", {
+          credentials: "include",
+          cache: "no-store"
+        });
+
+        const data = await res.json();
+
+        if (data.role !== "admin") {
+          window.location.href = "/locked";
+        }
+      } catch {
+        window.location.href = "/locked";
+      }
+    })();
+  </script>
+
+  <style>
+    .admin-layout{
+      display:grid;
+      grid-template-columns:320px 1fr;
+      gap:24px;
+      margin-top:24px;
+      align-items:start;
+    }
+
+    .admin-sidebar,
+    .admin-card{
+      border:1px solid var(--line);
+      border-radius:28px;
+      background:linear-gradient(180deg,var(--panel),var(--panel-2));
+      padding:24px;
+    }
+
+    .admin-sidebar{
+      position:sticky;
+      top:20px;
+      min-height:calc(100vh - 120px);
+    }
+
+    .admin-content{
+      display:grid;
+      gap:24px;
+    }
+
+    .admin-nav{
+      display:grid;
+      gap:12px;
+      margin-top:24px;
+    }
+
+    .admin-link{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      padding:14px 16px;
+      border-radius:18px;
+      background:#111;
+      border:1px solid #252525;
+      color:#fff;
+      text-decoration:none;
+      font-weight:850;
+      min-height:58px;
+      transition:.2s ease;
+    }
+
+    .admin-link:hover,
+    .admin-link.active{
+      border-color:#ffd700;
+      color:#ffd700;
+      transform:translateX(4px);
+    }
+
+    .notify-grid{
+      display:grid;
+      grid-template-columns:1fr .9fr;
+      gap:24px;
+      align-items:start;
+    }
+
+    .notify-form{
+      display:grid;
+      gap:16px;
+      margin-top:20px;
+    }
+
+    .notify-field{
+      display:grid;
+      gap:8px;
+    }
+
+    .notify-field label{
+      color:#ffd700;
+      font-weight:900;
+      font-size:13px;
+      text-transform:uppercase;
+      letter-spacing:.08em;
+    }
+
+    .notify-field input,
+    .notify-field textarea,
+    .notify-field select{
+      width:100%;
+      border-radius:18px;
+      border:1px solid rgba(255,215,0,.16);
+      background:#111;
+      color:#fff;
+      padding:16px;
+      outline:none;
+      font-size:15px;
+      font-family:Arial,sans-serif;
+    }
+
+    .notify-field textarea{
+      min-height:160px;
+      resize:vertical;
+      line-height:1.6;
+    }
+
+    .notify-field input:focus,
+    .notify-field textarea:focus,
+    .notify-field select:focus{
+      border-color:#ffd700;
+      box-shadow:0 0 22px rgba(255,215,0,.08);
+    }
+
+    .notify-submit{
+      margin-top:8px;
+      border:none;
+      border-radius:999px;
+      background:#ffd700;
+      color:#111;
+      padding:16px 22px;
+      font-weight:950;
+      cursor:pointer;
+      font-size:15px;
+      transition:.2s ease;
+    }
+
+    .notify-submit:hover{
+      transform:translateY(-2px);
+      box-shadow:0 0 26px rgba(255,215,0,.16);
+    }
+
+    .notify-preview{
+      background:#111;
+      border:1px solid rgba(255,215,0,.14);
+      border-radius:24px;
+      padding:22px;
+      margin-top:20px;
+      position:relative;
+      overflow:hidden;
+    }
+
+    .notify-preview::before{
+      content:"";
+      position:absolute;
+      right:-80px;
+      top:-80px;
+      width:220px;
+      height:220px;
+      background:radial-gradient(circle,rgba(255,215,0,.16),transparent 70%);
+      pointer-events:none;
+    }
+
+    .preview-top{
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      align-items:center;
+      margin-bottom:14px;
+      position:relative;
+      z-index:1;
+    }
+
+    .preview-type{
+      display:inline-flex;
+      padding:7px 11px;
+      border-radius:999px;
+      background:#ffd700;
+      color:#111;
+      font-size:11px;
+      font-weight:950;
+      letter-spacing:.08em;
+    }
+
+    .preview-time{
+      color:#8f8f8f;
+      font-size:12px;
+      font-weight:800;
+    }
+
+    .preview-title{
+      color:#ffd700;
+      font-size:22px;
+      font-weight:950;
+      margin-bottom:10px;
+            position:relative;
+      z-index:1;
+    }
+
+    .preview-message{
+      color:rgba(255,255,255,.82);
+      line-height:1.7;
+      font-size:15px;
+      position:relative;
+      z-index:1;
+    }
+
+    .notification-feed{
+      display:grid;
+      gap:12px;
+      margin-top:20px;
+    }
+
+    .notification-row{
+      background:#111;
+      border:1px solid rgba(255,215,0,.12);
+      border-radius:18px;
+      padding:18px;
+    }
+
+    .notification-row-top{
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      align-items:center;
+      margin-bottom:10px;
+    }
+
+    .notification-row strong{
+      color:#ffd700;
+      display:block;
+      margin-bottom:6px;
+      font-size:16px;
+    }
+
+    .notification-row p{
+      margin:0;
+      color:#a8a8a8;
+      line-height:1.6;
+      font-size:13px;
+    }
+
+    .status-message{
+      margin-top:14px;
+      color:#9f9f9f;
+      font-size:14px;
+      font-weight:800;
+    }
+.notification-actions{
+  display:flex;
+  gap:10px;
+  margin-top:14px;
+  flex-wrap:wrap;
+}
+
+.notification-action-btn{
+  border:1px solid rgba(255,215,0,.18);
+  background:#0c0c0c;
+  color:#ffd700;
+  border-radius:999px;
+  padding:9px 13px;
+  font-weight:900;
+  cursor:pointer;
+}
+
+.notification-action-btn.danger{
+  color:#ef4444;
+  border-color:rgba(239,68,68,.35);
+}
+    
+    @media(max-width:1200px){
+      .admin-layout,
+      .notify-grid{
+        grid-template-columns:1fr;
+      }
+
+      .admin-sidebar{
+        position:relative;
+        top:0;
+        min-height:auto;
+      }
+    }
+  </style>
+</head>
+
+<body class="admin-page">
+
+<div class="page">
+
+  <nav class="admin-topbar">
+    <a href="/admin/dashboard" class="admin-brand">BullProsperity Admin</a>
+
+    <div class="admin-toplinks">
+      <a href="/hub">Hub</a>
+      <a href="/course">Course</a>
+      <a href="/tools">Tools</a>
+      <a href="/setup-room">Setup Room</a>
+      <a href="/community">Community</a>
+      <a href="/api/logout">Logout</a>
+    </div>
+  </nav>
+
+  <section class="hero-shell">
+    <div class="badge">Admin Notifications</div>
+
+    <h1 class="hero-title">
+      BullProsperity
+      <span class="gold">Alert Center</span>
+    </h1>
+
+    <p class="hero-text">
+      Erstelle Premium Notifications für Mitglieder: Lessons, Setups, Market Updates und System Hinweise.
+    </p>
+  </section>
+
+  <section class="admin-layout">
+
+    <aside class="admin-sidebar">
+      <div class="badge">Verwaltung</div>
+
+      <h2 class="admin-sidebar-title">Control Center</h2>
+
+      <div class="admin-nav">
+        <a href="/admin/dashboard" class="admin-link"><span>📊 Dashboard</span><small>LIVE</small></a>
+        <a href="/admin/members" class="admin-link"><span>👥 Mitglieder</span><small>USER</small></a>
+        <a href="/admin/course-analytics" class="admin-link"><span>🎬 Course Analytics</span><small>WATCH</small></a>
+        <a href="/admin/sr-analytics" class="admin-link"><span>🎯 Setup Room Analytics</span><small>SMC</small></a>
+        <a href="/admin/notifications" class="admin-link active"><span>🔔 Notifications</span><small>PUSH</small></a>
+        <a href="/admin/security" class="admin-link"><span>🛡️ Security</span><small>ADMIN</small></a>
+        <a href="/admin/ai-journal" class="admin-link"><span>🧠 AI Journal</span><small>REVIEW</small></a>
+        <a href="/admin/mentor-radar" class="admin-link"><span>🧭 Mentor Radar</span><small>COACH</small></a>
+        <a href="/admin-signals" class="admin-link"><span>📡 Admin Signals</span><small>POST</small></a>
+      </div>
+    </aside>
+
+    <div class="admin-content">
+
+      <div class="notify-grid">
+
+        <div class="admin-card">
+          <div class="badge">Notification erstellen</div>
+
+          <h2 class="section-heading" style="font-size:38px;margin-bottom:10px;">
+            Neue Alert senden
+          </h2>
+
+          <p class="section-subtext">
+            Diese Nachricht erscheint im Hub als Premium Notification.
+          </p>
+
+          <form class="notify-form" id="notificationForm">
+
+            <div class="notify-field">
+              <label for="notificationType">Kategorie</label>
+              <select id="notificationType">
+                <option value="LESSON">LESSON</option>
+                <option value="SETUP">SETUP</option>
+                <option value="MARKET">MARKET</option>
+                <option value="SYSTEM">SYSTEM</option>
+              </select>
+            </div>
+
+            <div class="notify-field">
+              <label for="notificationTitle">Titel</label>
+              <input id="notificationTitle" placeholder="z. B. Neue SMC Lesson online" required />
+            </div>
+
+            <div class="notify-field">
+              <label for="notificationMessage">Nachricht</label>
+              <textarea id="notificationMessage" placeholder="Schreibe deine Notification..." required></textarea>
+            </div>
+
+            <button class="notify-submit" type="submit">
+              Notification senden
+            </button>
+
+            <div class="status-message" id="notificationStatus">
+              Bereit zum Senden.
+            </div>
+
+          </form>
+        </div>
+
+        <div class="admin-card">
+          <div class="badge">Live Vorschau</div>
+
+          <h2 class="section-heading" style="font-size:34px;margin-bottom:10px;">
+            Preview
+          </h2>
+
+          <p class="section-subtext">
+            So sieht die Notification später für Mitglieder aus.
+          </p>
+
+          <div class="notify-preview">
+            <div class="preview-top">
+              <div class="preview-type" id="previewType">SYSTEM</div>
+              <div class="preview-time">Jetzt</div>
+            </div>
+
+            <div class="preview-title" id="previewTitle">
+              BullProsperity Update
+            </div>
+
+            <div class="preview-message" id="previewMessage">
+              Deine Nachricht erscheint hier als Vorschau.
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="admin-card">
+        <div class="badge">Letzte Notifications</div>
+
+        <h2 class="section-heading" style="font-size:36px;margin-bottom:10px;">
+                    Gesendete Alerts
+        </h2>
+
+        <p class="section-subtext">
+          Die neuesten gesendeten Notifications.
+        </p>
+
+        <div class="notification-feed" id="notificationFeed">
+          <div class="notification-row">
+            <strong>Noch keine Daten geladen</strong>
+            <p>Gesendete Notifications erscheinen hier automatisch.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </section>
+
+  <div class="footer-note">
+    BullProsperity Notification Center.
+  </div>
+
+</div>
+
+<script>
+const form = document.getElementById("notificationForm");
+const titleInput = document.getElementById("notificationTitle");
+const messageInput = document.getElementById("notificationMessage");
+const typeInput = document.getElementById("notificationType");
+const statusBox = document.getElementById("notificationStatus");
+
+const previewType = document.getElementById("previewType");
+const previewTitle = document.getElementById("previewTitle");
+const previewMessage = document.getElementById("previewMessage");
+const notificationFeed = document.getElementById("notificationFeed");
+
+let editingId = null;
+
+function updatePreview(){
+  previewType.textContent = typeInput.value || "SYSTEM";
+  previewTitle.textContent = titleInput.value.trim() || "BullProsperity Update";
+  previewMessage.textContent = messageInput.value.trim() || "Deine Nachricht erscheint hier als Vorschau.";
+}
+
+[typeInput, titleInput, messageInput].forEach(el => {
+  el.addEventListener("input", updatePreview);
+  el.addEventListener("change", updatePreview);
+});
+
+function formatDate(value){
+  if(!value) return "-";
+
+  return new Date(value).toLocaleString("de-DE", {
+    day:"2-digit",
+    month:"2-digit",
+    hour:"2-digit",
+    minute:"2-digit"
+  });
+}
+
+async function adminUpdateNotification(payload){
+  const res = await fetch("/api/admin/notifications", {
+    method:"PATCH",
+    headers:{
+      "Content-Type":"application/json"
+    },
+    credentials:"include",
+    body:JSON.stringify(payload)
+  });
+
+  const result = await res.json();
+
+  if(!res.ok){
+    throw new Error(result.error || "Update Fehler");
+  }
+
+  return result;
+}
+
+async function loadNotifications(){
+  try{
+    const { data, error } = await supabaseClient
+      .from("notifications")
+      .select("*")
+      .order("created_at", { ascending:false })
+      .limit(20);
+
+    if(error){
+      console.log(error);
+      return;
+    }
+
+    if(!data || !data.length){
+      notificationFeed.innerHTML = `
+        <div class="notification-row">
+          <strong>Noch keine Notifications</strong>
+          <p>Sobald du Alerts sendest, erscheinen sie hier.</p>
+        </div>
+      `;
+      return;
+    }
+
+    notificationFeed.innerHTML = "";
+
+    data.forEach(item => {
+
+      const activeText =
+        item.is_active === false
+          ? "Zurückgezogen"
+          : "Aktiv";
+
+      const activeColor =
+        item.is_active === false
+          ? "#ef4444"
+          : "#22c55e";
+
+      const safeItem = encodeURIComponent(JSON.stringify(item));
+
+      notificationFeed.innerHTML += `
+        <div class="notification-row">
+
+          <div class="notification-row-top">
+            <div class="preview-type">
+              ${item.type || "SYSTEM"}
+            </div>
+
+            <div class="preview-time">
+              ${formatDate(item.created_at)}
+            </div>
+          </div>
+
+          <strong>
+            ${item.title || "Ohne Titel"}
+          </strong>
+
+          <p>
+            ${item.message || ""}
+          </p>
+
+          <p style="
+            margin-top:10px;
+            color:${activeColor};
+            font-weight:900;
+          ">
+            Status: ${activeText}
+          </p>
+
+          <div class="notification-actions">
+
+            <button
+              class="notification-action-btn"
+              onclick="editNotification('${safeItem}')"
+            >
+              Bearbeiten
+            </button>
+
+            <button
+              class="notification-action-btn danger"
+              onclick="retractNotification('${item.id}')"
+            >
+              Zurückziehen
+            </button>
+
+            <button
+              class="notification-action-btn"
+              onclick="reactivateNotification('${item.id}')"
+            >
+              Wieder aktivieren
+            </button>
+
+          </div>
+
+        </div>
+      `;
+    });
+
+  }catch(err){
+    console.log("Notification Feed Fehler:", err);
+  }
+}
+
+function editNotification(encodedItem){
+
+  const item =
+    JSON.parse(decodeURIComponent(encodedItem));
+
+  editingId = item.id;
+
+  titleInput.value = item.title || "";
+  messageInput.value = item.message || "";
+  typeInput.value = item.type || "SYSTEM";
+
+  statusBox.textContent =
+    "Bearbeitungsmodus aktiv.";
+
+  document.querySelector(".notify-submit")
+    .textContent = "Änderungen speichern";
+
+  updatePreview();
+
+  window.scrollTo({
+    top:0,
+    behavior:"smooth"
+  });
+}
+
+async function retractNotification(id){
+
+  if(
+    !confirm(
+      "Diese Notification wirklich zurückziehen?"
+    )
+  ) return;
+
+  try{
+
+    await adminUpdateNotification({
+      id,
+      is_active:false
+          });
+
+    statusBox.textContent =
+      "Notification wurde zurückgezogen.";
+
+    loadNotifications();
+
+  }catch(err){
+
+    statusBox.textContent = err.message;
+
+  }
+}
+
+async function reactivateNotification(id){
+
+  try{
+
+    await adminUpdateNotification({
+      id,
+      is_active:true
+    });
+
+    statusBox.textContent =
+      "Notification wurde wieder aktiviert.";
+
+    loadNotifications();
+
+  }catch(err){
+
+    statusBox.textContent = err.message;
+
+  }
+}
+
+form.addEventListener("submit", async (e) => {
+
+  e.preventDefault();
+
+  const title = titleInput.value.trim();
+  const message = messageInput.value.trim();
+  const type = typeInput.value;
+
+  if(!title || !message){
+
+    statusBox.textContent =
+      "Bitte Titel und Nachricht ausfüllen.";
+
+    return;
+  }
+
+  statusBox.textContent =
+    editingId
+      ? "Änderungen werden gespeichert..."
+      : "Notification wird gesendet...";
+
+  if(editingId){
+
+    try{
+
+      await adminUpdateNotification({
+        id:editingId,
+        title,
+        message,
+        type
+      });
+
+      statusBox.textContent =
+        "Notification erfolgreich bearbeitet.";
+
+      editingId = null;
+
+      document.querySelector(".notify-submit")
+        .textContent = "Notification senden";
+
+      form.reset();
+
+      updatePreview();
+
+      loadNotifications();
+
+    }catch(err){
+
+      statusBox.textContent = err.message;
+
+    }
+
+    return;
+  }
+
+  const res = await fetch(
+    "/api/admin/notifications",
+    {
+      method:"POST",
+      headers:{
+        "Content-Type":"application/json"
+      },
+      credentials:"include",
+      body:JSON.stringify({
+        title,
+        message,
+        type
+      })
+    }
+  );
+
+  const result = await res.json();
+
+  if(!res.ok){
+
+    console.log(result);
+
+    statusBox.textContent =
+      result.error || "Fehler beim Senden.";
+
+    return;
+  }
+
+  statusBox.textContent =
+    "Notification erfolgreich gesendet.";
+
+  form.reset();
+
+  updatePreview();
+
+  loadNotifications();
+});
+
+updatePreview();
+loadNotifications();
+</script>
+
+</body>
+</html>

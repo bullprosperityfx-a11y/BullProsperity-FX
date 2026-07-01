@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <script>document.documentElement.classList.add("bp-auth-checking");</script>
+  <script src="/access-guard.js?v=20260623-3"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>BullProsperity | Entry Modelle</title>
+
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <link rel="manifest" href="/manifest.json">
+  <link rel="apple-touch-icon" href="/favicon.png">
+  <meta name="theme-color" content="#050505">
+
+  <link rel="stylesheet" href="/theme.css" />
+  <script src="/login.js?v=20260624-2" defer></script>
+
+  <script>
+    (async () => {
+      try {
+        const res = await fetch("/api/access", {
+          credentials: "include",
+          cache: "no-store"
+        });
+
+        const data = await res.json();
+
+        if (data.role !== "admin" && data.role !== "premium") {
+          window.location.href = "/locked";
+        }
+      } catch (err) {
+        window.location.href = "/locked";
+      }
+    })();
+  </script>
+
+  <style>
+    .entry-models-page{
+      background:
+        linear-gradient(135deg, rgba(243,210,27,0.07), transparent 28%),
+        radial-gradient(circle at 78% 8%, rgba(43,191,120,0.10), transparent 24%),
+        radial-gradient(circle at 12% 26%, rgba(243,210,27,0.10), transparent 22%),
+        #050505;
+    }
+
+    .entry-models-page .navbar{
+      position:sticky;
+      top:14px;
+      z-index:50;
+      padding:14px 16px;
+      border:1px solid rgba(243,210,27,0.14);
+      border-radius:24px;
+      background:rgba(7,7,7,0.78);
+      backdrop-filter:blur(18px);
+      box-shadow:0 18px 60px rgba(0,0,0,0.28);
+    }
+
+    .entry-models-page .logo,
+    .entry-models-page .section-heading{
+      letter-spacing:0;
+    }
+
+    .entry-models-page .hero-shell{
+      margin-top:14px;
+      padding:40px;
+      border-radius:34px;
+      background:
+        linear-gradient(145deg, rgba(255,255,255,0.055), transparent 38%),
+        radial-gradient(circle at 76% 20%, rgba(243,210,27,0.14), transparent 30%),
+        linear-gradient(180deg, rgba(18,18,18,0.92), rgba(5,5,5,0.98));
+      overflow:hidden;
+    }
+
+    .entry-models-page .hero-shell::before{
+      width:520px;
+      height:520px;
+      top:-220px;
+      right:-160px;
+      background:radial-gradient(circle, rgba(243,210,27,0.16), transparent 66%);
+    }
+
+    .entry-models-page .hero-title{
+      max-width:1050px;
+      font-size:clamp(44px, 5vw, 74px);
+      letter-spacing:0;
+      line-height:.92;
+    }
+
+    .entry-models-page .hero-text{
+      max-width:900px;
+    }
+
+    .entry-models-page .badge{
+      border-color:rgba(243,210,27,0.18);
+      background:rgba(243,210,27,0.065);
+      color:var(--gold);
+      box-shadow:none;
+    }
+
+    .entry-models-page .section-card,
+    .entry-models-page .entry-card-link{
+      border:1px solid rgba(243,210,27,0.16);
+      border-radius:26px;
+      background:
+        linear-gradient(145deg, rgba(255,255,255,0.035), transparent 44%),
+        linear-gradient(180deg, rgba(17,17,17,0.9), rgba(7,7,7,0.96));
+      box-shadow:
+        inset 0 0 0 1px rgba(255,255,255,0.025),
+        0 22px 58px rgba(0,0,0,0.28);
+    }
+
+    .chart-box{
+      position:relative;
+      overflow:hidden;
+      border-radius:22px;
+      border:1px solid rgba(243,210,27,.18);
+      cursor:pointer;
+      background:#050505;
+      transition:.35s ease;
+    }
+
+    .chart-box:hover{
+      transform:translateY(-3px);
+      border-color:rgba(243,210,27,.42);
+      box-shadow:0 22px 60px rgba(0,0,0,.55);
+    }
+
+    .chart-box img{
+      width:100%;
+      display:block;
+    }
+
+    .chart-overlay{
+      position:absolute;
+      left:18px;
+      bottom:18px;
+      padding:11px 17px;
+      border-radius:999px;
+      background:rgba(0,0,0,.72);
+      border:1px solid rgba(243,210,27,.25);
+      color:var(--gold);
+      font-size:.9rem;
+      font-weight:800;
+      backdrop-filter:blur(10px);
+      pointer-events:none;
+    }
+
+    .entry-card-link{
+      min-height:190px;
+      display:flex;
+      flex-direction:column;
+      justify-content:flex-start;
+      padding:28px;
+      border-radius:26px;
+      transition:.3s ease;
+      text-decoration:none;
+      color:inherit;
+      cursor:pointer;
+    }
+
+    .entry-card-link:hover{
+      transform:translateY(-4px);
+      border-color:rgba(243,210,27,.34);
+      box-shadow:0 24px 60px rgba(0,0,0,.38);
+    }
+
+    .entry-card-link .badge{
+      width:100%;
+      justify-content:flex-start;
+      margin-bottom:18px;
+      background:rgba(243,210,27,0.065);
+    }
+
+    .entry-card-link h3{
+      color:var(--gold);
+      font-size:1.35rem;
+      font-weight:900;
+      margin-bottom:12px;
+    }
+
+    .entry-card-link p{
+      color:#e3e3e3;
+      line-height:1.65;
+      font-weight:600;
+      margin:0;
+    }
+        .chart-modal{
+      position:fixed;
+      inset:0;
+      background:rgba(0,0,0,.52);
+      backdrop-filter:blur(6px);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      opacity:0;
+      visibility:hidden;
+      transition:.25s ease;
+      z-index:9999;
+      padding:42px;
+    }
+
+    .chart-modal.active{
+      opacity:1;
+      visibility:visible;
+    }
+
+    .chart-modal-content{
+      position:relative;
+      width:min(1050px,88vw);
+      max-height:82vh;
+      animation:zoomFade .25s ease;
+    }
+
+    .chart-modal-content img{
+      width:100%;
+      max-height:82vh;
+      object-fit:contain;
+      display:block;
+      border-radius:24px;
+      border:1px solid rgba(243,210,27,.22);
+      box-shadow:0 30px 80px rgba(0,0,0,.6);
+      background:#050505;
+    }
+
+    .chart-close{
+      position:absolute;
+      top:-18px;
+      right:-18px;
+      width:50px;
+      height:50px;
+      border-radius:50%;
+      background:#0f0f0f;
+      border:1px solid rgba(243,210,27,.35);
+      color:var(--gold);
+      font-size:2rem;
+      font-weight:700;
+      cursor:pointer;
+      z-index:10001;
+      line-height:1;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      transition:.25s ease;
+    }
+
+    .chart-close:hover{
+      transform:scale(1.08);
+      background:#161616;
+      border-color:rgba(243,210,27,.65);
+    }
+
+    .auth-badge{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:10px 14px;
+      border-radius:999px;
+      font-size:13px;
+      font-weight:700;
+      border:1px solid rgba(255,255,255,0.08);
+      background:rgba(255,255,255,0.04);
+      color:#fff;
+      white-space:nowrap;
+    }
+
+    .auth-badge::before{
+      content:"";
+      width:10px;
+      height:10px;
+      border-radius:50%;
+      display:inline-block;
+      background:#666;
+    }
+
+    .auth-badge.status-admin::before{background:#ffd700;}
+    .auth-badge.status-premium::before{background:#22c55e;}
+
+    .entry-models-page .logout-btn{
+      border-color:rgba(255,255,255,0.08);
+      background:rgba(255,255,255,0.04);
+    }
+
+    .entry-models-page .footer-note{
+      display:flex;
+      flex-wrap:wrap;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+      border:1px solid rgba(243,210,27,0.14);
+      border-radius:24px;
+      background:rgba(255,255,255,0.025);
+      padding:22px 26px;
+      margin:28px 0 10px;
+      color:#bdbdbd;
+      font-size:14px;
+      font-weight:800;
+      text-align:left;
+    }
+
+    .entry-models-page .footer-note strong{
+      display:block;
+      color:var(--gold);
+      font-size:16px;
+      margin-bottom:2px;
+    }
+
+    .entry-models-page .footer-note span{
+      color:#d2d2d2;
+      font-weight:700;
+    }
+
+    .entry-models-page .footer-note nav{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+    }
+
+    .entry-models-page .footer-note a{
+      color:#fff;
+      text-decoration:none;
+      font-weight:900;
+      padding:9px 12px;
+      border-radius:999px;
+      background:rgba(255,255,255,0.035);
+      border:1px solid rgba(255,255,255,0.07);
+    }
+
+    .entry-models-page .footer-note a:hover{
+      color:var(--gold);
+      border-color:rgba(243,210,27,0.34);
+    }
+
+    .entry-models-page .footer-note p{
+      flex-basis:100%;
+      margin:0;
+      color:#aaa;
+      font-weight:700;
+    }
+
+    @keyframes zoomFade{
+      from{
+        opacity:0;
+        transform:scale(.92);
+      }
+      to{
+        opacity:1;
+        transform:scale(1);
+      }
+    }
+  </style>
+</head>
+
+<body class="entry-models-page">
+  <div class="page">
+
+    <nav class="navbar">
+      <a href="/index" class="logo">BullProsperity</a>
+
+      <div class="nav-links">
+        <a href="/index">Home</a>
+        <a href="/hub">Hub</a>
+        <a href="/course">Course</a>
+        <a href="/tools">Tools</a>
+        <a href="/setup-room" class="active">Setup Room</a>
+        <a href="/community">Community</a>
+        <a id="loginNavBtn" href="/api/whop/login">Login</a>
+        <a id="logoutBtn" href="/api/logout" class="logout-btn" style="display:none;">Logout</a>
+        <div id="authBadge" class="auth-badge status-loading" style="display:none;">Zugang</div>
+      </div>
+    </nav>
+
+    <section class="hero-shell">
+      <div class="badge">Entry Kategorie</div>
+
+      <h1 class="hero-title">
+        BullProsperity <span class="gold">Entry Modelle</span>
+      </h1>
+
+      <p class="hero-text">
+        Hier geht es um die präzise Ausführung deiner Setups: Higher Timeframe Bias,
+        Confirmation, BOS, CHoCH, FVG, Orderblock und das Zusammenspiel aus Struktur,
+        Liquidität und Timing.
+      </p>
+
+      <div class="hero-buttons">
+        <a href="/setup-room" class="btn primary">Zurück zum Setup Room</a>
+        <a href="/course" class="btn secondary">Zum Kurs</a>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="section-heading">So sieht ein sauberer Entry aus</h2>
+
+      <div class="grid-2">
+        <div class="section-card">
+          <div class="chart-box" onclick="openChartZoom('entry-models-example.png')">
+            <img src="entry-models-example.png" alt="Entry Modell Chart">
+
+            <div class="chart-overlay">
+              Zum Vergrößern klicken
+            </div>
+          </div>
+        </div>
+
+        <div class="section-card">
+          <div class="badge">Entry Check</div>
+
+          <div class="list-box">
+            <div class="list-item">Ist der Higher Timeframe Bias klar?</div>
+            <div class="list-item">Wurde vorher relevante Liquidität abgeholt?</div>
+            <div class="list-item">Gibt es Confirmation durch BOS oder CHoCH?</div>
+            <div class="list-item">Liegt der Entry in einer sinnvollen Zone?</div>
+            <div class="list-item">Passt das Risiko zum Setup und zur Session?</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="section-heading">Entry Beispiele</h2>
+
+      <div class="grid-3">
+        <a href="#" class="entry-card-link">
+          <div class="badge">Confirmation</div>
+          <h3>BOS Entry Modell</h3>
+          <p>Nach dem Sweep entsteht ein klarer BOS und der Retest liefert den Entry.</p>
+        </a>
+
+        <a href="#" class="entry-card-link">
+          <div class="badge">Reversal</div>
+          <h3>CHoCH Entry Modell</h3>
+          <p>Der Markt dreht nach Liquidität und zeigt den ersten Character Change.</p>
+        </a>
+
+        <a href="#" class="entry-card-link">
+          <div class="badge">Precision</div>
+          <h3>FVG + Orderblock</h3>
+          <p>Kombination aus Fair Value Gap und Orderblock für einen präzisen Entry.</p>
+        </a>
+      </div>
+    </section>
+
+    <div class="footer-note">
+      <div>
+        <strong>BullProsperity</strong>
+        <span>Entry Modelle, BOS, CHoCH, FVG, Orderblock und Trading Education.</span>
+      </div>
+      <nav>
+        <a href="/impressum">Impressum</a>
+        <a href="/datenschutz">Datenschutz</a>
+        <a href="/risikohinweis">Risikohinweis</a>
+        <a href="/community">Kontakt</a>
+      </nav>
+      <p>BullProsperity dient ausschließlich Bildungs- und Informationszwecken. Es werden keine Gewinne garantiert.</p>
+    </div>
+
+  </div>
+
+  <div id="chartZoomModal" class="chart-modal" onclick="closeChartZoom()">
+    <div class="chart-modal-content" onclick="event.stopPropagation()">
+      <button class="chart-close" onclick="closeChartZoom()" type="button">x</button>
+      <img id="chartZoomImg" src="" alt="Chart Zoom">
+    </div>
+  </div>
+
+  <script>
+    const authBadge = document.getElementById("authBadge");
+    const loginNavBtn = document.getElementById("loginNavBtn");
+    const logoutBtn = document.getElementById("logoutBtn");
+
+    function openChartZoom(src){
+      const modal = document.getElementById("chartZoomModal");
+      const img = document.getElementById("chartZoomImg");
+
+      img.src = src;
+      modal.classList.add("active");
+    }
+
+    function closeChartZoom(){
+      const modal = document.getElementById("chartZoomModal");
+      modal.classList.remove("active");
+    }
+
+    document.addEventListener("DOMContentLoaded", async () => {
+      try {
+        const res = await fetch("/api/access", {
+          credentials: "include",
+          cache: "no-store"
+        });
+
+        const data = await res.json();
+        const role = data?.role || "guest";
+
+        if (role !== "admin" && role !== "premium") {
+          window.location.href = "/locked";
+          return;
+        }
+
+        if (role === "admin") {
+          authBadge.textContent = "Admin";
+          authBadge.className = "auth-badge status-admin";
+          authBadge.style.display = "inline-flex";
+        }
+
+        if (role === "premium") {
+          authBadge.textContent = "Premium";
+          authBadge.className = "auth-badge status-premium";
+          authBadge.style.display = "inline-flex";
+        }
+
+        if (loginNavBtn) loginNavBtn.style.display = "none";
+        if (logoutBtn) logoutBtn.style.display = "inline-flex";
+      } catch (err) {
+        window.location.href = "/locked";
+      }
+    });
+  </script>
+</body>
+</html>

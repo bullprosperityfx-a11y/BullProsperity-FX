@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <script>document.documentElement.classList.add("bp-auth-checking");</script>
+  <script src="/access-guard.js?v=20260623-3"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BullProsperity | Live Beispiele</title>
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <link rel="manifest" href="/manifest.json">
+  <link rel="apple-touch-icon" href="/favicon.png">
+  <meta name="theme-color" content="#050505">
+  <link rel="stylesheet" href="theme.css" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <script src="/login.js?v=20260624-2" defer></script>
+
+  <script>
+    (async () => {
+      try {
+        const res = await fetch("/api/access", { credentials: "include" });
+        const data = await res.json();
+        if (data.role !== "admin" && data.role !== "premium") {
+          window.location.href = "locked";
+        }
+      } catch (err) {
+        window.location.href = "locked";
+      }
+    })();
+  </script>
+
+  <style>
+    .live-setups-page{
+      background:
+        linear-gradient(135deg, rgba(243,210,27,0.07), transparent 28%),
+        radial-gradient(circle at 78% 8%, rgba(43,191,120,0.10), transparent 24%),
+        radial-gradient(circle at 12% 26%, rgba(243,210,27,0.10), transparent 22%),
+        #050505;
+    }
+
+    .live-setups-page .navbar{
+      position:sticky;
+      top:14px;
+      z-index:50;
+      padding:14px 16px;
+      border:1px solid rgba(243,210,27,0.14);
+      border-radius:24px;
+      background:rgba(7,7,7,0.78);
+      backdrop-filter:blur(18px);
+      box-shadow:0 18px 60px rgba(0,0,0,0.28);
+    }
+
+    .live-setups-page .logo,
+    .live-setups-page .section-heading{
+      letter-spacing:0;
+    }
+
+    .live-setups-page .hero-shell{
+      margin-top:14px;
+      padding:40px;
+      border-radius:34px;
+      background:
+        linear-gradient(145deg, rgba(255,255,255,0.055), transparent 38%),
+        radial-gradient(circle at 76% 20%, rgba(243,210,27,0.14), transparent 30%),
+        linear-gradient(180deg, rgba(18,18,18,0.92), rgba(5,5,5,0.98));
+      overflow:hidden;
+    }
+
+    .live-setups-page .hero-shell::before{
+      width:520px;
+      height:520px;
+      top:-220px;
+      right:-160px;
+      background:radial-gradient(circle, rgba(243,210,27,0.16), transparent 66%);
+    }
+
+    .live-setups-page .hero-title{
+      max-width:1050px;
+      font-size:clamp(44px, 5vw, 74px);
+      letter-spacing:0;
+      line-height:.92;
+    }
+
+    .live-setups-page .hero-text{
+      max-width:900px;
+    }
+
+    .live-setups-page .badge{
+      border-color:rgba(243,210,27,0.18);
+      background:rgba(243,210,27,0.065);
+      color:var(--gold);
+      box-shadow:none;
+    }
+
+    .live-setups-page .section-card,
+    .live-setups-page .example-card{
+      border:1px solid rgba(243,210,27,0.16);
+      border-radius:26px;
+      background:
+        linear-gradient(145deg, rgba(255,255,255,0.035), transparent 44%),
+        linear-gradient(180deg, rgba(17,17,17,0.9), rgba(7,7,7,0.96));
+      box-shadow:
+        inset 0 0 0 1px rgba(255,255,255,0.025),
+        0 22px 58px rgba(0,0,0,0.28);
+    }
+
+    .chart-placeholder{
+      border:1px solid rgba(243,210,27,0.16);
+      border-radius:24px;
+      min-height:440px;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.035), transparent),
+        repeating-linear-gradient(90deg, rgba(243,210,27,0.055) 0 1px, transparent 1px 78px),
+        repeating-linear-gradient(0deg, rgba(243,210,27,0.045) 0 1px, transparent 1px 58px),
+        radial-gradient(circle at 70% 30%, rgba(243,210,27,0.12), transparent 28%),
+        #070707;
+      position:relative;
+      overflow:hidden;
+      padding:24px;
+    }
+
+    .live-candles{
+      position:absolute;
+      inset:58px 44px 80px 44px;
+      display:flex;
+      align-items:end;
+      justify-content:space-between;
+      gap:14px;
+      opacity:.94;
+    }
+
+    .live-candle{
+      position:relative;
+      width:17px;
+      border-radius:5px;
+      background:var(--gold);
+      box-shadow:0 0 18px rgba(243,210,27,0.20);
+    }
+
+    .live-candle::before{
+      content:"";
+      position:absolute;
+      left:50%;
+      top:-32px;
+      width:2px;
+      height:calc(100% + 62px);
+      transform:translateX(-50%);
+      background:rgba(255,255,255,0.42);
+      z-index:-1;
+    }
+
+    .live-candle.bear{
+      background:#f5f5f5;
+      box-shadow:0 0 16px rgba(255,255,255,0.12);
+    }
+
+    .setup-label{
+      position:absolute;
+      border:1px solid rgba(243,210,27,0.22);
+      border-radius:999px;
+      background:rgba(7,7,7,0.72);
+      color:var(--gold);
+      padding:8px 12px;
+      font-size:12px;
+      font-weight:900;
+      backdrop-filter:blur(12px);
+    }
+
+    .setup-label.one{top:58px;left:58px;}
+    .setup-label.two{top:132px;right:76px;}
+    .setup-label.three{bottom:66px;left:46%;}
+
+    .chart-note{
+      position:absolute;
+      left:24px;
+      right:24px;
+      bottom:22px;
+      border:1px solid rgba(255,255,255,0.08);
+      border-radius:18px;
+      background:rgba(0,0,0,0.44);
+      color:#d7d7d7;
+      padding:14px 16px;
+      line-height:1.55;
+      font-weight:700;
+    }
+
+    .auth-badge{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:10px 14px;
+      border-radius:999px;
+      font-size:13px;
+      font-weight:700;
+      border:1px solid rgba(255,255,255,0.08);
+      background:rgba(255,255,255,0.04);
+      color:#fff;
+      white-space:nowrap;
+    }
+
+    .auth-badge::before{
+      content:"";
+      width:10px;
+      height:10px;
+      border-radius:50%;
+      display:inline-block;
+      background:#666;
+    }
+
+    .auth-badge.status-admin::before{background:#ffd700;}
+    .auth-badge.status-premium::before{background:#22c55e;}
+
+    .live-setups-page .logout-btn{
+      border-color:rgba(255,255,255,0.08);
+      background:rgba(255,255,255,0.04);
+    }
+
+    .live-setups-page .footer-note{
+      display:flex;
+      flex-wrap:wrap;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+      border:1px solid rgba(243,210,27,0.14);
+      border-radius:24px;
+      background:rgba(255,255,255,0.025);
+      padding:22px 26px;
+      margin:28px 0 10px;
+      color:#bdbdbd;
+      font-size:14px;
+      font-weight:800;
+      text-align:left;
+    }
+
+    .live-setups-page .footer-note strong{
+      display:block;
+      color:var(--gold);
+      font-size:16px;
+      margin-bottom:2px;
+    }
+
+    .live-setups-page .footer-note span{
+      color:#d2d2d2;
+      font-weight:700;
+    }
+
+    .live-setups-page .footer-note nav{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+    }
+
+    .live-setups-page .footer-note a{
+      color:#fff;
+      text-decoration:none;
+      font-weight:900;
+      padding:9px 12px;
+      border-radius:999px;
+      background:rgba(255,255,255,0.035);
+      border:1px solid rgba(255,255,255,0.07);
+    }
+
+    .live-setups-page .footer-note a:hover{
+      color:var(--gold);
+      border-color:rgba(243,210,27,0.34);
+    }
+
+    .live-setups-page .footer-note p{
+      flex-basis:100%;
+      margin:0;
+      color:#aaa;
+      font-weight:700;
+    }
+
+    @media(max-width:760px){
+      .live-setups-page .hero-shell{
+        padding:24px !important;
+      }
+
+      .live-candles{
+        inset:70px 24px 92px 24px;
+        gap:8px;
+      }
+
+      .live-candle{
+        width:12px;
+      }
+    }
+  </style>
+</head>
+<body class="live-setups-page">
+  <div class="page">
+
+    <nav class="navbar">
+      <a href="index" class="logo">BullProsperity</a>
+      <div class="nav-links">
+        <a href="index">Home</a>
+        <a href="hub">Hub</a>
+        <a href="course">Course</a>
+        <a href="tools">Tools</a>
+        <a href="setup-room" class="active">Setup Room</a>
+        <a href="community">Community</a>
+        <a id="loginNavBtn" href="/api/whop/login">Login</a>
+        <a id="logoutBtn" href="/api/logout" class="logout-btn" style="display:none;">Logout</a>
+        <div id="authBadge" class="auth-badge status-loading" style="display:none;">Zugang</div>
+      </div>
+    </nav>
+
+    <section class="hero-shell">
+      <div class="badge">Praxis Kategorie</div>
+      <h1 class="hero-title">Live <span class="gold">Beispiele</span></h1>
+      <p class="hero-text">
+        In diesem Bereich siehst du, wie BullProsperity Setups in echten
+        Marktbewegungen aussehen - inklusive Timing, Confirmation, Qualität
+        und vollständiger Ausführung.
+      </p>
+      <div class="hero-buttons">
+        <a href="setup-room" class="btn primary">Zurück zum Setup Room</a>
+        <a href="course" class="btn secondary">Zum Kurs</a>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="section-heading">Echte Setups im Markt</h2>
+      <p class="section-subtext">
+        Hier kannst du später echte Praxisbeispiele, Screenshots oder Videos einsetzen.
+      </p>
+
+      <div class="grid-2">
+        <div class="section-card">
+          <div class="chart-placeholder">
+            <div class="live-candles">
+              <div class="live-candle" style="height:42%;"></div>
+              <div class="live-candle bear" style="height:58%;"></div>
+              <div class="live-candle" style="height:48%;"></div>
+              <div class="live-candle" style="height:70%;"></div>
+              <div class="live-candle bear" style="height:36%;"></div>
+              <div class="live-candle bear" style="height:52%;"></div>
+              <div class="live-candle" style="height:76%;"></div>
+              <div class="live-candle" style="height:64%;"></div>
+              <div class="live-candle bear" style="height:46%;"></div>
+              <div class="live-candle" style="height:82%;"></div>
+              <div class="live-candle" style="height:68%;"></div>
+              <div class="live-candle bear" style="height:40%;"></div>
+            </div>
+            <div class="setup-label one">London Sweep</div>
+            <div class="setup-label two">BOS</div>
+            <div class="setup-label three">FVG Retest</div>
+            <div class="chart-note">
+              London Sweep - BOS - FVG Retest - Entry - Management - TP Hit.
+            </div>
+          </div>
+        </div>
+
+        <div class="section-card">
+          <div class="badge">Live Setup Check</div>
+          <div class="list-box">
+            <div class="list-item">War vor dem Setup klare Liquidität sichtbar?</div>
+            <div class="list-item">Gab es eine saubere Confirmation durch Struktur?</div>
+            <div class="list-item">Lag der Entry an einer hochwertigen Zone?</div>
+            <div class="list-item">War das CRV stark genug?</div>
+            <div class="list-item">Wäre das Setup live wirklich handelbar gewesen?</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="section-heading">Praxis Beispiele</h2>
+      <p class="section-subtext">
+        Diese Karten kannst du später mit echten Marktbeispielen verknüpfen.
+      </p>
+
+      <div class="grid-3">
+        <div class="example-card">
+          <div>
+            <div class="badge">Buy Setup</div>
+            <h3>Long nach Sweep</h3>
+            <p>Sell-Side Liquidität wird abgeholt und der Markt reagiert nach oben.</p>
+          </div>
+          <a href="#" class="example-link">Beispiel öffnen</a>
+        </div>
+
+        <div class="example-card">
+          <div>
+            <div class="badge">Sell Setup</div>
+            <h3>Short nach Rejection</h3>
+            <p>Buy-Side Liquidität wird genommen und anschließend kommt die Schwäche.</p>
+          </div>
+          <a href="#" class="example-link">Beispiel öffnen</a>
+        </div>
+
+        <div class="example-card">
+          <div>
+            <div class="badge">Review</div>
+            <h3>Komplette Analyse</h3>
+            <p>Vom Bias bis zum Management: ein vollständiges Beispiel im BullProsperity Stil.</p>
+          </div>
+          <a href="#" class="example-link">Beispiel öffnen</a>
+        </div>
+      </div>
+    </section>
+
+    <div class="footer-note">
+      <div>
+        <strong>BullProsperity</strong>
+        <span>Live Beispiele für Setups, Ausführung, Review und Trading Education.</span>
+      </div>
+      <nav>
+        <a href="impressum">Impressum</a>
+        <a href="datenschutz">Datenschutz</a>
+        <a href="risikohinweis">Risikohinweis</a>
+        <a href="community">Kontakt</a>
+      </nav>
+      <p>BullProsperity dient ausschließlich Bildungs- und Informationszwecken. Es werden keine Gewinne garantiert.</p>
+    </div>
+
+  </div>
+  <script>
+    const authBadge = document.getElementById("authBadge");
+    const loginNavBtn = document.getElementById("loginNavBtn");
+    const logoutBtn = document.getElementById("logoutBtn");
+
+    document.addEventListener("DOMContentLoaded", async () => {
+      try {
+        const res = await fetch("/api/access", {
+          credentials: "include"
+        });
+
+        const data = await res.json();
+        const role = data?.role || "guest";
+
+        if (role !== "admin" && role !== "premium") {
+          window.location.href = "locked";
+          return;
+        }
+
+        if (role === "admin") {
+          authBadge.textContent = "Admin";
+          authBadge.className = "auth-badge status-admin";
+          authBadge.style.display = "inline-flex";
+        }
+
+        if (role === "premium") {
+          authBadge.textContent = "Premium";
+          authBadge.className = "auth-badge status-premium";
+          authBadge.style.display = "inline-flex";
+        }
+
+        if (loginNavBtn) loginNavBtn.style.display = "none";
+        if (logoutBtn) logoutBtn.style.display = "inline-flex";
+      } catch (err) {
+        window.location.href = "locked";
+      }
+    });
+  </script>
+</body>
+</html>

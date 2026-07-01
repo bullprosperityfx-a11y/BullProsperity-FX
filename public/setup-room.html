@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <script>document.documentElement.classList.add("bp-auth-checking");</script>
+  <script src="/access-guard.js?v=20260623-3"></script>
+  <script>
+(async () => {
+  try {
+    const res = await fetch("/api/access", {
+      credentials: "include",
+      cache: "no-store"
+    });
+
+    const data = await res.json();
+
+    if (data.role !== "admin" && data.role !== "premium") {
+      window.location.href = "/locked";
+    }
+
+  } catch (err) {
+    window.location.href = "/locked";
+  }
+})();
+</script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>BullProsperity | Setup Room</title>
+ <link rel="icon" type="image/png" href="/favicon.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="apple-touch-icon" href="/favicon.png">
+<meta name="theme-color" content="#050505">
+  <link rel="stylesheet" href="theme.css" />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="/supabase.js"></script>
+  <script src="/login.js?v=20260624-2" defer></script>
+
+  <style>
+    .setup-page{
+      background:
+        linear-gradient(135deg, rgba(243,210,27,0.07), transparent 28%),
+        radial-gradient(circle at 78% 8%, rgba(43,191,120,0.10), transparent 24%),
+        radial-gradient(circle at 12% 26%, rgba(243,210,27,0.10), transparent 22%),
+        #050505;
+    }
+
+    .setup-page .navbar{
+      position:sticky;
+      top:14px;
+      z-index:50;
+      padding:14px 16px;
+      border:1px solid rgba(243,210,27,0.14);
+      border-radius:24px;
+      background:rgba(7,7,7,0.78);
+      backdrop-filter:blur(18px);
+      box-shadow:0 18px 60px rgba(0,0,0,0.28);
+    }
+
+    .setup-page .logo{
+      letter-spacing:0;
+    }
+
+    .setup-page .hero-shell{
+      margin-top:14px;
+      padding:40px;
+      border-radius:34px;
+      background:
+        linear-gradient(145deg, rgba(255,255,255,0.055), transparent 38%),
+        radial-gradient(circle at 76% 20%, rgba(243,210,27,0.14), transparent 30%),
+        linear-gradient(180deg, rgba(18,18,18,0.92), rgba(5,5,5,0.98));
+      overflow:hidden;
+    }
+
+    .setup-page .hero-shell::before{
+      width:520px;
+      height:520px;
+      top:-220px;
+      right:-160px;
+      background:radial-gradient(circle, rgba(243,210,27,0.16), transparent 66%);
+    }
+
+    .setup-page .hero-title{
+      max-width:1050px;
+      font-size:clamp(44px, 5vw, 74px);
+      letter-spacing:0;
+      line-height:.92;
+    }
+
+    .setup-page .hero-text{
+      max-width:900px;
+    }
+
+    .setup-page .badge{
+      border-color:rgba(243,210,27,0.18);
+      background:rgba(243,210,27,0.065);
+      color:var(--gold);
+      box-shadow:none;
+    }
+
+    .setup-page .section{
+      margin-bottom:34px;
+    }
+
+    .setup-page .section-heading{
+      letter-spacing:0;
+    }
+
+    .setup-page .section-subtext{
+      max-width:900px;
+    }
+
+    .setup-page .grid-3{
+      display:grid;
+      grid-template-columns:repeat(3, minmax(0, 1fr));
+      gap:18px;
+    }
+
+    .setup-page .setup-card{
+      position:relative;
+      overflow:hidden;
+      border:1px solid rgba(243,210,27,0.16);
+      border-radius:26px;
+      background:
+        linear-gradient(145deg, rgba(255,255,255,0.035), transparent 44%),
+        linear-gradient(180deg, rgba(17,17,17,0.9), rgba(7,7,7,0.96));
+      box-shadow:
+        inset 0 0 0 1px rgba(255,255,255,0.025),
+        0 22px 58px rgba(0,0,0,0.28);
+      padding:26px;
+      min-height:260px;
+      transition:transform .25s ease, border-color .25s ease, box-shadow .25s ease;
+    }
+
+    .setup-page .setup-card::before{
+      content:"";
+      position:absolute;
+      inset:auto -70px -90px auto;
+      width:190px;
+      height:190px;
+      background:radial-gradient(circle, rgba(243,210,27,0.12), transparent 70%);
+      opacity:.65;
+      pointer-events:none;
+    }
+
+    .setup-page .setup-card:hover{
+      transform:translateY(-6px);
+      border-color:rgba(243,210,27,0.5);
+      box-shadow:0 22px 58px rgba(0,0,0,0.34);
+    }
+
+    .setup-page .setup-card h3{
+      color:#fff;
+      font-size:24px;
+      letter-spacing:0;
+    }
+
+    .setup-page .setup-card p{
+      color:#d9d9d9;
+      font-weight:700;
+    }
+
+    .setup-page .setup-link,
+    .setup-page .btn{
+      border-radius:999px;
+      min-height:46px;
+    }
+
+    .setup-page .setup-link{
+      background:var(--gold);
+      color:#111;
+      box-shadow:0 0 24px rgba(243,210,27,0.16);
+      z-index:1;
+    }
+
+    .setup-page .btn.primary{
+      background:var(--gold);
+      color:#111;
+      box-shadow:0 0 24px rgba(243,210,27,0.16);
+    }
+
+    .setup-page .btn.secondary{
+      color:#fff;
+      border-color:rgba(255,255,255,0.14);
+      background:rgba(255,255,255,0.025);
+    }
+
+    .auth-badge{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:10px 14px;
+      border-radius:999px;
+      font-size:13px;
+      font-weight:700;
+      border:1px solid #252525;
+      background:#111;
+      color:#fff;
+      white-space:nowrap;
+    }
+
+    .auth-badge::before{
+      content:"";
+      width:10px;
+      height:10px;
+      border-radius:50%;
+      display:inline-block;
+      background:#666;
+    }
+
+    .auth-badge.status-admin::before{background:#ffd700;}
+    .auth-badge.status-premium::before{background:#22c55e;}
+    .auth-badge.status-longterm::before{background:#3b82f6;}
+    .auth-badge.status-locked::before{background:#ef4444;}
+
+    .setup-page .auth-badge,
+    .setup-page .logout-btn{
+      border-color:rgba(255,255,255,0.08);
+      background:rgba(255,255,255,0.04);
+    }
+
+    .setup-page .footer-note{
+      display:flex;
+      flex-wrap:wrap;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+      border:1px solid rgba(243,210,27,0.14);
+      border-radius:24px;
+      background:rgba(255,255,255,0.025);
+      padding:22px 26px;
+      margin:0 0 10px;
+      color:#bdbdbd;
+      font-size:14px;
+      font-weight:800;
+      text-align:left;
+    }
+
+    .setup-page .footer-note strong{
+      display:block;
+      color:var(--gold);
+      font-size:16px;
+      margin-bottom:2px;
+    }
+
+    .setup-page .footer-note span{
+      color:#d2d2d2;
+      font-weight:700;
+    }
+
+    .setup-page .footer-note nav{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+    }
+
+    .setup-page .footer-note a{
+      color:#fff;
+      text-decoration:none;
+      font-weight:900;
+      padding:9px 12px;
+      border-radius:999px;
+      background:rgba(255,255,255,0.035);
+      border:1px solid rgba(255,255,255,0.07);
+    }
+
+    .setup-page .footer-note a:hover{
+      color:var(--gold);
+      border-color:rgba(243,210,27,0.34);
+    }
+
+    .setup-page .footer-note p{
+      flex-basis:100%;
+      margin:0;
+      color:#aaa;
+      font-weight:700;
+    }
+
+    @media(max-width:1100px){
+      .setup-page .grid-3{
+        grid-template-columns:1fr 1fr;
+      }
+    }
+
+    @media(max-width:760px){
+      .setup-page .hero-shell{
+        padding:24px !important;
+      }
+
+      .setup-page .grid-3{
+        grid-template-columns:1fr;
+      }
+
+      .setup-page .footer-note{
+        align-items:flex-start;
+        flex-direction:column;
+      }
+    }
+  </style>
+</head>
+
+<body class="setup-page">
+  <div class="page">
+
+    <nav class="navbar">
+      <a href="index" class="logo">BullProsperity</a>
+
+      <div class="nav-links">
+        <a href="index">Home</a>
+        <a href="hub">Hub</a>
+        <a href="course">Course</a>
+        <a href="tools">Tools</a>
+        <a href="setup-room" class="active">Setup Room</a>
+        <a href="community">Community</a>
+        <a id="loginNavBtn" href="/api/whop/login">Login</a>
+        <a id="logoutBtn" href="/api/logout" class="logout-btn" style="display:none;">Logout</a>
+        <div id="authBadge" class="auth-badge status-loading" style="display:none;">Zugang</div>
+      </div>
+    </nav>
+
+    <section class="hero-shell">
+      <div class="badge">Premium Mitgliederbereich</div>
+
+      <h1 class="hero-title">
+        Echte Marktbeispiele im
+        <span class="gold">BullProsperity Setup Room</span>
+      </h1>
+
+      <p class="hero-text">
+        Hier findest du Marktanalysen, Setup-Ideen und Praxisbeispiele aus der BullProsperity Strategie.
+        Dieser Bereich hilft dir, das Wissen aus Modul 8 direkt in echten Marktbewegungen zu verstehen
+        und sauber nachzuvollziehen.
+      </p>
+
+      <div class="hero-buttons">
+        <a href="course" class="btn primary">Zum Kurs</a>
+        <a href="tools" class="btn secondary">Zu den Tools</a>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="section-heading">Aktuelle Setup Kategorien</h2>
+
+      <p class="section-subtext">
+        Diese Bereiche sind direkt verlinkt. Du kannst später jede Kategorie
+        mit einer eigenen Unterseite oder einem eigenen Analysebereich verbinden.
+      </p>
+
+      <div class="grid-3">
+
+        <div class="setup-card">
+          <div>
+            <div class="badge">SMC</div>
+            <h3>Liquidity Setups</h3>
+            <p>Beispiele für Liquidity Sweeps, Stop Hunts und institutionelle Bewegungen rund um Equal Highs und Equal Lows.</p>
+          </div>
+          <a href="liquidity" class="setup-link" data-category="Liquidity Setups">Setups ansehen</a>
+        </div>
+
+        <div class="setup-card">
+          <div>
+            <div class="badge">Entries</div>
+            <h3>Entry Modelle</h3>
+            <p>BullProsperity Entry Modelle mit Confirmation, Struktur, Timing und sauberer Ausführung.</p>
+          </div>
+          <a href="entry-models" class="setup-link" data-category="Entry Modelle">Beispiele ansehen</a>
+        </div>
+
+        <div class="setup-card">
+          <div>
+            <div class="badge">Structure</div>
+            <h3>Marktstruktur</h3>
+            <p>BOS, CHoCH, Strukturwechsel und Trendverständnis im Chart mit klarer visueller Erklärung.</p>
+          </div>
+          <a href="market-structure" class="setup-link" data-category="Marktstruktur">Charts öffnen</a>
+        </div>
+
+        <div class="setup-card">
+          <div>
+            <div class="badge">Practice</div>
+            <h3>Replay Analyse</h3>
+            <p>Trainiere dein Auge mit Replay Analysen und markiere eigene Setups zur besseren Routineentwicklung.</p>
+          </div>
+          <a href="replay" class="setup-link" data-category="Replay Analyse">Analyse starten</a>
+        </div>
+
+        <div class="setup-card">
+          <div>
+            <div class="badge">Examples</div>
+            <h3>Live Beispiele</h3>
+            <p>Beispiele aus echten Marktbewegungen erklärt, damit du Timing, Struktur und Bestätigung besser verstehst.</p>
+          </div>
+          <a href="live-setups" class="setup-link" data-category="Live Beispiele">Beispiele ansehen</a>
+        </div>
+
+        <div class="setup-card">
+          <div>
+            <div class="badge">Members</div>
+            <h3>Community Setups</h3>
+            <p>Setup-Ideen und Beispiele aus dem Mitgliederbereich für mehr Austausch und mehrere Perspektiven.</p>
+          </div>
+          <a href="community" class="setup-link" data-category="Community Setups">Community öffnen</a>
+        </div>
+
+      </div>
+    </section>
+
+    <div class="footer-note">
+      <div>
+        <strong>BullProsperity</strong>
+        <span>Setup Room für Marktstruktur, Praxisbeispiele und Trading Education.</span>
+      </div>
+      <nav>
+        <a href="impressum">Impressum</a>
+        <a href="datenschutz">Datenschutz</a>
+        <a href="risikohinweis">Risikohinweis</a>
+        <a href="community">Kontakt</a>
+      </nav>
+      <p>BullProsperity dient ausschließlich Bildungs- und Informationszwecken. Es werden keine Gewinne garantiert.</p>
+    </div>
+
+  </div>
+
+<script>
+const authBadge = document.getElementById("authBadge");
+const loginNavBtn = document.getElementById("loginNavBtn");
+
+let currentUser = {
+  email: "unknown@bullprosperity.local",
+  role: "guest"
+};
+
+async function trackSetupRoom(action, category, targetUrl) {
+  try {
+    if (!window.supabaseClient) return;
+
+    await supabaseClient
+      .from("setup_room_activity")
+      .insert({
+        email: currentUser.email,
+        role: currentUser.role,
+        action: action,
+        category: category || "Setup Room",
+        target_url: targetUrl || window.location.pathname
+      });
+
+    console.log("SR Tracking gespeichert:", action);
+  } catch (err) {
+    console.log("SR Tracking Fehler:", err);
+  }
+}
+
+(async () => {
+  try {
+    const res = await fetch("/api/access", {
+      credentials: "include",
+      cache: "no-store"
+    });
+
+    if (!res.ok) {
+      window.location.href = "locked";
+      return;
+    }
+
+    const data = await res.json();
+    const role = data?.role || "guest";
+
+    currentUser = {
+      email: data.email || "admin@bullprosperity.local",
+      role: role
+    };
+
+    if (role !== "admin" && role !== "premium") {
+      window.location.href = "locked";
+      return;
+    }
+    document.body.classList.add("access-ready");
+
+if (role === "admin") {
+  authBadge.textContent = "Admin";
+  authBadge.className = "auth-badge status-admin";
+  authBadge.style.display = "inline-flex";
+}
+
+if (role === "premium") {
+  authBadge.textContent = "Premium";
+  authBadge.className = "auth-badge status-premium";
+  authBadge.style.display = "inline-flex";
+}
+
+    if (loginNavBtn) {
+  loginNavBtn.style.display = "none";
+}
+
+const logoutBtn = document.getElementById("logoutBtn");
+
+if (logoutBtn && (role === "admin" || role === "premium")) {
+  logoutBtn.style.display = "inline-flex";
+}
+
+    await trackSetupRoom("setup_room_opened", "Setup Room", window.location.pathname);
+
+  } catch (err) {
+    window.location.href = "locked";
+  }
+})();
+
+document.querySelectorAll(".setup-link").forEach(link => {
+  link.addEventListener("click", async () => {
+    const category = link.getAttribute("data-category") || link.textContent.trim();
+    const targetUrl = link.getAttribute("href");
+
+    await trackSetupRoom("category_clicked", category, targetUrl);
+  });
+});
+</script>
+  <script>
+  window.addEventListener("load", () => {
+    const loader = document.getElementById("bpLoader");
+
+    setTimeout(() => {
+      if(loader){
+        loader.classList.add("hide");
+      }
+    }, 700);
+  });
+</script>
+
+</body>
+</html>
