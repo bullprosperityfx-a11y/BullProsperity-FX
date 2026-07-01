@@ -1,7 +1,6 @@
 {
   "installCommand": "pnpm install",
   "buildCommand": "pnpm build",
-  "outputDirectory": ".next",
   "cleanUrls": true,
   "trailingSlash": false,
   "redirects": [
