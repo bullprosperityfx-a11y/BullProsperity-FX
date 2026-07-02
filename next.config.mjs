@@ -52,6 +52,7 @@ const nextConfig = {
           source: `/${page}`,
           destination: `/${page}.html`
         })),
+        { source: "/lesson:lessonId(\\d+)", destination: "/lesson:lessonId.html" },
         { source: "/admin/:page", destination: "/admin/:page.html" }
       ]
     };
