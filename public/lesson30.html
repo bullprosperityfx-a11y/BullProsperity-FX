@@ -495,6 +495,24 @@ quickLessons.forEach((item, index) => {
   };
 });
 
+const lessonVideoOverrides = {
+  3: { videoId: "1184948123", videoTitle: "Risikoaufklärung & wichtiger Hinweis" },
+  5: { videoId: "1173678522", videoTitle: "Warum Retail Trader verlieren" },
+  6: { videoId: "1206409841", videoTitle: "Die wichtigsten Märkte erklärt" },
+  7: { videoId: "1206410379", videoTitle: "Was du zum Traden brauchst" },
+  20: { videoId: "1206409947", videoTitle: "Risikomanagement im Trading" },
+  21: { videoId: "1206409313", videoTitle: "Positionsgröße berechnen" },
+  23: { videoId: "1206409595", videoTitle: "Drawdown Kontrolle" },
+  24: { videoId: "1206409773", videoTitle: "Trading Psychologie" },
+  26: { videoId: "1206410192", videoTitle: "Kontinuierliche Verbesserung" }
+};
+
+Object.entries(lessonVideoOverrides).forEach(([id, video]) => {
+  if (lessons[id]) {
+    lessons[id] = { ...lessons[id], ...video };
+  }
+});
+
 const sidebarModulesData = [
   {
     title: "Modul 1 — Einführung",

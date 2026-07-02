@@ -59,6 +59,8 @@ export const lessons: Lesson[] = [
     title: "Die wichtigsten Märkte erklärt",
     description: "Forex, Indizes, Gold und Marktunterschiede.",
     focus: "Märkte sauber einordnen.",
+    videoId: "1206409841",
+    videoTitle: "Die wichtigsten Märkte erklärt",
     tags: ["Märkte", "XAUUSD", "Indizes"]
   },
   {
@@ -67,6 +69,8 @@ export const lessons: Lesson[] = [
     title: "Was du zum Traden brauchst",
     description: "Broker, Charting, Notizen, Routine und Setup.",
     focus: "Die richtige Infrastruktur aufbauen.",
+    videoId: "1206410379",
+    videoTitle: "Was du zum Traden brauchst",
     tags: ["Broker", "Charting", "Setup"]
   },
   {
@@ -171,6 +175,8 @@ export const lessons: Lesson[] = [
     title: "Risk Management Grundlagen",
     description: "Kapital schützen und Risiko planen.",
     focus: "Prozess vor Ergebnis.",
+    videoId: "1206409947",
+    videoTitle: "Risikomanagement im Trading",
     tags: ["Risiko", "Kapital"]
   },
   {
@@ -179,6 +185,8 @@ export const lessons: Lesson[] = [
     title: "Positionsgröße berechnen",
     description: "Positionsgröße anhand Risiko und Stop-Loss planen.",
     focus: "Keine zufällige Lot Size.",
+    videoId: "1206409313",
+    videoTitle: "Positionsgröße berechnen",
     tags: ["Lot Size", "Risiko"]
   },
   {
@@ -195,6 +203,8 @@ export const lessons: Lesson[] = [
     title: "Drawdown Kontrolle",
     description: "Verlustphasen, Grenzen und Stabilität.",
     focus: "Drawdown aktiv begrenzen.",
+    videoId: "1206409595",
+    videoTitle: "Drawdown Kontrolle",
     tags: ["Drawdown", "Kontrolle"]
   },
   {
@@ -203,6 +213,8 @@ export const lessons: Lesson[] = [
     title: "Trading Psychologie",
     description: "Emotionen, Druck und Erwartungsmanagement.",
     focus: "Psychologie als Teil des Systems behandeln.",
+    videoId: "1206409773",
+    videoTitle: "Trading Psychologie",
     tags: ["Psychologie", "Mindset"]
   },
   {
@@ -219,6 +231,8 @@ export const lessons: Lesson[] = [
     title: "Disziplin entwickeln",
     description: "Regeln, Wiederholung und Prozessstabilität.",
     focus: "Disziplin praktisch trainieren.",
+    videoId: "1206410192",
+    videoTitle: "Kontinuierliche Verbesserung",
     tags: ["Disziplin", "Regeln"]
   },
   {
