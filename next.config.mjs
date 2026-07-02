@@ -52,15 +52,13 @@ const nextConfig = {
           source: `/${page}`,
           destination: `/${page}.html`
         })),
-        { source: "/lesson/:id(\\d+)", destination: "/lesson:id.html" },
         { source: "/admin/:page", destination: "/admin/:page.html" }
       ]
     };
   },
   async redirects() {
     return [
-      { source: "/dashboard", destination: "/hub", permanent: true },
-      { source: "/lesson:lessonId(\\d+)", destination: "/lesson/:lessonId", permanent: true }
+      { source: "/dashboard", destination: "/hub", permanent: true }
     ];
   },
   async headers() {
